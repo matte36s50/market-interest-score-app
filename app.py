@@ -3,30 +3,35 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
+import random
 
-# Function to scrape Bring a Trailer auction data
+# Function to scrape Bring a Trailer auction data using Selenium
 def fetch_bat_data():
     url = "https://bringatrailer.com/auctions/"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
     
-    response = requests.get(url, headers=headers)
+    options = Options()
+    options.add_argument("--headless")  # Run in headless mode (no GUI)
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
     
-    if response.status_code != 200:
-        st.error(f"Error fetching Bring a Trailer data: {response.status_code}")
-        return pd.DataFrame()
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
     
-    # Debug: Print part of the page source to check structure
-    st.write("Bring a Trailer HTML Sample:", response.text[:1000])
+    # Wait for JavaScript content to load
+    time.sleep(5)
     
-    soup = BeautifulSoup(response.text, 'html.parser')
-    listings = soup.find_all('div', class_='listing-row')
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    driver.quit()
+    
+    listings = soup.find_all("div", class_="auction-item-container")
     data = []
     
-    for listing in listings[:50]:  # Limit to 50 listings
-        title_tag = listing.find('h3')
-        bids_tag = listing.find('span', class_='bid-count')
+    for listing in listings[:50]:
+        title_tag = listing.find("div", class_="auction-title")
+        bids_tag = listing.find("span", class_="bid-count")
         
         if title_tag and bids_tag:
             title = title_tag.text.strip()
@@ -35,11 +40,20 @@ def fetch_bat_data():
     
     return pd.DataFrame(data)
 
-# Function to scrape Cars & Bids auction data
+# Function to scrape Cars & Bids auction data using headers
 def fetch_cnb_data():
     url = "https://carsandbids.com/past-auctions/"
+    
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Version/15.2 Mobile/15E148 Safari/537.36"
+    ]
+    
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        "User-Agent": random.choice(user_agents),
+        "Referer": "https://carsandbids.com",
+        "Accept-Language": "en-US,en;q=0.9"
     }
     
     response = requests.get(url, headers=headers)
@@ -48,16 +62,13 @@ def fetch_cnb_data():
         st.error(f"Error fetching Cars & Bids data: {response.status_code}")
         return pd.DataFrame()
     
-    # Debug: Print part of the page source to check structure
-    st.write("Cars & Bids HTML Sample:", response.text[:1000])
-    
     soup = BeautifulSoup(response.text, 'html.parser')
-    listings = soup.find_all('div', class_='listing-card')
+    listings = soup.find_all("div", class_="listing-card")
     data = []
     
-    for listing in listings[:50]:  # Limit to 50 listings
-        title_tag = listing.find('h2')
-        bids_tag = listing.find('span', class_='bids')
+    for listing in listings[:50]:
+        title_tag = listing.find("h2")
+        bids_tag = listing.find("span", class_="bids")
         
         if title_tag and bids_tag:
             title = title_tag.text.strip()
@@ -71,16 +82,13 @@ def load_data():
     bat_data = fetch_bat_data()
     cnb_data = fetch_cnb_data()
     
-    # Print debug output
     st.write("Bring a Trailer Data Sample:")
     st.write(bat_data.head())
     st.write("Cars & Bids Data Sample:")
     st.write(cnb_data.head())
     
-    # Merge and process auction data
     all_data = pd.concat([bat_data, cnb_data], ignore_index=True)
     
-    # Check if 'Title' column exists before processing
     if 'Title' not in all_data.columns:
         st.error("Error: 'Title' column not found in scraped data. Check auction site structure.")
         return pd.DataFrame()
