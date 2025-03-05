@@ -14,11 +14,13 @@ def fetch_bat_data():
     response = requests.get(url, headers=headers)
     
     if response.status_code != 200:
-        print("Error fetching Bring a Trailer data:", response.status_code)
-        return pd.DataFrame()  # Return empty DataFrame
+        st.error(f"Error fetching Bring a Trailer data: {response.status_code}")
+        return pd.DataFrame()
+    
+    # Debug: Print part of the page source to check structure
+    st.write("Bring a Trailer HTML Sample:", response.text[:1000])
     
     soup = BeautifulSoup(response.text, 'html.parser')
-    
     listings = soup.find_all('div', class_='listing-row')
     data = []
     
@@ -43,11 +45,13 @@ def fetch_cnb_data():
     response = requests.get(url, headers=headers)
     
     if response.status_code != 200:
-        print("Error fetching Cars & Bids data:", response.status_code)
-        return pd.DataFrame()  # Return empty DataFrame
+        st.error(f"Error fetching Cars & Bids data: {response.status_code}")
+        return pd.DataFrame()
+    
+    # Debug: Print part of the page source to check structure
+    st.write("Cars & Bids HTML Sample:", response.text[:1000])
     
     soup = BeautifulSoup(response.text, 'html.parser')
-    
     listings = soup.find_all('div', class_='listing-card')
     data = []
     
@@ -69,9 +73,9 @@ def load_data():
     
     # Print debug output
     st.write("Bring a Trailer Data Sample:")
-    st.write(bat_data.head())  # Show first few rows
+    st.write(bat_data.head())
     st.write("Cars & Bids Data Sample:")
-    st.write(cnb_data.head())  # Show first few rows
+    st.write(cnb_data.head())
     
     # Merge and process auction data
     all_data = pd.concat([bat_data, cnb_data], ignore_index=True)
@@ -79,9 +83,9 @@ def load_data():
     # Check if 'Title' column exists before processing
     if 'Title' not in all_data.columns:
         st.error("Error: 'Title' column not found in scraped data. Check auction site structure.")
-        return pd.DataFrame()  # Return empty DataFrame to avoid further errors
+        return pd.DataFrame()
     
-    all_data['Brand'] = all_data['Title'].apply(lambda x: x.split()[0])  # Extract brand from title
+    all_data['Brand'] = all_data['Title'].apply(lambda x: x.split()[0])
     brand_counts = all_data.groupby('Brand').size().reset_index(name='Auction Count')
     
     return brand_counts
