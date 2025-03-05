@@ -41,8 +41,20 @@ def load_data():
     bat_data = fetch_bat_data()
     cnb_data = fetch_cnb_data()
     
+    # Print debug output
+    st.write("Bring a Trailer Data Sample:")
+    st.write(bat_data.head())  # Show first few rows
+    st.write("Cars & Bids Data Sample:")
+    st.write(cnb_data.head())  # Show first few rows
+    
     # Merge and process auction data
     all_data = pd.concat([bat_data, cnb_data], ignore_index=True)
+    
+    # Check if 'Title' column exists before processing
+    if 'Title' not in all_data.columns:
+        st.error("Error: 'Title' column not found in scraped data. Check auction site structure.")
+        return pd.DataFrame()  # Return empty DataFrame to avoid further errors
+    
     all_data['Brand'] = all_data['Title'].apply(lambda x: x.split()[0])  # Extract brand from title
     brand_counts = all_data.groupby('Brand').size().reset_index(name='Auction Count')
     
