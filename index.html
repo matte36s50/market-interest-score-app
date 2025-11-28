@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Interest Index - Collector Car Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            950: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #27272a;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #52525b;
+            border-radius: 3px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #71717a;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100">
+    <!-- Header -->
+    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
+                        MII
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">Market Interest Index</h1>
+                        <p class="text-xs text-zinc-500">Collector Car Analytics Dashboard</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <div class="text-xs text-zinc-500">Last Updated</div>
+                        <div id="lastUpdated" class="text-sm font-medium text-zinc-300"></div>
+                    </div>
+                    <select id="quarterSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Market Overview Cards -->
+        <div class="grid grid-cols-4 gap-4 mb-8">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Qualifying Makes</div>
+                <div id="qualifyingMakes" class="text-3xl font-bold text-zinc-100">0</div>
+                <div id="totalMakes" class="text-xs text-zinc-500 mt-1"></div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Total Auctions</div>
+                <div id="totalAuctions" class="text-3xl font-bold text-zinc-100">0</div>
+                <div class="text-xs text-zinc-500 mt-1">this quarter</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Market MII Avg</div>
+                <div id="marketMII" class="text-3xl font-bold text-amber-500">0.0</div>
+                <div class="text-xs text-zinc-500 mt-1">index points</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Avg Sale Price</div>
+                <div id="avgPrice" class="text-3xl font-bold text-emerald-400">$0K</div>
+                <div class="text-xs text-zinc-500 mt-1">across all makes</div>
+            </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search manufacturer..."
+                            class="bg-zinc-800 border border-zinc-700 rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                        />
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+
+                    <!-- Min Auctions Filter -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-zinc-500">Min Auctions:</label>
+                        <select id="minAuctions" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <option value="5">5+</option>
+                            <option value="10" selected>10+ (Default)</option>
+                            <option value="20">20+</option>
+                            <option value="50">50+</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Controls -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-zinc-500">Sort:</label>
+                        <select id="sortBy" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <option value="miiScore" selected>MII Score</option>
+                            <option value="auctions">Auction Volume</option>
+                            <option value="avgPrice">Avg Price</option>
+                            <option value="trend">Trend</option>
+                            <option value="sellThrough">Sell-Through %</option>
+                        </select>
+                        <button id="sortOrder" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm hover:bg-zinc-700 transition-colors">
+                            ↓
+                        </button>
+                    </div>
+                </div>
+
+                <!-- View Mode Toggle -->
+                <div class="flex items-center bg-zinc-800 rounded-lg p-1">
+                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-amber-600 text-white">
+                        Leaderboard
+                    </button>
+                    <button data-mode="compare" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200">
+                        Compare
+                    </button>
+                    <button data-mode="trends" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200">
+                        Trends
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Main Leaderboard -->
+            <div class="col-span-2">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                    <div class="border-b border-zinc-800 px-5 py-4">
+                        <h2 class="font-semibold">Manufacturer Leaderboard</h2>
+                        <p id="leaderboardSubtitle" class="text-xs text-zinc-500 mt-1"></p>
+                    </div>
+
+                    <div id="leaderboardContainer" class="divide-y divide-zinc-800/50">
+                        <!-- Leaderboard items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="space-y-6">
+                <div id="manufacturerDetail">
+                    <!-- Manufacturer detail will be inserted here -->
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
+                        <div class="text-4xl mb-4">👈</div>
+                        <h3 class="font-semibold text-zinc-300">Select a Manufacturer</h3>
+                        <p class="text-sm text-zinc-500 mt-2">
+                            Click on any manufacturer in the leaderboard to view detailed model breakdowns and trends
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Compare Panel -->
+                <div id="comparePanel" class="hidden bg-zinc-900 border border-amber-900/50 rounded-xl p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold"><span id="compareCount">Compare (0/4)</span></h4>
+                        <button id="clearCompare" class="text-xs text-zinc-500 hover:text-zinc-300">
+                            Clear all
+                        </button>
+                    </div>
+                    <div id="compareList" class="flex flex-wrap gap-2 mb-4">
+                        <!-- Compare items will be inserted here -->
+                    </div>
+
+                    <!-- Mini comparison chart -->
+                    <div style="height: 120px;">
+                        <canvas id="compareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MII Methodology Footer -->
+        <div class="mt-12 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+            <h3 class="font-semibold mb-4">About the Market Interest Index (MII)</h3>
+            <div class="grid grid-cols-3 gap-6 text-sm text-zinc-400">
+                <div>
+                    <h4 class="font-medium text-zinc-300 mb-2">Formula Weights</h4>
+                    <ul class="space-y-1">
+                        <li>• Sale Price: 30%</li>
+                        <li>• Bid Activity: 30%</li>
+                        <li>• View Count: 20%</li>
+                        <li>• Comments: 12%</li>
+                        <li>• Social Engagement: 5%</li>
+                        <li>• Vehicle Age: 3%</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-zinc-300 mb-2">Confidence Levels</h4>
+                    <ul class="space-y-1">
+                        <li><span class="text-emerald-400">●</span> High: 50+ auctions</li>
+                        <li><span class="text-teal-400">◐</span> Medium-High: 20-49 auctions</li>
+                        <li><span class="text-amber-400">◐</span> Medium: 10-19 auctions</li>
+                        <li><span class="text-red-400">○</span> Low: 5-9 auctions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-zinc-300 mb-2">Data Sources</h4>
+                    <p>
+                        MII scores are calculated from auction data aggregated from Bring a Trailer and Cars & Bids.
+                        Data is refreshed twice daily at 6 AM and 6 PM UTC.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800 mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-sm text-zinc-500">
+            <div>Market Interest Index © 2025</div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-zinc-300">Documentation</a>
+                <a href="#" class="hover:text-zinc-300">API</a>
+                <a href="#" class="hover:text-zinc-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
