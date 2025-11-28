@@ -46,7 +46,7 @@ const sampleData = {
         },
         {
             make: "Mercedes-Benz",
-            logo: "⭐",
+            logo: "⚪",
             auctions: 198,
             avgPrice: 67800,
             miiScore: 81.5,
@@ -228,7 +228,7 @@ const sampleData = {
 // State management
 let state = {
     selectedMake: null,
-    minAuctions: 10,
+    minAuctions: 5,
     sortBy: 'miiScore',
     sortOrder: 'desc',
     searchTerm: '',
@@ -307,6 +307,26 @@ function getFilteredManufacturers() {
         });
 }
 
+function getTopModels(minAuctions = 3, limit = 15) {
+    const allModels = [];
+
+    sampleData.manufacturers.forEach(mfr => {
+        mfr.models.forEach(model => {
+            if (model.auctions >= minAuctions) {
+                allModels.push({
+                    ...model,
+                    make: mfr.make,
+                    makeLogo: mfr.logo
+                });
+            }
+        });
+    });
+
+    return allModels
+        .sort((a, b) => b.mii - a.mii)
+        .slice(0, limit);
+}
+
 function calculateMarketStats() {
     const filtered = sampleData.manufacturers.filter(m => m.auctions >= state.minAuctions);
     return {
@@ -325,6 +345,40 @@ function renderMarketStats() {
     document.getElementById('totalAuctions').textContent = stats.totalAuctions.toLocaleString();
     document.getElementById('marketMII').textContent = stats.avgMII.toFixed(1);
     document.getElementById('avgPrice').textContent = `$${(stats.avgPrice / 1000).toFixed(0)}K`;
+}
+
+function renderTopModels() {
+    const topModels = getTopModels(3, 15);
+    const container = document.getElementById('topModelsContainer');
+
+    container.innerHTML = topModels.map((model, idx) => {
+        return `
+            <div class="bg-zinc-800/50 rounded-lg p-4 hover:bg-zinc-800 transition-colors">
+                <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">${model.makeLogo}</span>
+                        <div>
+                            <div class="font-semibold text-sm">${model.model}</div>
+                            <div class="text-xs text-zinc-500">${model.make}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xl font-bold text-amber-500">${model.mii.toFixed(1)}</div>
+                        <div class="text-xs text-zinc-500">#${idx + 1}</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <div class="text-zinc-500">
+                        ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K
+                    </div>
+                    <div class="flex items-center gap-2">
+                        ${getTrendIndicator(model.trend)}
+                        ${getConfidenceBadge(model.confidence)}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 function renderLeaderboard() {
@@ -697,6 +751,7 @@ function toggleCompare(make) {
 
 function updateFilters() {
     renderMarketStats();
+    renderTopModels();
     renderLeaderboard();
 }
 
@@ -760,6 +815,7 @@ function init() {
 
     // Initial render
     renderMarketStats();
+    renderTopModels();
     renderLeaderboard();
     renderManufacturerDetail();
     renderComparePanel();
