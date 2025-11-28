@@ -234,7 +234,7 @@ let state = {
     searchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
-    selectedQuarter: '2025Q3'
+    selectedQuarter: '2025Q2'
 };
 
 let charts = {
