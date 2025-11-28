@@ -111,8 +111,8 @@
                     <div class="flex items-center gap-2">
                         <label class="text-xs text-zinc-500">Min Auctions:</label>
                         <select id="minAuctions" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
-                            <option value="5">5+</option>
-                            <option value="10" selected>10+ (Default)</option>
+                            <option value="5" selected>5+ (Default)</option>
+                            <option value="10">10+</option>
                             <option value="20">20+</option>
                             <option value="50">50+</option>
                         </select>
@@ -146,6 +146,17 @@
                         Trends
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Top Models Overall -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-6">
+            <div class="border-b border-zinc-800 px-5 py-4">
+                <h2 class="font-semibold">Top Models Overall</h2>
+                <p id="topModelsSubtitle" class="text-xs text-zinc-500 mt-1">Top models across all manufacturers with 3+ auctions</p>
+            </div>
+            <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+                <!-- Top models will be inserted here -->
             </div>
         </div>
 
