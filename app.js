@@ -1,7 +1,7 @@
 // Sample data structure
 const sampleData = {
     lastUpdated: "2025-11-26T18:00:00Z",
-    quarters: ["2024Q3", "2024Q4", "2025Q1", "2025Q2", "2025Q3"],
+    quarters: ["2025Q2", "2025Q3"],
     manufacturers: [
         {
             make: "Porsche",
@@ -12,7 +12,7 @@ const sampleData = {
             confidence: "High",
             trend: 4.2,
             sellThrough: 78,
-            history: [82.1, 83.5, 85.2, 86.8, 87.4],
+            history: [86.8, 87.4],
             models: [
                 { model: "911 Turbo", auctions: 67, mii: 92.3, avgPrice: 185000, trend: 5.1, confidence: "High" },
                 { model: "911 Carrera", auctions: 54, mii: 88.7, avgPrice: 95000, trend: 3.2, confidence: "High" },
@@ -32,7 +32,7 @@ const sampleData = {
             confidence: "High",
             trend: 2.8,
             sellThrough: 72,
-            history: [79.4, 80.1, 81.8, 83.1, 84.2],
+            history: [83.1, 84.2],
             models: [
                 { model: "E46 M3", auctions: 54, mii: 89.7, avgPrice: 48500, trend: 4.5, confidence: "High" },
                 { model: "E30 M3", auctions: 28, mii: 94.2, avgPrice: 125000, trend: 8.2, confidence: "Medium-High" },
@@ -53,7 +53,7 @@ const sampleData = {
             confidence: "High",
             trend: 1.4,
             sellThrough: 68,
-            history: [78.2, 79.1, 79.8, 80.6, 81.5],
+            history: [80.6, 81.5],
             models: [
                 { model: "190E 2.5-16 Evo II", auctions: 8, mii: 96.2, avgPrice: 385000, trend: 12.1, confidence: "Low" },
                 { model: "SL 500 (R129)", auctions: 32, mii: 78.4, avgPrice: 28000, trend: 0.8, confidence: "High" },
@@ -72,7 +72,7 @@ const sampleData = {
             confidence: "High",
             trend: 3.8,
             sellThrough: 82,
-            history: [86.5, 87.8, 89.1, 90.2, 91.2],
+            history: [90.2, 91.2],
             models: [
                 { model: "F430", auctions: 22, mii: 89.4, avgPrice: 185000, trend: 2.4, confidence: "Medium" },
                 { model: "458 Italia", auctions: 18, mii: 92.1, avgPrice: 225000, trend: 4.2, confidence: "Medium" },
@@ -90,7 +90,7 @@ const sampleData = {
             confidence: "High",
             trend: 5.2,
             sellThrough: 74,
-            history: [71.2, 73.4, 75.1, 77.2, 78.6],
+            history: [77.2, 78.6],
             models: [
                 { model: "Skyline GT-R (R34)", auctions: 18, mii: 94.8, avgPrice: 185000, trend: 8.5, confidence: "Medium" },
                 { model: "Skyline GT-R (R32)", auctions: 24, mii: 88.2, avgPrice: 85000, trend: 6.2, confidence: "Medium-High" },
@@ -108,7 +108,7 @@ const sampleData = {
             confidence: "High",
             trend: 3.1,
             sellThrough: 76,
-            history: [72.4, 73.8, 74.9, 75.8, 76.8],
+            history: [75.8, 76.8],
             models: [
                 { model: "Supra (A80)", auctions: 28, mii: 91.4, avgPrice: 95000, trend: 5.8, confidence: "Medium-High" },
                 { model: "Land Cruiser (FJ40)", auctions: 35, mii: 82.6, avgPrice: 65000, trend: 3.2, confidence: "High" },
@@ -126,7 +126,7 @@ const sampleData = {
             confidence: "High",
             trend: 0.8,
             sellThrough: 65,
-            history: [72.8, 73.2, 73.6, 73.9, 74.2],
+            history: [73.9, 74.2],
             models: [
                 { model: "RS4 (B7)", auctions: 28, mii: 81.4, avgPrice: 48000, trend: 2.1, confidence: "Medium-High" },
                 { model: "RS6 Avant (C6)", auctions: 18, mii: 84.2, avgPrice: 68000, trend: 3.8, confidence: "Medium" },
@@ -144,7 +144,7 @@ const sampleData = {
             confidence: "High",
             trend: 1.2,
             sellThrough: 71,
-            history: [70.2, 70.8, 71.4, 71.9, 72.4],
+            history: [71.9, 72.4],
             models: [
                 { model: "Corvette C2 Stingray", auctions: 32, mii: 85.2, avgPrice: 95000, trend: 2.8, confidence: "High" },
                 { model: "Corvette C3", auctions: 48, mii: 74.6, avgPrice: 42000, trend: 0.8, confidence: "High" },
@@ -162,7 +162,7 @@ const sampleData = {
             confidence: "High",
             trend: 0.6,
             sellThrough: 69,
-            history: [70.4, 70.8, 71.2, 71.5, 71.8],
+            history: [71.5, 71.8],
             models: [
                 { model: "GT40", auctions: 5, mii: 97.8, avgPrice: 2850000, trend: 4.5, confidence: "Low" },
                 { model: "Mustang Shelby GT350", auctions: 28, mii: 84.2, avgPrice: 125000, trend: 2.8, confidence: "Medium-High" },
@@ -180,7 +180,7 @@ const sampleData = {
             confidence: "High",
             trend: 2.4,
             sellThrough: 79,
-            history: [84.2, 85.5, 86.8, 87.6, 88.4],
+            history: [87.6, 88.4],
             models: [
                 { model: "Gallardo", auctions: 22, mii: 84.2, avgPrice: 145000, trend: 1.8, confidence: "Medium" },
                 { model: "Murcielago", auctions: 12, mii: 89.5, avgPrice: 285000, trend: 3.2, confidence: "Medium" },
@@ -197,7 +197,7 @@ const sampleData = {
             confidence: "High",
             trend: -0.4,
             sellThrough: 62,
-            history: [75.2, 74.8, 74.2, 74.0, 73.8],
+            history: [74.0, 73.8],
             models: [
                 { model: "E-Type Series I", auctions: 18, mii: 88.4, avgPrice: 165000, trend: 1.2, confidence: "Medium" },
                 { model: "XJ220", auctions: 5, mii: 91.2, avgPrice: 485000, trend: 2.8, confidence: "Low" },
@@ -214,7 +214,7 @@ const sampleData = {
             confidence: "High",
             trend: 2.1,
             sellThrough: 71,
-            history: [71.2, 72.1, 73.2, 73.9, 74.5],
+            history: [73.9, 74.5],
             models: [
                 { model: "Defender 90", auctions: 42, mii: 79.8, avgPrice: 68000, trend: 3.5, confidence: "High" },
                 { model: "Defender 110", auctions: 35, mii: 76.4, avgPrice: 52000, trend: 2.8, confidence: "High" },
@@ -444,7 +444,7 @@ function renderManufacturerDetail() {
 
         <!-- MII Trend Chart -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h4 class="font-semibold mb-4">MII Trend (5 Quarters)</h4>
+            <h4 class="font-semibold mb-4">MII Trend (2 Quarters)</h4>
             <canvas id="trendChart" style="max-height: 160px;"></canvas>
         </div>
 
