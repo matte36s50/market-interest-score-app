@@ -271,11 +271,135 @@ function processCSVData(rawData) {
         };
     });
 
-    // Set manufacturers to latest quarter data for backward compatibility
-    const latestQuarterKey = quarters.length > 0 ?
-        (sampleData.quarters[sampleData.quarters.length - 1]) : null;
-    if (latestQuarterKey && sampleData.quarterData[latestQuarterKey]) {
-        sampleData.manufacturers = sampleData.quarterData[latestQuarterKey].manufacturers;
+    // Process YTD (Year-to-Date) - aggregate all quarters from current year
+    console.log('Processing YTD data...');
+    const currentYear = new Date().getFullYear();
+    const ytdQuarters = quarters.filter(q => q.startsWith(currentYear.toString()));
+
+    if (ytdQuarters.length > 0) {
+        console.log('YTD quarters:', ytdQuarters);
+
+        // Combine all YTD quarter data
+        const ytdRows = ytdQuarters.flatMap(q => dataByQuarter[q]);
+
+        // Group by manufacturer
+        const ytdMfrGroups = {};
+        ytdRows.forEach(row => {
+            const mfr = row.manufacturer;
+            if (!ytdMfrGroups[mfr]) {
+                ytdMfrGroups[mfr] = [];
+            }
+            ytdMfrGroups[mfr].push(row);
+        });
+
+        // Calculate YTD manufacturer statistics
+        const ytdManufacturers = Object.keys(ytdMfrGroups).map(mfrName => {
+            const mfrData = ytdMfrGroups[mfrName];
+            const auctions = mfrData.length;
+
+            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / auctions;
+            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / auctions;
+
+            // For YTD, trend is based on first vs last quarter
+            let trend = 0;
+            if (ytdQuarters.length > 1) {
+                const firstQ = ytdQuarters[0];
+                const lastQ = ytdQuarters[ytdQuarters.length - 1];
+                const firstQKey = firstQ;
+                const lastQKey = lastQ === latestQuarter ? qtdQuarter : lastQ;
+
+                const firstMfr = sampleData.quarterData[firstQKey]?.manufacturers.find(m => m.make === mfrName);
+                const lastMfr = sampleData.quarterData[lastQKey]?.manufacturers.find(m => m.make === mfrName);
+
+                if (firstMfr && lastMfr) {
+                    trend = ((lastMfr.miiScore - firstMfr.miiScore) / firstMfr.miiScore) * 100;
+                }
+            }
+
+            // Build history from all YTD quarters
+            const history = ytdQuarters.map((q, i) => {
+                const qKey = i === ytdQuarters.length - 1 && q === latestQuarter ? qtdQuarter : q;
+                const mfr = sampleData.quarterData[qKey]?.manufacturers.find(m => m.make === mfrName);
+                return mfr ? mfr.miiScore : null;
+            }).filter(v => v !== null);
+
+            // Confidence based on total YTD auctions
+            let confidence = 'Low';
+            if (auctions >= 150) confidence = 'High';
+            else if (auctions >= 60) confidence = 'Medium-High';
+            else if (auctions >= 30) confidence = 'Medium';
+
+            const sellThrough = 75;
+
+            // Process models for YTD
+            const models = mfrData.map(row => ({
+                model: row.model,
+                auctions: 1,
+                mii: parseFloat(row.mii_score),
+                avgPrice: parseFloat(row.price || 0),
+                trend: 0,
+                confidence: 'Medium'
+            }));
+
+            // Group models by name and aggregate
+            const modelGroups = {};
+            models.forEach(model => {
+                if (!modelGroups[model.model]) {
+                    modelGroups[model.model] = {
+                        model: model.model,
+                        auctions: 0,
+                        totalMII: 0,
+                        totalPrice: 0
+                    };
+                }
+                modelGroups[model.model].auctions += 1;
+                modelGroups[model.model].totalMII += model.mii;
+                modelGroups[model.model].totalPrice += model.avgPrice;
+            });
+
+            const aggregatedModels = Object.values(modelGroups).map(mg => ({
+                model: mg.model,
+                auctions: mg.auctions,
+                mii: mg.totalMII / mg.auctions,
+                avgPrice: mg.totalPrice / mg.auctions,
+                trend: 0,
+                confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
+            }));
+
+            return {
+                make: mfrName,
+                logo: MANUFACTURER_LOGOS[mfrName] || '🚗',
+                auctions: auctions,
+                avgPrice: Math.round(avgPrice),
+                miiScore: parseFloat(avgMII.toFixed(1)),
+                confidence: confidence,
+                trend: parseFloat(trend.toFixed(1)),
+                sellThrough: sellThrough,
+                history: history,
+                models: aggregatedModels.sort((a, b) => b.mii - a.mii)
+            };
+        });
+
+        sampleData.quarterData['YTD'] = {
+            manufacturers: ytdManufacturers.sort((a, b) => b.miiScore - a.miiScore)
+        };
+
+        // Add YTD to quarters list at the beginning
+        sampleData.quarters = ['YTD'].concat(sampleData.quarters);
+
+        console.log('YTD processing complete:', ytdManufacturers.length, 'manufacturers');
+    }
+
+    // Set manufacturers to YTD data by default
+    if (sampleData.quarterData['YTD']) {
+        sampleData.manufacturers = sampleData.quarterData['YTD'].manufacturers;
+    } else {
+        // Fallback to latest quarter if no YTD data
+        const latestQuarterKey = quarters.length > 0 ?
+            (sampleData.quarters[sampleData.quarters.length - 1]) : null;
+        if (latestQuarterKey && sampleData.quarterData[latestQuarterKey]) {
+            sampleData.manufacturers = sampleData.quarterData[latestQuarterKey].manufacturers;
+        }
     }
 
     // Build quarterMIITrends (aggregate MII by quarter)
@@ -365,13 +489,13 @@ sampleData.manufacturers = [];
 // State management
 let state = {
     selectedMake: null,
-    minAuctions: 5,
+    minAuctions: 10,
     sortBy: 'miiScore',
     sortOrder: 'desc',
     searchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
-    selectedQuarter: '2025Q4-QTD'
+    selectedQuarter: 'YTD'
 };
 
 let charts = {
@@ -464,7 +588,10 @@ function getTopModels(minAuctions = 3, limit = 15) {
     const quarterKey = state.selectedQuarter;
     const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
 
-    console.log('getTopModels: Quarter:', quarterKey, '| Manufacturers:', manufacturers.length);
+    // For YTD, use no minimum auctions; for quarters, use the specified minimum
+    const effectiveMinAuctions = quarterKey === 'YTD' ? 0 : minAuctions;
+
+    console.log('getTopModels: Quarter:', quarterKey, '| Manufacturers:', manufacturers.length, '| Min auctions:', effectiveMinAuctions);
 
     manufacturers.forEach(mfr => {
         if (!mfr.models || mfr.models.length === 0) {
@@ -473,7 +600,7 @@ function getTopModels(minAuctions = 3, limit = 15) {
         }
 
         mfr.models.forEach(model => {
-            if (model.auctions >= minAuctions) {
+            if (model.auctions >= effectiveMinAuctions) {
                 allModels.push({
                     ...model,
                     make: mfr.make,
@@ -483,7 +610,7 @@ function getTopModels(minAuctions = 3, limit = 15) {
         });
     });
 
-    console.log('getTopModels: Found', allModels.length, 'models with', minAuctions, '+ auctions');
+    console.log('getTopModels: Found', allModels.length, 'models with', effectiveMinAuctions, '+ auctions');
 
     return allModels
         .sort((a, b) => b.mii - a.mii)
@@ -529,12 +656,22 @@ function renderMarketStats() {
 function renderTopModels() {
     const topModels = getTopModels(3, 15);
     const container = document.getElementById('topModelsContainer');
+    const subtitle = document.getElementById('topModelsSubtitle');
+
+    // Update subtitle based on selected quarter
+    const isYTD = state.selectedQuarter === 'YTD';
+    if (subtitle) {
+        subtitle.textContent = isYTD
+            ? 'Top models across all manufacturers for the year'
+            : 'Top models across all manufacturers with 3+ auctions';
+    }
 
     console.log('Rendering top models:', topModels.length, 'models found');
 
     if (topModels.length === 0) {
-        console.warn('No models found with 3+ auctions');
-        container.innerHTML = '<div class="col-span-full text-center text-zinc-500 py-8">No models found with 3+ auctions in this quarter</div>';
+        const minText = isYTD ? '' : 'with 3+ auctions ';
+        console.warn('No models found', minText);
+        container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found ${minText}in this ${isYTD ? 'period' : 'quarter'}</div>`;
         return;
     }
 
