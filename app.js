@@ -1,32 +1,38 @@
 // S3 CSV URL
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 
-// Manufacturer emoji mapping
-const MANUFACTURER_LOGOS = {
-    'Porsche': '🔵',
-    'BMW': '⚪',
-    'Mercedes-Benz': '⚪',
-    'Ferrari': '🔴',
-    'Nissan': '🟡',
-    'Toyota': '🔘',
-    'Audi': '⚫',
-    'Chevrolet': '🟠',
-    'Ford': '🔷',
-    'Lamborghini': '🟡',
-    'Jaguar': '🟢',
-    'Land Rover': '🟤',
-    'Lexus': '🔘',
-    'Honda': '🔴',
-    'Acura': '⚫',
-    'Mazda': '🔴',
-    'Subaru': '🔵',
-    'Volkswagen': '🔵',
-    'Mercedes-AMG': '⚪',
-    'Dodge': '🔴',
-    'Plymouth': '🟠',
-    'Pontiac': '🔵',
-    'Oldsmobile': '⚪'
+// Manufacturer branding (colors and abbreviations for better visual identity)
+const MANUFACTURER_BRANDING = {
+    'Porsche': { abbr: 'POR', color: '#d5001c', bg: '#1a0003' },
+    'BMW': { abbr: 'BMW', color: '#1c69d4', bg: '#001a33' },
+    'Mercedes-Benz': { abbr: 'MB', color: '#00adef', bg: '#001a24' },
+    'Ferrari': { abbr: 'FER', color: '#dc0000', bg: '#1f0000' },
+    'Nissan': { abbr: 'NIS', color: '#c3002f', bg: '#1a0006' },
+    'Toyota': { abbr: 'TOY', color: '#eb0a1e', bg: '#1f0103' },
+    'Audi': { abbr: 'AUD', color: '#bb0a30', bg: '#1a0105' },
+    'Chevrolet': { abbr: 'CHV', color: '#ffc72c', bg: '#262109' },
+    'Ford': { abbr: 'FOR', color: '#003478', bg: '#000a14' },
+    'Lamborghini': { abbr: 'LAM', color: '#ffd700', bg: '#262209' },
+    'Jaguar': { abbr: 'JAG', color: '#006633', bg: '#00140a' },
+    'Land Rover': { abbr: 'LRV', color: '#005a2b', bg: '#001108' },
+    'Lexus': { abbr: 'LEX', color: '#0061aa', bg: '#001220' },
+    'Honda': { abbr: 'HON', color: '#cc0000', bg: '#1a0000' },
+    'Acura': { abbr: 'ACU', color: '#700000', bg: '#120000' },
+    'Mazda': { abbr: 'MAZ', color: '#c1272d', bg: '#1a0405' },
+    'Subaru': { abbr: 'SUB', color: '#0052a5', bg: '#001019' },
+    'Volkswagen': { abbr: 'VW', color: '#001e50', bg: '#00060f' },
+    'Mercedes-AMG': { abbr: 'AMG', color: '#00adef', bg: '#001a24' },
+    'Dodge': { abbr: 'DOD', color: '#cc162c', bg: '#1a0304' },
+    'Plymouth': { abbr: 'PLY', color: '#ff6600', bg: '#1f1100' },
+    'Pontiac': { abbr: 'PON', color: '#ee3124', bg: '#1f0605' },
+    'Oldsmobile': { abbr: 'OLD', color: '#003da5', bg: '#000c19' }
 };
+
+// Helper function to generate manufacturer logo HTML
+function getManufacturerLogo(manufacturer) {
+    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#888', bg: '#1a1a1a' };
+    return `<div class="flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background: ${branding.bg}; color: ${branding.color}; border: 1px solid ${branding.color}40;">${branding.abbr}</div>`;
+}
 
 // Global data object (will be populated from CSV)
 let sampleData = {
@@ -254,7 +260,7 @@ function processCSVData(rawData) {
 
             return {
                 make: mfrName,
-                logo: MANUFACTURER_LOGOS[mfrName] || '🚗',
+                logo: mfrName, // Store manufacturer name for dynamic logo generation
                 auctions: auctions,
                 avgPrice: Math.round(avgPrice),
                 miiScore: parseFloat(avgMII.toFixed(1)),
@@ -368,7 +374,7 @@ function processCSVData(rawData) {
 
             return {
                 make: mfrName,
-                logo: MANUFACTURER_LOGOS[mfrName] || '🚗',
+                logo: mfrName, // Store manufacturer name for dynamic logo generation
                 auctions: auctions,
                 avgPrice: Math.round(avgPrice),
                 miiScore: parseFloat(avgMII.toFixed(1)),
@@ -384,8 +390,8 @@ function processCSVData(rawData) {
             manufacturers: ytdManufacturers.sort((a, b) => b.miiScore - a.miiScore)
         };
 
-        // Add YTD to quarters list at the beginning
-        sampleData.quarters = ['YTD'].concat(sampleData.quarters);
+        // Add YTD to quarters list at the end
+        sampleData.quarters = sampleData.quarters.concat(['YTD']);
 
         console.log('YTD processing complete:', ytdManufacturers.length, 'manufacturers');
     }
@@ -493,6 +499,7 @@ let state = {
     sortBy: 'miiScore',
     sortOrder: 'desc',
     searchTerm: '',
+    modelSearchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
     selectedQuarter: 'YTD'
@@ -617,6 +624,35 @@ function getTopModels(minAuctions = 3, limit = 15) {
         .slice(0, limit);
 }
 
+function searchAllModels(searchTerm, limit = 50) {
+    const allModels = [];
+
+    // Get manufacturers for the selected quarter
+    const quarterKey = state.selectedQuarter;
+    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+
+    manufacturers.forEach(mfr => {
+        if (!mfr.models || mfr.models.length === 0) return;
+
+        mfr.models.forEach(model => {
+            // Search by model name (case insensitive)
+            if (model.model.toLowerCase().includes(searchTerm.toLowerCase())) {
+                allModels.push({
+                    ...model,
+                    make: mfr.make,
+                    makeLogo: mfr.logo
+                });
+            }
+        });
+    });
+
+    console.log('searchAllModels: Found', allModels.length, 'models matching', searchTerm);
+
+    return allModels
+        .sort((a, b) => b.mii - a.mii)
+        .slice(0, limit);
+}
+
 function calculateMarketStats() {
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
@@ -654,24 +690,38 @@ function renderMarketStats() {
 }
 
 function renderTopModels() {
-    const topModels = getTopModels(3, 15);
     const container = document.getElementById('topModelsContainer');
     const subtitle = document.getElementById('topModelsSubtitle');
-
-    // Update subtitle based on selected quarter
     const isYTD = state.selectedQuarter === 'YTD';
-    if (subtitle) {
-        subtitle.textContent = isYTD
-            ? 'Top models across all manufacturers for the year'
-            : 'Top models across all manufacturers with 3+ auctions';
+
+    // Use search results if searching, otherwise show top models
+    let topModels;
+    let isSearching = state.modelSearchTerm && state.modelSearchTerm.length > 0;
+
+    if (isSearching) {
+        topModels = searchAllModels(state.modelSearchTerm, 50);
+        if (subtitle) {
+            subtitle.textContent = `Search results for "${state.modelSearchTerm}" (${topModels.length} found)`;
+        }
+    } else {
+        topModels = getTopModels(3, 15);
+        // Update subtitle based on selected quarter
+        if (subtitle) {
+            subtitle.textContent = isYTD
+                ? 'Top models across all manufacturers for the year'
+                : 'Top models across all manufacturers with 3+ auctions';
+        }
     }
 
-    console.log('Rendering top models:', topModels.length, 'models found');
+    console.log('Rendering top models:', topModels.length, 'models found', isSearching ? '(searching)' : '');
 
     if (topModels.length === 0) {
-        const minText = isYTD ? '' : 'with 3+ auctions ';
-        console.warn('No models found', minText);
-        container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found ${minText}in this ${isYTD ? 'period' : 'quarter'}</div>`;
+        if (isSearching) {
+            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found matching "${state.modelSearchTerm}"</div>`;
+        } else {
+            const minText = isYTD ? '' : 'with 3+ auctions ';
+            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found ${minText}in this ${isYTD ? 'period' : 'quarter'}</div>`;
+        }
         return;
     }
 
@@ -680,7 +730,7 @@ function renderTopModels() {
             <div class="bg-zinc-800/50 rounded-lg p-4 hover:bg-zinc-800 transition-colors">
                 <div class="flex items-start justify-between mb-2">
                     <div class="flex items-center gap-2">
-                        <span class="text-2xl">${model.makeLogo}</span>
+                        ${getManufacturerLogo(model.make)}
                         <div>
                             <div class="font-semibold text-sm">${model.model}</div>
                             <div class="text-xs text-zinc-500">${model.make}</div>
@@ -725,9 +775,7 @@ function renderLeaderboard() {
                         <div class="w-8 text-center font-bold text-zinc-500">
                             ${idx + 1}
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-xl">
-                            ${mfr.logo}
-                        </div>
+                        ${getManufacturerLogo(mfr.make)}
                         <div>
                             <div class="font-semibold text-zinc-100">${mfr.make}</div>
                             <div class="text-xs text-zinc-500">
@@ -791,9 +839,7 @@ function renderManufacturerDetail() {
         <!-- Manufacturer Header -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <div class="flex items-center gap-4 mb-4">
-                <div class="w-14 h-14 rounded-full bg-zinc-800 flex items-center justify-center text-3xl">
-                    ${mfr.logo}
-                </div>
+                ${getManufacturerLogo(mfr.make)}
                 <div>
                     <h3 class="text-xl font-bold">${mfr.make}</h3>
                     <div class="text-sm text-zinc-500">
@@ -957,7 +1003,8 @@ function renderComparePanel() {
         const mfr = sampleData.manufacturers.find(m => m.make === make);
         return `
             <span class="inline-flex items-center gap-2 bg-zinc-800 rounded-full px-3 py-1 text-sm">
-                ${mfr?.logo} ${make}
+                ${getManufacturerLogo(make)}
+                <span class="ml-1">${make}</span>
                 <button class="remove-compare text-zinc-500 hover:text-zinc-300" data-make="${make}">
                     ×
                 </button>
@@ -1262,6 +1309,30 @@ function init() {
         state.compareList = [];
         renderLeaderboard();
         renderComparePanel();
+    });
+
+    // Model search functionality
+    const modelSearchInput = document.getElementById('modelSearch');
+    const modelSearchClear = document.getElementById('modelSearchClear');
+
+    modelSearchInput.addEventListener('input', (e) => {
+        state.modelSearchTerm = e.target.value;
+
+        // Show/hide clear button
+        if (state.modelSearchTerm.length > 0) {
+            modelSearchClear.classList.remove('hidden');
+        } else {
+            modelSearchClear.classList.add('hidden');
+        }
+
+        renderTopModels();
+    });
+
+    modelSearchClear.addEventListener('click', () => {
+        state.modelSearchTerm = '';
+        modelSearchInput.value = '';
+        modelSearchClear.classList.add('hidden');
+        renderTopModels();
     });
 
     // Initial render

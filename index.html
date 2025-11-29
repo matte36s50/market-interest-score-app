@@ -215,8 +215,22 @@
         <!-- Top Models Overall -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-6 mb-6">
             <div class="border-b border-zinc-800 px-5 py-4">
-                <h2 class="font-semibold">Top Models Overall</h2>
-                <p id="topModelsSubtitle" class="text-xs text-zinc-500 mt-1">Top models across all manufacturers with 3+ auctions</p>
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="font-semibold">Top Models Overall</h2>
+                </div>
+                <p id="topModelsSubtitle" class="text-xs text-zinc-500 mb-3">Top models across all manufacturers with 3+ auctions</p>
+                <!-- Model Search -->
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="modelSearch"
+                        placeholder="Search for any model..."
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 placeholder-zinc-500"
+                    />
+                    <div id="modelSearchClear" class="absolute right-3 top-2.5 text-zinc-500 hover:text-zinc-300 cursor-pointer hidden">
+                        ×
+                    </div>
+                </div>
             </div>
             <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
                 <!-- Top models will be inserted here -->
