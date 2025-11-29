@@ -529,7 +529,7 @@ function getConfidenceBadge(level) {
     };
     const style = styles[level] || styles.Medium;
 
-    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${style.bg} ${style.text}">
+    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${style.bg} ${style.text} min-w-[110px] justify-center">
         <span>${style.icon}</span>
         <span>${level}</span>
     </span>`;
@@ -784,16 +784,18 @@ function renderLeaderboard() {
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-6">
-                        <div class="hidden md:block">
+                    <div class="flex items-center gap-4">
+                        <div class="hidden md:block w-20">
                             ${createSparkline(mfr.history, sparklineColor)}
                         </div>
-                        <div class="text-right">
+                        <div class="text-right w-20">
                             <div class="text-2xl font-bold text-amber-500">${mfr.miiScore.toFixed(1)}</div>
                             ${getTrendIndicator(mfr.trend)}
                         </div>
-                        ${getConfidenceBadge(mfr.confidence)}
-                        <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isComparing ? 'bg-amber-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}"
+                        <div class="w-28">
+                            ${getConfidenceBadge(mfr.confidence)}
+                        </div>
+                        <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all flex-shrink-0 ${isComparing ? 'bg-amber-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}"
                                 data-make="${mfr.make}">
                             ${isComparing ? '✓' : '+'}
                         </button>
