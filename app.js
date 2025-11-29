@@ -2,6 +2,20 @@
 const sampleData = {
     lastUpdated: "2025-11-26T18:00:00Z",
     quarters: ["2025Q2", "2025Q3", "2025Q4-QTD"],
+    quarterMIITrends: {
+        "2025Q2": {
+            labels: ["Apr 1", "Apr 15", "May 1", "May 15", "Jun 1", "Jun 15", "Jun 30"],
+            data: [76.2, 77.1, 77.8, 78.2, 78.9, 79.3, 79.6]
+        },
+        "2025Q3": {
+            labels: ["Jul 1", "Jul 15", "Aug 1", "Aug 15", "Sep 1", "Sep 15", "Sep 30"],
+            data: [79.6, 80.1, 80.8, 81.2, 81.8, 82.3, 82.7]
+        },
+        "2025Q4-QTD": {
+            labels: ["Oct 1", "Oct 15", "Nov 1", "Nov 15", "Nov 29"],
+            data: [82.7, 83.2, 83.9, 84.5, 85.1]
+        }
+    },
     manufacturers: [
         {
             make: "Porsche",
@@ -239,46 +253,11 @@ let state = {
 
 let charts = {
     trend: null,
-    compare: null
+    compare: null,
+    quarterMII: null
 };
 
 // Helper functions
-function getQuarterInfo(quarterStr) {
-    const isQTD = quarterStr.endsWith('-QTD');
-    const baseQuarter = isQTD ? quarterStr.replace('-QTD', '') : quarterStr;
-
-    // Parse quarter (e.g., "2025Q3")
-    const year = parseInt(baseQuarter.substring(0, 4));
-    const quarter = parseInt(baseQuarter.substring(5, 6));
-
-    // Calculate quarter start and end dates
-    const quarterStartMonth = (quarter - 1) * 3;
-    const quarterEndMonth = quarterStartMonth + 3;
-
-    const startDate = new Date(year, quarterStartMonth, 1);
-    const endDate = new Date(year, quarterEndMonth, 0); // Last day of previous month
-
-    return { isQTD, year, quarter, startDate, endDate };
-}
-
-function getQuarterProgress() {
-    const now = new Date();
-    const info = getQuarterInfo(state.selectedQuarter);
-
-    if (!info.isQTD) return null;
-
-    const totalDays = Math.ceil((info.endDate - info.startDate) / (1000 * 60 * 60 * 24));
-    const elapsedDays = Math.ceil((now - info.startDate) / (1000 * 60 * 60 * 24));
-    const percentage = Math.min(100, Math.max(0, (elapsedDays / totalDays) * 100));
-
-    return {
-        totalDays,
-        elapsedDays: Math.max(0, elapsedDays),
-        daysRemaining: Math.max(0, totalDays - elapsedDays),
-        percentage: percentage.toFixed(1)
-    };
-}
-
 function formatQuarterDisplay(quarterStr) {
     if (quarterStr.endsWith('-QTD')) {
         const base = quarterStr.replace('-QTD', '');
@@ -776,53 +755,124 @@ function renderCompareChart() {
     });
 }
 
-function renderQuarterProgress() {
+function renderQuarterMIIChart() {
     const container = document.getElementById('quarterProgressContainer');
     if (!container) return;
 
-    const progress = getQuarterProgress();
-
-    if (!progress) {
+    const trendData = sampleData.quarterMIITrends[state.selectedQuarter];
+    if (!trendData) {
         container.classList.add('hidden');
         return;
     }
 
+    const isQTD = state.selectedQuarter.endsWith('-QTD');
+
     container.classList.remove('hidden');
     container.innerHTML = `
-        <div class="bg-gradient-to-r from-amber-900/30 to-orange-900/30 border border-amber-800/50 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2">
-                    <span class="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-                    <h3 class="font-semibold text-sm text-amber-400">Quarter to Date</h3>
+                    <h3 class="font-semibold">Market Interest Index Trend</h3>
+                    ${isQTD ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-900/30 text-amber-400 border border-amber-800/50"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Live</span>' : ''}
                 </div>
-                <div class="text-xs text-amber-400/80">Live Data</div>
+                <div class="text-xs text-zinc-500">${formatQuarterDisplay(state.selectedQuarter)}</div>
             </div>
-
-            <div class="grid grid-cols-3 gap-3 mb-3">
-                <div class="bg-zinc-900/50 rounded-lg p-2">
-                    <div class="text-xs text-zinc-500">Days Elapsed</div>
-                    <div class="text-lg font-bold text-amber-400">${progress.elapsedDays}</div>
-                </div>
-                <div class="bg-zinc-900/50 rounded-lg p-2">
-                    <div class="text-xs text-zinc-500">Days Remaining</div>
-                    <div class="text-lg font-bold text-emerald-400">${progress.daysRemaining}</div>
-                </div>
-                <div class="bg-zinc-900/50 rounded-lg p-2">
-                    <div class="text-xs text-zinc-500">Progress</div>
-                    <div class="text-lg font-bold text-orange-400">${progress.percentage}%</div>
-                </div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="w-full bg-zinc-800/50 rounded-full h-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all duration-500"
-                     style="width: ${progress.percentage}%"></div>
-            </div>
-            <div class="text-xs text-zinc-500 mt-2 text-center">
-                ${progress.elapsedDays} of ${progress.totalDays} days completed
+            <div style="height: 200px;">
+                <canvas id="quarterMIIChart"></canvas>
             </div>
         </div>
     `;
+
+    // Render chart after DOM update
+    setTimeout(() => {
+        const canvas = document.getElementById('quarterMIIChart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        if (charts.quarterMII) {
+            charts.quarterMII.destroy();
+        }
+
+        const currentValue = trendData.data[trendData.data.length - 1];
+        const startValue = trendData.data[0];
+        const change = currentValue - startValue;
+        const changePercent = ((change / startValue) * 100).toFixed(1);
+
+        charts.quarterMII = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: trendData.labels,
+                datasets: [{
+                    label: 'Average MII',
+                    data: trendData.data,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#f59e0b',
+                    pointBorderColor: '#18181b',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#18181b',
+                        titleColor: '#f4f4f5',
+                        bodyColor: '#f4f4f5',
+                        borderColor: '#27272a',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'MII: ' + context.parsed.y.toFixed(1);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#27272a',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#71717a',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#27272a',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#71717a',
+                            font: {
+                                size: 11
+                            },
+                            callback: function(value) {
+                                return value.toFixed(1);
+                            }
+                        },
+                        min: Math.min(...trendData.data) - 2,
+                        max: Math.max(...trendData.data) + 2
+                    }
+                }
+            }
+        });
+    }, 0);
 }
 
 // Action functions
@@ -870,7 +920,7 @@ function init() {
     quarterSelect.addEventListener('change', (e) => {
         state.selectedQuarter = e.target.value;
         updateFilters();
-        renderQuarterProgress();
+        renderQuarterMIIChart();
     });
 
     // Event listeners
@@ -914,7 +964,7 @@ function init() {
     });
 
     // Initial render
-    renderQuarterProgress();
+    renderQuarterMIIChart();
     renderMarketStats();
     renderTopModels();
     renderLeaderboard();
