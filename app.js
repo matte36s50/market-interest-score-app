@@ -1,7 +1,7 @@
 // Sample data structure
 const sampleData = {
     lastUpdated: "2025-11-26T18:00:00Z",
-    quarters: ["2025Q2", "2025Q3"],
+    quarters: ["2025Q2", "2025Q3", "2025Q3-QTD"],
     manufacturers: [
         {
             make: "Porsche",
@@ -234,7 +234,7 @@ let state = {
     searchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
-    selectedQuarter: '2025Q2'
+    selectedQuarter: '2025Q3-QTD'
 };
 
 let charts = {
@@ -243,6 +243,50 @@ let charts = {
 };
 
 // Helper functions
+function getQuarterInfo(quarterStr) {
+    const isQTD = quarterStr.endsWith('-QTD');
+    const baseQuarter = isQTD ? quarterStr.replace('-QTD', '') : quarterStr;
+
+    // Parse quarter (e.g., "2025Q3")
+    const year = parseInt(baseQuarter.substring(0, 4));
+    const quarter = parseInt(baseQuarter.substring(5, 6));
+
+    // Calculate quarter start and end dates
+    const quarterStartMonth = (quarter - 1) * 3;
+    const quarterEndMonth = quarterStartMonth + 3;
+
+    const startDate = new Date(year, quarterStartMonth, 1);
+    const endDate = new Date(year, quarterEndMonth, 0); // Last day of previous month
+
+    return { isQTD, year, quarter, startDate, endDate };
+}
+
+function getQuarterProgress() {
+    const now = new Date();
+    const info = getQuarterInfo(state.selectedQuarter);
+
+    if (!info.isQTD) return null;
+
+    const totalDays = Math.ceil((info.endDate - info.startDate) / (1000 * 60 * 60 * 24));
+    const elapsedDays = Math.ceil((now - info.startDate) / (1000 * 60 * 60 * 24));
+    const percentage = Math.min(100, Math.max(0, (elapsedDays / totalDays) * 100));
+
+    return {
+        totalDays,
+        elapsedDays: Math.max(0, elapsedDays),
+        daysRemaining: Math.max(0, totalDays - elapsedDays),
+        percentage: percentage.toFixed(1)
+    };
+}
+
+function formatQuarterDisplay(quarterStr) {
+    if (quarterStr.endsWith('-QTD')) {
+        const base = quarterStr.replace('-QTD', '');
+        return `${base} (QTD)`;
+    }
+    return quarterStr;
+}
+
 function getConfidenceBadge(level) {
     const styles = {
         High: { bg: 'bg-emerald-900/30', text: 'text-emerald-400', icon: '●' },
@@ -732,6 +776,55 @@ function renderCompareChart() {
     });
 }
 
+function renderQuarterProgress() {
+    const container = document.getElementById('quarterProgressContainer');
+    if (!container) return;
+
+    const progress = getQuarterProgress();
+
+    if (!progress) {
+        container.classList.add('hidden');
+        return;
+    }
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+        <div class="bg-gradient-to-r from-amber-900/30 to-orange-900/30 border border-amber-800/50 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                    <h3 class="font-semibold text-sm text-amber-400">Quarter to Date</h3>
+                </div>
+                <div class="text-xs text-amber-400/80">Live Data</div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mb-3">
+                <div class="bg-zinc-900/50 rounded-lg p-2">
+                    <div class="text-xs text-zinc-500">Days Elapsed</div>
+                    <div class="text-lg font-bold text-amber-400">${progress.elapsedDays}</div>
+                </div>
+                <div class="bg-zinc-900/50 rounded-lg p-2">
+                    <div class="text-xs text-zinc-500">Days Remaining</div>
+                    <div class="text-lg font-bold text-emerald-400">${progress.daysRemaining}</div>
+                </div>
+                <div class="bg-zinc-900/50 rounded-lg p-2">
+                    <div class="text-xs text-zinc-500">Progress</div>
+                    <div class="text-lg font-bold text-orange-400">${progress.percentage}%</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-zinc-800/50 rounded-full h-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all duration-500"
+                     style="width: ${progress.percentage}%"></div>
+            </div>
+            <div class="text-xs text-zinc-500 mt-2 text-center">
+                ${progress.elapsedDays} of ${progress.totalDays} days completed
+            </div>
+        </div>
+    `;
+}
+
 // Action functions
 function selectManufacturer(make) {
     state.selectedMake = make;
@@ -770,8 +863,15 @@ function init() {
     // Populate quarter select
     const quarterSelect = document.getElementById('quarterSelect');
     quarterSelect.innerHTML = sampleData.quarters.map(q =>
-        `<option value="${q}" ${q === state.selectedQuarter ? 'selected' : ''}>${q}</option>`
+        `<option value="${q}" ${q === state.selectedQuarter ? 'selected' : ''}>${formatQuarterDisplay(q)}</option>`
     ).join('');
+
+    // Event listener for quarter select
+    quarterSelect.addEventListener('change', (e) => {
+        state.selectedQuarter = e.target.value;
+        updateFilters();
+        renderQuarterProgress();
+    });
 
     // Event listeners
     document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -814,6 +914,7 @@ function init() {
     });
 
     // Initial render
+    renderQuarterProgress();
     renderMarketStats();
     renderTopModels();
     renderLeaderboard();
