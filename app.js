@@ -1,7 +1,7 @@
 // Sample data structure
 const sampleData = {
     lastUpdated: "2025-11-26T18:00:00Z",
-    quarters: ["2025Q2", "2025Q3", "2025Q3-QTD"],
+    quarters: ["2025Q2", "2025Q3", "2025Q4-QTD"],
     manufacturers: [
         {
             make: "Porsche",
@@ -234,7 +234,7 @@ let state = {
     searchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
-    selectedQuarter: '2025Q3-QTD'
+    selectedQuarter: '2025Q4-QTD'
 };
 
 let charts = {
