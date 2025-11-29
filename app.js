@@ -40,33 +40,82 @@ let sampleData = {
 // Load and parse CSV from S3
 async function loadCSVData() {
     try {
-        const response = await fetch(CSV_URL);
+        console.log('Fetching CSV from:', CSV_URL);
+
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+        const response = await fetch(CSV_URL, {
+            mode: 'cors',
+            signal: controller.signal,
+            headers: {
+                'Accept': 'text/csv'
+            }
+        });
+
+        clearTimeout(timeoutId);
+
+        console.log('Fetch response status:', response.status, response.statusText);
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            if (response.status === 403) {
+                errorMessage += ' - Access Denied. Check S3 bucket permissions and CORS configuration.';
+            } else if (response.status === 404) {
+                errorMessage += ' - File not found. Verify the CSV file exists at the specified URL.';
+            }
+            throw new Error(errorMessage);
         }
+
         const csvText = await response.text();
+        console.log('CSV text length:', csvText.length, 'characters');
 
         return new Promise((resolve, reject) => {
             Papa.parse(csvText, {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    console.log('CSV parsed:', results.data.length, 'rows');
+                    console.log('CSV parsing complete');
+                    console.log('- Data rows:', results.data.length);
+                    console.log('- Errors:', results.errors.length);
+
+                    if (results.errors.length > 0) {
+                        console.warn('CSV parsing errors:', results.errors);
+                        // Only reject if there are critical errors and no data
+                        if (results.data.length === 0) {
+                            reject(new Error('CSV parsing failed: ' + results.errors[0].message));
+                            return;
+                        }
+                    }
+
                     resolve(results.data);
                 },
                 error: (error) => {
-                    reject(error);
+                    console.error('Papa Parse error:', error);
+                    reject(new Error('CSV parsing error: ' + error.message));
                 }
             });
         });
     } catch (error) {
         console.error('Error loading CSV:', error);
+
+        // Provide more specific error messages
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout - S3 server did not respond within 15 seconds');
+        } else if (error.message.includes('Failed to fetch')) {
+            throw new Error('Network error - Unable to reach S3. Check your internet connection or S3 CORS settings.');
+        }
+
         throw error;
     }
 }
 
 // Process CSV data into dashboard format
 function processCSVData(rawData) {
+    console.log('Processing CSV data...');
+    console.log('Total raw data rows:', rawData.length);
+
     // Filter out invalid quarters and rows
     const validData = rawData.filter(row =>
         row.quarter &&
@@ -78,6 +127,13 @@ function processCSVData(rawData) {
     );
 
     console.log('Valid data rows:', validData.length);
+    console.log('Filtered out:', rawData.length - validData.length, 'rows');
+
+    if (validData.length === 0) {
+        console.error('ERROR: No valid data rows found!');
+        console.log('Sample of raw data (first 3 rows):', rawData.slice(0, 3));
+        throw new Error('No valid data found in CSV. Check data format.');
+    }
 
     // Get unique quarters and sort them
     const quarters = [...new Set(validData.map(row => row.quarter))].sort();
@@ -269,12 +325,35 @@ async function initializeApp() {
 
     } catch (error) {
         console.error('Failed to load data:', error);
+
+        // Provide helpful troubleshooting information
+        const troubleshootingSteps = [
+            'Open browser DevTools (F12) and check the Console tab for detailed errors',
+            'Verify the S3 bucket has public read access enabled',
+            'Check that CORS is configured on the S3 bucket',
+            'Ensure the file mii_results_latest.csv exists in the bucket',
+            'Check your internet connection'
+        ];
+
         loadingIndicator.innerHTML = `
-            <div class="text-center">
+            <div class="text-center max-w-2xl mx-auto">
                 <div class="text-6xl mb-4">⚠️</div>
-                <div class="text-xl font-semibold text-red-400">Failed to Load Data</div>
-                <div class="text-sm text-zinc-500 mt-2">${error.message}</div>
-                <div class="text-xs text-zinc-600 mt-4">Check console for details</div>
+                <div class="text-xl font-semibold text-red-400 mb-2">Failed to Load Data</div>
+                <div class="text-sm text-zinc-400 mt-2 mb-4">${error.message}</div>
+                <button
+                    onclick="location.reload()"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mb-6">
+                    Retry
+                </button>
+                <details class="text-left bg-zinc-900 p-4 rounded-lg">
+                    <summary class="cursor-pointer text-sm text-zinc-400 mb-2">Troubleshooting Steps</summary>
+                    <ol class="text-xs text-zinc-500 space-y-1 list-decimal list-inside">
+                        ${troubleshootingSteps.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                    <div class="mt-3 text-xs text-zinc-600">
+                        <strong>S3 URL:</strong> <span class="text-zinc-500">${CSV_URL}</span>
+                    </div>
+                </details>
             </div>
         `;
     }
