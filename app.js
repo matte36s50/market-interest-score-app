@@ -464,7 +464,14 @@ function getTopModels(minAuctions = 3, limit = 15) {
     const quarterKey = state.selectedQuarter;
     const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
 
+    console.log('getTopModels: Quarter:', quarterKey, '| Manufacturers:', manufacturers.length);
+
     manufacturers.forEach(mfr => {
+        if (!mfr.models || mfr.models.length === 0) {
+            console.warn('Manufacturer', mfr.make, 'has no models');
+            return;
+        }
+
         mfr.models.forEach(model => {
             if (model.auctions >= minAuctions) {
                 allModels.push({
@@ -475,6 +482,8 @@ function getTopModels(minAuctions = 3, limit = 15) {
             }
         });
     });
+
+    console.log('getTopModels: Found', allModels.length, 'models with', minAuctions, '+ auctions');
 
     return allModels
         .sort((a, b) => b.mii - a.mii)
@@ -520,6 +529,14 @@ function renderMarketStats() {
 function renderTopModels() {
     const topModels = getTopModels(3, 15);
     const container = document.getElementById('topModelsContainer');
+
+    console.log('Rendering top models:', topModels.length, 'models found');
+
+    if (topModels.length === 0) {
+        console.warn('No models found with 3+ auctions');
+        container.innerHTML = '<div class="col-span-full text-center text-zinc-500 py-8">No models found with 3+ auctions in this quarter</div>';
+        return;
+    }
 
     container.innerHTML = topModels.map((model, idx) => {
         return `
