@@ -6,6 +6,7 @@
     <title>Market Interest Index - Collector Car Analytics Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -64,6 +65,15 @@
             </div>
         </div>
     </header>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-zinc-700 border-t-amber-500 mb-4"></div>
+            <div class="text-xl font-semibold text-zinc-100">Loading MII Data...</div>
+            <div class="text-sm text-zinc-500 mt-2">Fetching from S3 bucket</div>
+        </div>
+    </div>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
         <!-- Quarter MII Trend Chart -->

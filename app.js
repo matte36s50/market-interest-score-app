@@ -1,243 +1,287 @@
-// Sample data structure
-const sampleData = {
-    lastUpdated: "2025-11-26T18:00:00Z",
-    quarters: ["2025Q2", "2025Q3", "2025Q4-QTD"],
-    quarterMIITrends: {
-        "2025Q2": {
-            labels: ["Apr 1", "Apr 15", "May 1", "May 15", "Jun 1", "Jun 15", "Jun 30"],
-            data: [76.2, 77.1, 77.8, 78.2, 78.9, 79.3, 79.6]
-        },
-        "2025Q3": {
-            labels: ["Jul 1", "Jul 15", "Aug 1", "Aug 15", "Sep 1", "Sep 15", "Sep 30"],
-            data: [79.6, 80.1, 80.8, 81.2, 81.8, 82.3, 82.7]
-        },
-        "2025Q4-QTD": {
-            labels: ["Oct 1", "Oct 15", "Nov 1", "Nov 15", "Nov 29"],
-            data: [82.7, 83.2, 83.9, 84.5, 85.1]
-        }
-    },
-    manufacturers: [
-        {
-            make: "Porsche",
-            logo: "🔵",
-            auctions: 245,
-            avgPrice: 89500,
-            miiScore: 87.4,
-            confidence: "High",
-            trend: 4.2,
-            sellThrough: 78,
-            history: [86.8, 87.4, 91.6],
-            models: [
-                { model: "911 Turbo", auctions: 67, mii: 92.3, avgPrice: 185000, trend: 5.1, confidence: "High" },
-                { model: "911 Carrera", auctions: 54, mii: 88.7, avgPrice: 95000, trend: 3.2, confidence: "High" },
-                { model: "Boxster S", auctions: 38, mii: 79.4, avgPrice: 42000, trend: -1.3, confidence: "Medium-High" },
-                { model: "Cayman GT4", auctions: 28, mii: 91.1, avgPrice: 125000, trend: 6.8, confidence: "Medium-High" },
-                { model: "944 Turbo", auctions: 22, mii: 76.8, avgPrice: 38000, trend: 2.1, confidence: "Medium" },
-                { model: "928 GTS", auctions: 18, mii: 74.2, avgPrice: 65000, trend: 1.8, confidence: "Medium" },
-                { model: "Taycan", auctions: 18, mii: 68.5, avgPrice: 72000, trend: -3.4, confidence: "Medium" }
-            ]
-        },
-        {
-            make: "BMW",
-            logo: "⚪",
-            auctions: 312,
-            avgPrice: 52300,
-            miiScore: 84.2,
-            confidence: "High",
-            trend: 2.8,
-            sellThrough: 72,
-            history: [83.1, 84.2, 87.0],
-            models: [
-                { model: "E46 M3", auctions: 54, mii: 89.7, avgPrice: 48500, trend: 4.5, confidence: "High" },
-                { model: "E30 M3", auctions: 28, mii: 94.2, avgPrice: 125000, trend: 8.2, confidence: "Medium-High" },
-                { model: "E39 M5", auctions: 42, mii: 85.3, avgPrice: 38000, trend: 2.1, confidence: "High" },
-                { model: "E92 M3", auctions: 48, mii: 82.6, avgPrice: 42000, trend: 1.8, confidence: "High" },
-                { model: "Z3 M Coupe", auctions: 22, mii: 88.1, avgPrice: 58000, trend: 5.4, confidence: "Medium" },
-                { model: "E28 M5", auctions: 15, mii: 79.4, avgPrice: 45000, trend: 3.2, confidence: "Medium" },
-                { model: "Z8", auctions: 12, mii: 91.8, avgPrice: 235000, trend: 4.1, confidence: "Medium" },
-                { model: "2002tii", auctions: 18, mii: 77.5, avgPrice: 42000, trend: 1.2, confidence: "Medium" }
-            ]
-        },
-        {
-            make: "Mercedes-Benz",
-            logo: "⚪",
-            auctions: 198,
-            avgPrice: 67800,
-            miiScore: 81.5,
-            confidence: "High",
-            trend: 1.4,
-            sellThrough: 68,
-            history: [80.6, 81.5, 84.3],
-            models: [
-                { model: "190E 2.5-16 Evo II", auctions: 8, mii: 96.2, avgPrice: 385000, trend: 12.1, confidence: "Low" },
-                { model: "SL 500 (R129)", auctions: 32, mii: 78.4, avgPrice: 28000, trend: 0.8, confidence: "High" },
-                { model: "W124 500E", auctions: 24, mii: 84.2, avgPrice: 52000, trend: 3.5, confidence: "Medium-High" },
-                { model: "C63 AMG (W204)", auctions: 38, mii: 79.8, avgPrice: 38000, trend: -0.5, confidence: "High" },
-                { model: "SLS AMG", auctions: 18, mii: 88.5, avgPrice: 195000, trend: 2.8, confidence: "Medium" },
-                { model: "300SL Gullwing", auctions: 6, mii: 98.1, avgPrice: 1450000, trend: 5.2, confidence: "Low" }
-            ]
-        },
-        {
-            make: "Ferrari",
-            logo: "🔴",
-            auctions: 89,
-            avgPrice: 285000,
-            miiScore: 91.2,
-            confidence: "High",
-            trend: 3.8,
-            sellThrough: 82,
-            history: [90.2, 91.2, 95.0],
-            models: [
-                { model: "F430", auctions: 22, mii: 89.4, avgPrice: 185000, trend: 2.4, confidence: "Medium" },
-                { model: "458 Italia", auctions: 18, mii: 92.1, avgPrice: 225000, trend: 4.2, confidence: "Medium" },
-                { model: "360 Modena", auctions: 28, mii: 84.7, avgPrice: 95000, trend: 1.8, confidence: "Medium-High" },
-                { model: "F355", auctions: 12, mii: 87.3, avgPrice: 125000, trend: 3.1, confidence: "Medium" },
-                { model: "Testarossa", auctions: 9, mii: 85.9, avgPrice: 175000, trend: 2.8, confidence: "Low" }
-            ]
-        },
-        {
-            make: "Nissan",
-            logo: "🟡",
-            auctions: 156,
-            avgPrice: 48200,
-            miiScore: 78.6,
-            confidence: "High",
-            trend: 5.2,
-            sellThrough: 74,
-            history: [77.2, 78.6, 83.8],
-            models: [
-                { model: "Skyline GT-R (R34)", auctions: 18, mii: 94.8, avgPrice: 185000, trend: 8.5, confidence: "Medium" },
-                { model: "Skyline GT-R (R32)", auctions: 24, mii: 88.2, avgPrice: 85000, trend: 6.2, confidence: "Medium-High" },
-                { model: "300ZX Twin Turbo", auctions: 32, mii: 79.4, avgPrice: 38000, trend: 4.1, confidence: "High" },
-                { model: "240SX", auctions: 42, mii: 72.5, avgPrice: 22000, trend: 3.8, confidence: "High" },
-                { model: "Fairlady Z (S30)", auctions: 18, mii: 81.2, avgPrice: 52000, trend: 2.4, confidence: "Medium" }
-            ]
-        },
-        {
-            make: "Toyota",
-            logo: "🔘",
-            auctions: 178,
-            avgPrice: 42500,
-            miiScore: 76.8,
-            confidence: "High",
-            trend: 3.1,
-            sellThrough: 76,
-            history: [75.8, 76.8, 80.2],
-            models: [
-                { model: "Supra (A80)", auctions: 28, mii: 91.4, avgPrice: 95000, trend: 5.8, confidence: "Medium-High" },
-                { model: "Land Cruiser (FJ40)", auctions: 35, mii: 82.6, avgPrice: 65000, trend: 3.2, confidence: "High" },
-                { model: "MR2 Turbo", auctions: 24, mii: 74.8, avgPrice: 28000, trend: 2.4, confidence: "Medium-High" },
-                { model: "AE86", auctions: 18, mii: 78.5, avgPrice: 35000, trend: 4.1, confidence: "Medium" },
-                { model: "4Runner (1st Gen)", auctions: 32, mii: 71.2, avgPrice: 24000, trend: 1.8, confidence: "High" }
-            ]
-        },
-        {
-            make: "Audi",
-            logo: "⚫",
-            auctions: 142,
-            avgPrice: 48900,
-            miiScore: 74.2,
-            confidence: "High",
-            trend: 0.8,
-            sellThrough: 65,
-            history: [73.9, 74.2, 77.5],
-            models: [
-                { model: "RS4 (B7)", auctions: 28, mii: 81.4, avgPrice: 48000, trend: 2.1, confidence: "Medium-High" },
-                { model: "RS6 Avant (C6)", auctions: 18, mii: 84.2, avgPrice: 68000, trend: 3.8, confidence: "Medium" },
-                { model: "Ur-Quattro", auctions: 15, mii: 86.5, avgPrice: 85000, trend: 4.2, confidence: "Medium" },
-                { model: "R8 V10", auctions: 32, mii: 77.8, avgPrice: 125000, trend: -1.2, confidence: "High" },
-                { model: "TT RS", auctions: 24, mii: 72.4, avgPrice: 42000, trend: 0.5, confidence: "Medium-High" }
-            ]
-        },
-        {
-            make: "Chevrolet",
-            logo: "🟠",
-            auctions: 285,
-            avgPrice: 58200,
-            miiScore: 72.4,
-            confidence: "High",
-            trend: 1.2,
-            sellThrough: 71,
-            history: [71.9, 72.4, 74.8],
-            models: [
-                { model: "Corvette C2 Stingray", auctions: 32, mii: 85.2, avgPrice: 95000, trend: 2.8, confidence: "High" },
-                { model: "Corvette C3", auctions: 48, mii: 74.6, avgPrice: 42000, trend: 0.8, confidence: "High" },
-                { model: "Camaro Z/28 (1st Gen)", auctions: 24, mii: 82.4, avgPrice: 78000, trend: 3.1, confidence: "Medium-High" },
-                { model: "Chevelle SS 454", auctions: 18, mii: 79.8, avgPrice: 68000, trend: 1.4, confidence: "Medium" },
-                { model: "C8 Corvette", auctions: 52, mii: 68.5, avgPrice: 85000, trend: -2.1, confidence: "High" }
-            ]
-        },
-        {
-            make: "Ford",
-            logo: "🔷",
-            auctions: 298,
-            avgPrice: 52800,
-            miiScore: 71.8,
-            confidence: "High",
-            trend: 0.6,
-            sellThrough: 69,
-            history: [71.5, 71.8, 73.4],
-            models: [
-                { model: "GT40", auctions: 5, mii: 97.8, avgPrice: 2850000, trend: 4.5, confidence: "Low" },
-                { model: "Mustang Shelby GT350", auctions: 28, mii: 84.2, avgPrice: 125000, trend: 2.8, confidence: "Medium-High" },
-                { model: "Bronco (1st Gen)", auctions: 42, mii: 78.5, avgPrice: 58000, trend: 1.2, confidence: "High" },
-                { model: "F-150 Raptor", auctions: 38, mii: 72.4, avgPrice: 52000, trend: -0.8, confidence: "High" },
-                { model: "Focus RS", auctions: 32, mii: 74.8, avgPrice: 38000, trend: 1.5, confidence: "High" }
-            ]
-        },
-        {
-            make: "Lamborghini",
-            logo: "🟡",
-            auctions: 52,
-            avgPrice: 285000,
-            miiScore: 88.4,
-            confidence: "High",
-            trend: 2.4,
-            sellThrough: 79,
-            history: [87.6, 88.4, 92.8],
-            models: [
-                { model: "Gallardo", auctions: 22, mii: 84.2, avgPrice: 145000, trend: 1.8, confidence: "Medium" },
-                { model: "Murcielago", auctions: 12, mii: 89.5, avgPrice: 285000, trend: 3.2, confidence: "Medium" },
-                { model: "Countach", auctions: 8, mii: 94.8, avgPrice: 650000, trend: 4.8, confidence: "Low" },
-                { model: "Huracan", auctions: 10, mii: 82.4, avgPrice: 225000, trend: 0.5, confidence: "Medium" }
-            ]
-        },
-        {
-            make: "Jaguar",
-            logo: "🟢",
-            auctions: 86,
-            avgPrice: 68500,
-            miiScore: 73.8,
-            confidence: "High",
-            trend: -0.4,
-            sellThrough: 62,
-            history: [74.0, 73.8, 76.9],
-            models: [
-                { model: "E-Type Series I", auctions: 18, mii: 88.4, avgPrice: 165000, trend: 1.2, confidence: "Medium" },
-                { model: "XJ220", auctions: 5, mii: 91.2, avgPrice: 485000, trend: 2.8, confidence: "Low" },
-                { model: "F-Type R", auctions: 28, mii: 72.5, avgPrice: 58000, trend: -1.5, confidence: "Medium-High" },
-                { model: "XKR", auctions: 22, mii: 68.4, avgPrice: 32000, trend: -2.1, confidence: "Medium" }
-            ]
-        },
-        {
-            make: "Land Rover",
-            logo: "🟤",
-            auctions: 124,
-            avgPrice: 52400,
-            miiScore: 74.5,
-            confidence: "High",
-            trend: 2.1,
-            sellThrough: 71,
-            history: [73.9, 74.5, 77.6],
-            models: [
-                { model: "Defender 90", auctions: 42, mii: 79.8, avgPrice: 68000, trend: 3.5, confidence: "High" },
-                { model: "Defender 110", auctions: 35, mii: 76.4, avgPrice: 52000, trend: 2.8, confidence: "High" },
-                { model: "Range Rover Classic", auctions: 28, mii: 74.2, avgPrice: 42000, trend: 1.8, confidence: "Medium-High" },
-                { model: "Discovery Series I", auctions: 19, mii: 68.5, avgPrice: 18000, trend: 0.5, confidence: "Medium" }
-            ]
-        }
-    ]
+// S3 CSV URL
+const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
+
+// Manufacturer emoji mapping
+const MANUFACTURER_LOGOS = {
+    'Porsche': '🔵',
+    'BMW': '⚪',
+    'Mercedes-Benz': '⚪',
+    'Ferrari': '🔴',
+    'Nissan': '🟡',
+    'Toyota': '🔘',
+    'Audi': '⚫',
+    'Chevrolet': '🟠',
+    'Ford': '🔷',
+    'Lamborghini': '🟡',
+    'Jaguar': '🟢',
+    'Land Rover': '🟤',
+    'Lexus': '🔘',
+    'Honda': '🔴',
+    'Acura': '⚫',
+    'Mazda': '🔴',
+    'Subaru': '🔵',
+    'Volkswagen': '🔵',
+    'Mercedes-AMG': '⚪',
+    'Dodge': '🔴',
+    'Plymouth': '🟠',
+    'Pontiac': '🔵',
+    'Oldsmobile': '⚪'
 };
+
+// Global data object (will be populated from CSV)
+let sampleData = {
+    lastUpdated: new Date().toISOString(),
+    quarters: [],
+    quarterMIITrends: {},
+    quarterData: {},
+    manufacturers: []
+};
+
+// Load and parse CSV from S3
+async function loadCSVData() {
+    try {
+        const response = await fetch(CSV_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const csvText = await response.text();
+
+        return new Promise((resolve, reject) => {
+            Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    console.log('CSV parsed:', results.data.length, 'rows');
+                    resolve(results.data);
+                },
+                error: (error) => {
+                    reject(error);
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error loading CSV:', error);
+        throw error;
+    }
+}
+
+// Process CSV data into dashboard format
+function processCSVData(rawData) {
+    // Filter out invalid quarters and rows
+    const validData = rawData.filter(row =>
+        row.quarter &&
+        row.quarter !== 'IAF' &&
+        row.manufacturer &&
+        row.model &&
+        row.mii_score &&
+        !isNaN(parseFloat(row.mii_score))
+    );
+
+    console.log('Valid data rows:', validData.length);
+
+    // Get unique quarters and sort them
+    const quarters = [...new Set(validData.map(row => row.quarter))].sort();
+    sampleData.quarters = quarters;
+
+    // Determine latest quarter (for QTD marking)
+    const latestQuarter = quarters[quarters.length - 1];
+    const qtdQuarter = latestQuarter + '-QTD';
+
+    // Update quarters array to mark latest as QTD
+    sampleData.quarters = quarters.slice(0, -1).concat([qtdQuarter]);
+
+    // Group data by quarter
+    const dataByQuarter = {};
+    quarters.forEach(q => {
+        dataByQuarter[q] = validData.filter(row => row.quarter === q);
+    });
+
+    // Process each quarter
+    sampleData.quarterData = {};
+
+    quarters.forEach((quarter, qIndex) => {
+        const quarterKey = (qIndex === quarters.length - 1) ? qtdQuarter : quarter;
+        const quarterRows = dataByQuarter[quarter];
+
+        // Group by manufacturer
+        const mfrGroups = {};
+        quarterRows.forEach(row => {
+            const mfr = row.manufacturer;
+            if (!mfrGroups[mfr]) {
+                mfrGroups[mfr] = [];
+            }
+            mfrGroups[mfr].push(row);
+        });
+
+        // Calculate manufacturer-level statistics
+        const manufacturers = Object.keys(mfrGroups).map(mfrName => {
+            const mfrData = mfrGroups[mfrName];
+            const auctions = mfrData.length;
+
+            // Calculate average MII score for manufacturer
+            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / auctions;
+
+            // Calculate average price
+            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / auctions;
+
+            // Calculate trend (difference from previous quarter)
+            let trend = 0;
+            if (qIndex > 0) {
+                const prevQuarter = quarters[qIndex - 1];
+                const prevQuarterKey = prevQuarter;
+                if (sampleData.quarterData[prevQuarterKey]) {
+                    const prevMfr = sampleData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
+                    if (prevMfr) {
+                        trend = ((avgMII - prevMfr.miiScore) / prevMfr.miiScore) * 100;
+                    }
+                }
+            }
+
+            // Build history array (last 3 quarters)
+            const history = [];
+            for (let i = Math.max(0, qIndex - 2); i <= qIndex; i++) {
+                const hQuarter = quarters[i];
+                const hQuarterKey = i === quarters.length - 1 ? qtdQuarter : hQuarter;
+                if (sampleData.quarterData[hQuarterKey]) {
+                    const hMfr = sampleData.quarterData[hQuarterKey].manufacturers.find(m => m.make === mfrName);
+                    if (hMfr) {
+                        history.push(hMfr.miiScore);
+                    }
+                } else if (i === qIndex) {
+                    history.push(avgMII);
+                }
+            }
+
+            // Get confidence level based on auction count
+            let confidence = 'Low';
+            if (auctions >= 50) confidence = 'High';
+            else if (auctions >= 20) confidence = 'Medium-High';
+            else if (auctions >= 10) confidence = 'Medium';
+
+            // Calculate sell-through (assume all sold for now, or could add logic)
+            const sellThrough = 75; // Placeholder
+
+            // Process models
+            const models = mfrData.map(row => ({
+                model: row.model,
+                auctions: 1, // Each row is one auction
+                mii: parseFloat(row.mii_score),
+                avgPrice: parseFloat(row.price || 0),
+                trend: 0, // Could calculate model-specific trend
+                confidence: 'Medium'
+            }));
+
+            // Group models by name and aggregate
+            const modelGroups = {};
+            models.forEach(model => {
+                if (!modelGroups[model.model]) {
+                    modelGroups[model.model] = {
+                        model: model.model,
+                        auctions: 0,
+                        totalMII: 0,
+                        totalPrice: 0
+                    };
+                }
+                modelGroups[model.model].auctions += 1;
+                modelGroups[model.model].totalMII += model.mii;
+                modelGroups[model.model].totalPrice += model.avgPrice;
+            });
+
+            const aggregatedModels = Object.values(modelGroups).map(mg => ({
+                model: mg.model,
+                auctions: mg.auctions,
+                mii: mg.totalMII / mg.auctions,
+                avgPrice: mg.totalPrice / mg.auctions,
+                trend: 0,
+                confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
+            }));
+
+            return {
+                make: mfrName,
+                logo: MANUFACTURER_LOGOS[mfrName] || '🚗',
+                auctions: auctions,
+                avgPrice: Math.round(avgPrice),
+                miiScore: parseFloat(avgMII.toFixed(1)),
+                confidence: confidence,
+                trend: parseFloat(trend.toFixed(1)),
+                sellThrough: sellThrough,
+                history: history,
+                models: aggregatedModels.sort((a, b) => b.mii - a.mii)
+            };
+        });
+
+        sampleData.quarterData[quarterKey] = {
+            manufacturers: manufacturers.sort((a, b) => b.miiScore - a.miiScore)
+        };
+    });
+
+    // Set manufacturers to latest quarter data for backward compatibility
+    const latestQuarterKey = quarters.length > 0 ?
+        (sampleData.quarters[sampleData.quarters.length - 1]) : null;
+    if (latestQuarterKey && sampleData.quarterData[latestQuarterKey]) {
+        sampleData.manufacturers = sampleData.quarterData[latestQuarterKey].manufacturers;
+    }
+
+    // Build quarterMIITrends (aggregate MII by quarter)
+    sampleData.quarterMIITrends = {};
+    quarters.forEach((quarter, qIndex) => {
+        const quarterKey = qIndex === quarters.length - 1 ? qtdQuarter : quarter;
+        if (sampleData.quarterData[quarterKey]) {
+            const manufacturers = sampleData.quarterData[quarterKey].manufacturers;
+            const avgMII = manufacturers.reduce((sum, m) => sum + m.miiScore, 0) / manufacturers.length;
+
+            // Create placeholder trend data (would need actual time-series data for real trends)
+            sampleData.quarterMIITrends[quarterKey] = {
+                labels: ['Start', 'Mid', 'End'],
+                data: [avgMII - 1, avgMII, avgMII + 0.5]
+            };
+        }
+    });
+
+    console.log('Processed data:', sampleData);
+    return sampleData;
+}
+
+// Initialize app with CSV data
+async function initializeApp() {
+    const loadingIndicator = document.getElementById('loadingIndicator');
+
+    try {
+        loadingIndicator.style.display = 'flex';
+
+        // Load and process CSV data
+        const rawData = await loadCSVData();
+        processCSVData(rawData);
+
+        // Update last updated time
+        sampleData.lastUpdated = new Date().toISOString();
+
+        // Set default selected quarter to latest
+        if (sampleData.quarters.length > 0) {
+            state.selectedQuarter = sampleData.quarters[sampleData.quarters.length - 1];
+        }
+
+        // Hide loading indicator
+        loadingIndicator.style.display = 'none';
+
+        // Initialize the dashboard
+        init();
+
+    } catch (error) {
+        console.error('Failed to load data:', error);
+        loadingIndicator.innerHTML = `
+            <div class="text-center">
+                <div class="text-6xl mb-4">⚠️</div>
+                <div class="text-xl font-semibold text-red-400">Failed to Load Data</div>
+                <div class="text-sm text-zinc-500 mt-2">${error.message}</div>
+                <div class="text-xs text-zinc-600 mt-4">Check console for details</div>
+            </div>
+        `;
+    }
+}
+
+// Temporary placeholder manufacturers array (will be replaced by CSV data)
+sampleData.manufacturers = [];
 
 // State management
 let state = {
@@ -321,7 +365,11 @@ function createSparkline(data, color = '#10b981') {
 }
 
 function getFilteredManufacturers() {
-    return sampleData.manufacturers
+    // Get manufacturers for the selected quarter
+    const quarterKey = state.selectedQuarter;
+    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+
+    return manufacturers
         .filter(m => m.auctions >= state.minAuctions)
         .filter(m => m.make.toLowerCase().includes(state.searchTerm.toLowerCase()))
         .sort((a, b) => {
@@ -333,7 +381,11 @@ function getFilteredManufacturers() {
 function getTopModels(minAuctions = 3, limit = 15) {
     const allModels = [];
 
-    sampleData.manufacturers.forEach(mfr => {
+    // Get manufacturers for the selected quarter
+    const quarterKey = state.selectedQuarter;
+    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+
+    manufacturers.forEach(mfr => {
         mfr.models.forEach(model => {
             if (model.auctions >= minAuctions) {
                 allModels.push({
@@ -351,7 +403,20 @@ function getTopModels(minAuctions = 3, limit = 15) {
 }
 
 function calculateMarketStats() {
-    const filtered = sampleData.manufacturers.filter(m => m.auctions >= state.minAuctions);
+    // Get manufacturers for the selected quarter
+    const quarterKey = state.selectedQuarter;
+    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const filtered = manufacturers.filter(m => m.auctions >= state.minAuctions);
+
+    if (filtered.length === 0) {
+        return {
+            totalManufacturers: 0,
+            totalAuctions: 0,
+            avgMII: 0,
+            avgPrice: 0
+        };
+    }
+
     return {
         totalManufacturers: filtered.length,
         totalAuctions: filtered.reduce((sum, m) => sum + m.auctions, 0),
@@ -363,8 +428,11 @@ function calculateMarketStats() {
 // Render functions
 function renderMarketStats() {
     const stats = calculateMarketStats();
+    const quarterKey = state.selectedQuarter;
+    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+
     document.getElementById('qualifyingMakes').textContent = stats.totalManufacturers;
-    document.getElementById('totalMakes').textContent = `of ${sampleData.manufacturers.length} total`;
+    document.getElementById('totalMakes').textContent = `of ${manufacturers.length} total`;
     document.getElementById('totalAuctions').textContent = stats.totalAuctions.toLocaleString();
     document.getElementById('marketMII').textContent = stats.avgMII.toFixed(1);
     document.getElementById('avgPrice').textContent = `$${(stats.avgPrice / 1000).toFixed(0)}K`;
@@ -974,7 +1042,7 @@ function init() {
 
 // Start the app when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-    init();
+    initializeApp();
 }
