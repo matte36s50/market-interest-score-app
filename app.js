@@ -264,8 +264,11 @@ function processCSVData(rawData) {
                             const prevModel = prevMfr.models.find(m => m.model === mg.model);
                             if (prevModel && prevModel.mii > 0) {
                                 modelTrend = ((currentMII - prevModel.mii) / prevModel.mii) * 100;
+                                console.log(`Trend for ${mfrName} ${mg.model}: ${currentMII.toFixed(1)} vs ${prevModel.mii.toFixed(1)} = ${modelTrend.toFixed(1)}%`);
                             }
                         }
+                    } else {
+                        console.log(`No previous quarter data found for ${prevQuarterKey}`);
                     }
                 }
 
@@ -630,15 +633,15 @@ function getFilteredManufacturers() {
         });
 }
 
-function getTopModels(minAuctions = 3, limit = 20) {
+function getTopModels(minAuctions = 0, limit = 20) {
     const allModels = [];
 
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
     const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
 
-    // For YTD, use no minimum auctions; for quarters, use the specified minimum
-    const effectiveMinAuctions = quarterKey === 'YTD' ? 0 : minAuctions;
+    // No minimum auctions - show all models including single auctions
+    const effectiveMinAuctions = minAuctions;
 
     console.log('getTopModels: Quarter:', quarterKey, '| Manufacturers:', manufacturers.length, '| Min auctions:', effectiveMinAuctions);
 
@@ -746,12 +749,12 @@ function renderTopModels() {
             subtitle.textContent = `Search results for "${state.modelSearchTerm}" (${topModels.length} found)`;
         }
     } else {
-        topModels = getTopModels(3, 20);
+        topModels = getTopModels(0, 20);
         // Update subtitle based on selected quarter
         if (subtitle) {
             subtitle.textContent = isYTD
                 ? 'Top 20 models across all manufacturers for the year'
-                : 'Top 20 models across all manufacturers with 3+ auctions';
+                : 'Top 20 models with highest market interest this quarter';
         }
     }
 
@@ -761,13 +764,13 @@ function renderTopModels() {
         if (isSearching) {
             container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found matching "${state.modelSearchTerm}"</div>`;
         } else {
-            const minText = isYTD ? '' : 'with 3+ auctions ';
-            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found ${minText}in this ${isYTD ? 'period' : 'quarter'}</div>`;
+            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found in this ${isYTD ? 'period' : 'quarter'}</div>`;
         }
         return;
     }
 
     container.innerHTML = topModels.map((model, idx) => {
+        const auctionText = model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`;
         return `
             <div class="bg-zinc-800/50 rounded-lg p-4 hover:bg-zinc-800 transition-colors">
                 <div class="flex items-start justify-between mb-2">
@@ -785,7 +788,7 @@ function renderTopModels() {
                 </div>
                 <div class="flex items-center justify-between text-xs">
                     <div class="text-zinc-500">
-                        ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K
+                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K
                     </div>
                     <div class="flex items-center gap-2">
                         ${getTrendIndicator(model.trend)}
