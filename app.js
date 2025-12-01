@@ -588,7 +588,7 @@ function getFilteredManufacturers() {
         });
 }
 
-function getTopModels(minAuctions = 3, limit = 15) {
+function getTopModels(minAuctions = 3, limit = 20) {
     const allModels = [];
 
     // Get manufacturers for the selected quarter
@@ -704,12 +704,12 @@ function renderTopModels() {
             subtitle.textContent = `Search results for "${state.modelSearchTerm}" (${topModels.length} found)`;
         }
     } else {
-        topModels = getTopModels(3, 15);
+        topModels = getTopModels(3, 20);
         // Update subtitle based on selected quarter
         if (subtitle) {
             subtitle.textContent = isYTD
-                ? 'Top models across all manufacturers for the year'
-                : 'Top models across all manufacturers with 3+ auctions';
+                ? 'Top 20 models across all manufacturers for the year'
+                : 'Top 20 models across all manufacturers with 3+ auctions';
         }
     }
 
