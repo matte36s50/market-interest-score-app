@@ -249,14 +249,35 @@ function processCSVData(rawData) {
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
 
-            const aggregatedModels = Object.values(modelGroups).map(mg => ({
-                model: mg.model,
-                auctions: mg.auctions,
-                mii: mg.totalMII / mg.auctions,
-                avgPrice: mg.totalPrice / mg.auctions,
-                trend: 0,
-                confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
-            }));
+            const aggregatedModels = Object.values(modelGroups).map(mg => {
+                const currentMII = mg.totalMII / mg.auctions;
+                let modelTrend = 0;
+
+                // Calculate trend by comparing to previous quarter
+                if (qIndex > 0) {
+                    const prevQuarter = quarters[qIndex - 1];
+                    const prevQuarterKey = prevQuarter;
+
+                    if (sampleData.quarterData[prevQuarterKey]) {
+                        const prevMfr = sampleData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
+                        if (prevMfr && prevMfr.models) {
+                            const prevModel = prevMfr.models.find(m => m.model === mg.model);
+                            if (prevModel && prevModel.mii > 0) {
+                                modelTrend = ((currentMII - prevModel.mii) / prevModel.mii) * 100;
+                            }
+                        }
+                    }
+                }
+
+                return {
+                    model: mg.model,
+                    auctions: mg.auctions,
+                    mii: currentMII,
+                    avgPrice: mg.totalPrice / mg.auctions,
+                    trend: parseFloat(modelTrend.toFixed(1)),
+                    confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
+                };
+            });
 
             return {
                 make: mfrName,
@@ -363,14 +384,35 @@ function processCSVData(rawData) {
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
 
-            const aggregatedModels = Object.values(modelGroups).map(mg => ({
-                model: mg.model,
-                auctions: mg.auctions,
-                mii: mg.totalMII / mg.auctions,
-                avgPrice: mg.totalPrice / mg.auctions,
-                trend: 0,
-                confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
-            }));
+            const aggregatedModels = Object.values(modelGroups).map(mg => {
+                const currentMII = mg.totalMII / mg.auctions;
+                let modelTrend = 0;
+
+                // Calculate YTD trend by comparing to first quarter
+                if (ytdQuarters.length > 1) {
+                    const firstQ = ytdQuarters[0];
+                    const firstQKey = firstQ;
+
+                    if (sampleData.quarterData[firstQKey]) {
+                        const firstMfr = sampleData.quarterData[firstQKey].manufacturers.find(m => m.make === mfrName);
+                        if (firstMfr && firstMfr.models) {
+                            const firstModel = firstMfr.models.find(m => m.model === mg.model);
+                            if (firstModel && firstModel.mii > 0) {
+                                modelTrend = ((currentMII - firstModel.mii) / firstModel.mii) * 100;
+                            }
+                        }
+                    }
+                }
+
+                return {
+                    model: mg.model,
+                    auctions: mg.auctions,
+                    mii: currentMII,
+                    avgPrice: mg.totalPrice / mg.auctions,
+                    trend: parseFloat(modelTrend.toFixed(1)),
+                    confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
+                };
+            });
 
             return {
                 make: mfrName,
