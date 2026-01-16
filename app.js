@@ -46,8 +46,6 @@ let sampleData = {
 // Load and parse CSV from S3
 async function loadCSVData() {
     try {
-        console.log('Fetching CSV from:', CSV_URL);
-
         // Create abort controller for timeout
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
@@ -62,8 +60,6 @@ async function loadCSVData() {
 
         clearTimeout(timeoutId);
 
-        console.log('Fetch response status:', response.status, response.statusText);
-
         if (!response.ok) {
             let errorMessage = `HTTP error! status: ${response.status}`;
             if (response.status === 403) {
@@ -75,17 +71,12 @@ async function loadCSVData() {
         }
 
         const csvText = await response.text();
-        console.log('CSV text length:', csvText.length, 'characters');
 
         return new Promise((resolve, reject) => {
             Papa.parse(csvText, {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    console.log('CSV parsing complete');
-                    console.log('- Data rows:', results.data.length);
-                    console.log('- Errors:', results.errors.length);
-
                     if (results.errors.length > 0) {
                         console.warn('CSV parsing errors:', results.errors);
                         // Only reject if there are critical errors and no data
@@ -98,13 +89,11 @@ async function loadCSVData() {
                     resolve(results.data);
                 },
                 error: (error) => {
-                    console.error('Papa Parse error:', error);
                     reject(new Error('CSV parsing error: ' + error.message));
                 }
             });
         });
     } catch (error) {
-        console.error('Error loading CSV:', error);
 
         // Provide more specific error messages
         if (error.name === 'AbortError') {
@@ -119,9 +108,6 @@ async function loadCSVData() {
 
 // Process CSV data into dashboard format
 function processCSVData(rawData) {
-    console.log('Processing CSV data...');
-    console.log('Total raw data rows:', rawData.length);
-
     // Filter out invalid quarters and rows
     const validData = rawData.filter(row =>
         row.quarter &&
@@ -132,12 +118,7 @@ function processCSVData(rawData) {
         !isNaN(parseFloat(row.mii_score))
     );
 
-    console.log('Valid data rows:', validData.length);
-    console.log('Filtered out:', rawData.length - validData.length, 'rows');
-
     if (validData.length === 0) {
-        console.error('ERROR: No valid data rows found!');
-        console.log('Sample of raw data (first 3 rows):', rawData.slice(0, 3));
         throw new Error('No valid data found in CSV. Check data format.');
     }
 
@@ -221,7 +202,8 @@ function processCSVData(rawData) {
             else if (auctions >= 10) confidence = 'Medium';
 
             // Calculate sell-through (assume all sold for now, or could add logic)
-            const sellThrough = 75; // Placeholder
+            // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
+            const sellThrough = 75;
 
             // Process models
             const models = mfrData.map(row => ({
@@ -264,11 +246,8 @@ function processCSVData(rawData) {
                             const prevModel = prevMfr.models.find(m => m.model === mg.model);
                             if (prevModel && prevModel.mii > 0) {
                                 modelTrend = ((currentMII - prevModel.mii) / prevModel.mii) * 100;
-                                console.log(`Trend for ${mfrName} ${mg.model}: ${currentMII.toFixed(1)} vs ${prevModel.mii.toFixed(1)} = ${modelTrend.toFixed(1)}%`);
                             }
                         }
-                    } else {
-                        console.log(`No previous quarter data found for ${prevQuarterKey}`);
                     }
                 }
 
@@ -302,13 +281,10 @@ function processCSVData(rawData) {
     });
 
     // Process YTD (Year-to-Date) - aggregate all quarters from current year
-    console.log('Processing YTD data...');
     const currentYear = new Date().getFullYear();
     const ytdQuarters = quarters.filter(q => q.startsWith(currentYear.toString()));
 
     if (ytdQuarters.length > 0) {
-        console.log('YTD quarters:', ytdQuarters);
-
         // Combine all YTD quarter data
         const ytdRows = ytdQuarters.flatMap(q => dataByQuarter[q]);
 
@@ -359,6 +335,7 @@ function processCSVData(rawData) {
             else if (auctions >= 60) confidence = 'Medium-High';
             else if (auctions >= 30) confidence = 'Medium';
 
+            // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
             const sellThrough = 75;
 
             // Process models for YTD
@@ -437,8 +414,6 @@ function processCSVData(rawData) {
 
         // Add YTD to quarters list at the end
         sampleData.quarters = sampleData.quarters.concat(['YTD']);
-
-        console.log('YTD processing complete:', ytdManufacturers.length, 'manufacturers');
     }
 
     // Set manufacturers to YTD data by default
@@ -469,7 +444,6 @@ function processCSVData(rawData) {
         }
     });
 
-    console.log('Processed data:', sampleData);
     return sampleData;
 }
 
@@ -643,8 +617,6 @@ function getTopModels(minAuctions = 0, limit = 20) {
     // No minimum auctions - show all models including single auctions
     const effectiveMinAuctions = minAuctions;
 
-    console.log('getTopModels: Quarter:', quarterKey, '| Manufacturers:', manufacturers.length, '| Min auctions:', effectiveMinAuctions);
-
     manufacturers.forEach(mfr => {
         if (!mfr.models || mfr.models.length === 0) {
             console.warn('Manufacturer', mfr.make, 'has no models');
@@ -661,8 +633,6 @@ function getTopModels(minAuctions = 0, limit = 20) {
             }
         });
     });
-
-    console.log('getTopModels: Found', allModels.length, 'models with', effectiveMinAuctions, '+ auctions');
 
     return allModels
         .sort((a, b) => b.mii - a.mii)
@@ -690,8 +660,6 @@ function searchAllModels(searchTerm, limit = 50) {
             }
         });
     });
-
-    console.log('searchAllModels: Found', allModels.length, 'models matching', searchTerm);
 
     return allModels
         .sort((a, b) => b.mii - a.mii)
@@ -757,8 +725,6 @@ function renderTopModels() {
                 : 'Top 20 models with highest market interest this quarter';
         }
     }
-
-    console.log('Rendering top models:', topModels.length, 'models found', isSearching ? '(searching)' : '');
 
     if (topModels.length === 0) {
         if (isSearching) {
