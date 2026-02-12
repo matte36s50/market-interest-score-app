@@ -535,10 +535,11 @@ function renderManufacturerGrid() {
         const isExpanded = state.expandedMfr === mfr.name;
 
         return `
-            <div class="mfr-card terminal-panel rounded cursor-pointer ${isExpanded ? 'selected' : ''}"
-                 data-mfr="${mfr.name}">
+            <div class="mfr-card rounded cursor-pointer ${isExpanded ? 'selected' : ''}"
+                 data-mfr="${mfr.name}"
+                 style="background:#111111; border:1px solid #2a2a2a; overflow:hidden;">
                 <!-- Card Header -->
-                <div class="px-3 py-2 border-b border-[#1c1c1c] flex items-center justify-between">
+                <div class="px-3 py-2 border-b border-[#2a2a2a] flex items-center justify-between" style="background:#0f0f0f;">
                     <div class="flex items-center gap-2">
                         <span class="inline-flex items-center justify-center w-6 h-6 rounded text-[9px] font-bold"
                               style="background:${branding.color}20; color:${branding.color}; border:1px solid ${branding.color}40;">
@@ -555,13 +556,13 @@ function renderManufacturerGrid() {
                 </div>
 
                 <!-- Mini Candlestick Chart -->
-                <div class="px-2 py-1 relative" style="height: 120px;">
+                <div class="px-2 py-1 relative" style="height: 130px; overflow:hidden;">
                     <canvas class="mfr-chart" data-mfr="${mfr.name}"></canvas>
                     <div class="chart-tooltip hidden mfr-tooltip" data-mfr="${mfr.name}"></div>
                 </div>
 
                 <!-- Stats Footer -->
-                <div class="px-3 py-1.5 border-t border-[#1c1c1c] flex items-center justify-between text-[9px]">
+                <div class="px-3 py-2 border-t border-[#2a2a2a] flex items-center justify-between text-[9px]" style="background:#0f0f0f;">
                     <div>
                         <span class="text-[#555]">VOL</span>
                         <span class="text-[#ccc] ml-1">${mfr.volume}</span>

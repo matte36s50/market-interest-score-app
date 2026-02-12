@@ -52,8 +52,8 @@
         }
 
         .mfr-card { transition: all 0.15s ease; }
-        .mfr-card:hover { border-color: #ff9800; background: #151515; }
-        .mfr-card.selected { border-color: #ff9800; box-shadow: 0 0 0 1px #ff9800; }
+        .mfr-card:hover { border-color: #ff9800 !important; background: #151515 !important; }
+        .mfr-card.selected { border-color: #ff9800 !important; box-shadow: 0 0 0 1px #ff9800; }
 
         /* Bloomberg-style scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -71,6 +71,14 @@
             z-index: 100;
             white-space: nowrap;
         }
+
+        /* Ensure canvas elements fill their containers */
+        #marketChart, .mfr-chart, #detailChart {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
     </style>
 </head>
 <body class="min-h-screen">
@@ -189,7 +197,7 @@
                 </div>
             </div>
             <div class="px-4 py-3">
-                <div class="relative" style="height: 280px;">
+                <div class="relative" style="height: 280px; overflow: hidden;">
                     <canvas id="marketChart"></canvas>
                     <div id="marketTooltip" class="chart-tooltip hidden"></div>
                 </div>
@@ -211,7 +219,7 @@
         </div>
 
         <!-- Manufacturer Grid -->
-        <div id="mfrGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div id="mfrGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             <!-- Cards inserted by JS -->
         </div>
 
