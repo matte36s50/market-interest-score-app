@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MII Terminal - Manufacturer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        terminal: {
+                            bg: '#0a0a0a',
+                            panel: '#111111',
+                            border: '#1c1c1c',
+                            grid: '#1a1a1a',
+                            text: '#cccccc',
+                            muted: '#555555',
+                            green: '#00c853',
+                            red: '#ff1744',
+                            amber: '#ff9800',
+                            blue: '#2196f3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            background: #0a0a0a;
+            color: #cccccc;
+        }
+        .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #111; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .terminal-border { border: 1px solid #1c1c1c; }
+        .terminal-panel { background: #111111; border: 1px solid #1c1c1c; }
+
+        .ticker-flash { animation: tickerPulse 2s ease-in-out; }
+        @keyframes tickerPulse {
+            0% { background: rgba(255, 152, 0, 0.2); }
+            100% { background: transparent; }
+        }
+
+        .mfr-card { transition: all 0.15s ease; }
+        .mfr-card:hover { border-color: #ff9800; background: #151515; }
+        .mfr-card.selected { border-color: #ff9800; box-shadow: 0 0 0 1px #ff9800; }
+
+        /* Bloomberg-style scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 0; }
+
+        .chart-tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 6px 10px;
+            font-size: 10px;
+            line-height: 1.4;
+            z-index: 100;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Terminal Header -->
+    <header class="border-b border-[#1c1c1c] bg-[#0d0d0d] sticky top-0 z-50">
+        <div class="max-w-[1800px] mx-auto px-4 py-2">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-[10px] text-white">
+                            MII
+                        </div>
+                        <div>
+                            <span class="text-sm font-semibold text-[#ff9800] tracking-wider">MII TERMINAL</span>
+                            <span class="text-[10px] text-[#555] ml-2">COLLECTOR CAR MARKET DATA</span>
+                        </div>
+                    </div>
+                    <div class="h-4 w-px bg-[#1c1c1c] mx-2"></div>
+                    <a href="index.html" class="text-[10px] text-[#555] hover:text-[#ff9800] transition-colors uppercase tracking-wider">
+                        &larr; Leaderboard
+                    </a>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-[#555] uppercase">Period:</span>
+                        <select id="quarterSelect" class="bg-[#111] border border-[#1c1c1c] rounded px-2 py-1 text-[11px] text-[#ccc] focus:outline-none focus:border-[#ff9800]">
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-[#555] uppercase">Min Vol:</span>
+                        <select id="minVolume" class="bg-[#111] border border-[#1c1c1c] rounded px-2 py-1 text-[11px] text-[#ccc] focus:outline-none focus:border-[#ff9800]">
+                            <option value="0">All</option>
+                            <option value="5">5+</option>
+                            <option value="10" selected>10+</option>
+                            <option value="20">20+</option>
+                            <option value="50">50+</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-[#555] uppercase">Sort:</span>
+                        <select id="sortBy" class="bg-[#111] border border-[#1c1c1c] rounded px-2 py-1 text-[11px] text-[#ccc] focus:outline-none focus:border-[#ff9800]">
+                            <option value="mii">MII Score</option>
+                            <option value="volume">Volume</option>
+                            <option value="change">Change</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </div>
+                    <div id="lastUpdated" class="text-[10px] text-[#555]"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading -->
+    <div id="loadingIndicator" class="fixed inset-0 bg-[#0a0a0a]/95 z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-2 border-[#333] border-t-[#ff9800] mb-3"></div>
+            <div class="text-sm font-medium text-[#ccc]">LOADING MARKET DATA...</div>
+            <div class="text-[10px] text-[#555] mt-1">Fetching from S3</div>
+        </div>
+    </div>
+
+    <!-- Stats Ticker -->
+    <div class="border-b border-[#1c1c1c] bg-[#0d0d0d] px-4 py-1.5">
+        <div class="max-w-[1800px] mx-auto flex items-center gap-6 text-[11px]">
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">MKT MII</span>
+                <span id="statMII" class="text-[#ff9800] font-semibold">--</span>
+                <span id="statMIIChange" class="text-[#555]">--</span>
+            </div>
+            <div class="w-px h-3 bg-[#1c1c1c]"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">VOL</span>
+                <span id="statVol" class="text-[#ccc] font-medium">--</span>
+            </div>
+            <div class="w-px h-3 bg-[#1c1c1c]"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">AVG PX</span>
+                <span id="statAvgPx" class="text-[#ccc] font-medium">--</span>
+            </div>
+            <div class="w-px h-3 bg-[#1c1c1c]"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">MAKES</span>
+                <span id="statMakes" class="text-[#ccc] font-medium">--</span>
+            </div>
+            <div class="w-px h-3 bg-[#1c1c1c]"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">HIGH</span>
+                <span id="statHigh" class="text-[#00c853] font-medium">--</span>
+            </div>
+            <div class="w-px h-3 bg-[#1c1c1c]"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-[#555]">LOW</span>
+                <span id="statLow" class="text-[#ff1744] font-medium">--</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-[1800px] mx-auto px-4 py-4">
+        <!-- Market Overview Chart -->
+        <div class="terminal-panel rounded mb-4">
+            <div class="flex items-center justify-between px-4 py-2 border-b border-[#1c1c1c]">
+                <div class="flex items-center gap-3">
+                    <span class="text-[11px] font-semibold text-[#ff9800] uppercase tracking-wider">BaT Market MII Index</span>
+                    <span class="text-[10px] text-[#555]">ALL MANUFACTURERS</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 bg-[#00c853] inline-block"></span>
+                        <span class="text-[9px] text-[#555]">UP</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2 h-2 bg-[#ff1744] inline-block"></span>
+                        <span class="text-[9px] text-[#555]">DOWN</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 py-3">
+                <div class="relative" style="height: 280px;">
+                    <canvas id="marketChart"></canvas>
+                    <div id="marketTooltip" class="chart-tooltip hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manufacturer Search -->
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+                <span class="text-[11px] font-semibold text-[#ff9800] uppercase tracking-wider">Manufacturer Breakdown</span>
+                <input
+                    type="text"
+                    id="mfrSearch"
+                    placeholder="SEARCH..."
+                    class="bg-[#111] border border-[#1c1c1c] rounded px-3 py-1 text-[11px] text-[#ccc] w-48 focus:outline-none focus:border-[#ff9800] placeholder-[#333] uppercase"
+                />
+            </div>
+            <div id="mfrCount" class="text-[10px] text-[#555]"></div>
+        </div>
+
+        <!-- Manufacturer Grid -->
+        <div id="mfrGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <!-- Cards inserted by JS -->
+        </div>
+
+        <!-- Expanded Manufacturer Detail (shown when clicking a card) -->
+        <div id="mfrDetail" class="hidden mt-4">
+            <!-- Will be populated by JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#1c1c1c] mt-8 py-3">
+        <div class="max-w-[1800px] mx-auto px-4 flex items-center justify-between text-[10px] text-[#555]">
+            <div>MII Terminal &copy; 2025 | Data: Bring a Trailer</div>
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="hover:text-[#ff9800] transition-colors">Dashboard</a>
+                <span>|</span>
+                <span>Refreshed twice daily 06:00/18:00 UTC</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
