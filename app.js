@@ -280,9 +280,9 @@ function processCSVData(rawData) {
         };
     });
 
-    // Process YTD (Year-to-Date) - aggregate all quarters from current year
-    const currentYear = new Date().getFullYear();
-    const ytdQuarters = quarters.filter(q => q.startsWith(currentYear.toString()));
+    // Process YTD (Year-to-Date) - aggregate all quarters from the most recent year in data
+    const latestYear = latestQuarter.substring(0, 4);
+    const ytdQuarters = quarters.filter(q => q.startsWith(latestYear));
 
     if (ytdQuarters.length > 0) {
         // Combine all YTD quarter data
