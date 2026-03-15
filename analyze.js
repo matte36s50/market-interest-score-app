@@ -238,7 +238,9 @@ function populateSelects() {
     });
 
     // Quarter selects
-    const qSelects = ['componentQuarterSelect', 'outlierQuarter', 'corrQuarter', 'modelsRankQuarter'];
+    // modelsRankQuarter intentionally omitted here — it should default to "All Quarters"
+    // so the Auctions count shows total auctions across all time, not just one quarter.
+    const qSelects = ['componentQuarterSelect', 'outlierQuarter', 'corrQuarter'];
     qSelects.forEach(id => {
         const sel = document.getElementById(id);
         const allOpt = sel.querySelector('option[value="__all__"]');
@@ -259,6 +261,18 @@ function populateSelects() {
         // Default to latest quarter
         sel.value = quarters[quarters.length - 1];
     });
+
+    // Model Rankings quarter select — populated separately, stays at "All Quarters"
+    const modelsQSel = document.getElementById('modelsRankQuarter');
+    if (modelsQSel) {
+        quarters.forEach(q => {
+            const o = document.createElement('option');
+            o.value = q;
+            o.textContent = q;
+            modelsQSel.appendChild(o);
+        });
+        // stays at __all__ (first option, already in HTML)
+    }
 
     // Model datalists — initial population (all models)
     ['radarModelList', 'trendModelList', 'outlierModelList', 'corrModelList'].forEach(id => {
