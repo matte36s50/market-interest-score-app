@@ -136,7 +136,8 @@
             <div class="stat-card">
                 <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Total Records</div>
                 <div id="statTotalRecords" class="text-2xl font-bold text-zinc-100">—</div>
-                <div class="text-xs text-zinc-500 mt-1">auction rows</div>
+                <div class="text-xs text-zinc-500 mt-1">valid auction rows</div>
+                <div id="statFilteredNote" class="text-xs text-amber-600 mt-0.5 hidden"></div>
             </div>
             <div class="stat-card">
                 <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Quarters</div>
@@ -173,6 +174,9 @@
             </button>
             <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="correlations">
                 Correlation Explorer
+            </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="models">
+                Model Rankings
             </button>
         </div>
 
@@ -568,6 +572,83 @@
                         <h3 class="font-semibold text-sm mb-3">Legend</h3>
                         <div id="corrLegend" class="space-y-1.5 text-xs text-zinc-400 max-h-48 overflow-auto scrollbar-thin"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Model Rankings -->
+        <!-- ============================================================ -->
+        <div id="tab-models" class="tab-content">
+            <!-- Controls -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Manufacturer:</label>
+                    <select id="modelsRankMfr" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                        <option value="__all__">All Manufacturers</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Quarter:</label>
+                    <select id="modelsRankQuarter" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <option value="__all__">All Quarters</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Rank by:</label>
+                    <select id="modelsRankMetric" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <option value="mii_score">MII Score</option>
+                        <option value="price">Avg Sale Price</option>
+                        <option value="views">Avg Views</option>
+                        <option value="bids">Avg Bids</option>
+                        <option value="sold_rate">Sell-Through Rate</option>
+                        <option value="volume">Auction Volume</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Show top:</label>
+                    <select id="modelsRankN" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bar chart -->
+            <div class="chart-container mb-6">
+                <div class="mb-4">
+                    <h2 class="font-semibold text-zinc-100" id="modelsRankChartTitle">Top Models by MII Score</h2>
+                    <p class="text-xs text-zinc-500 mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p>
+                </div>
+                <div style="height: 400px;">
+                    <canvas id="modelsRankChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Full ranked table -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-6">
+                <div class="border-b border-zinc-800 px-5 py-3 flex items-center justify-between">
+                    <h3 class="font-semibold text-zinc-100" id="modelsRankTableTitle">Model Leaderboard</h3>
+                    <span id="modelsRankTableCount" class="text-xs text-zinc-500"></span>
+                </div>
+                <div class="overflow-auto scrollbar-thin">
+                    <table class="w-full text-sm">
+                        <thead class="sticky top-0 bg-zinc-900">
+                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                                <th class="text-left px-4 py-2">#</th>
+                                <th class="text-left px-4 py-2">Make</th>
+                                <th class="text-left px-4 py-2">Model</th>
+                                <th class="text-right px-4 py-2">Auctions</th>
+                                <th class="text-right px-4 py-2">MII Score</th>
+                                <th class="text-right px-4 py-2">Avg Price</th>
+                                <th class="text-right px-4 py-2">Avg Views</th>
+                                <th class="text-right px-4 py-2">Avg Bids</th>
+                                <th class="text-right px-4 py-2">Sell-Thru</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelsRankTable"></tbody>
+                    </table>
                 </div>
             </div>
         </div>

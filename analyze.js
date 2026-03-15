@@ -156,6 +156,8 @@ async function init() {
     try {
         rawData = await loadData();
 
+        const rawCount = rawData.length;
+
         // Filter invalid rows
         rawData = rawData.filter(r =>
             r.quarter && r.quarter !== 'IAF' &&
@@ -171,6 +173,12 @@ async function init() {
 
         // Summary stats
         document.getElementById('statTotalRecords').textContent = rawData.length.toLocaleString();
+        const excluded = rawCount - rawData.length;
+        if (excluded > 0) {
+            const note = document.getElementById('statFilteredNote');
+            note.textContent = `${excluded.toLocaleString()} rows excluded (${rawCount.toLocaleString()} raw)`;
+            note.classList.remove('hidden');
+        }
         document.getElementById('statQuarters').textContent = quarters.length;
         document.getElementById('statQuarterRange').textContent = quarters[0] + ' – ' + quarters[quarters.length - 1];
         document.getElementById('statMakes').textContent = manufacturers.length;
@@ -190,6 +198,7 @@ async function init() {
         renderTrends();
         renderOutliers();
         renderCorrelations();
+        renderModelRankings();
 
         // Hide loading
         document.getElementById('loadingIndicator').classList.add('hidden');
@@ -203,7 +212,7 @@ async function init() {
 
 function populateSelects() {
     // Manufacturer dropdowns
-    const mfrSelects = ['radarMfrSelect', 'trendMfrSelect', 'corrMfrFilter'];
+    const mfrSelects = ['radarMfrSelect', 'trendMfrSelect', 'corrMfrFilter', 'modelsRankMfr'];
     mfrSelects.forEach(id => {
         const sel = document.getElementById(id);
         // Keep first option (All / Market Average)
@@ -229,7 +238,7 @@ function populateSelects() {
     });
 
     // Quarter selects
-    const qSelects = ['componentQuarterSelect', 'outlierQuarter', 'corrQuarter'];
+    const qSelects = ['componentQuarterSelect', 'outlierQuarter', 'corrQuarter', 'modelsRankQuarter'];
     qSelects.forEach(id => {
         const sel = document.getElementById(id);
         const allOpt = sel.querySelector('option[value="__all__"]');
@@ -254,6 +263,148 @@ function populateSelects() {
     // Model datalists — initial population (all models)
     ['radarModelList', 'trendModelList', 'outlierModelList', 'corrModelList'].forEach(id => {
         populateModelDatalist(id, '__all__');
+    });
+}
+
+// ============================================================
+// SECTION 5: Model Rankings
+// ============================================================
+
+const RANK_METRIC_LABELS = {
+    mii_score: 'MII Score',
+    price: 'Avg Sale Price',
+    views: 'Avg Views',
+    bids: 'Avg Bids',
+    sold_rate: 'Sell-Through Rate (%)',
+    volume: 'Auction Volume',
+};
+
+function formatRankMetric(metric, val) {
+    if (val == null) return '—';
+    if (metric === 'price') return fmtPrice(val);
+    if (metric === 'sold_rate') return val.toFixed(1) + '%';
+    if (metric === 'volume') return Math.round(val).toLocaleString() + ' auctions';
+    if (metric === 'views' || metric === 'bids') return Math.round(val).toLocaleString();
+    return val.toFixed(2);
+}
+
+function renderModelRankings() {
+    const mfr = document.getElementById('modelsRankMfr').value;
+    const quarter = document.getElementById('modelsRankQuarter').value;
+    const rankMetric = document.getElementById('modelsRankMetric').value;
+    const n = parseInt(document.getElementById('modelsRankN').value, 10);
+
+    let data = filterByQuarter(rawData, quarter);
+    if (mfr !== '__all__') data = data.filter(r => r.manufacturer === mfr);
+
+    // Aggregate by manufacturer + model
+    const modelMap = {};
+    data.forEach(r => {
+        const key = r.manufacturer + '|||' + r.model;
+        if (!modelMap[key]) {
+            modelMap[key] = {
+                manufacturer: r.manufacturer,
+                model: r.model,
+                count: 0,
+                mii_vals: [], price_vals: [], views_vals: [], bids_vals: [], sold_vals: [],
+            };
+        }
+        const m = modelMap[key];
+        m.count++;
+        const mii = parseFloat(r.mii_score);   if (!isNaN(mii))             m.mii_vals.push(mii);
+        const price = parseFloat(r.price);     if (!isNaN(price) && price > 0) m.price_vals.push(price);
+        const views = parseFloat(r.views);     if (!isNaN(views))            m.views_vals.push(views);
+        const bids  = parseFloat(r.bids);      if (!isNaN(bids))             m.bids_vals.push(bids);
+        const sold  = parseFloat(r.sold_rate); if (!isNaN(sold))             m.sold_vals.push(sold);
+    });
+
+    const rows = Object.values(modelMap).map(m => ({
+        manufacturer: m.manufacturer,
+        model: m.model,
+        count: m.count,
+        mii_score: m.mii_vals.length  ? avg(m.mii_vals)   : null,
+        price:     m.price_vals.length ? avg(m.price_vals) : null,
+        views:     m.views_vals.length ? avg(m.views_vals) : null,
+        bids:      m.bids_vals.length  ? avg(m.bids_vals)  : null,
+        sold_rate: m.sold_vals.length  ? avg(m.sold_vals)  : null,
+        volume:    m.count,
+    }));
+
+    rows.sort((a, b) => (b[rankMetric] ?? -Infinity) - (a[rankMetric] ?? -Infinity));
+    const topRows = rows.slice(0, n);
+
+    // Titles
+    const rankLabel = RANK_METRIC_LABELS[rankMetric] || rankMetric;
+    document.getElementById('modelsRankChartTitle').textContent =
+        `Top ${topRows.length} Models by ${rankLabel}`;
+    document.getElementById('modelsRankChartSubtitle').textContent =
+        (mfr === '__all__' ? 'All manufacturers' : mfr) + ' — ' +
+        (quarter === '__all__' ? 'all quarters' : quarter);
+    document.getElementById('modelsRankTableTitle').textContent =
+        `Model Leaderboard — ${rankLabel}`;
+    document.getElementById('modelsRankTableCount').textContent =
+        `${rows.length} unique models`;
+
+    // Horizontal bar chart
+    destroyChart('modelsRank');
+    const ctx = document.getElementById('modelsRankChart').getContext('2d');
+    const chartLabels = topRows.map(r => r.model.length > 30 ? r.model.slice(0, 28) + '…' : r.model);
+    const chartData   = topRows.map(r => r[rankMetric]);
+    const chartColors = topRows.map(r => getMfrColor(r.manufacturer));
+
+    charts.modelsRank = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: rankLabel,
+                data: chartData,
+                backgroundColor: chartColors.map(c => hexToRGBA(c, 0.8)),
+                borderColor: chartColors,
+                borderWidth: 1,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            ...CHART_DEFAULTS,
+            indexAxis: 'y',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: items => topRows[items[0].dataIndex].manufacturer + ' — ' + topRows[items[0].dataIndex].model,
+                        label: item => `${rankLabel}: ${formatRankMetric(rankMetric, item.raw)}`,
+                    }
+                }
+            },
+            scales: {
+                x: { grid: { color: '#27272a' }, ticks: { color: '#71717a' } },
+                y: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa', font: { size: 11 } } },
+            }
+        }
+    });
+
+    // Table
+    const tbody = document.getElementById('modelsRankTable');
+    tbody.innerHTML = '';
+    const podiumColors = ['text-amber-400', 'text-zinc-300', 'text-amber-600'];
+    topRows.forEach((r, i) => {
+        const rankCls = i < 3 ? podiumColors[i] : 'text-zinc-500';
+        const hl = col => col === rankMetric ? 'text-amber-400 font-medium' : 'text-zinc-300';
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors';
+        tr.innerHTML = `
+            <td class="px-4 py-2.5 font-bold ${rankCls}">#${i + 1}</td>
+            <td class="px-4 py-2.5 text-zinc-400 whitespace-nowrap">${r.manufacturer}</td>
+            <td class="px-4 py-2.5 font-medium">${r.model}</td>
+            <td class="px-4 py-2.5 text-right ${hl('volume')}">${r.count.toLocaleString()}</td>
+            <td class="px-4 py-2.5 text-right ${hl('mii_score')}">${r.mii_score != null ? r.mii_score.toFixed(2) : '—'}</td>
+            <td class="px-4 py-2.5 text-right ${hl('price')}">${r.price != null ? fmtPrice(r.price) : '—'}</td>
+            <td class="px-4 py-2.5 text-right ${hl('views')}">${r.views != null ? Math.round(r.views).toLocaleString() : '—'}</td>
+            <td class="px-4 py-2.5 text-right ${hl('bids')}">${r.bids != null ? r.bids.toFixed(1) : '—'}</td>
+            <td class="px-4 py-2.5 text-right ${hl('sold_rate')}">${r.sold_rate != null ? r.sold_rate.toFixed(1) + '%' : '—'}</td>
+        `;
+        tbody.appendChild(tr);
     });
 }
 
@@ -351,6 +502,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Correlation tab controls
     ['corrX', 'corrY', 'corrQuarter', 'corrColorBy', 'corrMfrFilter'].forEach(id => {
         document.getElementById(id).addEventListener('change', renderCorrelations);
+    });
+
+    // Model Rankings tab controls
+    ['modelsRankMfr', 'modelsRankQuarter', 'modelsRankMetric', 'modelsRankN'].forEach(id => {
+        document.getElementById(id).addEventListener('change', renderModelRankings);
     });
 
     // Model search wiring (sets up datalist refresh + debounced re-render)
