@@ -250,6 +250,68 @@ function populateSelects() {
         // Default to latest quarter
         sel.value = quarters[quarters.length - 1];
     });
+
+    // Model datalists — initial population (all models)
+    ['radarModelList', 'trendModelList', 'outlierModelList', 'corrModelList'].forEach(id => {
+        populateModelDatalist(id, '__all__');
+    });
+}
+
+// ---- Model Search Utilities ----
+
+function populateModelDatalist(datalistId, mfr) {
+    const dl = document.getElementById(datalistId);
+    if (!dl) return;
+    const source = (mfr && mfr !== '__all__')
+        ? rawData.filter(r => r.manufacturer === mfr)
+        : rawData;
+    const models = [...new Set(source.map(r => r.model))].sort();
+    dl.innerHTML = models.map(m => `<option value="${m.replace(/"/g, '&quot;')}">`).join('');
+}
+
+function getModelFilter(inputId) {
+    const input = document.getElementById(inputId);
+    return input ? input.value.trim() || null : null;
+}
+
+function filterByModel(data, model) {
+    if (!model) return data;
+    const lower = model.toLowerCase();
+    return data.filter(r => r.model.toLowerCase().includes(lower));
+}
+
+// Wire up a model search input: updates datalist when manufacturer changes,
+// triggers re-render on input (debounced), and handles the clear button.
+function wireModelSearch(inputId, clearBtnId, datalistId, mfrSelectId, onChangeCallback) {
+    const input = document.getElementById(inputId);
+    const clearBtn = document.getElementById(clearBtnId);
+    const mfrSel = mfrSelectId ? document.getElementById(mfrSelectId) : null;
+    if (!input || !clearBtn) return;
+
+    function updateClearBtn() {
+        clearBtn.classList.toggle('visible', input.value.trim().length > 0);
+    }
+
+    clearBtn.addEventListener('click', () => {
+        input.value = '';
+        updateClearBtn();
+        onChangeCallback();
+    });
+
+    let debTimer;
+    input.addEventListener('input', () => {
+        updateClearBtn();
+        clearTimeout(debTimer);
+        debTimer = setTimeout(onChangeCallback, 250);
+    });
+
+    if (mfrSel) {
+        mfrSel.addEventListener('change', () => {
+            input.value = '';
+            updateClearBtn();
+            populateModelDatalist(datalistId, mfrSel.value);
+        });
+    }
 }
 
 // ---- Event Listeners ----
@@ -291,6 +353,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id).addEventListener('change', renderCorrelations);
     });
 
+    // Model search wiring (sets up datalist refresh + debounced re-render)
+    wireModelSearch('radarModelSearch',   'radarModelClear',   'radarModelList',   'radarMfrSelect', renderComponents);
+    wireModelSearch('trendModelSearch',   'trendModelClear',   'trendModelList',   'trendMfrSelect', renderTrends);
+    wireModelSearch('outlierModelSearch', 'outlierModelClear', 'outlierModelList', null,             renderOutliers);
+    wireModelSearch('corrModelSearch',    'corrModelClear',    'corrModelList',    'corrMfrFilter',  renderCorrelations);
+
     init();
 });
 
@@ -314,8 +382,10 @@ function getComponentAverages(data) {
 
 function renderComponents() {
     const mfr = document.getElementById('radarMfrSelect').value;
+    const model = getModelFilter('radarModelSearch');
 
-    const data = mfr === '__all__' ? rawData : rawData.filter(r => r.manufacturer === mfr);
+    let data = mfr === '__all__' ? rawData : rawData.filter(r => r.manufacturer === mfr);
+    data = filterByModel(data, model);
     const marketData = rawData;
 
     const selected = getComponentAverages(data);
@@ -547,11 +617,13 @@ function renderTrends() {
     const metric = document.getElementById('trendMetric').value;
     const mfr = document.getElementById('trendMfrSelect').value;
     const compare = document.getElementById('trendCompare').value;
+    const model = getModelFilter('trendModelSearch');
 
     const label = METRIC_LABELS[metric] || metric;
 
     // Primary dataset
-    const primaryData = mfr === '__all__' ? rawData : rawData.filter(r => r.manufacturer === mfr);
+    let primaryData = mfr === '__all__' ? rawData : rawData.filter(r => r.manufacturer === mfr);
+    primaryData = filterByModel(primaryData, model);
     const primaryLabel = mfr === '__all__' ? 'Market' : mfr;
     const primaryValues = getQuarterlyMetric(primaryData, metric);
 
@@ -562,8 +634,9 @@ function renderTrends() {
 
     // Chart title
     document.getElementById('trendChartTitle').textContent = `${label} — Quarter over Quarter`;
+    const subtitleBase = mfr === '__all__' ? 'Market-wide average per quarter' : `${mfr} per quarter`;
     document.getElementById('trendChartSubtitle').textContent =
-        mfr === '__all__' ? 'Market-wide average per quarter' : `${mfr} per quarter`;
+        model ? `${subtitleBase} — ${model}` : subtitleBase;
 
     destroyChart('trend');
     const ctx = document.getElementById('trendChart').getContext('2d');
@@ -704,9 +777,11 @@ function renderOutliers() {
     const metric = document.getElementById('outlierMetric').value;
     const quarter = document.getElementById('outlierQuarter').value;
     const n = parseInt(document.getElementById('outlierN').value, 10);
+    const model = getModelFilter('outlierModelSearch');
     const label = METRIC_LABELS[metric] || metric;
 
     let data = filterByQuarter(rawData, quarter);
+    data = filterByModel(data, model);
     data = data.filter(r => !isNaN(parseFloat(r[metric])));
 
     const sorted = [...data].sort((a, b) => parseFloat(b[metric]) - parseFloat(a[metric]));
@@ -900,9 +975,11 @@ function renderCorrelations() {
     const quarter = document.getElementById('corrQuarter').value;
     const colorBy = document.getElementById('corrColorBy').value;
     const mfrFilter = document.getElementById('corrMfrFilter').value;
+    const model = getModelFilter('corrModelSearch');
 
     let data = filterByQuarter(rawData, quarter);
     if (mfrFilter !== '__all__') data = data.filter(r => r.manufacturer === mfrFilter);
+    data = filterByModel(data, model);
 
     data = data.filter(r => {
         const xv = parseFloat(r[xKey]);

@@ -28,6 +28,26 @@
         .scrollbar-thin::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
         .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #71717a; }
 
+        .model-search-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+        .model-clear-btn {
+            position: absolute;
+            right: 8px;
+            cursor: pointer;
+            color: #71717a;
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .model-clear-btn.visible { display: block; }
+        .model-clear-btn:hover { color: #d4d4d8; }
+
         .tab-btn.active {
             background: #d97706;
             color: white;
@@ -160,20 +180,30 @@
         <!-- TAB: Component Breakdown -->
         <!-- ============================================================ -->
         <div id="tab-components" class="tab-content active">
+            <!-- Component Controls Bar -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Manufacturer:</label>
+                    <select id="radarMfrSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                        <option value="__all__">Market Average</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off"
+                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-48" />
+                        <datalist id="radarModelList"></datalist>
+                        <button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
+                </div>
+            </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- Radar Chart -->
                 <div class="chart-container">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h2 class="font-semibold text-zinc-100">Normalized Component Scores</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5">Average normalized score per MII component</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs text-zinc-500">Manufacturer:</label>
-                            <select id="radarMfrSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
-                                <option value="__all__">Market Average</option>
-                            </select>
-                        </div>
+                    <div class="mb-4">
+                        <h2 class="font-semibold text-zinc-100">Normalized Component Scores</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Average normalized score per MII component</p>
                     </div>
                     <div style="height: 320px;">
                         <canvas id="radarChart"></canvas>
@@ -242,6 +272,15 @@
                         <option value="none">None</option>
                     </select>
                 </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off"
+                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                        <datalist id="trendModelList"></datalist>
+                        <button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Main trend chart -->
@@ -309,6 +348,15 @@
                             <select id="outlierQuarter" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="__all__">All Quarters</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Model</label>
+                            <div class="model-search-wrap w-full">
+                                <input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off"
+                                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50" />
+                                <datalist id="outlierModelList"></datalist>
+                                <button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">×</button>
+                            </div>
                         </div>
                         <div>
                             <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Top N Records</label>
@@ -442,6 +490,15 @@
                     <select id="corrMfrFilter" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[140px]">
                         <option value="__all__">All</option>
                     </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-zinc-500">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off"
+                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                        <datalist id="corrModelList"></datalist>
+                        <button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
                 </div>
             </div>
 
