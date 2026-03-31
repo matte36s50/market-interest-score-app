@@ -47,6 +47,16 @@ let mfrColorMap = {};
 const charts = {};
 
 // ---- Utilities ----
+// Format "2025-05" → "May 2025" for chart labels
+function fmtPeriod(p) {
+    const m = p && p.match(/^(\d{4})-(\d{2})$/);
+    if (m) {
+        const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, 1);
+        return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+    return p;
+}
+
 function fmtNum(v, decimals = 1) {
     if (v == null || isNaN(v)) return '—';
     if (Math.abs(v) >= 1_000_000) return '$' + (v / 1_000_000).toFixed(1) + 'M';
@@ -238,7 +248,7 @@ function populateSelects() {
     });
 
     // Quarter selects
-    // modelsRankQuarter intentionally omitted here — it should default to "All Quarters"
+    // modelsRankQuarter intentionally omitted here — it should default to "All Months"
     // so the Auctions count shows total auctions across all time, not just one quarter.
     const qSelects = ['componentQuarterSelect', 'outlierQuarter', 'corrQuarter'];
     qSelects.forEach(id => {
@@ -249,7 +259,7 @@ function populateSelects() {
         else {
             const o = document.createElement('option');
             o.value = '__all__';
-            o.textContent = 'All Quarters';
+            o.textContent = 'All Months';
             sel.appendChild(o);
         }
         quarters.forEach(q => {
@@ -262,7 +272,7 @@ function populateSelects() {
         sel.value = quarters[quarters.length - 1];
     });
 
-    // Model Rankings quarter select — populated separately, stays at "All Quarters"
+    // Model Rankings quarter select — populated separately, stays at "All Months"
     const modelsQSel = document.getElementById('modelsRankQuarter');
     if (modelsQSel) {
         quarters.forEach(q => {
@@ -353,7 +363,7 @@ function renderModelRankings() {
         `Top ${topRows.length} Models by ${rankLabel}`;
     document.getElementById('modelsRankChartSubtitle').textContent =
         (mfr === '__all__' ? 'All manufacturers' : mfr) + ' — ' +
-        (quarter === '__all__' ? 'all quarters' : quarter);
+        (quarter === '__all__' ? 'all months' : quarter);
     document.getElementById('modelsRankTableTitle').textContent =
         `Model Leaderboard — ${rankLabel}`;
     document.getElementById('modelsRankTableCount').textContent =
@@ -803,8 +813,8 @@ function renderTrends() {
         : null;
 
     // Chart title
-    document.getElementById('trendChartTitle').textContent = `${label} — Quarter over Quarter`;
-    const subtitleBase = mfr === '__all__' ? 'Market-wide average per quarter' : `${mfr} per quarter`;
+    document.getElementById('trendChartTitle').textContent = `${label} — Month over Month`;
+    const subtitleBase = mfr === '__all__' ? 'Market-wide average per month' : `${mfr} per month`;
     document.getElementById('trendChartSubtitle').textContent =
         model ? `${subtitleBase} — ${model}` : subtitleBase;
 
@@ -813,7 +823,7 @@ function renderTrends() {
     charts.trend = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: quarters,
+            labels: quarters.map(fmtPeriod),
             datasets: [
                 {
                     label: primaryLabel,
@@ -890,7 +900,7 @@ function renderMiniChart(canvasId, data, color) {
     charts[key] = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: quarters,
+            labels: quarters.map(fmtPeriod),
             datasets: [{
                 data,
                 borderColor: color,
