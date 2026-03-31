@@ -126,11 +126,11 @@ function processCSVData(rawData) {
     const quarters = [...new Set(validData.map(row => row.quarter))].sort();
     sampleData.quarters = quarters;
 
-    // Determine latest quarter (for QTD marking)
+    // Determine latest period (for MTD marking)
     const latestQuarter = quarters[quarters.length - 1];
-    const qtdQuarter = latestQuarter + '-QTD';
+    const qtdQuarter = latestQuarter + '-MTD';
 
-    // Update quarters array to mark latest as QTD
+    // Update quarters array to mark latest as MTD
     sampleData.quarters = quarters.slice(0, -1).concat([qtdQuarter]);
 
     // Group data by quarter
@@ -195,11 +195,11 @@ function processCSVData(rawData) {
                 }
             }
 
-            // Get confidence level based on auction count
+            // Get confidence level based on auction count (monthly thresholds)
             let confidence = 'Low';
-            if (auctions >= 50) confidence = 'High';
-            else if (auctions >= 20) confidence = 'Medium-High';
-            else if (auctions >= 10) confidence = 'Medium';
+            if (auctions >= 15) confidence = 'High';
+            else if (auctions >= 8) confidence = 'Medium-High';
+            else if (auctions >= 4) confidence = 'Medium';
 
             // Calculate sell-through (assume all sold for now, or could add logic)
             // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
@@ -329,11 +329,11 @@ function processCSVData(rawData) {
                 return mfr ? mfr.miiScore : null;
             }).filter(v => v !== null);
 
-            // Confidence based on total YTD auctions
+            // Confidence based on total YTD auctions (monthly data)
             let confidence = 'Low';
-            if (auctions >= 150) confidence = 'High';
-            else if (auctions >= 60) confidence = 'Medium-High';
-            else if (auctions >= 30) confidence = 'Medium';
+            if (auctions >= 50) confidence = 'High';
+            else if (auctions >= 20) confidence = 'Medium-High';
+            else if (auctions >= 10) confidence = 'Medium';
 
             // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
             const sellThrough = 75;
@@ -532,11 +532,18 @@ let charts = {
 
 // Helper functions
 function formatQuarterDisplay(quarterStr) {
-    if (quarterStr.endsWith('-QTD')) {
-        const base = quarterStr.replace('-QTD', '');
-        return `${base} (QTD)`;
+    if (quarterStr === 'YTD') return 'YTD';
+    const isMTD = quarterStr.endsWith('-MTD');
+    const base = isMTD ? quarterStr.replace('-MTD', '') : quarterStr;
+    // Format "2025-05" → "May 2025"
+    const monthMatch = base.match(/^(\d{4})-(\d{2})$/);
+    if (monthMatch) {
+        const date = new Date(parseInt(monthMatch[1]), parseInt(monthMatch[2]) - 1, 1);
+        const label = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        return isMTD ? `${label} (MTD)` : label;
     }
-    return quarterStr;
+    // Fallback for legacy quarterly format
+    return isMTD ? `${base} (MTD)` : base;
 }
 
 function getConfidenceBadge(level) {
@@ -722,7 +729,7 @@ function renderTopModels() {
         if (subtitle) {
             subtitle.textContent = isYTD
                 ? 'Top 20 models across all manufacturers for the year'
-                : 'Top 20 models with highest market interest this quarter';
+                : 'Top 20 models with highest market interest this month';
         }
     }
 
@@ -854,7 +861,7 @@ function renderManufacturerDetail() {
                 <div>
                     <h3 class="text-xl font-bold">${mfr.make}</h3>
                     <div class="text-sm text-zinc-500">
-                        ${mfr.auctions} auctions this quarter
+                        ${mfr.auctions} auctions this month
                     </div>
                 </div>
             </div>
@@ -1124,7 +1131,7 @@ function renderQuarterMIIChart() {
         return;
     }
 
-    const isQTD = state.selectedQuarter.endsWith('-QTD');
+    const isQTD = state.selectedQuarter.endsWith('-MTD');
 
     container.classList.remove('hidden');
     container.innerHTML = `

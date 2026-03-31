@@ -105,6 +105,16 @@ async function loadCSVData() {
     });
 }
 
+// Format "2025-05" → "May '25" for compact candlestick labels
+function fmtPeriod(p) {
+    const m = p && p.match(/^(\d{4})-(\d{2})$/);
+    if (m) {
+        const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, 1);
+        return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+    }
+    return p;
+}
+
 // ---- OHLC Data Processing ----
 function avg(arr) {
     if (arr.length === 0) return 0;
@@ -137,7 +147,7 @@ function processOHLCData(rawData) {
         const prevClose = idx > 0 ? marketOHLC[idx - 1].close : avg(scores);
 
         marketOHLC.push({
-            label: quarter,
+            label: fmtPeriod(quarter),
             open: prevClose,
             high: Math.max(...scores),
             low: Math.min(...scores),
@@ -173,7 +183,7 @@ function processOHLCData(rawData) {
                 : avg(scores);
 
             manufacturerOHLC[mfr].push({
-                label: quarter,
+                label: fmtPeriod(quarter),
                 open: prevClose,
                 high: Math.max(...scores),
                 low: Math.min(...scores),
