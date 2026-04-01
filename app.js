@@ -201,9 +201,9 @@ function processCSVData(rawData) {
             else if (auctions >= 8) confidence = 'Medium-High';
             else if (auctions >= 4) confidence = 'Medium';
 
-            // Calculate sell-through (assume all sold for now, or could add logic)
-            // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
-            const sellThrough = 75;
+            // Calculate sell-through from sold field
+            const soldCount = mfrData.filter(row => parseFloat(row.sold) === 1).length;
+            const sellThrough = auctions > 0 ? Math.round((soldCount / auctions) * 100) : 0;
 
             // Process models
             const models = mfrData.map(row => ({
@@ -335,8 +335,9 @@ function processCSVData(rawData) {
             else if (auctions >= 20) confidence = 'Medium-High';
             else if (auctions >= 10) confidence = 'Medium';
 
-            // FIXME: sellThrough is hardcoded. Calculate from CSV data when 'sold' field is available.
-            const sellThrough = 75;
+            // Calculate sell-through from sold field
+            const soldCount = mfrData.filter(row => parseFloat(row.sold) === 1).length;
+            const sellThrough = auctions > 0 ? Math.round((soldCount / auctions) * 100) : 0;
 
             // Process models for YTD
             const models = mfrData.map(row => ({
@@ -838,7 +839,9 @@ function renderLeaderboard() {
 
 function renderManufacturerDetail() {
     const container = document.getElementById('manufacturerDetail');
-    const mfr = sampleData.manufacturers.find(m => m.make === state.selectedMake);
+    const quarterKey = state.selectedQuarter;
+    const periodManufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const mfr = periodManufacturers.find(m => m.make === state.selectedMake);
 
     if (!mfr) {
         container.innerHTML = `
