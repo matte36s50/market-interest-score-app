@@ -35,7 +35,7 @@ function getManufacturerLogo(manufacturer) {
 }
 
 // Global data object (will be populated from CSV)
-let sampleData = {
+let dashboardData = {
     lastUpdated: new Date().toISOString(),
     quarters: [],
     quarterMIITrends: {},
@@ -124,14 +124,14 @@ function processCSVData(rawData) {
 
     // Get unique quarters and sort them
     const quarters = [...new Set(validData.map(row => row.quarter))].sort();
-    sampleData.quarters = quarters;
+    dashboardData.quarters = quarters;
 
     // Determine latest period (for MTD marking)
     const latestQuarter = quarters[quarters.length - 1];
     const qtdQuarter = latestQuarter + '-MTD';
 
     // Update quarters array to mark latest as MTD
-    sampleData.quarters = quarters.slice(0, -1).concat([qtdQuarter]);
+    dashboardData.quarters = quarters.slice(0, -1).concat([qtdQuarter]);
 
     // Group data by quarter
     const dataByQuarter = {};
@@ -140,7 +140,7 @@ function processCSVData(rawData) {
     });
 
     // Process each quarter
-    sampleData.quarterData = {};
+    dashboardData.quarterData = {};
 
     quarters.forEach((quarter, qIndex) => {
         const quarterKey = (qIndex === quarters.length - 1) ? qtdQuarter : quarter;
@@ -172,8 +172,8 @@ function processCSVData(rawData) {
             if (qIndex > 0) {
                 const prevQuarter = quarters[qIndex - 1];
                 const prevQuarterKey = prevQuarter;
-                if (sampleData.quarterData[prevQuarterKey]) {
-                    const prevMfr = sampleData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
+                if (dashboardData.quarterData[prevQuarterKey]) {
+                    const prevMfr = dashboardData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
                     if (prevMfr) {
                         trend = ((avgMII - prevMfr.miiScore) / prevMfr.miiScore) * 100;
                     }
@@ -185,8 +185,8 @@ function processCSVData(rawData) {
             for (let i = Math.max(0, qIndex - 2); i <= qIndex; i++) {
                 const hQuarter = quarters[i];
                 const hQuarterKey = i === quarters.length - 1 ? qtdQuarter : hQuarter;
-                if (sampleData.quarterData[hQuarterKey]) {
-                    const hMfr = sampleData.quarterData[hQuarterKey].manufacturers.find(m => m.make === mfrName);
+                if (dashboardData.quarterData[hQuarterKey]) {
+                    const hMfr = dashboardData.quarterData[hQuarterKey].manufacturers.find(m => m.make === mfrName);
                     if (hMfr) {
                         history.push(hMfr.miiScore);
                     }
@@ -240,8 +240,8 @@ function processCSVData(rawData) {
                     const prevQuarter = quarters[qIndex - 1];
                     const prevQuarterKey = prevQuarter;
 
-                    if (sampleData.quarterData[prevQuarterKey]) {
-                        const prevMfr = sampleData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
+                    if (dashboardData.quarterData[prevQuarterKey]) {
+                        const prevMfr = dashboardData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
                         if (prevMfr && prevMfr.models) {
                             const prevModel = prevMfr.models.find(m => m.model === mg.model);
                             if (prevModel && prevModel.mii > 0) {
@@ -275,7 +275,7 @@ function processCSVData(rawData) {
             };
         });
 
-        sampleData.quarterData[quarterKey] = {
+        dashboardData.quarterData[quarterKey] = {
             manufacturers: manufacturers.sort((a, b) => b.miiScore - a.miiScore)
         };
     });
@@ -314,8 +314,8 @@ function processCSVData(rawData) {
                 const firstQKey = firstQ;
                 const lastQKey = lastQ === latestQuarter ? qtdQuarter : lastQ;
 
-                const firstMfr = sampleData.quarterData[firstQKey]?.manufacturers.find(m => m.make === mfrName);
-                const lastMfr = sampleData.quarterData[lastQKey]?.manufacturers.find(m => m.make === mfrName);
+                const firstMfr = dashboardData.quarterData[firstQKey]?.manufacturers.find(m => m.make === mfrName);
+                const lastMfr = dashboardData.quarterData[lastQKey]?.manufacturers.find(m => m.make === mfrName);
 
                 if (firstMfr && lastMfr) {
                     trend = ((lastMfr.miiScore - firstMfr.miiScore) / firstMfr.miiScore) * 100;
@@ -325,7 +325,7 @@ function processCSVData(rawData) {
             // Build history from all YTD quarters
             const history = ytdQuarters.map((q, i) => {
                 const qKey = i === ytdQuarters.length - 1 && q === latestQuarter ? qtdQuarter : q;
-                const mfr = sampleData.quarterData[qKey]?.manufacturers.find(m => m.make === mfrName);
+                const mfr = dashboardData.quarterData[qKey]?.manufacturers.find(m => m.make === mfrName);
                 return mfr ? mfr.miiScore : null;
             }).filter(v => v !== null);
 
@@ -374,8 +374,8 @@ function processCSVData(rawData) {
                     const firstQ = ytdQuarters[0];
                     const firstQKey = firstQ;
 
-                    if (sampleData.quarterData[firstQKey]) {
-                        const firstMfr = sampleData.quarterData[firstQKey].manufacturers.find(m => m.make === mfrName);
+                    if (dashboardData.quarterData[firstQKey]) {
+                        const firstMfr = dashboardData.quarterData[firstQKey].manufacturers.find(m => m.make === mfrName);
                         if (firstMfr && firstMfr.models) {
                             const firstModel = firstMfr.models.find(m => m.model === mg.model);
                             if (firstModel && firstModel.mii > 0) {
@@ -409,43 +409,49 @@ function processCSVData(rawData) {
             };
         });
 
-        sampleData.quarterData['YTD'] = {
+        dashboardData.quarterData['YTD'] = {
             manufacturers: ytdManufacturers.sort((a, b) => b.miiScore - a.miiScore)
         };
 
         // Add YTD to quarters list at the end
-        sampleData.quarters = sampleData.quarters.concat(['YTD']);
+        dashboardData.quarters = dashboardData.quarters.concat(['YTD']);
     }
 
     // Set manufacturers to YTD data by default
-    if (sampleData.quarterData['YTD']) {
-        sampleData.manufacturers = sampleData.quarterData['YTD'].manufacturers;
+    if (dashboardData.quarterData['YTD']) {
+        dashboardData.manufacturers = dashboardData.quarterData['YTD'].manufacturers;
     } else {
         // Fallback to latest quarter if no YTD data
         const latestQuarterKey = quarters.length > 0 ?
-            (sampleData.quarters[sampleData.quarters.length - 1]) : null;
-        if (latestQuarterKey && sampleData.quarterData[latestQuarterKey]) {
-            sampleData.manufacturers = sampleData.quarterData[latestQuarterKey].manufacturers;
+            (dashboardData.quarters[dashboardData.quarters.length - 1]) : null;
+        if (latestQuarterKey && dashboardData.quarterData[latestQuarterKey]) {
+            dashboardData.manufacturers = dashboardData.quarterData[latestQuarterKey].manufacturers;
         }
     }
 
-    // Build quarterMIITrends (aggregate MII by quarter)
-    sampleData.quarterMIITrends = {};
-    quarters.forEach((quarter, qIndex) => {
-        const quarterKey = qIndex === quarters.length - 1 ? qtdQuarter : quarter;
-        if (sampleData.quarterData[quarterKey]) {
-            const manufacturers = sampleData.quarterData[quarterKey].manufacturers;
-            const avgMII = manufacturers.reduce((sum, m) => sum + m.miiScore, 0) / manufacturers.length;
-
-            // Create placeholder trend data (would need actual time-series data for real trends)
-            sampleData.quarterMIITrends[quarterKey] = {
-                labels: ['Start', 'Mid', 'End'],
-                data: [avgMII - 1, avgMII, avgMII + 0.5]
-            };
-        }
+    // Build real market MII trend — actual average MII per period across all manufacturers
+    dashboardData.quarterMIITrends = {};
+    const allPeriodKeys = dashboardData.quarters.filter(q => q !== 'YTD');
+    const trendLabels = allPeriodKeys.map(q => formatQuarterDisplay(q));
+    const trendValues = allPeriodKeys.map(q => {
+        const periodData = dashboardData.quarterData[q];
+        if (!periodData || !periodData.manufacturers.length) return null;
+        const mfrs = periodData.manufacturers;
+        return parseFloat((mfrs.reduce((sum, m) => sum + m.miiScore, 0) / mfrs.length).toFixed(1));
     });
 
-    return sampleData;
+    // Store a single market-wide trend object used by the main trend chart
+    dashboardData.quarterMIITrends['__market__'] = {
+        labels: trendLabels,
+        data: trendValues
+    };
+
+    // Also store per-period entry (for compatibility) pointing at real market data
+    allPeriodKeys.forEach(q => {
+        dashboardData.quarterMIITrends[q] = dashboardData.quarterMIITrends['__market__'];
+    });
+
+    return dashboardData;
 }
 
 // Initialize app with CSV data
@@ -460,11 +466,11 @@ async function initializeApp() {
         processCSVData(rawData);
 
         // Update last updated time
-        sampleData.lastUpdated = new Date().toISOString();
+        dashboardData.lastUpdated = new Date().toISOString();
 
         // Set default selected quarter to latest
-        if (sampleData.quarters.length > 0) {
-            state.selectedQuarter = sampleData.quarters[sampleData.quarters.length - 1];
+        if (dashboardData.quarters.length > 0) {
+            state.selectedQuarter = dashboardData.quarters[dashboardData.quarters.length - 1];
         }
 
         // Hide loading indicator
@@ -509,8 +515,8 @@ async function initializeApp() {
     }
 }
 
-// Temporary placeholder manufacturers array (will be replaced by CSV data)
-sampleData.manufacturers = [];
+// Manufacturers populated from CSV data on load
+dashboardData.manufacturers = [];
 
 // State management
 let state = {
@@ -604,7 +610,7 @@ function createSparkline(data, color = '#10b981') {
 function getFilteredManufacturers() {
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
-    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
 
     return manufacturers
         .filter(m => m.auctions >= state.minAuctions)
@@ -620,7 +626,7 @@ function getTopModels(minAuctions = 0, limit = 20) {
 
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
-    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
 
     // No minimum auctions - show all models including single auctions
     const effectiveMinAuctions = minAuctions;
@@ -652,7 +658,7 @@ function searchAllModels(searchTerm, limit = 50) {
 
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
-    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
 
     manufacturers.forEach(mfr => {
         if (!mfr.models || mfr.models.length === 0) return;
@@ -677,7 +683,7 @@ function searchAllModels(searchTerm, limit = 50) {
 function calculateMarketStats() {
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
-    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
     const filtered = manufacturers.filter(m => m.auctions >= state.minAuctions);
 
     if (filtered.length === 0) {
@@ -701,7 +707,7 @@ function calculateMarketStats() {
 function renderMarketStats() {
     const stats = calculateMarketStats();
     const quarterKey = state.selectedQuarter;
-    const manufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
 
     document.getElementById('qualifyingMakes').textContent = stats.totalManufacturers;
     document.getElementById('totalMakes').textContent = `of ${manufacturers.length} total`;
@@ -840,7 +846,7 @@ function renderLeaderboard() {
 function renderManufacturerDetail() {
     const container = document.getElementById('manufacturerDetail');
     const quarterKey = state.selectedQuarter;
-    const periodManufacturers = (sampleData.quarterData[quarterKey]?.manufacturers) || sampleData.manufacturers || [];
+    const periodManufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
     const mfr = periodManufacturers.find(m => m.make === state.selectedMake);
 
     if (!mfr) {
@@ -949,7 +955,7 @@ function renderTrendChart(mfr) {
     charts.trend = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: sampleData.quarters,
+            labels: dashboardData.quarters,
             datasets: [{
                 label: 'MII Score',
                 data: mfr.history,
@@ -1021,7 +1027,7 @@ function renderComparePanel() {
     document.getElementById('compareCount').textContent = `Compare (${state.compareList.length}/4)`;
 
     listContainer.innerHTML = state.compareList.map(make => {
-        const mfr = sampleData.manufacturers.find(m => m.make === make);
+        const mfr = dashboardData.manufacturers.find(m => m.make === make);
         return `
             <span class="inline-flex items-center gap-2 bg-zinc-800 rounded-full px-3 py-1 text-sm">
                 ${getManufacturerLogo(make)}
@@ -1054,7 +1060,7 @@ function renderCompareChart() {
     const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
 
     const datasets = state.compareList.map((make, i) => {
-        const mfr = sampleData.manufacturers.find(m => m.make === make);
+        const mfr = dashboardData.manufacturers.find(m => m.make === make);
         return {
             label: make,
             data: mfr.history,
@@ -1069,7 +1075,7 @@ function renderCompareChart() {
     charts.compare = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: sampleData.quarters,
+            labels: dashboardData.quarters,
             datasets: datasets
         },
         options: {
@@ -1128,23 +1134,30 @@ function renderQuarterMIIChart() {
     const container = document.getElementById('quarterProgressContainer');
     if (!container) return;
 
-    const trendData = sampleData.quarterMIITrends[state.selectedQuarter];
-    if (!trendData) {
+    const trendData = dashboardData.quarterMIITrends['__market__'];
+    if (!trendData || !trendData.data.some(v => v !== null)) {
         container.classList.add('hidden');
         return;
     }
 
-    const isQTD = state.selectedQuarter.endsWith('-MTD');
+    const isMTD = state.selectedQuarter.endsWith('-MTD');
+    const validData = trendData.data.filter(v => v !== null);
+    const currentValue = validData[validData.length - 1];
+    const startValue = validData[0];
+    const change = currentValue - startValue;
+    const changePercent = startValue > 0 ? ((change / startValue) * 100).toFixed(1) : '0.0';
+    const changeColor = change >= 0 ? '#10b981' : '#f43f5e';
+    const changeSign = change >= 0 ? '+' : '';
 
     container.classList.remove('hidden');
     container.innerHTML = `
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2">
-                    <h3 class="font-semibold">Market Interest Index Trend</h3>
-                    ${isQTD ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-900/30 text-amber-400 border border-amber-800/50"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Live</span>' : ''}
+                    <h3 class="font-semibold">Market Interest Index — Month over Month</h3>
+                    ${isMTD ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-900/30 text-amber-400 border border-amber-800/50"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Live</span>' : ''}
                 </div>
-                <div class="text-xs text-zinc-500">${formatQuarterDisplay(state.selectedQuarter)}</div>
+                <div class="text-xs font-medium" style="color:${changeColor}">${changeSign}${changePercent}% overall</div>
             </div>
             <div style="height: 200px;">
                 <canvas id="quarterMIIChart"></canvas>
@@ -1152,47 +1165,45 @@ function renderQuarterMIIChart() {
         </div>
     `;
 
-    // Render chart after DOM update
     setTimeout(() => {
         const canvas = document.getElementById('quarterMIIChart');
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
+        if (charts.quarterMII) charts.quarterMII.destroy();
 
-        if (charts.quarterMII) {
-            charts.quarterMII.destroy();
-        }
-
-        const currentValue = trendData.data[trendData.data.length - 1];
-        const startValue = trendData.data[0];
-        const change = currentValue - startValue;
-        const changePercent = ((change / startValue) * 100).toFixed(1);
+        // Highlight the currently selected period
+        const selectedLabel = formatQuarterDisplay(state.selectedQuarter);
+        const pointColors = trendData.labels.map(l =>
+            l === selectedLabel ? '#ffffff' : '#f59e0b'
+        );
+        const pointRadii = trendData.labels.map(l =>
+            l === selectedLabel ? 6 : 3
+        );
 
         charts.quarterMII = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: trendData.labels,
                 datasets: [{
-                    label: 'Average MII',
+                    label: 'Market Avg MII',
                     data: trendData.data,
                     borderColor: '#f59e0b',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     fill: true,
                     tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#f59e0b',
+                    pointRadius: pointRadii,
+                    pointBackgroundColor: pointColors,
                     pointBorderColor: '#18181b',
                     pointBorderWidth: 2,
-                    pointHoverRadius: 6
+                    pointHoverRadius: 6,
+                    spanGaps: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#18181b',
                         titleColor: '#f4f4f5',
@@ -1202,41 +1213,24 @@ function renderQuarterMIIChart() {
                         padding: 12,
                         displayColors: false,
                         callbacks: {
-                            label: function(context) {
-                                return 'MII: ' + context.parsed.y.toFixed(1);
-                            }
+                            label: ctx => 'Avg MII: ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '—')
                         }
                     }
                 },
                 scales: {
                     x: {
-                        grid: {
-                            color: '#27272a',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            color: '#71717a',
-                            font: {
-                                size: 11
-                            }
-                        }
+                        grid: { color: '#27272a', drawBorder: false },
+                        ticks: { color: '#71717a', font: { size: 10 }, maxRotation: 45 }
                     },
                     y: {
-                        grid: {
-                            color: '#27272a',
-                            drawBorder: false
-                        },
+                        grid: { color: '#27272a', drawBorder: false },
                         ticks: {
                             color: '#71717a',
-                            font: {
-                                size: 11
-                            },
-                            callback: function(value) {
-                                return value.toFixed(1);
-                            }
+                            font: { size: 11 },
+                            callback: v => v.toFixed(1)
                         },
-                        min: Math.min(...trendData.data) - 2,
-                        max: Math.max(...trendData.data) + 2
+                        min: Math.min(...validData) - 2,
+                        max: Math.max(...validData) + 2
                     }
                 }
             }
@@ -1270,7 +1264,7 @@ function updateFilters() {
 // Initialize
 function init() {
     // Set last updated
-    const date = new Date(sampleData.lastUpdated);
+    const date = new Date(dashboardData.lastUpdated);
     document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -1281,7 +1275,7 @@ function init() {
 
     // Populate quarter select
     const quarterSelect = document.getElementById('quarterSelect');
-    quarterSelect.innerHTML = sampleData.quarters.map(q =>
+    quarterSelect.innerHTML = dashboardData.quarters.map(q =>
         `<option value="${q}" ${q === state.selectedQuarter ? 'selected' : ''}>${formatQuarterDisplay(q)}</option>`
     ).join('');
 
