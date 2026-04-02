@@ -4,6 +4,60 @@
 // ============================================================
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
+const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
+
+async function loadBatAuctionCounts() {
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const response = await fetch(BAT_CSV_URL, { mode: 'cors', signal: controller.signal, headers: { 'Accept': 'text/csv' } });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const text = await response.text();
+
+        return new Promise(resolve => {
+            Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                complete: results => {
+                    const counts = {};
+                    results.data.forEach(row => {
+                        const make = (row.make || '').trim();
+                        const rawModel = (row.model || '').trim();
+                        const saleDate = (row.sale_date || '').trim();
+                        if (!make || !rawModel || !saleDate) return;
+
+                        const parts = saleDate.split('/');
+                        if (parts.length !== 3) return;
+                        const month = parts[0].padStart(2, '0');
+                        const yearPart = parts[2].trim();
+                        const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+                        const period = `${year}-${month}`;
+
+                        let model = rawModel;
+                        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+                        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+
+                        const key = `${make}|${model}|${period}`;
+                        counts[key] = (counts[key] || 0) + 1;
+                    });
+                    resolve(counts);
+                },
+                error: () => resolve({})
+            });
+        });
+    } catch (e) {
+        console.warn('Could not load bat.csv auction counts:', e.message);
+        return {};
+    }
+}
+
+function injectAuctionCounts(rows, batCounts) {
+    rows.forEach(row => {
+        const key = `${row.manufacturer}|${row.model}|${row.quarter}`;
+        row.auction_count = String(batCounts[key] || 0);
+    });
+}
 
 // ---- Manufacturer Branding ----
 const MANUFACTURER_BRANDING = {
@@ -664,7 +718,7 @@ function renderExpandedDetail(mfrName) {
         }
         modelGroups[model].scores.push(parseFloat(row.mii_score));
         modelGroups[model].prices.push(parseFloat(row.price || 0));
-        modelGroups[model].auctions += (parseFloat(row.auction_count) || 1);
+        modelGroups[model].auctions += (parseFloat(row.auction_count) || 0);
     });
 
     const models = Object.values(modelGroups).map(mg => ({
@@ -886,7 +940,9 @@ async function initializeApp() {
     try {
         loadingIndicator.style.display = 'flex';
 
-        rawCSVData = await loadCSVData();
+        const [loadedData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts()]);
+        rawCSVData = loadedData;
+        injectAuctionCounts(rawCSVData, batCounts);
         processedData = processOHLCData(rawCSVData);
 
         // Set last updated

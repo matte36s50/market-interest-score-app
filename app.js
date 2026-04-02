@@ -1,5 +1,65 @@
-// S3 CSV URL
+// S3 CSV URLs
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
+const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
+
+// Build auction count map from bat.csv: "make|normalizedModel|YYYY-MM" -> count
+// Normalizes bat.csv model names to match MII model names by stripping the
+// manufacturer prefix (e.g. "Porsche LWB 911T") and year-range suffixes (e.g. "(1969-1973)").
+async function loadBatAuctionCounts() {
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const response = await fetch(BAT_CSV_URL, { mode: 'cors', signal: controller.signal, headers: { 'Accept': 'text/csv' } });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const text = await response.text();
+
+        return new Promise(resolve => {
+            Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                complete: results => {
+                    const counts = {};
+                    results.data.forEach(row => {
+                        const make = (row.make || '').trim();
+                        const rawModel = (row.model || '').trim();
+                        const saleDate = (row.sale_date || '').trim();
+                        if (!make || !rawModel || !saleDate) return;
+
+                        // Parse sale_date "M/D/YY" or "M/D/YYYY" -> "YYYY-MM"
+                        const parts = saleDate.split('/');
+                        if (parts.length !== 3) return;
+                        const month = parts[0].padStart(2, '0');
+                        const yearPart = parts[2].trim();
+                        const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+                        const period = `${year}-${month}`;
+
+                        // Normalize model: strip leading "Make " prefix, strip trailing "(YYYY-YYYY)"
+                        let model = rawModel;
+                        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+                        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+
+                        const key = `${make}|${model}|${period}`;
+                        counts[key] = (counts[key] || 0) + 1;
+                    });
+                    resolve(counts);
+                },
+                error: () => resolve({})
+            });
+        });
+    } catch (e) {
+        console.warn('Could not load bat.csv auction counts:', e.message);
+        return {};
+    }
+}
+
+// Inject auction_count into MII rows from bat.csv counts map
+function injectAuctionCounts(rows, batCounts) {
+    rows.forEach(row => {
+        const key = `${row.manufacturer}|${row.model}|${row.quarter}`;
+        row.auction_count = String(batCounts[key] || 0);
+    });
+}
 
 // Manufacturer branding (colors and abbreviations for better visual identity)
 const MANUFACTURER_BRANDING = {
@@ -160,7 +220,7 @@ function processCSVData(rawData) {
         const manufacturers = Object.keys(mfrGroups).map(mfrName => {
             const mfrData = mfrGroups[mfrName];
             // auction_count is stored per row by pipeline (sum of raw auctions per make/model/month)
-            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 1), 0);
+            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
             // Calculate average MII score for manufacturer
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
@@ -209,7 +269,7 @@ function processCSVData(rawData) {
             // Process models
             const models = mfrData.map(row => ({
                 model: row.model,
-                auctions: parseFloat(row.auction_count) || 1,
+                auctions: parseFloat(row.auction_count) || 0,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
@@ -302,7 +362,7 @@ function processCSVData(rawData) {
         // Calculate YTD manufacturer statistics
         const ytdManufacturers = Object.keys(ytdMfrGroups).map(mfrName => {
             const mfrData = ytdMfrGroups[mfrName];
-            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 1), 0);
+            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
             const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / mfrData.length;
@@ -343,7 +403,7 @@ function processCSVData(rawData) {
             // Process models for YTD
             const models = mfrData.map(row => ({
                 model: row.model,
-                auctions: parseFloat(row.auction_count) || 1,
+                auctions: parseFloat(row.auction_count) || 0,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
@@ -462,8 +522,9 @@ async function initializeApp() {
     try {
         loadingIndicator.style.display = 'flex';
 
-        // Load and process CSV data
-        const rawData = await loadCSVData();
+        // Load MII results and bat.csv auction counts in parallel
+        const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts()]);
+        injectAuctionCounts(rawData, batCounts);
         processCSVData(rawData);
 
         // Update last updated time

@@ -5,6 +5,60 @@
 // ============================================================
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
+const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
+
+async function loadBatAuctionCounts() {
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const response = await fetch(BAT_CSV_URL, { mode: 'cors', signal: controller.signal, headers: { 'Accept': 'text/csv' } });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const text = await response.text();
+
+        return new Promise(resolve => {
+            Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                complete: results => {
+                    const counts = {};
+                    results.data.forEach(row => {
+                        const make = (row.make || '').trim();
+                        const rawModel = (row.model || '').trim();
+                        const saleDate = (row.sale_date || '').trim();
+                        if (!make || !rawModel || !saleDate) return;
+
+                        const parts = saleDate.split('/');
+                        if (parts.length !== 3) return;
+                        const month = parts[0].padStart(2, '0');
+                        const yearPart = parts[2].trim();
+                        const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+                        const period = `${year}-${month}`;
+
+                        let model = rawModel;
+                        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+                        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+
+                        const key = `${make}|${model}|${period}`;
+                        counts[key] = (counts[key] || 0) + 1;
+                    });
+                    resolve(counts);
+                },
+                error: () => resolve({})
+            });
+        });
+    } catch (e) {
+        console.warn('Could not load bat.csv auction counts:', e.message);
+        return {};
+    }
+}
+
+function injectAuctionCounts(rows, batCounts) {
+    rows.forEach(row => {
+        const key = `${row.manufacturer}|${row.model}|${row.quarter}`;
+        row.auction_count = String(batCounts[key] || 0);
+    });
+}
 
 // MII component weights
 const COMPONENTS = [
@@ -164,7 +218,9 @@ async function loadData() {
 // ---- Init ----
 async function init() {
     try {
-        rawData = await loadData();
+        const [loadedData, batCounts] = await Promise.all([loadData(), loadBatAuctionCounts()]);
+        rawData = loadedData;
+        injectAuctionCounts(rawData, batCounts);
 
         const rawCount = rawData.length;
 
@@ -334,12 +390,12 @@ function renderModelRankings() {
             };
         }
         const m = modelMap[key];
-        m.count += (parseFloat(r.auction_count) || 1);
+        m.count += (parseFloat(r.auction_count) || 0);
         const mii = parseFloat(r.mii_score);   if (!isNaN(mii))             m.mii_vals.push(mii);
         const price = parseFloat(r.price);     if (!isNaN(price) && price > 0) m.price_vals.push(price);
         const views = parseFloat(r.views);     if (!isNaN(views))            m.views_vals.push(views);
         const bids  = parseFloat(r.bids);      if (!isNaN(bids))             m.bids_vals.push(bids);
-        const sold  = parseFloat(r.sold_rate); if (!isNaN(sold))             m.sold_vals.push(sold);
+        const sold  = parseFloat(r.sold);      if (!isNaN(sold))             m.sold_vals.push(sold);
     });
 
     const rows = Object.values(modelMap).map(m => ({
@@ -775,7 +831,7 @@ function getQuarterlyMetric(data, metric) {
     return quarters.map(q => {
         const rows = data.filter(r => r.quarter === q);
         if (!rows.length) return null;
-        const totalAuctions = rows.reduce((s, r) => s + (parseFloat(r.auction_count) || 1), 0);
+        const totalAuctions = rows.reduce((s, r) => s + (parseFloat(r.auction_count) || 0), 0);
         if (metric === 'volume') return totalAuctions;
         if (metric === 'sold_rate') {
             const sold = rows.reduce((s, r) => s + (parseFloat(r.sold) || 0), 0);
