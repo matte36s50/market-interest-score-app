@@ -334,7 +334,7 @@ function renderModelRankings() {
             };
         }
         const m = modelMap[key];
-        m.count++;
+        m.count += (parseFloat(r.auction_count) || 1);
         const mii = parseFloat(r.mii_score);   if (!isNaN(mii))             m.mii_vals.push(mii);
         const price = parseFloat(r.price);     if (!isNaN(price) && price > 0) m.price_vals.push(price);
         const views = parseFloat(r.views);     if (!isNaN(views))            m.views_vals.push(views);
@@ -775,10 +775,11 @@ function getQuarterlyMetric(data, metric) {
     return quarters.map(q => {
         const rows = data.filter(r => r.quarter === q);
         if (!rows.length) return null;
-        if (metric === 'volume') return rows.length;
+        const totalAuctions = rows.reduce((s, r) => s + (parseFloat(r.auction_count) || 1), 0);
+        if (metric === 'volume') return totalAuctions;
         if (metric === 'sold_rate') {
-            const sold = rows.filter(r => parseFloat(r.sold) === 1).length;
-            return rows.length ? (sold / rows.length) * 100 : null;
+            const sold = rows.reduce((s, r) => s + (parseFloat(r.sold) || 0), 0);
+            return totalAuctions ? (sold / totalAuctions) * 100 : null;
         }
         const vals = rows.map(r => parseFloat(r[metric])).filter(v => !isNaN(v));
         return vals.length ? avg(vals) : null;
