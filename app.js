@@ -159,13 +159,14 @@ function processCSVData(rawData) {
         // Calculate manufacturer-level statistics
         const manufacturers = Object.keys(mfrGroups).map(mfrName => {
             const mfrData = mfrGroups[mfrName];
-            const auctions = mfrData.length;
+            // auction_count is stored per row by pipeline (sum of raw auctions per make/model/month)
+            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 1), 0);
 
             // Calculate average MII score for manufacturer
-            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / auctions;
+            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
 
             // Calculate average price
-            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / auctions;
+            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / mfrData.length;
 
             // Calculate trend (difference from previous quarter)
             let trend = 0;
@@ -201,17 +202,17 @@ function processCSVData(rawData) {
             else if (auctions >= 8) confidence = 'Medium-High';
             else if (auctions >= 4) confidence = 'Medium';
 
-            // Calculate sell-through from sold field
-            const soldCount = mfrData.filter(row => parseFloat(row.sold) === 1).length;
+            // sold column is a sum (pipeline aggregates sold counts), not binary
+            const soldCount = mfrData.reduce((sum, row) => sum + (parseFloat(row.sold) || 0), 0);
             const sellThrough = auctions > 0 ? Math.round((soldCount / auctions) * 100) : 0;
 
             // Process models
             const models = mfrData.map(row => ({
                 model: row.model,
-                auctions: 1, // Each row is one auction
+                auctions: parseFloat(row.auction_count) || 1,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
-                trend: 0, // Could calculate model-specific trend
+                trend: 0,
                 confidence: 'Medium'
             }));
 
@@ -226,7 +227,7 @@ function processCSVData(rawData) {
                         totalPrice: 0
                     };
                 }
-                modelGroups[model.model].auctions += 1;
+                modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
@@ -301,10 +302,10 @@ function processCSVData(rawData) {
         // Calculate YTD manufacturer statistics
         const ytdManufacturers = Object.keys(ytdMfrGroups).map(mfrName => {
             const mfrData = ytdMfrGroups[mfrName];
-            const auctions = mfrData.length;
+            const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 1), 0);
 
-            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / auctions;
-            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / auctions;
+            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
+            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / mfrData.length;
 
             // For YTD, trend is based on first vs last quarter
             let trend = 0;
@@ -335,14 +336,14 @@ function processCSVData(rawData) {
             else if (auctions >= 20) confidence = 'Medium-High';
             else if (auctions >= 10) confidence = 'Medium';
 
-            // Calculate sell-through from sold field
-            const soldCount = mfrData.filter(row => parseFloat(row.sold) === 1).length;
+            // sold column is a sum (pipeline aggregates sold counts), not binary
+            const soldCount = mfrData.reduce((sum, row) => sum + (parseFloat(row.sold) || 0), 0);
             const sellThrough = auctions > 0 ? Math.round((soldCount / auctions) * 100) : 0;
 
             // Process models for YTD
             const models = mfrData.map(row => ({
                 model: row.model,
-                auctions: 1,
+                auctions: parseFloat(row.auction_count) || 1,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
@@ -360,7 +361,7 @@ function processCSVData(rawData) {
                         totalPrice: 0
                     };
                 }
-                modelGroups[model.model].auctions += 1;
+                modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
