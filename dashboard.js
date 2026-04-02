@@ -660,16 +660,17 @@ function renderExpandedDetail(mfrName) {
     mfrRows.forEach(row => {
         const model = row.model;
         if (!modelGroups[model]) {
-            modelGroups[model] = { model, scores: [], prices: [] };
+            modelGroups[model] = { model, scores: [], prices: [], auctions: 0 };
         }
         modelGroups[model].scores.push(parseFloat(row.mii_score));
         modelGroups[model].prices.push(parseFloat(row.price || 0));
+        modelGroups[model].auctions += (parseFloat(row.auction_count) || 1);
     });
 
     const models = Object.values(modelGroups).map(mg => ({
         model: mg.model,
         mii: avg(mg.scores),
-        auctions: mg.scores.length,
+        auctions: mg.auctions,
         avgPrice: avg(mg.prices),
         high: Math.max(...mg.scores),
         low: Math.min(...mg.scores),
