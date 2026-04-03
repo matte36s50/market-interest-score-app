@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MII Data Analysis - Underlying S3 Data Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hagi: { red: '#8B1A1A', gold: '#C5A028' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f0f0f0;
+        }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #f0f0f0; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        .model-search-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+        .model-clear-btn {
+            position: absolute;
+            right: 8px;
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .model-clear-btn.visible { display: block; }
+        .model-clear-btn:hover { color: #374151; }
+
+        .tab-btn.active {
+            background: #8B1A1A;
+            color: white;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        select option { background: #ffffff; }
+
+        .chart-container {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .table-row:hover { background: #f9fafb; }
+        .sortable-header { cursor: pointer; user-select: none; }
+        .sortable-header:hover { color: #8B1A1A; }
+    </style>
+</head>
+<body class="min-h-screen text-gray-900">
+
+    <!-- Navigation Bar -->
+    <header class="bg-[#8B1A1A] sticky top-0 z-50">
+        <div class="max-w-[1600px] mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#C5A028] flex items-center justify-center font-bold text-white text-sm tracking-wide">
+                        MII
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-white tracking-tight leading-none">MII Data Analysis</h1>
+                        <p class="text-xs text-red-300 leading-none mt-0.5">Underlying S3 Data Explorer</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="index-hagi.html" class="px-3 py-1.5 border border-white/40 text-white/90 text-xs rounded hover:bg-white/10 hover:border-white transition-colors font-medium">
+                        &larr; Leaderboard
+                    </a>
+                    <a href="dashboard-hagi.html" class="px-3 py-1.5 border border-white/40 text-white/90 text-xs rounded hover:bg-white/10 hover:border-white transition-colors font-medium">
+                        Terminal View
+                    </a>
+                    <div class="w-px h-5 bg-white/20"></div>
+                    <a href="analyze.html" class="text-white/40 text-xs hover:text-white/70 transition-colors">
+                        Classic View
+                    </a>
+                    <div class="text-right ml-2">
+                        <div class="text-xs text-white/40">Last Updated</div>
+                        <div id="lastUpdated" class="text-xs font-medium text-white/80">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#8B1A1A] mb-4"></div>
+            <div class="text-xl font-semibold text-gray-800">Loading MII Data...</div>
+            <div class="text-sm text-gray-500 mt-2">Fetching raw auction data from S3</div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="hidden fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="text-center max-w-md">
+            <div class="text-5xl mb-4">⚠️</div>
+            <div class="text-xl font-semibold text-[#8B1A1A] mb-2">Failed to Load Data</div>
+            <div id="errorMessage" class="text-sm text-gray-500 mb-4"></div>
+            <button onclick="location.reload()" class="px-4 py-2 bg-[#8B1A1A] text-white rounded-lg text-sm hover:bg-[#6B1414] transition-colors">
+                Retry
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-[1600px] mx-auto px-6 py-6">
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+            <div class="stat-card">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Total Records</div>
+                <div id="statTotalRecords" class="text-2xl font-bold text-gray-900">—</div>
+                <div class="text-xs text-gray-400 mt-1">make/model/month combinations</div>
+                <div id="statFilteredNote" class="text-xs text-[#C5A028] mt-0.5 hidden"></div>
+            </div>
+            <div class="stat-card">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Quarters</div>
+                <div id="statQuarters" class="text-2xl font-bold text-gray-900">—</div>
+                <div id="statQuarterRange" class="text-xs text-gray-400 mt-1">date range</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Unique Makes</div>
+                <div id="statMakes" class="text-2xl font-bold text-gray-900">—</div>
+                <div class="text-xs text-gray-400 mt-1">manufacturers</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Unique Models</div>
+                <div id="statModels" class="text-2xl font-bold text-gray-900">—</div>
+                <div class="text-xs text-gray-400 mt-1">distinct models</div>
+            </div>
+            <div class="stat-card border-l-4 border-[#C5A028]">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Avg MII Score</div>
+                <div id="statAvgMII" class="text-2xl font-bold text-[#8B1A1A]">—</div>
+                <div class="text-xs text-gray-400 mt-1">all records</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="bg-white border border-gray-200 rounded-xl p-1 mb-6 flex gap-1 w-fit shadow-sm">
+            <button class="tab-btn active px-5 py-2 rounded-lg text-sm font-medium transition-all" data-tab="components">
+                Component Breakdown
+            </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-gray-500 hover:text-gray-800" data-tab="trends">
+                Trends
+            </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-gray-500 hover:text-gray-800" data-tab="outliers">
+                Outlier Detection
+            </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-gray-500 hover:text-gray-800" data-tab="correlations">
+                Correlation Explorer
+            </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-gray-500 hover:text-gray-800" data-tab="models">
+                Model Rankings
+            </button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Component Breakdown -->
+        <!-- ============================================================ -->
+        <div id="tab-components" class="tab-content active">
+            <!-- Component Controls Bar -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Manufacturer:</label>
+                    <select id="radarMfrSelect" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 min-w-[160px]">
+                        <option value="__all__">Market Average</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off"
+                            class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 w-48" />
+                        <datalist id="radarModelList"></datalist>
+                        <button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Radar Chart -->
+                <div class="chart-container">
+                    <div class="mb-4">
+                        <h2 class="font-semibold text-gray-900">Normalized Component Scores</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Average normalized score per MII component</p>
+                    </div>
+                    <div style="height: 320px;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Component Bar Chart: selected vs market -->
+                <div class="chart-container">
+                    <div class="mb-4">
+                        <h2 class="font-semibold text-gray-900">Component Score vs Market Average</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Selected manufacturer compared to all-market baseline</p>
+                    </div>
+                    <div style="height: 320px;">
+                        <canvas id="componentBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 10 makers by component breakdown (stacked bar) -->
+            <div class="chart-container mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="font-semibold text-gray-900">Weighted Component Contribution — Top Manufacturers</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Weighted contribution of each component to the final MII score (top 15 by avg MII)</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-gray-400">Quarter:</label>
+                        <select id="componentQuarterSelect" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        </select>
+                    </div>
+                </div>
+                <div style="height: 380px;">
+                    <canvas id="componentStackedChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Trends -->
+        <!-- ============================================================ -->
+        <div id="tab-trends" class="tab-content">
+            <!-- Controls -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Metric:</label>
+                    <select id="trendMetric" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="mii_score">MII Score</option>
+                        <option value="price">Avg Sale Price ($)</option>
+                        <option value="views">Avg Views</option>
+                        <option value="bids">Avg Bids</option>
+                        <option value="comments">Avg Comments</option>
+                        <option value="social_score">Social Score</option>
+                        <option value="sold_rate">Sell-Through Rate (%)</option>
+                        <option value="volume">Auction Volume</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Manufacturer:</label>
+                    <select id="trendMfrSelect" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 min-w-[160px]">
+                        <option value="__all__">All (Market)</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Compare:</label>
+                    <select id="trendCompare" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 min-w-[160px]">
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off"
+                            class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 w-44" />
+                        <datalist id="trendModelList"></datalist>
+                        <button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main trend chart -->
+            <div class="chart-container mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="font-semibold text-gray-900" id="trendChartTitle">Month-over-Month MII Score Trend</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5" id="trendChartSubtitle">Average per month across all manufacturers</p>
+                    </div>
+                    <div id="trendLegend" class="flex items-center gap-4 text-xs text-gray-500"></div>
+                </div>
+                <div style="height: 340px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Multi-metric mini charts -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="chart-container">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2">Avg MII Score</div>
+                    <div id="miniMIIValue" class="text-xl font-bold text-amber-500 mb-2">—</div>
+                    <div style="height: 80px;"><canvas id="miniMIIChart"></canvas></div>
+                </div>
+                <div class="chart-container">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2">Avg Price</div>
+                    <div id="miniPriceValue" class="text-xl font-bold text-emerald-400 mb-2">—</div>
+                    <div style="height: 80px;"><canvas id="miniPriceChart"></canvas></div>
+                </div>
+                <div class="chart-container">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2">Avg Bids</div>
+                    <div id="miniBidsValue" class="text-xl font-bold text-blue-400 mb-2">—</div>
+                    <div style="height: 80px;"><canvas id="miniBidsChart"></canvas></div>
+                </div>
+                <div class="chart-container">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2">Auction Volume</div>
+                    <div id="miniVolValue" class="text-xl font-bold text-purple-400 mb-2">—</div>
+                    <div style="height: 80px;"><canvas id="miniVolChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Outlier Detection -->
+        <!-- ============================================================ -->
+        <div id="tab-outliers" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Controls -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5">
+                    <h2 class="font-semibold mb-4">Configuration</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Metric</label>
+                            <select id="outlierMetric" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                                <option value="mii_score">MII Score</option>
+                                <option value="price">Sale Price ($)</option>
+                                <option value="views">Views</option>
+                                <option value="bids">Bids</option>
+                                <option value="comments">Comments</option>
+                                <option value="social_score">Social Score</option>
+                                <option value="google_trends_interest">Google Trends Interest</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Quarter</label>
+                            <select id="outlierQuarter" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                                <option value="__all__">All Months</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Model</label>
+                            <div class="model-search-wrap w-full">
+                                <input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off"
+                                    class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30" />
+                                <datalist id="outlierModelList"></datalist>
+                                <button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">×</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Top N Records</label>
+                            <select id="outlierN" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                                <option value="10">Top 10</option>
+                                <option value="20" selected>Top 20</option>
+                                <option value="50">Top 50</option>
+                            </select>
+                        </div>
+                        <hr class="border-gray-100">
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase tracking-wider block mb-2">Special Analyses</label>
+                            <div class="space-y-2">
+                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                    High Views, Low Bids <span class="text-gray-400">(watched but not bought)</span>
+                                </button>
+                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                    High Price, Low MII <span class="text-gray-400">(pricy but low interest)</span>
+                                </button>
+                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                    Low Price, High MII <span class="text-gray-400">(high interest, low cost)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distribution Chart -->
+                <div class="chart-container lg:col-span-2">
+                    <div class="mb-4">
+                        <h2 class="font-semibold text-gray-900" id="outlierDistTitle">MII Score Distribution</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Histogram showing distribution of values</p>
+                    </div>
+                    <div style="height: 280px;">
+                        <canvas id="outlierDistChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top / Bottom Tables -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Top Records -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    <div class="border-b border-gray-100 px-5 py-3 flex items-center justify-between">
+                        <h3 class="font-semibold text-emerald-400" id="outlierTopTitle">Top 20 by MII Score</h3>
+                        <span id="outlierTopCount" class="text-xs text-gray-400"></span>
+                    </div>
+                    <div class="overflow-auto max-h-96 scrollbar-thin">
+                        <table class="w-full text-sm">
+                            <thead class="sticky top-0 bg-white">
+                                <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                    <th class="text-left px-4 py-2">Make / Model</th>
+                                    <th class="text-left px-4 py-2">Quarter</th>
+                                    <th class="text-right px-4 py-2" id="outlierTopColHeader">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="outlierTopTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Bottom Records -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    <div class="border-b border-gray-100 px-5 py-3 flex items-center justify-between">
+                        <h3 class="font-semibold text-red-400" id="outlierBottomTitle">Bottom 20 by MII Score</h3>
+                        <span id="outlierBottomCount" class="text-xs text-gray-400"></span>
+                    </div>
+                    <div class="overflow-auto max-h-96 scrollbar-thin">
+                        <table class="w-full text-sm">
+                            <thead class="sticky top-0 bg-white">
+                                <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                    <th class="text-left px-4 py-2">Make / Model</th>
+                                    <th class="text-left px-4 py-2">Quarter</th>
+                                    <th class="text-right px-4 py-2" id="outlierBottomColHeader">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="outlierBottomTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Correlation Explorer -->
+        <!-- ============================================================ -->
+        <div id="tab-correlations" class="tab-content">
+            <!-- Controls -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">X Axis:</label>
+                    <select id="corrX" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="views">Views</option>
+                        <option value="bids">Bids</option>
+                        <option value="price">Sale Price</option>
+                        <option value="comments">Comments</option>
+                        <option value="social_score">Social Score</option>
+                        <option value="google_trends_interest">Google Trends Interest</option>
+                        <option value="youtube_total_views">YouTube Total Views</option>
+                        <option value="age">Vehicle Age (yrs)</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Y Axis:</label>
+                    <select id="corrY" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="mii_score" selected>MII Score</option>
+                        <option value="price">Sale Price</option>
+                        <option value="views">Views</option>
+                        <option value="bids">Bids</option>
+                        <option value="comments">Comments</option>
+                        <option value="social_score">Social Score</option>
+                        <option value="google_trends_interest">Google Trends Interest</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Quarter:</label>
+                    <select id="corrQuarter" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="__all__">All</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Color by:</label>
+                    <select id="corrColorBy" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="manufacturer">Manufacturer</option>
+                        <option value="quarter">Quarter</option>
+                        <option value="sold">Sold (yes/no)</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Filter Make:</label>
+                    <select id="corrMfrFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 min-w-[140px]">
+                        <option value="__all__">All</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Model:</label>
+                    <div class="model-search-wrap">
+                        <input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off"
+                            class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 w-44" />
+                        <datalist id="corrModelList"></datalist>
+                        <button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Scatter Plot -->
+                <div class="chart-container lg:col-span-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="font-semibold text-gray-900" id="corrChartTitle">Views vs MII Score</h2>
+                            <p class="text-xs text-zinc-500 mt-0.5" id="corrChartSubtitle">Scatter plot — hover points for details</p>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            r = <span id="corrCoefficient" class="text-amber-400 font-semibold">—</span>
+                        </div>
+                    </div>
+                    <div style="height: 400px;">
+                        <canvas id="corrScatterChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Stats Panel -->
+                <div class="space-y-4">
+                    <div class="bg-white border border-gray-200 rounded-xl p-5">
+                        <h3 class="font-semibold text-sm mb-3">Correlation Stats</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Pearson r</span>
+                                <span id="statCorrR" class="font-semibold text-[#C5A028]">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">R²</span>
+                                <span id="statCorrR2" class="font-semibold text-gray-600">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Data points</span>
+                                <span id="statCorrN" class="font-semibold text-gray-600">—</span>
+                            </div>
+                            <hr class="border-gray-100">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">X mean</span>
+                                <span id="statCorrXMean" class="text-gray-600">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">X std dev</span>
+                                <span id="statCorrXStd" class="text-gray-600">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Y mean</span>
+                                <span id="statCorrYMean" class="text-gray-600">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Y std dev</span>
+                                <span id="statCorrYStd" class="text-gray-600">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-xl p-5">
+                        <h3 class="font-semibold text-sm mb-3">Interpretation</h3>
+                        <p id="corrInterpretation" class="text-xs text-zinc-400 leading-relaxed">
+                            Select axes and run the analysis to see interpretation.
+                        </p>
+                    </div>
+
+                    <!-- Color legend -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-5">
+                        <h3 class="font-semibold text-sm mb-3">Legend</h3>
+                        <div id="corrLegend" class="space-y-1.5 text-xs text-zinc-400 max-h-48 overflow-auto scrollbar-thin"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Model Rankings -->
+        <!-- ============================================================ -->
+        <div id="tab-models" class="tab-content">
+            <!-- Controls -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Manufacturer:</label>
+                    <select id="modelsRankMfr" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 min-w-[160px]">
+                        <option value="__all__">All Manufacturers</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Quarter:</label>
+                    <select id="modelsRankQuarter" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="__all__">All Months</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Rank by:</label>
+                    <select id="modelsRankMetric" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="mii_score">MII Score</option>
+                        <option value="price">Avg Sale Price</option>
+                        <option value="views">Avg Views</option>
+                        <option value="bids">Avg Bids</option>
+                        <option value="sold_rate">Sell-Through Rate</option>
+                        <option value="volume">Auction Volume</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-400">Show top:</label>
+                    <select id="modelsRankN" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bar chart -->
+            <div class="chart-container mb-6">
+                <div class="mb-4">
+                    <h2 class="font-semibold text-gray-900" id="modelsRankChartTitle">Top Models by MII Score</h2>
+                    <p class="text-xs text-zinc-500 mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p>
+                </div>
+                <div style="height: 400px;">
+                    <canvas id="modelsRankChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Full ranked table -->
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                <div class="border-b border-gray-100 px-5 py-3 flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-900" id="modelsRankTableTitle">Model Leaderboard</h3>
+                    <span id="modelsRankTableCount" class="text-xs text-gray-400"></span>
+                </div>
+                <div class="overflow-auto scrollbar-thin">
+                    <table class="w-full text-sm">
+                        <thead class="sticky top-0 bg-white">
+                            <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                <th class="text-left px-4 py-2">#</th>
+                                <th class="text-left px-4 py-2">Make</th>
+                                <th class="text-left px-4 py-2">Model</th>
+                                <th class="text-right px-4 py-2">Auctions</th>
+                                <th class="text-right px-4 py-2">MII Score</th>
+                                <th class="text-right px-4 py-2">Avg Price</th>
+                                <th class="text-right px-4 py-2">Avg Views</th>
+                                <th class="text-right px-4 py-2">Avg Bids</th>
+                                <th class="text-right px-4 py-2">Sell-Thru</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelsRankTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 mt-12 py-4 bg-white">
+        <div class="max-w-[1600px] mx-auto px-6 flex items-center justify-between text-xs text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="text-[#8B1A1A] font-semibold text-xs">MII</span>
+                <span>Market Interest Index &copy; 2025 — Raw Data Analysis</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="index-hagi.html" class="hover:text-gray-600">Leaderboard</a>
+                <a href="dashboard-hagi.html" class="hover:text-gray-600">Terminal View</a>
+                <span>|</span>
+                <a href="analyze.html" class="hover:text-gray-600">Classic Dark View</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="analyze-hagi.js"></script>
+</body>
+</html>
