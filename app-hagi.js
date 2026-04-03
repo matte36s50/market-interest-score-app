@@ -61,37 +61,54 @@ function injectAuctionCounts(rows, batCounts) {
     });
 }
 
-// Manufacturer branding (colors and abbreviations for better visual identity)
+// Manufacturer branding (colors, abbreviations, and logo URLs)
 const MANUFACTURER_BRANDING = {
-    'Porsche': { abbr: 'POR', color: '#d5001c', bg: '#1a0003' },
-    'BMW': { abbr: 'BMW', color: '#1c69d4', bg: '#001a33' },
-    'Mercedes-Benz': { abbr: 'MB', color: '#00adef', bg: '#001a24' },
-    'Ferrari': { abbr: 'FER', color: '#dc0000', bg: '#1f0000' },
-    'Nissan': { abbr: 'NIS', color: '#c3002f', bg: '#1a0006' },
-    'Toyota': { abbr: 'TOY', color: '#eb0a1e', bg: '#1f0103' },
-    'Audi': { abbr: 'AUD', color: '#bb0a30', bg: '#1a0105' },
-    'Chevrolet': { abbr: 'CHV', color: '#ffc72c', bg: '#262109' },
-    'Ford': { abbr: 'FOR', color: '#003478', bg: '#000a14' },
-    'Lamborghini': { abbr: 'LAM', color: '#ffd700', bg: '#262209' },
-    'Jaguar': { abbr: 'JAG', color: '#006633', bg: '#00140a' },
-    'Land Rover': { abbr: 'LRV', color: '#005a2b', bg: '#001108' },
-    'Lexus': { abbr: 'LEX', color: '#0061aa', bg: '#001220' },
-    'Honda': { abbr: 'HON', color: '#cc0000', bg: '#1a0000' },
-    'Acura': { abbr: 'ACU', color: '#700000', bg: '#120000' },
-    'Mazda': { abbr: 'MAZ', color: '#c1272d', bg: '#1a0405' },
-    'Subaru': { abbr: 'SUB', color: '#0052a5', bg: '#001019' },
-    'Volkswagen': { abbr: 'VW', color: '#001e50', bg: '#00060f' },
-    'Mercedes-AMG': { abbr: 'AMG', color: '#00adef', bg: '#001a24' },
-    'Dodge': { abbr: 'DOD', color: '#cc162c', bg: '#1a0304' },
-    'Plymouth': { abbr: 'PLY', color: '#ff6600', bg: '#1f1100' },
-    'Pontiac': { abbr: 'PON', color: '#ee3124', bg: '#1f0605' },
-    'Oldsmobile': { abbr: 'OLD', color: '#003da5', bg: '#000c19' }
+    'Porsche':       { abbr: 'POR', color: '#d5001c', bg: '#1a0003', logoUrl: 'https://upload.wikimedia.org/wikipedia/de/thumb/8/8c/Porsche_logo.svg/80px-Porsche_logo.svg.png' },
+    'BMW':           { abbr: 'BMW', color: '#1c69d4', bg: '#001a33', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/80px-BMW.svg.png' },
+    'Mercedes-Benz': { abbr: 'MB',  color: '#00adef', bg: '#001a24', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/80px-Mercedes-Logo.svg.png' },
+    'Ferrari':       { abbr: 'FER', color: '#dc0000', bg: '#1f0000', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/Ferrari-Logo.svg/80px-Ferrari-Logo.svg.png' },
+    'Nissan':        { abbr: 'NIS', color: '#c3002f', bg: '#1a0006', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/80px-Nissan_logo.svg.png' },
+    'Toyota':        { abbr: 'TOY', color: '#eb0a1e', bg: '#1f0103', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Toyota_logo_%28Red%29.svg/80px-Toyota_logo_%28Red%29.svg.png' },
+    'Audi':          { abbr: 'AUD', color: '#bb0a30', bg: '#1a0105', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/80px-Audi-Logo_2016.svg.png' },
+    'Chevrolet':     { abbr: 'CHV', color: '#c8a84b', bg: '#262109', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Chevrolet_logo.svg/80px-Chevrolet_logo.svg.png' },
+    'Ford':          { abbr: 'FOR', color: '#003478', bg: '#000a14', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/80px-Ford_logo_flat.svg.png' },
+    'Lamborghini':   { abbr: 'LAM', color: '#c8a84b', bg: '#262209', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Lamborghini_Logo.svg/80px-Lamborghini_Logo.svg.png' },
+    'Jaguar':        { abbr: 'JAG', color: '#006633', bg: '#00140a', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Jaguar_logo_%282012%29.svg/80px-Jaguar_logo_%282012%29.svg.png' },
+    'Land Rover':    { abbr: 'LRV', color: '#005a2b', bg: '#001108', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Land_Rover_logo.svg/80px-Land_Rover_logo.svg.png' },
+    'Lexus':         { abbr: 'LEX', color: '#0061aa', bg: '#001220', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Lexus_division_emblem.svg/80px-Lexus_division_emblem.svg.png' },
+    'Honda':         { abbr: 'HON', color: '#cc0000', bg: '#1a0000', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Honda_Logo.svg/80px-Honda_Logo.svg.png' },
+    'Acura':         { abbr: 'ACU', color: '#700000', bg: '#120000', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Acura_logo.svg/80px-Acura_logo.svg.png' },
+    'Mazda':         { abbr: 'MAZ', color: '#c1272d', bg: '#1a0405', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mazda_logo.svg/80px-Mazda_logo.svg.png' },
+    'Subaru':        { abbr: 'SUB', color: '#0052a5', bg: '#001019', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Subaru_logo.svg/80px-Subaru_logo.svg.png' },
+    'Volkswagen':    { abbr: 'VW',  color: '#001e50', bg: '#00060f', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Volkswagen_logo_2019.svg/80px-Volkswagen_logo_2019.svg.png' },
+    'Mercedes-AMG':  { abbr: 'AMG', color: '#00adef', bg: '#001a24', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/AMG_logo.svg/80px-AMG_logo.svg.png' },
+    'Dodge':         { abbr: 'DOD', color: '#cc162c', bg: '#1a0304', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Dodge_logo.svg/80px-Dodge_logo.svg.png' },
+    'Plymouth':      { abbr: 'PLY', color: '#ff6600', bg: '#1f1100' },
+    'Pontiac':       { abbr: 'PON', color: '#ee3124', bg: '#1f0605', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c8/Pontiac_logo.svg/80px-Pontiac_logo.svg.png' },
+    'Oldsmobile':    { abbr: 'OLD', color: '#003da5', bg: '#000c19' }
+};
+
+// Fallback handler for broken logo images — replaces wrapper with letter-box
+window._mfrLogoErr = function(img) {
+    const make = img.alt;
+    const b = MANUFACTURER_BRANDING[make] || {};
+    const color = b.color || '#555';
+    const abbr = b.abbr || make.substring(0, 3).toUpperCase();
+    img.closest('.mfr-logo-wrap').outerHTML =
+        `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#f5f5f5;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
 };
 
 // Helper function to generate manufacturer logo HTML (light-theme variant)
 function getManufacturerLogo(manufacturer) {
-    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#555', bg: '#f0f0f0' };
-    return `<div class="flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background: #f5f5f5; color: ${branding.color}; border: 2px solid ${branding.color}60;">${branding.abbr}</div>`;
+    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#555' };
+    const color = branding.color || '#555';
+    const abbr = branding.abbr || manufacturer.substring(0, 3).toUpperCase();
+    if (branding.logoUrl) {
+        return `<div class="mfr-logo-wrap flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg overflow-hidden bg-white" style="border:1px solid #e5e7eb;">
+            <img src="${branding.logoUrl}" alt="${manufacturer}" style="width:30px;height:30px;object-fit:contain;" onerror="_mfrLogoErr(this)">
+        </div>`;
+    }
+    return `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#f5f5f5;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
 }
 
 // Populate the ticker strip with manufacturer data after load
