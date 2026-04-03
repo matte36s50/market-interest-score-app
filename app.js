@@ -273,7 +273,12 @@ function processCSVData(rawData) {
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
-                confidence: 'Medium'
+                confidence: 'Medium',
+                googleTrends: parseFloat(row.google_trends_interest) || 0,
+                youtubeTotalViews: parseFloat(row.youtube_total_views) || 0,
+                instagramMentions: (row.instagram_mentions !== undefined && row.instagram_mentions !== '')
+                    ? (parseFloat(row.instagram_mentions) || 0) : null,
+                socialScore: parseFloat(row.social_score) || 0
             }));
 
             // Group models by name and aggregate
@@ -284,12 +289,26 @@ function processCSVData(rawData) {
                         model: model.model,
                         auctions: 0,
                         totalMII: 0,
-                        totalPrice: 0
+                        totalPrice: 0,
+                        totalGoogleTrends: 0,
+                        totalYoutubeTotalViews: 0,
+                        totalInstagramMentions: 0,
+                        hasInstagramData: false,
+                        totalSocialScore: 0,
+                        rowCount: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
+                modelGroups[model.model].totalGoogleTrends += model.googleTrends;
+                modelGroups[model.model].totalYoutubeTotalViews += model.youtubeTotalViews;
+                if (model.instagramMentions !== null) {
+                    modelGroups[model.model].totalInstagramMentions += model.instagramMentions;
+                    modelGroups[model.model].hasInstagramData = true;
+                }
+                modelGroups[model.model].totalSocialScore += model.socialScore;
+                modelGroups[model.model].rowCount++;
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
@@ -318,9 +337,23 @@ function processCSVData(rawData) {
                     mii: currentMII,
                     avgPrice: mg.totalPrice / mg.auctions,
                     trend: parseFloat(modelTrend.toFixed(1)),
-                    confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
+                    confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low',
+                    googleTrends: mg.rowCount > 0 ? parseFloat((mg.totalGoogleTrends / mg.rowCount).toFixed(1)) : 0,
+                    youtubeTotalViews: mg.totalYoutubeTotalViews,
+                    instagramMentions: mg.hasInstagramData ? mg.totalInstagramMentions : null,
+                    socialScore: mg.rowCount > 0 ? parseFloat((mg.totalSocialScore / mg.rowCount).toFixed(2)) : 0
                 };
             });
+
+            // Aggregate digital signals at manufacturer level
+            const mfrAvgGoogleTrends = mfrData.length > 0
+                ? mfrData.reduce((sum, row) => sum + (parseFloat(row.google_trends_interest) || 0), 0) / mfrData.length : 0;
+            const mfrTotalYoutubeViews = mfrData.reduce((sum, row) => sum + (parseFloat(row.youtube_total_views) || 0), 0);
+            const mfrInstagramRows = mfrData.filter(row => row.instagram_mentions !== undefined && row.instagram_mentions !== '');
+            const mfrTotalInstagram = mfrInstagramRows.length > 0
+                ? mfrInstagramRows.reduce((sum, row) => sum + (parseFloat(row.instagram_mentions) || 0), 0) : null;
+            const mfrAvgSocialScore = mfrData.length > 0
+                ? mfrData.reduce((sum, row) => sum + (parseFloat(row.social_score) || 0), 0) / mfrData.length : 0;
 
             return {
                 make: mfrName,
@@ -332,7 +365,11 @@ function processCSVData(rawData) {
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
                 history: history,
-                models: aggregatedModels.sort((a, b) => b.mii - a.mii)
+                models: aggregatedModels.sort((a, b) => b.mii - a.mii),
+                googleTrends: parseFloat(mfrAvgGoogleTrends.toFixed(1)),
+                youtubeTotalViews: mfrTotalYoutubeViews,
+                instagramMentions: mfrTotalInstagram,
+                socialScore: parseFloat(mfrAvgSocialScore.toFixed(2))
             };
         });
 
@@ -407,7 +444,12 @@ function processCSVData(rawData) {
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
-                confidence: 'Medium'
+                confidence: 'Medium',
+                googleTrends: parseFloat(row.google_trends_interest) || 0,
+                youtubeTotalViews: parseFloat(row.youtube_total_views) || 0,
+                instagramMentions: (row.instagram_mentions !== undefined && row.instagram_mentions !== '')
+                    ? (parseFloat(row.instagram_mentions) || 0) : null,
+                socialScore: parseFloat(row.social_score) || 0
             }));
 
             // Group models by name and aggregate
@@ -418,12 +460,26 @@ function processCSVData(rawData) {
                         model: model.model,
                         auctions: 0,
                         totalMII: 0,
-                        totalPrice: 0
+                        totalPrice: 0,
+                        totalGoogleTrends: 0,
+                        totalYoutubeTotalViews: 0,
+                        totalInstagramMentions: 0,
+                        hasInstagramData: false,
+                        totalSocialScore: 0,
+                        rowCount: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
+                modelGroups[model.model].totalGoogleTrends += model.googleTrends;
+                modelGroups[model.model].totalYoutubeTotalViews += model.youtubeTotalViews;
+                if (model.instagramMentions !== null) {
+                    modelGroups[model.model].totalInstagramMentions += model.instagramMentions;
+                    modelGroups[model.model].hasInstagramData = true;
+                }
+                modelGroups[model.model].totalSocialScore += model.socialScore;
+                modelGroups[model.model].rowCount++;
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
@@ -452,9 +508,23 @@ function processCSVData(rawData) {
                     mii: currentMII,
                     avgPrice: mg.totalPrice / mg.auctions,
                     trend: parseFloat(modelTrend.toFixed(1)),
-                    confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
+                    confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low',
+                    googleTrends: mg.rowCount > 0 ? parseFloat((mg.totalGoogleTrends / mg.rowCount).toFixed(1)) : 0,
+                    youtubeTotalViews: mg.totalYoutubeTotalViews,
+                    instagramMentions: mg.hasInstagramData ? mg.totalInstagramMentions : null,
+                    socialScore: mg.rowCount > 0 ? parseFloat((mg.totalSocialScore / mg.rowCount).toFixed(2)) : 0
                 };
             });
+
+            // Aggregate digital signals at manufacturer level
+            const mfrAvgGoogleTrends = mfrData.length > 0
+                ? mfrData.reduce((sum, row) => sum + (parseFloat(row.google_trends_interest) || 0), 0) / mfrData.length : 0;
+            const mfrTotalYoutubeViews = mfrData.reduce((sum, row) => sum + (parseFloat(row.youtube_total_views) || 0), 0);
+            const mfrInstagramRows = mfrData.filter(row => row.instagram_mentions !== undefined && row.instagram_mentions !== '');
+            const mfrTotalInstagram = mfrInstagramRows.length > 0
+                ? mfrInstagramRows.reduce((sum, row) => sum + (parseFloat(row.instagram_mentions) || 0), 0) : null;
+            const mfrAvgSocialScore = mfrData.length > 0
+                ? mfrData.reduce((sum, row) => sum + (parseFloat(row.social_score) || 0), 0) / mfrData.length : 0;
 
             return {
                 make: mfrName,
@@ -466,7 +536,11 @@ function processCSVData(rawData) {
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
                 history: history,
-                models: aggregatedModels.sort((a, b) => b.mii - a.mii)
+                models: aggregatedModels.sort((a, b) => b.mii - a.mii),
+                googleTrends: parseFloat(mfrAvgGoogleTrends.toFixed(1)),
+                youtubeTotalViews: mfrTotalYoutubeViews,
+                instagramMentions: mfrTotalInstagram,
+                socialScore: parseFloat(mfrAvgSocialScore.toFixed(2))
             };
         });
 
@@ -905,6 +979,131 @@ function renderLeaderboard() {
     });
 }
 
+// ---- Digital Signal Helpers ----
+
+// Format large numbers for YouTube views (e.g. 1234567 -> "1.2M")
+function fmtViews(n) {
+    if (!n || isNaN(n)) return '—';
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+    return String(Math.round(n));
+}
+
+// Format Instagram mentions
+function fmtMentions(n) {
+    if (n === null || n === undefined || isNaN(n)) return null;
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+    return String(Math.round(n));
+}
+
+// Render a compact Google Trends bar (score 0-100)
+function renderTrendsBar(score) {
+    const pct = Math.min(100, Math.max(0, score || 0));
+    const color = pct >= 70 ? '#10b981' : pct >= 40 ? '#f59e0b' : '#71717a';
+    const label = pct >= 70 ? 'High' : pct >= 40 ? 'Moderate' : 'Low';
+    return `
+        <div class="flex items-center gap-2">
+            <div class="flex-1 bg-zinc-700 rounded-full h-1.5 overflow-hidden">
+                <div class="h-full rounded-full transition-all" style="width:${pct}%; background:${color};"></div>
+            </div>
+            <span class="text-xs font-medium" style="color:${color}; min-width:2.5rem;">${pct.toFixed(0)}/100</span>
+            <span class="text-xs text-zinc-500">${label}</span>
+        </div>`;
+}
+
+// Build the Digital Signals panel HTML for manufacturer or model level
+function renderDigitalSignalsPanel(googleTrends, youtubeTotalViews, instagramMentions, socialScore, compact) {
+    const viewsFmt = fmtViews(youtubeTotalViews);
+    const igFmt = fmtMentions(instagramMentions);
+    const hasYT = youtubeTotalViews > 0;
+    const hasIG = igFmt !== null;
+    const hasSocial = socialScore > 0;
+
+    if (compact) {
+        // Inline badges for model list rows
+        return `
+            <div class="flex items-center gap-3 mt-1.5 flex-wrap">
+                <span class="inline-flex items-center gap-1 text-xs text-zinc-400" title="Google Trends Search Interest (0-100)">
+                    <svg class="w-3 h-3 text-blue-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <span class="text-blue-400 font-medium">${(googleTrends||0).toFixed(0)}</span>
+                    <span class="text-zinc-600">trends</span>
+                </span>
+                ${hasYT ? `<span class="inline-flex items-center gap-1 text-xs text-zinc-400" title="YouTube Total Views">
+                    <svg class="w-3 h-3 text-red-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3 3 0 00-2.12-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.57A3 3 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3 3 0 002.12 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.57a3 3 0 002.12-2.12C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+                    <span class="text-red-400 font-medium">${viewsFmt}</span>
+                    <span class="text-zinc-600">views</span>
+                </span>` : ''}
+                ${hasIG ? `<span class="inline-flex items-center gap-1 text-xs text-zinc-400" title="Instagram Mentions">
+                    <svg class="w-3 h-3 text-pink-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    <span class="text-pink-400 font-medium">${igFmt}</span>
+                    <span class="text-zinc-600">mentions</span>
+                </span>` : ''}
+            </div>`;
+    }
+
+    // Full panel for manufacturer header
+    return `
+        <div class="grid grid-cols-1 gap-3">
+            <!-- Google Trends -->
+            <div class="bg-zinc-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <span class="text-xs font-semibold text-zinc-300 uppercase tracking-wide">Google Trends</span>
+                    <span class="ml-auto text-xs text-zinc-500" title="Search interest index from Google Trends (0=low, 100=peak interest)">Search Interest Index</span>
+                </div>
+                ${renderTrendsBar(googleTrends)}
+                <div class="mt-1.5 text-xs text-zinc-500">Relative search volume over the period — higher means more public curiosity driving market heat.</div>
+            </div>
+
+            <!-- YouTube Views -->
+            <div class="bg-zinc-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-1">
+                    <svg class="w-4 h-4 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3 3 0 00-2.12-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.57A3 3 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3 3 0 002.12 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.57a3 3 0 002.12-2.12C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+                    <span class="text-xs font-semibold text-zinc-300 uppercase tracking-wide">YouTube Views</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-xl font-bold text-red-400">${hasYT ? viewsFmt : '—'}</span>
+                    ${hasYT ? '<span class="text-xs text-zinc-500">total video views this period</span>' : '<span class="text-xs text-zinc-600">no data available</span>'}
+                </div>
+                <div class="mt-1 text-xs text-zinc-500">Aggregate YouTube view count across brand/model content — reflects enthusiast and media engagement.</div>
+            </div>
+
+            <!-- Instagram Mentions -->
+            <div class="bg-zinc-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-1">
+                    <svg class="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    <span class="text-xs font-semibold text-zinc-300 uppercase tracking-wide">Instagram Mentions</span>
+                </div>
+                ${hasIG
+                    ? `<div class="flex items-baseline gap-2">
+                        <span class="text-xl font-bold text-pink-400">${igFmt}</span>
+                        <span class="text-xs text-zinc-500">post mentions this period</span>
+                       </div>
+                       <div class="mt-1 text-xs text-zinc-500">Public Instagram posts mentioning this brand — signals lifestyle and collector community buzz.</div>`
+                    : `<div class="flex items-center gap-2 mt-1">
+                        <span class="text-sm text-zinc-500">Pending pipeline integration</span>
+                       </div>
+                       <div class="mt-1 text-xs text-zinc-600">Instagram mention tracking will be available once connected to the data pipeline.</div>`
+                }
+            </div>
+
+            ${hasSocial ? `<!-- Social Engagement Score -->
+            <div class="bg-zinc-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-1">
+                    <svg class="w-4 h-4 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    <span class="text-xs font-semibold text-zinc-300 uppercase tracking-wide">Social Engagement</span>
+                    <span class="ml-auto text-xs bg-pink-900/40 text-pink-400 rounded px-1.5 py-0.5">5% of MII</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-xl font-bold text-pink-500">${socialScore.toFixed(2)}</span>
+                    <span class="text-xs text-zinc-500">composite score (incl. Instagram, forums, social media)</span>
+                </div>
+                <div class="mt-1 text-xs text-zinc-500">Normalized engagement from platforms including Instagram, Reddit, and automotive forums — feeds directly into the MII formula.</div>
+            </div>` : ''}
+        </div>`;
+}
+
 function renderManufacturerDetail() {
     const container = document.getElementById('manufacturerDetail');
     const quarterKey = state.selectedQuarter;
@@ -961,6 +1160,16 @@ function renderManufacturerDetail() {
             <canvas id="trendChart" style="max-height: 160px;"></canvas>
         </div>
 
+        <!-- Digital Signals Panel -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-4">
+                <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <h4 class="font-semibold">Digital Signals</h4>
+                <span class="ml-auto text-xs text-zinc-600 italic">Informational — does not affect MII score</span>
+            </div>
+            ${renderDigitalSignalsPanel(mfr.googleTrends, mfr.youtubeTotalViews, mfr.instagramMentions, mfr.socialScore, false)}
+        </div>
+
         <!-- Model Rankings -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <div class="border-b border-zinc-800 px-5 py-4">
@@ -979,14 +1188,15 @@ function renderManufacturerDetail() {
                                     <span class="w-6 text-center text-sm font-medium text-zinc-500">
                                         ${idx + 1}
                                     </span>
-                                    <div>
+                                    <div class="flex-1 min-w-0">
                                         <div class="font-medium text-sm">${model.model}</div>
                                         <div class="text-xs text-zinc-500">
                                             ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K
                                         </div>
+                                        ${renderDigitalSignalsPanel(model.googleTrends, model.youtubeTotalViews, model.instagramMentions, model.socialScore, true)}
                                     </div>
                                 </div>
-                                <div class="text-right">
+                                <div class="text-right flex-shrink-0 ml-3">
                                     <div class="font-bold text-amber-500">${model.mii.toFixed(1)}</div>
                                     <div class="flex items-center gap-2">
                                         ${getTrendIndicator(model.trend)}
