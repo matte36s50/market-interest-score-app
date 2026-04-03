@@ -302,17 +302,21 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        rowCount: 0,
                         totalMII: 0,
                         totalPrice: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
+                modelGroups[model.model].rowCount++;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                const currentMII = mg.totalMII / mg.auctions;
+                // Use auction count as divisor when available, fall back to row count
+                const divisor = mg.auctions > 0 ? mg.auctions : mg.rowCount;
+                const currentMII = mg.totalMII / divisor;
                 let modelTrend = 0;
 
                 // Calculate trend by comparing to previous quarter
@@ -335,7 +339,7 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
-                    avgPrice: mg.totalPrice / mg.auctions,
+                    avgPrice: mg.totalPrice / divisor,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
                 };
@@ -436,17 +440,21 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        rowCount: 0,
                         totalMII: 0,
                         totalPrice: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
+                modelGroups[model.model].rowCount++;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                const currentMII = mg.totalMII / mg.auctions;
+                // Use auction count as divisor when available, fall back to row count
+                const divisor = mg.auctions > 0 ? mg.auctions : mg.rowCount;
+                const currentMII = mg.totalMII / divisor;
                 let modelTrend = 0;
 
                 // Calculate YTD trend by comparing to first quarter
@@ -469,7 +477,7 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
-                    avgPrice: mg.totalPrice / mg.auctions,
+                    avgPrice: mg.totalPrice / divisor,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
                 };
