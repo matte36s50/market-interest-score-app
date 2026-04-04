@@ -86,10 +86,7 @@
         <div class="max-w-[1600px] mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <svg width="34" height="40" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-                        <path d="M20 2 L38 8 L38 28 C38 38 20 44 20 44 C20 44 2 38 2 28 L2 8 Z" fill="#C5A028" stroke="#9a7d1e" stroke-width="1.5"/>
-                        <text x="20" y="27" text-anchor="middle" fill="white" font-weight="800" font-size="10" font-family="-apple-system,system-ui,sans-serif" letter-spacing="1.5">MII</text>
-                    </svg>
+                    <span style="font-size:1.6rem; font-weight:800; color:#C5A028; letter-spacing:0.1em; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; flex-shrink:0; line-height:1;">MII</span>
                     <div>
                         <h1 class="text-lg font-bold text-white tracking-tight leading-none">MII Data Analysis</h1>
                         <p class="text-xs text-red-300 leading-none mt-0.5">Underlying S3 Data Explorer</p>
@@ -344,7 +341,7 @@
                     <div class="space-y-4">
                         <div>
                             <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Metric</label>
-                            <select id="outlierMetric" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                            <select id="outlierMetric" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
                                 <option value="mii_score">MII Score</option>
                                 <option value="price">Sale Price ($)</option>
                                 <option value="views">Views</option>
@@ -356,7 +353,7 @@
                         </div>
                         <div>
                             <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Quarter</label>
-                            <select id="outlierQuarter" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                            <select id="outlierQuarter" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
                                 <option value="__all__">All Months</option>
                             </select>
                         </div>
@@ -364,14 +361,14 @@
                             <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Model</label>
                             <div class="model-search-wrap w-full">
                                 <input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off"
-                                    class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30" />
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-7 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30" />
                                 <datalist id="outlierModelList"></datalist>
                                 <button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">×</button>
                             </div>
                         </div>
                         <div>
                             <label class="text-xs text-gray-500 uppercase tracking-wider block mb-1.5">Top N Records</label>
-                            <select id="outlierN" class="w-full bg-zinc-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                            <select id="outlierN" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
                                 <option value="10">Top 10</option>
                                 <option value="20" selected>Top 20</option>
                                 <option value="50">Top 50</option>
@@ -381,13 +378,13 @@
                         <div>
                             <label class="text-xs text-gray-500 uppercase tracking-wider block mb-2">Special Analyses</label>
                             <div class="space-y-2">
-                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-700 hover:border-amber-500/50 hover:text-amber-600 transition-colors">
                                     High Views, Low Bids <span class="text-gray-400">(watched but not bought)</span>
                                 </button>
-                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-700 hover:border-amber-500/50 hover:text-amber-600 transition-colors">
                                     High Price, Low MII <span class="text-gray-400">(pricy but low interest)</span>
                                 </button>
-                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-gray-200 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
+                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-700 hover:border-amber-500/50 hover:text-amber-600 transition-colors">
                                     Low Price, High MII <span class="text-gray-400">(high interest, low cost)</span>
                                 </button>
                             </div>
