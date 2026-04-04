@@ -181,6 +181,9 @@
             <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="models">
                 Model Rankings
             </button>
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="coverage">
+                Data Coverage
+            </button>
         </div>
 
         <!-- ============================================================ -->
@@ -654,6 +657,103 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB: Data Coverage -->
+        <!-- ============================================================ -->
+        <div id="tab-coverage" class="tab-content">
+
+            <!-- Summary stat cards -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                <div class="stat-card">
+                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">First Record</div>
+                    <div id="covFirstDay" class="text-lg font-bold text-zinc-100 font-mono">—</div>
+                    <div class="text-xs text-zinc-500 mt-1">earliest auction date</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Last Record</div>
+                    <div id="covLastDay" class="text-lg font-bold text-zinc-100 font-mono">—</div>
+                    <div class="text-xs text-zinc-500 mt-1">most recent auction date</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Months With Data</div>
+                    <div id="covTotalMonths" class="text-2xl font-bold text-zinc-100">—</div>
+                    <div class="text-xs text-zinc-500 mt-1">distinct months</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Days With Data</div>
+                    <div id="covTotalDays" class="text-2xl font-bold text-zinc-100">—</div>
+                    <div class="text-xs text-zinc-500 mt-1">distinct calendar days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Flagged Months</div>
+                    <div id="covFlagged" class="text-2xl font-bold text-red-400">—</div>
+                    <div class="text-xs text-zinc-500 mt-1">below 50% of median (<span id="covMedian">—</span> auctions)</div>
+                </div>
+            </div>
+
+            <div id="covNoData" class="hidden text-zinc-500 text-center py-12">No bat.csv data available.</div>
+
+            <!-- Monthly bar chart -->
+            <div class="chart-container mb-6">
+                <div class="mb-4 flex items-start justify-between">
+                    <div>
+                        <h2 class="font-semibold text-zinc-100">Monthly Auction Record Count</h2>
+                        <p class="text-xs text-zinc-500 mt-0.5">Records in bat.csv per month — red bars indicate months below 50% of median (likely scraper gaps)</p>
+                    </div>
+                    <span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-400">—</span>
+                </div>
+                <div style="height: 320px;">
+                    <canvas id="coverageChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Gap table -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-6">
+                <div class="border-b border-zinc-800 px-5 py-3">
+                    <h3 class="font-semibold text-zinc-100">Month-by-Month Coverage Report</h3>
+                    <p class="text-xs text-zinc-500 mt-0.5">
+                        "Missing days" = calendar days with zero auction records in bat.csv.
+                        Run <code class="text-amber-400 bg-zinc-800 px-1 rounded">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for any flagged month to get a pipeable list of missing dates.
+                    </p>
+                </div>
+                <div class="overflow-auto scrollbar-thin">
+                    <table class="w-full text-sm">
+                        <thead class="sticky top-0 bg-zinc-900">
+                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                                <th class="text-left px-4 py-2">Month</th>
+                                <th class="text-right px-4 py-2">Records</th>
+                                <th class="text-right px-4 py-2">% of Median</th>
+                                <th class="text-right px-4 py-2">Missing Days</th>
+                                <th class="text-center px-4 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="covGapTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Backfill instructions -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-6">
+                <h3 class="font-semibold text-zinc-100 mb-2">How to Backfill Missing Data</h3>
+                <div class="text-sm text-zinc-400 space-y-2">
+                    <p>If months are flagged above, use the CLI scripts to identify and backfill missing dates:</p>
+                    <ol class="list-decimal list-inside space-y-1 ml-2 text-zinc-300">
+                        <li>Run the diagnostic to see all gaps across all months:
+                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/diagnose-data-gaps.js</code>
+                        </li>
+                        <li>Get a pipeable list of missing dates for a specific range:
+                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code>
+                        </li>
+                        <li>Pass the missing dates to your scraper's backfill command:
+                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code>
+                        </li>
+                        <li>After re-running the scraper, regenerate <code class="text-amber-400">mii_results_latest.csv</code> and upload both CSVs to S3.</li>
+                    </ol>
+                </div>
+            </div>
+
         </div>
 
     </main>

@@ -42,14 +42,14 @@ async function loadBatAuctionCounts() {
                         const key = `${make}|${model}|${period}`;
                         counts[key] = (counts[key] || 0) + 1;
                     });
-                    resolve(counts);
+                    resolve({ counts, rows: results.data });
                 },
-                error: () => resolve({})
+                error: () => resolve({ counts: {}, rows: [] })
             });
         });
     } catch (e) {
         console.warn('Could not load bat.csv auction counts:', e.message);
-        return {};
+        return { counts: {}, rows: [] };
     }
 }
 
@@ -96,6 +96,7 @@ let rawData = [];
 let quarters = [];
 let manufacturers = [];
 let mfrColorMap = {};
+let batRawRows = [];  // raw bat.csv rows, used for data coverage analysis
 
 // Chart instances — tracked for destroy/recreate
 const charts = {};
@@ -218,9 +219,10 @@ async function loadData() {
 // ---- Init ----
 async function init() {
     try {
-        const [loadedData, batCounts] = await Promise.all([loadData(), loadBatAuctionCounts()]);
+        const [loadedData, batResult] = await Promise.all([loadData(), loadBatAuctionCounts()]);
         rawData = loadedData;
-        injectAuctionCounts(rawData, batCounts);
+        batRawRows = batResult.rows;
+        injectAuctionCounts(rawData, batResult.counts);
 
         const rawCount = rawData.length;
 
@@ -265,6 +267,7 @@ async function init() {
         renderOutliers();
         renderCorrelations();
         renderModelRankings();
+        renderDataCoverage(batRawRows);
 
         // Hide loading
         document.getElementById('loadingIndicator').classList.add('hidden');
@@ -1384,4 +1387,158 @@ function interpretCorrelation(r, xLabel, yLabel) {
     else explain = ` There is little predictive relationship between ${xLabel} and ${yLabel}.`;
 
     return `There is a ${strength} ${dir} correlation (r = ${r.toFixed(2)}) between ${xLabel} and ${yLabel}.${explain}`;
+}
+
+// ============================================================
+// SECTION 6: Data Coverage Analysis
+// Analyses bat.csv raw rows to find months/days with missing data.
+// ============================================================
+
+function renderDataCoverage(rows) {
+    // --- Build monthly and daily counts from raw bat.csv rows ---
+    const monthCounts = {};  // YYYY-MM -> count
+    const dayCounts   = {};  // YYYY-MM-DD -> count
+
+    rows.forEach(row => {
+        const saleDate = (row.sale_date || '').trim();
+        if (!saleDate) return;
+        const parts = saleDate.split('/');
+        if (parts.length !== 3) return;
+        const month   = parts[0].padStart(2, '0');
+        const day     = parts[1].padStart(2, '0');
+        const yearPart = parts[2].trim();
+        const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+        const period = `${year}-${month}`;
+        const dayKey = `${year}-${month}-${day}`;
+
+        monthCounts[period] = (monthCounts[period] || 0) + 1;
+        dayCounts[dayKey]   = (dayCounts[dayKey]   || 0) + 1;
+    });
+
+    const sortedMonths = Object.keys(monthCounts).sort();
+
+    // Summary stats
+    const allDayKeys  = Object.keys(dayCounts).sort();
+    const firstDay    = allDayKeys[0]  || '—';
+    const lastDay     = allDayKeys[allDayKeys.length - 1] || '—';
+    document.getElementById('covFirstDay').textContent  = firstDay;
+    document.getElementById('covLastDay').textContent   = lastDay;
+    document.getElementById('covTotalMonths').textContent = sortedMonths.length;
+    document.getElementById('covTotalDays').textContent   = allDayKeys.length;
+
+    if (!sortedMonths.length) {
+        document.getElementById('covNoData').classList.remove('hidden');
+        return;
+    }
+
+    // Median monthly count (for flagging)
+    const countValues = sortedMonths.map(m => monthCounts[m]);
+    const sortedCounts = [...countValues].sort((a, b) => a - b);
+    const median = sortedCounts[Math.floor(sortedCounts.length / 2)] || 1;
+    const LOW_PCT = 0.5;
+
+    document.getElementById('covMedian').textContent = Math.round(median);
+
+    // --- Monthly bar chart (HAGI light-theme colors) ---
+    const labels   = sortedMonths.map(m => fmtPeriod(m));
+    const bgColors = sortedMonths.map(m =>
+        monthCounts[m] < median * LOW_PCT ? 'rgba(220,38,38,0.6)' : 'rgba(197,160,40,0.6)'
+    );
+    const borderColors = sortedMonths.map(m =>
+        monthCounts[m] < median * LOW_PCT ? 'rgb(220,38,38)' : 'rgb(197,160,40)'
+    );
+
+    destroyChart('coverage');
+    const ctx = document.getElementById('coverageChart').getContext('2d');
+    charts['coverage'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Auction Records',
+                data: countValues,
+                backgroundColor: bgColors,
+                borderColor: borderColors,
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        afterLabel: (ctx) => {
+                            const m = sortedMonths[ctx.dataIndex];
+                            const pct = Math.round((monthCounts[m] / median) * 100);
+                            return `${pct}% of median`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(0,0,0,0.07)' },
+                    ticks: { color: '#9ca3af', maxRotation: 45 }
+                },
+                y: {
+                    grid: { color: 'rgba(0,0,0,0.07)' },
+                    ticks: { color: '#9ca3af' },
+                    title: { display: true, text: 'Auction Records', color: '#9ca3af', font: { size: 11 } }
+                }
+            }
+        }
+    });
+
+    // --- Gap table ---
+    const tbody = document.getElementById('covGapTable');
+    tbody.innerHTML = '';
+
+    let flaggedCount = 0;
+    sortedMonths.forEach(m => {
+        const cnt = monthCounts[m];
+        const pct = Math.round((cnt / median) * 100);
+        const isLow = cnt < median * LOW_PCT;
+        if (isLow) flaggedCount++;
+
+        const [y, mo] = m.split('-').map(Number);
+        const daysInMonth = new Date(y, mo, 0).getDate();
+        let missingDays = 0;
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dk = `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            if (!dayCounts[dk]) missingDays++;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition-colors';
+        tr.innerHTML = `
+            <td class="px-4 py-2.5 font-mono text-sm ${isLow ? 'text-red-600 font-medium' : 'text-gray-700'}">${m}</td>
+            <td class="px-4 py-2.5 text-right ${isLow ? 'text-red-600 font-medium' : 'text-gray-600'}">${cnt.toLocaleString()}</td>
+            <td class="px-4 py-2.5 text-right">
+                <div class="flex items-center justify-end gap-2">
+                    <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                        <div class="h-1.5 rounded-full ${isLow ? 'bg-red-500' : 'bg-[#C5A028]'}" style="width:${Math.min(pct, 100)}%"></div>
+                    </div>
+                    <span class="${isLow ? 'text-red-500' : 'text-gray-500'} text-xs w-10 text-right">${pct}%</span>
+                </div>
+            </td>
+            <td class="px-4 py-2.5 text-right text-gray-500 text-sm">${missingDays} / ${daysInMonth}</td>
+            <td class="px-4 py-2.5 text-center">
+                ${isLow
+                    ? '<span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-600 border border-red-200">Low</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-500 border border-gray-200">OK</span>'
+                }
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('covFlagged').textContent = flaggedCount;
+    document.getElementById('covFlaggedBadge').textContent =
+        flaggedCount > 0 ? `${flaggedCount} month${flaggedCount > 1 ? 's' : ''} flagged` : 'No gaps detected';
+    document.getElementById('covFlaggedBadge').className =
+        flaggedCount > 0
+            ? 'px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-600 border border-red-200'
+            : 'px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-600 border border-green-200';
 }
