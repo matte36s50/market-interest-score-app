@@ -389,7 +389,8 @@ function renderModelRankings() {
                 manufacturer: r.manufacturer,
                 model: r.model,
                 count: 0,
-                mii_vals: [], price_vals: [], views_vals: [], bids_vals: [], sold_vals: [],
+                mii_vals: [], price_vals: [], views_vals: [], bids_vals: [],
+                totalSold: 0,
             };
         }
         const m = modelMap[key];
@@ -398,7 +399,7 @@ function renderModelRankings() {
         const price = parseFloat(r.price);     if (!isNaN(price) && price > 0) m.price_vals.push(price);
         const views = parseFloat(r.views);     if (!isNaN(views))            m.views_vals.push(views);
         const bids  = parseFloat(r.bids);      if (!isNaN(bids))             m.bids_vals.push(bids);
-        const sold  = parseFloat(r.sold);      if (!isNaN(sold))             m.sold_vals.push(sold);
+        const sold  = parseFloat(r.sold);      if (!isNaN(sold))             m.totalSold += sold;
     });
 
     const rows = Object.values(modelMap).map(m => ({
@@ -409,7 +410,7 @@ function renderModelRankings() {
         price:     m.price_vals.length ? avg(m.price_vals) : null,
         views:     m.views_vals.length ? avg(m.views_vals) : null,
         bids:      m.bids_vals.length  ? avg(m.bids_vals)  : null,
-        sold_rate: m.sold_vals.length  ? avg(m.sold_vals)  : null,
+        sold_rate: m.count > 0 ? (m.totalSold / m.count) * 100 : null,
         volume:    m.count,
     }));
 
