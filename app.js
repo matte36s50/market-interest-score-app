@@ -270,6 +270,7 @@ function processCSVData(rawData) {
             const models = mfrData.map(row => ({
                 model: row.model,
                 auctions: parseFloat(row.auction_count) || 0,
+                sold: parseFloat(row.sold) || 0,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
@@ -283,11 +284,13 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        totalSold: 0,
                         totalMII: 0,
                         totalPrice: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
+                modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
@@ -317,6 +320,7 @@ function processCSVData(rawData) {
                     auctions: mg.auctions,
                     mii: currentMII,
                     avgPrice: mg.totalPrice / mg.auctions,
+                    sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
                 };
@@ -404,6 +408,7 @@ function processCSVData(rawData) {
             const models = mfrData.map(row => ({
                 model: row.model,
                 auctions: parseFloat(row.auction_count) || 0,
+                sold: parseFloat(row.sold) || 0,
                 mii: parseFloat(row.mii_score),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
@@ -417,11 +422,13 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        totalSold: 0,
                         totalMII: 0,
                         totalPrice: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
+                modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
                 modelGroups[model.model].totalPrice += model.avgPrice;
             });
@@ -451,6 +458,7 @@ function processCSVData(rawData) {
                     auctions: mg.auctions,
                     mii: currentMII,
                     avgPrice: mg.totalPrice / mg.auctions,
+                    sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
                 };
