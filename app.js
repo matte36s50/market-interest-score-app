@@ -225,8 +225,9 @@ function processCSVData(rawData) {
             // Calculate average MII score for manufacturer
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
 
-            // Calculate average price
-            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / mfrData.length;
+            // Calculate average price (sold only)
+            const pricedMfrRows = mfrData.filter(row => parseFloat(row.price) > 0);
+            const avgPrice = pricedMfrRows.length > 0 ? pricedMfrRows.reduce((sum, row) => sum + parseFloat(row.price), 0) / pricedMfrRows.length : 0;
 
             // Calculate trend (difference from previous quarter)
             let trend = 0;
@@ -286,13 +287,17 @@ function processCSVData(rawData) {
                         auctions: 0,
                         totalSold: 0,
                         totalMII: 0,
-                        totalPrice: 0
+                        totalPrice: 0,
+                        priceCount: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
-                modelGroups[model.model].totalPrice += model.avgPrice;
+                if (model.avgPrice > 0) {
+                    modelGroups[model.model].totalPrice += model.avgPrice;
+                    modelGroups[model.model].priceCount++;
+                }
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
@@ -319,7 +324,7 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
-                    avgPrice: mg.totalPrice / mg.auctions,
+                    avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
@@ -328,7 +333,7 @@ function processCSVData(rawData) {
 
             return {
                 make: mfrName,
-                logo: mfrName, // Store manufacturer name for dynamic logo generation
+                logo: mfrName,
                 auctions: auctions,
                 avgPrice: Math.round(avgPrice),
                 miiScore: parseFloat(avgMII.toFixed(1)),
@@ -369,7 +374,8 @@ function processCSVData(rawData) {
             const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
-            const avgPrice = mfrData.reduce((sum, row) => sum + parseFloat(row.price || 0), 0) / mfrData.length;
+            const pricedYtdRows = mfrData.filter(row => parseFloat(row.price) > 0);
+            const avgPrice = pricedYtdRows.length > 0 ? pricedYtdRows.reduce((sum, row) => sum + parseFloat(row.price), 0) / pricedYtdRows.length : 0;
 
             // For YTD, trend is based on first vs last quarter
             let trend = 0;
@@ -424,13 +430,17 @@ function processCSVData(rawData) {
                         auctions: 0,
                         totalSold: 0,
                         totalMII: 0,
-                        totalPrice: 0
+                        totalPrice: 0,
+                        priceCount: 0
                     };
                 }
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
-                modelGroups[model.model].totalPrice += model.avgPrice;
+                if (model.avgPrice > 0) {
+                    modelGroups[model.model].totalPrice += model.avgPrice;
+                    modelGroups[model.model].priceCount++;
+                }
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
@@ -457,7 +467,7 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
-                    avgPrice: mg.totalPrice / mg.auctions,
+                    avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
                     confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
@@ -838,7 +848,7 @@ function renderTopModels() {
                 </div>
                 <div class="flex items-center justify-between text-xs">
                     <div class="text-zinc-500">
-                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K
+                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                     </div>
                     <div class="flex items-center gap-2">
                         ${getTrendIndicator(model.trend)}
@@ -874,7 +884,7 @@ function renderLeaderboard() {
                         <div>
                             <div class="font-semibold text-zinc-100">${mfr.make}</div>
                             <div class="text-xs text-zinc-500">
-                                ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg
+                                ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg • ${mfr.sellThrough}% sold
                             </div>
                         </div>
                     </div>
@@ -990,7 +1000,7 @@ function renderManufacturerDetail() {
                                     <div>
                                         <div class="font-medium text-sm">${model.model}</div>
                                         <div class="text-xs text-zinc-500">
-                                            ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K
+                                            ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                                         </div>
                                     </div>
                                 </div>
