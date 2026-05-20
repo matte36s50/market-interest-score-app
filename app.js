@@ -1039,13 +1039,25 @@ function renderTrendChart(mfr) {
         charts.trend.destroy();
     }
 
+    // Build full historical trend across all available months for this manufacturer
+    const allPeriods = dashboardData.quarters.filter(q => q !== 'YTD');
+    const trendLabels = [];
+    const trendData = [];
+    allPeriods.forEach(period => {
+        const periodMfr = dashboardData.quarterData[period]?.manufacturers.find(m => m.make === mfr.make);
+        if (periodMfr) {
+            trendLabels.push(formatQuarterDisplay(period));
+            trendData.push(periodMfr.miiScore);
+        }
+    });
+
     charts.trend = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: mfr.historyLabels || dashboardData.quarters,
+            labels: trendLabels,
             datasets: [{
                 label: 'MII Score',
-                data: mfr.history,
+                data: trendData,
                 borderColor: '#f59e0b',
                 backgroundColor: 'rgba(245, 158, 11, 0.1)',
                 fill: true,
