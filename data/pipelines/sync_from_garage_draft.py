@@ -7,7 +7,6 @@ and merges them into data/auction_lots.csv.
 Field derivations
 -----------------
   price_at_48h  = 0.75 × low_estimate  →  low_estimate  = price_at_48h / 0.75
-  high_estimate = low_estimate (conservative proxy; update manually if available)
   sold          = final_price is not null and not reserve_not_met
   auction_house = leading tokens of auction_reference before the year segment
 
@@ -142,11 +141,8 @@ def map_row(raw: dict) -> dict:
     final_price = raw.get("final_price")
     reserve_not_met = bool(raw.get("reserve_not_met"))
 
-    # Derive pre-sale estimates from draft buy price
+    # Derive low estimate from draft buy price (buy price = 75% of low estimate)
     low_est = round(price_at_48h / BUY_PRICE_FACTOR) if price_at_48h else ""
-    # High estimate not stored in garage-draft; set equal to low as a
-    # conservative proxy. Update manually if you have the actual range.
-    high_est = low_est
 
     sold = (
         final_price is not None
@@ -163,7 +159,7 @@ def map_row(raw: dict) -> dict:
         "model": raw.get("model", ""),
         "year_of_car": raw.get("year", ""),
         "low_estimate_usd": low_est,
-        "high_estimate_usd": high_est,
+        "high_estimate_usd": "",
         "sold_price_usd": final_price if sold else "",
         "sold": "true" if sold else "false",
         "notes": raw.get("title", ""),
@@ -221,9 +217,6 @@ def main():
     write_lots(LOTS_PATH, existing_rows + new_rows)
     print(f"Added {len(new_rows)} new lots → {os.path.abspath(LOTS_PATH)}")
     print(f"Total lots now: {len(existing_rows) + len(new_rows)}")
-    print()
-    print("Note: high_estimate_usd is set equal to low_estimate_usd (derived from")
-    print("price_at_48h). Update manually if you have the actual high estimate range.")
     print()
     print("Next:")
     print("  python data/pipelines/auction_rating.py")

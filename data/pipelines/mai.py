@@ -37,10 +37,10 @@ def main():
         return
 
     lots["sold"] = lots["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
-    lots["high_estimate_usd"] = pd.to_numeric(lots["high_estimate_usd"], errors="coerce").fillna(0)
+    lots["low_estimate_usd"] = pd.to_numeric(lots["low_estimate_usd"], errors="coerce").fillna(0)
     lots["sold_price_usd"] = pd.to_numeric(lots["sold_price_usd"], errors="coerce").fillna(0)
 
-    apex = lots[lots["high_estimate_usd"] >= APEX_THRESHOLD].copy()
+    apex = lots[lots["low_estimate_usd"] >= APEX_THRESHOLD].copy()
 
     if apex.empty:
         print("No apex lots found — writing empty mai_scores.csv")

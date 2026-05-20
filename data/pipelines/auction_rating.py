@@ -3,7 +3,7 @@
 Auction Rating Pipeline
 Reads auction_lots.csv and outputs a per-event Auction Rating score.
 
-Apex lot = high_estimate_usd >= 500000
+Apex lot = low_estimate_usd >= 500000
 Sub-scores are min-max normalized 0-100 across all events in the dataset.
 Rating = 0.3*Concentration + 0.4*Volume + 0.3*Sell-Through
 """
@@ -36,10 +36,10 @@ def main():
 
     # Normalise the sold column to boolean
     df["sold"] = df["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
-    df["high_estimate_usd"] = pd.to_numeric(df["high_estimate_usd"], errors="coerce").fillna(0)
+    df["low_estimate_usd"] = pd.to_numeric(df["low_estimate_usd"], errors="coerce").fillna(0)
     df["sold_price_usd"] = pd.to_numeric(df["sold_price_usd"], errors="coerce").fillna(0)
 
-    apex = df[df["high_estimate_usd"] >= APEX_THRESHOLD].copy()
+    apex = df[df["low_estimate_usd"] >= APEX_THRESHOLD].copy()
 
     events = df.groupby(["event", "event_date", "auction_house"])
 

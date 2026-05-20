@@ -61,13 +61,10 @@ Find your Supabase URL and anon key at:
 | notes | `title` |
 
 ### Apex classification note
-The MAI pipeline flags lots as "apex" when `high_estimate_usd >= $500,000`.
-Because garage-draft only stores one estimate level (via `price_at_48h`), the
-high estimate is set equal to the low estimate. This means the apex threshold
-is effectively applied to the **low** estimate — which is slightly more
-conservative but correct in direction. If you want to store a true high
-estimate, either update the CSV manually after sync or add a `high_estimate`
-field to the garage-draft form.
+The MAI pipeline flags lots as "apex" when `low_estimate_usd >= $500,000`.
+The synced `low_estimate_usd` value (derived from `price_at_48h ÷ 0.75`)
+is the single estimate used for this threshold. `high_estimate_usd` is left
+blank — it's in the schema for optional manual use but not required by any pipeline.
 
 ### Customising the auction_house parser
 The `parse_auction_house()` function splits on `_` and `-` and drops the final
