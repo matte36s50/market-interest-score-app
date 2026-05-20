@@ -3,309 +3,689 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Interest Index - Collector Car Analytics</title>
+    <title>Market Interest Index — Collector Car Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        /* ── Chart.js professional defaults ── */
+        Chart.defaults.font.family = "'DM Sans', sans-serif";
+        Chart.defaults.font.size = 11;
+        Chart.defaults.color = '#a8a29e';
+        Chart.defaults.borderColor = 'rgba(0,0,0,0.04)';
+        Chart.defaults.animation.duration = 350;
+        Chart.defaults.animation.easing = 'easeOutQuart';
+
+        /* Tooltip */
+        Object.assign(Chart.defaults.plugins.tooltip, {
+            backgroundColor: '#18181b',
+            padding: { x: 12, y: 10 },
+            cornerRadius: 9,
+            borderColor: 'rgba(255,255,255,0.07)',
+            borderWidth: 1,
+            titleFont: { family: "'DM Sans', sans-serif", weight: '600', size: 12 },
+            bodyFont:  { family: "'DM Sans', sans-serif", size: 11 },
+            titleColor: '#f5f5f4',
+            bodyColor:  '#a8a29e',
+            titleMarginBottom: 5,
+            boxPadding: 5,
+            usePointStyle: true,
+            caretSize: 5,
+        });
+
+        /* ── Professional chart enhancement plugin ── */
+        Chart.register({
+            id: 'miiPro',
+            beforeInit(chart) {
+                const opts = chart.config.options || {};
+                const type = chart.config.type;
+
+                /* Scale cleanup */
+                const scales = opts.scales || {};
+                Object.entries(scales).forEach(([key, scale]) => {
+                    if (!scale) return;
+                    /* Lighter grid */
+                    if (!scale.grid) scale.grid = {};
+                    scale.grid.color     = 'rgba(0,0,0,0.042)';
+                    scale.grid.lineWidth = 1;
+                    scale.grid.drawTicks = false;
+                    /* Hide x-axis grid for bar/line — horizontal only looks cleaner */
+                    if (key === 'x' && (type === 'bar' || type === 'line')) scale.grid.display = false;
+                    /* Remove axis border line */
+                    if (!scale.border) scale.border = {};
+                    scale.border.display = false;
+                    /* Better tick labels */
+                    if (!scale.ticks) scale.ticks = {};
+                    scale.ticks.color = '#b5afa8';
+                    if (!scale.ticks.font) scale.ticks.font = {};
+                    scale.ticks.font.family = "'DM Sans', sans-serif";
+                    scale.ticks.font.size   = 10;
+                    if (scale.ticks.padding === undefined) scale.ticks.padding = 10;
+                });
+
+                /* Radar improvements */
+                if (type === 'radar' && scales.r) {
+                    const r = scales.r;
+                    if (!r.grid) r.grid = {};         r.grid.color = 'rgba(0,0,0,0.06)';
+                    if (!r.angleLines) r.angleLines = {}; r.angleLines.color = 'rgba(0,0,0,0.06)';
+                    if (!r.ticks) r.ticks = {};
+                    r.ticks.backdropColor = 'transparent'; r.ticks.color = '#b5afa8';
+                    if (!r.ticks.font) r.ticks.font = {}; r.ticks.font.size = 9;
+                    if (!r.pointLabels) r.pointLabels = {};
+                    r.pointLabels.color = '#78716c';
+                    if (!r.pointLabels.font) r.pointLabels.font = {};
+                    Object.assign(r.pointLabels.font, { family: "'DM Sans', sans-serif", size: 11, weight: '500' });
+                }
+
+                /* Legend */
+                const legend = opts.plugins && opts.plugins.legend;
+                if (legend && legend.display !== false) {
+                    if (!legend.labels) legend.labels = {};
+                    Object.assign(legend.labels, {
+                        font: { family: "'DM Sans', sans-serif", size: 11 },
+                        padding: 18, usePointStyle: true, pointStyleWidth: 8, boxHeight: 8, color: '#78716c'
+                    });
+                }
+
+                /* Dataset visual defaults */
+                const datasets = (chart.config.data || {}).datasets || [];
+                datasets.forEach(ds => {
+                    if (type === 'bar') {
+                        if (ds.borderRadius === undefined) ds.borderRadius = 4;
+                        if (ds.borderSkipped === undefined) ds.borderSkipped = 'bottom';
+                    }
+                    if (type === 'line') {
+                        if (ds.pointRadius      === undefined) ds.pointRadius      = 3.5;
+                        if (ds.pointHoverRadius === undefined) ds.pointHoverRadius = 5.5;
+                        if (ds.borderWidth      === undefined) ds.borderWidth      = 2.5;
+                        if (ds.tension          === undefined) ds.tension          = 0.4;
+                        ds.pointBorderWidth      = 2;
+                        ds.pointBorderColor      = '#ffffff';
+                        ds.pointHoverBorderColor = '#ffffff';
+                        ds.pointHoverBorderWidth = 2;
+                    }
+                    if (type === 'scatter') {
+                        if (ds.pointRadius      === undefined) ds.pointRadius      = 4.5;
+                        if (ds.pointHoverRadius === undefined) ds.pointHoverRadius = 7;
+                        ds.pointBorderWidth      = 1.5;
+                        ds.pointBorderColor      = 'rgba(255,255,255,0.9)';
+                        ds.pointHoverBorderColor = '#ffffff';
+                        ds.pointHoverBorderWidth = 2;
+                    }
+                });
+            },
+            /* Gradient fills for line charts */
+            beforeDraw(chart) {
+                if (chart.config.type !== 'line') return;
+                const { ctx, chartArea } = chart;
+                if (!chartArea) return;
+                ((chart.config.data || {}).datasets || []).forEach(ds => {
+                    if (!ds.fill) return;
+                    const color = typeof ds.borderColor === 'string' ? ds.borderColor : null;
+                    if (!color || !color.startsWith('#') || color.length < 7) return;
+                    const r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
+                    const grad = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    grad.addColorStop(0,   `rgba(${r},${g},${b},0.16)`);
+                    grad.addColorStop(0.55,`rgba(${r},${g},${b},0.04)`);
+                    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+                    ds.backgroundColor = grad;
+                });
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: { sans: ["'DM Sans'", 'sans-serif'] },
                     colors: {
-                        hagi: {
-                            red: '#8B1A1A',
-                            gold: '#C5A028',
-                        }
+                        brand: { red: '#8B1A1A', gold: '#B8960C' },
+                        warm: { 50: '#f6f4ef', 100: '#f0ebe2', 200: '#e5e0d6', 300: '#cfc8bc' }
                     }
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: #f0f0f0;
-        }
+        *, *::before, *::after { font-family: 'DM Sans', sans-serif; }
+        body { background: #f6f4ef; }
+
         @keyframes tickerMove {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .ticker-animate {
-            animation: tickerMove 300s linear infinite;
-            display: inline-block;
+        .ticker-animate { animation: tickerMove 300s linear infinite; display: inline-block; white-space: nowrap; }
+        .ticker-animate:hover { animation-play-state: paused; }
+
+        .scrollbar-thin::-webkit-scrollbar { width: 5px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #f6f4ef; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cfc8bc; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e8e3da;
+            border-radius: 14px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .kpi-card {
+            background: #fff;
+            border: 1px solid #e8e3da;
+            border-radius: 14px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.03);
+            padding: 1.25rem 1.35rem 1.1rem;
+            border-top: 2.5px solid transparent;
+            overflow: hidden;
+        }
+        .input-field {
+            background: #f6f4ef;
+            border: 1px solid #e5e0d6;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: #1c1917;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #8B1A1A;
+            box-shadow: 0 0 0 3px rgba(139,26,26,0.07);
+        }
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: #57534e;
+            padding: 5px 11px;
+            border-radius: 7px;
+            transition: all 0.15s;
+            text-decoration: none;
             white-space: nowrap;
         }
-        .ticker-animate:hover { animation-play-state: paused; }
-        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: #f0f0f0; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #aaa; }
+        .nav-link:hover { color: #8B1A1A; background: #fdf2f2; }
+        .nav-link.current { color: #8B1A1A; background: #fdf2f2; font-weight: 600; }
+
+        select option { background: #ffffff; color: #1c1917; }
+
+        /* Loading */
+        #loadingIndicator { backdrop-filter: blur(4px); }
     </style>
 </head>
-<body class="min-h-screen text-gray-900">
+<body class="min-h-screen text-[#1c1917]">
 
-    <!-- Navigation Bar -->
-    <header class="bg-[#8B1A1A] sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <span style="font-size:1.6rem; font-weight:800; color:#C5A028; letter-spacing:0.1em; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; flex-shrink:0; line-height:1;">MII</span>
-                    <div>
-                        <h1 class="text-lg font-bold text-white tracking-tight leading-none">Market Interest Index</h1>
-                        <p class="text-xs text-red-300 leading-none mt-0.5">Collector Car Analytics</p>
-                    </div>
-                </div>
+    <!-- Red accent top bar -->
+    <div class="h-[3px] bg-[#8B1A1A] w-full fixed top-0 left-0 z-50"></div>
 
-                <!-- Right nav -->
-                <div class="flex items-center gap-3">
-                    <a href="dashboard-hagi.html" class="px-3 py-1.5 border border-white/40 text-white/90 text-xs rounded hover:bg-white/10 hover:border-white transition-colors font-medium tracking-wide">
-                        Terminal View &rarr;
-                    </a>
-                    <a href="analyze-hagi.html" class="px-3 py-1.5 border border-white/40 text-white/90 text-xs rounded hover:bg-white/10 hover:border-white transition-colors font-medium tracking-wide">
-                        Data Analysis &rarr;
-                    </a>
-                    <div class="w-px h-5 bg-white/20"></div>
-                    <a href="index.html" class="text-white/40 text-xs hover:text-white/70 transition-colors">
-                        Classic View
-                    </a>
-                    <div class="w-px h-5 bg-white/20"></div>
-                    <div class="text-right">
-                        <div class="text-xs text-white/40">Last Updated</div>
-                        <div id="lastUpdated" class="text-xs font-medium text-white/80"></div>
-                    </div>
-                    <select id="quarterSelect" class="bg-white/10 border border-white/30 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:ring-1 focus:ring-white/60 cursor-pointer">
-                    </select>
+    <!-- Navigation -->
+    <header class="bg-white sticky top-[3px] z-40 border-b border-[#e5e0d6]" style="box-shadow: 0 1px 8px rgba(0,0,0,0.04);">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <span class="text-[1.3rem] font-bold text-[#8B1A1A] tracking-[0.07em] leading-none">MII</span>
+                <div class="w-px h-5 bg-[#e5e0d6]"></div>
+                <span class="font-semibold text-[#1c1917] text-sm leading-none hidden sm:block">Market Interest Index</span>
+                <span class="text-[11px] text-[#a8a29e] hidden lg:block">Collector Car Analytics</span>
+            </div>
+
+            <!-- Nav + Controls -->
+            <div class="flex items-center gap-1">
+                <a href="index-hagi.html" class="nav-link current">Leaderboard</a>
+                <a href="dashboard-hagi.html" class="nav-link">Dashboard</a>
+                <a href="analyze-hagi.html" class="nav-link">Analysis</a>
+                <div class="w-px h-5 bg-[#e5e0d6] mx-2"></div>
+                <div class="text-right mr-2 hidden md:block">
+                    <div class="text-[10px] text-[#a8a29e] uppercase tracking-widest font-medium">Updated</div>
+                    <div id="lastUpdated" class="text-[11px] font-semibold text-[#57534e] leading-tight"></div>
                 </div>
+                <select id="quarterSelect" class="input-field px-2.5 py-1.5 cursor-pointer text-xs"></select>
             </div>
         </div>
     </header>
 
     <!-- Ticker Strip -->
-    <div class="bg-[#1a1a1a] overflow-hidden h-8 flex items-center">
-        <div class="flex-shrink-0 bg-[#C5A028] text-black text-[10px] font-bold px-3 h-full flex items-center uppercase tracking-wider">
-            Live
-        </div>
+    <div class="bg-[#1c1917] overflow-hidden h-7 flex items-center sticky top-[59px] z-30">
+        <div class="flex-shrink-0 bg-[#B8960C] text-black text-[9px] font-bold px-3 h-full flex items-center uppercase tracking-widest">Live</div>
         <div class="overflow-hidden flex-1 relative h-full">
-            <div id="tickerContent" class="text-[11px] text-gray-400 absolute top-0 left-0 h-full flex items-center">
-                <span class="px-4">Loading market data...</span>
+            <div id="tickerContent" class="text-[10px] text-[#78716c] absolute top-0 left-0 h-full flex items-center">
+                <span class="px-4">Loading market data…</span>
             </div>
         </div>
     </div>
 
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center">
+    <!-- Loading -->
+    <div id="loadingIndicator" class="fixed inset-0 bg-white/88 z-50 flex items-center justify-center">
         <div class="text-center">
-            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#8B1A1A] mb-4"></div>
-            <div class="text-xl font-semibold text-gray-800">Loading MII Data...</div>
-            <div class="text-sm text-gray-500 mt-2">Fetching from S3 bucket</div>
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 border-[#e5e0d6] border-t-[#8B1A1A] mb-5"></div>
+            <div class="text-sm font-semibold text-[#1c1917]">Loading MII Data</div>
+            <div class="text-xs text-[#a8a29e] mt-1">Fetching from S3</div>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
 
-        <!-- Quarter MII Trend Chart -->
+        <!-- Quarter Progress -->
         <div id="quarterProgressContainer" class="mb-6 hidden"></div>
 
-        <!-- Market Overview Cards -->
-        <div class="grid grid-cols-4 gap-4 mb-8">
-            <div class="bg-white border-l-4 border-gray-300 rounded-r-xl p-5 shadow-sm">
-                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Qualifying Makes</div>
-                <div id="qualifyingMakes" class="text-3xl font-bold text-gray-900">0</div>
-                <div id="totalMakes" class="text-xs text-gray-400 mt-1"></div>
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="kpi-card" style="border-top-color:#cfc8bc;">
+                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Qualifying Makes</div>
+                <div id="qualifyingMakes" class="text-[2rem] font-bold text-[#1c1917] leading-none tabular-nums">0</div>
+                <div id="totalMakes" class="text-[11px] text-[#a8a29e] mt-2"></div>
             </div>
-            <div class="bg-white border-l-4 border-[#8B1A1A] rounded-r-xl p-5 shadow-sm">
-                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Total Auctions</div>
-                <div id="totalAuctions" class="text-3xl font-bold text-gray-900">0</div>
-                <div class="text-xs text-gray-400 mt-1">this month</div>
+            <div class="kpi-card" style="border-top-color:#8B1A1A;">
+                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Total Auctions</div>
+                <div id="totalAuctions" class="text-[2rem] font-bold text-[#1c1917] leading-none tabular-nums">0</div>
+                <div class="text-[11px] text-[#a8a29e] mt-2">this period</div>
             </div>
-            <div class="bg-white border-l-4 border-[#C5A028] rounded-r-xl p-5 shadow-sm">
-                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Market MII Avg</div>
-                <div id="marketMII" class="text-3xl font-bold text-[#8B1A1A]">0.0</div>
-                <div class="text-xs text-gray-400 mt-1">index points</div>
+            <div class="kpi-card" style="border-top-color:#B8960C;">
+                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Market MII Avg</div>
+                <div id="marketMII" class="text-[2rem] font-bold text-[#8B1A1A] leading-none tabular-nums">0.0</div>
+                <div class="text-[11px] text-[#a8a29e] mt-2">index points</div>
             </div>
-            <div class="bg-white border-l-4 border-green-500 rounded-r-xl p-5 shadow-sm">
-                <div class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Avg Sale Price</div>
-                <div id="avgPrice" class="text-3xl font-bold text-green-700">$0K</div>
-                <div class="text-xs text-gray-400 mt-1">across all makes</div>
+            <div class="kpi-card" style="border-top-color:#15803d;">
+                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Avg Sale Price</div>
+                <div id="avgPrice" class="text-[2rem] font-bold text-[#15803d] leading-none tabular-nums">$0K</div>
+                <div class="text-[11px] text-[#a8a29e] mt-2">across all makes</div>
             </div>
         </div>
 
         <!-- Controls Bar -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 shadow-sm">
-            <div class="flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
+        <div class="card p-4 mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                     <!-- Search -->
                     <div class="relative">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search manufacturer..."
-                            class="bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]/50"
-                        />
-                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <input type="text" id="searchInput" placeholder="Search manufacturer…"
+                            class="input-field pl-9 pr-4 py-2 w-56 focus:outline-none" />
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#a8a29e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
-
-                    <!-- Min Auctions Filter -->
+                    <!-- Min Auctions -->
                     <div class="flex items-center gap-2">
-                        <label class="text-xs text-gray-500">Min Auctions:</label>
-                        <select id="minAuctions" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <label class="text-[11px] text-[#a8a29e] font-medium whitespace-nowrap">Min auctions</label>
+                        <select id="minAuctions" class="input-field px-3 py-2 focus:outline-none">
                             <option value="5">5+</option>
-                            <option value="10" selected>10+ (Default)</option>
+                            <option value="10" selected>10+</option>
                             <option value="20">20+</option>
                             <option value="50">50+</option>
                         </select>
                     </div>
-
-                    <!-- Sort Controls -->
+                    <!-- Sort -->
                     <div class="flex items-center gap-2">
-                        <label class="text-xs text-gray-500">Sort:</label>
-                        <select id="sortBy" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30">
+                        <label class="text-[11px] text-[#a8a29e] font-medium">Sort</label>
+                        <select id="sortBy" class="input-field px-3 py-2 focus:outline-none">
                             <option value="miiScore" selected>MII Score</option>
                             <option value="auctions">Auction Volume</option>
                             <option value="avgPrice">Avg Price</option>
                             <option value="trend">Trend</option>
                             <option value="sellThrough">Sell-Through %</option>
                         </select>
-                        <button id="sortOrder" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-100 transition-colors">
-                            ↓
-                        </button>
+                        <button id="sortOrder" class="input-field w-8 h-8 flex items-center justify-center hover:bg-[#f0ebe2] transition-colors text-[#57534e] text-sm font-medium cursor-pointer">↓</button>
                     </div>
                 </div>
-
-                <!-- View Mode Toggle -->
-                <div class="flex items-center bg-gray-100 rounded-lg p-1">
-                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-[#8B1A1A] text-white">
-                        Leaderboard
-                    </button>
-                    <button data-mode="compare" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-gray-500 hover:text-gray-800">
-                        Compare
-                    </button>
-                    <button data-mode="trends" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-gray-500 hover:text-gray-800">
-                        Trends
-                    </button>
+                <!-- View Toggle -->
+                <div class="flex items-center bg-[#f6f4ef] rounded-lg p-1 gap-0.5">
+                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all bg-[#8B1A1A] text-white shadow-sm">Leaderboard</button>
+                    <button data-mode="compare"     class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#a8a29e] hover:text-[#57534e]">Compare</button>
+                    <button data-mode="trends"      class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#a8a29e] hover:text-[#57534e]">Trends</button>
                 </div>
             </div>
         </div>
 
+        <!-- Main Grid -->
         <div class="grid grid-cols-3 gap-6">
-            <!-- Main Leaderboard -->
+            <!-- Leaderboard -->
             <div class="col-span-2">
-                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                    <div class="border-b border-gray-100 px-5 py-4 bg-white">
-                        <h2 class="font-semibold text-gray-900">Manufacturer Leaderboard</h2>
-                        <p id="leaderboardSubtitle" class="text-xs text-gray-400 mt-1"></p>
+                <div class="card overflow-hidden">
+                    <div class="border-b border-[#f0ebe2] px-5 py-4">
+                        <h2 class="font-semibold text-[#1c1917] text-[13px]">Manufacturer Leaderboard</h2>
+                        <p id="leaderboardSubtitle" class="text-[11px] text-[#a8a29e] mt-0.5"></p>
                     </div>
-                    <div id="leaderboardContainer" class="divide-y divide-gray-100">
-                        <!-- Leaderboard items will be inserted here -->
-                    </div>
+                    <div id="leaderboardContainer" class="divide-y divide-[#f6f4ef]"></div>
                 </div>
             </div>
 
-            <!-- Right Sidebar -->
-            <div class="space-y-6">
+            <!-- Sidebar -->
+            <div class="space-y-5">
                 <div id="manufacturerDetail">
-                    <div class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
-                        <div class="text-4xl mb-4">👈</div>
-                        <h3 class="font-semibold text-gray-700">Select a Manufacturer</h3>
-                        <p class="text-sm text-gray-400 mt-2">
-                            Click on any manufacturer in the leaderboard to view detailed model breakdowns and trends
-                        </p>
+                    <div class="card p-7 text-center">
+                        <div class="w-9 h-9 rounded-full bg-[#f6f4ef] flex items-center justify-center mx-auto mb-3.5">
+                            <svg class="w-4 h-4 text-[#cfc8bc]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-[#78716c] text-[13px]">Select a Manufacturer</h3>
+                        <p class="text-[11px] text-[#a8a29e] mt-2 leading-relaxed">Click any row in the leaderboard to view model breakdowns and trend details</p>
                     </div>
                 </div>
-
                 <!-- Compare Panel -->
-                <div id="comparePanel" class="hidden bg-white border border-[#8B1A1A]/30 rounded-xl p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <h4 class="font-semibold text-gray-800"><span id="compareCount">Compare (0/4)</span></h4>
-                        <button id="clearCompare" class="text-xs text-gray-400 hover:text-gray-600">
-                            Clear all
-                        </button>
+                <div id="comparePanel" class="hidden card p-5" style="border-color: rgba(139,26,26,0.2);">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-semibold text-[#1c1917] text-[13px]"><span id="compareCount">Compare (0/4)</span></h4>
+                        <button id="clearCompare" class="text-[11px] text-[#a8a29e] hover:text-[#57534e] transition-colors">Clear all</button>
                     </div>
-                    <div id="compareList" class="flex flex-wrap gap-2 mb-4"></div>
-                    <div style="height: 120px;">
-                        <canvas id="compareChart"></canvas>
-                    </div>
+                    <div id="compareList" class="flex flex-wrap gap-1.5 mb-4"></div>
+                    <div style="height: 110px;"><canvas id="compareChart"></canvas></div>
                 </div>
             </div>
         </div>
 
-        <!-- Top Models Overall -->
-        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-6 mb-6 shadow-sm">
-            <div class="border-b border-gray-100 px-5 py-4">
+        <!-- Top Models -->
+        <div class="card overflow-hidden mt-6 mb-6">
+            <div class="border-b border-[#f0ebe2] px-5 py-4">
                 <div class="flex items-center justify-between mb-2">
-                    <h2 class="font-semibold text-gray-900">Top 20 Models Overall</h2>
+                    <h2 class="font-semibold text-[#1c1917] text-[13px]">Top 20 Models Overall</h2>
                 </div>
-                <p id="topModelsSubtitle" class="text-xs text-gray-400 mb-3">Top 20 models with highest market interest this month</p>
+                <p id="topModelsSubtitle" class="text-[11px] text-[#a8a29e] mb-3">Top 20 models with highest market interest this period</p>
                 <div class="relative">
-                    <input
-                        type="text"
-                        id="modelSearch"
-                        placeholder="Search for any model..."
-                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]/40 placeholder-gray-400"
-                    />
-                    <div id="modelSearchClear" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer hidden">
-                        &times;
-                    </div>
+                    <input type="text" id="modelSearch" placeholder="Search for any model…"
+                        class="w-full input-field pl-9 pr-8 py-2 focus:outline-none" />
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#a8a29e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <div id="modelSearchClear" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#a8a29e] hover:text-[#57534e] cursor-pointer hidden text-base leading-none">&times;</div>
                 </div>
             </div>
-            <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
-                <!-- Top models will be inserted here -->
+            <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5"></div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="card p-6 mb-6">
+            <h3 class="font-semibold text-[#1c1917] mb-5 text-[13px]">About the Market Interest Index (MII)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Formula Weights</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#f59e0b] flex-shrink-0"></span>Sale Price — 30%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#3b82f6] flex-shrink-0"></span>Bid Activity — 30%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#10b981] flex-shrink-0"></span>View Count — 20%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#8b5cf6] flex-shrink-0"></span>Comments — 12%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#ec4899] flex-shrink-0"></span>Social Engagement — 5%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#6b7280] flex-shrink-0"></span>Vehicle Age — 3%</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Confidence Levels</h4>
+                    <ul class="space-y-2">
+                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-green-600 text-base leading-none">●</span> High: 50+ auctions</li>
+                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-teal-600 text-base leading-none">◐</span> Medium-High: 20–49</li>
+                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-amber-600 text-base leading-none">◐</span> Medium: 10–19</li>
+                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-red-500 text-base leading-none">○</span> Low: 5–9 auctions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Data Sources</h4>
+                    <p class="text-[12px] text-[#57534e] leading-relaxed">MII scores are calculated from auction data aggregated from Bring a Trailer and Cars &amp; Bids. Refreshed twice daily at 6 AM and 6 PM UTC.</p>
+                </div>
             </div>
         </div>
 
-        <!-- MII Methodology Footer -->
-        <div class="mt-12 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 class="font-semibold mb-4 text-gray-800">About the Market Interest Index (MII)</h3>
-            <div class="grid grid-cols-3 gap-6 text-sm text-gray-500">
-                <div>
-                    <h4 class="font-medium text-gray-700 mb-2">Formula Weights</h4>
-                    <ul class="space-y-1">
-                        <li>• Sale Price: 30%</li>
-                        <li>• Bid Activity: 30%</li>
-                        <li>• View Count: 20%</li>
-                        <li>• Comments: 12%</li>
-                        <li>• Social Engagement: 5%</li>
-                        <li>• Vehicle Age: 3%</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-medium text-gray-700 mb-2">Confidence Levels</h4>
-                    <ul class="space-y-1">
-                        <li><span class="text-green-600">●</span> High: 50+ auctions</li>
-                        <li><span class="text-teal-600">◐</span> Medium-High: 20-49 auctions</li>
-                        <li><span class="text-amber-600">◐</span> Medium: 10-19 auctions</li>
-                        <li><span class="text-red-500">○</span> Low: 5-9 auctions</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-medium text-gray-700 mb-2">Data Sources</h4>
-                    <p>
-                        MII scores are calculated from auction data aggregated from Bring a Trailer and Cars &amp; Bids.
-                        Data is refreshed twice daily at 6 AM and 6 PM UTC.
-                    </p>
-                </div>
-            </div>
-        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-200 mt-12 py-6 bg-white">
-        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-sm text-gray-400">
+    <footer class="border-t border-[#e5e0d6] py-5 bg-white mt-4">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-[11px] text-[#a8a29e]">
             <div class="flex items-center gap-2">
-                <span class="text-[#8B1A1A] font-semibold text-xs">MII</span>
+                <span class="text-[#8B1A1A] font-bold tracking-[0.08em]">MII</span>
                 <span>Market Interest Index &copy; 2025</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="index.html" class="hover:text-gray-600 text-xs">Classic Dark View</a>
-                <a href="dashboard-hagi.html" class="hover:text-gray-600 text-xs">Terminal View</a>
-                <a href="analyze-hagi.html" class="hover:text-gray-600 text-xs">Data Analysis</a>
+                <a href="index.html" class="hover:text-[#57534e] transition-colors">Classic View</a>
+                <a href="dashboard-hagi.html" class="hover:text-[#57534e] transition-colors">Dashboard</a>
+                <a href="analyze-hagi.html" class="hover:text-[#57534e] transition-colors">Analysis</a>
             </div>
         </div>
     </footer>
 
     <script src="app-hagi.js"></script>
+
+    <!-- Patch: replace emoji + upgrade sparklines with shared-scale, value-labelled charts -->
+    <script>
+    (function() {
+
+        /* ── 1. MII logo badge in empty state ── */
+        const mfrDetail = document.getElementById('manufacturerDetail');
+        if (mfrDetail) {
+            new MutationObserver(function() {
+                const emojiEl = mfrDetail.querySelector('.text-4xl');
+                if (emojiEl && emojiEl.textContent.includes('\uD83D\uDC48')) {
+                    emojiEl.outerHTML = [
+                        '<div style="margin:0 auto 1.5rem;width:54px;height:54px;background:#8B1A1A;',
+                        'border-radius:13px;display:flex;align-items:center;justify-content:center;',
+                        'box-shadow:0 4px 16px rgba(139,26,26,0.22);">',
+                        '<span style="font-size:1.1rem;font-weight:800;color:#B8960C;letter-spacing:0.12em;',
+                        'font-family:\'DM Sans\',sans-serif;line-height:1;">MII</span>',
+                        '</div>'
+                    ].join('');
+                }
+                const card = mfrDetail.querySelector('[class*="rounded-xl"]');
+                if (card) {
+                    card.style.borderColor  = '#e8e3da';
+                    card.style.borderRadius = '14px';
+                    card.style.boxShadow    = '0 1px 2px rgba(0,0,0,0.04),0 2px 10px rgba(0,0,0,0.03)';
+                }
+            }).observe(mfrDetail, { childList: true, subtree: true });
+        }
+
+        /* ── 2. Warm border + shadow on JS-injected model cards ── */
+        const topModels = document.getElementById('topModelsContainer');
+        if (topModels) {
+            new MutationObserver(function() {
+                topModels.querySelectorAll('.bg-white').forEach(function(card) {
+                    if (card.dataset.warmPatched) return;
+                    card.dataset.warmPatched = '1';
+                    card.style.borderColor  = '#e8e3da';
+                    card.style.borderRadius = '12px';
+                    card.style.boxShadow    = '0 1px 2px rgba(0,0,0,0.04),0 2px 8px rgba(0,0,0,0.03)';
+                });
+            }).observe(topModels, { childList: true, subtree: true });
+        }
+
+        /* ── 3. Shared-scale sparklines ── */
+
+        /* Capture global MII range before each leaderboard render */
+        function patchLeaderboard() {
+            const orig = window.renderLeaderboard;
+            if (typeof orig !== 'function') return false;
+            window.renderLeaderboard = function() {
+                try {
+                    const mfrs = getFilteredManufacturers();
+                    const vals = mfrs.flatMap(function(m){ return m.history || []; })
+                                     .filter(function(v){ return typeof v === 'number' && isFinite(v); });
+                    if (vals.length) {
+                        var lo = Math.min.apply(null, vals);
+                        var hi = Math.max.apply(null, vals);
+                        var pad = Math.max((hi - lo) * 0.18, 1);
+                        window._spkMin = Math.max(0, lo - pad);
+                        window._spkMax = hi + pad;
+                    }
+                } catch(e) {}
+                return orig.apply(this, arguments);
+            };
+            return true;
+        }
+
+        /* Professional createSparkline override */
+        function patchSparkline() {
+            window.createSparkline = function(data, color) {
+                color = color || '#8B1A1A';
+                if (!data || data.length < 2) return '<div style="width:108px;height:30px;"></div>';
+
+                var last   = data[data.length - 1];
+                var prev   = data[data.length - 2];
+                var change = last - prev;
+
+                /* Use shared scale if available */
+                var scaleMin = (typeof window._spkMin === 'number') ? window._spkMin : Math.min.apply(null,data) - 1;
+                var scaleMax = (typeof window._spkMax === 'number') ? window._spkMax : Math.max.apply(null,data) + 1;
+                var range    = scaleMax - scaleMin || 1;
+
+                var W = 72, H = 30;
+
+                var pts = data.map(function(v, i) {
+                    var x = (i / Math.max(data.length - 1, 1)) * W;
+                    var y = H - ((v - scaleMin) / range) * H;
+                    return x.toFixed(1) + ',' + Math.max(1, Math.min(H - 1, y)).toFixed(1);
+                });
+
+                var lastX = W;
+                var lastY = Math.max(2, Math.min(H - 2, H - ((last - scaleMin) / range) * H));
+
+                /* Parse color for gradient */
+                var r = 139, g = 26, b = 26;
+                if (color && color[0] === '#' && color.length >= 7) {
+                    r = parseInt(color.slice(1,3),16);
+                    g = parseInt(color.slice(3,5),16);
+                    b = parseInt(color.slice(5,7),16);
+                }
+
+                var gid = 'sg' + Math.random().toString(36).slice(2,7);
+                var areaPoints = pts.join(' ') + ' ' + W + ',' + H + ' 0,' + H;
+
+                /* Change indicator */
+                var absChg = Math.abs(change);
+                var noChg  = absChg < 0.05;
+                var chgColor = noChg ? '#a8a29e' : (change > 0 ? '#16a34a' : '#dc2626');
+                var chgText  = noChg ? '—' : (change > 0 ? '+' : '−') + absChg.toFixed(1);
+
+                return [
+                    '<div style="display:inline-flex;align-items:center;gap:9px;">',
+                      '<svg width="' + W + '" height="' + H + '" style="display:block;overflow:visible;flex-shrink:0;">',
+                        '<defs>',
+                          '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">',
+                            '<stop offset="0%" stop-color="rgba(' + r + ',' + g + ',' + b + ',0.14)"/>',
+                            '<stop offset="100%" stop-color="rgba(' + r + ',' + g + ',' + b + ',0)"/>',
+                          '</linearGradient>',
+                        '</defs>',
+                        '<polygon points="' + areaPoints + '" fill="url(#' + gid + ')"/>',
+                        '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                        '<circle cx="' + lastX + '" cy="' + lastY.toFixed(1) + '" r="2.8" fill="' + color + '" stroke="#fff" stroke-width="1.5"/>',
+                      '</svg>',
+                      '<div style="text-align:right;line-height:1.25;min-width:42px;">',
+                        '<div style="font-size:12px;font-weight:600;color:#1c1917;font-family:\'DM Sans\',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-0.01em;">' + last.toFixed(1) + '</div>',
+                        '<div style="font-size:9.5px;color:' + chgColor + ';font-family:\'DM Sans\',sans-serif;font-weight:500;">' + chgText + '</div>',
+                      '</div>',
+                    '</div>'
+                ].join('');
+            };
+        }
+
+        /* Retry patching until app functions are available */
+        var attempts = 0;
+        function tryPatch() {
+            attempts++;
+            var ok = patchLeaderboard();
+            patchSparkline();
+            patchLogos();
+            if (!ok && attempts < 40) setTimeout(tryPatch, 150);
+        }
+
+        /* ── 4. Clearbit logo override ── */
+        function patchLogos() {
+            /* Map of manufacturer → clearbit domain */
+            var LOGO = {
+                'Porsche':        'porsche.com',
+                'BMW':            'bmw.com',
+                'Mercedes-Benz':  'mercedes-benz.com',
+                'Mercedes-AMG':   'mercedes-amg.com',
+                'Ferrari':        'ferrari.com',
+                'Lamborghini':    'lamborghini.com',
+                'Audi':           'audi.com',
+                'Volkswagen':     'vw.com',
+                'Toyota':         'toyota.com',
+                'Lexus':          'lexus.com',
+                'Honda':          'honda.com',
+                'Acura':          'acura.com',
+                'Nissan':         'nissan.com',
+                'Infiniti':       'infiniti.com',
+                'Mazda':          'mazda.com',
+                'Subaru':         'subaru.com',
+                'Mitsubishi':     'mitsubishi-motors.com',
+                'Ford':           'ford.com',
+                'Lincoln':        'lincoln.com',
+                'Chevrolet':      'chevrolet.com',
+                'Cadillac':       'cadillac.com',
+                'Buick':          'buick.com',
+                'GMC':            'gmc.com',
+                'Dodge':          'dodge.com',
+                'Chrysler':       'chrysler.com',
+                'Jeep':           'jeep.com',
+                'Tesla':          'tesla.com',
+                'McLaren':        'mclaren.com',
+                'Maserati':       'maserati.com',
+                'Alfa Romeo':     'alfaromeo.com',
+                'Aston Martin':   'astonmartin.com',
+                'Bentley':        'bentleymotors.com',
+                'Rolls-Royce':    'rolls-roycemotorcars.com',
+                'Lotus':          'lotuscars.com',
+                'Jaguar':         'jaguar.com',
+                'Land Rover':     'landrover.com',
+                'MINI':           'mini.com',
+                'Volvo':          'volvocars.com',
+                'Peugeot':        'peugeot.com',
+                'Renault':        'renault.com',
+                'Citroën':        'citroen.com',
+                'Hyundai':        'hyundai.com',
+                'Kia':            'kia.com',
+                'Genesis':        'genesis.com',
+                'Saab':           'saab.com',
+                'Bugatti':        'bugatti.com',
+                'Rivian':         'rivian.com',
+            };
+
+            /* Global error handler — called by onerror on logo imgs */
+            window._logoFallback = function(img) {
+                var wrap  = img.parentElement;
+                if (!wrap) return;
+                var mfr   = wrap.dataset.mfr || '';
+                var B     = (window.MANUFACTURER_BRANDING || {})[mfr] || {};
+                var color = B.color || '#8B1A1A';
+                var abbr  = B.abbr  || mfr.substring(0, 3).toUpperCase();
+                wrap.innerHTML =
+                    '<span style="font-size:9px;font-weight:700;letter-spacing:0.05em;' +
+                    'font-family:\'DM Sans\',sans-serif;color:' + color + ';">' + abbr + '</span>';
+                wrap.style.background = '#f6f4ef';
+            };
+
+            /* Override the function the app uses to build logo HTML */
+            window.getManufacturerLogo = function(manufacturer) {
+                var B      = (window.MANUFACTURER_BRANDING || {})[manufacturer] || {};
+                var color  = B.color || '#8B1A1A';
+                var abbr   = B.abbr  || (manufacturer || 'MFR').substring(0, 3).toUpperCase();
+                var domain = LOGO[manufacturer];
+
+                var wrapStyle = [
+                    'flex-shrink:0;width:38px;height:38px;border-radius:9px;',
+                    'display:flex;align-items:center;justify-content:center;overflow:hidden;',
+                    'border:1px solid #e8e3da;'
+                ].join('');
+
+                if (!domain) {
+                    /* No logo available — abbreviation badge */
+                    return '<div style="' + wrapStyle + 'background:#f6f4ef;" data-mfr="' + manufacturer + '">' +
+                        '<span style="font-size:9px;font-weight:700;letter-spacing:0.05em;' +
+                        'font-family:\'DM Sans\',sans-serif;color:' + color + ';">' + abbr + '</span></div>';
+                }
+
+                var src = 'https://logo.clearbit.com/' + domain;
+                return '<div style="' + wrapStyle + 'background:#fff;" data-mfr="' + manufacturer + '">' +
+                    '<img src="' + src + '" alt="' + manufacturer + '" ' +
+                    'style="width:26px;height:26px;object-fit:contain;" ' +
+                    'onload="if(this.naturalWidth<8||this.naturalHeight<8)window._logoFallback(this);" ' +
+                    'onerror="window._logoFallback(this);"></div>';
+            };
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', tryPatch);
+        } else {
+            tryPatch();
+        }
+
+    })();
+    </script>
 </body>
 </html>
