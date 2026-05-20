@@ -246,6 +246,49 @@
             </div>
         </div>
 
+        <!-- Manufacturer Apex Index (MAI) -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-6 mb-6">
+            <div class="border-b border-zinc-800 px-5 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="font-semibold">Manufacturer Apex Index (MAI)</h2>
+                        <p class="text-xs text-zinc-500 mt-1 max-w-2xl">
+                            MAI measures manufacturer presence and performance at apex classic car auction events.
+                            It proxies the network density (D) term in the Networked Utility Dividend framework:
+                            <span class="font-mono text-zinc-400">U = (Fun × Exp) + Nostalgia + (CulturalSalience × N<sup>α</sup> × D) × (1/Survivorship)</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0 ml-4 text-xs text-zinc-500 bg-zinc-800 rounded-lg px-3 py-1.5 border border-zinc-700 font-mono">
+                        D-term proxy
+                    </div>
+                </div>
+            </div>
+            <div class="p-5">
+                <div id="maiChartContainer" style="position: relative;">
+                    <canvas id="maiChart"></canvas>
+                </div>
+                <div id="maiEmptyState" class="hidden py-12 text-center">
+                    <div class="text-3xl mb-3 text-zinc-600">📊</div>
+                    <p class="font-medium text-zinc-400">No MAI data yet</p>
+                    <p class="text-sm mt-1 text-zinc-600">Populate <code class="font-mono text-zinc-500">data/auction_lots.csv</code> then run <code class="font-mono text-zinc-500">auction_rating.py</code> and <code class="font-mono text-zinc-500">mai.py</code>.</p>
+                </div>
+                <div class="mt-5 grid grid-cols-3 gap-4">
+                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
+                        <div class="text-zinc-300 font-semibold mb-1">P — Presence</div>
+                        <div class="text-zinc-500">Manufacturer's share of apex lots (≥$500K estimate) at each event</div>
+                    </div>
+                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
+                        <div class="text-zinc-300 font-semibold mb-1">Q — Quality</div>
+                        <div class="text-zinc-500">Mean(sold price / high estimate) for sold apex lots — measures price realisation</div>
+                    </div>
+                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
+                        <div class="text-zinc-300 font-semibold mb-1">R — Performance</div>
+                        <div class="text-zinc-500">Sell-through rate for apex lots — measures market confidence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- MII Methodology Footer -->
         <div class="mt-12 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
             <h3 class="font-semibold mb-4">About the Market Interest Index (MII)</h3>
@@ -294,5 +337,110 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+    // MAI chart — loads data/mai_scores.csv and renders a horizontal bar chart
+    (function () {
+        var csvUrl = 'data/mai_scores.csv';
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            dynamicTyping: true,
+            complete: function (results) {
+                var data = (results.data || []).filter(function (r) {
+                    return r.manufacturer && r.MAI_score != null && !isNaN(r.MAI_score);
+                });
+                if (!data.length) {
+                    showEmpty();
+                    return;
+                }
+                data.sort(function (a, b) { return b.MAI_score - a.MAI_score; });
+                renderMAI(data.slice(0, 20));
+            },
+            error: function () { showEmpty(); }
+        });
+
+        function showEmpty() {
+            document.getElementById('maiChartContainer').classList.add('hidden');
+            document.getElementById('maiEmptyState').classList.remove('hidden');
+        }
+
+        function renderMAI(data) {
+            var container = document.getElementById('maiChartContainer');
+            var height = Math.max(320, data.length * 38 + 60);
+            container.style.height = height + 'px';
+
+            var labels = data.map(function (d) { return d.manufacturer; });
+            var scores = data.map(function (d) { return d.MAI_score; });
+
+            // Amber gradient: brightest at rank 1, fading toward rank N
+            var bgColors = data.map(function (_, i) {
+                var alpha = 1 - (i / Math.max(data.length - 1, 1)) * 0.55;
+                return 'rgba(245, 158, 11, ' + alpha + ')';
+            });
+
+            new Chart(document.getElementById('maiChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'MAI Score',
+                        data: scores,
+                        backgroundColor: bgColors,
+                        borderColor: 'transparent',
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    var d = data[ctx.dataIndex];
+                                    var pct = function (v) {
+                                        return v != null ? (v * 100).toFixed(1) + '%' : 'n/a';
+                                    };
+                                    return [
+                                        'MAI Score: ' + (d.MAI_score || 0).toFixed(4),
+                                        'P  Presence:    ' + pct(d.avg_P),
+                                        'Q  Quality:     ' + pct(d.avg_Q),
+                                        'R  Performance: ' + pct(d.avg_R),
+                                        'Events: ' + (d.events_present || 0),
+                                        'Apex lots: ' + (d.total_apex_lots || 0),
+                                    ];
+                                }
+                            },
+                            backgroundColor: '#18181b',
+                            borderColor: '#3f3f46',
+                            borderWidth: 1,
+                            titleColor: '#f4f4f5',
+                            bodyColor: '#a1a1aa',
+                            padding: 12,
+                            bodyFont: { family: 'monospace', size: 12 },
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.04)' },
+                            ticks: { color: '#71717a', font: { size: 11 } },
+                            border: { color: '#3f3f46' },
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#d4d4d8', font: { size: 12 } },
+                            border: { display: false },
+                        }
+                    }
+                }
+            });
+        }
+    })();
+    </script>
 </body>
 </html>
