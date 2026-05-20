@@ -244,6 +244,7 @@ function processCSVData(rawData) {
 
             // Build history array (last 3 quarters)
             const history = [];
+            const historyLabels = [];
             for (let i = Math.max(0, qIndex - 2); i <= qIndex; i++) {
                 const hQuarter = quarters[i];
                 const hQuarterKey = i === quarters.length - 1 ? qtdQuarter : hQuarter;
@@ -251,9 +252,11 @@ function processCSVData(rawData) {
                     const hMfr = dashboardData.quarterData[hQuarterKey].manufacturers.find(m => m.make === mfrName);
                     if (hMfr) {
                         history.push(hMfr.miiScore);
+                        historyLabels.push(formatQuarterDisplay(hQuarterKey));
                     }
                 } else if (i === qIndex) {
                     history.push(avgMII);
+                    historyLabels.push(formatQuarterDisplay(hQuarterKey));
                 }
             }
 
@@ -341,6 +344,7 @@ function processCSVData(rawData) {
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
                 history: history,
+                historyLabels: historyLabels,
                 models: aggregatedModels.sort((a, b) => b.mii - a.mii)
             };
         });
@@ -394,11 +398,13 @@ function processCSVData(rawData) {
             }
 
             // Build history from all YTD quarters
-            const history = ytdQuarters.map((q, i) => {
+            const ytdHistoryData = ytdQuarters.map((q, i) => {
                 const qKey = i === ytdQuarters.length - 1 && q === latestQuarter ? qtdQuarter : q;
                 const mfr = dashboardData.quarterData[qKey]?.manufacturers.find(m => m.make === mfrName);
-                return mfr ? mfr.miiScore : null;
+                return mfr ? { score: mfr.miiScore, label: formatQuarterDisplay(qKey) } : null;
             }).filter(v => v !== null);
+            const history = ytdHistoryData.map(d => d.score);
+            const historyLabels = ytdHistoryData.map(d => d.label);
 
             // Confidence based on total YTD auctions (monthly data)
             let confidence = 'Low';
@@ -484,6 +490,7 @@ function processCSVData(rawData) {
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
                 history: history,
+                historyLabels: historyLabels,
                 models: aggregatedModels.sort((a, b) => b.mii - a.mii)
             };
         });
@@ -975,7 +982,7 @@ function renderManufacturerDetail() {
 
         <!-- MII Trend Chart -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h4 class="font-semibold mb-4">MII Trend (2 Quarters)</h4>
+            <h4 class="font-semibold mb-4">MII Trend</h4>
             <canvas id="trendChart" style="max-height: 160px;"></canvas>
         </div>
 
@@ -1035,7 +1042,7 @@ function renderTrendChart(mfr) {
     charts.trend = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: dashboardData.quarters,
+            labels: mfr.historyLabels || dashboardData.quarters,
             datasets: [{
                 label: 'MII Score',
                 data: mfr.history,
