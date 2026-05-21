@@ -1,0 +1,48 @@
+name: Sync Garage Draft & Recompute MAI
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # daily at 6 AM UTC
+  workflow_dispatch:        # run manually from the Actions tab anytime
+
+permissions:
+  contents: write           # needed to commit data files back to main
+
+jobs:
+  sync-and-compute:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      - name: Sync auction lots from Garage Draft
+        env:
+          GARAGE_DRAFT_SUPABASE_URL: ${{ secrets.GARAGE_DRAFT_SUPABASE_URL }}
+          GARAGE_DRAFT_SUPABASE_KEY: ${{ secrets.GARAGE_DRAFT_SUPABASE_KEY }}
+        run: python data/pipelines/sync_from_garage_draft.py
+
+      - name: Compute auction ratings
+        run: python data/pipelines/auction_rating.py
+
+      - name: Compute MAI scores
+        run: python data/pipelines/mai.py
+
+      - name: Commit updated data files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/auction_lots.csv data/auction_ratings.csv data/mai_scores.csv
+          git diff --staged --quiet && echo "No data changes." || \
+            git commit -m "data: sync from Garage Draft and recompute MAI"
+          git push
