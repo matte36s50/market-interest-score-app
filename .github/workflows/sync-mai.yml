@@ -1,4 +1,4 @@
-name: Sync Garage Draft & Recompute MAI
+name: Sync Garage Draft, Update Pageviews & Recompute MAI
 
 on:
   schedule:
@@ -38,11 +38,15 @@ jobs:
       - name: Compute MAI scores
         run: python data/pipelines/mai.py
 
+      - name: Update Wikipedia pageviews
+        continue-on-error: true   # don't fail the pipeline if Wikimedia is temporarily down
+        run: python data/pipelines/wikipedia_pageviews.py
+
       - name: Commit updated data files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/auction_lots.csv data/auction_ratings.csv data/mai_scores.csv
+          git add data/auction_lots.csv data/auction_ratings.csv data/mai_scores.csv data/wikipedia_pageviews.csv
           git diff --staged --quiet && echo "No data changes." || \
-            git commit -m "data: sync from Garage Draft and recompute MAI"
+            git commit -m "data: daily sync — Garage Draft, pageviews, MAI"
           git push
