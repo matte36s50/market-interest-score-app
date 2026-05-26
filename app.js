@@ -171,7 +171,7 @@ function processCSVData(rawData) {
     // Filter out invalid quarters and rows
     const validData = rawData.filter(row =>
         row.quarter &&
-        row.quarter !== 'IAF' &&
+        /^\d{4}-\d{2}$/.test(row.quarter.trim()) &&
         row.manufacturer &&
         row.model &&
         row.mii_score &&
