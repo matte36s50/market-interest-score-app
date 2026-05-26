@@ -1,0 +1,197 @@
+/* ══════════════════════════════════════════════════════
+   MII Dark Theme — Navy + Champagne Gold
+   ══════════════════════════════════════════════════════ */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Barlow:wght@200;300;400;500&family=Barlow+Condensed:wght@200;300;400&display=swap');
+
+/* === Global font override === */
+*, *::before, *::after {
+  font-family: 'Barlow', sans-serif !important;
+}
+
+/* === Numeric / metric values → Cormorant Garamond === */
+.tabular-nums {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.02em !important;
+}
+[class*="text-[2rem]"], [class*="text-[1.6rem]"], [class*="text-[1.8rem]"] {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 300 !important;
+}
+
+/* === Label styling — uppercase tracking === */
+[class*="uppercase"][class*="tracking-widest"] {
+  font-family: 'Barlow', sans-serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.4em !important;
+}
+
+/* === Base === */
+html { background: #080e1a !important; }
+body { background: #080e1a !important; color: #c0bdb8 !important; }
+
+/* === Tailwind bg overrides === */
+.bg-white        { background-color: #112033 !important; }
+.bg-\[#f6f4ef\]  { background-color: #080e1a !important; }
+.bg-\[#fdf2f2\]  { background-color: rgba(201,168,76,0.08) !important; }
+.bg-\[#f0ebe2\]  { background-color: #0d1828 !important; }
+.bg-\[#8B1A1A\]  { background-color: #c9a84c !important; }
+.bg-\[#6B1414\]  { background-color: #b8960c !important; }
+.bg-\[#1c1917\]  { background-color: #0d1828 !important; }
+.bg-red-50       { background-color: rgba(201,168,76,0.08) !important; }
+
+/* === Text === */
+.text-\[#1c1917\]  { color: #f0eeea !important; }
+.text-\[#8B1A1A\]  { color: #c9a84c !important; }
+.text-\[#6B1414\]  { color: #b8960c !important; }
+.text-\[#57534e\]  { color: #c0bdb8 !important; }
+.text-\[#a8a29e\]  { color: #7a8898 !important; }
+.text-\[#78716c\]  { color: #7a8898 !important; }
+.text-\[#cfc8bc\]  { color: #445060 !important; }
+.text-\[#B8960C\]  { color: #c9a84c !important; }
+.text-\[#b5afa8\]  { color: #7a8898 !important; }
+.text-white        { color: #f0eeea !important; }
+.text-black        { color: #080e1a !important; }
+.text-\[#15803d\]  { color: #6ab87a !important; }
+.text-green-600    { color: #6ab87a !important; }
+.text-red-500, .text-red-600 { color: #c47a7a !important; }
+
+/* === Borders === */
+.border-\[#e5e0d6\] { border-color: #1e3350 !important; }
+.border-\[#e8e3da\] { border-color: #1e3350 !important; }
+.border-\[#f0ebe2\] { border-color: #152236 !important; }
+.border-b           { border-color: #1e3350 !important; }
+
+/* === Divider lines === */
+.bg-\[#e5e0d6\], .bg-\[#cfc8bc\] { background-color: #1e3350 !important; }
+
+/* === Cards — flat, sharp, dark === */
+.card, .kpi-card, .stat-card, .chart-container, .mii-card {
+  background: #112033 !important;
+  border: 0.5px solid #1e3350 !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+}
+
+/* KPI card top border accent */
+.kpi-card {
+  border-top-width: 2px !important;
+}
+
+/* === Header / Nav === */
+header {
+  background: #0d1828 !important;
+  border-color: #1e3350 !important;
+  box-shadow: 0 1px 12px rgba(0,0,0,0.5) !important;
+  border-radius: 0 !important;
+}
+.nav-link              { color: #7a8898 !important; border-radius: 2px !important; }
+.nav-link:hover        { color: #c9a84c !important; background: rgba(201,168,76,0.08) !important; }
+.nav-link.current      { color: #e0c878 !important; background: rgba(201,168,76,0.1) !important; font-weight: 500 !important; }
+
+/* === Stats bar === */
+.border-b.bg-white { background: #0d1828 !important; }
+
+/* === Inputs & selects === */
+.input-field, select {
+  background: #0d1828 !important;
+  border-color: #1e3350 !important;
+  border-radius: 2px !important;
+  color: #f0eeea !important;
+  font-family: 'Barlow', sans-serif !important;
+}
+.input-field:focus {
+  border-color: #c9a84c !important;
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.12) !important;
+}
+select option { background: #0d1828 !important; color: #c0bdb8 !important; }
+
+/* === Tables === */
+.table-row:hover { background: #172840 !important; }
+.table-row td    { border-color: #152236 !important; }
+table thead      { background: #0d1828 !important; }
+table tbody tr:nth-child(odd)  { background: #0f1d30 !important; }
+table tbody tr:nth-child(even) { background: #112033 !important; }
+table tbody tr:hover           { background: #172840 !important; }
+th  { color: #7a8898 !important; font-size: 10px !important; letter-spacing: 0.35em !important; text-transform: uppercase !important; font-weight: 300 !important; }
+td  { color: #c0bdb8 !important; }
+
+/* === Tabs === */
+.tab-nav       { border-color: #1e3350 !important; background: transparent !important; }
+.tab-btn       { color: #445060 !important; background: transparent !important; font-family: 'Barlow', sans-serif !important; font-size: 11px !important; letter-spacing: 0.25em !important; text-transform: uppercase !important; font-weight: 300 !important; border-radius: 0 !important; }
+.tab-btn:hover { color: #c0bdb8 !important; }
+.tab-btn.active { color: #c9a84c !important; border-bottom-color: #c9a84c !important; background: transparent !important; font-weight: 400 !important; }
+
+/* === Sort headers === */
+.sortable-header:hover { color: #c9a84c !important; }
+
+/* === Manufacturer cards (dashboard) === */
+.mfr-card {
+  background: #112033 !important;
+  border: 0.5px solid #1e3350 !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+}
+.mfr-card:hover  { border-color: #c9a84c !important; box-shadow: 0 2px 16px rgba(201,168,76,0.12) !important; }
+.mfr-card.selected { border-color: #c9a84c !important; box-shadow: 0 0 0 1.5px rgba(201,168,76,0.3) !important; }
+
+/* === Buttons === */
+button.bg-\[#8B1A1A\], a.bg-\[#8B1A1A\] {
+  background: #c9a84c !important;
+  color: #080e1a !important;
+  border-radius: 2px !important;
+  font-family: 'Barlow', sans-serif !important;
+}
+button.bg-\[#8B1A1A\]:hover { background: #e0c878 !important; }
+.bg-\[#f0ebe2\], button.bg-\[#f0ebe2\] {
+  background: #172840 !important;
+  border-color: #1e3350 !important;
+  color: #c0bdb8 !important;
+  border-radius: 2px !important;
+}
+
+/* === View mode / filter chips === */
+.view-mode-btn { border-radius: 2px !important; }
+
+/* === Loading + Error overlays === */
+#loadingIndicator, #errorState {
+  background: rgba(8,14,26,0.94) !important;
+}
+.animate-spin { border-color: #1e3350 !important; border-top-color: #c9a84c !important; }
+.border-t-\[#8B1A1A\] { border-top-color: #c9a84c !important; }
+
+/* === Scrollbars === */
+::-webkit-scrollbar              { width: 4px; height: 4px; }
+::-webkit-scrollbar-track        { background: #080e1a; }
+::-webkit-scrollbar-thumb        { background: #1e3350; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover  { background: #26425e; }
+.scrollbar-thin::-webkit-scrollbar-track { background: #080e1a !important; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #1e3350 !important; }
+
+/* === Ticker strip === */
+.bg-\[#1c1917\] { background-color: #0a1220 !important; }
+.text-\[#78716c\] { color: #445060 !important; }
+
+/* === Inline style overrides (color & border) === */
+[style*="background: #8B1A1A"], [style*="background:#8B1A1A"],
+[style*="background-color: #8B1A1A"], [style*="background-color:#8B1A1A"] {
+  background-color: #c9a84c !important;
+}
+[style*="color: #8B1A1A"], [style*="color:#8B1A1A"] { color: #c9a84c !important; }
+[style*="color: #15803d"], [style*="color:#15803d"]  { color: #6ab87a !important; }
+[style*="border-top: 2.5px solid #8B1A1A"] { border-top-color: #c9a84c !important; }
+[style*="border-top:2.5px solid #8B1A1A"]  { border-top-color: #c9a84c !important; }
+[style*="border-top: 2.5px solid #B8960C"] { border-top-color: #c9a84c !important; }
+[style*="border-top:2.5px solid #B8960C"]  { border-top-color: #c9a84c !important; }
+[style*="border-top: 2.5px solid #cfc8bc"] { border-top-color: #1e3350 !important; }
+[style*="border-top: 2.5px solid #15803d"] { border-top-color: #6ab87a !important; }
+[style*="border-top: 2.5px solid #3b82f6"] { border-top-color: #6a9abf !important; }
+[style*="border-top: 2.5px solid #57534e"] { border-top-color: #445060 !important; }
+
+/* === Focus === */
+*:focus-visible { outline-color: #c9a84c !important; }
+
+/* === Canvas backgrounds (Chart.js) === */
+canvas { background: transparent !important; }
