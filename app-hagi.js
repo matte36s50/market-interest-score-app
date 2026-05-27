@@ -916,8 +916,8 @@ function renderLeaderboard() {
         const isSelected = state.selectedMake === mfr.make;
         const isComparing = state.compareList.includes(mfr.make);
         const isFirst = idx === 0;
-        const borderColor = isFirst ? 'border-l-4 border-[#C5A028]' : 'border-l-4 border-[#8B1A1A]';
-        const selectedBg = isSelected ? 'bg-red-50' : 'bg-white hover:bg-gray-50';
+        const borderColor = 'border-l-4 border-[#c9a84c]';
+        const selectedBg = isSelected ? 'bg-[#172840]' : 'bg-[#112033] hover:bg-[#1e3350]';
 
         // Rank badge style
         let rankBadge;
@@ -1096,12 +1096,12 @@ function renderTrendChart(mfr) {
             datasets: [{
                 label: 'MII Score',
                 data: mfr.history,
-                borderColor: '#8B1A1A',
-                backgroundColor: 'rgba(139, 26, 26, 0.08)',
+                borderColor: '#c9a84c',
+                backgroundColor: 'rgba(201,168,76,0.08)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
-                pointBackgroundColor: '#8B1A1A'
+                pointBackgroundColor: '#c9a84c'
             }]
         },
         options: {
@@ -1290,8 +1290,8 @@ function renderQuarterMIIChart() {
                 datasets: [{
                     label: 'Market Avg MII',
                     data: trendData.data,
-                    borderColor: '#8B1A1A',
-                    backgroundColor: 'rgba(139, 26, 26, 0.08)',
+                    borderColor: '#c9a84c',
+                    backgroundColor: 'rgba(201,168,76,0.08)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: pointRadii,
