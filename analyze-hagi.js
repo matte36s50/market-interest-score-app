@@ -880,6 +880,7 @@ function renderTrends() {
         model ? `${subtitleBase} — ${model}` : subtitleBase;
 
     destroyChart('trend');
+    const primaryColor = mfr === '__all__' ? '#f59e0b' : getMfrColor(primaryLabel);
     const ctx = document.getElementById('trendChart').getContext('2d');
     charts.trend = new Chart(ctx, {
         type: 'line',
@@ -889,10 +890,10 @@ function renderTrends() {
                 {
                     label: primaryLabel,
                     data: primaryValues,
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.1)',
+                    borderColor: primaryColor,
+                    backgroundColor: hexToRGBA(primaryColor, 0.1),
                     borderWidth: 2.5,
-                    pointBackgroundColor: '#f59e0b',
+                    pointBackgroundColor: primaryColor,
                     pointRadius: 5,
                     pointHoverRadius: 7,
                     tension: 0.3,
@@ -945,7 +946,7 @@ function renderTrends() {
     legendEl.innerHTML = '';
     if (compareValues) {
         legendEl.innerHTML = `
-            <span style="color:#f59e0b">● ${primaryLabel}</span>
+            <span style="color:${primaryColor}">● ${primaryLabel}</span>
             <span style="color:${getMfrColor(compare)}">● ${compare}</span>
         `;
     }
