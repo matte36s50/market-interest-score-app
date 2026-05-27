@@ -49,7 +49,7 @@ body { background: #080e1a !important; color: #c0bdb8 !important; }
 .text-\[#57534e\]  { color: #c0bdb8 !important; }
 .text-\[#a8a29e\]  { color: #7a8898 !important; }
 .text-\[#78716c\]  { color: #7a8898 !important; }
-.text-\[#cfc8bc\]  { color: #7a8898 !important; }
+.text-\[#cfc8bc\]  { color: #445060 !important; }
 .text-\[#B8960C\]  { color: #c9a84c !important; }
 .text-\[#b5afa8\]  { color: #7a8898 !important; }
 .text-white        { color: #f0eeea !important; }
@@ -57,6 +57,26 @@ body { background: #080e1a !important; color: #c0bdb8 !important; }
 .text-\[#15803d\]  { color: #6ab87a !important; }
 .text-green-600    { color: #6ab87a !important; }
 .text-red-500, .text-red-600 { color: #c47a7a !important; }
+
+/* === Tailwind gray scale — dark text on dark bg fix === */
+.text-gray-900, .text-gray-800 { color: #f0eeea !important; }
+.text-gray-700, .text-gray-600 { color: #c0bdb8 !important; }
+.text-gray-500                  { color: #7a8898 !important; }
+.text-gray-400                  { color: #445060 !important; }
+
+/* === Attribute-selector fallbacks (Tailwind CDN escapes # in class names differently) === */
+[class*="text-[#1c1917]"]  { color: #f0eeea !important; }
+[class*="text-[#8B1A1A]"]  { color: #c9a84c !important; }
+[class*="text-[#57534e]"]  { color: #c0bdb8 !important; }
+[class*="text-[#a8a29e]"]  { color: #7a8898 !important; }
+[class*="text-[#78716c]"]  { color: #7a8898 !important; }
+[class*="text-[#15803d]"]  { color: #6ab87a !important; }
+[class*="text-[#B8960C]"]  { color: #c9a84c !important; }
+
+/* === KPI card values — direct ID overrides === */
+#qualifyingMakes, #totalAuctions { color: #f0eeea !important; }
+#marketMII  { color: #c9a84c !important; }
+#avgPrice   { color: #6ab87a !important; }
 
 /* === Borders === */
 .border-\[#e5e0d6\] { border-color: #1e3350 !important; }
@@ -120,7 +140,7 @@ td  { color: #c0bdb8 !important; }
 
 /* === Tabs === */
 .tab-nav       { border-color: #1e3350 !important; background: transparent !important; }
-.tab-btn       { color: #7a8898 !important; background: transparent !important; font-family: 'Barlow', sans-serif !important; font-size: 11px !important; letter-spacing: 0.25em !important; text-transform: uppercase !important; font-weight: 300 !important; border-radius: 0 !important; }
+.tab-btn       { color: #445060 !important; background: transparent !important; font-family: 'Barlow', sans-serif !important; font-size: 11px !important; letter-spacing: 0.25em !important; text-transform: uppercase !important; font-weight: 300 !important; border-radius: 0 !important; }
 .tab-btn:hover { color: #c0bdb8 !important; }
 .tab-btn.active { color: #c9a84c !important; border-bottom-color: #c9a84c !important; background: transparent !important; font-weight: 400 !important; }
 
@@ -172,7 +192,7 @@ button.bg-\[#8B1A1A\]:hover { background: #e0c878 !important; }
 
 /* === Ticker strip === */
 .bg-\[#1c1917\] { background-color: #0a1220 !important; }
-.text-\[#78716c\] { color: #7a8898 !important; }
+.text-\[#78716c\] { color: #445060 !important; }
 
 /* === Inline style overrides (color & border) === */
 [style*="background: #8B1A1A"], [style*="background:#8B1A1A"],
@@ -181,6 +201,11 @@ button.bg-\[#8B1A1A\]:hover { background: #e0c878 !important; }
 }
 [style*="color: #8B1A1A"], [style*="color:#8B1A1A"] { color: #c9a84c !important; }
 [style*="color: #15803d"], [style*="color:#15803d"]  { color: #6ab87a !important; }
+/* Dark-on-dark inline color fixes */
+[style*="color: #1c1917"], [style*="color:#1c1917"] { color: #f0eeea !important; }
+[style*="color: #57534e"], [style*="color:#57534e"] { color: #c0bdb8 !important; }
+[style*="color: #78716c"], [style*="color:#78716c"] { color: #7a8898 !important; }
+[style*="color: #a8a29e"], [style*="color:#a8a29e"] { color: #7a8898 !important; }
 [style*="border-top: 2.5px solid #8B1A1A"] { border-top-color: #c9a84c !important; }
 [style*="border-top:2.5px solid #8B1A1A"]  { border-top-color: #c9a84c !important; }
 [style*="border-top: 2.5px solid #B8960C"] { border-top-color: #c9a84c !important; }
@@ -192,6 +217,37 @@ button.bg-\[#8B1A1A\]:hover { background: #e0c878 !important; }
 
 /* === Focus === */
 *:focus-visible { outline-color: #c9a84c !important; }
+
+/* === Brand name typography — Cormorant Garamond to match logo aesthetic === */
+header .flex-shrink-0 > span:first-of-type {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.07em !important;
+  color: #e8dfc8 !important;
+}
+header .flex-shrink-0 > span:last-of-type {
+  font-family: 'Barlow', sans-serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.3em !important;
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+  color: #7a8898 !important;
+}
+
+/* === MII score value in leaderboard rows — gold on dark navy === */
+#leaderboardContainer .text-right > div:first-child {
+  color: #e0c878 !important;
+  text-shadow: 0 0 18px rgba(201,168,76,0.25);
+}
+
+/* === Logo prominence in dark theme === */
+header .flex-shrink-0 > svg:first-of-type {
+  filter: drop-shadow(0 0 8px rgba(201,168,76,0.55)) drop-shadow(0 0 2px rgba(201,168,76,0.3));
+  background: radial-gradient(circle at 42% 32%, #1e3a5f, #0a1525);
+  border-radius: 50%;
+  outline: 1.5px solid rgba(201,168,76,0.35);
+}
 
 /* === Canvas backgrounds (Chart.js) === */
 canvas { background: transparent !important; }
