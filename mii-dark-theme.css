@@ -49,7 +49,7 @@ body { background: #080e1a !important; color: #c0bdb8 !important; }
 .text-\[#57534e\]  { color: #c0bdb8 !important; }
 .text-\[#a8a29e\]  { color: #7a8898 !important; }
 .text-\[#78716c\]  { color: #7a8898 !important; }
-.text-\[#cfc8bc\]  { color: #445060 !important; }
+.text-\[#cfc8bc\]  { color: #7a8898 !important; }
 .text-\[#B8960C\]  { color: #c9a84c !important; }
 .text-\[#b5afa8\]  { color: #7a8898 !important; }
 .text-white        { color: #f0eeea !important; }
@@ -120,7 +120,7 @@ td  { color: #c0bdb8 !important; }
 
 /* === Tabs === */
 .tab-nav       { border-color: #1e3350 !important; background: transparent !important; }
-.tab-btn       { color: #445060 !important; background: transparent !important; font-family: 'Barlow', sans-serif !important; font-size: 11px !important; letter-spacing: 0.25em !important; text-transform: uppercase !important; font-weight: 300 !important; border-radius: 0 !important; }
+.tab-btn       { color: #7a8898 !important; background: transparent !important; font-family: 'Barlow', sans-serif !important; font-size: 11px !important; letter-spacing: 0.25em !important; text-transform: uppercase !important; font-weight: 300 !important; border-radius: 0 !important; }
 .tab-btn:hover { color: #c0bdb8 !important; }
 .tab-btn.active { color: #c9a84c !important; border-bottom-color: #c9a84c !important; background: transparent !important; font-weight: 400 !important; }
 
@@ -172,7 +172,7 @@ button.bg-\[#8B1A1A\]:hover { background: #e0c878 !important; }
 
 /* === Ticker strip === */
 .bg-\[#1c1917\] { background-color: #0a1220 !important; }
-.text-\[#78716c\] { color: #445060 !important; }
+.text-\[#78716c\] { color: #7a8898 !important; }
 
 /* === Inline style overrides (color & border) === */
 [style*="background: #8B1A1A"], [style*="background:#8B1A1A"],
