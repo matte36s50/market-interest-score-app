@@ -1089,13 +1089,24 @@ function renderTrendChart(mfr) {
         charts.trend.destroy();
     }
 
+    const allPeriods = dashboardData.quarters.filter(q => q !== 'YTD');
+    const trendLabels = [];
+    const trendData = [];
+    allPeriods.forEach(period => {
+        const periodMfr = dashboardData.quarterData[period]?.manufacturers.find(m => m.make === mfr.make);
+        if (periodMfr) {
+            trendLabels.push(formatQuarterDisplay(period));
+            trendData.push(periodMfr.miiScore);
+        }
+    });
+
     charts.trend = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: dashboardData.quarters,
+            labels: trendLabels,
             datasets: [{
                 label: 'MII Score',
-                data: mfr.history,
+                data: trendData,
                 borderColor: '#c9a84c',
                 backgroundColor: 'rgba(201,168,76,0.08)',
                 fill: true,
