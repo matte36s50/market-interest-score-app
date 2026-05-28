@@ -32,6 +32,8 @@ async function loadBatAuctionCounts() {
                         const month = parts[0].padStart(2, '0');
                         const yearPart = parts[2].trim();
                         const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+                        const yearInt = parseInt(year);
+                        if (yearInt < 2020 || yearInt > new Date().getFullYear() + 1) return;
                         const period = `${year}-${month}`;
 
                         // Normalize model: strip leading "Make " prefix, strip trailing "(YYYY-YYYY)"
