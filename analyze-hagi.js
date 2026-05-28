@@ -1410,6 +1410,8 @@ function renderDataCoverage(rows) {
         const day     = parts[1].padStart(2, '0');
         const yearPart = parts[2].trim();
         const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
+        const yearInt = parseInt(year);
+        if (yearInt < 2020 || yearInt > new Date().getFullYear() + 1) return;
         const period = `${year}-${month}`;
         const dayKey = `${year}-${month}-${day}`;
 
