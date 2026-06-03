@@ -139,6 +139,38 @@ To integrate real auction data:
 - `app.py` - Legacy Streamlit Python scraper (deprecated)
 - `requirements.txt` - Python dependencies for legacy app
 
+## Lot-Level Drill-Down
+
+The monthly figures shown for each model (e.g. "$28K avg") are the **mean of the
+individual auction sales** in that period — a single high or low sale never shows
+up as its own point on the headline charts. To see the sales behind a number,
+click any model row in a manufacturer's **Model Rankings** panel. A modal opens
+with:
+
+- A scatter plot of every individual sale price over time (sold vs. unsold).
+- A table of each lot: sale date, model year, price, status, bid/comment activity,
+  and a link to the original Bring a Trailer listing.
+
+This makes outlier sales (e.g. a $56K E46 M3 in a month that averaged $28K) visible
+and traceable. Non-USD sales are listed in the table but omitted from the price axis.
+
+## Data Maintenance Scripts
+
+Run from the repo root (`node scripts/<name>.js`). All three read `bat.csv` from
+S3 by default, or a local copy via `--csv /path/to/bat.csv`.
+
+- `scripts/diagnose-data-gaps.js` — month/day coverage report; flags months with
+  suspiciously low auction counts (< 50% of median).
+- `scripts/backfill-checker.js <start> <end>` — lists every date in a range with
+  zero auction records, ready to pipe into a re-scrape.
+- `scripts/clean-bat-data.js` — removes rows with a **corrupt** `sale_date` (e.g.
+  the Unix-epoch sentinel `12/31/69`, which otherwise creates a phantom "2069-12"
+  month). Rows with a blank date (usually live/unsold listings) are kept and only
+  reported. Writes `bat.cleaned.csv`; use `--dry-run` to report without writing.
+
+`data/backfill-needed.txt` holds the current list of missing dates in flagged
+months, regenerated from the diagnostics.
+
 ## Browser Support
 
 - Chrome/Edge 90+
