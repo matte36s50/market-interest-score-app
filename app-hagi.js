@@ -1108,7 +1108,7 @@ function renderManufacturerDetail() {
                 ${mfr.models
                     .sort((a, b) => b.mii - a.mii)
                     .map((model, idx) => `
-                        <div class="model-row px-5 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                        <div class="model-row px-5 py-3 hover:bg-[#172840] transition-colors cursor-pointer"
                              data-make="${mfr.make}" data-model="${model.model.replace(/"/g, '&quot;')}"
                              title="View individual auction sales for ${model.model.replace(/"/g, '&quot;')}">
                             <div class="flex items-center justify-between">
