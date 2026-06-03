@@ -155,6 +155,66 @@ function getRowValue(row, metric) {
     return isNaN(v) ? null : v;
 }
 
+// ---- Lot-level (individual auction) records for the Correlation Explorer ----
+// Metrics that only exist at the aggregated model-month (MII) level and cannot
+// be plotted per individual auction. When either axis uses one of these, the
+// Correlation Explorer falls back to monthly averages.
+const MII_ONLY_METRICS = new Set(['mii_score', 'social_score', 'google_trends_interest', 'youtube_total_views']);
+
+let _lotCorrCache = null;
+// Convert raw bat.csv rows into records shaped like the monthly rows used by
+// renderCorrelations, but one per individual auction lot. Cached: batRawRows is
+// static after load.
+function getLotCorrelationRecords() {
+    if (_lotCorrCache) return _lotCorrCache;
+    const nowYear = new Date().getFullYear();
+    const parseNum = (s) => {
+        const m = (s == null ? '' : String(s)).match(/-?[\d,]+(?:\.\d+)?/);
+        return m ? parseFloat(m[0].replace(/,/g, '')) : null;
+    };
+    const records = [];
+    batRawRows.forEach(row => {
+        const make = (row.make || '').trim();
+        const rawModel = (row.model || '').trim();
+        const saleDate = (row.sale_date || '').trim();
+        if (!make || !rawModel || !saleDate) return;
+
+        const parts = saleDate.split('/');
+        if (parts.length !== 3) return;
+        const month = parts[0].padStart(2, '0');
+        const yearPart = parts[2].trim();
+        const yr = yearPart.length === 2 ? '20' + yearPart : yearPart;
+        const yearInt = parseInt(yr);
+        if (yearInt < 2020 || yearInt > nowYear + 1) return; // drops corrupt/sentinel dates
+        const period = `${yr}-${month}`;
+
+        let model = rawModel;
+        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+
+        // Price: USD only — mixed currencies would distort the price axis.
+        const amtRaw = (row.sale_amount || '').trim();
+        const nonUSD = /€|£|\bEUR\b|\bGBP\b/i.test(amtRaw);
+        const price = nonUSD ? null : parseNum(amtRaw);
+        const vehYear = parseNum(row.year);
+
+        records.push({
+            manufacturer: make,
+            model,
+            quarter: period,
+            views: parseNum(row.views),
+            bids: parseNum(row.bids),
+            comments: parseNum(row.comments),
+            price: (price && price > 0) ? price : null,
+            age: vehYear ? (nowYear - vehYear) : null,
+            sold: (row.sale_type || '').trim().toLowerCase() === 'sold' ? 1 : 0,
+            _url: (row.auction_url || '').trim(),
+        });
+    });
+    _lotCorrCache = records;
+    return records;
+}
+
 function destroyChart(key) {
     if (charts[key]) {
         charts[key].destroy();
@@ -586,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnLowPriceHighMII').addEventListener('click', () => renderSpecialOutlier('lphm'));
 
     // Correlation tab controls
-    ['corrX', 'corrY', 'corrQuarter', 'corrColorBy', 'corrMfrFilter'].forEach(id => {
+    ['corrX', 'corrY', 'corrQuarter', 'corrColorBy', 'corrMfrFilter', 'corrGranularity'].forEach(id => {
         document.getElementById(id).addEventListener('change', renderCorrelations);
     });
 
@@ -1221,7 +1281,16 @@ function renderCorrelations() {
     const mfrFilter = document.getElementById('corrMfrFilter').value;
     const model = getModelFilter('corrModelSearch');
 
-    let data = filterByQuarter(rawData, quarter);
+    // Granularity: "individual" plots one point per auction lot (from bat.csv);
+    // "monthly" plots one point per model-month (from the MII aggregates).
+    // MII-only axes (MII Score, Social Score, Trends, YouTube) force monthly.
+    const granEl = document.getElementById('corrGranularity');
+    const granularity = granEl ? granEl.value : 'individual';
+    const forcedMonthly = MII_ONLY_METRICS.has(xKey) || MII_ONLY_METRICS.has(yKey);
+    const useIndividual = granularity === 'individual' && !forcedMonthly;
+
+    let data = useIndividual ? getLotCorrelationRecords() : filterByQuarter(rawData, quarter);
+    if (useIndividual && quarter !== '__all__') data = data.filter(r => r.quarter === quarter);
     if (mfrFilter !== '__all__') data = data.filter(r => r.manufacturer === mfrFilter);
     data = filterByModel(data, model);
 
@@ -1230,6 +1299,19 @@ function renderCorrelations() {
         const yv = parseFloat(r[yKey]);
         return !isNaN(xv) && !isNaN(yv) && isFinite(xv) && isFinite(yv);
     });
+
+    // Subtitle reflects what each point represents (and any forced fallback).
+    const subtitleEl = document.getElementById('corrChartSubtitle');
+    if (subtitleEl) {
+        if (useIndividual) {
+            subtitleEl.textContent = `Each point is one auction — ${data.length.toLocaleString()} individual lots`;
+        } else if (forcedMonthly && granularity === 'individual') {
+            const miiKey = MII_ONLY_METRICS.has(xKey) ? xKey : yKey;
+            subtitleEl.textContent = `${METRIC_LABELS[miiKey] || miiKey} only exists per model-month — showing monthly averages`;
+        } else {
+            subtitleEl.textContent = 'Each point is one model-month (monthly average)';
+        }
+    }
 
     const xVals = data.map(r => parseFloat(r[xKey]));
     const yVals = data.map(r => parseFloat(r[yKey]));
@@ -1287,6 +1369,7 @@ function renderCorrelations() {
                 _mfr: r.manufacturer,
                 _model: r.model,
                 _quarter: r.quarter,
+                _url: r._url,
             })),
             backgroundColor: hexToRGBA(color, 0.55),
             borderColor: color,
@@ -1327,6 +1410,12 @@ function renderCorrelations() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            onClick: (evt, els) => {
+                if (!els.length) return;
+                const ds = charts.corrScatter.data.datasets[els[0].datasetIndex];
+                const pt = ds.data[els[0].index];
+                if (pt && pt._url) window.open(pt._url, '_blank', 'noopener');
+            },
             plugins: {
                 legend: { display: false },
                 tooltip: {
