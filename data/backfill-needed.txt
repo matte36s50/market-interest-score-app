@@ -1,0 +1,58 @@
+# Backfill candidates — dates with ZERO auction records in months flagged
+# LOW by diagnose-data-gaps.js. Generated 2026-06-03T13:49Z from bat.csv.
+# Note: some dates may legitimately have no auctions ending (holidays). Re-scrape
+#       these days, then re-run scripts/diagnose-data-gaps.js to confirm the fill.
+# Feed to your scraper, e.g.:  grep -v '^#' data/backfill-needed.txt | xargs -I{} scraper --date {}
+#
+# --- flagged month: 2025-09 ---
+2025-09-09
+2025-09-10
+2025-09-11
+2025-09-12
+2025-09-13
+2025-09-14
+2025-09-15
+2025-09-16
+2025-09-17
+2025-09-18
+2025-09-19
+2025-09-20
+2025-09-21
+2025-09-22
+2025-09-23
+2025-09-24
+2025-09-29
+2025-09-30
+# --- flagged month: 2025-10 ---
+2025-10-01
+2025-10-02
+2025-10-03
+2025-10-04
+2025-10-05
+2025-10-06
+2025-10-07
+2025-10-08
+2025-10-09
+2025-10-10
+2025-10-11
+2025-10-12
+2025-10-13
+# --- flagged month: 2026-01 ---
+2026-01-01
+2026-01-02
+2026-01-03
+2026-01-04
+2026-01-05
+2026-01-06
+2026-01-07
+2026-01-08
+2026-01-09
+2026-01-10
+2026-01-11
+2026-01-12
+2026-01-13
+2026-01-14
+2026-01-15
+2026-01-16
+2026-01-17
+2026-01-18

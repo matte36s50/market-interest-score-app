@@ -2,9 +2,55 @@
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
 
-// Build auction count map from bat.csv: "make|normalizedModel|YYYY-MM" -> count
-// Normalizes bat.csv model names to match MII model names by stripping the
+// Lot-level index from bat.csv: "make|normalizedModel" -> array of individual auction records.
+// Lets the dashboard drill down from a monthly model average to the individual sales behind it.
+let batLots = {};
+
+// Normalize a bat.csv model name to match MII model names by stripping the
 // manufacturer prefix (e.g. "Porsche LWB 911T") and year-range suffixes (e.g. "(1969-1973)").
+function normalizeBatModel(make, rawModel) {
+    let model = rawModel;
+    if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+    return model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+}
+
+// Parse a bat.csv sale_amount string like "USD $56,000" or "EUR €75,000".
+// Returns { amount: Number|null, currency: String }.
+function parseSaleAmount(raw) {
+    const s = (raw || '').trim();
+    const currencyMatch = s.match(/^([A-Z]{3})/);
+    const currency = currencyMatch ? currencyMatch[1] : (s.includes('€') ? 'EUR' : (s.includes('£') ? 'GBP' : 'USD'));
+    const numMatch = s.match(/([\d,]+(?:\.\d+)?)/);
+    const amount = numMatch ? parseFloat(numMatch[1].replace(/,/g, '')) : null;
+    return { amount: (amount && amount > 0) ? amount : null, currency };
+}
+
+// Parse a bat.csv "views"/"watchers"/numeric field like "6,856 views" -> 6856.
+function parseBatNumber(raw) {
+    const m = (raw || '').toString().match(/([\d,]+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1].replace(/,/g, '')) : null;
+}
+
+// A sale_date is valid only if it parses to a plausible recent year. This silently
+// drops the epoch-sentinel "12/31/69" rows (null source dates) and other corrupt dates
+// so they never pollute counts or charts. parseSaleDate returns null for those.
+function parseSaleDate(saleDate) {
+    const parts = (saleDate || '').trim().split('/');
+    if (parts.length !== 3) return null;
+    const monthNum = parseInt(parts[0], 10);
+    const dayNum = parseInt(parts[1], 10);
+    const yearPart = parts[2].trim();
+    const year = parseInt(yearPart.length === 2 ? '20' + yearPart : yearPart, 10);
+    if (isNaN(monthNum) || isNaN(dayNum) || isNaN(year)) return null;
+    if (year < 2020 || year > new Date().getFullYear() + 1) return null;
+    const month = String(monthNum).padStart(2, '0');
+    const day = String(dayNum).padStart(2, '0');
+    return { year: String(year), month, day, period: `${year}-${month}`, dayKey: `${year}-${month}-${day}` };
+}
+
+// Build the auction-count map AND the lot-level index from bat.csv in a single pass.
+// Returns the counts map ("make|normalizedModel|YYYY-MM" -> count); the lot index is
+// stored on the module-global `batLots`.
 async function loadBatAuctionCounts() {
     try {
         const controller = new AbortController();
@@ -20,30 +66,41 @@ async function loadBatAuctionCounts() {
                 skipEmptyLines: true,
                 complete: results => {
                     const counts = {};
+                    const lots = {};
                     results.data.forEach(row => {
                         const make = (row.make || '').trim();
                         const rawModel = (row.model || '').trim();
-                        const saleDate = (row.sale_date || '').trim();
-                        if (!make || !rawModel || !saleDate) return;
+                        if (!make || !rawModel) return;
 
-                        // Parse sale_date "M/D/YY" or "M/D/YYYY" -> "YYYY-MM"
-                        const parts = saleDate.split('/');
-                        if (parts.length !== 3) return;
-                        const month = parts[0].padStart(2, '0');
-                        const yearPart = parts[2].trim();
-                        const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
-                        const yearInt = parseInt(year);
-                        if (yearInt < 2020 || yearInt > new Date().getFullYear() + 1) return;
-                        const period = `${year}-${month}`;
+                        const parsed = parseSaleDate(row.sale_date);
+                        if (!parsed) return; // drops corrupt/sentinel dates
 
-                        // Normalize model: strip leading "Make " prefix, strip trailing "(YYYY-YYYY)"
-                        let model = rawModel;
-                        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
-                        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+                        const model = normalizeBatModel(make, rawModel);
+                        const period = parsed.period;
 
-                        const key = `${make}|${model}|${period}`;
-                        counts[key] = (counts[key] || 0) + 1;
+                        const countKey = `${make}|${model}|${period}`;
+                        counts[countKey] = (counts[countKey] || 0) + 1;
+
+                        const { amount, currency } = parseSaleAmount(row.sale_amount);
+                        const saleType = (row.sale_type || '').trim().toLowerCase();
+                        const lotKey = `${make}|${model}`;
+                        (lots[lotKey] = lots[lotKey] || []).push({
+                            date: parsed.dayKey,
+                            period,
+                            amount,
+                            currency,
+                            sold: saleType === 'sold',
+                            saleType: (row.sale_type || '').trim() || 'unknown',
+                            url: (row.auction_url || '').trim(),
+                            year: parseBatNumber(row.year),
+                            views: parseBatNumber(row.views),
+                            bids: parseBatNumber(row.bids),
+                            comments: parseBatNumber(row.comments)
+                        });
                     });
+                    // Sort each model's lots chronologically for the scatter/table.
+                    Object.values(lots).forEach(arr => arr.sort((a, b) => a.date.localeCompare(b.date)));
+                    batLots = lots;
                     resolve(counts);
                 },
                 error: () => resolve({})
@@ -660,7 +717,8 @@ let state = {
 let charts = {
     trend: null,
     compare: null,
-    quarterMII: null
+    quarterMII: null,
+    lots: null
 };
 
 // Helper functions
@@ -1050,14 +1108,16 @@ function renderManufacturerDetail() {
                 ${mfr.models
                     .sort((a, b) => b.mii - a.mii)
                     .map((model, idx) => `
-                        <div class="px-5 py-3 hover:bg-gray-50 transition-colors">
+                        <div class="model-row px-5 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                             data-make="${mfr.make}" data-model="${model.model.replace(/"/g, '&quot;')}"
+                             title="View individual auction sales for ${model.model.replace(/"/g, '&quot;')}">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
                                     <span class="w-6 text-center text-sm font-medium text-gray-400">
                                         ${idx + 1}
                                     </span>
                                     <div>
-                                        <div class="font-medium text-sm text-gray-900">${model.model}</div>
+                                        <div class="font-medium text-sm text-gray-900 flex items-center gap-1.5">${model.model}<span class="text-gray-400 text-xs">→</span></div>
                                         <div class="text-xs text-gray-500">
                                             ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                                         </div>
@@ -1077,8 +1137,126 @@ function renderManufacturerDetail() {
         </div>
     `;
 
+    // Wire up lot-level drill-down: clicking a model row opens individual sales.
+    container.querySelectorAll('.model-row').forEach(row => {
+        row.addEventListener('click', () => showLotDetail(row.dataset.make, row.dataset.model));
+    });
+
     // Render trend chart
     setTimeout(() => renderTrendChart(mfr), 0);
+}
+
+// ---------------------------------------------------------------------------
+// Lot-level drill-down: shows the individual auction sales behind a model's
+// monthly average (so high/low outliers like a $56K E46 M3 are visible).
+// ---------------------------------------------------------------------------
+function formatCurrency(amount, currency) {
+    if (amount == null) return '—';
+    const symbol = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+    const prefix = (currency && currency !== 'USD') ? `${currency} ${symbol}` : symbol;
+    return `${prefix}${Math.round(amount).toLocaleString()}`;
+}
+
+function showLotDetail(make, model) {
+    const modal = document.getElementById('lotModal');
+    const titleEl = document.getElementById('lotModalTitle');
+    const subtitleEl = document.getElementById('lotModalSubtitle');
+    const tableBody = document.getElementById('lotTableBody');
+    if (!modal) return;
+
+    const lots = (batLots[`${make}|${model}`] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+
+    titleEl.textContent = `${make} ${model}`;
+
+    const usdSold = lots.filter(l => l.sold && l.currency === 'USD' && l.amount != null);
+    const soldCount = lots.filter(l => l.sold).length;
+    const avg = usdSold.length ? usdSold.reduce((s, l) => s + l.amount, 0) / usdSold.length : null;
+    const high = usdSold.length ? Math.max(...usdSold.map(l => l.amount)) : null;
+    const low = usdSold.length ? Math.min(...usdSold.map(l => l.amount)) : null;
+    subtitleEl.innerHTML = lots.length
+        ? `${lots.length} listings • ${soldCount} sold • USD avg ${formatCurrency(avg, 'USD')} • range ${formatCurrency(low, 'USD')}–${formatCurrency(high, 'USD')}`
+        : 'No individual auction records found for this model in bat.csv.';
+
+    if (!lots.length) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-gray-400 text-sm">No lot-level data available.</td></tr>`;
+    } else {
+        tableBody.innerHTML = lots.map(l => {
+            const statusColor = l.sold ? 'text-emerald-600' : 'text-gray-400';
+            const statusLabel = l.sold ? 'sold' : (l.saleType || 'unsold');
+            const link = l.url
+                ? `<a href="${l.url}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-500 underline">view ↗</a>`
+                : '—';
+            return `
+                <tr class="border-t border-gray-100 hover:bg-gray-50">
+                    <td class="px-4 py-2 text-sm text-gray-700 whitespace-nowrap">${l.date}</td>
+                    <td class="px-4 py-2 text-sm text-gray-500">${l.year ? Math.round(l.year) : '—'}</td>
+                    <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap">${formatCurrency(l.amount, l.currency)}</td>
+                    <td class="px-4 py-2 text-sm ${statusColor} whitespace-nowrap">${statusLabel}</td>
+                    <td class="px-4 py-2 text-sm text-gray-500 whitespace-nowrap">${l.bids != null ? l.bids : '—'} bids • ${l.comments != null ? l.comments : '—'} comments</td>
+                    <td class="px-4 py-2 text-sm">${link}</td>
+                </tr>`;
+        }).join('');
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => renderLotScatter(lots), 0);
+}
+
+function hideLotDetail() {
+    const modal = document.getElementById('lotModal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    if (charts.lots) { charts.lots.destroy(); charts.lots = null; }
+}
+
+function renderLotScatter(lots) {
+    const canvas = document.getElementById('lotScatterChart');
+    if (!canvas) return;
+    if (charts.lots) charts.lots.destroy();
+
+    // Plot USD lots only (mixed currencies would distort the axis); split sold vs unsold.
+    const usdLots = lots.filter(l => l.currency === 'USD' && l.amount != null);
+    const toPoint = l => ({ x: l.date, y: l.amount, url: l.url, saleType: l.saleType, date: l.date });
+    const soldPoints = usdLots.filter(l => l.sold).map(toPoint);
+    const unsoldPoints = usdLots.filter(l => !l.sold).map(toPoint);
+
+    charts.lots = new Chart(canvas.getContext('2d'), {
+        type: 'scatter',
+        data: {
+            datasets: [
+                { label: 'Sold', data: soldPoints, backgroundColor: '#059669', pointRadius: 5, pointHoverRadius: 7 },
+                { label: 'Unsold / bid', data: unsoldPoints, backgroundColor: '#9ca3af', pointRadius: 4, pointHoverRadius: 6 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'category', ticks: { color: '#6b7280', maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#f3f4f6' } },
+                y: {
+                    ticks: { color: '#6b7280', callback: v => '$' + (v / 1000) + 'K' },
+                    grid: { color: '#f3f4f6' },
+                    title: { display: true, text: 'Sale price (USD)', color: '#6b7280' }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#374151' } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `${ctx.dataset.label}: $${Math.round(ctx.parsed.y).toLocaleString()} (${ctx.raw.date || ctx.parsed.x})`
+                    }
+                }
+            },
+            onClick: (evt, elements) => {
+                if (elements.length) {
+                    const pt = charts.lots.data.datasets[elements[0].datasetIndex].data[elements[0].index];
+                    if (pt && pt.url) window.open(pt.url, '_blank', 'noopener');
+                }
+            }
+        }
+    });
 }
 
 function renderTrendChart(mfr) {
@@ -1401,6 +1579,12 @@ function init() {
         updateFilters();
         renderQuarterMIIChart();
     });
+
+    // Lot-level drill-down modal close handlers
+    const lotModal = document.getElementById('lotModal');
+    document.getElementById('lotModalClose').addEventListener('click', hideLotDetail);
+    lotModal.addEventListener('click', (e) => { if (e.target === lotModal) hideLotDetail(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideLotDetail(); });
 
     // Event listeners
     document.getElementById('searchInput').addEventListener('input', (e) => {

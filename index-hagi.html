@@ -531,6 +531,44 @@
 
     </main>
 
+    <!-- Lot-level drill-down modal: individual auction sales behind a model's monthly average -->
+    <div id="lotModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-white border border-[#e5e0d6] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex items-start justify-between px-6 py-4 border-b border-[#e5e0d6]">
+                <div>
+                    <h3 id="lotModalTitle" class="text-lg font-bold text-gray-900">Model</h3>
+                    <p id="lotModalSubtitle" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+                <button id="lotModalClose" class="text-gray-400 hover:text-gray-700 text-2xl leading-none px-2" aria-label="Close">&times;</button>
+            </div>
+            <div class="px-6 py-4 overflow-y-auto scrollbar-thin">
+                <div class="bg-[#faf8f3] rounded-xl p-3 mb-4" style="height: 240px;">
+                    <canvas id="lotScatterChart"></canvas>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-[#e5e0d6]">
+                    <table class="w-full text-left">
+                        <thead class="bg-[#faf8f3] text-xs uppercase text-gray-500">
+                            <tr>
+                                <th class="px-4 py-2 font-medium">Sale date</th>
+                                <th class="px-4 py-2 font-medium">Year</th>
+                                <th class="px-4 py-2 font-medium">Price</th>
+                                <th class="px-4 py-2 font-medium">Status</th>
+                                <th class="px-4 py-2 font-medium">Activity</th>
+                                <th class="px-4 py-2 font-medium">Listing</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lotTableBody"></tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-400 mt-3">
+                    Each row is an individual auction lot from bring-a-trailer data. The monthly model average shown elsewhere
+                    is the mean of these sales. Click a point or "view" to open the original listing. Non-USD sales are listed
+                    but omitted from the chart axis.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="border-t border-[#e5e0d6] py-5 bg-white mt-4">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-[11px] text-[#a8a29e]">
