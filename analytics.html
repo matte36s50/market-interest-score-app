@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Market Interest Index</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            950: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #27272a;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #52525b;
+            border-radius: 3px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #71717a;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100">
+    <!-- Header -->
+    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
+                        MII
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">Model Analytics</h1>
+                        <p class="text-xs text-zinc-500">Compare MII profiles across models</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
+                        &larr; Dashboard
+                    </a>
+                    <a href="dashboard.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
+                        Terminal View &rarr;
+                    </a>
+                    <a href="analyze.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
+                        Data Analysis &rarr;
+                    </a>
+                    <div class="text-right">
+                        <div class="text-xs text-zinc-500">Last Updated</div>
+                        <div id="lastUpdated" class="text-sm font-medium text-zinc-300"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-zinc-700 border-t-amber-500 mb-4"></div>
+            <div class="text-xl font-semibold text-zinc-100">Loading MII Data...</div>
+            <div class="text-sm text-zinc-500 mt-2">Fetching from S3 bucket</div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Model Selection -->
+        <div class="grid grid-cols-3 gap-6 mb-6">
+            <!-- Base model picker -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <h2 class="font-semibold mb-1">1. Pick a Base Model</h2>
+                <p class="text-xs text-zinc-500 mb-4">The model you want to benchmark against the market</p>
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="baseSearch"
+                        placeholder="Search make or model..."
+                        autocomplete="off"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 placeholder-zinc-500"
+                    />
+                    <div id="baseResults" class="hidden absolute left-0 right-0 mt-1 max-h-64 overflow-y-auto scrollbar-thin bg-zinc-800 border border-zinc-700 rounded-lg z-40 shadow-2xl"></div>
+                </div>
+                <div id="baseSelected" class="mt-4"></div>
+            </div>
+
+            <!-- Suggested similar models -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <h2 class="font-semibold mb-1">2. Suggested Comparables</h2>
+                <p class="text-xs text-zinc-500 mb-4">Closest MII profiles by weighted distance over normalized inputs</p>
+                <div id="suggestionsList" class="space-y-2">
+                    <p class="text-sm text-zinc-600">Pick a base model to see suggestions</p>
+                </div>
+            </div>
+
+            <!-- Manual add + selection list -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <h2 class="font-semibold mb-1">3. Comparison Set <span id="selectionCount" class="text-xs font-normal text-zinc-500"></span></h2>
+                <p class="text-xs text-zinc-500 mb-4">Add up to 5 models of your own choosing</p>
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="addSearch"
+                        placeholder="Add another model..."
+                        autocomplete="off"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 placeholder-zinc-500"
+                    />
+                    <div id="addResults" class="hidden absolute left-0 right-0 mt-1 max-h-64 overflow-y-auto scrollbar-thin bg-zinc-800 border border-zinc-700 rounded-lg z-40 shadow-2xl"></div>
+                </div>
+                <div id="selectionList" class="mt-4 space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div id="chartsSection" class="hidden">
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                    <h2 class="font-semibold">MII Profile</h2>
+                    <p class="text-xs text-zinc-500 mb-4">Normalized input dimensions (0–1), averaged across each model's months</p>
+                    <div style="height: 380px;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                    <h2 class="font-semibold">MII Trend</h2>
+                    <p class="text-xs text-zinc-500 mb-4">Monthly MII score over time</p>
+                    <div style="height: 380px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Head-to-head table -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                <div class="border-b border-zinc-800 px-5 py-4">
+                    <h2 class="font-semibold">Head-to-Head</h2>
+                    <p class="text-xs text-zinc-500 mt-1">Averages across each model's months of data; best value per row highlighted</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead id="h2hHead" class="bg-zinc-800/50 text-xs uppercase text-zinc-500"></thead>
+                        <tbody id="h2hBody" class="divide-y divide-zinc-800/50"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="bg-zinc-900 border border-zinc-800 rounded-xl p-12 text-center">
+            <div class="text-4xl mb-4">📡</div>
+            <h3 class="font-semibold text-zinc-300">Select a Base Model to Begin</h3>
+            <p class="text-sm text-zinc-500 mt-2 max-w-md mx-auto">
+                Search for any model above. We'll suggest the cars with the most similar market-interest
+                profiles, and you can add up to five more to compare head-to-head.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800 mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-sm text-zinc-500">
+            <div>Market Interest Index © 2025</div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-zinc-300">Documentation</a>
+                <a href="#" class="hover:text-zinc-300">API</a>
+                <a href="#" class="hover:text-zinc-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="analytics.js"></script>
+</body>
+</html>
