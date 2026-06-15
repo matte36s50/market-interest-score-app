@@ -1,7 +1,12 @@
-// Model Analytics — compare MII profiles across models.
+// Model Comparison — compare MII profiles across models.
 // Loads the same mii_results_latest.csv as the main dashboard, builds a per-model
 // profile from the normalized MII input columns, and lets the user benchmark a
 // base model against auto-suggested comparables plus manual picks.
+//
+// The page ships HAGI light-theme tokens in its markup; mii-dark-theme.css (loaded
+// in the HTML) maps those tokens to the navy + champagne-gold theme, so all chrome
+// here uses classes that stylesheet recognises. Series accents use colours chosen
+// to read well on the dark navy background.
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 
@@ -21,7 +26,8 @@ const PROFILE_DIMS = [
 ];
 
 const MAX_COMPARISONS = 5;   // additional models beyond the base
-const SERIES_COLORS = ['#f59e0b', '#38bdf8', '#34d399', '#a78bfa', '#fb7185', '#a3e635'];
+// Champagne-gold-forward palette tuned for the navy theme.
+const SERIES_COLORS = ['#e0c878', '#6a9abf', '#6ab87a', '#c9a0d6', '#c47a7a', '#cda35c'];
 
 // modelKey ("Manufacturer|Model") -> { manufacturer, model, rows, profile, count }
 let models = {};
@@ -161,9 +167,9 @@ function setupSearch(inputId, resultsId, onPick) {
         }
         results.innerHTML = matches.map(k => {
             const m = models[k];
-            return `<button data-key="${escapeHtml(k)}" class="search-item w-full text-left px-4 py-2 text-sm hover:bg-zinc-700 transition-colors flex items-center justify-between gap-2">
-                <span><span class="text-zinc-400">${escapeHtml(m.manufacturer)}</span> <span class="font-medium">${escapeHtml(m.model)}</span></span>
-                <span class="text-xs text-zinc-500 whitespace-nowrap">${m.count} mo · MII ${m.avgMII.toFixed(1)}</span>
+            return `<button data-key="${escapeHtml(k)}" class="search-item table-row w-full text-left px-4 py-2.5 flex items-center justify-between gap-2" style="border-bottom:1px solid #152236">
+                <span class="text-[12.5px]"><span class="text-[#a8a29e]">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-[#1c1917]">${escapeHtml(m.model)}</span></span>
+                <span class="text-[11px] text-[#a8a29e] whitespace-nowrap">${m.count} mo · MII ${m.avgMII.toFixed(1)}</span>
             </button>`;
         }).join('');
         results.classList.remove('hidden');
@@ -221,12 +227,12 @@ function renderSelection() {
     const baseEl = document.getElementById('baseSelected');
     if (baseKey) {
         const m = models[baseKey];
-        baseEl.innerHTML = `<div class="flex items-center justify-between bg-zinc-800 border border-amber-500/40 rounded-lg px-4 py-3">
-            <div>
-                <div class="text-xs text-zinc-500">${escapeHtml(m.manufacturer)}</div>
-                <div class="font-semibold text-amber-500">${escapeHtml(m.model)}</div>
+        baseEl.innerHTML = `<div class="flex items-center justify-between rounded-lg px-4 py-3" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.5)">
+            <div class="min-w-0">
+                <div class="text-[11px] text-[#a8a29e]">${escapeHtml(m.manufacturer)}</div>
+                <div class="font-semibold text-[15px] text-[#8B1A1A] truncate">${escapeHtml(m.model)}</div>
             </div>
-            <div class="text-right text-xs text-zinc-500">${m.count} months<br>avg MII ${m.avgMII.toFixed(1)}</div>
+            <div class="text-right text-[11px] text-[#a8a29e] leading-tight whitespace-nowrap ml-3">${m.count} months<br>avg MII ${m.avgMII.toFixed(1)}</div>
         </div>`;
     } else {
         baseEl.innerHTML = '';
@@ -236,16 +242,16 @@ function renderSelection() {
 
     const listEl = document.getElementById('selectionList');
     if (!comparisonKeys.length) {
-        listEl.innerHTML = '<p class="text-sm text-zinc-600">No comparison models added yet</p>';
+        listEl.innerHTML = '<p class="text-[12px] text-[#a8a29e]">No comparison models added yet</p>';
     } else {
         listEl.innerHTML = comparisonKeys.map((k, i) => {
             const color = SERIES_COLORS[(i + 1) % SERIES_COLORS.length];
-            return `<div class="flex items-center justify-between bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2">
+            return `<div class="flex items-center justify-between rounded-lg px-3 py-2" style="background:#0d1828;border:1px solid #1e3350">
                 <div class="flex items-center gap-2 min-w-0">
                     <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${color}"></span>
-                    <span class="text-sm truncate">${escapeHtml(modelLabel(k))}</span>
+                    <span class="text-[12.5px] text-[#1c1917] truncate">${escapeHtml(modelLabel(k))}</span>
                 </div>
-                <button data-key="${escapeHtml(k)}" class="remove-btn text-zinc-500 hover:text-red-400 text-lg leading-none px-1" aria-label="Remove">&times;</button>
+                <button data-key="${escapeHtml(k)}" class="remove-btn text-[#a8a29e] text-lg leading-none px-1" title="Remove" aria-label="Remove">&times;</button>
             </div>`;
         }).join('');
     }
@@ -254,24 +260,27 @@ function renderSelection() {
 function renderSuggestions() {
     const el = document.getElementById('suggestionsList');
     if (!baseKey) {
-        el.innerHTML = '<p class="text-sm text-zinc-600">Pick a base model to see suggestions</p>';
+        el.innerHTML = '<p class="text-[12px] text-[#a8a29e]">Pick a base model to see suggestions</p>';
         return;
     }
     const suggestions = suggestSimilar(baseKey);
     if (!suggestions.length) {
-        el.innerHTML = '<p class="text-sm text-zinc-600">No similar models found</p>';
+        el.innerHTML = '<p class="text-[12px] text-[#a8a29e]">No similar models found</p>';
         return;
     }
     const full = comparisonKeys.length >= MAX_COMPARISONS;
     el.innerHTML = suggestions.map(s => {
         const m = models[s.key];
         const pct = similarityPct(s.distance);
-        return `<div class="flex items-center justify-between bg-zinc-800/60 border border-zinc-700/50 rounded-lg px-3 py-2 gap-2">
+        const addBtn = full
+            ? `<button data-key="${escapeHtml(s.key)}" disabled class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-not-allowed" style="background:#c9a84c;color:#080e1a;opacity:.4">+ Add</button>`
+            : `<button data-key="${escapeHtml(s.key)}" class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold hover:opacity-90 transition-opacity" style="background:#c9a84c;color:#080e1a">+ Add</button>`;
+        return `<div class="flex items-center justify-between rounded-lg px-3 py-2 gap-2 table-row" style="background:#0d1828;border:1px solid #1e3350">
             <div class="min-w-0">
-                <div class="text-sm truncate"><span class="text-zinc-400">${escapeHtml(m.manufacturer)}</span> <span class="font-medium">${escapeHtml(m.model)}</span></div>
-                <div class="text-xs text-zinc-500">${pct.toFixed(0)}% profile match · avg MII ${m.avgMII.toFixed(1)}</div>
+                <div class="text-[12.5px] truncate"><span class="text-[#a8a29e]">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-[#1c1917]">${escapeHtml(m.model)}</span></div>
+                <div class="text-[11px] text-[#a8a29e]">${pct.toFixed(0)}% profile match · avg MII ${m.avgMII.toFixed(1)}</div>
             </div>
-            <button data-key="${escapeHtml(s.key)}" ${full ? 'disabled' : ''} class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-xs font-medium ${full ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed' : 'bg-amber-600/20 text-amber-500 border border-amber-600/40 hover:bg-amber-600/40'} transition-colors">+ Add</button>
+            ${addBtn}
         </div>`;
     }).join('');
 }
@@ -289,7 +298,7 @@ function renderRadar(keys) {
                     label: modelLabel(k),
                     data: models[k].profile,
                     borderColor: color,
-                    backgroundColor: color + '22',
+                    backgroundColor: color + '26',
                     pointBackgroundColor: color,
                     pointRadius: 3,
                     borderWidth: 2,
@@ -304,13 +313,13 @@ function renderRadar(keys) {
                     min: 0,
                     max: 1,
                     ticks: { display: false },
-                    grid: { color: 'rgba(255,255,255,0.08)' },
-                    angleLines: { color: 'rgba(255,255,255,0.08)' },
-                    pointLabels: { color: '#a1a1aa', font: { size: 11 } }
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    angleLines: { color: 'rgba(255,255,255,0.06)' },
+                    pointLabels: { color: '#7a8898', font: { size: 11 } }
                 }
             },
             plugins: {
-                legend: { labels: { color: '#d4d4d8', boxWidth: 12, font: { size: 11 } } }
+                legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
             }
         }
     });
@@ -341,6 +350,7 @@ function renderTrend(keys) {
                     }),
                     borderColor: color,
                     backgroundColor: color,
+                    pointBackgroundColor: color,
                     spanGaps: true,
                     tension: 0.3,
                     pointRadius: 3,
@@ -353,17 +363,17 @@ function renderTrend(keys) {
             maintainAspectRatio: false,
             scales: {
                 x: {
-                    grid: { color: 'rgba(255,255,255,0.04)' },
-                    ticks: { color: '#71717a', font: { size: 10 } }
+                    grid: { display: false },
+                    ticks: { color: '#7a8898', font: { size: 10 } }
                 },
                 y: {
                     grid: { color: 'rgba(255,255,255,0.06)' },
-                    ticks: { color: '#71717a', font: { size: 11 } },
-                    title: { display: true, text: 'MII Score', color: '#71717a', font: { size: 11 } }
+                    ticks: { color: '#7a8898', font: { size: 11 } },
+                    title: { display: true, text: 'MII Score', color: '#7a8898', font: { size: 11 } }
                 }
             },
             plugins: {
-                legend: { labels: { color: '#d4d4d8', boxWidth: 12, font: { size: 11 } } }
+                legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
             }
         }
     });
@@ -395,9 +405,12 @@ function renderTable(keys) {
     const head = document.getElementById('h2hHead');
     const body = document.getElementById('h2hBody');
 
+    // Inline !important is needed because mii-dark-theme.css forces a uniform
+    // th colour/letter-spacing; this re-asserts the per-model series colour.
+    const thStyle = c => `color:${c} !important;text-transform:none !important;letter-spacing:0.01em !important;font-size:11.5px !important;font-weight:600 !important`;
     head.innerHTML = `<tr>
-        <th class="px-5 py-3 font-medium">Metric</th>
-        ${keys.map((k, i) => `<th class="px-5 py-3 font-medium" style="color:${SERIES_COLORS[i % SERIES_COLORS.length]}">${escapeHtml(modelLabel(k))}${i === 0 ? ' <span class="text-zinc-600 normal-case">(base)</span>' : ''}</th>`).join('')}
+        <th class="px-5 py-3">Metric</th>
+        ${keys.map((k, i) => `<th class="px-5 py-3" style="${thStyle(SERIES_COLORS[i % SERIES_COLORS.length])}">${escapeHtml(modelLabel(k))}${i === 0 ? ' <span style="color:#7a8898 !important;font-weight:400 !important">(base)</span>' : ''}</th>`).join('')}
     </tr>`;
 
     const metrics = [
@@ -420,11 +433,12 @@ function renderTable(keys) {
     body.innerHTML = metrics.map(metric => {
         const vals = keys.map(k => metric.get(models[k]));
         const best = metric.noHighlight ? null : Math.max(...vals.filter(v => v !== null && !isNaN(v)));
-        return `<tr class="hover:bg-zinc-800/30">
-            <td class="px-5 py-3 text-zinc-400">${metric.label}</td>
+        return `<tr>
+            <td class="px-5 py-3" style="color:#7a8898 !important">${metric.label}</td>
             ${vals.map(v => {
                 const isBest = best !== null && v !== null && v === best && keys.length > 1;
-                return `<td class="px-5 py-3 ${isBest ? 'text-amber-400 font-semibold' : 'text-zinc-200'}">${metric.fmt(v)}</td>`;
+                const style = isBest ? ' style="color:#e0c878 !important;font-weight:600 !important"' : '';
+                return `<td class="px-5 py-3"${style}>${metric.fmt(v)}</td>`;
             }).join('')}
         </tr>`;
     }).join('');
@@ -475,9 +489,11 @@ async function init() {
     } catch (error) {
         const indicator = document.getElementById('loadingIndicator');
         indicator.innerHTML = `<div class="text-center max-w-md px-6">
-            <div class="text-4xl mb-4">⚠️</div>
-            <div class="text-xl font-semibold text-zinc-100">Failed to Load Data</div>
-            <div class="text-sm text-zinc-500 mt-2">${escapeHtml(error.message)}</div>
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(201,168,76,0.1)">
+                <svg class="w-6 h-6 text-[#8B1A1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            </div>
+            <div class="text-base font-semibold text-[#8B1A1A] mb-1">Failed to Load Data</div>
+            <div class="text-xs text-[#a8a29e]">${escapeHtml(error.message)}</div>
         </div>`;
     }
 }
