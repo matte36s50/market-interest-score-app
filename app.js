@@ -6,11 +6,45 @@ const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
 // Lets the dashboard drill down from a monthly model average to the individual sales behind it.
 let batLots = {};
 
-// Normalize a bat.csv model name to match MII model names by stripping the
-// manufacturer prefix (e.g. "Porsche LWB 911T") and year-range suffixes (e.g. "(1969-1973)").
-function normalizeBatModel(make, rawModel) {
-    let model = rawModel;
-    if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
+// Some manufacturers appear under more than one brand name across the two data
+// sources: MII files Datsun-era cars under "Nissan" (keeping "Datsun" in the
+// model name), while bat.csv files them under make "Datsun". MAKE_ALIASES maps
+// every such brand to a single canonical make so the two datasets join up.
+const MAKE_ALIASES = {
+    'Datsun': 'Nissan',
+};
+
+// Canonical make for a raw make/manufacturer value (alias -> canonical).
+function canonicalMake(make) {
+    return MAKE_ALIASES[make] || make;
+}
+
+// Every brand name a canonical make can appear under (itself + its aliases),
+// used to strip a leading brand word from model names on both sides.
+const MAKE_PREFIXES = (() => {
+    const map = {};
+    Object.entries(MAKE_ALIASES).forEach(([alias, canon]) => {
+        if (!map[canon]) map[canon] = [canon];
+        map[canon].push(alias);
+    });
+    return map;
+})();
+
+// Normalize a model name so MII and bat.csv keys line up: canonicalize the make,
+// strip any leading brand word it may carry (e.g. "Datsun 240Z" -> "240Z",
+// "Porsche LWB 911T" -> "LWB 911T"), and drop year-range suffixes (e.g.
+// "(1969-1973)"). Applied identically to both datasets, so case differences and
+// alias brands resolve to the same key.
+function normalizeModelKey(make, rawModel) {
+    const canon = canonicalMake(make);
+    let model = rawModel || '';
+    const prefixes = MAKE_PREFIXES[canon] || [canon];
+    for (const prefix of prefixes) {
+        if (model.toLowerCase().startsWith(prefix.toLowerCase() + ' ')) {
+            model = model.slice(prefix.length + 1);
+            break;
+        }
+    }
     return model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
 }
 
@@ -75,15 +109,16 @@ async function loadBatAuctionCounts() {
                         const parsed = parseSaleDate(row.sale_date);
                         if (!parsed) return; // drops corrupt/sentinel dates
 
-                        const model = normalizeBatModel(make, rawModel);
+                        const cmake = canonicalMake(make);
+                        const model = normalizeModelKey(make, rawModel);
                         const period = parsed.period;
 
-                        const countKey = `${make}|${model}|${period}`;
+                        const countKey = `${cmake}|${model}|${period}`;
                         counts[countKey] = (counts[countKey] || 0) + 1;
 
                         const { amount, currency } = parseSaleAmount(row.sale_amount);
                         const saleType = (row.sale_type || '').trim().toLowerCase();
-                        const lotKey = `${make}|${model}`;
+                        const lotKey = `${cmake}|${model}`;
                         (lots[lotKey] = lots[lotKey] || []).push({
                             date: parsed.dayKey,
                             period,
@@ -115,7 +150,7 @@ async function loadBatAuctionCounts() {
 // Inject auction_count into MII rows from bat.csv counts map
 function injectAuctionCounts(rows, batCounts) {
     rows.forEach(row => {
-        const key = `${row.manufacturer}|${row.model}|${row.quarter}`;
+        const key = `${canonicalMake(row.manufacturer)}|${normalizeModelKey(row.manufacturer, row.model)}|${row.quarter}`;
         row.auction_count = String(batCounts[key] || 0);
     });
 }
@@ -1114,7 +1149,7 @@ function showLotDetail(make, model) {
     const tableBody = document.getElementById('lotTableBody');
     if (!modal) return;
 
-    const lots = (batLots[`${make}|${model}`] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const lots = (batLots[`${canonicalMake(make)}|${normalizeModelKey(make, model)}`] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
 
     titleEl.textContent = `${make} ${model}`;
 
