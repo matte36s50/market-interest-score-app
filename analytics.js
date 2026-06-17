@@ -34,11 +34,16 @@ let models = {};
 let modelKeys = [];   // sorted for search
 let quarters = [];    // all distinct months, sorted
 
+// Benchmarks computed across every valid row in the dataset.
+let marketAvgMII = 0;            // overall market average MII
+let manufacturerAvgMII = {};     // manufacturer -> average MII across its rows
+
 let baseKey = null;
 let comparisonKeys = [];
 
 let radarChart = null;
 let trendChart = null;
+let benchmarkChart = null;
 
 // ---- Data loading ----
 
@@ -111,6 +116,25 @@ function buildModels(rawData) {
     });
 
     modelKeys = Object.keys(models).sort((a, b) => a.localeCompare(b));
+
+    // Market and per-manufacturer benchmarks, averaged over every valid row so
+    // models with more months of data carry proportionally more weight (the
+    // same convention used for each model's own avgMII above).
+    let marketSum = 0;
+    const mfrSums = {};   // manufacturer -> { sum, n }
+    valid.forEach(row => {
+        const mii = parseFloat(row.mii_score);
+        marketSum += mii;
+        const mfr = String(row.manufacturer).trim();
+        (mfrSums[mfr] = mfrSums[mfr] || { sum: 0, n: 0 });
+        mfrSums[mfr].sum += mii;
+        mfrSums[mfr].n += 1;
+    });
+    marketAvgMII = valid.length ? marketSum / valid.length : 0;
+    manufacturerAvgMII = {};
+    Object.entries(mfrSums).forEach(([mfr, { sum, n }]) => {
+        manufacturerAvgMII[mfr] = n ? sum / n : 0;
+    });
 }
 
 // ---- Similarity ----
@@ -379,6 +403,96 @@ function renderTrend(keys) {
     });
 }
 
+function renderBenchmark(keys) {
+    const ctx = document.getElementById('benchmarkChart').getContext('2d');
+    if (benchmarkChart) benchmarkChart.destroy();
+
+    const labels = keys.map(k => modelLabel(k));
+    const modelMII = keys.map(k => models[k].avgMII);
+    const mfrMII = keys.map(k => manufacturerAvgMII[models[k].manufacturer] ?? null);
+    // A flat reference value repeated across categories renders as a horizontal
+    // line spanning the whole chart in a mixed bar/line chart.
+    const marketLine = keys.map(() => marketAvgMII);
+
+    benchmarkChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Model avg MII',
+                    data: modelMII,
+                    backgroundColor: keys.map((k, i) => SERIES_COLORS[i % SERIES_COLORS.length]),
+                    borderWidth: 0,
+                    borderRadius: 4,
+                    categoryPercentage: 0.7,
+                    barPercentage: 0.9,
+                    order: 3,
+                },
+                {
+                    type: 'bar',
+                    label: 'Manufacturer avg MII',
+                    data: mfrMII,
+                    backgroundColor: 'rgba(122,136,152,0.45)',
+                    borderWidth: 0,
+                    borderRadius: 4,
+                    categoryPercentage: 0.7,
+                    barPercentage: 0.9,
+                    order: 2,
+                },
+                {
+                    type: 'line',
+                    label: 'Market avg MII',
+                    data: marketLine,
+                    borderColor: '#c9a84c',
+                    borderWidth: 1.5,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    pointHitRadius: 0,
+                    fill: false,
+                    order: 1,
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#7a8898', font: { size: 11 } }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: { color: '#7a8898', font: { size: 11 } },
+                    title: { display: true, text: 'MII Score', color: '#7a8898', font: { size: 11 } }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
+                tooltip: {
+                    callbacks: {
+                        label: (item) => {
+                            const v = item.parsed.y;
+                            if (v === null || isNaN(v)) return `${item.dataset.label}: —`;
+                            let line = `${item.dataset.label}: ${v.toFixed(1)}`;
+                            // For the model bar, surface how far above/below the
+                            // market it sits — the headline comparison here.
+                            if (item.datasetIndex === 0) {
+                                const d = v - marketAvgMII;
+                                line += `  (${d >= 0 ? '+' : ''}${d.toFixed(1)} vs market)`;
+                            }
+                            return line;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 function fmtMoney(v) {
     if (!v) return '—';
     if (v >= 1e6) return '$' + (v / 1e6).toFixed(2) + 'M';
@@ -460,6 +574,7 @@ function renderAll() {
     empty.classList.add('hidden');
     renderRadar(keys);
     renderTrend(keys);
+    renderBenchmark(keys);
     renderTable(keys);
 }
 
