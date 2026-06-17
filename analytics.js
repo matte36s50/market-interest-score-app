@@ -499,6 +499,7 @@ function renderJitter(keys) {
         const color = SERIES_COLORS[ki % SERIES_COLORS.length];
         // The model itself: solid line + large points across the columns.
         datasets.push({
+            type: 'line',
             label: modelLabel(k),
             data: models[k].profile.slice(),
             borderColor: color,
