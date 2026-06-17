@@ -126,7 +126,7 @@
         <!-- Component percentile jitter plot -->
         <div class="chart-container mb-5">
             <h2 class="font-semibold text-[13px] text-[#1c1917]">Component Percentiles</h2>
-            <p class="text-[11px] text-[#a8a29e] mt-0.5 mb-4">Where each selected model ranks on every MII input. The box-and-whisker shows the spread of all models with ≥2 months of data (box = 25th–75th percentile, line = median, whiskers = 10th–90th). Coloured lines are your selected models, with dashed manufacturer and market averages.</p>
+            <p class="text-[11px] text-[#a8a29e] mt-0.5 mb-4">Where each selected model ranks on every MII input. The violin shows the distribution of all models with ≥2 months of data (wider = more models at that percentile); the light tick marks each component's median. Coloured lines are your selected models, with dashed manufacturer and market averages.</p>
             <div style="height: 380px;">
                 <canvas id="jitterChart"></canvas>
             </div>
@@ -183,7 +183,7 @@
     </div>
 </footer>
 
-<script src="mii-normalize.js?v=3"></script>
-<script src="analytics.js?v=3"></script>
+<script src="mii-normalize.js?v=4"></script>
+<script src="analytics.js?v=4"></script>
 </body>
 </html>

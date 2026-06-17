@@ -434,10 +434,10 @@ function quantileSorted(sorted, q) {
     return lo === hi ? sorted[lo] : sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
 }
 
-// Component spread plot: a box-and-whisker per MII input summarising where the
-// whole field of models sits (10/25/50/75/90 percentile), with each selected
-// model drawn as a line across the columns (like the benchmark chart), plus its
-// manufacturer average and the overall market average as dashed reference lines.
+// Component spread plot: a violin (kernel-density silhouette) per MII input
+// showing where the whole field of models sits, with each selected model drawn
+// as a line across the columns (like the benchmark chart), plus its manufacturer
+// average and the overall market average as dashed reference lines.
 function renderJitter(keys) {
     const ctx = document.getElementById('jitterChart').getContext('2d');
     if (jitterChart) jitterChart.destroy();
@@ -445,48 +445,60 @@ function renderJitter(keys) {
     const labels = PROFILE_DIMS.map(d => d.label);
     const fieldKeys = modelKeys.filter(k => models[k].count >= 2);
 
-    // Box stats per component, computed across the whole field.
-    const boxStats = PROFILE_DIMS.map((_, i) => {
-        const vals = fieldKeys.map(k => models[k].profile[i]).sort((a, b) => a - b);
-        return {
-            p10: quantileSorted(vals, 0.10), p25: quantileSorted(vals, 0.25),
-            p50: quantileSorted(vals, 0.50), p75: quantileSorted(vals, 0.75),
-            p90: quantileSorted(vals, 0.90),
-        };
+    // Per-component kernel density estimate (the violin silhouette) plus median.
+    // Densities are sampled along the percentile axis and each violin is scaled
+    // to the same max width, so the shape — not the absolute count — is what reads.
+    const Y_SAMPLES = 64;
+    const ys = Array.from({ length: Y_SAMPLES }, (_, j) => j / (Y_SAMPLES - 1));
+    const violins = PROFILE_DIMS.map((_, i) => {
+        const vals = fieldKeys.map(k => models[k].profile[i]);
+        const sorted = vals.slice().sort((a, b) => a - b);
+        const n = vals.length || 1;
+        const mean = vals.reduce((s, v) => s + v, 0) / n;
+        const sd = Math.sqrt(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / n) || 0.1;
+        // Silverman's rule of thumb, with a floor so the silhouette stays smooth.
+        const h = Math.max(0.025, 1.06 * sd * Math.pow(n, -0.2));
+        const dens = ys.map(yv => {
+            let s = 0;
+            for (let t = 0; t < vals.length; t++) { const u = (yv - vals[t]) / h; s += Math.exp(-0.5 * u * u); }
+            return s;
+        });
+        const maxD = Math.max(...dens) || 1;
+        return { dens: dens.map(d => d / maxD), median: quantileSorted(sorted, 0.5) };
     });
 
-    // Draw the boxes behind the line series with a small inline plugin.
-    const boxPlugin = {
-        id: 'componentBoxes',
+    // Draw the violins behind the line series with a small inline plugin.
+    const violinPlugin = {
+        id: 'componentViolins',
         beforeDatasetsDraw(chart) {
             const { ctx, chartArea, scales: { x, y } } = chart;
             if (!x || !y || !chartArea) return;
-            const halfW = Math.min(34, (chartArea.width / boxStats.length) * 0.26);
-            const capW = halfW * 0.55;
+            const halfW = Math.min(42, (chartArea.width / violins.length) * 0.34);
             const yp = v => y.getPixelForValue(v);
             ctx.save();
-            boxStats.forEach((s, i) => {
+            violins.forEach((vio, i) => {
                 const cx = x.getPixelForValue(i);
-                // whiskers p10–p25 and p75–p90, with end caps
-                ctx.strokeStyle = 'rgba(160,174,192,0.55)';
-                ctx.lineWidth = 1.5;
+                // Right edge bottom→top, then left edge top→bottom, closed & filled.
                 ctx.beginPath();
-                ctx.moveTo(cx, yp(s.p90)); ctx.lineTo(cx, yp(s.p75));
-                ctx.moveTo(cx, yp(s.p25)); ctx.lineTo(cx, yp(s.p10));
-                ctx.moveTo(cx - capW, yp(s.p90)); ctx.lineTo(cx + capW, yp(s.p90));
-                ctx.moveTo(cx - capW, yp(s.p10)); ctx.lineTo(cx + capW, yp(s.p10));
+                ys.forEach((yv, j) => {
+                    const px = cx + vio.dens[j] * halfW;
+                    j === 0 ? ctx.moveTo(px, yp(yv)) : ctx.lineTo(px, yp(yv));
+                });
+                for (let j = ys.length - 1; j >= 0; j--) {
+                    ctx.lineTo(cx - vio.dens[j] * halfW, yp(ys[j]));
+                }
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(122,136,152,0.20)';
+                ctx.strokeStyle = 'rgba(160,174,192,0.55)';
+                ctx.lineWidth = 1.25;
+                ctx.fill();
                 ctx.stroke();
-                // interquartile box p25–p75
-                const top = yp(s.p75), h = yp(s.p25) - yp(s.p75);
-                ctx.fillStyle = 'rgba(122,136,152,0.18)';
-                ctx.strokeStyle = 'rgba(160,174,192,0.6)';
-                ctx.fillRect(cx - halfW, top, halfW * 2, h);
-                ctx.strokeRect(cx - halfW, top, halfW * 2, h);
-                // median
-                ctx.strokeStyle = 'rgba(207,200,188,0.85)';
+                // Median tick, spanning the silhouette width at that level.
+                const mw = halfW * (vio.dens[Math.round(vio.median * (ys.length - 1))] || 0.3);
+                ctx.strokeStyle = 'rgba(207,200,188,0.9)';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
-                ctx.moveTo(cx - halfW, yp(s.p50)); ctx.lineTo(cx + halfW, yp(s.p50));
+                ctx.moveTo(cx - mw, yp(vio.median)); ctx.lineTo(cx + mw, yp(vio.median));
                 ctx.stroke();
             });
             ctx.restore();
@@ -553,7 +565,7 @@ function renderJitter(keys) {
     jitterChart = new Chart(ctx, {
         type: 'line',
         data: { labels, datasets },
-        plugins: [boxPlugin],
+        plugins: [violinPlugin],
         options: {
             responsive: true,
             maintainAspectRatio: false,
