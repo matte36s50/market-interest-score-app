@@ -60,14 +60,16 @@ function injectAuctionCounts(rows, batCounts) {
     });
 }
 
-// MII component weights
+// MII component weights — the actual formula, kept in sync with mii-normalize.js.
 const COMPONENTS = [
-    { key: 'price_normalized',                  label: 'Sale Price',     weight: 0.30, color: '#f59e0b' },
-    { key: 'bids_normalized',                   label: 'Bid Activity',   weight: 0.30, color: '#3b82f6' },
-    { key: 'views_normalized',                  label: 'View Count',     weight: 0.20, color: '#10b981' },
-    { key: 'comments_normalized',               label: 'Comments',       weight: 0.12, color: '#8b5cf6' },
+    { key: 'price_normalized',                  label: 'Sale Price',     weight: 0.20, color: '#f59e0b' },
+    { key: 'bids_normalized',                   label: 'Bid Activity',   weight: 0.20, color: '#3b82f6' },
+    { key: 'views_normalized',                  label: 'View Count',     weight: 0.15, color: '#10b981' },
+    { key: 'google_trends_interest_normalized', label: 'Google Trends',  weight: 0.15, color: '#ef4444' },
+    { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, color: '#8b5cf6' },
+    { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, color: '#14b8a6' },
     { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, color: '#ec4899' },
-    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.03, color: '#6b7280' },
+    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6b7280' },
 ];
 
 const METRIC_LABELS = {
@@ -283,6 +285,10 @@ async function init() {
         rawData = loadedData;
         batRawRows = batResult.rows;
         injectAuctionCounts(rawData, batResult.counts);
+
+        // Replace upstream min-max normalization with percentile ranks and
+        // recompute mii_score before filtering/aggregation (mii-normalize.js).
+        if (window.MII) MII.recompute(rawData);
 
         const rawCount = rawData.length;
 

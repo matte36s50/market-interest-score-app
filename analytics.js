@@ -10,19 +10,19 @@
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 
-// The dimensions of a model's MII profile. Weights mirror the published MII
-// formula (price 30%, bids 30%, views 20%, comments 12%, social 5%, age 3%);
-// Google Trends and YouTube feed the social score, so they carry no extra
-// weight in the similarity distance but are still shown on the radar.
+// The dimensions of a model's MII profile. Weights are the actual MII formula
+// (kept in sync with mii-normalize.js): price 20%, bids 20%, views 15%,
+// comments 10%, Google Trends 15%, YouTube 10%, social 5%, age 5%. All eight
+// inputs carry real weight, so each contributes to the similarity distance.
 const PROFILE_DIMS = [
-    { key: 'price_normalized', label: 'Price', weight: 0.30 },
-    { key: 'bids_normalized', label: 'Bids', weight: 0.30 },
-    { key: 'views_normalized', label: 'Views', weight: 0.20 },
-    { key: 'comments_normalized', label: 'Comments', weight: 0.12 },
+    { key: 'price_normalized', label: 'Price', weight: 0.20 },
+    { key: 'bids_normalized', label: 'Bids', weight: 0.20 },
+    { key: 'views_normalized', label: 'Views', weight: 0.15 },
+    { key: 'comments_normalized', label: 'Comments', weight: 0.10 },
     { key: 'social_score_normalized', label: 'Social', weight: 0.05 },
-    { key: 'age_normalized', label: 'Age', weight: 0.03 },
-    { key: 'google_trends_interest_normalized', label: 'Google Trends', weight: 0 },
-    { key: 'youtube_total_views_normalized', label: 'YouTube', weight: 0 },
+    { key: 'age_normalized', label: 'Age', weight: 0.05 },
+    { key: 'google_trends_interest_normalized', label: 'Google Trends', weight: 0.15 },
+    { key: 'youtube_total_views_normalized', label: 'YouTube', weight: 0.10 },
 ];
 
 const MAX_COMPARISONS = 5;   // additional models beyond the base
@@ -45,6 +45,7 @@ let comparisonKeys = [];
 let radarChart = null;
 let trendChart = null;
 let benchmarkChart = null;
+let jitterChart = null;
 
 // ---- Data loading ----
 
@@ -77,6 +78,10 @@ async function loadCSV() {
 }
 
 function buildModels(rawData) {
+    // Replace the upstream min-max normalization with percentile ranks and
+    // recompute mii_score before profiles/benchmarks are built (mii-normalize.js).
+    if (window.MII) MII.recompute(rawData);
+
     // String() guards: model names like "959" or "2002" must never be treated
     // as numbers anywhere downstream (sorting, .toLowerCase searches, keys).
     const valid = rawData.filter(row =>
@@ -414,6 +419,108 @@ function renderTrend(keys) {
     });
 }
 
+// Deterministic horizontal jitter so a model's point sits in the same spot on
+// every redraw (a hash of the key keeps it stable instead of Math.random).
+function jitterOffset(key, dimIndex) {
+    let h = 2166136261;
+    const s = key + '#' + dimIndex;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (((h >>> 0) % 1000) / 1000 - 0.5) * 0.6;   // ±0.3 around the column
+}
+
+// JMP-style strip plot: one column per MII input, every model dropped in as a
+// point at its percentile (0–1), with the selected models highlighted on top.
+function renderJitter(keys) {
+    const ctx = document.getElementById('jitterChart').getContext('2d');
+    if (jitterChart) jitterChart.destroy();
+
+    const selected = new Set(keys);
+
+    // Background: all reasonably-sampled models that aren't currently selected.
+    const bg = [];
+    modelKeys.forEach(k => {
+        const m = models[k];
+        if (m.count < 2 || selected.has(k)) return;
+        m.profile.forEach((v, i) => {
+            bg.push({ x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label });
+        });
+    });
+
+    const datasets = [{
+        label: 'All models (≥2 mo)',
+        data: bg,
+        backgroundColor: 'rgba(122,136,152,0.28)',
+        pointRadius: 1.6,
+        pointHoverRadius: 1.6,
+        order: 99,
+    }];
+
+    keys.forEach((k, ki) => {
+        const color = SERIES_COLORS[ki % SERIES_COLORS.length];
+        const pts = models[k].profile.map((v, i) => ({
+            x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label,
+        }));
+        datasets.push({
+            label: modelLabel(k),
+            data: pts,
+            backgroundColor: color,
+            borderColor: '#08111f',
+            borderWidth: 1,
+            pointRadius: 6,
+            pointHoverRadius: 7,
+            order: ki,
+        });
+    });
+
+    jitterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: { datasets },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            interaction: { mode: 'nearest', intersect: true },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: -0.5,
+                    max: PROFILE_DIMS.length - 0.5,
+                    grid: { color: 'rgba(255,255,255,0.04)' },
+                    ticks: {
+                        stepSize: 1,
+                        color: '#7a8898',
+                        font: { size: 10 },
+                        callback: (val) => (Number.isInteger(val) && PROFILE_DIMS[val]) ? PROFILE_DIMS[val].label : '',
+                    },
+                },
+                y: {
+                    min: 0,
+                    max: 1,
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: { color: '#7a8898', font: { size: 11 } },
+                    title: { display: true, text: 'Percentile (0 = lowest, 1 = highest)', color: '#7a8898', font: { size: 11 } },
+                },
+            },
+            plugins: {
+                legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
+                tooltip: {
+                    // Skip the dense grey background layer; only label highlighted models.
+                    filter: (item) => item.datasetIndex !== 0,
+                    callbacks: {
+                        label: (c) => {
+                            const r = c.raw;
+                            return `${r.key.replace('|', ' ')} · ${r.comp}: ${r.y.toFixed(2)}`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+}
+
 function renderBenchmark(keys) {
     const ctx = document.getElementById('benchmarkChart').getContext('2d');
     if (benchmarkChart) benchmarkChart.destroy();
@@ -583,6 +690,7 @@ function renderAll() {
     empty.classList.add('hidden');
     renderRadar(keys);
     renderTrend(keys);
+    renderJitter(keys);
     renderBenchmark(keys);
     renderTable(keys);
 }
