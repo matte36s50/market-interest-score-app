@@ -419,60 +419,127 @@ function renderTrend(keys) {
     });
 }
 
-// Deterministic horizontal jitter so a model's point sits in the same spot on
-// every redraw (a hash of the key keeps it stable instead of Math.random).
-function jitterOffset(key, dimIndex) {
-    let h = 2166136261;
-    const s = key + '#' + dimIndex;
-    for (let i = 0; i < s.length; i++) {
-        h ^= s.charCodeAt(i);
-        h = Math.imul(h, 16777619);
-    }
-    return (((h >>> 0) % 1000) / 1000 - 0.5) * 0.6;   // ±0.3 around the column
+// Average a profile dimension across a set of model keys.
+function avgProfileDim(modelKeyList, dimIndex) {
+    let s = 0, n = 0;
+    modelKeyList.forEach(k => { s += models[k].profile[dimIndex]; n++; });
+    return n ? s / n : 0;
 }
 
-// JMP-style strip plot: one column per MII input, every model dropped in as a
-// point at its percentile (0–1), with the selected models highlighted on top.
+// JMP-style beeswarm: one column per MII input. The field (all models with ≥2
+// months) is fanned out by local density so each column shows its distribution
+// shape. On top — like the benchmark line chart — each selected model is drawn
+// as a line across the columns (solid), with its manufacturer average (dashed)
+// and the overall market average (dashed neutral) for reference.
 function renderJitter(keys) {
     const ctx = document.getElementById('jitterChart').getContext('2d');
     if (jitterChart) jitterChart.destroy();
 
     const selected = new Set(keys);
+    const nDims = PROFILE_DIMS.length;
+    const HALF = 0.40;     // max half-width of a swarm column
+    const BIN = 0.02;      // percentile-bin height for the density fan
+    const DX = 0.055;      // horizontal spacing between neighbours in a bin
 
-    // Background: all reasonably-sampled models that aren't currently selected.
+    // Collect the field per component, then fan each column out symmetrically:
+    // points sharing a percentile bin spread left/right around the column centre,
+    // which reproduces the violin/histogram silhouette of a beeswarm.
+    const fieldKeys = modelKeys.filter(k => models[k].count >= 2);
     const bg = [];
-    modelKeys.forEach(k => {
-        const m = models[k];
-        if (m.count < 2 || selected.has(k)) return;
-        m.profile.forEach((v, i) => {
-            bg.push({ x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label });
+    for (let i = 0; i < nDims; i++) {
+        const col = [];
+        fieldKeys.forEach(k => {
+            if (selected.has(k)) return;
+            col.push({ y: models[k].profile[i], key: k });
         });
-    });
+        col.sort((a, b) => a.y - b.y);
+
+        const buckets = {};
+        col.forEach(p => { const b = Math.round(p.y / BIN); (buckets[b] = buckets[b] || []).push(p); });
+        Object.values(buckets).forEach(arr => {
+            const n = arr.length;
+            const dx = n > 1 ? Math.min(DX, (2 * HALF) / (n - 1)) : 0;
+            arr.forEach((p, j) => {
+                bg.push({ x: i + (j - (n - 1) / 2) * dx, y: p.y, key: p.key, comp: PROFILE_DIMS[i].label });
+            });
+        });
+    }
 
     const datasets = [{
         label: 'All models (≥2 mo)',
         data: bg,
-        backgroundColor: 'rgba(122,136,152,0.28)',
-        pointRadius: 1.6,
-        pointHoverRadius: 1.6,
+        backgroundColor: 'rgba(160,174,192,0.45)',
+        pointRadius: 2,
+        pointHoverRadius: 2,
         order: 99,
     }];
 
+    // A line is plotted at x = component index (column centre), so it threads
+    // through the swarm at each model's / average's percentile.
+    const lineFrom = (vals, key) => vals.map((v, i) => ({ x: i, y: v, key, comp: PROFILE_DIMS[i].label }));
+
+    const seenMfr = new Set();
     keys.forEach((k, ki) => {
         const color = SERIES_COLORS[ki % SERIES_COLORS.length];
-        const pts = models[k].profile.map((v, i) => ({
-            x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label,
-        }));
+        // The model itself: solid line + large points across the columns.
         datasets.push({
+            type: 'line',
             label: modelLabel(k),
-            data: pts,
+            data: lineFrom(models[k].profile, modelLabel(k)),
+            borderColor: color,
             backgroundColor: color,
-            borderColor: '#08111f',
-            borderWidth: 1,
+            pointBackgroundColor: color,
+            pointBorderColor: '#08111f',
+            pointBorderWidth: 1.5,
             pointRadius: 6,
             pointHoverRadius: 7,
+            borderWidth: 2,
+            showLine: true,
+            tension: 0,
+            fill: false,
             order: ki,
         });
+
+        // Manufacturer average (dashed), de-duplicated across selected models.
+        const mfr = models[k].manufacturer;
+        if (!seenMfr.has(mfr)) {
+            seenMfr.add(mfr);
+            const mfrKeys = fieldKeys.filter(fk => models[fk].manufacturer === mfr);
+            if (mfrKeys.length) {
+                const prof = PROFILE_DIMS.map((_, i) => avgProfileDim(mfrKeys, i));
+                datasets.push({
+                    type: 'line',
+                    label: `${mfr} (mfr avg)`,
+                    data: lineFrom(prof, `${mfr} avg`),
+                    borderColor: color,
+                    backgroundColor: color,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    borderWidth: 1.5,
+                    showLine: true,
+                    tension: 0,
+                    fill: false,
+                    order: 50,
+                });
+            }
+        }
+    });
+
+    // Overall market average across all field models (dashed neutral reference).
+    const marketProf = PROFILE_DIMS.map((_, i) => avgProfileDim(fieldKeys, i));
+    datasets.push({
+        type: 'line',
+        label: 'Market avg',
+        data: lineFrom(marketProf, 'Market avg'),
+        borderColor: '#cfc8bc',
+        backgroundColor: '#cfc8bc',
+        borderDash: [2, 3],
+        pointRadius: 0,
+        borderWidth: 2,
+        showLine: true,
+        tension: 0,
+        fill: false,
+        order: 60,
     });
 
     jitterChart = new Chart(ctx, {
