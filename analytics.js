@@ -426,66 +426,81 @@ function avgProfileDim(modelKeyList, dimIndex) {
     return n ? s / n : 0;
 }
 
-// JMP-style beeswarm: one column per MII input. The field (all models with ≥2
-// months) is fanned out by local density so each column shows its distribution
-// shape. On top — like the benchmark line chart — each selected model is drawn
-// as a line across the columns (solid), with its manufacturer average (dashed)
-// and the overall market average (dashed neutral) for reference.
+// Linear-interpolated quantile of a sorted numeric array.
+function quantileSorted(sorted, q) {
+    if (!sorted.length) return 0;
+    const pos = (sorted.length - 1) * q;
+    const lo = Math.floor(pos), hi = Math.ceil(pos);
+    return lo === hi ? sorted[lo] : sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+
+// Component spread plot: a box-and-whisker per MII input summarising where the
+// whole field of models sits (10/25/50/75/90 percentile), with each selected
+// model drawn as a line across the columns (like the benchmark chart), plus its
+// manufacturer average and the overall market average as dashed reference lines.
 function renderJitter(keys) {
     const ctx = document.getElementById('jitterChart').getContext('2d');
     if (jitterChart) jitterChart.destroy();
 
-    const selected = new Set(keys);
-    const nDims = PROFILE_DIMS.length;
-    const HALF = 0.40;     // max half-width of a swarm column
-    const BIN = 0.02;      // percentile-bin height for the density fan
-    const DX = 0.055;      // horizontal spacing between neighbours in a bin
-
-    // Collect the field per component, then fan each column out symmetrically:
-    // points sharing a percentile bin spread left/right around the column centre,
-    // which reproduces the violin/histogram silhouette of a beeswarm.
+    const labels = PROFILE_DIMS.map(d => d.label);
     const fieldKeys = modelKeys.filter(k => models[k].count >= 2);
-    const bg = [];
-    for (let i = 0; i < nDims; i++) {
-        const col = [];
-        fieldKeys.forEach(k => {
-            if (selected.has(k)) return;
-            col.push({ y: models[k].profile[i], key: k });
-        });
-        col.sort((a, b) => a.y - b.y);
 
-        const buckets = {};
-        col.forEach(p => { const b = Math.round(p.y / BIN); (buckets[b] = buckets[b] || []).push(p); });
-        Object.values(buckets).forEach(arr => {
-            const n = arr.length;
-            const dx = n > 1 ? Math.min(DX, (2 * HALF) / (n - 1)) : 0;
-            arr.forEach((p, j) => {
-                bg.push({ x: i + (j - (n - 1) / 2) * dx, y: p.y, key: p.key, comp: PROFILE_DIMS[i].label });
+    // Box stats per component, computed across the whole field.
+    const boxStats = PROFILE_DIMS.map((_, i) => {
+        const vals = fieldKeys.map(k => models[k].profile[i]).sort((a, b) => a - b);
+        return {
+            p10: quantileSorted(vals, 0.10), p25: quantileSorted(vals, 0.25),
+            p50: quantileSorted(vals, 0.50), p75: quantileSorted(vals, 0.75),
+            p90: quantileSorted(vals, 0.90),
+        };
+    });
+
+    // Draw the boxes behind the line series with a small inline plugin.
+    const boxPlugin = {
+        id: 'componentBoxes',
+        beforeDatasetsDraw(chart) {
+            const { ctx, chartArea, scales: { x, y } } = chart;
+            if (!x || !y || !chartArea) return;
+            const halfW = Math.min(34, (chartArea.width / boxStats.length) * 0.26);
+            const capW = halfW * 0.55;
+            const yp = v => y.getPixelForValue(v);
+            ctx.save();
+            boxStats.forEach((s, i) => {
+                const cx = x.getPixelForValue(i);
+                // whiskers p10–p25 and p75–p90, with end caps
+                ctx.strokeStyle = 'rgba(160,174,192,0.55)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(cx, yp(s.p90)); ctx.lineTo(cx, yp(s.p75));
+                ctx.moveTo(cx, yp(s.p25)); ctx.lineTo(cx, yp(s.p10));
+                ctx.moveTo(cx - capW, yp(s.p90)); ctx.lineTo(cx + capW, yp(s.p90));
+                ctx.moveTo(cx - capW, yp(s.p10)); ctx.lineTo(cx + capW, yp(s.p10));
+                ctx.stroke();
+                // interquartile box p25–p75
+                const top = yp(s.p75), h = yp(s.p25) - yp(s.p75);
+                ctx.fillStyle = 'rgba(122,136,152,0.18)';
+                ctx.strokeStyle = 'rgba(160,174,192,0.6)';
+                ctx.fillRect(cx - halfW, top, halfW * 2, h);
+                ctx.strokeRect(cx - halfW, top, halfW * 2, h);
+                // median
+                ctx.strokeStyle = 'rgba(207,200,188,0.85)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - halfW, yp(s.p50)); ctx.lineTo(cx + halfW, yp(s.p50));
+                ctx.stroke();
             });
-        });
-    }
+            ctx.restore();
+        },
+    };
 
-    const datasets = [{
-        label: 'All models (≥2 mo)',
-        data: bg,
-        backgroundColor: 'rgba(160,174,192,0.45)',
-        pointRadius: 2,
-        pointHoverRadius: 2,
-        order: 99,
-    }];
-
-    // A line is plotted at x = component index (column centre), so it threads
-    // through the swarm at each model's / average's percentile.
-    const lineFrom = (vals, key) => vals.map((v, i) => ({ x: i, y: v, key, comp: PROFILE_DIMS[i].label }));
-
+    const datasets = [];
     const seenMfr = new Set();
     keys.forEach((k, ki) => {
         const color = SERIES_COLORS[ki % SERIES_COLORS.length];
         // The model itself: solid line + large points across the columns.
         datasets.push({
-            type: 'line',
             label: modelLabel(k),
-            data: lineFrom(models[k].profile, modelLabel(k)),
+            data: models[k].profile.slice(),
             borderColor: color,
             backgroundColor: color,
             pointBackgroundColor: color,
@@ -494,29 +509,24 @@ function renderJitter(keys) {
             pointRadius: 6,
             pointHoverRadius: 7,
             borderWidth: 2,
-            showLine: true,
             tension: 0,
             fill: false,
             order: ki,
         });
-
         // Manufacturer average (dashed), de-duplicated across selected models.
         const mfr = models[k].manufacturer;
         if (!seenMfr.has(mfr)) {
             seenMfr.add(mfr);
             const mfrKeys = fieldKeys.filter(fk => models[fk].manufacturer === mfr);
             if (mfrKeys.length) {
-                const prof = PROFILE_DIMS.map((_, i) => avgProfileDim(mfrKeys, i));
                 datasets.push({
-                    type: 'line',
                     label: `${mfr} (mfr avg)`,
-                    data: lineFrom(prof, `${mfr} avg`),
+                    data: PROFILE_DIMS.map((_, i) => avgProfileDim(mfrKeys, i)),
                     borderColor: color,
                     backgroundColor: color,
                     borderDash: [6, 4],
                     pointRadius: 0,
                     borderWidth: 1.5,
-                    showLine: true,
                     tension: 0,
                     fill: false,
                     order: 50,
@@ -525,43 +535,35 @@ function renderJitter(keys) {
         }
     });
 
-    // Overall market average across all field models (dashed neutral reference).
-    const marketProf = PROFILE_DIMS.map((_, i) => avgProfileDim(fieldKeys, i));
+    // Overall market average across the field (dashed neutral reference).
     datasets.push({
-        type: 'line',
         label: 'Market avg',
-        data: lineFrom(marketProf, 'Market avg'),
+        data: PROFILE_DIMS.map((_, i) => avgProfileDim(fieldKeys, i)),
         borderColor: '#cfc8bc',
         backgroundColor: '#cfc8bc',
         borderDash: [2, 3],
         pointRadius: 0,
         borderWidth: 2,
-        showLine: true,
         tension: 0,
         fill: false,
         order: 60,
     });
 
     jitterChart = new Chart(ctx, {
-        type: 'scatter',
-        data: { datasets },
+        type: 'line',
+        data: { labels, datasets },
+        plugins: [boxPlugin],
         options: {
             responsive: true,
             maintainAspectRatio: false,
             animation: false,
             interaction: { mode: 'nearest', intersect: true },
+            layout: { padding: { top: 8 } },
             scales: {
                 x: {
-                    type: 'linear',
-                    min: -0.5,
-                    max: PROFILE_DIMS.length - 0.5,
+                    offset: true,
                     grid: { color: 'rgba(255,255,255,0.04)' },
-                    ticks: {
-                        stepSize: 1,
-                        color: '#7a8898',
-                        font: { size: 10 },
-                        callback: (val) => (Number.isInteger(val) && PROFILE_DIMS[val]) ? PROFILE_DIMS[val].label : '',
-                    },
+                    ticks: { color: '#7a8898', font: { size: 11 } },
                 },
                 y: {
                     min: 0,
@@ -574,13 +576,8 @@ function renderJitter(keys) {
             plugins: {
                 legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
                 tooltip: {
-                    // Skip the dense grey background layer; only label highlighted models.
-                    filter: (item) => item.datasetIndex !== 0,
                     callbacks: {
-                        label: (c) => {
-                            const r = c.raw;
-                            return `${r.key.replace('|', ' ')} · ${r.comp}: ${r.y.toFixed(2)}`;
-                        },
+                        label: (c) => `${c.dataset.label} · ${c.label}: ${Number(c.parsed.y).toFixed(2)}`,
                     },
                 },
             },
