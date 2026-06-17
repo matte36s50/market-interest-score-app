@@ -152,6 +152,8 @@ async function loadCSVData() {
                     reject(new Error('No data in CSV'));
                     return;
                 }
+                // Percentile-rank normalization + mii_score recompute (mii-normalize.js).
+                if (window.MII) MII.recompute(results.data);
                 resolve(results.data);
             },
             error: (err) => reject(err)

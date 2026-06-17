@@ -263,6 +263,10 @@ async function loadCSVData() {
 
 // Process CSV data into dashboard format
 function processCSVData(rawData) {
+    // Replace the upstream min-max normalization with percentile ranks and
+    // recompute mii_score before anything reads it (see mii-normalize.js).
+    if (window.MII) MII.recompute(rawData);
+
     // Filter out invalid quarters and rows
     const validData = rawData.filter(row =>
         row.quarter &&

@@ -109,7 +109,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div class="chart-container">
                 <h2 class="font-semibold text-[13px] text-[#1c1917]">MII Profile</h2>
-                <p class="text-[11px] text-[#a8a29e] mt-0.5 mb-4">Normalized input dimensions (0–1), averaged across each model's months</p>
+                <p class="text-[11px] text-[#a8a29e] mt-0.5 mb-4">Percentile rank per input (0–1), averaged across each model's months</p>
                 <div style="height: 380px;">
                     <canvas id="radarChart"></canvas>
                 </div>
@@ -120,6 +120,15 @@
                 <div style="height: 380px;">
                     <canvas id="trendChart"></canvas>
                 </div>
+            </div>
+        </div>
+
+        <!-- Component percentile jitter plot -->
+        <div class="chart-container mb-5">
+            <h2 class="font-semibold text-[13px] text-[#1c1917]">Component Percentiles</h2>
+            <p class="text-[11px] text-[#a8a29e] mt-0.5 mb-4">Where each selected model ranks on every MII input. Each point is a model's percentile for that component (0 = lowest in the dataset, 1 = highest, 0.5 = median). Grey points are all other models with ≥2 months of data; coloured points are your selected models.</p>
+            <div style="height: 380px;">
+                <canvas id="jitterChart"></canvas>
             </div>
         </div>
 
@@ -174,6 +183,7 @@
     </div>
 </footer>
 
+<script src="mii-normalize.js"></script>
 <script src="analytics.js"></script>
 </body>
 </html>

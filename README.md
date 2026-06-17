@@ -22,14 +22,33 @@ A comprehensive, interactive dashboard for tracking collector car market interes
 
 ## MII Formula
 
-The Market Interest Index is calculated using the following weighted factors:
+The Market Interest Index is a weighted blend of eight inputs:
 
-- **Sale Price**: 30%
-- **Bid Activity**: 30%
-- **View Count**: 20%
-- **Comments**: 12%
+- **Sale Price**: 20%
+- **Bid Activity**: 20%
+- **View Count**: 15%
+- **Google Trends Interest**: 15%
+- **Comments**: 10%
+- **YouTube Views**: 10%
 - **Social Engagement**: 5%
-- **Vehicle Age**: 3%
+- **Vehicle Age**: 5%
+
+The weights sum to 1.0, so `MII = 100 × Σ(weight × normalized input)`.
+
+### Normalization (percentile rank)
+
+Each input is converted to a **percentile rank** across the whole dataset before
+weighting: 0 = lowest, 1 = highest, ~0.5 = the median car. This is done in the
+browser by `mii-normalize.js`, which every page calls right after loading the
+CSV, so the classic and HAGI pages always agree on a car's score.
+
+Percentile ranking replaces the older min-max scaling (value ÷ dataset-max).
+Auction prices, views, and comments are extremely right-skewed — a handful of
+seven-figure cars and a long tail of affordable ones — so min-max scaling pushed
+the typical car's normalized value toward zero and crushed nearly every score
+into the 20s–30s. Percentile rank spreads models across the full 0–100 range and
+makes the score answer "how does this car rank versus the field" rather than
+"what fraction of the single priciest car's value did it reach".
 
 ## Confidence Levels
 
