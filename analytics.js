@@ -419,8 +419,8 @@ function renderTrend(keys) {
     });
 }
 
-// Deterministic horizontal jitter so a model's point sits in the same spot on
-// every redraw (a hash of the key keeps it stable instead of Math.random).
+// Deterministic small jitter (hash of key) so a selected model lands in the same
+// spot on every redraw instead of jumping around.
 function jitterOffset(key, dimIndex) {
     let h = 2166136261;
     const s = key + '#' + dimIndex;
@@ -428,47 +428,68 @@ function jitterOffset(key, dimIndex) {
         h ^= s.charCodeAt(i);
         h = Math.imul(h, 16777619);
     }
-    return (((h >>> 0) % 1000) / 1000 - 0.5) * 0.6;   // ±0.3 around the column
+    return (((h >>> 0) % 1000) / 1000 - 0.5);   // [-0.5, 0.5]
 }
 
-// JMP-style strip plot: one column per MII input, every model dropped in as a
-// point at its percentile (0–1), with the selected models highlighted on top.
+// JMP-style beeswarm: one column per MII input. The field (all models with ≥2
+// months) is fanned out by local density so each column shows its distribution
+// shape; the selected models sit on top as large points at their own percentile.
 function renderJitter(keys) {
     const ctx = document.getElementById('jitterChart').getContext('2d');
     if (jitterChart) jitterChart.destroy();
 
     const selected = new Set(keys);
+    const nDims = PROFILE_DIMS.length;
+    const HALF = 0.40;     // max half-width of a swarm column
+    const BIN = 0.02;      // percentile-bin height for the density fan
+    const DX = 0.055;      // horizontal spacing between neighbours in a bin
 
-    // Background: all reasonably-sampled models that aren't currently selected.
+    // Collect the field per component, then fan each column out symmetrically:
+    // points sharing a percentile bin spread left/right around the column centre,
+    // which reproduces the violin/histogram silhouette of a beeswarm.
     const bg = [];
-    modelKeys.forEach(k => {
-        const m = models[k];
-        if (m.count < 2 || selected.has(k)) return;
-        m.profile.forEach((v, i) => {
-            bg.push({ x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label });
+    for (let i = 0; i < nDims; i++) {
+        const col = [];
+        modelKeys.forEach(k => {
+            const m = models[k];
+            if (m.count < 2 || selected.has(k)) return;
+            col.push({ y: m.profile[i], key: k });
         });
-    });
+        col.sort((a, b) => a.y - b.y);
+
+        const buckets = {};
+        col.forEach(p => { const b = Math.round(p.y / BIN); (buckets[b] = buckets[b] || []).push(p); });
+        Object.values(buckets).forEach(arr => {
+            const n = arr.length;
+            const dx = n > 1 ? Math.min(DX, (2 * HALF) / (n - 1)) : 0;
+            arr.forEach((p, j) => {
+                bg.push({ x: i + (j - (n - 1) / 2) * dx, y: p.y, key: p.key, comp: PROFILE_DIMS[i].label });
+            });
+        });
+    }
 
     const datasets = [{
         label: 'All models (≥2 mo)',
         data: bg,
-        backgroundColor: 'rgba(122,136,152,0.28)',
-        pointRadius: 1.6,
-        pointHoverRadius: 1.6,
+        backgroundColor: 'rgba(160,174,192,0.45)',
+        pointRadius: 2,
+        pointHoverRadius: 2,
         order: 99,
     }];
 
     keys.forEach((k, ki) => {
         const color = SERIES_COLORS[ki % SERIES_COLORS.length];
+        // Selected models ride near the column centre (small stable jitter) and
+        // on top, so they read clearly against the grey field.
         const pts = models[k].profile.map((v, i) => ({
-            x: i + jitterOffset(k, i), y: v, key: k, comp: PROFILE_DIMS[i].label,
+            x: i + jitterOffset(k, i) * 0.18, y: v, key: k, comp: PROFILE_DIMS[i].label,
         }));
         datasets.push({
             label: modelLabel(k),
             data: pts,
             backgroundColor: color,
             borderColor: '#08111f',
-            borderWidth: 1,
+            borderWidth: 1.5,
             pointRadius: 6,
             pointHoverRadius: 7,
             order: ki,
