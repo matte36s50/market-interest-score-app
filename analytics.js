@@ -625,6 +625,7 @@ function renderBenchmark(keys) {
             borderColor: color,
             backgroundColor: color,
             pointBackgroundColor: color,
+            pointStyle: 'circle',
             spanGaps: true,
             tension: 0.3,
             pointRadius: 3,
@@ -641,6 +642,7 @@ function renderBenchmark(keys) {
                 borderColor: color,
                 backgroundColor: color,
                 borderDash: [6, 4],
+                pointStyle: 'line',
                 spanGaps: true,
                 tension: 0.3,
                 pointRadius: 0,
@@ -656,6 +658,7 @@ function renderBenchmark(keys) {
         borderColor: '#cfc8bc',
         backgroundColor: '#cfc8bc',
         borderDash: [2, 3],
+        pointStyle: 'line',
         spanGaps: true,
         tension: 0.3,
         pointRadius: 0,
@@ -680,7 +683,18 @@ function renderBenchmark(keys) {
                 }
             },
             plugins: {
-                legend: { labels: { color: '#7a8898', boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
+                legend: {
+                    labels: {
+                        color: '#7a8898',
+                        // Wider swatch + usePointStyle lets each dataset's pointStyle
+                        // ('circle' for models, 'line' for the dashed/dotted averages)
+                        // and borderDash render in the legend, so solid vs dashed vs
+                        // dotted is distinguishable even when colours repeat.
+                        boxWidth: 34,
+                        usePointStyle: true,
+                        font: { size: 11 }
+                    }
+                }
             }
         }
     });
