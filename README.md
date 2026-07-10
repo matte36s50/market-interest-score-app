@@ -173,6 +173,28 @@ with:
 This makes outlier sales (e.g. a $56K E46 M3 in a month that averaged $28K) visible
 and traceable. Non-USD sales are listed in the table but omitted from the price axis.
 
+## Live-Auction Admin Tab
+
+`admin.html` (linked as **Admin** in the dashboard header) is a data-entry page
+for results from live auction events (RM Sotheby's, Gooding, Bonhams, Mecum…).
+Enter the event once, quick-add lots (an **APEX** badge lights up at a ≥$500K
+low estimate), then **Save to GitHub** — the page commits the rows to
+`data/auction_lots.csv` via the GitHub Contents API using a fine-grained
+personal access token (scoped to this repo, Contents read/write only) that is
+stored solely in your browser's localStorage.
+
+On each commit touching `data/auction_lots.csv`, the
+`data-pipelines.yml` workflow reruns `auction_rating.py` and `mai.py`, commits
+the regenerated `data/auction_ratings.csv` / `data/mai_scores.csv`, and
+re-triggers the Pages deploy — so the Manufacturer Apex Index chart on the
+dashboard updates within a few minutes of saving.
+
+Offline/no-token fallback: **Download CSV** exports existing + pending rows as
+a merged `auction_lots.csv` for a manual commit. Pending lots persist in
+localStorage, so closing the tab mid-event loses nothing. Duplicates are
+flagged using the same key as `sync_from_garage_draft.py`
+(event + manufacturer + model + year).
+
 ## Data Maintenance Scripts
 
 Run from the repo root (`node scripts/<name>.js`). All three read `bat.csv` from

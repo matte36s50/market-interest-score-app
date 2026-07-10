@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MII Admin - Live Auction Results Entry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Styling only — the page stays functional if the CDN is unreachable.
+        if (typeof tailwind !== 'undefined') tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            950: '#09090b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Keep show/hide working even if the Tailwind CDN fails to load. */
+        .hidden { display: none !important; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .field-input {
+            background-color: #27272a;
+            border: 1px solid #3f3f46;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            width: 100%;
+        }
+        .field-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+        }
+        .field-label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #71717a;
+            margin-bottom: 0.35rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100">
+    <!-- Header -->
+    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
+                        MII
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">Auction Results Admin</h1>
+                        <p class="text-xs text-zinc-500">Enter live auction lots &rarr; data/auction_lots.csv &rarr; MAI pipelines</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="connStatus" class="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-500">Not connected</span>
+                    <a href="index.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
+                        &larr; Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-8 space-y-6">
+
+        <!-- GitHub connection settings -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <button id="settingsToggle" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-zinc-800/40 transition-colors">
+                <div>
+                    <h2 class="font-semibold">GitHub Connection</h2>
+                    <p class="text-xs text-zinc-500 mt-1">Saving commits rows to <code class="font-mono text-zinc-400">data/auction_lots.csv</code>; a GitHub Action then recomputes the Auction Ratings and MAI automatically.</p>
+                </div>
+                <span id="settingsChevron" class="text-zinc-500">&#9662;</span>
+            </button>
+            <div id="settingsBody" class="px-5 pb-5 border-t border-zinc-800 pt-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="field-label">Repository owner</label>
+                        <input id="cfgOwner" class="field-input font-mono" placeholder="matte36s50" />
+                    </div>
+                    <div>
+                        <label class="field-label">Repository name</label>
+                        <input id="cfgRepo" class="field-input font-mono" placeholder="market-interest-score-app" />
+                    </div>
+                    <div>
+                        <label class="field-label">Branch</label>
+                        <input id="cfgBranch" class="field-input font-mono" placeholder="main" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="field-label">Fine-grained personal access token</label>
+                    <input id="cfgToken" type="password" class="field-input font-mono" placeholder="github_pat_..." autocomplete="off" />
+                    <p class="text-xs text-zinc-600 mt-2">
+                        Create at GitHub &rarr; Settings &rarr; Developer settings &rarr; Fine-grained tokens. Scope it to <strong>only this repository</strong>
+                        with <strong>Contents: Read and write</strong> permission (nothing else). The token is stored only in this browser's localStorage
+                        and sent only to <code class="font-mono">api.github.com</code>.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="btnConnect" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-sm font-medium transition-colors">Save &amp; test connection</button>
+                    <button id="btnForget" class="px-4 py-2 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 rounded-lg text-sm text-zinc-400 transition-colors">Forget token</button>
+                    <span id="settingsMsg" class="text-xs text-zinc-500"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event details -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <h2 class="font-semibold mb-1">1 &middot; Event</h2>
+            <p class="text-xs text-zinc-500 mb-4">Entered once; applied to every lot you add below.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="field-label">Event name</label>
+                    <input id="evName" class="field-input" placeholder="RM Sotheby's Monterey 2026" list="eventSuggestions" />
+                    <datalist id="eventSuggestions"></datalist>
+                </div>
+                <div>
+                    <label class="field-label">Event date</label>
+                    <input id="evDate" type="date" class="field-input" />
+                </div>
+                <div>
+                    <label class="field-label">Auction house</label>
+                    <input id="evHouse" class="field-input" placeholder="RM Sotheby's" list="houseSuggestions" />
+                    <datalist id="houseSuggestions">
+                        <option value="RM Sotheby's"></option>
+                        <option value="Gooding & Company"></option>
+                        <option value="Bonhams"></option>
+                        <option value="Mecum"></option>
+                        <option value="Broad Arrow"></option>
+                        <option value="Barrett-Jackson"></option>
+                        <option value="Artcurial"></option>
+                        <option value="Christie's"></option>
+                    </datalist>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lot entry -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center justify-between mb-1">
+                <h2 class="font-semibold">2 &middot; Add lot</h2>
+                <span id="apexBadge" class="hidden text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-400">APEX LOT &middot; &ge;$500K</span>
+            </div>
+            <p class="text-xs text-zinc-500 mb-4">Press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-zinc-400">Enter</kbd> in any field to add the lot.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label class="field-label">Lot #</label>
+                    <input id="lotNumber" class="field-input" placeholder="142" />
+                </div>
+                <div>
+                    <label class="field-label">Manufacturer</label>
+                    <input id="lotMake" class="field-input" placeholder="Ferrari" />
+                </div>
+                <div>
+                    <label class="field-label">Model</label>
+                    <input id="lotModel" class="field-input" placeholder="250 GT Lusso" />
+                </div>
+                <div>
+                    <label class="field-label">Year</label>
+                    <input id="lotYear" type="number" class="field-input" placeholder="1963" min="1885" max="2030" />
+                </div>
+                <div>
+                    <label class="field-label">Low estimate (USD)</label>
+                    <input id="lotLow" type="number" class="field-input" placeholder="1500000" min="0" />
+                </div>
+                <div>
+                    <label class="field-label">High estimate (USD)</label>
+                    <input id="lotHigh" type="number" class="field-input" placeholder="1800000" min="0" />
+                </div>
+                <div>
+                    <label class="field-label">Sold price (USD)</label>
+                    <input id="lotPrice" type="number" class="field-input" placeholder="1655000" min="0" />
+                </div>
+                <div>
+                    <label class="field-label">Result</label>
+                    <div class="flex items-center gap-2 h-[38px]">
+                        <label class="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer select-none">
+                            <input id="lotSold" type="checkbox" checked class="w-4 h-4 accent-amber-500" />
+                            Sold
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-end">
+                <div>
+                    <label class="field-label">Notes (optional)</label>
+                    <input id="lotNotes" class="field-input" placeholder="Matching numbers, ex-works…" />
+                </div>
+                <button id="btnAddLot" class="px-6 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-sm font-semibold transition-colors h-[38px]">+ Add lot</button>
+            </div>
+            <p id="lotMsg" class="text-xs mt-3 hidden"></p>
+        </div>
+
+        <!-- Pending lots -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <div class="border-b border-zinc-800 px-5 py-4 flex items-center justify-between">
+                <div>
+                    <h2 class="font-semibold">3 &middot; Pending lots <span id="pendingCount" class="text-zinc-500 font-normal text-sm">(0)</span></h2>
+                    <p class="text-xs text-zinc-500 mt-1">Kept in this browser until saved — safe to close the tab and come back.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnDownload" class="px-4 py-2 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">Download CSV</button>
+                    <button id="btnSave" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-xs font-semibold transition-colors">Save to GitHub</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-zinc-800/50 text-xs uppercase text-zinc-500">
+                        <tr>
+                            <th class="px-4 py-2 font-medium">Event</th>
+                            <th class="px-4 py-2 font-medium">Lot</th>
+                            <th class="px-4 py-2 font-medium">Car</th>
+                            <th class="px-4 py-2 font-medium text-right">Low est.</th>
+                            <th class="px-4 py-2 font-medium text-right">High est.</th>
+                            <th class="px-4 py-2 font-medium text-right">Price</th>
+                            <th class="px-4 py-2 font-medium">Result</th>
+                            <th class="px-4 py-2 font-medium">Apex</th>
+                            <th class="px-4 py-2 font-medium"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingBody" class="divide-y divide-zinc-800/50"></tbody>
+                </table>
+                <div id="pendingEmpty" class="py-10 text-center text-sm text-zinc-600">No pending lots — add one above.</div>
+            </div>
+            <p id="saveMsg" class="px-5 py-3 text-xs border-t border-zinc-800 hidden"></p>
+        </div>
+
+        <!-- Existing data -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="font-semibold">Already in <code class="font-mono text-sm text-zinc-400">data/auction_lots.csv</code></h2>
+                <button id="btnRefreshExisting" class="text-xs text-zinc-500 hover:text-amber-500 transition-colors">Refresh</button>
+            </div>
+            <div id="existingSummary" class="text-sm text-zinc-500">Connect to GitHub (or open on the deployed site) to load current data.</div>
+        </div>
+
+        <!-- How it flows -->
+        <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 text-xs text-zinc-500 leading-relaxed">
+            <span class="text-zinc-300 font-semibold">How it flows:</span>
+            Save commits your rows to <code class="font-mono">data/auction_lots.csv</code> on the configured branch. A GitHub Action
+            (<code class="font-mono">data-pipelines.yml</code>) then runs <code class="font-mono">auction_rating.py</code> and
+            <code class="font-mono">mai.py</code>, commits the regenerated <code class="font-mono">auction_ratings.csv</code> and
+            <code class="font-mono">mai_scores.csv</code>, and redeploys the site — the Manufacturer Apex Index chart on the dashboard
+            updates within a few minutes. Duplicates are detected by <em>event + manufacturer + model + year</em>, matching the
+            Garage Draft sync script.
+        </div>
+    </main>
+
+    <script src="admin.js?v=1"></script>
+</body>
+</html>
