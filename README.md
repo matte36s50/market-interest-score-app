@@ -198,8 +198,9 @@ flagged using the same key as `sync_from_garage_draft.py`
 ### Claude-powered results importer
 
 Section 2 of the admin page bulk-imports published results: copy any auction
-house's results page (or PDF / press release), paste it in, and press
-**Extract lots**. The page calls the Claude API directly from the browser
+house's results page (or press release), paste it in — or **attach the PDF
+directly** (sent to the API as a native document, so scanned catalogs are read
+visually; up to 30 MB / ~100 pages per import) — and press **Extract lots**. The page calls the Claude API directly from the browser
 (model `claude-opus-4-8`, streaming, structured outputs constrained to the
 `auction_lots.csv` schema) and drops the extracted rows into the pending table.
 Rows the model was unsure about (currency conversions, buyer's-premium

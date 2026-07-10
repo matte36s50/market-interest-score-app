@@ -89,6 +89,7 @@
 
     var config = loadJSON(LS_CONFIG) || { owner: 'matte36s50', repo: 'market-interest-score-app', branch: 'main' };
     var pending = loadJSON(LS_PENDING) || [];
+    var importPdfFile = null;  // PDF attached to the results importer, if any
     var existingRows = null;   // parsed rows currently in the repo's CSV
     var existingSha = null;    // blob sha needed for the PUT
 
@@ -503,10 +504,49 @@
         });
     }
 
+    function setPdf(file) {
+        importPdfFile = file || null;
+        $('pdfName').classList.toggle('hidden', !importPdfFile);
+        $('pdfNameText').textContent = importPdfFile
+            ? importPdfFile.name + ' (' + (importPdfFile.size / 1024 / 1024).toFixed(1) + ' MB)'
+            : '';
+    }
+
+    // Read a File as bare base64 (no data: prefix) for the API's document block.
+    function readFileB64(file) {
+        return new Promise(function (resolve, reject) {
+            var r = new FileReader();
+            r.onload = function () { resolve(String(r.result).split(',')[1]); };
+            r.onerror = function () { reject(new Error('Could not read the PDF file.')); };
+            r.readAsDataURL(file);
+        });
+    }
+
+    // Builds the user-turn content: pasted text, an attached PDF (sent as a
+    // native document block, so scanned pages are read visually), or both.
+    function buildImportContent(pasted) {
+        if (!importPdfFile) {
+            return Promise.resolve('Extract the auction results from this pasted page:\n\n' + pasted);
+        }
+        if (importPdfFile.size > 30 * 1024 * 1024) {
+            return Promise.reject(new Error('PDF is larger than 30 MB — split it or paste the text instead.'));
+        }
+        return readFileB64(importPdfFile).then(function (b64) {
+            return [
+                { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } },
+                {
+                    type: 'text',
+                    text: 'Extract the auction results from the attached PDF.' +
+                        (pasted ? ' Additional pasted context/results follow:\n\n' + pasted : '')
+                }
+            ];
+        });
+    }
+
     function importResults() {
         var msg = $('importMsg');
         var pasted = $('importText').value.trim();
-        if (!pasted) { flash(msg, 'Paste the copied results page first.', 'err'); return; }
+        if (!pasted && !importPdfFile) { flash(msg, 'Paste the copied results page or attach a PDF first.', 'err'); return; }
         if (!anthropicKey()) {
             flash(msg, 'No Anthropic API key configured — add one in the GitHub Connection panel above.', 'err');
             $('settingsBody').classList.remove('hidden');
@@ -514,19 +554,21 @@
         }
 
         $('btnImport').disabled = true;
-        flash(msg, 'Extracting…');
+        flash(msg, importPdfFile ? 'Reading PDF…' : 'Extracting…');
 
-        streamClaude({
-            model: CLAUDE_MODEL,
-            max_tokens: 64000,
-            stream: true,
-            thinking: { type: 'adaptive' },
-            system: EXTRACT_SYSTEM,
-            output_config: { format: { type: 'json_schema', schema: EXTRACT_SCHEMA } },
-            messages: [{ role: 'user', content: 'Extract the auction results from this pasted page:\n\n' + pasted }]
-        }, function (partial) {
-            var n = (partial.match(/"manufacturer"/g) || []).length;
-            flash(msg, 'Extracting… ' + n + ' lots so far');
+        buildImportContent(pasted).then(function (content) {
+            return streamClaude({
+                model: CLAUDE_MODEL,
+                max_tokens: 64000,
+                stream: true,
+                thinking: { type: 'adaptive' },
+                system: EXTRACT_SYSTEM,
+                output_config: { format: { type: 'json_schema', schema: EXTRACT_SCHEMA } },
+                messages: [{ role: 'user', content: content }]
+            }, function (partial) {
+                var n = (partial.match(/"manufacturer"/g) || []).length;
+                flash(msg, 'Extracting… ' + n + ' lots so far');
+            });
         }).then(function (text) {
             var parsed = JSON.parse(text);
             var ev = parsed.event || {};
@@ -566,6 +608,8 @@
             });
             renderPending();
             $('importText').value = '';
+            $('importPdf').value = '';
+            setPdf(null);
             flash(msg, 'Imported ' + (parsed.lots || []).length + ' lots' +
                 (flagged ? ' — ' + flagged + ' flagged for review (amber rows below)' : '') +
                 '. Review the pending table, then Save to GitHub.', flagged ? 'warn' : 'ok');
@@ -638,6 +682,8 @@
     $('btnConnect').addEventListener('click', testConnection);
     $('btnForget').addEventListener('click', forgetToken);
     $('btnImport').addEventListener('click', importResults);
+    $('importPdf').addEventListener('change', function () { setPdf(this.files[0]); });
+    $('pdfClear').addEventListener('click', function () { $('importPdf').value = ''; setPdf(null); });
     $('btnAddLot').addEventListener('click', addLot);
     $('btnSave').addEventListener('click', function () { saveToGitHub(false); });
     $('btnDownload').addEventListener('click', downloadCsv);
