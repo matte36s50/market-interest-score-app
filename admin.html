@@ -169,14 +169,21 @@
                 <span class="text-xs font-semibold px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/40 text-violet-300">Claude-powered</span>
             </div>
             <p class="text-xs text-zinc-500 mb-4">
-                Open the auction house's published results page, select all, copy, and paste it below — any house, any format.
-                Claude extracts the lots into the pending table for you to review before saving. Works with copied PDFs and press releases too.
+                Open the auction house's published results page, select all, copy, and paste it below — any house, any format —
+                or attach the PDF directly (scanned catalogs work too; pages are read visually).
+                Claude extracts the lots into the pending table for you to review before saving.
                 Requires an Anthropic API key in the connection panel above.
             </p>
             <textarea id="importText" rows="7" class="field-input font-mono text-xs" style="resize: vertical;"
                 placeholder="Paste the copied results page here…&#10;&#10;e.g.&#10;LOT 142  1963 Ferrari 250 GT/L Berlinetta Lusso by Scaglietti&#10;Estimate: $1,500,000 – $1,800,000    SOLD $1,655,000&#10;…"></textarea>
-            <div class="flex items-center gap-3 mt-3">
+            <div class="flex flex-wrap items-center gap-3 mt-3">
                 <button id="btnImport" class="px-5 py-2 bg-violet-600 hover:bg-violet-500 rounded-lg text-sm font-semibold transition-colors">Extract lots</button>
+                <label for="importPdf" class="px-4 py-2 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 rounded-lg text-sm text-zinc-300 cursor-pointer transition-colors select-none">Attach PDF&hellip;</label>
+                <input type="file" id="importPdf" accept="application/pdf,.pdf" class="hidden" />
+                <span id="pdfName" class="hidden text-xs text-zinc-400">
+                    <span id="pdfNameText" class="font-mono"></span>
+                    <button id="pdfClear" class="text-zinc-600 hover:text-red-400 ml-1 text-sm leading-none" title="Remove PDF">&times;</button>
+                </span>
                 <span id="importMsg" class="text-xs text-zinc-500 hidden"></span>
             </div>
             <p class="text-xs text-zinc-600 mt-3">
@@ -296,6 +303,6 @@
         </div>
     </main>
 
-    <script src="admin.js?v=2"></script>
+    <script src="admin.js?v=3"></script>
 </body>
 </html>
