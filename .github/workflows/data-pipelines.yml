@@ -1,0 +1,64 @@
+name: Data Pipelines (Auction Ratings + MAI)
+
+# Recomputes data/auction_ratings.csv and data/mai_scores.csv whenever new
+# auction lots land (e.g. via the admin tab), commits the results, and
+# re-triggers the Pages deploy so the dashboard's MAI chart picks them up.
+# The explicit deploy dispatch is required because pushes made with
+# GITHUB_TOKEN never trigger other workflows on their own.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/auction_lots.csv'
+      - 'data/pipelines/auction_rating.py'
+      - 'data/pipelines/mai.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: data-pipelines
+  cancel-in-progress: false
+
+jobs:
+  recompute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run pipelines
+        run: |
+          python data/pipelines/auction_rating.py
+          python data/pipelines/mai.py
+
+      - name: Commit regenerated outputs
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/auction_ratings.csv data/mai_scores.csv
+          if git diff --cached --quiet; then
+            echo "No changes in derived CSVs — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: regenerate auction ratings and MAI scores"
+            git pull --rebase origin main
+            git push origin main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

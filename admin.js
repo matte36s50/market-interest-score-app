@@ -1,0 +1,458 @@
+// MII Admin — live auction results entry.
+//
+// Appends lot rows to data/auction_lots.csv via the GitHub Contents API using a
+// fine-grained PAT held only in this browser's localStorage. Pending (unsaved)
+// lots are also persisted to localStorage so an interrupted session at a live
+// auction loses nothing. "Download CSV" is the no-network fallback: it exports
+// existing + pending rows as a merged file for a manual commit.
+//
+// Deliberately zero external dependencies (no CDN scripts beyond Tailwind
+// styling): data entry must keep working on flaky venue wifi, so CSV
+// parsing/serialization is implemented inline.
+
+(function () {
+    'use strict';
+
+    var CSV_PATH = 'data/auction_lots.csv';
+    var CSV_HEADER = ['event', 'event_date', 'auction_house', 'lot_number',
+        'manufacturer', 'model', 'year_of_car', 'low_estimate_usd',
+        'high_estimate_usd', 'sold_price_usd', 'sold', 'notes'];
+    var APEX_THRESHOLD = 500000; // must match auction_rating.py / mai.py
+    var LS_CONFIG = 'mii_admin_config';
+    var LS_TOKEN = 'mii_admin_token';
+    var LS_PENDING = 'mii_admin_pending';
+
+    var config = loadJSON(LS_CONFIG) || { owner: 'matte36s50', repo: 'market-interest-score-app', branch: 'main' };
+    var pending = loadJSON(LS_PENDING) || [];
+    var existingRows = null;   // parsed rows currently in the repo's CSV
+    var existingSha = null;    // blob sha needed for the PUT
+
+    // ---------- small helpers ----------
+
+    function $(id) { return document.getElementById(id); }
+
+    function loadJSON(key) {
+        try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
+    }
+
+    function saveJSON(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+    function token() { return localStorage.getItem(LS_TOKEN) || ''; }
+
+    function fmtUSD(v) {
+        var n = parseFloat(v);
+        if (isNaN(n) || n <= 0) return '—';
+        return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+        });
+    }
+
+    // Duplicate key — must mirror sync_from_garage_draft.py:
+    // event + manufacturer + model + year, case/whitespace-insensitive.
+    function dupKey(r) {
+        return [r.event, r.manufacturer, r.model, r.year_of_car].map(function (v) {
+            return String(v == null ? '' : v).trim().toLowerCase();
+        }).join('||');
+    }
+
+    function flash(el, text, kind) {
+        el.textContent = text;
+        el.classList.remove('hidden', 'text-emerald-400', 'text-red-400', 'text-zinc-500', 'text-amber-400');
+        el.classList.add(kind === 'ok' ? 'text-emerald-400' : kind === 'err' ? 'text-red-400' : kind === 'warn' ? 'text-amber-400' : 'text-zinc-500');
+    }
+
+    // UTF-8 safe base64 for the Contents API.
+    function b64encode(str) {
+        var bytes = new TextEncoder().encode(str);
+        var bin = '';
+        for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        return btoa(bin);
+    }
+
+    function b64decode(b64) {
+        var bin = atob(b64.replace(/\n/g, ''));
+        var bytes = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+    }
+
+    // ---------- GitHub API ----------
+
+    function apiUrl(path) {
+        return 'https://api.github.com/repos/' + config.owner + '/' + config.repo + path;
+    }
+
+    function gh(path, options) {
+        options = options || {};
+        options.headers = Object.assign({
+            'Accept': 'application/vnd.github+json',
+            'Authorization': 'Bearer ' + token(),
+            'X-GitHub-Api-Version': '2022-11-28'
+        }, options.headers || {});
+        return fetch(apiUrl(path), options);
+    }
+
+    // Fetch current CSV + sha. Falls back to the site-relative file (read-only)
+    // when no token is configured, so the "existing data" panel still works on
+    // the deployed site.
+    function fetchExisting() {
+        if (token()) {
+            return gh('/contents/' + CSV_PATH + '?ref=' + encodeURIComponent(config.branch))
+                .then(function (res) {
+                    if (res.status === 404) return { content: null, sha: null };
+                    if (!res.ok) throw new Error('GitHub API ' + res.status);
+                    return res.json().then(function (j) {
+                        return { content: b64decode(j.content), sha: j.sha };
+                    });
+                });
+        }
+        return fetch(CSV_PATH, { cache: 'no-store' }).then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.text().then(function (t) { return { content: t, sha: null }; });
+        });
+    }
+
+    // Minimal RFC-4180 CSV parser: quoted fields, escaped quotes, CRLF.
+    function parseCsv(text) {
+        if (!text) return [];
+        var rows = [], row = [], field = '', inQ = false;
+        for (var i = 0; i < text.length; i++) {
+            var ch = text[i];
+            if (inQ) {
+                if (ch === '"') {
+                    if (text[i + 1] === '"') { field += '"'; i++; }
+                    else inQ = false;
+                } else field += ch;
+            } else if (ch === '"') {
+                inQ = true;
+            } else if (ch === ',') {
+                row.push(field); field = '';
+            } else if (ch === '\n' || ch === '\r') {
+                if (ch === '\r' && text[i + 1] === '\n') i++;
+                row.push(field); field = '';
+                rows.push(row); row = [];
+            } else {
+                field += ch;
+            }
+        }
+        if (field !== '' || row.length) { row.push(field); rows.push(row); }
+        rows = rows.filter(function (r) {
+            return r.some(function (c) { return String(c).trim() !== ''; });
+        });
+        if (rows.length < 2) return [];
+        var header = rows[0].map(function (h) { return h.trim(); });
+        return rows.slice(1).map(function (r) {
+            var obj = {};
+            header.forEach(function (h, idx) { obj[h] = r[idx] != null ? r[idx] : ''; });
+            return obj;
+        });
+    }
+
+    // ---------- existing-data panel ----------
+
+    function refreshExisting() {
+        $('existingSummary').textContent = 'Loading…';
+        fetchExisting().then(function (r) {
+            existingRows = parseCsv(r.content);
+            existingSha = r.sha;
+            renderExisting();
+            renderPending(); // re-run duplicate highlighting
+        }).catch(function (e) {
+            existingRows = null;
+            $('existingSummary').textContent = 'Could not load current CSV (' + e.message + ').';
+        });
+    }
+
+    function renderExisting() {
+        var el = $('existingSummary');
+        if (!existingRows) { el.textContent = 'Not loaded.'; return; }
+        if (!existingRows.length) {
+            el.textContent = 'The file is empty — the lots you save here will be its first rows.';
+            return;
+        }
+        var events = {};
+        var apexCount = 0;
+        existingRows.forEach(function (r) {
+            events[r.event] = (events[r.event] || 0) + 1;
+            if (parseFloat(r.low_estimate_usd) >= APEX_THRESHOLD) apexCount++;
+        });
+        var names = Object.keys(events);
+        var recent = names.slice(-5).map(function (n) { return esc(n) + ' (' + events[n] + ' lots)'; }).join(' · ');
+        el.innerHTML = '<span class="text-zinc-300 font-semibold">' + existingRows.length + ' lots</span> across ' +
+            '<span class="text-zinc-300 font-semibold">' + names.length + ' events</span>, ' +
+            '<span class="text-amber-400 font-semibold">' + apexCount + ' apex</span> (&ge;$500K low estimate).' +
+            '<div class="mt-1 text-xs text-zinc-600">Latest events: ' + recent + '</div>';
+
+        // Offer known event names for quick re-entry (resuming a multi-day sale).
+        $('eventSuggestions').innerHTML = names.map(function (n) {
+            return '<option value="' + esc(n) + '"></option>';
+        }).join('');
+    }
+
+    // ---------- pending lots ----------
+
+    function isDuplicate(row) {
+        var key = dupKey(row);
+        var inExisting = (existingRows || []).some(function (r) { return dupKey(r) === key; });
+        var inPending = pending.filter(function (r) { return dupKey(r) === key; }).length > 1
+            || (pending.indexOf(row) === -1 && pending.some(function (r) { return dupKey(r) === key; }));
+        return inExisting || inPending;
+    }
+
+    function renderPending() {
+        var body = $('pendingBody');
+        $('pendingCount').textContent = '(' + pending.length + ')';
+        $('pendingEmpty').classList.toggle('hidden', pending.length > 0);
+        body.innerHTML = pending.map(function (r, i) {
+            var isApex = parseFloat(r.low_estimate_usd) >= APEX_THRESHOLD;
+            var dup = isDuplicate(r);
+            var sold = String(r.sold) === 'true';
+            return '<tr class="' + (dup ? 'bg-red-500/5' : '') + '">' +
+                '<td class="px-4 py-2 text-zinc-400 text-xs">' + esc(r.event) + '<div class="text-zinc-600">' + esc(r.event_date) + '</div></td>' +
+                '<td class="px-4 py-2 text-zinc-500">' + esc(r.lot_number || '—') + '</td>' +
+                '<td class="px-4 py-2"><span class="text-zinc-200">' + esc(r.year_of_car) + ' ' + esc(r.manufacturer) + ' ' + esc(r.model) + '</span>' +
+                    (dup ? '<div class="text-[10px] text-red-400 font-semibold uppercase mt-0.5">possible duplicate</div>' : '') + '</td>' +
+                '<td class="px-4 py-2 text-right text-zinc-400">' + fmtUSD(r.low_estimate_usd) + '</td>' +
+                '<td class="px-4 py-2 text-right text-zinc-400">' + fmtUSD(r.high_estimate_usd) + '</td>' +
+                '<td class="px-4 py-2 text-right ' + (sold ? 'text-emerald-400' : 'text-zinc-600') + '">' + fmtUSD(r.sold_price_usd) + '</td>' +
+                '<td class="px-4 py-2">' + (sold
+                    ? '<span class="text-xs text-emerald-400">Sold</span>'
+                    : '<span class="text-xs text-zinc-500">Not sold</span>') + '</td>' +
+                '<td class="px-4 py-2">' + (isApex
+                    ? '<span class="text-[10px] font-bold text-amber-400 border border-amber-500/40 bg-amber-500/10 rounded px-1.5 py-0.5">APEX</span>'
+                    : '<span class="text-zinc-700 text-xs">—</span>') + '</td>' +
+                '<td class="px-4 py-2 text-right"><button data-remove="' + i + '" class="text-zinc-600 hover:text-red-400 text-lg leading-none px-1" title="Remove">&times;</button></td>' +
+                '</tr>';
+        }).join('');
+        saveJSON(LS_PENDING, pending);
+    }
+
+    function addLot() {
+        var msg = $('lotMsg');
+        var row = {
+            event: $('evName').value.trim(),
+            event_date: $('evDate').value,
+            auction_house: $('evHouse').value.trim(),
+            lot_number: $('lotNumber').value.trim(),
+            manufacturer: $('lotMake').value.trim(),
+            model: $('lotModel').value.trim(),
+            year_of_car: $('lotYear').value.trim(),
+            low_estimate_usd: $('lotLow').value.trim(),
+            high_estimate_usd: $('lotHigh').value.trim(),
+            sold_price_usd: $('lotSold').checked ? $('lotPrice').value.trim() : '',
+            sold: $('lotSold').checked ? 'true' : 'false',
+            notes: $('lotNotes').value.trim()
+        };
+
+        if (!row.event || !row.event_date || !row.auction_house) {
+            flash(msg, 'Fill in the event name, date and auction house first (section 1).', 'err');
+            return;
+        }
+        if (!row.manufacturer || !row.model || !row.year_of_car) {
+            flash(msg, 'Manufacturer, model and year are required.', 'err');
+            return;
+        }
+        if (row.sold === 'true' && !row.sold_price_usd) {
+            flash(msg, 'Marked as sold but no sold price entered.', 'err');
+            return;
+        }
+
+        pending.push(row);
+        renderPending();
+
+        if (isDuplicate(row)) {
+            flash(msg, 'Added, but flagged as a possible duplicate (same event + car + year already exists).', 'warn');
+        } else {
+            flash(msg, 'Added: ' + row.year_of_car + ' ' + row.manufacturer + ' ' + row.model, 'ok');
+        }
+
+        // Clear the per-lot fields; event fields persist for the next lot.
+        ['lotNumber', 'lotMake', 'lotModel', 'lotYear', 'lotLow', 'lotHigh', 'lotPrice', 'lotNotes'].forEach(function (id) {
+            $(id).value = '';
+        });
+        $('lotSold').checked = true;
+        updateApexBadge();
+        $('lotMake').focus();
+    }
+
+    function updateApexBadge() {
+        var low = parseFloat($('lotLow').value);
+        $('apexBadge').classList.toggle('hidden', !(low >= APEX_THRESHOLD));
+    }
+
+    // ---------- CSV output ----------
+
+    function csvField(v) {
+        var s = String(v == null ? '' : v);
+        return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+
+    function rowsToCsvLines(rows) {
+        return rows.map(function (r) {
+            return CSV_HEADER.map(function (c) { return csvField(r[c]); }).join(',');
+        }).join('\n');
+    }
+
+    function mergedCsv(existingText) {
+        var base = (existingText || CSV_HEADER.join(',')).replace(/\s+$/, '');
+        return base + '\n' + rowsToCsvLines(pending) + '\n';
+    }
+
+    function downloadCsv() {
+        var doDownload = function (existingText) {
+            var blob = new Blob([mergedCsv(existingText)], { type: 'text/csv' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'auction_lots.csv';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        };
+        if (!pending.length) { flash($('saveMsg'), 'No pending lots to export.', 'err'); return; }
+        fetchExisting().then(function (r) { doDownload(r.content); })
+            .catch(function () { doDownload(null); });
+    }
+
+    // ---------- save to GitHub ----------
+
+    function saveToGitHub(isRetry) {
+        var msg = $('saveMsg');
+        if (!pending.length) { flash(msg, 'No pending lots to save.', 'err'); return; }
+        if (!token()) {
+            flash(msg, 'No GitHub token configured — open "GitHub Connection" above, or use Download CSV.', 'err');
+            $('settingsBody').classList.remove('hidden');
+            return;
+        }
+
+        flash(msg, 'Saving ' + pending.length + ' lots to ' + config.owner + '/' + config.repo + '@' + config.branch + '…');
+        $('btnSave').disabled = true;
+
+        // Always re-fetch immediately before the PUT so the sha is fresh.
+        fetchExisting().then(function (r) {
+            existingRows = parseCsv(r.content);
+            existingSha = r.sha;
+
+            var events = {};
+            pending.forEach(function (p) { events[p.event] = true; });
+            var body = {
+                message: 'data: add ' + pending.length + ' auction lots (' + Object.keys(events).join(', ') + ') via admin tab',
+                content: b64encode(mergedCsv(r.content)),
+                branch: config.branch
+            };
+            if (existingSha) body.sha = existingSha;
+
+            return gh('/contents/' + CSV_PATH, { method: 'PUT', body: JSON.stringify(body) });
+        }).then(function (res) {
+            if (res.status === 409 && !isRetry) {
+                // sha went stale between GET and PUT (e.g. the pipelines action
+                // committed) — refetch once and retry.
+                flash($('saveMsg'), 'File changed upstream, retrying…');
+                $('btnSave').disabled = false;
+                return saveToGitHub(true);
+            }
+            if (!res.ok) {
+                return res.json().catch(function () { return {}; }).then(function (j) {
+                    throw new Error('GitHub API ' + res.status + (j.message ? ': ' + j.message : ''));
+                });
+            }
+            return res.json().then(function (j) {
+                var saved = pending.length;
+                pending = [];
+                renderPending();
+                refreshExisting();
+                flash($('saveMsg'), 'Saved ' + saved + ' lots (commit ' + j.commit.sha.slice(0, 7) +
+                    '). The MAI pipelines will run automatically; the dashboard chart updates after the next deploy.', 'ok');
+            });
+        }).catch(function (e) {
+            flash($('saveMsg'), 'Save failed: ' + e.message + ' — your lots are still pending locally. You can retry or use Download CSV.', 'err');
+        }).finally(function () {
+            $('btnSave').disabled = false;
+        });
+    }
+
+    // ---------- connection settings ----------
+
+    function setConnStatus(text, ok) {
+        var el = $('connStatus');
+        el.textContent = text;
+        el.className = 'text-xs px-3 py-1.5 rounded-lg border ' + (ok
+            ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+            : 'border-zinc-700 bg-zinc-800 text-zinc-500');
+    }
+
+    function testConnection() {
+        var msg = $('settingsMsg');
+        config.owner = $('cfgOwner').value.trim() || config.owner;
+        config.repo = $('cfgRepo').value.trim() || config.repo;
+        config.branch = $('cfgBranch').value.trim() || config.branch;
+        saveJSON(LS_CONFIG, config);
+        var t = $('cfgToken').value.trim();
+        if (t) localStorage.setItem(LS_TOKEN, t);
+
+        if (!token()) { flash(msg, 'Enter a token first.', 'err'); return; }
+        flash(msg, 'Testing…');
+        gh('/contents/' + CSV_PATH + '?ref=' + encodeURIComponent(config.branch))
+            .then(function (res) {
+                if (res.ok || res.status === 404) {
+                    flash(msg, 'Connected. Token can read ' + config.owner + '/' + config.repo + '@' + config.branch + '.', 'ok');
+                    setConnStatus('Connected: ' + config.owner + '/' + config.repo + '@' + config.branch, true);
+                    refreshExisting();
+                } else {
+                    throw new Error('GitHub API ' + res.status);
+                }
+            })
+            .catch(function (e) {
+                flash(msg, 'Connection failed: ' + e.message, 'err');
+                setConnStatus('Not connected', false);
+            });
+    }
+
+    function forgetToken() {
+        localStorage.removeItem(LS_TOKEN);
+        $('cfgToken').value = '';
+        setConnStatus('Not connected', false);
+        flash($('settingsMsg'), 'Token removed from this browser.', 'ok');
+    }
+
+    // ---------- wire-up ----------
+
+    $('cfgOwner').value = config.owner;
+    $('cfgRepo').value = config.repo;
+    $('cfgBranch').value = config.branch;
+
+    $('settingsToggle').addEventListener('click', function () {
+        var body = $('settingsBody');
+        body.classList.toggle('hidden');
+        $('settingsChevron').innerHTML = body.classList.contains('hidden') ? '&#9662;' : '&#9652;';
+    });
+    $('btnConnect').addEventListener('click', testConnection);
+    $('btnForget').addEventListener('click', forgetToken);
+    $('btnAddLot').addEventListener('click', addLot);
+    $('btnSave').addEventListener('click', function () { saveToGitHub(false); });
+    $('btnDownload').addEventListener('click', downloadCsv);
+    $('btnRefreshExisting').addEventListener('click', refreshExisting);
+    $('lotLow').addEventListener('input', updateApexBadge);
+    $('pendingBody').addEventListener('click', function (e) {
+        var idx = e.target.getAttribute && e.target.getAttribute('data-remove');
+        if (idx != null) { pending.splice(+idx, 1); renderPending(); }
+    });
+
+    // Enter anywhere in the lot fields adds the lot.
+    ['lotNumber', 'lotMake', 'lotModel', 'lotYear', 'lotLow', 'lotHigh', 'lotPrice', 'lotNotes'].forEach(function (id) {
+        $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addLot(); } });
+    });
+
+    // Initial state
+    renderPending();
+    if (token()) {
+        setConnStatus('Connected: ' + config.owner + '/' + config.repo + '@' + config.branch, true);
+        refreshExisting();
+    } else {
+        $('settingsBody').classList.remove('hidden');
+        $('settingsChevron').innerHTML = '&#9652;';
+        refreshExisting(); // still try read-only via the site-relative file
+    }
+})();
