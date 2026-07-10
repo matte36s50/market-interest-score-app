@@ -21,6 +21,71 @@
     var LS_CONFIG = 'mii_admin_config';
     var LS_TOKEN = 'mii_admin_token';
     var LS_PENDING = 'mii_admin_pending';
+    var LS_ANTHROPIC = 'mii_admin_anthropic_key';
+
+    var CLAUDE_MODEL = 'claude-opus-4-8';
+
+    // Structured-output schema for the results importer. Guarantees the
+    // response parses into rows matching the auction_lots.csv columns.
+    var EXTRACT_SCHEMA = {
+        type: 'object',
+        properties: {
+            event: {
+                type: 'object',
+                properties: {
+                    event_name: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+                    event_date: { anyOf: [{ type: 'string' }, { type: 'null' }], description: 'YYYY-MM-DD' },
+                    auction_house: { anyOf: [{ type: 'string' }, { type: 'null' }] }
+                },
+                required: ['event_name', 'event_date', 'auction_house'],
+                additionalProperties: false
+            },
+            lots: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    properties: {
+                        lot_number: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+                        manufacturer: { type: 'string' },
+                        model: { type: 'string' },
+                        year_of_car: { anyOf: [{ type: 'integer' }, { type: 'null' }] },
+                        low_estimate_usd: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+                        high_estimate_usd: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+                        sold_price_usd: { anyOf: [{ type: 'number' }, { type: 'null' }] },
+                        sold: { type: 'boolean' },
+                        notes: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+                        needs_review: { type: 'boolean' },
+                        review_reason: { anyOf: [{ type: 'string' }, { type: 'null' }] }
+                    },
+                    required: ['lot_number', 'manufacturer', 'model', 'year_of_car',
+                        'low_estimate_usd', 'high_estimate_usd', 'sold_price_usd',
+                        'sold', 'notes', 'needs_review', 'review_reason'],
+                    additionalProperties: false
+                }
+            }
+        },
+        required: ['event', 'lots'],
+        additionalProperties: false
+    };
+
+    var EXTRACT_SYSTEM = [
+        'You extract collector-car auction results from pasted web pages, PDFs, or press releases',
+        'into structured rows for a market-analytics dataset. Rules:',
+        '- Include only motor cars. Skip motorcycles, automobilia, memorabilia, watches, and non-vehicle lots.',
+        '- Extract the event name, date (YYYY-MM-DD; if the sale spans several days use the final day), and auction house if present.',
+        '- manufacturer is the marque only (e.g. "Ferrari"); model is the rest of the car name without the year',
+        '  (e.g. "250 GT/L Berlinetta Lusso by Scaglietti" -> model "250 GT Lusso"). Keep models concise but unambiguous.',
+        '- All monetary values in USD. If prices are in another currency, convert at a recent typical rate,',
+        '  set needs_review=true and note the original amount and currency in review_reason.',
+        '- Use the price as published by the house (usually including buyer\'s premium). If both hammer and',
+        '  premium-inclusive prices are shown, use the premium-inclusive one. If it is ambiguous which is shown,',
+        '  set needs_review=true and say so in review_reason.',
+        '- sold=false for unsold / not-sold / reserve-not-met / withdrawn lots, with sold_price_usd=null.',
+        '  Note a stated high bid or "withdrawn" in notes.',
+        '- If estimates are unavailable ("Estimate upon request"), leave them null and flag needs_review.',
+        '- Set needs_review=true whenever you are unsure about any value in a row; review_reason must say why.',
+        '- Do not invent values. A field you cannot find is null.'
+    ].join('\n');
 
     var config = loadJSON(LS_CONFIG) || { owner: 'matte36s50', repo: 'market-interest-score-app', branch: 'main' };
     var pending = loadJSON(LS_PENDING) || [];
@@ -38,6 +103,8 @@
     function saveJSON(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
     function token() { return localStorage.getItem(LS_TOKEN) || ''; }
+
+    function anthropicKey() { return localStorage.getItem(LS_ANTHROPIC) || ''; }
 
     function fmtUSD(v) {
         var n = parseFloat(v);
@@ -215,7 +282,8 @@
                 '<td class="px-4 py-2 text-zinc-400 text-xs">' + esc(r.event) + '<div class="text-zinc-600">' + esc(r.event_date) + '</div></td>' +
                 '<td class="px-4 py-2 text-zinc-500">' + esc(r.lot_number || '—') + '</td>' +
                 '<td class="px-4 py-2"><span class="text-zinc-200">' + esc(r.year_of_car) + ' ' + esc(r.manufacturer) + ' ' + esc(r.model) + '</span>' +
-                    (dup ? '<div class="text-[10px] text-red-400 font-semibold uppercase mt-0.5">possible duplicate</div>' : '') + '</td>' +
+                    (dup ? '<div class="text-[10px] text-red-400 font-semibold uppercase mt-0.5">possible duplicate</div>' : '') +
+                    (r._review ? '<div class="text-[10px] text-amber-400 mt-0.5" title="' + esc(r._reviewReason || '') + '">&#9888; review: ' + esc(r._reviewReason || 'check values') + '</div>' : '') + '</td>' +
                 '<td class="px-4 py-2 text-right text-zinc-400">' + fmtUSD(r.low_estimate_usd) + '</td>' +
                 '<td class="px-4 py-2 text-right text-zinc-400">' + fmtUSD(r.high_estimate_usd) + '</td>' +
                 '<td class="px-4 py-2 text-right ' + (sold ? 'text-emerald-400' : 'text-zinc-600') + '">' + fmtUSD(r.sold_price_usd) + '</td>' +
@@ -373,6 +441,141 @@
         });
     }
 
+    // ---------- results importer (Claude API, direct from the browser) ----------
+
+    // Streams POST /v1/messages and resolves with the accumulated text of the
+    // response. Streaming keeps long extractions (150-lot sales) from hitting
+    // request timeouts and lets us show a live lot counter.
+    function streamClaude(body, onProgress) {
+        return fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'x-api-key': anthropicKey(),
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify(body)
+        }).then(function (res) {
+            if (!res.ok) {
+                return res.json().catch(function () { return {}; }).then(function (j) {
+                    var m = (j.error && j.error.message) || ('HTTP ' + res.status);
+                    if (res.status === 401) m = 'Invalid Anthropic API key — check the connection panel.';
+                    if (res.status === 429) m = 'Rate limited by the Claude API — wait a minute and retry.';
+                    if (res.status === 529) m = 'Claude API is temporarily overloaded — retry shortly.';
+                    throw new Error(m);
+                });
+            }
+            var reader = res.body.getReader();
+            var decoder = new TextDecoder();
+            var buf = '', text = '', stopReason = null, apiError = null;
+
+            function handleLine(line) {
+                if (line.indexOf('data: ') !== 0) return;
+                var data;
+                try { data = JSON.parse(line.slice(6)); } catch (e) { return; }
+                if (data.type === 'content_block_delta' && data.delta && data.delta.type === 'text_delta') {
+                    text += data.delta.text;
+                    if (onProgress) onProgress(text);
+                } else if (data.type === 'message_delta' && data.delta && data.delta.stop_reason) {
+                    stopReason = data.delta.stop_reason;
+                } else if (data.type === 'error') {
+                    apiError = (data.error && data.error.message) || 'stream error';
+                }
+            }
+
+            function pump() {
+                return reader.read().then(function (r) {
+                    if (r.done) {
+                        if (apiError) throw new Error(apiError);
+                        if (stopReason === 'refusal') throw new Error('Claude declined to process this content.');
+                        if (stopReason === 'max_tokens') throw new Error('Output truncated — paste a smaller portion of the results and import in parts.');
+                        return text;
+                    }
+                    buf += decoder.decode(r.value, { stream: true });
+                    var lines = buf.split('\n');
+                    buf = lines.pop();
+                    lines.forEach(handleLine);
+                    return pump();
+                });
+            }
+            return pump();
+        });
+    }
+
+    function importResults() {
+        var msg = $('importMsg');
+        var pasted = $('importText').value.trim();
+        if (!pasted) { flash(msg, 'Paste the copied results page first.', 'err'); return; }
+        if (!anthropicKey()) {
+            flash(msg, 'No Anthropic API key configured — add one in the GitHub Connection panel above.', 'err');
+            $('settingsBody').classList.remove('hidden');
+            return;
+        }
+
+        $('btnImport').disabled = true;
+        flash(msg, 'Extracting…');
+
+        streamClaude({
+            model: CLAUDE_MODEL,
+            max_tokens: 64000,
+            stream: true,
+            thinking: { type: 'adaptive' },
+            system: EXTRACT_SYSTEM,
+            output_config: { format: { type: 'json_schema', schema: EXTRACT_SCHEMA } },
+            messages: [{ role: 'user', content: 'Extract the auction results from this pasted page:\n\n' + pasted }]
+        }, function (partial) {
+            var n = (partial.match(/"manufacturer"/g) || []).length;
+            flash(msg, 'Extracting… ' + n + ' lots so far');
+        }).then(function (text) {
+            var parsed = JSON.parse(text);
+            var ev = parsed.event || {};
+
+            // Section-1 values win; blanks are prefilled from the extraction.
+            if (!$('evName').value.trim() && ev.event_name) $('evName').value = ev.event_name;
+            if (!$('evDate').value && ev.event_date) $('evDate').value = ev.event_date;
+            if (!$('evHouse').value.trim() && ev.auction_house) $('evHouse').value = ev.auction_house;
+
+            var evName = $('evName').value.trim();
+            var evDate = $('evDate').value;
+            var evHouse = $('evHouse').value.trim();
+            if (!evName || !evDate || !evHouse) {
+                flash(msg, 'Extracted ' + (parsed.lots || []).length + ' lots, but the event name/date/house could not be determined — fill in section 1 and press Extract again.', 'err');
+                return;
+            }
+
+            var flagged = 0;
+            (parsed.lots || []).forEach(function (l) {
+                if (l.needs_review) flagged++;
+                pending.push({
+                    event: evName,
+                    event_date: evDate,
+                    auction_house: evHouse,
+                    lot_number: l.lot_number || '',
+                    manufacturer: l.manufacturer || '',
+                    model: l.model || '',
+                    year_of_car: l.year_of_car != null ? String(l.year_of_car) : '',
+                    low_estimate_usd: l.low_estimate_usd != null ? String(Math.round(l.low_estimate_usd)) : '',
+                    high_estimate_usd: l.high_estimate_usd != null ? String(Math.round(l.high_estimate_usd)) : '',
+                    sold_price_usd: l.sold_price_usd != null ? String(Math.round(l.sold_price_usd)) : '',
+                    sold: l.sold ? 'true' : 'false',
+                    notes: l.notes || '',
+                    _review: !!l.needs_review,
+                    _reviewReason: l.review_reason || ''
+                });
+            });
+            renderPending();
+            $('importText').value = '';
+            flash(msg, 'Imported ' + (parsed.lots || []).length + ' lots' +
+                (flagged ? ' — ' + flagged + ' flagged for review (amber rows below)' : '') +
+                '. Review the pending table, then Save to GitHub.', flagged ? 'warn' : 'ok');
+        }).catch(function (e) {
+            flash(msg, 'Import failed: ' + e.message, 'err');
+        }).finally(function () {
+            $('btnImport').disabled = false;
+        });
+    }
+
     // ---------- connection settings ----------
 
     function setConnStatus(text, ok) {
@@ -391,6 +594,8 @@
         saveJSON(LS_CONFIG, config);
         var t = $('cfgToken').value.trim();
         if (t) localStorage.setItem(LS_TOKEN, t);
+        var ak = $('cfgAnthropicKey').value.trim();
+        if (ak) localStorage.setItem(LS_ANTHROPIC, ak);
 
         if (!token()) { flash(msg, 'Enter a token first.', 'err'); return; }
         flash(msg, 'Testing…');
@@ -412,9 +617,11 @@
 
     function forgetToken() {
         localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_ANTHROPIC);
         $('cfgToken').value = '';
+        $('cfgAnthropicKey').value = '';
         setConnStatus('Not connected', false);
-        flash($('settingsMsg'), 'Token removed from this browser.', 'ok');
+        flash($('settingsMsg'), 'GitHub token and Anthropic API key removed from this browser.', 'ok');
     }
 
     // ---------- wire-up ----------
@@ -430,6 +637,7 @@
     });
     $('btnConnect').addEventListener('click', testConnection);
     $('btnForget').addEventListener('click', forgetToken);
+    $('btnImport').addEventListener('click', importResults);
     $('btnAddLot').addEventListener('click', addLot);
     $('btnSave').addEventListener('click', function () { saveToGitHub(false); });
     $('btnDownload').addEventListener('click', downloadCsv);
