@@ -113,6 +113,16 @@
                         and sent only to <code class="font-mono">api.github.com</code>.
                     </p>
                 </div>
+                <div class="mb-4">
+                    <label class="field-label">Anthropic API key (for the results importer)</label>
+                    <input id="cfgAnthropicKey" type="password" class="field-input font-mono" placeholder="sk-ant-..." autocomplete="off" />
+                    <p class="text-xs text-zinc-600 mt-2">
+                        Powers section 2 (paste-a-results-page extraction). Create at
+                        <code class="font-mono">platform.claude.com</code> &rarr; API keys. Stored only in this browser's localStorage
+                        and sent only to <code class="font-mono">api.anthropic.com</code>. A full results page costs a few cents to extract.
+                        Optional — manual entry and Save to GitHub work without it.
+                    </p>
+                </div>
                 <div class="flex items-center gap-3">
                     <button id="btnConnect" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-sm font-medium transition-colors">Save &amp; test connection</button>
                     <button id="btnForget" class="px-4 py-2 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 rounded-lg text-sm text-zinc-400 transition-colors">Forget token</button>
@@ -152,10 +162,33 @@
             </div>
         </div>
 
+        <!-- Import results with Claude -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center justify-between mb-1">
+                <h2 class="font-semibold">2 &middot; Import a results page</h2>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/40 text-violet-300">Claude-powered</span>
+            </div>
+            <p class="text-xs text-zinc-500 mb-4">
+                Open the auction house's published results page, select all, copy, and paste it below — any house, any format.
+                Claude extracts the lots into the pending table for you to review before saving. Works with copied PDFs and press releases too.
+                Requires an Anthropic API key in the connection panel above.
+            </p>
+            <textarea id="importText" rows="7" class="field-input font-mono text-xs" style="resize: vertical;"
+                placeholder="Paste the copied results page here…&#10;&#10;e.g.&#10;LOT 142  1963 Ferrari 250 GT/L Berlinetta Lusso by Scaglietti&#10;Estimate: $1,500,000 – $1,800,000    SOLD $1,655,000&#10;…"></textarea>
+            <div class="flex items-center gap-3 mt-3">
+                <button id="btnImport" class="px-5 py-2 bg-violet-600 hover:bg-violet-500 rounded-lg text-sm font-semibold transition-colors">Extract lots</button>
+                <span id="importMsg" class="text-xs text-zinc-500 hidden"></span>
+            </div>
+            <p class="text-xs text-zinc-600 mt-3">
+                Extracted rows land in the pending table below flagged for review where the model was unsure
+                (currency conversions, buyer's premium ambiguity, unclear results). Nothing is saved to GitHub until you press Save.
+            </p>
+        </div>
+
         <!-- Lot entry -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <div class="flex items-center justify-between mb-1">
-                <h2 class="font-semibold">2 &middot; Add lot</h2>
+                <h2 class="font-semibold">3 &middot; Add lots manually</h2>
                 <span id="apexBadge" class="hidden text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-400">APEX LOT &middot; &ge;$500K</span>
             </div>
             <p class="text-xs text-zinc-500 mb-4">Press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-zinc-400">Enter</kbd> in any field to add the lot.</p>
@@ -212,7 +245,7 @@
         <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <div class="border-b border-zinc-800 px-5 py-4 flex items-center justify-between">
                 <div>
-                    <h2 class="font-semibold">3 &middot; Pending lots <span id="pendingCount" class="text-zinc-500 font-normal text-sm">(0)</span></h2>
+                    <h2 class="font-semibold">4 &middot; Pending lots <span id="pendingCount" class="text-zinc-500 font-normal text-sm">(0)</span></h2>
                     <p class="text-xs text-zinc-500 mt-1">Kept in this browser until saved — safe to close the tab and come back.</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -263,6 +296,6 @@
         </div>
     </main>
 
-    <script src="admin.js?v=1"></script>
+    <script src="admin.js?v=2"></script>
 </body>
 </html>

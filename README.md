@@ -195,6 +195,20 @@ localStorage, so closing the tab mid-event loses nothing. Duplicates are
 flagged using the same key as `sync_from_garage_draft.py`
 (event + manufacturer + model + year).
 
+### Claude-powered results importer
+
+Section 2 of the admin page bulk-imports published results: copy any auction
+house's results page (or PDF / press release), paste it in, and press
+**Extract lots**. The page calls the Claude API directly from the browser
+(model `claude-opus-4-8`, streaming, structured outputs constrained to the
+`auction_lots.csv` schema) and drops the extracted rows into the pending table.
+Rows the model was unsure about (currency conversions, buyer's-premium
+ambiguity, missing estimates) are flagged amber for review — nothing is
+committed until you press Save. Requires an Anthropic API key (from
+platform.claude.com) entered in the connection panel; like the GitHub token it
+lives only in the browser's localStorage. A full results page costs a few
+cents to extract.
+
 ## Data Maintenance Scripts
 
 Run from the repo root (`node scripts/<name>.js`). All three read `bat.csv` from
