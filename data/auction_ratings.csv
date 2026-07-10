@@ -1,4 +1,4 @@
 event,event_date,auction_house,apex_lots,total_lots,apex_concentration,apex_volume,apex_sell_through,auction_rating
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,0,77,0.0000,0.0000,0.0000,0.0000
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,0,121,0.0000,0.0000,0.0000,0.0000
-RM Woodcote Park,2026-07-08,RM Sotheby's,0,42,0.0000,0.0000,0.0000,0.0000
+Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,20,77,52.1739,33.6517,100.0000,59.1128
+Gooding Amelia Island 2026,2026-03-05,Gooding & Company,28,121,0.0000,100.0000,100.0000,70.0000
+RM Woodcote Park,2026-07-08,RM Sotheby's,12,42,100.0000,0.0000,100.0000,60.0000
