@@ -111,10 +111,14 @@
     }
 
     // Fill each row's raw social_score from the signals table (average of the
-    // months the row's period covers). Idempotent.
+    // months the row's period covers). Fills gaps only: an upstream measured
+    // social_score (the pipeline's richer multi-signal composite) always wins;
+    // the Wikipedia-only signal is the fallback for rows upstream couldn't
+    // measure. Idempotent.
     function joinSocial(rows) {
         if (!socialSignals) return;
         rows.forEach(function (r) {
+            if (!isNaN(parseFloat(r.social_score))) return;
             var key = (r.manufacturer || '').trim() + '|' + (r.model || '').trim();
             var byMonth = socialSignals[key];
             if (!byMonth) return;
