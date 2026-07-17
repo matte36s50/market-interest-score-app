@@ -55,10 +55,22 @@ async function loadBatAuctionCounts() {
     }
 }
 
+// Inject auction_count into MII rows from bat.csv counts map. The map is
+// keyed by month, so sum the months the row's period covers — works for both
+// monthly ('2025-05') and quarterly ('2025Q2') MII files. When bat.csv has no
+// match, keep the pipeline's own auction_count instead of zeroing the row
+// (a key-format mismatch here once blanked the whole leaderboard).
 function injectAuctionCounts(rows, batCounts) {
     rows.forEach(row => {
-        const key = `${row.manufacturer}|${row.model}|${row.quarter}`;
-        row.auction_count = String(batCounts[key] || 0);
+        const prefix = `${row.manufacturer}|${row.model}|`;
+        const period = String(row.quarter || '').trim();
+        const months = (window.MII && MII.periodMonths) ? MII.periodMonths(period) : [period];
+        let sum = 0, found = false;
+        months.forEach(m => {
+            const c = batCounts[prefix + m];
+            if (c != null) { sum += c; found = true; }
+        });
+        if (found) row.auction_count = String(sum);
     });
 }
 
