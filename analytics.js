@@ -25,6 +25,15 @@ const PROFILE_DIMS = [
     { key: 'youtube_total_views_normalized', label: 'YouTube', weight: 0.10 },
 ];
 
+// Axis label with a data-quality flag from MII.dataQuality, so a dead or
+// static input reads as such instead of silently charting as zero.
+function dimLabel(dim) {
+    const dq = window.MII && MII.dataQuality[dim.key.replace(/_normalized$/, '')];
+    if (dq && dq.status === 'empty') return dim.label + ' (no data)';
+    if (dq && dq.status === 'static') return dim.label + ' (static)';
+    return dim.label;
+}
+
 const MAX_COMPARISONS = 5;   // additional models beyond the base
 // Champagne-gold-forward palette tuned for the navy theme.
 const SERIES_COLORS = ['#e0c878', '#6a9abf', '#6ab87a', '#c9a0d6', '#c47a7a', '#cda35c'];
@@ -84,9 +93,11 @@ function buildModels(rawData) {
 
     // String() guards: model names like "959" or "2002" must never be treated
     // as numbers anywhere downstream (sorting, .toLowerCase searches, keys).
+    // Accept both period grains the pipeline has emitted: monthly "2025-05"
+    // and quarterly "2025Q2". Either sorts correctly as a string.
     const valid = rawData.filter(row =>
         row.quarter &&
-        /^\d{4}-\d{2}$/.test(String(row.quarter).trim()) &&
+        /^\d{4}(-\d{2}|Q[1-4])$/.test(String(row.quarter).trim()) &&
         row.manufacturer &&
         row.model !== null && row.model !== undefined && String(row.model).trim() !== '' &&
         row.mii_score !== null && row.mii_score !== undefined &&
@@ -331,7 +342,7 @@ function renderRadar(keys) {
     radarChart = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: PROFILE_DIMS.map(d => d.label),
+            labels: PROFILE_DIMS.map(dimLabel),
             datasets: keys.map((k, i) => {
                 const color = SERIES_COLORS[i % SERIES_COLORS.length];
                 return {
@@ -442,7 +453,7 @@ function renderJitter(keys) {
     const ctx = document.getElementById('jitterChart').getContext('2d');
     if (jitterChart) jitterChart.destroy();
 
-    const labels = PROFILE_DIMS.map(d => d.label);
+    const labels = PROFILE_DIMS.map(dimLabel);
     const fieldKeys = modelKeys.filter(k => models[k].count >= 2);
 
     // Per-component kernel density estimate (the violin silhouette) plus median.

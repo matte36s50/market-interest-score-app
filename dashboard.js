@@ -161,13 +161,15 @@ async function loadCSVData() {
     });
 }
 
-// Format "2025-05" → "May '25" for compact candlestick labels
+// Format "2025-05" → "May '25" and "2025Q2" → "Q2 '25" for compact candlestick labels
 function fmtPeriod(p) {
     const m = p && p.match(/^(\d{4})-(\d{2})$/);
     if (m) {
         const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, 1);
         return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
     }
+    const q = p && p.match(/^(\d{4})(Q[1-4])$/);
+    if (q) return `${q[2]} '${q[1].slice(2)}`;
     return p;
 }
 

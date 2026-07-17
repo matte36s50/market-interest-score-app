@@ -54,23 +54,53 @@
         };
     }
 
+    // Data-quality assessment of the most recent recompute(). Keyed by the raw
+    // column name; status is one of:
+    //   'ok'     — populated with a healthy spread of values
+    //   'empty'  — no usable values anywhere (weight is redistributed)
+    //   'static' — populated but with so few distinct values it behaves like a
+    //              lookup table, not a measurement (e.g. a per-brand constant)
+    var dataQuality = {};
+    var STATIC_DISTINCT_THRESHOLD = 50;
+
     // Overwrite each *_normalized column with a percentile rank and recompute
     // mii_score. Reads only the raw columns, so it is safe to call more than once
     // on the same rows. Mutates rows in place and returns them.
+    //
+    // Inputs with no data anywhere are dropped and the remaining weights are
+    // renormalized (per docs/social-score-methodology.md §5) — a uniform,
+    // rank-preserving rescale that keeps the score on a true 0-100 scale instead
+    // of capping at (1 - deadWeight) × 100.
     function recompute(rows) {
         if (!Array.isArray(rows) || !rows.length) return rows;
 
+        dataQuality = {};
+        var liveWeight = 0;
+
         COMPONENTS.forEach(function (c) {
             var vals = [];
+            var distinct = {};
+            var distinctCount = 0;
             for (var i = 0; i < rows.length; i++) {
                 var v = parseFloat(rows[i][c.raw]);
-                if (!isNaN(v)) vals.push(v);
+                if (!isNaN(v)) {
+                    vals.push(v);
+                    if (!distinct[v]) { distinct[v] = 1; distinctCount++; }
+                }
             }
+            dataQuality[c.raw] = {
+                label: c.label,
+                coverage: vals.length / rows.length,
+                distinct: distinctCount,
+                status: !vals.length ? 'empty'
+                    : distinctCount < STATIC_DISTINCT_THRESHOLD ? 'static'
+                    : 'ok',
+            };
             if (!vals.length) {
-                // No data for this input anywhere — contribute nothing.
                 rows.forEach(function (r) { r[c.norm] = 0; });
                 return;
             }
+            liveWeight += c.weight;
             var rank = percentileRanker(vals);
             rows.forEach(function (r) {
                 var v = parseFloat(r[c.raw]);
@@ -81,14 +111,21 @@
         rows.forEach(function (r) {
             var s = 0;
             COMPONENTS.forEach(function (c) {
+                if (dataQuality[c.raw].status === 'empty') return;
                 var v = parseFloat(r[c.norm]);
                 if (!isNaN(v)) s += c.weight * v;
             });
-            r.mii_score = +(s * 100).toFixed(2);
+            r.mii_score = liveWeight > 0 ? +(s / liveWeight * 100).toFixed(2) : 0;
         });
 
         return rows;
     }
 
-    global.MII = { COMPONENTS: COMPONENTS, recompute: recompute, percentileRanker: percentileRanker };
+    global.MII = {
+        COMPONENTS: COMPONENTS,
+        recompute: recompute,
+        percentileRanker: percentileRanker,
+        // Live view of the last recompute's per-input health.
+        get dataQuality() { return dataQuality; },
+    };
 })(typeof window !== 'undefined' ? window : this);
