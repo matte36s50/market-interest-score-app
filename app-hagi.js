@@ -647,8 +647,10 @@ async function initializeApp() {
     try {
         loadingIndicator.style.display = 'flex';
 
-        // Load MII results and bat.csv auction counts in parallel
-        const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts()]);
+        // Load MII results, bat.csv auction counts, and social signals in parallel
+        const [rawData, batCounts] = await Promise.all([
+            loadCSVData(), loadBatAuctionCounts(), window.MII ? MII.ready : null,
+        ]);
         injectAuctionCounts(rawData, batCounts);
         processCSVData(rawData);
 

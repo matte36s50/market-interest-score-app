@@ -283,7 +283,9 @@ async function loadData() {
 // ---- Init ----
 async function init() {
     try {
-        const [loadedData, batResult] = await Promise.all([loadData(), loadBatAuctionCounts()]);
+        const [loadedData, batResult] = await Promise.all([
+            loadData(), loadBatAuctionCounts(), window.MII ? MII.ready : null,
+        ]);
         rawData = loadedData;
         batRawRows = batResult.rows;
         injectAuctionCounts(rawData, batResult.counts);

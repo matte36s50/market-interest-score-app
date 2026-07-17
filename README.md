@@ -42,6 +42,26 @@ weighting: 0 = lowest, 1 = highest, ~0.5 = the median car. This is done in the
 browser by `mii-normalize.js`, which every page calls right after loading the
 CSV, so the classic and HAGI pages always agree on a car's score.
 
+Inputs a row has no value for are dropped from its blend and the remaining
+weights renormalized, so a missing input never counts as "scored zero" and a
+dataset-wide dead column can't cap every score below 100. `MII.dataQuality`
+reports each input's health (`ok` / `empty` / `static`) after every recompute,
+and the Model Comparison radar labels flag degraded axes.
+
+### Social signals (measured)
+
+`data/pipelines/social_signals.py` collects per-model, **per-month** attention
+signals from Wikimedia — article pageviews plus share of voice within the
+manufacturer — and blends them into a 0–100 `social_score` composite
+(`data/social_signals.csv`), following `docs/social-score-methodology.md`.
+The `.github/workflows/social-signals.yml` workflow refreshes it monthly (and
+on demand via workflow dispatch); `mii-normalize.js` fetches the file on every
+page and joins it into the Social input before scoring, averaging months into
+quarters when the MII results are quarterly. Model → article mappings are
+cached in `data/wikipedia_slugs.csv`, which can be hand-curated. Reddit
+mentions/engagement, YouTube upload counts, and sentiment are designed to slot
+in as further sub-signal columns with the same weight-renormalization rule.
+
 Percentile ranking replaces the older min-max scaling (value ÷ dataset-max).
 Auction prices, views, and comments are extremely right-skewed — a handful of
 seven-figure cars and a long tail of affordable ones — so min-max scaling pushed

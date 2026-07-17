@@ -147,13 +147,14 @@ async function loadCSVData() {
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            complete: (results) => {
+            complete: async (results) => {
                 if (results.data.length === 0) {
                     reject(new Error('No data in CSV'));
                     return;
                 }
-                // Percentile-rank normalization + mii_score recompute (mii-normalize.js).
-                if (window.MII) MII.recompute(results.data);
+                // Percentile-rank normalization + mii_score recompute, with the
+                // social-signals join in place first (mii-normalize.js).
+                if (window.MII) { await MII.ready; MII.recompute(results.data); }
                 resolve(results.data);
             },
             error: (err) => reject(err)
@@ -161,13 +162,15 @@ async function loadCSVData() {
     });
 }
 
-// Format "2025-05" → "May '25" for compact candlestick labels
+// Format "2025-05" → "May '25" and "2025Q2" → "Q2 '25" for compact candlestick labels
 function fmtPeriod(p) {
     const m = p && p.match(/^(\d{4})-(\d{2})$/);
     if (m) {
         const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, 1);
         return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
     }
+    const q = p && p.match(/^(\d{4})(Q[1-4])$/);
+    if (q) return `${q[2]} '${q[1].slice(2)}`;
     return p;
 }
 

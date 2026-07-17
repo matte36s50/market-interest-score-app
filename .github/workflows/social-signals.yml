@@ -1,0 +1,60 @@
+name: Social Signals (Wikipedia attention)
+
+# Collects per-model, per-month attention signals (Wikipedia pageviews +
+# share of voice) into data/social_signals.csv, which the front-end joins
+# into the MII's social_score input (see mii-normalize.js). Runs monthly
+# once the previous month's pageviews are complete, and on demand.
+
+on:
+  schedule:
+    - cron: '23 6 2 * *'   # 06:23 UTC on the 2nd of each month
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'data/pipelines/social_signals.py'
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: social-signals
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # stdlib only — no pip install needed
+      - name: Collect social signals
+        run: python data/pipelines/social_signals.py
+
+      - name: Commit outputs
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/social_signals.csv data/wikipedia_slugs.csv
+          if git diff --cached --quiet; then
+            echo "No changes in social signals — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: refresh social signals (Wikipedia attention)"
+            git pull --rebase origin main
+            git push origin main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
