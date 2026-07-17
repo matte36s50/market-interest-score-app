@@ -147,13 +147,14 @@ async function loadCSVData() {
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            complete: (results) => {
+            complete: async (results) => {
                 if (results.data.length === 0) {
                     reject(new Error('No data in CSV'));
                     return;
                 }
-                // Percentile-rank normalization + mii_score recompute (mii-normalize.js).
-                if (window.MII) MII.recompute(results.data);
+                // Percentile-rank normalization + mii_score recompute, with the
+                // social-signals join in place first (mii-normalize.js).
+                if (window.MII) { await MII.ready; MII.recompute(results.data); }
                 resolve(results.data);
             },
             error: (err) => reject(err)

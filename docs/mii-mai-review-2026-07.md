@@ -235,6 +235,15 @@ is empty. None of these are design flaws — they are pipeline gaps — but any
 diligent audience will find them in minutes. Priority order to get
 presentation-ready:
 
+> **Update 2026-07-17 (later the same day):** items 1a–1b below and an interim
+> measured social signal have been implemented on this branch: weight
+> renormalization + `MII.dataQuality` + degraded-axis labels in the front end,
+> both period grains accepted, and `data/pipelines/social_signals.py` +
+> `social-signals.yml` (Wikipedia attention + SOV per model × month, joined
+> into the Social input in the browser). The collector's first real run
+> happens in GitHub Actions after merge to `main` (Wikimedia is unreachable
+> from this session's sandbox).
+
 1. **This repo (quick, unblocks the demo):**
    a. Renormalize MII weights over inputs that actually have data (removes
       the 85-point ceiling and the dead-axis artifact);

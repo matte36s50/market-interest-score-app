@@ -802,6 +802,7 @@ function renderAll() {
 async function init() {
     try {
         const rawData = await loadCSV();
+        if (window.MII) await MII.ready;   // social signals join before scoring
         buildModels(rawData);
 
         document.getElementById('lastUpdated').textContent =

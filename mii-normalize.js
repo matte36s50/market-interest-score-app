@@ -54,6 +54,94 @@
         };
     }
 
+    // ---- Measured social signals (data/social_signals.csv) -----------------
+    // Produced by data/pipelines/social_signals.py: per-model, per-month
+    // Wikipedia attention + share of voice, blended into a 0-100 composite.
+    // When the file is present, recompute() joins it into each row's raw
+    // social_score before ranking, so the Social axis carries real,
+    // time-varying values. When absent, the weight renormalization below
+    // keeps the score correct without it.
+    var socialSignals = null; // "manufacturer|model" -> { "YYYY-MM": score }
+
+    function parseCsvLine(line) {
+        var out = [], cur = '', inQ = false;
+        for (var i = 0; i < line.length; i++) {
+            var ch = line[i];
+            if (inQ) {
+                if (ch === '"') {
+                    if (line[i + 1] === '"') { cur += '"'; i++; } else inQ = false;
+                } else cur += ch;
+            } else if (ch === '"') inQ = true;
+            else if (ch === ',') { out.push(cur); cur = ''; }
+            else cur += ch;
+        }
+        out.push(cur);
+        return out;
+    }
+
+    function indexSignals(text) {
+        var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
+        if (lines.length < 2) return null;
+        var hdr = parseCsvLine(lines[0]);
+        var iMan = hdr.indexOf('manufacturer'), iMod = hdr.indexOf('model'),
+            iMonth = hdr.indexOf('month'), iScore = hdr.indexOf('social_score');
+        if (iMan < 0 || iMod < 0 || iMonth < 0 || iScore < 0) return null;
+        var out = {};
+        for (var i = 1; i < lines.length; i++) {
+            var c = parseCsvLine(lines[i]);
+            var score = parseFloat(c[iScore]);
+            if (isNaN(score)) continue;
+            var key = (c[iMan] || '').trim() + '|' + (c[iMod] || '').trim();
+            (out[key] = out[key] || {})[(c[iMonth] || '').trim()] = score;
+        }
+        return out;
+    }
+
+    // Months covered by a period label: monthly "2025-05" → itself,
+    // quarterly "2025Q2" → its three months.
+    function periodMonths(p) {
+        if (/^\d{4}-\d{2}$/.test(p)) return [p];
+        var q = /^(\d{4})Q([1-4])$/.exec(p);
+        if (!q) return [];
+        var first = (parseInt(q[2], 10) - 1) * 3 + 1;
+        return [0, 1, 2].map(function (k) {
+            var mm = first + k;
+            return q[1] + '-' + (mm < 10 ? '0' + mm : mm);
+        });
+    }
+
+    // Fill each row's raw social_score from the signals table (average of the
+    // months the row's period covers). Idempotent.
+    function joinSocial(rows) {
+        if (!socialSignals) return;
+        rows.forEach(function (r) {
+            var key = (r.manufacturer || '').trim() + '|' + (r.model || '').trim();
+            var byMonth = socialSignals[key];
+            if (!byMonth) return;
+            var sum = 0, n = 0;
+            periodMonths(String(r.quarter || '').trim()).forEach(function (mo) {
+                if (byMonth[mo] != null) { sum += byMonth[mo]; n++; }
+            });
+            if (n) r.social_score = sum / n;
+        });
+    }
+
+    // Kick off the signals fetch at script load; pages should `await MII.ready`
+    // before recompute() so the join lands on first render. The timeout means a
+    // missing/slow file can never block a page.
+    var readyResolve;
+    var ready = new Promise(function (res) { readyResolve = res; });
+    if (typeof fetch === 'function' && typeof window !== 'undefined') {
+        var guard = setTimeout(readyResolve, 4000);
+        fetch(global.MII_SOCIAL_SIGNALS_URL || 'data/social_signals.csv')
+            .then(function (r) { return r.ok ? r.text() : null; })
+            .then(function (t) { if (t) socialSignals = indexSignals(t); })
+            .catch(function () {})
+            .then(function () { clearTimeout(guard); readyResolve(); });
+    } else {
+        readyResolve();
+    }
+
     // Data-quality assessment of the most recent recompute(). Keyed by the raw
     // column name; status is one of:
     //   'ok'     — populated with a healthy spread of values
@@ -67,15 +155,17 @@
     // mii_score. Reads only the raw columns, so it is safe to call more than once
     // on the same rows. Mutates rows in place and returns them.
     //
-    // Inputs with no data anywhere are dropped and the remaining weights are
-    // renormalized (per docs/social-score-methodology.md §5) — a uniform,
-    // rank-preserving rescale that keeps the score on a true 0-100 scale instead
-    // of capping at (1 - deadWeight) × 100.
+    // Inputs a row has no value for are dropped from that row's blend and the
+    // remaining weights renormalized (docs/social-score-methodology.md §5) — so
+    // a dataset-wide dead column no longer caps every score below 100, and a
+    // model missing one input (e.g. no social signal yet) isn't ranked as if it
+    // scored zero on it. The *_normalized column still reads 0 for display.
     function recompute(rows) {
         if (!Array.isArray(rows) || !rows.length) return rows;
 
+        joinSocial(rows);
+
         dataQuality = {};
-        var liveWeight = 0;
 
         COMPONENTS.forEach(function (c) {
             var vals = [];
@@ -100,7 +190,6 @@
                 rows.forEach(function (r) { r[c.norm] = 0; });
                 return;
             }
-            liveWeight += c.weight;
             var rank = percentileRanker(vals);
             rows.forEach(function (r) {
                 var v = parseFloat(r[c.raw]);
@@ -109,13 +198,16 @@
         });
 
         rows.forEach(function (r) {
-            var s = 0;
+            var s = 0, w = 0;
             COMPONENTS.forEach(function (c) {
                 if (dataQuality[c.raw].status === 'empty') return;
+                if (isNaN(parseFloat(r[c.raw]))) return; // row lacks this input
                 var v = parseFloat(r[c.norm]);
-                if (!isNaN(v)) s += c.weight * v;
+                if (isNaN(v)) return;
+                s += c.weight * v;
+                w += c.weight;
             });
-            r.mii_score = liveWeight > 0 ? +(s / liveWeight * 100).toFixed(2) : 0;
+            r.mii_score = w > 0 ? +(s / w * 100).toFixed(2) : 0;
         });
 
         return rows;
@@ -125,6 +217,10 @@
         COMPONENTS: COMPONENTS,
         recompute: recompute,
         percentileRanker: percentileRanker,
+        // Resolves once the social-signals fetch settles (or times out).
+        ready: ready,
+        // Inject a signals CSV directly (tests / non-browser use).
+        setSocialSignals: function (text) { socialSignals = indexSignals(text); },
         // Live view of the last recompute's per-input health.
         get dataQuality() { return dataQuality; },
     };
