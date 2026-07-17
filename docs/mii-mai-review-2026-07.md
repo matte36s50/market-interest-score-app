@@ -62,6 +62,39 @@ in its current data state.
   precisely to catch a change like this, and the front-end degeneracy badge
   from the same plan was also never implemented.
 
+### 1.1 The row-count drop explained (13,700 → 7,941): grain change, not data loss
+
+Forensic comparison against the raw `bat.csv` in the same bucket:
+
+- **No auction data disappeared.** `bat.csv` holds 52,605 auctions covering
+  2025Q2 → today — the same window as the MII file — and it is still growing.
+  (Its lone pre-2025 row is the known `12/31/69` epoch-sentinel corruption
+  that `scripts/clean-bat-data.js` exists to remove.) BaT history earlier
+  than April 2025 was never in the bucket to begin with.
+- **The upstream aggregation grain changed from model × month to
+  model × quarter.** The old file stored `YYYY-MM` months in the column named
+  `quarter` — the front end proves it: `analytics.js` validates the column
+  against `/^\d{4}-\d{2}$/`, and comments/README throughout describe
+  "monthly" rows. The new file stores true quarters (`2025Q2`).
+- **The numbers reconcile.** `bat.csv` yields 15,647 sold model×month combos
+  vs 9,333 sold model×quarter combos. The pipeline's model-name normalization
+  merges ~15% of raw combos (9,333 → 7,941 observed); the same rate applied
+  to the monthly combos gives ≈13,300 ≈ the old ~13,700. Same auctions,
+  coarser buckets — roughly two monthly rows collapsed into one quarterly row.
+- Sold-only filtering is unchanged (the MII `sold` column is a *count* of
+  sold lots per row; the ~10K "high bid" no-sales were never aggregated).
+
+**But the grain change silently broke the Model Comparison page.** The
+`/^\d{4}-\d{2}$/` month check at `analytics.js:89` now rejects **every row**
+of the quarterly file, so `analytics.html` has no valid data at all — a
+second, independent "report not working" symptom alongside the zeroed Social
+axis. The main dashboard (`app.js`/`dashboard.js`) treats period labels as
+opaque strings and survives, but every trend chart dropped from ~15 monthly
+points to 6 quarterly points, and the README/UI copy still says "monthly."
+Fix: relax the format check to accept both `YYYY-MM` and `YYYYQn` (one-line
+regex change), and decide deliberately whether the MII should be monthly or
+quarterly — quarterly halves the trend resolution the BMW deck can show.
+
 ## 2. Front-end code review
 
 `mii-normalize.js` — the mid-rank percentile ranker is correctly implemented
