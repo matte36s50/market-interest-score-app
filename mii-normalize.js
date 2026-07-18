@@ -221,6 +221,10 @@
         COMPONENTS: COMPONENTS,
         recompute: recompute,
         percentileRanker: percentileRanker,
+        // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
+        // three months). Shared by pages that join monthly bat.csv data onto
+        // MII rows of either grain.
+        periodMonths: periodMonths,
         // Resolves once the social-signals fetch settles (or times out).
         ready: ready,
         // Inject a signals CSV directly (tests / non-browser use).
