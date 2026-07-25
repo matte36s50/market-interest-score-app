@@ -48,6 +48,18 @@ function normalizeModelKey(make, rawModel) {
     return model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
 }
 
+// The join key for a make/model pair. Case-folded on BOTH halves: the MII
+// pipeline title-cases its manufacturer column ("Detomaso", "Amc", "Bsa")
+// while bat.csv keeps the source spelling ("DeTomaso", "AMC", "BSA"), and
+// bat.csv itself carries the same model under several casings
+// ("DeTomaso Vallelunga" and "DETOMASO VALLELUNGA"). Keying on the raw
+// strings split those apart, so ~100 models showed "no auction records"
+// while their lots sat in a differently-cased bucket. Display names always
+// come from the row itself, never from this key.
+function modelJoinKey(make, model) {
+    return `${canonicalMake(make).toLowerCase()}|${normalizeModelKey(make, model).toLowerCase()}`;
+}
+
 // Parse a bat.csv sale_amount string like "USD $56,000" or "EUR €75,000".
 // Returns { amount: Number|null, currency: String }.
 function parseSaleAmount(raw) {
@@ -109,16 +121,15 @@ async function loadBatAuctionCounts() {
                         const parsed = parseSaleDate(row.sale_date);
                         if (!parsed) return; // drops corrupt/sentinel dates
 
-                        const cmake = canonicalMake(make);
-                        const model = normalizeModelKey(make, rawModel);
+                        const key = modelJoinKey(make, rawModel);
                         const period = parsed.period;
 
-                        const countKey = `${cmake}|${model}|${period}`;
+                        const countKey = `${key}|${period}`;
                         counts[countKey] = (counts[countKey] || 0) + 1;
 
                         const { amount, currency } = parseSaleAmount(row.sale_amount);
                         const saleType = (row.sale_type || '').trim().toLowerCase();
-                        const lotKey = `${cmake}|${model}`;
+                        const lotKey = key;
                         (lots[lotKey] = lots[lotKey] || []).push({
                             date: parsed.dayKey,
                             period,
@@ -154,7 +165,7 @@ async function loadBatAuctionCounts() {
 // (a key-format mismatch here once blanked the whole leaderboard).
 function injectAuctionCounts(rows, batCounts) {
     rows.forEach(row => {
-        const prefix = `${canonicalMake(row.manufacturer)}|${normalizeModelKey(row.manufacturer, row.model)}|`;
+        const prefix = `${modelJoinKey(row.manufacturer, row.model)}|`;
         const period = String(row.quarter || '').trim();
         const months = (window.MII && MII.periodMonths) ? MII.periodMonths(period) : [period];
         let sum = 0, found = false;
@@ -1166,7 +1177,7 @@ function showLotDetail(make, model) {
     const tableBody = document.getElementById('lotTableBody');
     if (!modal) return;
 
-    const lots = (batLots[`${canonicalMake(make)}|${normalizeModelKey(make, model)}`] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const lots = (batLots[modelJoinKey(make, model)] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
 
     titleEl.textContent = `${make} ${model}`;
 
