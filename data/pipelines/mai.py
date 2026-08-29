@@ -2,9 +2,13 @@
 """
 Manufacturer Apex Index (MAI) — D-term proxy for the Networked Utility Dividend.
 
+Apex lot = low_estimate_usd >= 500000 OR sold_price_usd >= 500000
+(sold price counts because many houses publish results without estimates).
+
 For each manufacturer × event:
   P (Presence)   = manufacturer's share of apex lots at that event
-  Q (Quality)    = mean(sold_price / high_estimate) for sold apex lots
+  Q (Quality)    = mean(sold_price / high_estimate) for sold apex lots with a
+                   published estimate; neutral 1.0 when no estimates exist
   R (Performance)= apex lot sell-through rate
 
 MAI per manufacturer = Σ(auction_rating_i × P_i × Q_i × R_i) / Σ(auction_rating_i)
@@ -38,9 +42,13 @@ def main():
 
     lots["sold"] = lots["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
     lots["low_estimate_usd"] = pd.to_numeric(lots["low_estimate_usd"], errors="coerce").fillna(0)
+    lots["high_estimate_usd"] = pd.to_numeric(lots["high_estimate_usd"], errors="coerce").fillna(0)
     lots["sold_price_usd"] = pd.to_numeric(lots["sold_price_usd"], errors="coerce").fillna(0)
 
-    apex = lots[lots["low_estimate_usd"] >= APEX_THRESHOLD].copy()
+    apex = lots[
+        (lots["low_estimate_usd"] >= APEX_THRESHOLD)
+        | (lots["sold_price_usd"] >= APEX_THRESHOLD)
+    ].copy()
 
     if apex.empty:
         print("No apex lots found — writing empty mai_scores.csv")
@@ -62,9 +70,14 @@ def main():
             R = len(mfr_sold) / len(mfr_apex) if len(mfr_apex) > 0 else 0.0
 
             if len(mfr_sold) > 0:
-                q_ratios = mfr_sold["sold_price_usd"] / mfr_sold["high_estimate_usd"]
-                Q = q_ratios[mfr_sold["high_estimate_usd"] > 0].mean()
-                Q = Q if pd.notna(Q) else 0.0
+                with_estimate = mfr_sold[mfr_sold["high_estimate_usd"] > 0]
+                if len(with_estimate) > 0:
+                    Q = (with_estimate["sold_price_usd"] / with_estimate["high_estimate_usd"]).mean()
+                    Q = Q if pd.notna(Q) else 1.0
+                else:
+                    # House published no estimates — price realisation is
+                    # unknowable, so stay neutral rather than zeroing P×Q×R.
+                    Q = 1.0
             else:
                 Q = 0.0
 

@@ -18,6 +18,11 @@
         'manufacturer', 'model', 'year_of_car', 'low_estimate_usd',
         'high_estimate_usd', 'sold_price_usd', 'sold', 'notes'];
     var APEX_THRESHOLD = 500000; // must match auction_rating.py / mai.py
+
+    // Apex rule (mirrors the pipelines): low estimate OR sold price >= $500K.
+    function isApexRow(low, price) {
+        return parseFloat(low) >= APEX_THRESHOLD || parseFloat(price) >= APEX_THRESHOLD;
+    }
     var LS_CONFIG = 'mii_admin_config';
     var LS_TOKEN = 'mii_admin_token';
     var LS_PENDING = 'mii_admin_pending';
@@ -246,13 +251,13 @@
         var apexCount = 0;
         existingRows.forEach(function (r) {
             events[r.event] = (events[r.event] || 0) + 1;
-            if (parseFloat(r.low_estimate_usd) >= APEX_THRESHOLD) apexCount++;
+            if (isApexRow(r.low_estimate_usd, r.sold_price_usd)) apexCount++;
         });
         var names = Object.keys(events);
         var recent = names.slice(-5).map(function (n) { return esc(n) + ' (' + events[n] + ' lots)'; }).join(' · ');
         el.innerHTML = '<span class="text-zinc-300 font-semibold">' + existingRows.length + ' lots</span> across ' +
             '<span class="text-zinc-300 font-semibold">' + names.length + ' events</span>, ' +
-            '<span class="text-amber-400 font-semibold">' + apexCount + ' apex</span> (&ge;$500K low estimate).' +
+            '<span class="text-amber-400 font-semibold">' + apexCount + ' apex</span> (&ge;$500K estimate or sale price).' +
             '<div class="mt-1 text-xs text-zinc-600">Latest events: ' + recent + '</div>';
 
         // Offer known event names for quick re-entry (resuming a multi-day sale).
@@ -276,7 +281,7 @@
         $('pendingCount').textContent = '(' + pending.length + ')';
         $('pendingEmpty').classList.toggle('hidden', pending.length > 0);
         body.innerHTML = pending.map(function (r, i) {
-            var isApex = parseFloat(r.low_estimate_usd) >= APEX_THRESHOLD;
+            var isApex = isApexRow(r.low_estimate_usd, r.sold_price_usd);
             var dup = isDuplicate(r);
             var sold = String(r.sold) === 'true';
             return '<tr class="' + (dup ? 'bg-red-500/5' : '') + '">' +
@@ -349,8 +354,8 @@
     }
 
     function updateApexBadge() {
-        var low = parseFloat($('lotLow').value);
-        $('apexBadge').classList.toggle('hidden', !(low >= APEX_THRESHOLD));
+        var price = $('lotSold').checked ? $('lotPrice').value : '';
+        $('apexBadge').classList.toggle('hidden', !isApexRow($('lotLow').value, price));
     }
 
     // ---------- CSV output ----------
@@ -689,6 +694,8 @@
     $('btnDownload').addEventListener('click', downloadCsv);
     $('btnRefreshExisting').addEventListener('click', refreshExisting);
     $('lotLow').addEventListener('input', updateApexBadge);
+    $('lotPrice').addEventListener('input', updateApexBadge);
+    $('lotSold').addEventListener('change', updateApexBadge);
     $('pendingBody').addEventListener('click', function (e) {
         var idx = e.target.getAttribute && e.target.getAttribute('data-remove');
         if (idx != null) { pending.splice(+idx, 1); renderPending(); }

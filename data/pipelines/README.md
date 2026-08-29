@@ -61,10 +61,12 @@ Find your Supabase URL and anon key at:
 | notes | `title` |
 
 ### Apex classification note
-The MAI pipeline flags lots as "apex" when `low_estimate_usd >= $500,000`.
-The synced `low_estimate_usd` value (derived from `price_at_48h ÷ 0.75`)
-is the single estimate used for this threshold. `high_estimate_usd` is left
-blank — it's in the schema for optional manual use but not required by any pipeline.
+The pipelines flag lots as "apex" when `low_estimate_usd >= $500,000` **or**
+`sold_price_usd >= $500,000` (the sold-price arm covers results published
+without estimates). The synced `low_estimate_usd` value (derived from
+`price_at_48h ÷ 0.75`) feeds the estimate arm of this threshold.
+`high_estimate_usd` is used only for the MAI Quality (Q) term, which stays
+neutral when no estimates are published.
 
 ### Customising the auction_house parser
 The `parse_auction_house()` function splits on `_` and `-` and drops the final
@@ -113,7 +115,7 @@ for the new entry.
 Computes an Auction Rating for each event in `data/auction_lots.csv`.
 
 ### What it does
-- Identifies "apex" lots: `high_estimate_usd >= $500,000`
+- Identifies "apex" lots: `low_estimate_usd >= $500,000` or `sold_price_usd >= $500,000`
 - Computes three sub-scores per event, normalised 0–100 across all events:
   - **Apex Concentration** — apex lot count / total lot count
   - **Apex Volume** — total sold price of sold apex lots
