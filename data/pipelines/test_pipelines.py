@@ -277,11 +277,84 @@ class TrendsShaping(unittest.TestCase):
         self.assertAlmostEqual(a[("Ferrari", "F40")]["2025-01"], 25.0)
         self.assertEqual((mean_a, mean_b), (100.0, 25.0))
 
+    def test_a_lower_tier_lands_on_the_primary_scale(self):
+        """A model measured against a smaller anchor must not be inflated."""
+        months = ["2025-01"]
+        model = {"Lancia Fulvia": {"manufacturer": "Lancia", "model": "Fulvia"}}
+        # Tier 1's anchor is a tenth of the primary's true volume. Within its
+        # own batch it reads 50 against an anchor of 100 — but on the shared
+        # scale that is half of a tenth, i.e. 5, not 50.
+        out, _ = google_trends.rescale_batch(
+            {"Datsun 240Z": {"2025-01": 100.0}, "Lancia Fulvia": {"2025-01": 50.0}},
+            "Datsun 240Z", model, months, relative_level=0.1)
+        self.assertAlmostEqual(out[("Lancia", "Fulvia")]["2025-01"], 5.0)
+
+    def test_the_ladder_chains_each_rung_to_the_one_above(self):
+        anchors = ["Top", "Mid", "Low"]
+
+        class Backend:
+            # Mid reads half of Top; Low reads a fifth of Mid. So Low should
+            # come out at 0.5 x 0.2 = 0.1 of Top.
+            pairs = {("Top", "Mid"): (100.0, 50.0), ("Mid", "Low"): (100.0, 20.0)}
+
+            def fetch(self, keywords, time_range):
+                upper, lower = keywords
+                u, l = self.pairs[(upper, lower)]
+                return {upper: {"2025-01": u}, lower: {"2025-01": l}}
+
+        levels = google_trends.calibrate_ladder(
+            Backend(), anchors, ["2025-01"], "range", sleep=0)
+        self.assertAlmostEqual(levels["Top"], 1.0)
+        self.assertAlmostEqual(levels["Mid"], 0.5)
+        self.assertAlmostEqual(levels["Low"], 0.1)
+
+    def test_a_broken_rung_truncates_the_ladder(self):
+        """Better to disable the tiers below than scale them by a bogus factor."""
+        class Backend:
+            def fetch(self, keywords, time_range):
+                upper, lower = keywords
+                if lower == "Low":
+                    return {upper: {"2025-01": 100.0}, lower: {"2025-01": 0.0}}
+                return {upper: {"2025-01": 100.0}, lower: {"2025-01": 50.0}}
+
+        levels = google_trends.calibrate_ladder(
+            Backend(), ["Top", "Mid", "Low"], ["2025-01"], "range", sleep=0)
+        self.assertEqual(set(levels), {"Top", "Mid"})
+
     def test_a_dead_anchor_invalidates_the_batch(self):
         out, mean = google_trends.rescale_batch(
             {"anchor": {"2025-01": 0.0}, "X": {"2025-01": 50.0}},
             "anchor", {"X": {"manufacturer": "X", "model": "X"}}, ["2025-01"])
         self.assertEqual((out, mean), ({}, 0.0))
+
+
+class TrendsTiering(unittest.TestCase):
+    """A model quantized to zero against too large an anchor must be retried
+    lower down, not recorded as a genuine zero."""
+
+    def setUp(self):
+        self.state = lib.State(os.path.join(tempfile.mkdtemp(), "state.csv"))
+
+    def test_an_unmeasured_model_starts_at_the_top(self):
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 0)
+
+    def test_a_measured_model_stays_at_its_tier(self):
+        self.state.mark("A", "1", "ok", "tier=2 anchor 40.0")
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 2)
+
+    def test_a_zeroed_model_is_demoted_one_rung(self):
+        self.state.mark("A", "1", "zero", "tier=0 rounded to zero")
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 1)
+
+    def test_a_demoted_model_is_retried_rather_than_held_back(self):
+        universe = [{"manufacturer": "A", "model": "1", "auction_count": 5}]
+        self.state.mark("A", "1", "zero", "tier=0 rounded to zero")
+        self.assertEqual(len(self.state.select(universe, limit=10)), 1)
+
+    def test_no_volume_at_the_bottom_is_held_back_like_any_empty(self):
+        universe = [{"manufacturer": "A", "model": "1", "auction_count": 5}]
+        self.state.mark("A", "1", "empty", "tier=2 no search volume")
+        self.assertEqual(self.state.select(universe, limit=10), [])
 
 
 class YouTubeShaping(unittest.TestCase):
