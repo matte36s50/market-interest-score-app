@@ -10,10 +10,12 @@ the budget rotation, and the weight renormalization in the social composite.
 Run: python3 data/pipelines/test_pipelines.py
 """
 
+import io
 import os
 import sys
 import tempfile
 import unittest
+import urllib.error
 from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +48,63 @@ class SearchPhrase(unittest.TestCase):
 
     def test_model_that_is_only_a_year_range_falls_back_to_make(self):
         self.assertEqual(lib.search_phrase("Ford", "1992-1997"), "Ford")
+
+    def test_a_slash_is_part_of_the_name_not_a_separator(self):
+        # 94 models carry a slash. Splitting on it turned "C/K" into "C",
+        # which searched for the wrong thing entirely.
+        self.assertEqual(lib.search_phrase("Chevrolet", "C/K"), "Chevrolet C/K")
+        self.assertEqual(lib.search_phrase("Ferrari", "296 GTB/GTS"),
+                         "Ferrari 296 GTB/GTS")
+        self.assertEqual(lib.search_phrase("Alfa Romeo", "105/115 Spider Series 1"),
+                         "Alfa Romeo 105/115 Spider Series 1")
+
+    def test_a_leading_ampersand_does_not_empty_the_phrase(self):
+        self.assertEqual(lib.search_phrase("Dodge", "& Plymouth Neon"),
+                         "Dodge Plymouth Neon")
+
+    def test_a_model_named_after_a_year_keeps_its_name(self):
+        # The BMW 2002 is a car, not a year. Stripping it left "BMW", which
+        # searched the whole brand and scored 27x the anchor.
+        self.assertEqual(lib.search_phrase("Bmw", "2002"), "Bmw 2002")
+        self.assertEqual(lib.search_phrase("Audi", "5000"), "Audi 5000")
+
+    def test_a_trailing_year_is_still_dropped_when_it_qualifies_a_name(self):
+        self.assertEqual(lib.search_phrase("Ford", "Mustang 1969"), "Ford Mustang")
+
+    def test_an_ampersand_part_that_is_just_the_maker_is_skipped(self):
+        # "AMC & Rambler Ambassador" is the Ambassador, not the whole of AMC.
+        self.assertEqual(lib.search_phrase("Amc", "AMC & Rambler Ambassador"),
+                         "Amc Rambler Ambassador")
+
+    def test_a_curated_override_wins(self):
+        original = lib._PHRASE_OVERRIDES
+        try:
+            lib._PHRASE_OVERRIDES = {("Ford", "A"): "Ford Model A"}
+            self.assertEqual(lib.search_phrase("Ford", "A"), "Ford Model A")
+        finally:
+            lib._PHRASE_OVERRIDES = original
+
+
+class Redaction(unittest.TestCase):
+    """State files are committed, and collector errors quote the failing URL —
+    which carries the API key."""
+
+    def test_api_keys_are_stripped_from_messages(self):
+        msg = "429 from https://x/search?q=a&key=AIzaSyEXAMPLEKEY123&type=video"
+        self.assertEqual(
+            lib.redact(msg),
+            "429 from https://x/search?q=a&key=REDACTED&type=video")
+
+    def test_serpapi_style_parameter_too(self):
+        self.assertIn("api_key=REDACTED", lib.redact("...&api_key=deadbeef&x=1"))
+
+    def test_a_state_note_never_carries_a_key(self):
+        state = lib.State(os.path.join(tempfile.mkdtemp(), "state.csv"))
+        state.mark("Chevrolet", "C/K", "error",
+                   "429 from https://x/search?key=AIzaSyEXAMPLEKEY123")
+        note = state.get("Chevrolet", "C/K")["note"]
+        self.assertNotIn("AIzaSy", note)
+        self.assertIn("key=REDACTED", note)
 
 
 class Months(unittest.TestCase):
@@ -139,6 +198,58 @@ class BudgetRotation(unittest.TestCase):
         self.assertIn("300ZX", [r["model"] for r in picked])
 
 
+# The real body YouTube returns once a default project's 100 search.list
+# calls for the day are gone. Note the reason is "rateLimitExceeded", not
+# "quotaExceeded" — classifying on the reason alone gets this wrong.
+YOUTUBE_DAILY_QUOTA_BODY = """{"error":{"code":429,
+ "message":"Quota exceeded for quota metric 'Search Queries' and limit
+ 'Search Queries per day' of service 'youtube.googleapis.com'",
+ "errors":[{"reason":"rateLimitExceeded"}],"status":"RESOURCE_EXHAUSTED"}}"""
+
+YOUTUBE_THROTTLE_BODY = """{"error":{"code":429,
+ "message":"Too many requests","errors":[{"reason":"rateLimitExceeded"}]}}"""
+
+
+class QuotaClassification(unittest.TestCase):
+    """A 429 means either 'slow down' or 'come back tomorrow'. Retrying the
+    second one just burns the run's clock."""
+
+    def _opener_raising(self, body):
+        class Opener:
+            def open(self, req, timeout=None):
+                raise urllib.error.HTTPError(
+                    "https://api/x?key=SECRET", 429, "Too Many Requests", {},
+                    io.BytesIO(body.encode()))
+        return Opener()
+
+    def test_daily_allowance_is_recognised(self):
+        self.assertTrue(lib.is_daily_quota_error(YOUTUBE_DAILY_QUOTA_BODY))
+
+    def test_plain_throttling_is_not_mistaken_for_it(self):
+        self.assertFalse(lib.is_daily_quota_error(YOUTUBE_THROTTLE_BODY))
+
+    def test_daily_allowance_stops_the_run_without_retrying(self):
+        with self.assertRaises(lib.QuotaExhausted):
+            lib.http_get("https://api/x", opener=self._opener_raising(
+                YOUTUBE_DAILY_QUOTA_BODY), retries=3, backoff=0)
+
+    def test_plain_throttling_raises_rate_limited(self):
+        with self.assertRaises(lib.RateLimited):
+            lib.http_get("https://api/x", opener=self._opener_raising(
+                YOUTUBE_THROTTLE_BODY), retries=2, backoff=0)
+
+    def test_the_key_never_reaches_the_exception_message(self):
+        try:
+            lib.http_get("https://api/x?q=a&key=SECRET",
+                         opener=self._opener_raising(YOUTUBE_THROTTLE_BODY),
+                         retries=1, backoff=0)
+        except lib.RateLimited as exc:
+            self.assertNotIn("SECRET", str(exc))
+            self.assertIn("key=REDACTED", str(exc))
+        else:
+            self.fail("expected RateLimited")
+
+
 class TrendsShaping(unittest.TestCase):
 
     def test_weekly_points_average_into_months(self):
@@ -188,11 +299,84 @@ class TrendsShaping(unittest.TestCase):
         self.assertAlmostEqual(a[("Ferrari", "F40")]["2025-01"], 25.0)
         self.assertEqual((mean_a, mean_b), (100.0, 25.0))
 
+    def test_a_lower_tier_lands_on_the_primary_scale(self):
+        """A model measured against a smaller anchor must not be inflated."""
+        months = ["2025-01"]
+        model = {"Lancia Fulvia": {"manufacturer": "Lancia", "model": "Fulvia"}}
+        # Tier 1's anchor is a tenth of the primary's true volume. Within its
+        # own batch it reads 50 against an anchor of 100 — but on the shared
+        # scale that is half of a tenth, i.e. 5, not 50.
+        out, _ = google_trends.rescale_batch(
+            {"Datsun 240Z": {"2025-01": 100.0}, "Lancia Fulvia": {"2025-01": 50.0}},
+            "Datsun 240Z", model, months, relative_level=0.1)
+        self.assertAlmostEqual(out[("Lancia", "Fulvia")]["2025-01"], 5.0)
+
+    def test_the_ladder_chains_each_rung_to_the_one_above(self):
+        anchors = ["Top", "Mid", "Low"]
+
+        class Backend:
+            # Mid reads half of Top; Low reads a fifth of Mid. So Low should
+            # come out at 0.5 x 0.2 = 0.1 of Top.
+            pairs = {("Top", "Mid"): (100.0, 50.0), ("Mid", "Low"): (100.0, 20.0)}
+
+            def fetch(self, keywords, time_range):
+                upper, lower = keywords
+                u, l = self.pairs[(upper, lower)]
+                return {upper: {"2025-01": u}, lower: {"2025-01": l}}
+
+        levels = google_trends.calibrate_ladder(
+            Backend(), anchors, ["2025-01"], "range", sleep=0)
+        self.assertAlmostEqual(levels["Top"], 1.0)
+        self.assertAlmostEqual(levels["Mid"], 0.5)
+        self.assertAlmostEqual(levels["Low"], 0.1)
+
+    def test_a_broken_rung_truncates_the_ladder(self):
+        """Better to disable the tiers below than scale them by a bogus factor."""
+        class Backend:
+            def fetch(self, keywords, time_range):
+                upper, lower = keywords
+                if lower == "Low":
+                    return {upper: {"2025-01": 100.0}, lower: {"2025-01": 0.0}}
+                return {upper: {"2025-01": 100.0}, lower: {"2025-01": 50.0}}
+
+        levels = google_trends.calibrate_ladder(
+            Backend(), ["Top", "Mid", "Low"], ["2025-01"], "range", sleep=0)
+        self.assertEqual(set(levels), {"Top", "Mid"})
+
     def test_a_dead_anchor_invalidates_the_batch(self):
         out, mean = google_trends.rescale_batch(
             {"anchor": {"2025-01": 0.0}, "X": {"2025-01": 50.0}},
             "anchor", {"X": {"manufacturer": "X", "model": "X"}}, ["2025-01"])
         self.assertEqual((out, mean), ({}, 0.0))
+
+
+class TrendsTiering(unittest.TestCase):
+    """A model quantized to zero against too large an anchor must be retried
+    lower down, not recorded as a genuine zero."""
+
+    def setUp(self):
+        self.state = lib.State(os.path.join(tempfile.mkdtemp(), "state.csv"))
+
+    def test_an_unmeasured_model_starts_at_the_top(self):
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 0)
+
+    def test_a_measured_model_stays_at_its_tier(self):
+        self.state.mark("A", "1", "ok", "tier=2 anchor 40.0")
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 2)
+
+    def test_a_zeroed_model_is_demoted_one_rung(self):
+        self.state.mark("A", "1", "zero", "tier=0 rounded to zero")
+        self.assertEqual(google_trends.tier_of(self.state, "A", "1"), 1)
+
+    def test_a_demoted_model_is_retried_rather_than_held_back(self):
+        universe = [{"manufacturer": "A", "model": "1", "auction_count": 5}]
+        self.state.mark("A", "1", "zero", "tier=0 rounded to zero")
+        self.assertEqual(len(self.state.select(universe, limit=10)), 1)
+
+    def test_no_volume_at_the_bottom_is_held_back_like_any_empty(self):
+        universe = [{"manufacturer": "A", "model": "1", "auction_count": 5}]
+        self.state.mark("A", "1", "empty", "tier=2 no search volume")
+        self.assertEqual(self.state.select(universe, limit=10), [])
 
 
 class YouTubeShaping(unittest.TestCase):

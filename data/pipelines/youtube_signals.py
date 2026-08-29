@@ -19,9 +19,16 @@ ordered by view count, then one statistics lookup on the results. The videos
 are bucketed by the month they were published, giving a per-month series in
 two API calls instead of one call per month.
 
-QUOTA. The YouTube Data API allows 10,000 units/day; search.list costs 100 and
-videos.list costs 1, so one model costs 101 units and a day's quota covers ~89
-models. The full universe is ~3,300 models, so a single run cannot cover it.
+QUOTA. Two separate limits apply and the tighter one is easy to miss. The
+YouTube Data API allows 10,000 units/day (search.list costs 100, videos.list
+costs 1, so one model costs 101 units and ~89 models fit). A default Google
+Cloud project ALSO caps search.list at **100 calls per day** (the quota
+`defaultSearchListPerDayPerProject`), and one model is one search — so ~90-100
+models/day is the real ceiling either way. Exceeding the search cap returns
+HTTP 429 with "Quota exceeded ... per day", not the 403 a units overrun gives,
+which is why a 429 here is checked for a daily-allowance message before it is
+treated as ordinary throttling.
+The full universe is ~3,300 models, so a single run cannot cover it.
 This script therefore spends a per-run budget on the staleest models (never
 measured first, highest auction volume first within that) and upserts the
 results, so daily runs converge on full coverage in ~5 weeks and then keep it
@@ -94,7 +101,7 @@ def yt_get(path, params, api_key):
                 "YouTube daily quota exhausted — rerun tomorrow to continue")
         if exc.code in (400, 403):
             reason = body[:300] or str(exc)
-            raise RuntimeError(f"YouTube API {exc.code}: {reason}")
+            raise RuntimeError(lib.redact(f"YouTube API {exc.code}: {reason}"))
         raise
 
 
@@ -148,13 +155,15 @@ def collect_model(rec, months, published_after, api_key, quota):
     man, mod = rec["manufacturer"], rec["model"]
     phrase = lib.search_phrase(man, mod)
 
-    ids, snippets, total_results = search_videos(phrase, published_after, api_key)
+    # Charge before the call: a request that fails has still been made, and a
+    # budget that only counts successes can overrun the real quota.
     quota.charge(SEARCH_COST)
+    ids, snippets, total_results = search_videos(phrase, published_after, api_key)
     if not ids:
         return [], 0, total_results
 
-    items = video_stats(ids, api_key)
     quota.charge(VIDEOS_COST)
+    items = video_stats(ids, api_key)
 
     month_set = set(months)
     buckets = {}
@@ -211,8 +220,13 @@ def main():
     lib.add_common_args(ap)
     ap.add_argument("--budget", type=int, default=9000,
                     help="API units to spend this run (daily quota is 10,000)")
+    ap.add_argument("--max-searches", type=int, default=95,
+                    help="search.list calls this run; a default Google Cloud "
+                         "project is capped at 100/day, separately from units")
     ap.add_argument("--months", type=int, default=12,
                     help="trailing complete months to measure")
+    ap.add_argument("--max-throttles", type=int, default=5,
+                    help="stop the run after this many 429s in a row")
     ap.add_argument("--api-key", default=os.environ.get("YOUTUBE_API_KEY", ""))
     args = ap.parse_args()
 
@@ -229,12 +243,13 @@ def main():
     state = lib.State(STATE_PATH)
     quota = Quota(args.budget)
 
-    affordable = max(0, args.budget // COST_PER_MODEL)
+    # Whichever ceiling bites first: the unit budget or the per-day search cap.
+    affordable = min(max(0, args.budget // COST_PER_MODEL), args.max_searches)
     todo = state.select(universe, args.limit or affordable)
     print(f"Universe {len(universe)} models; budget {args.budget} units "
           f"({affordable} models); processing {len(todo)}")
 
-    collected, empty, failed = [], 0, 0
+    collected, empty, failed, throttled = [], 0, 0, 0
     for i, rec in enumerate(todo, 1):
         if not quota.can_afford(COST_PER_MODEL):
             print("Budget spent — stopping.")
@@ -244,14 +259,28 @@ def main():
             rows, kept, total = collect_model(rec, months, published_after,
                                               args.api_key, quota)
         except lib.QuotaExhausted as exc:
+            print("  Daily YouTube allowance is spent — stopping and keeping "
+                  "progress; the next run resumes from here.")
             print(f"  {exc}")
             break
+        except lib.RateLimited:
+            # Not a quota refusal — YouTube is asking us to slow down. Leave
+            # the model unmarked so the next run picks it up again.
+            throttled += 1
+            print(f"  throttled on {man} {mod} "
+                  f"({throttled}/{args.max_throttles}) — backing off")
+            if throttled >= args.max_throttles:
+                print("  YouTube is throttling us — stopping and keeping progress.")
+                break
+            time.sleep(args.sleep * 20)
+            continue
         except Exception as exc:  # noqa: BLE001 — one bad model must not end the run
-            print(f"  [ERROR] {man} {mod}: {exc}")
+            print(f"  [ERROR] {man} {mod}: {lib.redact(exc)}")
             state.mark(man, mod, "error", exc)
             failed += 1
             continue
 
+        throttled = 0
         if rows:
             collected.extend(rows)
             state.mark(man, mod, "ok", f"{kept} videos, ~{total} matches")

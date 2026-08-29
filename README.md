@@ -62,7 +62,7 @@ those three radar axes read flat.
 
 | Input | Pipeline | Output | Source |
 |-------|----------|--------|--------|
-| Google Trends (0.15) | `google_trends.py` | `data/google_trends.csv` | Google Trends, anchor-normalized |
+| Google Trends (0.15) | `google_trends.py` | `data/google_trends.csv` | Google Trends, normalized against a chained anchor ladder |
 | YouTube (0.10) | `youtube_signals.py` | `data/youtube_signals.csv` | YouTube Data API v3 |
 | Social (0.05) | `social_signals.py` | `data/social_signals.csv` | Wikipedia + Reddit + YouTube uploads |
 | — (social sub-signal) | `reddit_signals.py` | `data/reddit_signals.csv` | Reddit search |

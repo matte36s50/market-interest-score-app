@@ -57,9 +57,21 @@ No credential is needed for Wikipedia or for the default Google Trends path.
 
 Two collectors cannot cover the ~3,300-model universe in one run:
 
-- **YouTube** allows 10,000 quota units/day. A `search.list` costs 100 units and
-  a `videos.list` costs 1, so one model costs 101 and a day's quota buys ~89
-  models — about 5 weeks for a full pass.
+- **YouTube** has *two* limits, and the tighter one is easy to miss. The API
+  allows 10,000 quota units/day — a `search.list` costs 100 and a `videos.list`
+  costs 1, so one model costs 101 and the units buy ~89 models. But a default
+  Google Cloud project **also caps `search.list` at 100 calls per day**
+  (`defaultSearchListPerDayPerProject`), and one model is one search. Either
+  way ~90–100 models/day is the ceiling — about 5 weeks for a full pass.
+
+  Exceeding the search cap returns **HTTP 429** with `"Quota exceeded ... per
+  day"`, not the 403 a units overrun returns, so a 429 is checked for a
+  daily-allowance message before it is treated as ordinary throttling; the run
+  then stops cleanly instead of retrying something that will be refused all
+  day. To lift it, request an increase for the *Search Queries per day* quota
+  on the project at
+  [Cloud console → Quotas](https://console.cloud.google.com/iam-admin/quotas),
+  then raise `--max-searches` to match.
 - **Google Trends** has no official API and rate-limits scraping aggressively.
 
 So every collector keeps a per-model state file (`data/*_state.csv`) recording
@@ -192,11 +204,36 @@ ratio model/anchor is comparable everywhere:
 trends_interest = 100 × (model's monthly value ÷ anchor's window mean)
 ```
 
-Choose the anchor (`--anchor`, default `Porsche 911`) for *middling*
-popularity. Too popular and obscure models round to 0 against it; too obscure
-and the anchor is itself noisy. The run prints a warning when a batch's anchor
-level falls low enough to cost precision, which happens when a batch-mate is
-far more searched than the anchor.
+### Why there is a ladder of anchors, not one anchor
+
+Trends reports integers with the batch maximum pinned to 100, so anything much
+smaller than the anchor rounds to 0. The first production run, anchored on
+`Porsche 911` alone, returned every month as zero for **814 of 1,574 models
+(52%)** — those models are not tied in reality, they were quantized into a tie.
+
+So `--anchors` takes a ladder of descending popularity, chained pairwise:
+
+```
+Porsche 911  --calibrate-->  Datsun 240Z  --calibrate-->  Lancia Fulvia
+   tier 0                       tier 1                       tier 2
+```
+
+Each adjacent pair is measured together in one calibration request at the start
+of a run, giving that anchor's level relative to the one above it and, by
+chaining, to the primary. Pairs rather than one big request, for the same
+reason the ladder exists: the bottom rung would round to 0 against the top.
+
+A model is measured against its tier's anchor and multiplied by that anchor's
+relative level, so every tier lands on the primary's scale. A model whose
+months all come back zero is marked `zero`, demoted a rung, and retried on the
+next run. A model still at zero on the bottom rung has no measurable search
+volume, and is recorded as having **no value** rather than a zero — the
+front-end renormalizes around a missing input instead of ranking it as a
+genuine floor.
+
+If a calibration rung fails to register, the ladder truncates there and the
+tiers below it are disabled for that run, rather than being scaled by a bogus
+factor.
 
 Weekly points are averaged into calendar months, so a 4-week and a 5-week month
 are on the same footing.
@@ -210,12 +247,36 @@ are on the same footing.
 - `serpapi` — set `SERPAPI_API_KEY`. A paid proxy for the same data that does
   not rate-limit. Used automatically when the key is present.
 
+### Fixing a bad search term
+
+Some model names cannot be turned into a good query by rule. `Ford A` (the
+Model A) matches almost anything; `BMW 2002` collides with the year. Add a row
+to **`data/search_phrases.csv`** and every collector — Trends, YouTube and
+Reddit alike — uses it:
+
+```csv
+manufacturer,model,phrase
+Ford,A,Ford Model A
+```
+
+Then delete that model's rows from the collector's output CSV and its row from
+the state file, so it is measured again under the new phrase rather than
+waiting out the rotation.
+
+Watch for phrases that collapse to the bare manufacturer name. Those do not
+merely mismeasure one model: a brand term is searched orders of magnitude more
+than any single car, so it also quantizes everything sharing its Trends batch
+to zero. Rows whose model name *is* the manufacturer (the upstream
+"unspecified model" buckets, like model `FIAT` under `Fiat`) are legitimate and
+are batched separately from real models for this reason.
+
 ### How to run
 
 ```bash
 python data/pipelines/google_trends.py                  # spend the run budget
 python data/pipelines/google_trends.py --limit 8        # smoke test
 python data/pipelines/google_trends.py --geo US         # US-only interest
+python data/pipelines/google_trends.py --anchors "A,B,C"   # custom ladder
 SERPAPI_API_KEY=... python data/pipelines/google_trends.py --backend serpapi
 ```
 
@@ -261,7 +322,7 @@ census, which is all percentile-rank normalization needs.
 export YOUTUBE_API_KEY=...
 python data/pipelines/youtube_signals.py                 # spend the daily budget
 python data/pipelines/youtube_signals.py --limit 3       # smoke test
-python data/pipelines/youtube_signals.py --budget 50000  # raised quota
+python data/pipelines/youtube_signals.py --budget 50000 --max-searches 500
 ```
 
 ### Output — `data/youtube_signals.csv`

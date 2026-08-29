@@ -51,6 +51,19 @@ class QuotaExhausted(Exception):
     """The upstream's daily allowance is spent — stop, don't retry."""
 
 
+# A 429 can mean two very different things: "you are going too fast, slow down"
+# (worth retrying) or "your allowance for the day is gone" (retrying only
+# wastes the run's remaining time). Google says which in the error body.
+_DAILY_QUOTA_MARKERS = (
+    "per day", "perday", "1/d/", "dailylimitexceeded", "quotaexceeded",
+)
+
+
+def is_daily_quota_error(body):
+    low = (body or "").lower()
+    return any(marker in low for marker in _DAILY_QUOTA_MARKERS)
+
+
 def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0):
     """GET a URL, returning decoded text. None on 404.
 
@@ -71,11 +84,21 @@ def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0)
             if exc.code == 404:
                 return None
             if exc.code == 429:
+                # Read the body before deciding: a daily-allowance refusal will
+                # still be refused in eight seconds, so retrying it just burns
+                # the run's clock.
+                body = ""
+                try:
+                    body = exc.read().decode("utf-8", errors="replace")
+                except Exception:  # noqa: BLE001
+                    pass
+                if is_daily_quota_error(body):
+                    raise QuotaExhausted(redact(body[:400] or url))
                 last_429 = True
                 if attempt < retries - 1:
                     time.sleep(backoff * (2 ** attempt) * 2)
                     continue
-                raise RateLimited(f"429 from {url}")
+                raise RateLimited(redact(f"429 from {url}"))
             if attempt == retries - 1:
                 raise
             time.sleep(backoff * (attempt + 1))
@@ -84,7 +107,7 @@ def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0)
                 raise
             time.sleep(backoff * (attempt + 1))
     if last_429:
-        raise RateLimited(f"429 from {url}")
+        raise RateLimited(redact(f"429 from {url}"))
     return None
 
 
@@ -135,27 +158,89 @@ _YEAR_RANGE = re.compile(r"\b(19|20)\d{2}\s*[-–—/]\s*((19|20)?\d{2})\b")
 _TRAILING_YEAR = re.compile(r"\s*\b(19|20)\d{2}\b\s*$")
 
 
+def load_phrase_overrides():
+    """Hand-curated search phrases, from data/search_phrases.csv.
+
+    Some model names cannot be turned into a good query by rule. "Ford A" (the
+    Model A) matches almost anything; "BMW 2002" collides with the year. This
+    file is the escape hatch, in the same spirit as wikipedia_slugs.csv: add a
+    row and every collector uses it.
+    """
+    path = os.path.join(DATA_DIR, "search_phrases.csv")
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            phrase = (row.get("phrase") or "").strip()
+            if phrase:
+                out[((row.get("manufacturer") or "").strip(),
+                     (row.get("model") or "").strip())] = phrase
+    return out
+
+
+_PHRASE_OVERRIDES = None
+
+
 def search_phrase(manufacturer, model):
     """The keyword phrase to search an outside platform for this model.
 
     Shared by every collector so YouTube, Reddit and Trends all ask about the
     same thing and their sub-signals stay comparable.
+
+    The failure mode to guard against is a phrase that collapses to the bare
+    manufacturer name. "AMC" instead of "AMC Rambler Ambassador", or "BMW"
+    instead of "BMW 2002", does not merely mismeasure that model — a brand
+    name is so much more searched than any single car that it also crushes
+    every other model sharing its Trends batch to zero.
     """
-    mod = model.strip()
-    mod = _YEAR_RANGE.sub("", mod)
-    # "Abarth 750 & 850" and "300SL Gullwing & Roadster" are one nameplate with
-    # two body styles; search the first, which is the one people name.
-    mod = re.split(r"\s*[&/]\s*", mod)[0]
-    mod = _TRAILING_YEAR.sub("", mod)
-    mod = re.sub(r"\s+", " ", mod).strip()
+    global _PHRASE_OVERRIDES
+    if _PHRASE_OVERRIDES is None:
+        _PHRASE_OVERRIDES = load_phrase_overrides()
+    override = _PHRASE_OVERRIDES.get((manufacturer.strip(), model.strip()))
+    if override:
+        return override
 
     man = manufacturer.strip()
+    mod = _YEAR_RANGE.sub("", model.strip())
+
+    # "Abarth 750 & 850" and "300SL Gullwing & Roadster" are one nameplate with
+    # two body styles; search the first, which is the one people name. Only "&"
+    # joins two names like that — a slash is usually part of one name ("C/K",
+    # "296 GTB/GTS", "105/115 Spider"), so it is left alone. Skip a part that
+    # is just the maker: "AMC & Rambler Ambassador" means the Ambassador, not
+    # the whole of AMC.
+    parts = [p.strip(" ,;-") for p in mod.split("&")]
+    mod = next((p for p in parts if p and p.lower() != man.lower()), "")
     if not mod:
+        mod = next((p for p in parts if p), "")
+
+    # A trailing year is usually a qualifier ("Mustang 1969") — but sometimes
+    # it IS the name (BMW 2002, Audi 5000). Only strip it if something is left.
+    without_year = _TRAILING_YEAR.sub("", mod).strip()
+    if without_year:
+        mod = without_year
+
+    mod = re.sub(r"\s+", " ", mod).strip()
+    if not mod or mod.lower() == man.lower():
         return man
     # Don't say "Porsche Porsche 911".
     if mod.lower().startswith(man.lower()):
         return mod
     return f"{man} {mod}"
+
+
+_SECRET_PARAM = re.compile(r"(?i)\b((?:api_)?key)=[^&\s]+")
+
+
+def redact(text):
+    """Strip credentials out of anything headed for a log or a state file.
+
+    Collector errors quote the URL that failed, and those URLs carry the API
+    key as a query parameter. State files are committed to the repository, so
+    an unredacted message would publish the key.
+    """
+    return _SECRET_PARAM.sub(r"\1=REDACTED", str(text))
 
 
 def tokens(s):
@@ -285,7 +370,8 @@ class State:
     def mark(self, man, mod, status, note=""):
         self.rows[(man, mod)] = {
             "manufacturer": man, "model": mod,
-            "measured_at": utcnow_iso(), "status": status, "note": str(note)[:200],
+            "measured_at": utcnow_iso(), "status": status,
+            "note": redact(note)[:200],
         }
 
     def save(self):
