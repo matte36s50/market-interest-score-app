@@ -31,8 +31,6 @@ Alfa Romeo,Montreal,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
 Alfa Romeo,Sprint Speciale,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
 Alfa Romeo,Stelvio,2026-08-29T19:59:57Z,ok,anchor 81.1
 Am General,AM General Truck,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
-Amc,AMC & Rambler Ambassador,2026-08-29T20:03:30Z,ok,anchor 16.7
-Amc,AMC & Rambler Marlin,2026-08-29T20:08:30Z,ok,anchor 16.7
 Amc,AMC AMX,2026-08-29T19:53:09Z,ok,anchor 81.1
 Amc,AMC Eagle,2026-08-29T19:49:48Z,ok,anchor 81.1
 Amc,AMC Javelin,2026-08-29T19:53:16Z,ok,anchor 81.1
@@ -111,7 +109,6 @@ Autobianchi,Autobianchi Bianchina,2026-08-29T21:49:39Z,zero,tier=0 rounded to ze
 BMW,1600 & 1602,2026-08-29T19:47:01Z,ok,anchor 81.1
 BMW,2-Series,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
 BMW,2000C & 2000CS,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
-BMW,2002,2026-08-29T19:26:56Z,ok,anchor 3.5
 BMW,2002tii,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
 BMW,Alpina,2026-08-29T19:34:57Z,ok,anchor 81.1
 BMW,E12 5-Series,2026-08-29T21:49:39Z,zero,tier=0 rounded to zero
@@ -478,7 +475,6 @@ Fisker,FISKER OCEAN,2026-08-29T20:04:50Z,error,anchor zero
 Fisker,Fisker Karma,2026-08-29T19:47:15Z,ok,anchor 81.1
 Ford,18 & 40 V8,2026-08-29T19:28:57Z,ok,anchor 81.2
 Ford,48 & 68 V8,2026-08-29T19:40:35Z,ok,anchor 81.1
-Ford,A,2026-08-29T19:26:42Z,ok,anchor 23.8
 Ford,A Pickup & AA,2026-08-29T19:37:04Z,ok,anchor 81.1
 Ford,AEROSTAR,2026-08-29T20:04:50Z,error,anchor zero
 Ford,B,2026-08-29T20:04:57Z,ok,anchor 81.1

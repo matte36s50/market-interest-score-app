@@ -158,25 +158,71 @@ _YEAR_RANGE = re.compile(r"\b(19|20)\d{2}\s*[-–—/]\s*((19|20)?\d{2})\b")
 _TRAILING_YEAR = re.compile(r"\s*\b(19|20)\d{2}\b\s*$")
 
 
+def load_phrase_overrides():
+    """Hand-curated search phrases, from data/search_phrases.csv.
+
+    Some model names cannot be turned into a good query by rule. "Ford A" (the
+    Model A) matches almost anything; "BMW 2002" collides with the year. This
+    file is the escape hatch, in the same spirit as wikipedia_slugs.csv: add a
+    row and every collector uses it.
+    """
+    path = os.path.join(DATA_DIR, "search_phrases.csv")
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            phrase = (row.get("phrase") or "").strip()
+            if phrase:
+                out[((row.get("manufacturer") or "").strip(),
+                     (row.get("model") or "").strip())] = phrase
+    return out
+
+
+_PHRASE_OVERRIDES = None
+
+
 def search_phrase(manufacturer, model):
     """The keyword phrase to search an outside platform for this model.
 
     Shared by every collector so YouTube, Reddit and Trends all ask about the
     same thing and their sub-signals stay comparable.
+
+    The failure mode to guard against is a phrase that collapses to the bare
+    manufacturer name. "AMC" instead of "AMC Rambler Ambassador", or "BMW"
+    instead of "BMW 2002", does not merely mismeasure that model — a brand
+    name is so much more searched than any single car that it also crushes
+    every other model sharing its Trends batch to zero.
     """
-    mod = model.strip()
-    mod = _YEAR_RANGE.sub("", mod)
-    # "Abarth 750 & 850" and "300SL Gullwing & Roadster" are one nameplate with
-    # two body styles; search the first, which is the one people name. Only "&"
-    # joins two names like that — a slash is usually part of one name
-    # ("C/K", "296 GTB/GTS", "105/115 Spider"), so it is left alone.
-    parts = [p.strip(" ,;-") for p in mod.split("&")]
-    mod = next((p for p in parts if p), "")
-    mod = _TRAILING_YEAR.sub("", mod)
-    mod = re.sub(r"\s+", " ", mod).strip()
+    global _PHRASE_OVERRIDES
+    if _PHRASE_OVERRIDES is None:
+        _PHRASE_OVERRIDES = load_phrase_overrides()
+    override = _PHRASE_OVERRIDES.get((manufacturer.strip(), model.strip()))
+    if override:
+        return override
 
     man = manufacturer.strip()
+    mod = _YEAR_RANGE.sub("", model.strip())
+
+    # "Abarth 750 & 850" and "300SL Gullwing & Roadster" are one nameplate with
+    # two body styles; search the first, which is the one people name. Only "&"
+    # joins two names like that — a slash is usually part of one name ("C/K",
+    # "296 GTB/GTS", "105/115 Spider"), so it is left alone. Skip a part that
+    # is just the maker: "AMC & Rambler Ambassador" means the Ambassador, not
+    # the whole of AMC.
+    parts = [p.strip(" ,;-") for p in mod.split("&")]
+    mod = next((p for p in parts if p and p.lower() != man.lower()), "")
     if not mod:
+        mod = next((p for p in parts if p), "")
+
+    # A trailing year is usually a qualifier ("Mustang 1969") — but sometimes
+    # it IS the name (BMW 2002, Audi 5000). Only strip it if something is left.
+    without_year = _TRAILING_YEAR.sub("", mod).strip()
+    if without_year:
+        mod = without_year
+
+    mod = re.sub(r"\s+", " ", mod).strip()
+    if not mod or mod.lower() == man.lower():
         return man
     # Don't say "Porsche Porsche 911".
     if mod.lower().startswith(man.lower()):

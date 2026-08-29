@@ -352,21 +352,32 @@ def main():
 
     # Group by rung: a model demoted for registering nothing needs a smaller
     # anchor, and every batch can carry only one.
-    by_tier = {}
+    #
+    # Brand-level rows (the upstream "unspecified model" buckets, where the
+    # model name is the manufacturer's own) are grouped apart from real models.
+    # A bare brand term is searched orders of magnitude more than any single
+    # car, so sharing a batch with one would quantize its batch-mates to zero —
+    # the same failure the anchor ladder exists to prevent. Kept together they
+    # are comparable to each other.
+    groups = {}
     for rec in todo:
         tier = min(tier_of(state, rec["manufacturer"], rec["model"]),
                    len(usable) - 1)
-        by_tier.setdefault(tier, []).append(rec)
+        is_brand = (lib.search_phrase(rec["manufacturer"], rec["model"]).lower()
+                    == rec["manufacturer"].strip().lower())
+        groups.setdefault((tier, is_brand), []).append(rec)
 
     batches = []
-    for tier in sorted(by_tier):
-        group = by_tier[tier]
+    for (tier, _), group in sorted(groups.items()):
         batches.extend(
             (tier, group[i:i + per_batch])
             for i in range(0, len(group), per_batch))
+    by_tier = {}
+    for (tier, _), group in groups.items():
+        by_tier[tier] = by_tier.get(tier, 0) + len(group)
     print(f"Universe {len(universe)} models; processing {len(todo)} "
           f"in {len(batches)} batches "
-          f"({', '.join(f'tier {t}: {len(g)}' for t, g in sorted(by_tier.items()))})")
+          f"({', '.join(f'tier {t}: {n}' for t, n in sorted(by_tier.items()))})")
 
     collected = []
     consecutive_failures = 0

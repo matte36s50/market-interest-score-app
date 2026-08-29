@@ -62,6 +62,28 @@ class SearchPhrase(unittest.TestCase):
         self.assertEqual(lib.search_phrase("Dodge", "& Plymouth Neon"),
                          "Dodge Plymouth Neon")
 
+    def test_a_model_named_after_a_year_keeps_its_name(self):
+        # The BMW 2002 is a car, not a year. Stripping it left "BMW", which
+        # searched the whole brand and scored 27x the anchor.
+        self.assertEqual(lib.search_phrase("Bmw", "2002"), "Bmw 2002")
+        self.assertEqual(lib.search_phrase("Audi", "5000"), "Audi 5000")
+
+    def test_a_trailing_year_is_still_dropped_when_it_qualifies_a_name(self):
+        self.assertEqual(lib.search_phrase("Ford", "Mustang 1969"), "Ford Mustang")
+
+    def test_an_ampersand_part_that_is_just_the_maker_is_skipped(self):
+        # "AMC & Rambler Ambassador" is the Ambassador, not the whole of AMC.
+        self.assertEqual(lib.search_phrase("Amc", "AMC & Rambler Ambassador"),
+                         "Amc Rambler Ambassador")
+
+    def test_a_curated_override_wins(self):
+        original = lib._PHRASE_OVERRIDES
+        try:
+            lib._PHRASE_OVERRIDES = {("Ford", "A"): "Ford Model A"}
+            self.assertEqual(lib.search_phrase("Ford", "A"), "Ford Model A")
+        finally:
+            lib._PHRASE_OVERRIDES = original
+
 
 class Redaction(unittest.TestCase):
     """State files are committed, and collector errors quote the failing URL —

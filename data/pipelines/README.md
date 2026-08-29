@@ -247,6 +247,29 @@ are on the same footing.
 - `serpapi` — set `SERPAPI_API_KEY`. A paid proxy for the same data that does
   not rate-limit. Used automatically when the key is present.
 
+### Fixing a bad search term
+
+Some model names cannot be turned into a good query by rule. `Ford A` (the
+Model A) matches almost anything; `BMW 2002` collides with the year. Add a row
+to **`data/search_phrases.csv`** and every collector — Trends, YouTube and
+Reddit alike — uses it:
+
+```csv
+manufacturer,model,phrase
+Ford,A,Ford Model A
+```
+
+Then delete that model's rows from the collector's output CSV and its row from
+the state file, so it is measured again under the new phrase rather than
+waiting out the rotation.
+
+Watch for phrases that collapse to the bare manufacturer name. Those do not
+merely mismeasure one model: a brand term is searched orders of magnitude more
+than any single car, so it also quantizes everything sharing its Trends batch
+to zero. Rows whose model name *is* the manufacturer (the upstream
+"unspecified model" buckets, like model `FIAT` under `Fiat`) are legitimate and
+are batched separately from real models for this reason.
+
 ### How to run
 
 ```bash
