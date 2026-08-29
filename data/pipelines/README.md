@@ -57,9 +57,21 @@ No credential is needed for Wikipedia or for the default Google Trends path.
 
 Two collectors cannot cover the ~3,300-model universe in one run:
 
-- **YouTube** allows 10,000 quota units/day. A `search.list` costs 100 units and
-  a `videos.list` costs 1, so one model costs 101 and a day's quota buys ~89
-  models — about 5 weeks for a full pass.
+- **YouTube** has *two* limits, and the tighter one is easy to miss. The API
+  allows 10,000 quota units/day — a `search.list` costs 100 and a `videos.list`
+  costs 1, so one model costs 101 and the units buy ~89 models. But a default
+  Google Cloud project **also caps `search.list` at 100 calls per day**
+  (`defaultSearchListPerDayPerProject`), and one model is one search. Either
+  way ~90–100 models/day is the ceiling — about 5 weeks for a full pass.
+
+  Exceeding the search cap returns **HTTP 429** with `"Quota exceeded ... per
+  day"`, not the 403 a units overrun returns, so a 429 is checked for a
+  daily-allowance message before it is treated as ordinary throttling; the run
+  then stops cleanly instead of retrying something that will be refused all
+  day. To lift it, request an increase for the *Search Queries per day* quota
+  on the project at
+  [Cloud console → Quotas](https://console.cloud.google.com/iam-admin/quotas),
+  then raise `--max-searches` to match.
 - **Google Trends** has no official API and rate-limits scraping aggressively.
 
 So every collector keeps a per-model state file (`data/*_state.csv`) recording
@@ -261,7 +273,7 @@ census, which is all percentile-rank normalization needs.
 export YOUTUBE_API_KEY=...
 python data/pipelines/youtube_signals.py                 # spend the daily budget
 python data/pipelines/youtube_signals.py --limit 3       # smoke test
-python data/pipelines/youtube_signals.py --budget 50000  # raised quota
+python data/pipelines/youtube_signals.py --budget 50000 --max-searches 500
 ```
 
 ### Output — `data/youtube_signals.csv`

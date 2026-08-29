@@ -51,6 +51,19 @@ class QuotaExhausted(Exception):
     """The upstream's daily allowance is spent — stop, don't retry."""
 
 
+# A 429 can mean two very different things: "you are going too fast, slow down"
+# (worth retrying) or "your allowance for the day is gone" (retrying only
+# wastes the run's remaining time). Google says which in the error body.
+_DAILY_QUOTA_MARKERS = (
+    "per day", "perday", "1/d/", "dailylimitexceeded", "quotaexceeded",
+)
+
+
+def is_daily_quota_error(body):
+    low = (body or "").lower()
+    return any(marker in low for marker in _DAILY_QUOTA_MARKERS)
+
+
 def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0):
     """GET a URL, returning decoded text. None on 404.
 
@@ -71,11 +84,21 @@ def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0)
             if exc.code == 404:
                 return None
             if exc.code == 429:
+                # Read the body before deciding: a daily-allowance refusal will
+                # still be refused in eight seconds, so retrying it just burns
+                # the run's clock.
+                body = ""
+                try:
+                    body = exc.read().decode("utf-8", errors="replace")
+                except Exception:  # noqa: BLE001
+                    pass
+                if is_daily_quota_error(body):
+                    raise QuotaExhausted(redact(body[:400] or url))
                 last_429 = True
                 if attempt < retries - 1:
                     time.sleep(backoff * (2 ** attempt) * 2)
                     continue
-                raise RateLimited(f"429 from {url}")
+                raise RateLimited(redact(f"429 from {url}"))
             if attempt == retries - 1:
                 raise
             time.sleep(backoff * (attempt + 1))
@@ -84,7 +107,7 @@ def http_get(url, headers=None, retries=3, timeout=30, opener=None, backoff=2.0)
                 raise
             time.sleep(backoff * (attempt + 1))
     if last_429:
-        raise RateLimited(f"429 from {url}")
+        raise RateLimited(redact(f"429 from {url}"))
     return None
 
 
@@ -144,8 +167,11 @@ def search_phrase(manufacturer, model):
     mod = model.strip()
     mod = _YEAR_RANGE.sub("", mod)
     # "Abarth 750 & 850" and "300SL Gullwing & Roadster" are one nameplate with
-    # two body styles; search the first, which is the one people name.
-    mod = re.split(r"\s*[&/]\s*", mod)[0]
+    # two body styles; search the first, which is the one people name. Only "&"
+    # joins two names like that — a slash is usually part of one name
+    # ("C/K", "296 GTB/GTS", "105/115 Spider"), so it is left alone.
+    parts = [p.strip(" ,;-") for p in mod.split("&")]
+    mod = next((p for p in parts if p), "")
     mod = _TRAILING_YEAR.sub("", mod)
     mod = re.sub(r"\s+", " ", mod).strip()
 
@@ -156,6 +182,19 @@ def search_phrase(manufacturer, model):
     if mod.lower().startswith(man.lower()):
         return mod
     return f"{man} {mod}"
+
+
+_SECRET_PARAM = re.compile(r"(?i)\b((?:api_)?key)=[^&\s]+")
+
+
+def redact(text):
+    """Strip credentials out of anything headed for a log or a state file.
+
+    Collector errors quote the URL that failed, and those URLs carry the API
+    key as a query parameter. State files are committed to the repository, so
+    an unredacted message would publish the key.
+    """
+    return _SECRET_PARAM.sub(r"\1=REDACTED", str(text))
 
 
 def tokens(s):
@@ -285,7 +324,8 @@ class State:
     def mark(self, man, mod, status, note=""):
         self.rows[(man, mod)] = {
             "manufacturer": man, "model": mod,
-            "measured_at": utcnow_iso(), "status": status, "note": str(note)[:200],
+            "measured_at": utcnow_iso(), "status": status,
+            "note": redact(note)[:200],
         }
 
     def save(self):

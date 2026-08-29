@@ -10,10 +10,12 @@ the budget rotation, and the weight renormalization in the social composite.
 Run: python3 data/pipelines/test_pipelines.py
 """
 
+import io
 import os
 import sys
 import tempfile
 import unittest
+import urllib.error
 from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +48,41 @@ class SearchPhrase(unittest.TestCase):
 
     def test_model_that_is_only_a_year_range_falls_back_to_make(self):
         self.assertEqual(lib.search_phrase("Ford", "1992-1997"), "Ford")
+
+    def test_a_slash_is_part_of_the_name_not_a_separator(self):
+        # 94 models carry a slash. Splitting on it turned "C/K" into "C",
+        # which searched for the wrong thing entirely.
+        self.assertEqual(lib.search_phrase("Chevrolet", "C/K"), "Chevrolet C/K")
+        self.assertEqual(lib.search_phrase("Ferrari", "296 GTB/GTS"),
+                         "Ferrari 296 GTB/GTS")
+        self.assertEqual(lib.search_phrase("Alfa Romeo", "105/115 Spider Series 1"),
+                         "Alfa Romeo 105/115 Spider Series 1")
+
+    def test_a_leading_ampersand_does_not_empty_the_phrase(self):
+        self.assertEqual(lib.search_phrase("Dodge", "& Plymouth Neon"),
+                         "Dodge Plymouth Neon")
+
+
+class Redaction(unittest.TestCase):
+    """State files are committed, and collector errors quote the failing URL —
+    which carries the API key."""
+
+    def test_api_keys_are_stripped_from_messages(self):
+        msg = "429 from https://x/search?q=a&key=AIzaSyEXAMPLEKEY123&type=video"
+        self.assertEqual(
+            lib.redact(msg),
+            "429 from https://x/search?q=a&key=REDACTED&type=video")
+
+    def test_serpapi_style_parameter_too(self):
+        self.assertIn("api_key=REDACTED", lib.redact("...&api_key=deadbeef&x=1"))
+
+    def test_a_state_note_never_carries_a_key(self):
+        state = lib.State(os.path.join(tempfile.mkdtemp(), "state.csv"))
+        state.mark("Chevrolet", "C/K", "error",
+                   "429 from https://x/search?key=AIzaSyEXAMPLEKEY123")
+        note = state.get("Chevrolet", "C/K")["note"]
+        self.assertNotIn("AIzaSy", note)
+        self.assertIn("key=REDACTED", note)
 
 
 class Months(unittest.TestCase):
@@ -137,6 +174,58 @@ class BudgetRotation(unittest.TestCase):
         self.state.mark("Nissan", "300ZX", "empty")
         picked = self.state.select(self.universe, limit=10, retry_empty_after_days=0)
         self.assertIn("300ZX", [r["model"] for r in picked])
+
+
+# The real body YouTube returns once a default project's 100 search.list
+# calls for the day are gone. Note the reason is "rateLimitExceeded", not
+# "quotaExceeded" — classifying on the reason alone gets this wrong.
+YOUTUBE_DAILY_QUOTA_BODY = """{"error":{"code":429,
+ "message":"Quota exceeded for quota metric 'Search Queries' and limit
+ 'Search Queries per day' of service 'youtube.googleapis.com'",
+ "errors":[{"reason":"rateLimitExceeded"}],"status":"RESOURCE_EXHAUSTED"}}"""
+
+YOUTUBE_THROTTLE_BODY = """{"error":{"code":429,
+ "message":"Too many requests","errors":[{"reason":"rateLimitExceeded"}]}}"""
+
+
+class QuotaClassification(unittest.TestCase):
+    """A 429 means either 'slow down' or 'come back tomorrow'. Retrying the
+    second one just burns the run's clock."""
+
+    def _opener_raising(self, body):
+        class Opener:
+            def open(self, req, timeout=None):
+                raise urllib.error.HTTPError(
+                    "https://api/x?key=SECRET", 429, "Too Many Requests", {},
+                    io.BytesIO(body.encode()))
+        return Opener()
+
+    def test_daily_allowance_is_recognised(self):
+        self.assertTrue(lib.is_daily_quota_error(YOUTUBE_DAILY_QUOTA_BODY))
+
+    def test_plain_throttling_is_not_mistaken_for_it(self):
+        self.assertFalse(lib.is_daily_quota_error(YOUTUBE_THROTTLE_BODY))
+
+    def test_daily_allowance_stops_the_run_without_retrying(self):
+        with self.assertRaises(lib.QuotaExhausted):
+            lib.http_get("https://api/x", opener=self._opener_raising(
+                YOUTUBE_DAILY_QUOTA_BODY), retries=3, backoff=0)
+
+    def test_plain_throttling_raises_rate_limited(self):
+        with self.assertRaises(lib.RateLimited):
+            lib.http_get("https://api/x", opener=self._opener_raising(
+                YOUTUBE_THROTTLE_BODY), retries=2, backoff=0)
+
+    def test_the_key_never_reaches_the_exception_message(self):
+        try:
+            lib.http_get("https://api/x?q=a&key=SECRET",
+                         opener=self._opener_raising(YOUTUBE_THROTTLE_BODY),
+                         retries=1, backoff=0)
+        except lib.RateLimited as exc:
+            self.assertNotIn("SECRET", str(exc))
+            self.assertIn("key=REDACTED", str(exc))
+        else:
+            self.fail("expected RateLimited")
 
 
 class TrendsShaping(unittest.TestCase):
