@@ -1,310 +1,350 @@
 #!/usr/bin/env python3
 """
-Social Signals Pipeline — measured, per-model, per-month attention signals.
+Social Signals Pipeline — the measured social composite for the MII.
 
-Implements the first two sub-signals of the composite specced in
-docs/social-score-methodology.md, from a free, reliable, public source
-(Wikimedia). Both are measured, time-varying, and computed at the same
-manufacturer + model grain as the MII results, so they can never regress
-into a static per-brand constant:
+Builds data/social_signals.csv: one row per manufacturer x model x month, with
+a 0-100 `social_score` that the front-end joins into the MII's Social input.
+It replaced a static per-brand constant (19 distinct values, 93% of brands
+pinned to one default) with something measured and time-varying.
 
-  attention  — monthly Wikipedia pageviews for the model's article
-  SOV        — the model's share of pageviews within its manufacturer
-               (the "share of voice within its segment" from the spec)
+This script does two jobs:
 
-social_score = 100 x (0.6 x pctrank(attention) + 0.4 x pctrank(sov))
+  1. COLLECT the Wikipedia sub-signals itself — monthly article pageviews and
+     the model's share of pageviews within its manufacturer.
+  2. BLEND every available sub-signal into the composite, reading the other
+     collectors' outputs (reddit_signals.csv, youtube_signals.csv) as they
+     land. Those collectors run independently and on their own budgets, so
+     this step is written to work with whatever subset exists today.
 
-The 0.6 / 0.4 split is the methodology doc's mention-volume 0.30 and
-share-of-voice 0.20 weights renormalized over the sub-signals available
-(doc §5: drop missing sub-signals and renormalize — never impute).
-Reddit mentions / engagement, YouTube upload counts, and sentiment slot in
-as additional columns + weights when their collectors are added.
+WEIGHTS follow docs/social-score-methodology.md §3:
 
-Model → article resolution uses the MediaWiki search API once per model and
-is cached in data/wikipedia_slugs.csv (curate that file by hand to correct
-or add mappings; delete a row to force re-resolution). Models that don't
-resolve simply have no social signal — the front-end renormalizes around
-missing values.
+  mention volume  0.30   mean of the ranks of Wikipedia pageviews and Reddit
+                         post count — two readings of the same underlying
+                         "how much is this car being looked up / talked about"
+  engagement rate 0.25   Reddit interactions per post
+  share of voice  0.20   the model's share of its manufacturer's attention
+  social video    0.15   count of new YouTube videos about the model
+  sentiment       0.10   not collected yet
 
-Outputs data/social_signals.csv:
-  manufacturer,model,month,wiki_slug,wiki_pageviews,wiki_sov,social_score
+A sub-signal a row has no value for is dropped from that row's blend and the
+remaining weights are renormalized (never impute a default). So a row with
+Wikipedia data only still scores on attention 0.30 / SOV 0.20 -> 0.6 / 0.4,
+exactly as it did before the other collectors existed, and gains precision as
+they fill in.
 
-Run in CI by .github/workflows/social-signals.yml (monthly). Stdlib only.
+Model -> article resolution uses the MediaWiki search API once per model and is
+cached in data/wikipedia_slugs.csv (hand-curate that file to fix a mapping;
+delete a row to force re-resolution).
 
 Usage:
-  python data/pipelines/social_signals.py             # full run vs live S3 CSV
-  python data/pipelines/social_signals.py --limit 25  # smoke test
-  python data/pipelines/social_signals.py --csv path/to/mii_results.csv
+  python data/pipelines/social_signals.py              # refresh wiki if stale, blend
+  python data/pipelines/social_signals.py --reuse-wiki # blend only, no API calls
+  python data/pipelines/social_signals.py --limit 25   # smoke test
 """
 
 import argparse
-import csv
-import io
-import json
 import os
-import re
+import sys
 import time
-import urllib.error
 import urllib.parse
-import urllib.request
-from datetime import date
 
-MII_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv"
-SLUGS_PATH = os.path.join(os.path.dirname(__file__), "..", "wikipedia_slugs.csv")
-OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "social_signals.csv")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import signal_lib as lib  # noqa: E402
+
+SLUGS_PATH = os.path.join(lib.DATA_DIR, "wikipedia_slugs.csv")
+OUTPUT_PATH = os.path.join(lib.DATA_DIR, "social_signals.csv")
+YOUTUBE_PATH = os.path.join(lib.DATA_DIR, "youtube_signals.csv")
+REDDIT_PATH = os.path.join(lib.DATA_DIR, "reddit_signals.csv")
 
 SEARCH_API = "https://en.wikipedia.org/w/api.php"
 PAGEVIEWS_API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article"
-HEADERS = {
-    "User-Agent": "MII-Social-Pipeline/1.0 (market-interest-index; mlotterhand@gmail.com)"
-}
 
-MONTHS_BACK = 24          # trailing window of complete months
-W_ATTENTION, W_SOV = 0.6, 0.4
+MONTHS_BACK = 24
 
+FIELDS = [
+    "manufacturer", "model", "month", "wiki_slug",
+    "wiki_pageviews", "wiki_sov",
+    "reddit_posts", "reddit_engagement", "yt_videos",
+    "social_score",
+]
 
-def http_get_json(url: str, retries: int = 3):
-    """GET a JSON URL with retry/backoff. Returns None on 404."""
-    for attempt in range(retries):
-        try:
-            req = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return json.load(resp)
-        except urllib.error.HTTPError as exc:
-            if exc.code == 404:
-                return None
-            if exc.code == 429 and attempt < retries - 1:
-                time.sleep(5 * (attempt + 1))
-                continue
-            if attempt == retries - 1:
-                raise
-            time.sleep(2 * (attempt + 1))
-        except Exception:
-            if attempt == retries - 1:
-                raise
-            time.sleep(2 * (attempt + 1))
-    return None
+# (weight, [columns that can supply it]) — several columns for one sub-signal
+# means "average the ranks of whichever are present".
+SUB_SIGNALS = [
+    ("mention",    0.30, ["wiki_pageviews", "reddit_posts"]),
+    ("engagement", 0.25, ["reddit_engagement"]),
+    ("sov",        0.20, ["wiki_sov"]),
+    ("video",      0.15, ["yt_videos"]),
+    # sentiment 0.10 — no collector yet; its weight renormalizes away.
+]
 
 
-def load_universe(source: str) -> list[tuple[str, str]]:
-    """Distinct (manufacturer, model) pairs from the MII results CSV."""
-    if re.match(r"^https?://", source):
-        req = urllib.request.Request(source, headers=HEADERS)
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            text = resp.read().decode("utf-8", errors="replace")
-        reader = csv.DictReader(io.StringIO(text))
-    else:
-        reader = csv.DictReader(open(source, newline="", encoding="utf-8"))
-    pairs = set()
-    for row in reader:
-        man = (row.get("manufacturer") or "").strip()
-        mod = (row.get("model") or "").strip()
-        if man and mod and man.lower() != "unknown":
-            pairs.add((man, mod))
-    return sorted(pairs)
+# --------------------------------------------------------------------------
+# Wikipedia collection
+# --------------------------------------------------------------------------
 
-
-def tokens(s: str) -> set[str]:
-    return {t for t in re.split(r"[^a-z0-9]+", s.lower()) if len(t) > 1}
-
-
-def resolve_slug(manufacturer: str, model: str) -> str | None:
+def resolve_slug(manufacturer, model):
     """Top Wikipedia search hit for 'manufacturer model', sanity-checked."""
     query = f"{manufacturer} {model}"
-    url = (
-        SEARCH_API
-        + "?action=query&list=search&format=json&srlimit=1&srsearch="
-        + urllib.parse.quote(query)
-    )
-    data = http_get_json(url)
+    url = (SEARCH_API
+           + "?action=query&list=search&format=json&srlimit=1&srsearch="
+           + urllib.parse.quote(query))
+    data = lib.http_get_json(url)
     hits = (data or {}).get("query", {}).get("search", [])
     if not hits:
         return None
     title = hits[0]["title"]
-    # The hit must share at least one token with the query, otherwise the
-    # search fell back to something unrelated.
-    if not (tokens(title) & (tokens(manufacturer) | tokens(model))):
+    # The hit must share a token with the query, otherwise the search fell
+    # through to something unrelated.
+    if not (lib.tokens(title) & (lib.tokens(manufacturer) | lib.tokens(model))):
         return None
     return title.replace(" ", "_")
 
 
-def load_slug_cache() -> dict[tuple[str, str], dict]:
-    if not os.path.exists(SLUGS_PATH):
-        return {}
-    with open(SLUGS_PATH, newline="", encoding="utf-8") as f:
-        return {
-            (r["manufacturer"], r["model"]): r
-            for r in csv.DictReader(f)
-        }
+def load_slug_cache():
+    return {(r["manufacturer"], r["model"]): r for r in lib.read_rows(SLUGS_PATH)}
 
 
-def save_slug_cache(cache: dict[tuple[str, str], dict]) -> None:
-    with open(SLUGS_PATH, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["manufacturer", "model", "slug", "status"])
-        w.writeheader()
-        for (man, mod) in sorted(cache):
-            row = cache[(man, mod)]
-            w.writerow({
-                "manufacturer": man,
-                "model": mod,
-                "slug": row.get("slug", ""),
-                "status": row.get("status", ""),
-            })
+def save_slug_cache(cache):
+    lib.write_rows(SLUGS_PATH, ["manufacturer", "model", "slug", "status"], [
+        {"manufacturer": man, "model": mod,
+         "slug": cache[(man, mod)].get("slug", ""),
+         "status": cache[(man, mod)].get("status", "")}
+        for (man, mod) in sorted(cache)
+    ])
 
 
-def month_window() -> tuple[list[str], str, str]:
-    """Last MONTHS_BACK complete months as YYYY-MM, plus API start/end stamps."""
-    today = date.today()
-    first_of_this_month = date(today.year, today.month, 1)
-    months = []
-    y, m = first_of_this_month.year, first_of_this_month.month
-    for _ in range(MONTHS_BACK):
-        m -= 1
-        if m == 0:
-            y, m = y - 1, 12
-        months.append(f"{y}-{m:02d}")
-    months.reverse()
-    start = months[0].replace("-", "") + "0100"
-    end = first_of_this_month.strftime("%Y%m%d") + "00"
-    return months, start, end
-
-
-def fetch_monthly_views(slug: str, start: str, end: str) -> dict[str, int]:
-    url = f"{PAGEVIEWS_API}/en.wikipedia/all-access/all-agents/{urllib.parse.quote(slug)}/monthly/{start}/{end}"
-    data = http_get_json(url)
-    out: dict[str, int] = {}
+def fetch_monthly_views(slug, start, end):
+    url = (f"{PAGEVIEWS_API}/en.wikipedia/all-access/all-agents/"
+           f"{urllib.parse.quote(slug)}/monthly/{start}/{end}")
+    data = lib.http_get_json(url)
+    out = {}
     for item in (data or {}).get("items", []):
         ts = item["timestamp"]  # YYYYMMDDHH
         out[f"{ts[:4]}-{ts[4:6]}"] = item["views"]
     return out
 
 
-def pct_ranker(values: list[float]):
-    """Mid-rank percentile in [0,1] — same construction as mii-normalize.js."""
-    ordered = sorted(values)
-    n = len(ordered)
+def collect_wikipedia(universe, months, sleep):
+    """Wikipedia rows: [{manufacturer, model, month, wiki_slug, wiki_pageviews}]."""
+    start = months[0].replace("-", "") + "0100"
+    end = lib.month_bounds(months[-1])[1].strftime("%Y%m%d") + "00"
 
-    def rank(x: float) -> float:
-        if not n:
-            return 0.0
-        import bisect
-        below = bisect.bisect_left(ordered, x)
-        upto = bisect.bisect_right(ordered, x)
-        return (below + (upto - below) / 2) / n
-
-    return rank
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default=MII_CSV_URL,
-                    help="MII results CSV (URL or path) that defines the model universe")
-    ap.add_argument("--limit", type=int, default=0,
-                    help="only process the first N models (smoke test)")
-    ap.add_argument("--sleep", type=float, default=0.15,
-                    help="pause between API calls, seconds")
-    args = ap.parse_args()
-
-    universe = load_universe(args.csv)
-    if args.limit:
-        universe = universe[: args.limit]
-    print(f"Model universe: {len(universe)} models")
-
-    months, start, end = month_window()
-
-    # 1. Resolve models to Wikipedia articles (cached).
     cache = load_slug_cache()
-    unresolved_new = 0
-    for i, (man, mod) in enumerate(universe):
-        if (man, mod) in cache:
+    newly_unresolved = 0
+    for i, rec in enumerate(universe):
+        key = (rec["manufacturer"], rec["model"])
+        if key in cache:
             continue
         slug = None
         try:
-            slug = resolve_slug(man, mod)
-        except Exception as exc:
-            print(f"  [ERROR] resolving {man} {mod}: {exc}")
-        cache[(man, mod)] = {
-            "slug": slug or "",
-            "status": "resolved" if slug else "unresolved",
-        }
+            slug = resolve_slug(*key)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  [ERROR] resolving {key[0]} {key[1]}: {exc}")
+        cache[key] = {"slug": slug or "",
+                      "status": "resolved" if slug else "unresolved"}
         if not slug:
-            unresolved_new += 1
+            newly_unresolved += 1
         if i % 100 == 0:
             print(f"  resolution {i}/{len(universe)}")
             save_slug_cache(cache)
-        time.sleep(args.sleep)
+        time.sleep(sleep)
     save_slug_cache(cache)
-    resolved = {
-        (man, mod): cache[(man, mod)]["slug"]
-        for (man, mod) in universe
-        if cache.get((man, mod), {}).get("slug")
-    }
-    print(f"Resolved {len(resolved)}/{len(universe)} models "
-          f"({unresolved_new} newly unresolved)")
 
-    # 2. Fetch monthly pageviews once per distinct article.
+    resolved = {(r["manufacturer"], r["model"]): cache[(r["manufacturer"], r["model"])]["slug"]
+                for r in universe
+                if cache.get((r["manufacturer"], r["model"]), {}).get("slug")}
+    print(f"Resolved {len(resolved)}/{len(universe)} models "
+          f"({newly_unresolved} newly unresolved)")
+
+    views_by_slug = {}
     slugs = sorted(set(resolved.values()))
-    views_by_slug: dict[str, dict[str, int]] = {}
     for i, slug in enumerate(slugs):
         try:
             views_by_slug[slug] = fetch_monthly_views(slug, start, end)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             print(f"  [ERROR] pageviews {slug}: {exc}")
             views_by_slug[slug] = {}
         if i % 100 == 0:
             print(f"  pageviews {i}/{len(slugs)}")
-        time.sleep(args.sleep)
+        time.sleep(sleep)
 
-    # 3. Build model x month rows.
     rows = []
     for (man, mod), slug in resolved.items():
         by_month = views_by_slug.get(slug, {})
         for month in months:
             views = by_month.get(month)
             if views is not None:
-                rows.append({
-                    "manufacturer": man, "model": mod, "month": month,
-                    "wiki_slug": slug, "wiki_pageviews": views,
-                })
-    print(f"Signal rows: {len(rows)}")
+                rows.append({"manufacturer": man, "model": mod, "month": month,
+                             "wiki_slug": slug, "wiki_pageviews": views})
+    return rows
 
-    # 4. Share of voice within the manufacturer, per month.
-    totals: dict[tuple[str, str], int] = {}
+
+def wiki_rows_from_existing(months):
+    """Reuse the Wikipedia columns already in the output CSV — no API calls."""
+    keep = set(months)
+    rows = []
+    for r in lib.read_rows(OUTPUT_PATH):
+        if r.get("month") not in keep:
+            continue
+        views = (r.get("wiki_pageviews") or "").strip()
+        if not views:
+            continue
+        rows.append({"manufacturer": r["manufacturer"], "model": r["model"],
+                     "month": r["month"], "wiki_slug": r.get("wiki_slug", ""),
+                     "wiki_pageviews": int(float(views))})
+    return rows
+
+
+def wiki_is_stale(months):
+    """True when the output CSV is missing the most recent complete month."""
+    existing = lib.read_rows(OUTPUT_PATH)
+    if not existing:
+        return True
+    newest = max((r.get("month") or "") for r in existing)
+    return newest < months[-1]
+
+
+# --------------------------------------------------------------------------
+# Composite
+# --------------------------------------------------------------------------
+
+def index_by_key(path, columns):
+    """{(manufacturer, model, month): {col: float}} from a collector's CSV."""
+    out = {}
+    for r in lib.read_rows(path):
+        key = (r.get("manufacturer", "").strip(), r.get("model", "").strip(),
+               r.get("month", "").strip())
+        vals = {}
+        for col in columns:
+            raw = (r.get(col) or "").strip()
+            if raw:
+                try:
+                    vals[col] = float(raw)
+                except ValueError:
+                    pass
+        if vals:
+            out[key] = vals
+    return out
+
+
+def add_share_of_voice(rows):
+    """Model's share of its manufacturer's Wikipedia pageviews that month."""
+    totals = {}
     for r in rows:
+        views = r.get("wiki_pageviews")
+        if views is None:
+            continue
         key = (r["manufacturer"], r["month"])
-        totals[key] = totals.get(key, 0) + r["wiki_pageviews"]
+        totals[key] = totals.get(key, 0) + views
     for r in rows:
-        total = totals[(r["manufacturer"], r["month"])]
-        r["wiki_sov"] = round(r["wiki_pageviews"] / total, 6) if total else 0.0
+        views = r.get("wiki_pageviews")
+        if views is None:
+            continue
+        total = totals.get((r["manufacturer"], r["month"]), 0)
+        r["wiki_sov"] = round(views / total, 6) if total else 0.0
 
-    # 5. Composite: percentile-rank each sub-signal across all rows, blend.
-    if rows:
-        rank_views = pct_ranker([r["wiki_pageviews"] for r in rows])
-        rank_sov = pct_ranker([r["wiki_sov"] for r in rows])
-        for r in rows:
-            score = 100 * (W_ATTENTION * rank_views(r["wiki_pageviews"])
-                           + W_SOV * rank_sov(r["wiki_sov"]))
-            r["social_score"] = round(score, 2)
 
-    rows.sort(key=lambda r: (r["manufacturer"], r["model"], r["month"]))
-    with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=[
-            "manufacturer", "model", "month",
-            "wiki_slug", "wiki_pageviews", "wiki_sov", "social_score",
-        ])
-        w.writeheader()
-        w.writerows(rows)
-    print(f"Wrote {len(rows)} rows to {os.path.abspath(OUTPUT_PATH)}")
+def score_rows(rows):
+    """Write social_score onto each row from the sub-signals it has."""
+    rankers = {}
+    for _, _, columns in SUB_SIGNALS:
+        for col in columns:
+            values = [r[col] for r in rows if r.get(col) is not None]
+            if values:
+                rankers[col] = lib.pct_ranker(values)
 
-    # QA per docs/social-score-methodology.md §7.
-    distinct_scores = len({r["social_score"] for r in rows})
-    by_model: dict[tuple[str, str], set] = {}
     for r in rows:
+        total, weight_used = 0.0, 0.0
+        for _, weight, columns in SUB_SIGNALS:
+            ranks = [rankers[c](r[c]) for c in columns
+                     if c in rankers and r.get(c) is not None]
+            if not ranks:
+                continue
+            total += weight * (sum(ranks) / len(ranks))
+            weight_used += weight
+        r["social_score"] = round(100 * total / weight_used, 2) if weight_used else ""
+
+
+def report(rows):
+    """QA against docs/social-score-methodology.md §7."""
+    scored = [r for r in rows if r.get("social_score") != ""]
+    distinct = len({r["social_score"] for r in scored})
+    by_model = {}
+    for r in scored:
         by_model.setdefault((r["manufacturer"], r["model"]), set()).add(r["social_score"])
     varying = sum(1 for v in by_model.values() if len(v) > 1)
-    print(f"QA: {distinct_scores} distinct scores; "
+    print(f"QA: {distinct} distinct scores across {len(scored)} rows; "
           f"{varying}/{len(by_model)} models vary over time")
+    for name, weight, columns in SUB_SIGNALS:
+        for col in columns:
+            n = sum(1 for r in rows if r.get(col) is not None)
+            print(f"  {name:<10} {col:<18} {n:>6} rows "
+                  f"({100 * n / max(1, len(rows)):5.1f}% coverage, weight {weight})")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    lib.add_common_args(ap)
+    ap.set_defaults(sleep=0.15)
+    ap.add_argument("--months", type=int, default=MONTHS_BACK,
+                    help="trailing complete months to cover")
+    ap.add_argument("--reuse-wiki", action="store_true",
+                    help="blend from the Wikipedia data already on disk, no API calls")
+    ap.add_argument("--force-wiki", action="store_true",
+                    help="always refresh Wikipedia, even when it is up to date")
+    args = ap.parse_args()
+
+    months = lib.month_window(args.months)
+
+    if args.reuse_wiki:
+        wiki = wiki_rows_from_existing(months)
+        print(f"Reusing {len(wiki)} Wikipedia rows already on disk")
+    elif not args.force_wiki and not wiki_is_stale(months):
+        wiki = wiki_rows_from_existing(months)
+        print(f"Wikipedia data already covers {months[-1]} — "
+              f"reusing {len(wiki)} rows (use --force-wiki to refresh anyway)")
+    else:
+        universe = lib.load_universe(args.csv, min_auctions=args.min_auctions)
+        if args.limit:
+            universe = universe[:args.limit]
+        print(f"Model universe: {len(universe)} models")
+        wiki = collect_wikipedia(universe, months, args.sleep)
+        print(f"Wikipedia rows: {len(wiki)}")
+
+    # Union of every (model, month) any collector has something for, so a
+    # model with Reddit or YouTube data but no Wikipedia article still scores.
+    rows_by_key = {}
+    for r in wiki:
+        rows_by_key[(r["manufacturer"], r["model"], r["month"])] = dict(r)
+
+    external = [
+        (REDDIT_PATH, ["reddit_posts", "reddit_engagement"]),
+        (YOUTUBE_PATH, ["yt_videos"]),
+    ]
+    for path, columns in external:
+        table = index_by_key(path, columns)
+        print(f"{os.path.basename(path)}: {len(table)} model-months")
+        for key, vals in table.items():
+            if key[2] not in months:
+                continue
+            row = rows_by_key.get(key)
+            if row is None:
+                row = {"manufacturer": key[0], "model": key[1], "month": key[2]}
+                rows_by_key[key] = row
+            row.update(vals)
+
+    rows = list(rows_by_key.values())
+    add_share_of_voice(rows)
+    score_rows(rows)
+
+    rows.sort(key=lambda r: (r["manufacturer"], r["model"], r["month"]))
+    lib.write_rows(OUTPUT_PATH, FIELDS, rows)
+    print(f"Wrote {len(rows)} rows to {OUTPUT_PATH}")
+    report(rows)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
