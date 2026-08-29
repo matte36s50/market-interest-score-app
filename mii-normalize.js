@@ -12,6 +12,10 @@
 // spread across the full 0-100 range and the score answers "how does this car
 // rank versus the field" rather than "what fraction of the single priciest car".
 //
+// It also joins the measured signal files collected by data/pipelines/ —
+// social, Google Trends and YouTube — onto the raw columns before ranking,
+// because upstream ships those three inputs empty.
+//
 // Every page calls MII.recompute(rows) right after parsing the CSV, so the
 // classic and HAGI pages always agree on a car's score.
 
@@ -54,14 +58,61 @@
         };
     }
 
-    // ---- Measured social signals (data/social_signals.csv) -----------------
-    // Produced by data/pipelines/social_signals.py: per-model, per-month
-    // Wikipedia attention + share of voice, blended into a 0-100 composite.
-    // When the file is present, recompute() joins it into each row's raw
-    // social_score before ranking, so the Social axis carries real,
-    // time-varying values. When absent, the weight renormalization below
-    // keeps the score correct without it.
-    var socialSignals = null; // "manufacturer|model" -> { "YYYY-MM": score }
+    // ---- Measured signal files ---------------------------------------------
+    // Three MII inputs are collected in this repo rather than upstream,
+    // because upstream ships them empty or hand-set:
+    //
+    //   Social        data/social_signals.csv   Wikipedia attention + share of
+    //                                           voice + Reddit + YouTube uploads
+    //   Google Trends data/google_trends.csv    anchor-normalized search interest
+    //   YouTube       data/youtube_signals.csv  views of videos about the model
+    //
+    // Each file is per manufacturer x model x MONTH. recompute() joins them
+    // onto each row's raw column before ranking, so these axes carry real,
+    // time-varying values. When a file is absent the weight renormalization
+    // below keeps every score correct without it — nothing is imputed.
+    var SIGNALS = [
+        {
+            name: 'social',
+            url: 'data/social_signals.csv',
+            column: 'social_score',
+            target: 'social_score',
+            // A score, not a count: average the months a period covers.
+            agg: 'mean',
+            // Upstream's own multi-signal composite always wins; this is the
+            // fallback for rows it could not measure.
+            overrides: function () { return false; },
+        },
+        {
+            name: 'trends',
+            url: 'data/google_trends.csv',
+            column: 'trends_interest',
+            target: 'google_trends_interest',
+            agg: 'mean',
+            // Upstream sends either nothing (google_trends_source "missing",
+            // its state today) or the old hand-set per-brand estimate. A
+            // measured value beats both; a genuine upstream measurement wins.
+            overrides: function (row) {
+                var src = String(row.google_trends_source || '').trim().toLowerCase();
+                return src === '' || src === 'missing' || src === 'estimate';
+            },
+        },
+        {
+            name: 'youtube',
+            url: 'data/youtube_signals.csv',
+            column: 'yt_views',
+            target: 'youtube_total_views',
+            // A flow: a quarter's views are its three months added up.
+            agg: 'sum',
+            overrides: function (row) {
+                var src = String(row.youtube_source || '').trim().toLowerCase();
+                return src === '' || src === 'missing';
+            },
+        },
+    ];
+
+    // name -> { "manufacturer|model": { "YYYY-MM": value } }
+    var signalTables = {};
 
     function parseCsvLine(line) {
         var out = [], cur = '', inQ = false;
@@ -79,20 +130,21 @@
         return out;
     }
 
-    function indexSignals(text) {
+    // Index one signal CSV on "manufacturer|model" -> month -> numeric value.
+    function indexSignal(text, column) {
         var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
         if (lines.length < 2) return null;
         var hdr = parseCsvLine(lines[0]);
         var iMan = hdr.indexOf('manufacturer'), iMod = hdr.indexOf('model'),
-            iMonth = hdr.indexOf('month'), iScore = hdr.indexOf('social_score');
-        if (iMan < 0 || iMod < 0 || iMonth < 0 || iScore < 0) return null;
+            iMonth = hdr.indexOf('month'), iVal = hdr.indexOf(column);
+        if (iMan < 0 || iMod < 0 || iMonth < 0 || iVal < 0) return null;
         var out = {};
         for (var i = 1; i < lines.length; i++) {
             var c = parseCsvLine(lines[i]);
-            var score = parseFloat(c[iScore]);
-            if (isNaN(score)) continue;
+            var value = parseFloat(c[iVal]);
+            if (isNaN(value)) continue;
             var key = (c[iMan] || '').trim() + '|' + (c[iMod] || '').trim();
-            (out[key] = out[key] || {})[(c[iMonth] || '').trim()] = score;
+            (out[key] = out[key] || {})[(c[iMonth] || '').trim()] = value;
         }
         return out;
     }
@@ -110,38 +162,52 @@
         });
     }
 
-    // Fill each row's raw social_score from the signals table (average of the
-    // months the row's period covers). Fills gaps only: an upstream measured
-    // social_score (the pipeline's richer multi-signal composite) always wins;
-    // the Wikipedia-only signal is the fallback for rows upstream couldn't
-    // measure. Idempotent.
-    function joinSocial(rows) {
-        if (!socialSignals) return;
+    // Fill each row's raw input column from a signal table, aggregating over
+    // the months the row's period covers. Fills gaps always; replaces an
+    // existing value only when the signal's `overrides` test says upstream's
+    // value is a placeholder rather than a measurement. Idempotent.
+    function joinSignal(rows, signal) {
+        var table = signalTables[signal.name];
+        if (!table) return;
         rows.forEach(function (r) {
-            if (!isNaN(parseFloat(r.social_score))) return;
-            var key = (r.manufacturer || '').trim() + '|' + (r.model || '').trim();
-            var byMonth = socialSignals[key];
+            var existing = parseFloat(r[signal.target]);
+            if (!isNaN(existing) && !signal.overrides(r)) return;
+            var byMonth = table[(r.manufacturer || '').trim() + '|' + (r.model || '').trim()];
             if (!byMonth) return;
             var sum = 0, n = 0;
             periodMonths(String(r.quarter || '').trim()).forEach(function (mo) {
                 if (byMonth[mo] != null) { sum += byMonth[mo]; n++; }
             });
-            if (n) r.social_score = sum / n;
+            if (!n) return;
+            r[signal.target] = signal.agg === 'sum' ? sum : sum / n;
         });
     }
 
-    // Kick off the signals fetch at script load; pages should `await MII.ready`
-    // before recompute() so the join lands on first render. The timeout means a
-    // missing/slow file can never block a page.
+    function joinSignals(rows) {
+        SIGNALS.forEach(function (signal) { joinSignal(rows, signal); });
+    }
+
+    // Kick off the signal fetches at script load; pages should `await MII.ready`
+    // before recompute() so the joins land on first render. The timeout means a
+    // missing or slow file can never block a page.
     var readyResolve;
     var ready = new Promise(function (res) { readyResolve = res; });
     if (typeof fetch === 'function' && typeof window !== 'undefined') {
         var guard = setTimeout(readyResolve, 4000);
-        fetch(global.MII_SOCIAL_SIGNALS_URL || 'data/social_signals.csv')
-            .then(function (r) { return r.ok ? r.text() : null; })
-            .then(function (t) { if (t) socialSignals = indexSignals(t); })
-            .catch(function () {})
-            .then(function () { clearTimeout(guard); readyResolve(); });
+        // Copied, not aliased — a page's own config object stays untouched.
+        var overrides = {};
+        var configured = global.MII_SIGNAL_URLS || {};
+        Object.keys(configured).forEach(function (k) { overrides[k] = configured[k]; });
+        // Legacy single-file override, kept working for pages that set it.
+        if (global.MII_SOCIAL_SIGNALS_URL) overrides.social = global.MII_SOCIAL_SIGNALS_URL;
+        Promise.all(SIGNALS.map(function (signal) {
+            return fetch(overrides[signal.name] || signal.url)
+                .then(function (r) { return r.ok ? r.text() : null; })
+                .then(function (t) {
+                    if (t) signalTables[signal.name] = indexSignal(t, signal.column);
+                })
+                .catch(function () {});
+        })).then(function () { clearTimeout(guard); readyResolve(); });
     } else {
         readyResolve();
     }
@@ -160,14 +226,14 @@
     // on the same rows. Mutates rows in place and returns them.
     //
     // Inputs a row has no value for are dropped from that row's blend and the
-    // remaining weights renormalized (docs/social-score-methodology.md §5) — so
+    // remaining weights renormalized (docs/social-score-methodology.md) — so
     // a dataset-wide dead column no longer caps every score below 100, and a
     // model missing one input (e.g. no social signal yet) isn't ranked as if it
     // scored zero on it. The *_normalized column still reads 0 for display.
     function recompute(rows) {
         if (!Array.isArray(rows) || !rows.length) return rows;
 
-        joinSocial(rows);
+        joinSignals(rows);
 
         dataQuality = {};
 
@@ -227,8 +293,15 @@
         periodMonths: periodMonths,
         // Resolves once the social-signals fetch settles (or times out).
         ready: ready,
-        // Inject a signals CSV directly (tests / non-browser use).
-        setSocialSignals: function (text) { socialSignals = indexSignals(text); },
+        // The measured signal files and the raw columns they feed.
+        SIGNALS: SIGNALS,
+        // Inject a signal CSV directly (tests / non-browser use).
+        setSignal: function (name, text) {
+            var signal = SIGNALS.filter(function (s) { return s.name === name; })[0];
+            if (!signal) throw new Error('unknown signal: ' + name);
+            signalTables[name] = indexSignal(text, signal.column);
+        },
+        setSocialSignals: function (text) { this.setSignal('social', text); },
         // Live view of the last recompute's per-input health.
         get dataQuality() { return dataQuality; },
     };

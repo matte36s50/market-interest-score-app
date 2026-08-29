@@ -48,19 +48,62 @@ dataset-wide dead column can't cap every score below 100. `MII.dataQuality`
 reports each input's health (`ok` / `empty` / `static`) after every recompute,
 and the Model Comparison radar labels flag degraded axes.
 
-### Social signals (measured)
+### Measured signals collected in this repo
 
-`data/pipelines/social_signals.py` collects per-model, **per-month** attention
-signals from Wikimedia — article pageviews plus share of voice within the
-manufacturer — and blends them into a 0–100 `social_score` composite
-(`data/social_signals.csv`), following `docs/social-score-methodology.md`.
-The `.github/workflows/social-signals.yml` workflow refreshes it monthly (and
-on demand via workflow dispatch); `mii-normalize.js` fetches the file on every
-page and joins it into the Social input before scoring, averaging months into
-quarters when the MII results are quarterly. Model → article mappings are
-cached in `data/wikipedia_slugs.csv`, which can be hand-curated. Reddit
-mentions/engagement, YouTube upload counts, and sentiment are designed to slot
-in as further sub-signal columns with the same weight-renormalization rule.
+Three of the eight MII inputs are **not supplied by the upstream pipeline**.
+In the live `mii_results_latest.csv` (14,807 rows), `google_trends_interest` is
+empty on every row (`google_trends_source = "missing"`), `youtube_total_views`
+is populated on 6, and `social_score` on 6. Because a missing input is dropped
+from a row's blend and the remaining weights renormalized, 30% of the MII —
+Trends 15% + YouTube 10% + Social 5% — was contributing nothing to any car, and
+those three radar axes read flat.
+
+`data/pipelines/` collects them here instead, per model and per **month**:
+
+| Input | Pipeline | Output | Source |
+|-------|----------|--------|--------|
+| Google Trends (0.15) | `google_trends.py` | `data/google_trends.csv` | Google Trends, anchor-normalized |
+| YouTube (0.10) | `youtube_signals.py` | `data/youtube_signals.csv` | YouTube Data API v3 |
+| Social (0.05) | `social_signals.py` | `data/social_signals.csv` | Wikipedia + Reddit + YouTube uploads |
+| — (social sub-signal) | `reddit_signals.py` | `data/reddit_signals.csv` | Reddit search |
+
+`mii-normalize.js` fetches all three signal files on every page load and joins
+them onto the raw columns before ranking, so the axes carry real, time-varying
+values. The join **fills gaps** and additionally **replaces upstream
+placeholders** — a `google_trends_source` of `missing` or `estimate` is
+overwritten by a measured value, while a genuine upstream measurement always
+wins. When a file is absent the weight renormalization keeps every score
+correct without it; nothing is ever imputed.
+
+`.github/workflows/signals.yml` runs the collectors daily and commits the
+results. See [`data/pipelines/README.md`](data/pipelines/README.md) for the API
+keys each one needs and why the schedule is daily rather than monthly.
+
+#### The social composite
+
+`social_score` was once a static per-brand constant — 19 distinct values, 93%
+of manufacturers pinned to one default, identical for every generation of a
+nameplate and unchanging over time. It is now a weighted blend of measured,
+percentile-ranked sub-signals following
+[`docs/social-score-methodology.md`](docs/social-score-methodology.md):
+
+| Sub-signal | Weight | Measured as |
+|------------|--------|-------------|
+| Mention volume | 0.30 | Wikipedia article pageviews and Reddit post count |
+| Engagement rate | 0.25 | Reddit interactions per post |
+| Share of voice | 0.20 | the model's share of its manufacturer's attention |
+| Social video | 0.15 | new YouTube videos about the model that month |
+| Sentiment | 0.10 | not collected yet |
+
+Sub-signals a row lacks are dropped and the rest renormalized, so a model with
+Wikipedia data alone still scores, and gains precision as the other collectors
+reach it. These facets are deliberately distinct from the MII's own inputs —
+YouTube **upload count** here versus **view totals** as an input, off-platform
+Reddit mentions versus on-listing Bring a Trailer comments — so the social
+score and the other seven inputs never double-count each other.
+
+Model → Wikipedia article mappings are cached in `data/wikipedia_slugs.csv` and
+can be hand-curated.
 
 Percentile ranking replaces the older min-max scaling (value ÷ dataset-max).
 Auction prices, views, and comments are extremely right-skewed — a handful of

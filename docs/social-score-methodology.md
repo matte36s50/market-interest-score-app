@@ -1,17 +1,25 @@
 # Social Score — Diagnosis & Redesign Methodology
 
-> Status: **proposed.** The composite described here must be implemented in the
-> upstream pipeline (`matte36s50/car-scrapers`), which generates
-> `mii_results_latest.csv`. This document is the implementation spec; the
-> front-end (`market-interest-score-app`) only consumes the resulting column.
+> Status: **implemented in this repository.** Upstream
+> (`matte36s50/car-scrapers`) never shipped the composite — as of the 2026-08
+> pull of `mii_results_latest.csv` it emits the sub-signal columns but leaves
+> them blank on 14,801 of 14,807 rows. The collectors in `data/pipelines/`
+> therefore measure the sub-signals here and `mii-normalize.js` joins the
+> result into the Social input in the browser. §3 below remains the spec; §5
+> records what is built and what is still open.
 
 ## 1. The problem
 
-The MII has eight inputs, seven of which are real, time-varying, and
-percentile-ranked across the field (Price, Bids, Views, Comments, Google Trends,
-YouTube, Age). The eighth — **Social** (weight 0.05) — is not.
+The MII has eight inputs. Five are real, time-varying, and percentile-ranked
+across the field (Price, Bids, Views, Comments, Age). **Social** (0.05) is not —
+it is the subject of this document. Google Trends (0.15) and YouTube (0.10)
+turned out to be empty rather than static, and are collected by the sibling
+pipelines described in `data/pipelines/README.md`.
 
-Evidence from the live `mii_results_latest.csv` (13,700 rows / 3,295 models):
+Evidence from `mii_results_latest.csv` as of 2026-07 (13,700 rows / 3,295
+models). The column has since gone from static to blank — as of the 2026-08
+pull it is populated on 6 of 14,807 rows — which is the same failure in a
+different costume: an input that carries no information about any car.
 
 - **Only 19 distinct `social_score` values exist** in the entire dataset.
 - `social_score` is **constant per model** — every model has exactly one value
@@ -96,33 +104,54 @@ The MII already counts **YouTube *view* totals**, **BaT *comments***, and
 - **Sentiment analysis** — NLP pass over collected mentions so volume is
   quality-weighted.
 
-## 5. Implementation plan (`car-scrapers`)
+## 5. Implementation status
 
-1. Locate where `social_score` is currently written into the MII results
-   (likely a hardcoded brand→score lookup table).
-2. Add collectors for each sub-signal, keyed on the same
-   `manufacturer + model + quarter` grain as the rest of the pipeline. Reuse the
-   existing model-name normalization so keys line up with `mii_results`.
-3. Persist raw per-quarter sub-signal counts (so the score is reproducible and
-   auditable, and so `mii-normalize.js`-style re-ranking can happen downstream).
-4. Compute `social_score` per the formula above and write it into
-   `mii_results_latest.csv`, replacing the static value.
-5. Backfill historical quarters where source data permits; where a sub-signal is
-   unavailable for a (model, quarter), drop it from that row's weighted sum and
-   renormalize the remaining weights (do **not** impute the brand default).
+Built, in `data/pipelines/`, at the `manufacturer + model + month` grain:
+
+| Sub-signal | Weight | Collector | Column |
+|------------|--------|-----------|--------|
+| Mention volume | 0.30 | `social_signals.py` (Wikipedia), `reddit_signals.py` | `wiki_pageviews`, `reddit_posts` |
+| Engagement rate | 0.25 | `reddit_signals.py` | `reddit_engagement` |
+| Share of voice | 0.20 | `social_signals.py` | `wiki_sov` |
+| Social video | 0.15 | `youtube_signals.py` | `yt_videos` |
+| Sentiment | 0.10 | — | not collected |
+
+Mention volume is measured twice — Wikipedia lookups and Reddit posts are two
+readings of "how much is this car being talked about" — so it is scored as the
+**mean of the ranks of whichever sources a row has**, rather than split into
+two weights. That keeps a Wikipedia-only row on the original 0.30/0.20 → 0.6/0.4
+attention/SOV split, so adding Reddit did not silently reweight the rows that
+came before it.
+
+Still open:
+
+1. **Sentiment (0.10).** Needs an NLP pass over the collected Reddit titles.
+   Its weight renormalizes away until then.
+2. **Instagram / TikTok.** Both now require business-tier API access for
+   hashtag search; neither has a free path comparable to the others.
+3. **Coverage.** Reddit and YouTube fill in on a rolling budget (see
+   `data/pipelines/README.md`), so at any moment some models are scored on
+   Wikipedia alone. This is correct behaviour under the drop-and-renormalize
+   rule, not a gap to be papered over with a default.
+
+Raw sub-signal columns are persisted alongside the score in
+`data/social_signals.csv`, so the composite is reproducible and auditable and
+can be re-ranked downstream.
 
 ## 6. Output schema / backward compatibility
 
-- The output column stays `social_score` (0–100), so the front-end and
-  `mii-normalize.js` need **no changes** — `recompute()` will percentile-rank the
-  new, varying values automatically.
+- The output column stays `social_score` (0–100). `mii-normalize.js` joins it
+  onto each row before ranking, filling gaps only: if upstream ever ships its
+  own measured composite, that value wins and this one steps back.
 - Recommended: also emit the raw sub-signal columns (e.g.
   `social_mentions`, `social_engagement_rate`, `social_sov`,
   `social_video_uploads`, `social_sentiment`) for transparency and debugging.
 
 ## 7. Validation / QA
 
-After implementation, confirm the artifact is gone:
+The current run reports **9,075 distinct scores across 62,872 rows, with
+2,637 of 2,638 models varying over time** — the artifact is gone. Re-check
+after any change to the composite:
 
 - `social_score` should have **hundreds+** of distinct values, not 19.
 - It should **vary across quarters** for the same model.
