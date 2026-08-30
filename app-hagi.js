@@ -413,9 +413,12 @@ function processCSVData(rawData) {
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                // Use auction count as divisor when available, fall back to row count
-                const divisor = mg.auctions > 0 ? mg.auctions : mg.rowCount;
-                const currentMII = mg.totalMII / divisor;
+                // mii_score is already a per-model-month figure, so averaging it
+                // means dividing by the number of months. Dividing by the
+                // auction count instead scaled every liquid model toward zero:
+                // a model with two months and seven sales had its average cut
+                // to two sevenths, while a one-sale model was left untouched.
+                const currentMII = mg.rowCount > 0 ? mg.totalMII / mg.rowCount : 0;
                 let modelTrend = 0;
 
                 // Calculate trend by comparing to previous quarter
@@ -560,9 +563,12 @@ function processCSVData(rawData) {
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                // Use auction count as divisor when available, fall back to row count
-                const divisor = mg.auctions > 0 ? mg.auctions : mg.rowCount;
-                const currentMII = mg.totalMII / divisor;
+                // mii_score is already a per-model-month figure, so averaging it
+                // means dividing by the number of months. Dividing by the
+                // auction count instead scaled every liquid model toward zero:
+                // a model with two months and seven sales had its average cut
+                // to two sevenths, while a one-sale model was left untouched.
+                const currentMII = mg.rowCount > 0 ? mg.totalMII / mg.rowCount : 0;
                 let modelTrend = 0;
 
                 // Calculate YTD trend by comparing to first quarter

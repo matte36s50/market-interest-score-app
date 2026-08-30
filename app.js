@@ -408,12 +408,17 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        // How many monthly rows this model contributed. The MII
+                        // average has to divide by this, not by the auction
+                        // count — see the aggregation below.
+                        months: 0,
                         totalSold: 0,
                         totalMII: 0,
                         totalPrice: 0,
                         priceCount: 0
                     };
                 }
+                modelGroups[model.model].months += 1;
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
@@ -424,7 +429,12 @@ function processCSVData(rawData) {
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                const currentMII = mg.totalMII / mg.auctions;
+                // mii_score is already a per-model-month figure, so averaging
+                // it means dividing by the number of months. Dividing by the
+                // auction count instead scaled every liquid model toward zero:
+                // a model with two months and seven sales had its average cut
+                // to two sevenths, while a one-sale model was left untouched.
+                const currentMII = mg.months > 0 ? mg.totalMII / mg.months : 0;
                 let modelTrend = 0;
 
                 // Calculate trend by comparing to previous quarter
@@ -554,12 +564,17 @@ function processCSVData(rawData) {
                     modelGroups[model.model] = {
                         model: model.model,
                         auctions: 0,
+                        // How many monthly rows this model contributed. The MII
+                        // average has to divide by this, not by the auction
+                        // count — see the aggregation below.
+                        months: 0,
                         totalSold: 0,
                         totalMII: 0,
                         totalPrice: 0,
                         priceCount: 0
                     };
                 }
+                modelGroups[model.model].months += 1;
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
@@ -570,7 +585,12 @@ function processCSVData(rawData) {
             });
 
             const aggregatedModels = Object.values(modelGroups).map(mg => {
-                const currentMII = mg.totalMII / mg.auctions;
+                // mii_score is already a per-model-month figure, so averaging
+                // it means dividing by the number of months. Dividing by the
+                // auction count instead scaled every liquid model toward zero:
+                // a model with two months and seven sales had its average cut
+                // to two sevenths, while a one-sale model was left untouched.
+                const currentMII = mg.months > 0 ? mg.totalMII / mg.months : 0;
                 let modelTrend = 0;
 
                 // Calculate YTD trend by comparing to first quarter
