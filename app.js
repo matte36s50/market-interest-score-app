@@ -344,6 +344,11 @@ function processCSVData(rawData) {
 
             // Calculate average MII score for manufacturer
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
+            // Value index, averaged the same way and reported beside interest.
+            const mviRows = mfrData.filter(row => !isNaN(parseFloat(row.mvi_score)));
+            const avgMVI = mviRows.length
+                ? mviRows.reduce((sum, row) => sum + parseFloat(row.mvi_score), 0) / mviRows.length
+                : null;
 
             // Calculate average price (sold only)
             const pricedMfrRows = mfrData.filter(row => parseFloat(row.price) > 0);
@@ -396,6 +401,11 @@ function processCSVData(rawData) {
                 auctions: parseFloat(row.auction_count) || 0,
                 sold: parseFloat(row.sold) || 0,
                 mii: parseFloat(row.mii_score),
+                // Value is published alongside interest, never blended into it.
+                mvi: parseFloat(row.mvi_score),
+                // Share of the score that is this row's own evidence rather
+                // than the prior a thin row was shrunk toward.
+                evidence: parseFloat(row.mii_confidence),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
                 confidence: 'Medium'
@@ -414,6 +424,9 @@ function processCSVData(rawData) {
                         months: 0,
                         totalSold: 0,
                         totalMII: 0,
+                        totalMVI: 0,
+                        mviCount: 0,
+                        totalEvidence: 0,
                         totalPrice: 0,
                         priceCount: 0
                     };
@@ -422,6 +435,11 @@ function processCSVData(rawData) {
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
+                if (!isNaN(model.mvi)) {
+                    modelGroups[model.model].totalMVI += model.mvi;
+                    modelGroups[model.model].mviCount++;
+                }
+                if (!isNaN(model.evidence)) modelGroups[model.model].totalEvidence += model.evidence;
                 if (model.avgPrice > 0) {
                     modelGroups[model.model].totalPrice += model.avgPrice;
                     modelGroups[model.model].priceCount++;
@@ -457,6 +475,8 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
+                    mvi: mg.mviCount > 0 ? mg.totalMVI / mg.mviCount : null,
+                    evidence: mg.months > 0 ? mg.totalEvidence / mg.months : 0,
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
@@ -470,6 +490,7 @@ function processCSVData(rawData) {
                 auctions: auctions,
                 avgPrice: Math.round(avgPrice),
                 miiScore: parseFloat(avgMII.toFixed(1)),
+                mviScore: avgMVI === null ? null : parseFloat(avgMVI.toFixed(1)),
                 confidence: confidence,
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
@@ -508,6 +529,11 @@ function processCSVData(rawData) {
             const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
             const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
+            // Value index, averaged the same way and reported beside interest.
+            const mviRows = mfrData.filter(row => !isNaN(parseFloat(row.mvi_score)));
+            const avgMVI = mviRows.length
+                ? mviRows.reduce((sum, row) => sum + parseFloat(row.mvi_score), 0) / mviRows.length
+                : null;
             const pricedYtdRows = mfrData.filter(row => parseFloat(row.price) > 0);
             const avgPrice = pricedYtdRows.length > 0 ? pricedYtdRows.reduce((sum, row) => sum + parseFloat(row.price), 0) / pricedYtdRows.length : 0;
 
@@ -552,6 +578,11 @@ function processCSVData(rawData) {
                 auctions: parseFloat(row.auction_count) || 0,
                 sold: parseFloat(row.sold) || 0,
                 mii: parseFloat(row.mii_score),
+                // Value is published alongside interest, never blended into it.
+                mvi: parseFloat(row.mvi_score),
+                // Share of the score that is this row's own evidence rather
+                // than the prior a thin row was shrunk toward.
+                evidence: parseFloat(row.mii_confidence),
                 avgPrice: parseFloat(row.price || 0),
                 trend: 0,
                 confidence: 'Medium'
@@ -570,6 +601,9 @@ function processCSVData(rawData) {
                         months: 0,
                         totalSold: 0,
                         totalMII: 0,
+                        totalMVI: 0,
+                        mviCount: 0,
+                        totalEvidence: 0,
                         totalPrice: 0,
                         priceCount: 0
                     };
@@ -578,6 +612,11 @@ function processCSVData(rawData) {
                 modelGroups[model.model].auctions += model.auctions;
                 modelGroups[model.model].totalSold += model.sold;
                 modelGroups[model.model].totalMII += model.mii;
+                if (!isNaN(model.mvi)) {
+                    modelGroups[model.model].totalMVI += model.mvi;
+                    modelGroups[model.model].mviCount++;
+                }
+                if (!isNaN(model.evidence)) modelGroups[model.model].totalEvidence += model.evidence;
                 if (model.avgPrice > 0) {
                     modelGroups[model.model].totalPrice += model.avgPrice;
                     modelGroups[model.model].priceCount++;
@@ -613,6 +652,8 @@ function processCSVData(rawData) {
                     model: mg.model,
                     auctions: mg.auctions,
                     mii: currentMII,
+                    mvi: mg.mviCount > 0 ? mg.totalMVI / mg.mviCount : null,
+                    evidence: mg.months > 0 ? mg.totalEvidence / mg.months : 0,
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
@@ -626,6 +667,7 @@ function processCSVData(rawData) {
                 auctions: auctions,
                 avgPrice: Math.round(avgPrice),
                 miiScore: parseFloat(avgMII.toFixed(1)),
+                mviScore: avgMVI === null ? null : parseFloat(avgMVI.toFixed(1)),
                 confidence: confidence,
                 trend: parseFloat(trend.toFixed(1)),
                 sellThrough: sellThrough,
@@ -998,7 +1040,7 @@ function renderTopModels() {
                 </div>
                 <div class="flex items-center justify-between text-xs">
                     <div class="text-zinc-500">
-                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
+                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg${model.mvi === null || model.mvi === undefined ? '' : ` • value ${model.mvi.toFixed(0)}`}
                     </div>
                     <div class="flex items-center gap-2">
                         ${getTrendIndicator(model.trend)}
@@ -1034,7 +1076,7 @@ function renderLeaderboard() {
                         <div>
                             <div class="font-semibold text-zinc-100">${mfr.make}</div>
                             <div class="text-xs text-zinc-500">
-                                ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg • ${mfr.sellThrough}% sold
+                                ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg${mfr.mviScore === null || mfr.mviScore === undefined ? '' : ` • value ${mfr.mviScore.toFixed(0)}`}
                             </div>
                         </div>
                     </div>
@@ -1107,18 +1149,18 @@ function renderManufacturerDetail() {
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-zinc-800/50 rounded-lg p-3">
-                    <div class="text-xs text-zinc-500">MII Score</div>
+                    <div class="text-xs text-zinc-500">Interest Index</div>
                     <div class="text-2xl font-bold text-amber-500">
                         ${mfr.miiScore.toFixed(1)}
                     </div>
                     ${getTrendIndicator(mfr.trend)}
                 </div>
                 <div class="bg-zinc-800/50 rounded-lg p-3">
-                    <div class="text-xs text-zinc-500">Sell-Through</div>
-                    <div class="text-2xl font-bold text-emerald-400">
-                        ${mfr.sellThrough}%
+                    <div class="text-xs text-zinc-500">Value Index</div>
+                    <div class="text-2xl font-bold text-sky-400">
+                        ${mfr.mviScore === null || mfr.mviScore === undefined ? '—' : mfr.mviScore.toFixed(1)}
                     </div>
-                    <div class="text-xs text-zinc-500">of auctions sold</div>
+                    <div class="text-xs text-zinc-500">price standing vs field</div>
                 </div>
             </div>
         </div>
@@ -1152,12 +1194,12 @@ function renderManufacturerDetail() {
                                     <div>
                                         <div class="font-medium text-sm flex items-center gap-1.5">${model.model}<span class="text-zinc-600 text-xs">→</span></div>
                                         <div class="text-xs text-zinc-500">
-                                            ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
+                                            ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg${model.mvi === null ? '' : ` • value ${model.mvi.toFixed(0)}`}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="font-bold text-amber-500">${model.mii.toFixed(1)}</div>
+                                    <div class="font-bold text-amber-500" title="Interest index">${model.mii.toFixed(1)}</div>
                                     <div class="flex items-center gap-2">
                                         ${getTrendIndicator(model.trend)}
                                         ${getConfidenceBadge(model.confidence)}

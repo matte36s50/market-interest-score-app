@@ -10,26 +10,22 @@
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 
-// The dimensions of a model's MII profile. Weights are the actual MII formula
-// (kept in sync with mii-normalize.js): price 20%, bids 20%, views 15%,
-// comments 10%, Google Trends 15%, YouTube 10%, social 5%, age 5%. All eight
-// inputs carry real weight, so each contributes to the similarity distance.
-const PROFILE_DIMS = [
-    { key: 'price_normalized', label: 'Price', weight: 0.20 },
-    { key: 'bids_normalized', label: 'Bids', weight: 0.20 },
-    { key: 'views_normalized', label: 'Views', weight: 0.15 },
-    { key: 'comments_normalized', label: 'Comments', weight: 0.10 },
-    { key: 'social_score_normalized', label: 'Social', weight: 0.05 },
-    { key: 'age_normalized', label: 'Age', weight: 0.05 },
-    { key: 'google_trends_interest_normalized', label: 'Google Trends', weight: 0.15 },
-    { key: 'youtube_total_views_normalized', label: 'YouTube', weight: 0.10 },
-];
+// The dimensions of a model's interest profile. Read from mii-normalize.js
+// rather than restated here: a hand-kept copy went stale once already and the
+// radar then charted weights the scorer had stopped using. Price is not a
+// dimension — it scores the separate value index, and mixing it back in here
+// would make two cars look similar merely for costing the same.
+const PROFILE_DIMS = (window.MII ? MII.COMPONENTS : []).map(c => ({
+    key: c.norm, label: c.label, weight: c.weight, raw: c.raw, pillar: c.pillarLabel,
+}));
 
-// Axis label with a data-quality flag from MII.dataQuality, so a dead or
-// static input reads as such instead of silently charting as zero.
+// Axis label with a data-quality flag from MII.dataQuality, so an input that is
+// dead, too sparse to score, or effectively a constant reads as such instead of
+// silently charting as zero.
 function dimLabel(dim) {
-    const dq = window.MII && MII.dataQuality[dim.key.replace(/_normalized$/, '')];
+    const dq = window.MII && MII.dataQuality[dim.raw || dim.key.replace(/_normalized$/, '')];
     if (dq && dq.status === 'empty') return dim.label + ' (no data)';
+    if (dq && dq.status === 'sparse') return dim.label + ' (too sparse to score)';
     if (dq && dq.status === 'static') return dim.label + ' (static)';
     return dim.label;
 }
