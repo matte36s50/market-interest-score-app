@@ -10670,6 +10670,16 @@ Chevrolet,Blazer GMT415,2026-05,Chevrolet_K5_Blazer,14255,0.003985,,,,36.88
 Chevrolet,Blazer GMT415,2026-06,Chevrolet_K5_Blazer,12415,0.00379,,,,33.71
 Chevrolet,Blazer GMT415,2026-07,Chevrolet_K5_Blazer,12109,0.003638,,,,32.92
 Chevrolet,Blazer GMT415,2026-08,Chevrolet_K5_Blazer,12096,0.003589,,,,32.78
+Chevrolet,C/K,2025-09,,,,,,2.0,40.91
+Chevrolet,C/K,2025-10,,,,,,4.0,66.67
+Chevrolet,C/K,2025-11,,,,,,4.0,66.67
+Chevrolet,C/K,2025-12,,,,,,4.0,66.67
+Chevrolet,C/K,2026-01,,,,,,1.0,18.18
+Chevrolet,C/K,2026-03,,,,,,1.0,18.18
+Chevrolet,C/K,2026-04,,,,,,1.0,18.18
+Chevrolet,C/K,2026-05,,,,,,1.0,18.18
+Chevrolet,C/K,2026-06,,,,,,1.0,18.18
+Chevrolet,C/K,2026-07,,,,,,1.0,18.18
 Chevrolet,C8 CORVETTE,2024-09,Chevrolet_Corvette_(C8),39751,0.010006,,,,68.08
 Chevrolet,C8 CORVETTE,2024-10,Chevrolet_Corvette_(C8),41099,0.01008,,,,68.69
 Chevrolet,C8 CORVETTE,2024-11,Chevrolet_Corvette_(C8),37909,0.01011,,,,67.47
@@ -42692,18 +42702,18 @@ Mercedes-Benz,R107 SL,2025-04,Mercedes-Benz_R107_and_C107,14108,0.00175,,,,32.66
 Mercedes-Benz,R107 SL,2025-05,Mercedes-Benz_R107_and_C107,14969,0.001983,,,,34.37
 Mercedes-Benz,R107 SL,2025-06,Mercedes-Benz_R107_and_C107,14566,0.001939,,,,33.64
 Mercedes-Benz,R107 SL,2025-07,Mercedes-Benz_R107_and_C107,12920,0.001865,,,,31.1
-Mercedes-Benz,R107 SL,2025-08,Mercedes-Benz_R107_and_C107,13461,0.001757,,,7.0,42.94
-Mercedes-Benz,R107 SL,2025-09,Mercedes-Benz_R107_and_C107,12665,0.001793,,,8.0,43.13
-Mercedes-Benz,R107 SL,2025-10,Mercedes-Benz_R107_and_C107,13696,0.001925,,,10.0,45.93
-Mercedes-Benz,R107 SL,2025-11,Mercedes-Benz_R107_and_C107,13596,0.001946,,,3.0,34.8
-Mercedes-Benz,R107 SL,2025-12,Mercedes-Benz_R107_and_C107,12542,0.001811,,,2.0,30.44
-Mercedes-Benz,R107 SL,2026-01,Mercedes-Benz_R107_and_C107,12416,0.001778,,,3.0,33.28
-Mercedes-Benz,R107 SL,2026-02,Mercedes-Benz_R107_and_C107,10724,0.001665,,,1.0,23.93
-Mercedes-Benz,R107 SL,2026-03,Mercedes-Benz_R107_and_C107,11404,0.001603,,,1.0,24.72
-Mercedes-Benz,R107 SL,2026-04,Mercedes-Benz_R107_and_C107,11539,0.001819,,,5.0,38.29
-Mercedes-Benz,R107 SL,2026-05,Mercedes-Benz_R107_and_C107,12672,0.0018,,,4.0,37.13
-Mercedes-Benz,R107 SL,2026-06,Mercedes-Benz_R107_and_C107,10863,0.001905,,,1.0,24.41
-Mercedes-Benz,R107 SL,2026-07,Mercedes-Benz_R107_and_C107,11408,0.002054,,,3.0,32.35
+Mercedes-Benz,R107 SL,2025-08,Mercedes-Benz_R107_and_C107,13461,0.001757,,,7.0,44.31
+Mercedes-Benz,R107 SL,2025-09,Mercedes-Benz_R107_and_C107,12665,0.001793,,,8.0,44.19
+Mercedes-Benz,R107 SL,2025-10,Mercedes-Benz_R107_and_C107,13696,0.001925,,,10.0,46.54
+Mercedes-Benz,R107 SL,2025-11,Mercedes-Benz_R107_and_C107,13596,0.001946,,,3.0,36.66
+Mercedes-Benz,R107 SL,2025-12,Mercedes-Benz_R107_and_C107,12542,0.001811,,,2.0,32.86
+Mercedes-Benz,R107 SL,2026-01,Mercedes-Benz_R107_and_C107,12416,0.001778,,,3.0,35.13
+Mercedes-Benz,R107 SL,2026-02,Mercedes-Benz_R107_and_C107,10724,0.001665,,,1.0,25.12
+Mercedes-Benz,R107 SL,2026-03,Mercedes-Benz_R107_and_C107,11404,0.001603,,,1.0,25.91
+Mercedes-Benz,R107 SL,2026-04,Mercedes-Benz_R107_and_C107,11539,0.001819,,,5.0,40.42
+Mercedes-Benz,R107 SL,2026-05,Mercedes-Benz_R107_and_C107,12672,0.0018,,,4.0,38.97
+Mercedes-Benz,R107 SL,2026-06,Mercedes-Benz_R107_and_C107,10863,0.001905,,,1.0,25.6
+Mercedes-Benz,R107 SL,2026-07,Mercedes-Benz_R107_and_C107,11408,0.002054,,,3.0,34.2
 Mercedes-Benz,R107 SL,2026-08,Mercedes-Benz_R107_and_C107,11467,0.002031,,,,29.09
 Mercedes-Benz,R129 SL,2024-09,Mercedes-Benz_SL-Class_(R129),16415,0.002407,,,,37.36
 Mercedes-Benz,R129 SL,2024-10,Mercedes-Benz_SL-Class_(R129),16736,0.002308,,,,37.7
@@ -51968,18 +51978,18 @@ Porsche,958 Cayenne,2025-04,List_of_Porsche_engines,8712,0.002099,,,,24.52
 Porsche,958 Cayenne,2025-05,List_of_Porsche_engines,8296,0.00208,,,,23.82
 Porsche,958 Cayenne,2025-06,List_of_Porsche_engines,6848,0.001838,,,,20.46
 Porsche,958 Cayenne,2025-07,List_of_Porsche_engines,6717,0.001904,,,,20.22
-Porsche,958 Cayenne,2025-08,List_of_Porsche_engines,7817,0.001964,,,5.0,33.57
-Porsche,958 Cayenne,2025-09,List_of_Porsche_engines,7689,0.001939,,,10.0,38.37
-Porsche,958 Cayenne,2025-10,List_of_Porsche_engines,8290,0.002133,,,6.0,35.94
-Porsche,958 Cayenne,2025-11,List_of_Porsche_engines,7411,0.002078,,,11.0,39.55
+Porsche,958 Cayenne,2025-08,List_of_Porsche_engines,7817,0.001964,,,5.0,35.69
+Porsche,958 Cayenne,2025-09,List_of_Porsche_engines,7689,0.001939,,,10.0,38.98
+Porsche,958 Cayenne,2025-10,List_of_Porsche_engines,8290,0.002133,,,6.0,37.62
+Porsche,958 Cayenne,2025-11,List_of_Porsche_engines,7411,0.002078,,,11.0,39.7
 Porsche,958 Cayenne,2025-12,List_of_Porsche_engines,5508,0.001591,,,,16.63
-Porsche,958 Cayenne,2026-01,List_of_Porsche_engines,4900,0.001401,,,4.0,25.04
-Porsche,958 Cayenne,2026-02,List_of_Porsche_engines,4184,0.001377,,,3.0,20.22
-Porsche,958 Cayenne,2026-03,List_of_Porsche_engines,4502,0.001463,,,1.0,13.93
-Porsche,958 Cayenne,2026-04,List_of_Porsche_engines,4919,0.00158,,,1.0,14.83
-Porsche,958 Cayenne,2026-05,List_of_Porsche_engines,4737,0.001485,,,4.0,24.91
-Porsche,958 Cayenne,2026-06,List_of_Porsche_engines,4309,0.001551,,,1.0,13.73
-Porsche,958 Cayenne,2026-07,List_of_Porsche_engines,3952,0.001455,,,2.0,16.88
+Porsche,958 Cayenne,2026-01,List_of_Porsche_engines,4900,0.001401,,,4.0,26.88
+Porsche,958 Cayenne,2026-02,List_of_Porsche_engines,4184,0.001377,,,3.0,22.08
+Porsche,958 Cayenne,2026-03,List_of_Porsche_engines,4502,0.001463,,,1.0,15.12
+Porsche,958 Cayenne,2026-04,List_of_Porsche_engines,4919,0.00158,,,1.0,16.02
+Porsche,958 Cayenne,2026-05,List_of_Porsche_engines,4737,0.001485,,,4.0,26.75
+Porsche,958 Cayenne,2026-06,List_of_Porsche_engines,4309,0.001551,,,1.0,14.92
+Porsche,958 Cayenne,2026-07,List_of_Porsche_engines,3952,0.001455,,,2.0,19.3
 Porsche,958 Cayenne,2026-08,List_of_Porsche_engines,3850,0.001465,,,,12.61
 Porsche,964 911 (Non-Turbo),2024-09,Porsche_911_(964),23283,0.006029,,,,52.91
 Porsche,964 911 (Non-Turbo),2024-10,Porsche_911_(964),21835,0.005215,,,,50.01
