@@ -10670,16 +10670,16 @@ Chevrolet,Blazer GMT415,2026-05,Chevrolet_K5_Blazer,14255,0.003985,,,,36.88
 Chevrolet,Blazer GMT415,2026-06,Chevrolet_K5_Blazer,12415,0.00379,,,,33.71
 Chevrolet,Blazer GMT415,2026-07,Chevrolet_K5_Blazer,12109,0.003638,,,,32.92
 Chevrolet,Blazer GMT415,2026-08,Chevrolet_K5_Blazer,12096,0.003589,,,,32.78
-Chevrolet,C/K,2025-09,,,,,,2.0,40.91
-Chevrolet,C/K,2025-10,,,,,,4.0,66.67
-Chevrolet,C/K,2025-11,,,,,,4.0,66.67
-Chevrolet,C/K,2025-12,,,,,,4.0,66.67
-Chevrolet,C/K,2026-01,,,,,,1.0,18.18
-Chevrolet,C/K,2026-03,,,,,,1.0,18.18
-Chevrolet,C/K,2026-04,,,,,,1.0,18.18
-Chevrolet,C/K,2026-05,,,,,,1.0,18.18
-Chevrolet,C/K,2026-06,,,,,,1.0,18.18
-Chevrolet,C/K,2026-07,,,,,,1.0,18.18
+Chevrolet,C/K,2025-09,,,,,,2.0,33.64
+Chevrolet,C/K,2025-10,,,,,,4.0,62.73
+Chevrolet,C/K,2025-11,,,,,,4.0,62.73
+Chevrolet,C/K,2025-12,,,,,,4.0,62.73
+Chevrolet,C/K,2026-01,,,,,,1.0,13.64
+Chevrolet,C/K,2026-03,,,,,,1.0,13.64
+Chevrolet,C/K,2026-04,,,,,,1.0,13.64
+Chevrolet,C/K,2026-05,,,,,,1.0,13.64
+Chevrolet,C/K,2026-06,,,,,,1.0,13.64
+Chevrolet,C/K,2026-07,,,,,,1.0,13.64
 Chevrolet,C8 CORVETTE,2024-09,Chevrolet_Corvette_(C8),39751,0.010006,,,,68.08
 Chevrolet,C8 CORVETTE,2024-10,Chevrolet_Corvette_(C8),41099,0.01008,,,,68.69
 Chevrolet,C8 CORVETTE,2024-11,Chevrolet_Corvette_(C8),37909,0.01011,,,,67.47
@@ -22006,18 +22006,18 @@ Ford,F-Series 1992-1997,2025-05,Ford_F-Series,77424,0.013687,,,,77.11
 Ford,F-Series 1992-1997,2025-06,Ford_F-Series,83400,0.014482,,,,77.87
 Ford,F-Series 1992-1997,2025-07,Ford_F-Series,67112,0.013823,,,,76.56
 Ford,F-Series 1992-1997,2025-08,Ford_F-Series,83398,0.015314,,,,78.31
-Ford,F-Series 1992-1997,2025-09,Ford_F-Series,73831,0.01529,,,,77.89
-Ford,F-Series 1992-1997,2025-10,Ford_F-Series,74758,0.015476,,,,78.08
-Ford,F-Series 1992-1997,2025-11,Ford_F-Series,73876,0.016088,,,,78.37
-Ford,F-Series 1992-1997,2025-12,Ford_F-Series,67263,0.0154,,,,77.54
-Ford,F-Series 1992-1997,2026-01,Ford_F-Series,66297,0.013531,,,,76.34
-Ford,F-Series 1992-1997,2026-02,Ford_F-Series,75741,0.015813,,,,78.3
-Ford,F-Series 1992-1997,2026-03,Ford_F-Series,63789,0.014178,,,,76.52
-Ford,F-Series 1992-1997,2026-04,Ford_F-Series,57805,0.013848,,,,75.58
-Ford,F-Series 1992-1997,2026-05,Ford_F-Series,59379,0.013869,,,,75.81
-Ford,F-Series 1992-1997,2026-06,Ford_F-Series,52703,0.013437,,,,74.29
+Ford,F-Series 1992-1997,2025-09,Ford_F-Series,73831,0.01529,,,7.0,80.69
+Ford,F-Series 1992-1997,2025-10,Ford_F-Series,74758,0.015476,,,4.0,74.54
+Ford,F-Series 1992-1997,2025-11,Ford_F-Series,73876,0.016088,,,1.0,63.43
+Ford,F-Series 1992-1997,2025-12,Ford_F-Series,67263,0.0154,,,4.0,74.12
+Ford,F-Series 1992-1997,2026-01,Ford_F-Series,66297,0.013531,,,2.0,66.48
+Ford,F-Series 1992-1997,2026-02,Ford_F-Series,75741,0.015813,,,1.0,63.38
+Ford,F-Series 1992-1997,2026-03,Ford_F-Series,63789,0.014178,,,2.0,66.63
+Ford,F-Series 1992-1997,2026-04,Ford_F-Series,57805,0.013848,,,4.0,72.61
+Ford,F-Series 1992-1997,2026-05,Ford_F-Series,59379,0.013869,,,3.0,69.02
+Ford,F-Series 1992-1997,2026-06,Ford_F-Series,52703,0.013437,,,1.0,60.29
 Ford,F-Series 1992-1997,2026-07,Ford_F-Series,54915,0.014456,,,,75.35
-Ford,F-Series 1992-1997,2026-08,Ford_F-Series,52793,0.014466,,,,74.95
+Ford,F-Series 1992-1997,2026-08,Ford_F-Series,52793,0.014466,,,6.0,76.96
 Ford,FIRE TRUCK,2024-09,Ford_L_series,5780,0.001218,,,,16.36
 Ford,FIRE TRUCK,2024-10,Ford_L_series,5835,0.001239,,,,16.58
 Ford,FIRE TRUCK,2024-11,Ford_L_series,5783,0.001275,,,,16.54
@@ -25281,18 +25281,18 @@ Ford,Thunderbird,2025-05,Ford_Thunderbird,31085,0.005495,,,,58.47
 Ford,Thunderbird,2025-06,Ford_Thunderbird,29616,0.005143,,,,56.69
 Ford,Thunderbird,2025-07,Ford_Thunderbird,27238,0.00561,,,,55.52
 Ford,Thunderbird,2025-08,Ford_Thunderbird,29891,0.005489,,,,57.45
-Ford,Thunderbird,2025-09,Ford_Thunderbird,28457,0.005893,,,,56.7
-Ford,Thunderbird,2025-10,Ford_Thunderbird,25539,0.005287,,,,53.74
-Ford,Thunderbird,2025-11,Ford_Thunderbird,22076,0.004808,,,,49.45
-Ford,Thunderbird,2025-12,Ford_Thunderbird,20693,0.004738,,,,47.75
-Ford,Thunderbird,2026-01,Ford_Thunderbird,21609,0.00441,,,,47.98
-Ford,Thunderbird,2026-02,Ford_Thunderbird,20709,0.004324,,,,46.81
-Ford,Thunderbird,2026-03,Ford_Thunderbird,21732,0.00483,,,,49.1
-Ford,Thunderbird,2026-04,Ford_Thunderbird,21583,0.005171,,,,49.66
-Ford,Thunderbird,2026-05,Ford_Thunderbird,23734,0.005544,,,,52.64
+Ford,Thunderbird,2025-09,Ford_Thunderbird,28457,0.005893,,,5.0,61.24
+Ford,Thunderbird,2025-10,Ford_Thunderbird,25539,0.005287,,,6.0,60.64
+Ford,Thunderbird,2025-11,Ford_Thunderbird,22076,0.004808,,,3.0,48.74
+Ford,Thunderbird,2025-12,Ford_Thunderbird,20693,0.004738,,,4.0,51.21
+Ford,Thunderbird,2026-01,Ford_Thunderbird,21609,0.00441,,,4.0,51.38
+Ford,Thunderbird,2026-02,Ford_Thunderbird,20709,0.004324,,,2.0,43.77
+Ford,Thunderbird,2026-03,Ford_Thunderbird,21732,0.00483,,,3.0,48.47
+Ford,Thunderbird,2026-04,Ford_Thunderbird,21583,0.005171,,,2.0,45.96
+Ford,Thunderbird,2026-05,Ford_Thunderbird,23734,0.005544,,,6.0,59.79
 Ford,Thunderbird,2026-06,Ford_Thunderbird,23377,0.00596,,,,52.87
-Ford,Thunderbird,2026-07,Ford_Thunderbird,33288,0.008763,,,,64.24
-Ford,Thunderbird,2026-08,Ford_Thunderbird,26343,0.007218,,,,57.4
+Ford,Thunderbird,2026-07,Ford_Thunderbird,33288,0.008763,,,5.0,67.04
+Ford,Thunderbird,2026-08,Ford_Thunderbird,26343,0.007218,,,7.0,64.92
 Ford,Torino,2024-09,Ford_Torino,21283,0.004484,,,,47.82
 Ford,Torino,2024-10,Ford_Torino,22572,0.004795,,,,50.05
 Ford,Torino,2024-11,Ford_Torino,21015,0.004634,,,,47.85
@@ -42702,18 +42702,18 @@ Mercedes-Benz,R107 SL,2025-04,Mercedes-Benz_R107_and_C107,14108,0.00175,,,,32.66
 Mercedes-Benz,R107 SL,2025-05,Mercedes-Benz_R107_and_C107,14969,0.001983,,,,34.37
 Mercedes-Benz,R107 SL,2025-06,Mercedes-Benz_R107_and_C107,14566,0.001939,,,,33.64
 Mercedes-Benz,R107 SL,2025-07,Mercedes-Benz_R107_and_C107,12920,0.001865,,,,31.1
-Mercedes-Benz,R107 SL,2025-08,Mercedes-Benz_R107_and_C107,13461,0.001757,,,7.0,44.31
-Mercedes-Benz,R107 SL,2025-09,Mercedes-Benz_R107_and_C107,12665,0.001793,,,8.0,44.19
-Mercedes-Benz,R107 SL,2025-10,Mercedes-Benz_R107_and_C107,13696,0.001925,,,10.0,46.54
-Mercedes-Benz,R107 SL,2025-11,Mercedes-Benz_R107_and_C107,13596,0.001946,,,3.0,36.66
-Mercedes-Benz,R107 SL,2025-12,Mercedes-Benz_R107_and_C107,12542,0.001811,,,2.0,32.86
-Mercedes-Benz,R107 SL,2026-01,Mercedes-Benz_R107_and_C107,12416,0.001778,,,3.0,35.13
-Mercedes-Benz,R107 SL,2026-02,Mercedes-Benz_R107_and_C107,10724,0.001665,,,1.0,25.12
-Mercedes-Benz,R107 SL,2026-03,Mercedes-Benz_R107_and_C107,11404,0.001603,,,1.0,25.91
-Mercedes-Benz,R107 SL,2026-04,Mercedes-Benz_R107_and_C107,11539,0.001819,,,5.0,40.42
-Mercedes-Benz,R107 SL,2026-05,Mercedes-Benz_R107_and_C107,12672,0.0018,,,4.0,38.97
-Mercedes-Benz,R107 SL,2026-06,Mercedes-Benz_R107_and_C107,10863,0.001905,,,1.0,25.6
-Mercedes-Benz,R107 SL,2026-07,Mercedes-Benz_R107_and_C107,11408,0.002054,,,3.0,34.2
+Mercedes-Benz,R107 SL,2025-08,Mercedes-Benz_R107_and_C107,13461,0.001757,,,7.0,45.15
+Mercedes-Benz,R107 SL,2025-09,Mercedes-Benz_R107_and_C107,12665,0.001793,,,8.0,45.17
+Mercedes-Benz,R107 SL,2025-10,Mercedes-Benz_R107_and_C107,13696,0.001925,,,10.0,47.1
+Mercedes-Benz,R107 SL,2025-11,Mercedes-Benz_R107_and_C107,13596,0.001946,,,3.0,35.47
+Mercedes-Benz,R107 SL,2025-12,Mercedes-Benz_R107_and_C107,12542,0.001811,,,2.0,31.18
+Mercedes-Benz,R107 SL,2026-01,Mercedes-Benz_R107_and_C107,12416,0.001778,,,3.0,33.94
+Mercedes-Benz,R107 SL,2026-02,Mercedes-Benz_R107_and_C107,10724,0.001665,,,1.0,24.07
+Mercedes-Benz,R107 SL,2026-03,Mercedes-Benz_R107_and_C107,11404,0.001603,,,1.0,24.86
+Mercedes-Benz,R107 SL,2026-04,Mercedes-Benz_R107_and_C107,11539,0.001819,,,5.0,39.86
+Mercedes-Benz,R107 SL,2026-05,Mercedes-Benz_R107_and_C107,12672,0.0018,,,4.0,38.06
+Mercedes-Benz,R107 SL,2026-06,Mercedes-Benz_R107_and_C107,10863,0.001905,,,1.0,24.55
+Mercedes-Benz,R107 SL,2026-07,Mercedes-Benz_R107_and_C107,11408,0.002054,,,3.0,33.02
 Mercedes-Benz,R107 SL,2026-08,Mercedes-Benz_R107_and_C107,11467,0.002031,,,,29.09
 Mercedes-Benz,R129 SL,2024-09,Mercedes-Benz_SL-Class_(R129),16415,0.002407,,,,37.36
 Mercedes-Benz,R129 SL,2024-10,Mercedes-Benz_SL-Class_(R129),16736,0.002308,,,,37.7
@@ -51978,18 +51978,18 @@ Porsche,958 Cayenne,2025-04,List_of_Porsche_engines,8712,0.002099,,,,24.52
 Porsche,958 Cayenne,2025-05,List_of_Porsche_engines,8296,0.00208,,,,23.82
 Porsche,958 Cayenne,2025-06,List_of_Porsche_engines,6848,0.001838,,,,20.46
 Porsche,958 Cayenne,2025-07,List_of_Porsche_engines,6717,0.001904,,,,20.22
-Porsche,958 Cayenne,2025-08,List_of_Porsche_engines,7817,0.001964,,,5.0,35.69
-Porsche,958 Cayenne,2025-09,List_of_Porsche_engines,7689,0.001939,,,10.0,38.98
-Porsche,958 Cayenne,2025-10,List_of_Porsche_engines,8290,0.002133,,,6.0,37.62
-Porsche,958 Cayenne,2025-11,List_of_Porsche_engines,7411,0.002078,,,11.0,39.7
+Porsche,958 Cayenne,2025-08,List_of_Porsche_engines,7817,0.001964,,,5.0,35.14
+Porsche,958 Cayenne,2025-09,List_of_Porsche_engines,7689,0.001939,,,10.0,39.54
+Porsche,958 Cayenne,2025-10,List_of_Porsche_engines,8290,0.002133,,,6.0,37.69
+Porsche,958 Cayenne,2025-11,List_of_Porsche_engines,7411,0.002078,,,11.0,39.84
 Porsche,958 Cayenne,2025-12,List_of_Porsche_engines,5508,0.001591,,,,16.63
-Porsche,958 Cayenne,2026-01,List_of_Porsche_engines,4900,0.001401,,,4.0,26.88
-Porsche,958 Cayenne,2026-02,List_of_Porsche_engines,4184,0.001377,,,3.0,22.08
-Porsche,958 Cayenne,2026-03,List_of_Porsche_engines,4502,0.001463,,,1.0,15.12
-Porsche,958 Cayenne,2026-04,List_of_Porsche_engines,4919,0.00158,,,1.0,16.02
-Porsche,958 Cayenne,2026-05,List_of_Porsche_engines,4737,0.001485,,,4.0,26.75
-Porsche,958 Cayenne,2026-06,List_of_Porsche_engines,4309,0.001551,,,1.0,14.92
-Porsche,958 Cayenne,2026-07,List_of_Porsche_engines,3952,0.001455,,,2.0,19.3
+Porsche,958 Cayenne,2026-01,List_of_Porsche_engines,4900,0.001401,,,4.0,25.97
+Porsche,958 Cayenne,2026-02,List_of_Porsche_engines,4184,0.001377,,,3.0,20.89
+Porsche,958 Cayenne,2026-03,List_of_Porsche_engines,4502,0.001463,,,1.0,14.07
+Porsche,958 Cayenne,2026-04,List_of_Porsche_engines,4919,0.00158,,,1.0,14.97
+Porsche,958 Cayenne,2026-05,List_of_Porsche_engines,4737,0.001485,,,4.0,25.84
+Porsche,958 Cayenne,2026-06,List_of_Porsche_engines,4309,0.001551,,,1.0,13.87
+Porsche,958 Cayenne,2026-07,List_of_Porsche_engines,3952,0.001455,,,2.0,17.62
 Porsche,958 Cayenne,2026-08,List_of_Porsche_engines,3850,0.001465,,,,12.61
 Porsche,964 911 (Non-Turbo),2024-09,Porsche_911_(964),23283,0.006029,,,,52.91
 Porsche,964 911 (Non-Turbo),2024-10,Porsche_911_(964),21835,0.005215,,,,50.01
