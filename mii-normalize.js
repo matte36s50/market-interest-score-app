@@ -218,8 +218,17 @@
     //   'empty'  — no usable values anywhere (weight is redistributed)
     //   'static' — populated but with so few distinct values it behaves like a
     //              lookup table, not a measurement (e.g. a per-brand constant)
+    //   'sparse' — well-spread values, but present on too few rows to rank the
+    //              field against (every other row charts as a bare zero)
     var dataQuality = {};
     var STATIC_DISTINCT_THRESHOLD = 50;
+    // An input present on only a sliver of the dataset is not a usable axis even
+    // when the handful of values it does carry are well spread. Percentile-ranking
+    // it ranks those few rows against each other rather than against the field,
+    // and every other row charts at zero — which reads as "measured, and it's
+    // nothing" rather than "not measured here". Flagged 'sparse' so labels can say
+    // so; scoring already drops the input per-row via weight renormalization.
+    var SPARSE_COVERAGE_THRESHOLD = 0.25;
 
     // Overwrite each *_normalized column with a percentile rank and recompute
     // mii_score. Reads only the raw columns, so it is safe to call more than once
@@ -254,6 +263,7 @@
                 distinct: distinctCount,
                 status: !vals.length ? 'empty'
                     : distinctCount < STATIC_DISTINCT_THRESHOLD ? 'static'
+                    : (vals.length / rows.length) < SPARSE_COVERAGE_THRESHOLD ? 'sparse'
                     : 'ok',
             };
             if (!vals.length) {
@@ -283,8 +293,42 @@
         return rows;
     }
 
+    // Confidence from sample size. One definition for every page and for both
+    // grains, so a manufacturer row and a model row in the same table always
+    // read the same auction count the same way. Previously model rows used their
+    // own far looser scale (5 auctions = "High" at monthly grain), which put a
+    // High badge on samples the manufacturer scale called Low.
+    var CONFIDENCE_THRESHOLDS = {
+        monthly:   { High: 15, 'Medium-High': 8,  Medium: 4  },
+        quarterly: { High: 50, 'Medium-High': 20, Medium: 10 },
+    };
+    function confidenceFor(auctions, grain) {
+        var t = CONFIDENCE_THRESHOLDS[grain] || CONFIDENCE_THRESHOLDS.monthly;
+        var n = parseFloat(auctions) || 0;
+        if (n >= t.High) return 'High';
+        if (n >= t['Medium-High']) return 'Medium-High';
+        if (n >= t.Medium) return 'Medium';
+        return 'Low';
+    }
+
+    // Suffix marking an input the last recompute found unfit to chart, given a
+    // raw column name ('youtube_total_views'). Charts append it to the axis
+    // label so a weight-renormalized-away input reads as unmeasured rather than
+    // as a genuine zero.
+    function qualitySuffix(rawColumn) {
+        var dq = dataQuality[rawColumn];
+        if (!dq) return '';
+        if (dq.status === 'empty') return ' (no data)';
+        if (dq.status === 'static') return ' (static)';
+        if (dq.status === 'sparse') return ' (sparse: ' + Math.round(dq.coverage * 100) + '% of rows)';
+        return '';
+    }
+
     global.MII = {
         COMPONENTS: COMPONENTS,
+        CONFIDENCE_THRESHOLDS: CONFIDENCE_THRESHOLDS,
+        qualitySuffix: qualitySuffix,
+        confidenceFor: confidenceFor,
         recompute: recompute,
         percentileRanker: percentileRanker,
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its

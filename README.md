@@ -115,10 +115,23 @@ makes the score answer "how does this car rank versus the field" rather than
 
 ## Confidence Levels
 
-- **High** (●): 50+ auctions
-- **Medium-High** (◐): 20-49 auctions
-- **Medium** (◐): 10-19 auctions
-- **Low** (○): 5-9 auctions
+Confidence is read off the auction count behind a figure, and the thresholds
+depend on the **grain** of the period selected — a single month is held to a
+lower bar than a YTD/quarterly aggregate covering many times the window.
+
+| Badge | Monthly period | YTD / quarterly |
+|-------|----------------|-----------------|
+| **High** (●)        | 15+ auctions | 50+ auctions |
+| **Medium-High** (◐) | 8–14         | 20–49        |
+| **Medium** (◐)      | 4–7          | 10–19        |
+| **Low** (○)         | under 4      | under 10     |
+
+`MII.confidenceFor(auctions, grain)` in `mii-normalize.js` is the single
+definition, used for both manufacturer rows and model rows. They previously
+disagreed: model rows ran their own far looser scale (5 auctions read as
+"High" at monthly grain, where the manufacturer scale called the same sample
+"Medium"), so a thinly-traded model could carry a High badge on a handful of
+sales. Treat any badge below High as a sample-size caveat, not a market signal.
 
 ## Usage
 
