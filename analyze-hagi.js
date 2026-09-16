@@ -721,7 +721,10 @@ function renderComponents() {
 function renderRadarChart(selected, market, mfrLabel) {
     destroyChart('radar');
     const ctx = document.getElementById('radarChart').getContext('2d');
-    const labels = COMPONENTS.map(c => c.label);
+    // Flag inputs the recompute found empty/static/sparse, so an axis that is
+    // charting zero purely because the signal is unmeasured says so.
+    const labels = COMPONENTS.map(c => c.label +
+        (window.MII ? MII.qualitySuffix(c.key.replace(/_normalized$/, '')) : ''));
 
     charts.radar = new Chart(ctx, {
         type: 'radar',
@@ -789,7 +792,10 @@ function renderRadarChart(selected, market, mfrLabel) {
 function renderComponentBar(selected, market, mfrLabel) {
     destroyChart('componentBar');
     const ctx = document.getElementById('componentBarChart').getContext('2d');
-    const labels = COMPONENTS.map(c => c.label);
+    // Flag inputs the recompute found empty/static/sparse, so an axis that is
+    // charting zero purely because the signal is unmeasured says so.
+    const labels = COMPONENTS.map(c => c.label +
+        (window.MII ? MII.qualitySuffix(c.key.replace(/_normalized$/, '')) : ''));
 
     charts.componentBar = new Chart(ctx, {
         type: 'bar',

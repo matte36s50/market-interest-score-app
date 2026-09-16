@@ -28,10 +28,8 @@ const PROFILE_DIMS = [
 // Axis label with a data-quality flag from MII.dataQuality, so a dead or
 // static input reads as such instead of silently charting as zero.
 function dimLabel(dim) {
-    const dq = window.MII && MII.dataQuality[dim.key.replace(/_normalized$/, '')];
-    if (dq && dq.status === 'empty') return dim.label + ' (no data)';
-    if (dq && dq.status === 'static') return dim.label + ' (static)';
-    return dim.label;
+    if (!window.MII) return dim.label;
+    return dim.label + MII.qualitySuffix(dim.key.replace(/_normalized$/, ''));
 }
 
 const MAX_COMPARISONS = 5;   // additional models beyond the base

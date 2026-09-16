@@ -380,11 +380,11 @@ function processCSVData(rawData) {
                 }
             }
 
-            // Get confidence level based on auction count (monthly thresholds)
-            let confidence = 'Low';
-            if (auctions >= 15) confidence = 'High';
-            else if (auctions >= 8) confidence = 'Medium-High';
-            else if (auctions >= 4) confidence = 'Medium';
+            // Confidence from auction count, monthly grain (mii-normalize.js owns
+            // the thresholds so model rows below use the identical scale).
+            const confidence = window.MII
+                ? MII.confidenceFor(auctions, 'monthly')
+                : (auctions >= 15 ? 'High' : auctions >= 8 ? 'Medium-High' : auctions >= 4 ? 'Medium' : 'Low');
 
             // sold column is a sum (pipeline aggregates sold counts), not binary
             const soldCount = mfrData.reduce((sum, row) => sum + (parseFloat(row.sold) || 0), 0);
@@ -460,7 +460,10 @@ function processCSVData(rawData) {
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
-                    confidence: mg.auctions >= 5 ? 'High' : mg.auctions >= 3 ? 'Medium' : 'Low'
+                    // Same scale as the manufacturer row above — a model row must not
+                    // claim High on a sample the manufacturer scale calls Low.
+                    confidence: window.MII ? MII.confidenceFor(mg.auctions, 'monthly')
+                        : (mg.auctions >= 15 ? 'High' : mg.auctions >= 8 ? 'Medium-High' : mg.auctions >= 4 ? 'Medium' : 'Low')
                 };
             });
 
@@ -537,10 +540,9 @@ function processCSVData(rawData) {
             const historyLabels = ytdHistoryData.map(d => d.label);
 
             // Confidence based on total YTD auctions (monthly data)
-            let confidence = 'Low';
-            if (auctions >= 50) confidence = 'High';
-            else if (auctions >= 20) confidence = 'Medium-High';
-            else if (auctions >= 10) confidence = 'Medium';
+            const confidence = window.MII
+                ? MII.confidenceFor(auctions, 'quarterly')
+                : (auctions >= 50 ? 'High' : auctions >= 20 ? 'Medium-High' : auctions >= 10 ? 'Medium' : 'Low');
 
             // sold column is a sum (pipeline aggregates sold counts), not binary
             const soldCount = mfrData.reduce((sum, row) => sum + (parseFloat(row.sold) || 0), 0);
@@ -616,7 +618,8 @@ function processCSVData(rawData) {
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
-                    confidence: mg.auctions >= 10 ? 'High' : mg.auctions >= 5 ? 'Medium' : 'Low'
+                    confidence: window.MII ? MII.confidenceFor(mg.auctions, 'quarterly')
+                        : (mg.auctions >= 50 ? 'High' : mg.auctions >= 20 ? 'Medium-High' : mg.auctions >= 10 ? 'Medium' : 'Low')
                 };
             });
 
