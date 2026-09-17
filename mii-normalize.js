@@ -406,6 +406,30 @@
         return '';
     }
 
+    // Bring a Trailer files memorabilia and hard parts under the car's own
+    // make and model — wheels, seats, engines, manuals, signs — so a naive row
+    // count treats a $300 steering wheel as an auction of the car. It also
+    // skews unevenly: 23% of E30 M3 rows and 15% of 911 Carrera 3.2 rows are
+    // parts, against 1% for the E46 M3, which distorts any comparison between
+    // them and drags their price averages down.
+    //
+    // The test is BAT's own `category`, not the listing slug. A slug rule
+    // ("a real car's URL starts with a model year") looks tempting and is
+    // wrong: it drops ~900 genuine vehicles whose slug leads with something
+    // else — Superformance, Backdraft, Factory Five, Kirkham and Meyers Manx
+    // replicas, and listings like "supercharged-2008-bmw-m3-convertible".
+    // Across every model checked, the category test flags exactly the same
+    // lots as the slug rule with none of those false positives.
+    //
+    // A feed with no `category` column filters nothing, which keeps older
+    // exports working rather than silently emptying the dataset.
+    var NON_VEHICLE_CATEGORIES = { 'parts': 1, 'wheels': 1 };
+    function isVehicleLot(row) {
+        if (!row) return false;
+        var cat = String(row.category == null ? '' : row.category).trim().toLowerCase();
+        return !NON_VEHICLE_CATEGORIES[cat];
+    }
+
     global.MII = {
         COMPONENTS: COMPONENTS,
         VERSION: VERSION,
@@ -413,6 +437,8 @@
         noiseFloor: noiseFloor,
         moveStrength: moveStrength,
         get effectiveWeights() { return effectiveWeights; },
+        NON_VEHICLE_CATEGORIES: NON_VEHICLE_CATEGORIES,
+        isVehicleLot: isVehicleLot,
         CONFIDENCE_THRESHOLDS: CONFIDENCE_THRESHOLDS,
         qualitySuffix: qualitySuffix,
         confidenceFor: confidenceFor,

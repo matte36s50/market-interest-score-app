@@ -70,6 +70,9 @@ async function loadBatAuctionCounts() {
                     results.data.forEach(row => {
                         const make = (row.make || '').trim();
                         const rawModel = (row.model || '').trim();
+                        // Memorabilia and hard parts are filed under the car's own
+                        // make/model; they are not auctions of the car.
+                        if (window.MII && !MII.isVehicleLot(row)) return;
                         if (!make || !rawModel) return;
 
                         const parsed = parseSaleDate(row.sale_date);

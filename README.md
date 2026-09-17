@@ -309,6 +309,28 @@ with:
 This makes outlier sales (e.g. a $56K E46 M3 in a month that averaged $28K) visible
 and traceable. Non-USD sales are listed in the table but omitted from the price axis.
 
+### Parts and memorabilia are excluded
+
+Bring a Trailer files hard parts and memorabilia under the donor car's own make
+and model — wheels, seats, engines, manuals, illuminated signs — so counting
+rows treats a $300 steering wheel as an auction of the car. The skew is uneven
+enough to distort comparisons between models: **23% of BMW E30 M3 rows and 15%
+of Porsche 911 Carrera 3.2 rows are parts, against 1% for the E46 M3 and 0% for
+the Mercedes 190E 16V**. Removing them *raises* the E30 M3's median sale from
+$60,005 to $69,000.
+
+`MII.isVehicleLot(row)` drops any lot whose bat.csv `category` is `Parts` or
+`Wheels`, and every page applies it when it reads bat.csv, so auction counts,
+confidence badges, price averages, the drill-down scatter and the lot-level
+correlations all see cars only.
+
+The test is BAT's own category rather than the listing slug. A slug rule — "a
+real car's URL starts with a model year" — flags exactly the same lots on every
+model checked, but also drops ~900 genuine vehicles whose slug leads with
+something else: Superformance, Backdraft, Factory Five, Kirkham and Meyers Manx
+replicas, and listings such as `supercharged-2008-bmw-m3-convertible`. A feed
+with no `category` column filters nothing, so older exports keep working.
+
 ## Live-Auction Admin Tab
 
 `admin.html` (linked as **Admin** in the dashboard header) is a data-entry page
