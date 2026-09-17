@@ -1,6 +1,16 @@
 # Market Interest Index (MII) Dashboard
 
-A comprehensive, interactive dashboard for tracking collector car market interest across manufacturers and models, based on auction data from Bring a Trailer and Cars & Bids.
+A comprehensive, interactive dashboard for tracking collector car market interest across manufacturers and models, based on auction data from Bring a Trailer.
+
+> **Cars & Bids is not in the index.** Every row of the live
+> `mii_results_latest.csv` carries `data_source = BAT`, and all 63,358 lots in
+> `bat.csv` are bringatrailer.com listings. A C&B scraper exists in
+> `car-scrapers` and `cnb.csv` sits in the same S3 bucket, but the loader's
+> `USE_CNB_DATA` flag is off: that file stopped collecting in October 2025, so
+> enabling it would add ~4,000 lots to five historical months and none to the
+> eleven since — a step change in the universe partway through the series.
+> This README previously promised both sources; it now describes what the
+> index actually contains.
 
 ## Features
 
