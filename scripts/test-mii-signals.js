@@ -117,5 +117,19 @@ MII.recompute(rows);
 check('missing trends file leaves the input empty', MII.dataQuality.google_trends_interest.status, 'empty');
 check('scores still land in range', rows.every(r => r.mii_score >= 0 && r.mii_score <= 100), true);
 
+console.log('non-vehicle lot filter');
+// BAT files wheels/seats/engines under the car's own make and model. The test
+// is BAT's own category, so replicas and year-less slugs stay counted as cars.
+check('a car is a vehicle', MII.isVehicleLot({ category: 'Convertibles' }), true);
+check('a blank category is a vehicle', MII.isVehicleLot({ category: '' }), true);
+check('a missing category is a vehicle', MII.isVehicleLot({}), true);
+check('Parts is not a vehicle', MII.isVehicleLot({ category: 'Parts' }), false);
+check('Wheels is not a vehicle', MII.isVehicleLot({ category: 'Wheels' }), false);
+check('category match ignores case and padding',
+    MII.isVehicleLot({ category: '  parts ' }), false);
+check('a replica with no year in its slug is still a vehicle',
+    MII.isVehicleLot({ category: '', auction_url: 'https://bringatrailer.com/listing/superformance-mkiii-50/' }), true);
+check('a null row is not a vehicle', MII.isVehicleLot(null), false);
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);

@@ -25,6 +25,9 @@ async function loadBatAuctionCounts() {
                     results.data.forEach(row => {
                         const make = (row.make || '').trim();
                         const rawModel = (row.model || '').trim();
+                        // Memorabilia and hard parts are filed under the car's own
+                        // make/model; they are not auctions of the car.
+                        if (window.MII && !MII.isVehicleLot(row)) return;
                         const saleDate = (row.sale_date || '').trim();
                         if (!make || !rawModel || !saleDate) return;
 
@@ -188,6 +191,9 @@ function getLotCorrelationRecords() {
     batRawRows.forEach(row => {
         const make = (row.make || '').trim();
         const rawModel = (row.model || '').trim();
+        // Memorabilia and hard parts are filed under the car's own
+        // make/model; they are not auctions of the car.
+        if (window.MII && !MII.isVehicleLot(row)) return;
         const saleDate = (row.sale_date || '').trim();
         if (!make || !rawModel || !saleDate) return;
 
