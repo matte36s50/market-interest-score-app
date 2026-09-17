@@ -344,6 +344,7 @@ function processCSVData(rawData) {
 
             // Calculate trend (difference from previous quarter)
             let trend = 0;
+            let trendPoints = 0;
             if (qIndex > 0) {
                 const prevQuarter = quarters[qIndex - 1];
                 const prevQuarterKey = prevQuarter;
@@ -351,6 +352,7 @@ function processCSVData(rawData) {
                     const prevMfr = dashboardData.quarterData[prevQuarterKey].manufacturers.find(m => m.make === mfrName);
                     if (prevMfr) {
                         trend = ((avgMII - prevMfr.miiScore) / prevMfr.miiScore) * 100;
+                        trendPoints = avgMII - prevMfr.miiScore;
                     }
                 }
             }
@@ -423,6 +425,7 @@ function processCSVData(rawData) {
                 // to two sevenths, while a one-sale model was left untouched.
                 const currentMII = mg.rowCount > 0 ? mg.totalMII / mg.rowCount : 0;
                 let modelTrend = 0;
+                let modelTrendPoints = 0;
 
                 // Calculate trend by comparing to previous quarter
                 if (qIndex > 0) {
@@ -435,6 +438,7 @@ function processCSVData(rawData) {
                             const prevModel = prevMfr.models.find(m => m.model === mg.model);
                             if (prevModel && prevModel.mii > 0) {
                                 modelTrend = ((currentMII - prevModel.mii) / prevModel.mii) * 100;
+                                modelTrendPoints = currentMII - prevModel.mii;
                             }
                         }
                     }
@@ -447,6 +451,8 @@ function processCSVData(rawData) {
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
+                    // raw MII-point change, so the UI can test it against the noise floor
+                    trendPoints: parseFloat(modelTrendPoints.toFixed(2)),
                     // Same scale as the manufacturer row above — a model row must not
                     // claim High on a sample the manufacturer scale calls Low.
                     confidence: window.MII ? MII.confidenceFor(mg.auctions, 'monthly')
@@ -462,6 +468,7 @@ function processCSVData(rawData) {
                 miiScore: parseFloat(avgMII.toFixed(1)),
                 confidence: confidence,
                 trend: parseFloat(trend.toFixed(1)),
+                trendPoints: parseFloat(trendPoints.toFixed(2)),
                 sellThrough: sellThrough,
                 history: history,
                 models: aggregatedModels.sort((a, b) => b.mii - a.mii)
@@ -502,6 +509,7 @@ function processCSVData(rawData) {
 
             // For YTD, trend is based on first vs last quarter
             let trend = 0;
+            let trendPoints = 0;
             if (ytdQuarters.length > 1) {
                 const firstQ = ytdQuarters[0];
                 const lastQ = ytdQuarters[ytdQuarters.length - 1];
@@ -513,6 +521,7 @@ function processCSVData(rawData) {
 
                 if (firstMfr && lastMfr) {
                     trend = ((lastMfr.miiScore - firstMfr.miiScore) / firstMfr.miiScore) * 100;
+                    trendPoints = lastMfr.miiScore - firstMfr.miiScore;
                 }
             }
 
@@ -575,6 +584,7 @@ function processCSVData(rawData) {
                 // to two sevenths, while a one-sale model was left untouched.
                 const currentMII = mg.rowCount > 0 ? mg.totalMII / mg.rowCount : 0;
                 let modelTrend = 0;
+                let modelTrendPoints = 0;
 
                 // Calculate YTD trend by comparing to first quarter
                 if (ytdQuarters.length > 1) {
@@ -587,6 +597,7 @@ function processCSVData(rawData) {
                             const firstModel = firstMfr.models.find(m => m.model === mg.model);
                             if (firstModel && firstModel.mii > 0) {
                                 modelTrend = ((currentMII - firstModel.mii) / firstModel.mii) * 100;
+                                modelTrendPoints = currentMII - firstModel.mii;
                             }
                         }
                     }
@@ -599,6 +610,8 @@ function processCSVData(rawData) {
                     avgPrice: mg.priceCount > 0 ? mg.totalPrice / mg.priceCount : 0,
                     sellThrough: mg.auctions > 0 ? Math.round((mg.totalSold / mg.auctions) * 100) : 0,
                     trend: parseFloat(modelTrend.toFixed(1)),
+                    // raw MII-point change, so the UI can test it against the noise floor
+                    trendPoints: parseFloat(modelTrendPoints.toFixed(2)),
                     confidence: window.MII ? MII.confidenceFor(mg.auctions, 'quarterly')
                         : (mg.auctions >= 50 ? 'High' : mg.auctions >= 20 ? 'Medium-High' : mg.auctions >= 10 ? 'Medium' : 'Low')
                 };
@@ -612,6 +625,7 @@ function processCSVData(rawData) {
                 miiScore: parseFloat(avgMII.toFixed(1)),
                 confidence: confidence,
                 trend: parseFloat(trend.toFixed(1)),
+                trendPoints: parseFloat(trendPoints.toFixed(2)),
                 sellThrough: sellThrough,
                 history: history,
                 models: aggregatedModels.sort((a, b) => b.mii - a.mii)
@@ -781,7 +795,13 @@ function getConfidenceBadge(level) {
     </span>`;
 }
 
-function getTrendIndicator(value, size = 'normal') {
+// `points` is the raw MII change behind the percentage, and `auctions` the
+// sample it rests on. With both, a move smaller than the measured noise floor
+// for that sample size is drawn greyed with a dotted underline rather than as a
+// confident arrow: at one auction a month the median swing is 10.5 MII points,
+// so most small movements are which cars happened to cross the block, not the
+// market moving. Called without them, behaviour is unchanged.
+function getTrendIndicator(value, size = 'normal', opts = {}) {
     const isPositive = value > 0;
     const isNeutral = Math.abs(value) < 0.5;
     const textSize = size === 'large' ? 'text-lg' : 'text-sm';
@@ -790,8 +810,15 @@ function getTrendIndicator(value, size = 'normal') {
         return `<span class="${textSize} text-gray-400 font-medium">→ ${Math.abs(value).toFixed(1)}%</span>`;
     }
 
-    const color = isPositive ? 'text-green-600' : 'text-red-600';
     const arrow = isPositive ? '▲' : '▼';
+    if (window.MII && opts.points != null && opts.auctions != null
+        && MII.moveStrength(opts.points, opts.auctions) === 'noise') {
+        const floor = MII.noiseFloor(opts.auctions);
+        return `<span class="${textSize} font-medium text-gray-400 decoration-dotted underline underline-offset-2"
+                      title="${Math.abs(opts.points).toFixed(1)} MII points on ${opts.auctions} auction(s) — under the ${floor.median} point median swing at this sample size, so it is within normal sampling noise">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
+    }
+
+    const color = isPositive ? 'text-green-600' : 'text-red-600';
     return `<span class="${textSize} font-semibold ${color}">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
 }
 
@@ -984,7 +1011,7 @@ function renderTopModels() {
                         ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                     </div>
                     <div class="flex items-center gap-2">
-                        ${getTrendIndicator(model.trend)}
+                        ${getTrendIndicator(model.trend, "normal", { points: model.trendPoints, auctions: model.auctions })}
                         ${getConfidenceBadge(model.confidence)}
                     </div>
                 </div>
@@ -1041,7 +1068,7 @@ function renderLeaderboard() {
                         </div>
                         <div class="text-right">
                             <div class="text-2xl font-bold text-[#8B1A1A]">${mfr.miiScore.toFixed(1)}</div>
-                            ${getTrendIndicator(mfr.trend)}
+                            ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
                         </div>
                         ${getConfidenceBadge(mfr.confidence)}
                         <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isComparing ? 'bg-[#8B1A1A] text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}"
@@ -1107,7 +1134,7 @@ function renderManufacturerDetail() {
                     <div class="text-2xl font-bold text-[#8B1A1A]">
                         ${mfr.miiScore.toFixed(1)}
                     </div>
-                    ${getTrendIndicator(mfr.trend)}
+                    ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
                 </div>
                 <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
                     <div class="text-xs text-gray-500 uppercase tracking-wider">Sell-Through</div>
@@ -1155,7 +1182,7 @@ function renderManufacturerDetail() {
                                 <div class="text-right">
                                     <div class="font-bold text-[#8B1A1A]">${model.mii.toFixed(1)}</div>
                                     <div class="flex items-center gap-2">
-                                        ${getTrendIndicator(model.trend)}
+                                        ${getTrendIndicator(model.trend, "normal", { points: model.trendPoints, auctions: model.auctions })}
                                         ${getConfidenceBadge(model.confidence)}
                                     </div>
                                 </div>

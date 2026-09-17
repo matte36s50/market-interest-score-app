@@ -1,6 +1,16 @@
 # Market Interest Index (MII) Dashboard
 
-A comprehensive, interactive dashboard for tracking collector car market interest across manufacturers and models, based on auction data from Bring a Trailer and Cars & Bids.
+A comprehensive, interactive dashboard for tracking collector car market interest across manufacturers and models, based on auction data from Bring a Trailer.
+
+> **Cars & Bids is not in the index.** Every row of the live
+> `mii_results_latest.csv` carries `data_source = BAT`, and all 63,358 lots in
+> `bat.csv` are bringatrailer.com listings. A C&B scraper exists in
+> `car-scrapers` and `cnb.csv` sits in the same S3 bucket, but the loader's
+> `USE_CNB_DATA` flag is off: that file stopped collecting in October 2025, so
+> enabling it would add ~4,000 lots to five historical months and none to the
+> eleven since — a step change in the universe partway through the series.
+> This README previously promised both sources; it now describes what the
+> index actually contains.
 
 ## Features
 
@@ -34,6 +44,66 @@ The Market Interest Index is a weighted blend of eight inputs:
 - **Vehicle Age**: 5%
 
 The weights sum to 1.0, so `MII = 100 × Σ(weight × normalized input)`.
+
+### Nominal vs effective weights — quote the effective column
+
+Those weights are **nominal**. Because an input a row has no value for is dropped
+and the remaining weights renormalized (never imputed), the weight an input
+actually carries depends on how widely it is measured. On the live dataset:
+
+| Input | Nominal | **Effective** | Coverage |
+|-------|---------|---------------|----------|
+| Sale Price | 20% | **23.9%** | 100% |
+| Bid Activity | 20% | **23.9%** | 100% |
+| View Count | 15% | **17.9%** | 100% |
+| Comments | 10% | **12.0%** | 100% |
+| Google Trends | 15% | **11.2%** | 67.0% |
+| YouTube | 10% | **0.1%** | 0.5% |
+| Social | 5% | 5.1% | 87.0% |
+| Vehicle Age | 5% | 6.0% | 100% |
+
+The live index is **~78% a Bring a Trailer auction-behaviour measure**, not the
+65% the nominal formula suggests, and YouTube's 10% is a rounding error until
+that collector reaches more than seven models. `MII.effectiveWeights` recomputes
+this after every `recompute()`, and the **How This Score Is Built** panel on the
+Data Coverage tab of `analyze.html` renders it from live data — so the published
+description can never drift from what the dashboard is doing.
+
+### Methodology version
+
+`MII.VERSION` (currently **2026.09**) stamps the scoring rules in force. Scoring
+has changed materially over this index's life — min-max scaling gave way to
+percentile rank, weight renormalization was added, and the model and
+manufacturer confidence scales were unified — so a score is only reproducible
+against a stated version. Cite it with any figure taken from the dashboard, and
+bump it whenever a change moves published scores.
+
+## Reading a change: the noise floor
+
+A model's monthly MII moves even when nothing about the market has, because a
+different set of cars happened to cross the block. Measured across every
+consecutive month-pair in the dataset, bucketed by the smaller of the two
+months' auction counts:
+
+| Auctions/month | Median swing | 90th percentile |
+|----------------|--------------|-----------------|
+| 1 | **10.5 pts** | 27.0 |
+| 2 | 8.2 | 21.4 |
+| 3–4 | 7.1 | 18.9 |
+| 5–7 | 5.7 | 15.9 |
+| 8–14 | 5.3 | 13.2 |
+| 15+ | **4.0** | 8.8 |
+
+**At one auction a month the median swing is 10.5 points**, and most models in
+this dataset trade at that volume — so most month-to-month movement on screen is
+sampling, not market. Practical rule: below ~8 lots in a month read the level and
+never the change; a move becomes interpretable at ~15+ lots once it clears ~9
+points.
+
+`MII.moveStrength(points, auctions)` classifies a move as `noise` (under the
+median), `weak` (median to 90th percentile) or `signal` (above). The dashboard
+draws a within-noise trend greyed with a dotted underline instead of a confident
+coloured arrow, with the reason in its tooltip.
 
 ### Normalization (percentile rank)
 
