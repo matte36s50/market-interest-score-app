@@ -1510,7 +1510,56 @@ function interpretCorrelation(r, xLabel, yLabel) {
 // Analyses bat.csv raw rows to find months/days with missing data.
 // ============================================================
 
+// Methodology panel: nominal vs effective weights, the version stamp, and the
+// measured noise floor. Reads MII.effectiveWeights, which recompute() refreshes,
+// so it always describes the data actually on screen rather than the README.
+function renderMethodology() {
+    if (!window.MII) return;
+    const vEl = document.getElementById('miiVersion');
+    if (vEl) vEl.textContent = MII.VERSION;
+
+    const body = document.getElementById('weightTableBody');
+    if (body) {
+        const STATUS = {
+            ok:     ['measured', 'text-emerald-400'],
+            sparse: ['too few rows to rank', 'text-amber-400'],
+            static: ['not varying', 'text-amber-400'],
+            empty:  ['no data — weight redistributed', 'text-rose-400'],
+        };
+        body.innerHTML = (MII.effectiveWeights || []).map(w => {
+            const [label, cls] = STATUS[w.status] || [w.status, 'text-zinc-400'];
+            // Flag an input whose real contribution is far from its published one.
+            const drift = w.nominal > 0 && Math.abs(w.effective - w.nominal) / w.nominal > 0.25;
+            return `<tr class="border-b border-zinc-800/60">
+                <td class="py-2 pr-4 text-zinc-200">${w.label}</td>
+                <td class="py-2 px-3 text-right font-mono text-zinc-400">${(w.nominal * 100).toFixed(0)}%</td>
+                <td class="py-2 px-3 text-right font-mono ${drift ? 'text-amber-400 font-semibold' : 'text-zinc-200'}">${(w.effective * 100).toFixed(1)}%</td>
+                <td class="py-2 px-3 text-right font-mono text-zinc-400">${(w.coverage * 100).toFixed(1)}%</td>
+                <td class="py-2 pl-3 ${cls}">${label}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    const noise = document.getElementById('noiseTableBody');
+    if (noise) {
+        const bands = MII.NOISE_FLOOR.slice().sort((a, b) => a.minLots - b.minLots);
+        noise.innerHTML = bands.map((b, i) => {
+            const next = bands[i + 1];
+            const range = b.minLots === 0 ? '1'
+                : next ? (next.minLots - b.minLots === 1 ? String(b.minLots)
+                                                         : b.minLots + '–' + (next.minLots - 1))
+                       : b.minLots + '+';
+            return `<tr class="border-b border-zinc-800/60">
+                <td class="py-2 pr-4 font-mono text-zinc-200">${range}</td>
+                <td class="py-2 px-3 text-right font-mono text-zinc-200">${b.median.toFixed(1)} pts</td>
+                <td class="py-2 px-3 text-right font-mono text-zinc-400">${b.p90.toFixed(1)} pts</td>
+            </tr>`;
+        }).join('');
+    }
+}
+
 function renderDataCoverage(rows) {
+    renderMethodology();
     // --- Build monthly and daily counts from raw bat.csv rows ---
     const monthCounts = {};  // YYYY-MM -> count
     const dayCounts   = {};  // YYYY-MM-DD -> count

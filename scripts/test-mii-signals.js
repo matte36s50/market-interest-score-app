@@ -117,5 +117,32 @@ MII.recompute(rows);
 check('missing trends file leaves the input empty', MII.dataQuality.google_trends_interest.status, 'empty');
 check('scores still land in range', rows.every(r => r.mii_score >= 0 && r.mii_score <= 100), true);
 
+console.log('methodology version + effective weights');
+check('a version is published', typeof MII.VERSION === 'string' && /^\d{4}\.\d{2}$/.test(MII.VERSION), true);
+rows = [upstreamRow(), upstreamRow({ manufacturer: 'BMW', model: 'M3', price: 50000 })];
+MII.recompute(rows);
+const ew = MII.effectiveWeights;
+check('one entry per input', ew.length, MII.COMPONENTS.length);
+// Renormalization moves weight between inputs but never creates or destroys it.
+near('effective weights sum to 1', ew.reduce((s, w) => s + w.effective, 0), 1, 1e-9);
+check('an input on every row keeps at least its nominal weight',
+    ew.filter(w => w.coverage === 1).every(w => w.effective >= w.nominal - 1e-9), true);
+check('an input on no row carries no weight',
+    ew.filter(w => w.coverage === 0).every(w => w.effective === 0), true);
+
+console.log('noise floor');
+// Bigger samples must never be allowed a larger noise allowance than smaller ones.
+const bands = MII.NOISE_FLOOR.slice().sort((a, b) => a.minLots - b.minLots);
+check('median swing falls as sample size rises',
+    bands.every((b, i) => i === 0 || b.median <= bands[i - 1].median), true);
+check('p90 is always above the median', bands.every(b => b.p90 > b.median), true);
+check('one lot a month is the noisiest band', MII.noiseFloor(1).median, 10.5);
+check('fifteen lots is the quietest band', MII.noiseFloor(21).median, 4);
+check('a 3-point move on one lot is noise', MII.moveStrength(3, 1), 'noise');
+check('a 12-point move on 21 lots is signal', MII.moveStrength(12, 21), 'signal');
+check('sign is ignored — a fall is judged like a rise',
+    MII.moveStrength(-12, 21), MII.moveStrength(12, 21));
+check('a move between median and p90 reads as weak', MII.moveStrength(6, 21), 'weak');
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);

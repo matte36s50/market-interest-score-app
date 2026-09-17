@@ -290,7 +290,89 @@
             r.mii_score = w > 0 ? +(s / w * 100).toFixed(2) : 0;
         });
 
+        computeEffectiveWeights(rows);
+
         return rows;
+    }
+
+    // Methodology version. Scoring has changed materially over this index's life
+    // (min-max scaling -> percentile rank; weight renormalization added;
+    // model and manufacturer confidence scales unified), and a score is only
+    // reproducible if the reader knows which rules produced it. Bump this
+    // whenever a change moves published scores, and cite it alongside any
+    // figure taken from the dashboard.
+    var VERSION = '2026.09';
+
+    // Mean EFFECTIVE weight of each input over the rows last scored.
+    //
+    // The published weights are nominal. Because a row missing an input has
+    // that input dropped and the remaining weights renormalized, the weight an
+    // input actually carries depends on how widely it is measured — an input
+    // present on 0.5% of rows contributes 0.5% of the weight its formula
+    // advertises, spread over the rest. Reporting only the nominal column
+    // overstates the sparse inputs and understates the dense ones, so the
+    // methodology panel shows both.
+    var effectiveWeights = [];
+    function computeEffectiveWeights(rows) {
+        var totals = {}, present = {};
+        COMPONENTS.forEach(function (c) { totals[c.raw] = 0; present[c.raw] = 0; });
+        rows.forEach(function (r) {
+            var live = COMPONENTS.filter(function (c) {
+                return dataQuality[c.raw] && dataQuality[c.raw].status !== 'empty'
+                    && !isNaN(parseFloat(r[c.raw]));
+            });
+            var w = live.reduce(function (s, c) { return s + c.weight; }, 0);
+            if (!w) return;
+            live.forEach(function (c) { totals[c.raw] += c.weight / w; present[c.raw]++; });
+        });
+        var n = rows.length || 1;
+        effectiveWeights = COMPONENTS.map(function (c) {
+            return {
+                raw: c.raw,
+                label: c.label,
+                nominal: c.weight,
+                effective: totals[c.raw] / n,
+                coverage: present[c.raw] / n,
+                status: (dataQuality[c.raw] || {}).status || 'unknown',
+            };
+        });
+        return effectiveWeights;
+    }
+
+    // Measured noise floor: how far a model's monthly MII moves for no reason
+    // other than which cars happened to cross the block that month.
+    //
+    // Derived from every consecutive month-pair in the live dataset (15,714
+    // rows), bucketed by the SMALLER of the two months' auction counts, then
+    // taking the median and 90th percentile of the absolute change. A move
+    // below the median for its sample size is what an unchanged market looks
+    // like; clearing the 90th percentile is the bar for calling a move real.
+    //
+    // The headline number: at one auction a month the median swing is 10.5
+    // points. Most models in this dataset trade at that volume, so most
+    // month-to-month movement in the UI is sampling, not market.
+    var NOISE_FLOOR = [
+        { minLots: 15, median: 4.0, p90: 8.8 },
+        { minLots: 8,  median: 5.3, p90: 13.2 },
+        { minLots: 5,  median: 5.7, p90: 15.9 },
+        { minLots: 3,  median: 7.1, p90: 18.9 },
+        { minLots: 2,  median: 8.2, p90: 21.4 },
+        { minLots: 0,  median: 10.5, p90: 27.0 },
+    ];
+    function noiseFloor(auctions) {
+        var n = parseFloat(auctions) || 0;
+        for (var i = 0; i < NOISE_FLOOR.length; i++) {
+            if (n >= NOISE_FLOOR[i].minLots) return NOISE_FLOOR[i];
+        }
+        return NOISE_FLOOR[NOISE_FLOOR.length - 1];
+    }
+    // How to read a month-over-month move of `points` MII on `auctions` lots:
+    //   'noise'    — below the median swing for this sample size
+    //   'weak'     — above the median but short of the 90th percentile
+    //   'signal'   — clears the 90th percentile of pure sampling variation
+    function moveStrength(points, auctions) {
+        var f = noiseFloor(auctions), d = Math.abs(parseFloat(points) || 0);
+        return d < f.median ? 'noise' : d < f.p90 ? 'weak' : 'signal';
     }
 
     // Confidence from sample size. One definition for every page and for both
@@ -326,6 +408,11 @@
 
     global.MII = {
         COMPONENTS: COMPONENTS,
+        VERSION: VERSION,
+        NOISE_FLOOR: NOISE_FLOOR,
+        noiseFloor: noiseFloor,
+        moveStrength: moveStrength,
+        get effectiveWeights() { return effectiveWeights; },
         CONFIDENCE_THRESHOLDS: CONFIDENCE_THRESHOLDS,
         qualitySuffix: qualitySuffix,
         confidenceFor: confidenceFor,

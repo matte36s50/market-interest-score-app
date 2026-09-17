@@ -359,6 +359,51 @@
     <div id="covNoData" class="hidden text-[#a8a29e] text-center py-12 text-sm">No bat.csv data available.</div>
     <div class="card p-5 mb-5"><div class="mb-4 flex items-start justify-between"><div><h2 class="font-semibold text-[#1c1917] text-[13px]">Monthly Auction Record Count</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Records per month — red bars = below 50% of median (likely scraper gaps)</p></div><span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-[11px] bg-[#f6f4ef] text-[#a8a29e] border border-[#e5e0d6]">—</span></div><div style="height:320px;"><canvas id="coverageChart"></canvas></div></div>
     <div class="card overflow-hidden mb-5"><div class="border-b border-[#f0ebe2] px-5 py-3"><h3 class="font-semibold text-[#1c1917] text-[13px]">Month-by-Month Coverage Report</h3><p class="text-[11px] text-[#a8a29e] mt-0.5">"Missing days" = calendar days with zero records. Run <code class="text-[#B8960C] bg-[#f6f4ef] px-1.5 py-0.5 rounded text-[10px] font-mono">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for flagged months.</p></div><div class="overflow-auto"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#a8a29e] uppercase tracking-wider border-b border-[#f0ebe2]"><th class="text-left px-4 py-2.5">Month</th><th class="text-right px-4 py-2.5">Records</th><th class="text-right px-4 py-2.5">% of Median</th><th class="text-right px-4 py-2.5">Missing Days</th><th class="text-center px-4 py-2.5">Status</th></tr></thead><tbody id="covGapTable"></tbody></table></div></div>
+            <!-- Methodology: nominal vs effective weights, version, noise floor -->
+            <div class="card p-5 mb-5">
+                <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+                    <h3 class="font-semibold text-[#1c1917]">How This Score Is Built</h3>
+                    <span class="text-xs text-[#a8a29e] font-mono">methodology <span id="miiVersion" class="text-[#B8960C]">—</span></span>
+                </div>
+                <p class="text-sm text-[#57534e] mb-4">
+                    Published weights are <em>nominal</em>. An input a row has no value for is dropped and the
+                    remaining weights are renormalised &mdash; never imputed &mdash; so the weight an input
+                    actually carries depends on how widely it is measured. Quote the effective column.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm" id="weightTable">
+                        <thead>
+                            <tr class="text-xs text-[#a8a29e] uppercase tracking-wider border-b border-[#e5e0d6]">
+                                <th class="text-left py-2 pr-4 font-medium">Input</th>
+                                <th class="text-right py-2 px-3 font-medium">Nominal</th>
+                                <th class="text-right py-2 px-3 font-medium">Effective</th>
+                                <th class="text-right py-2 px-3 font-medium">Coverage</th>
+                                <th class="text-left py-2 pl-3 font-medium">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weightTableBody"></tbody>
+                    </table>
+                </div>
+                <h4 class="font-semibold text-[#1c1917] mt-6 mb-1 text-sm">How big a move has to be to mean anything</h4>
+                <p class="text-sm text-[#57534e] mb-3">
+                    Measured from every consecutive month-pair in the dataset, bucketed by the smaller of the
+                    two months&rsquo; auction counts. A move under the median is what an unchanged market looks
+                    like at that sample size; clearing the 90th percentile is the bar for calling it real.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-xs text-[#a8a29e] uppercase tracking-wider border-b border-[#e5e0d6]">
+                                <th class="text-left py-2 pr-4 font-medium">Auctions / month</th>
+                                <th class="text-right py-2 px-3 font-medium">Median swing</th>
+                                <th class="text-right py-2 px-3 font-medium">90th percentile</th>
+                            </tr>
+                        </thead>
+                        <tbody id="noiseTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
     <div class="card p-5 mb-5"><h3 class="font-semibold text-[#1c1917] text-[13px] mb-3">How to Backfill Missing Data</h3><div class="text-[12px] text-[#57534e] space-y-2"><p>Use the CLI scripts to identify and backfill missing dates:</p><ol class="list-decimal list-inside space-y-2 ml-2"><li>Diagnose all gaps: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/diagnose-data-gaps.js</code></li><li>Get missing dates: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code></li><li>Pipe to scraper: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code></li><li>Regenerate <code class="text-[#B8960C] font-mono">mii_results_latest.csv</code> and upload both CSVs to S3.</li></ol></div></div>
 </div>
 
