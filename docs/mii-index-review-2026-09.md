@@ -162,6 +162,44 @@ description of the present, not a forecast. That is still a useful thing — it 
 what most sentiment and attention indices actually are — but the predictive claim
 is unsupported and would not survive scrutiny.
 
+#### Re-tested at weekly resolution, and it still holds
+
+The obvious objection to the above is grain. Da, Engelberg and Gao (*In Search
+of Attention*, Journal of Finance 2011) — the paper that established search
+volume as a direct attention measure and the citation that justifies the Trends
+input — find attention leads price over roughly **two weeks**, with reversal
+inside a year. A monthly series cannot see a two-week effect.
+
+So the test was rebuilt from lot-level `bat.csv` at weekly grain: 59,122 lots,
+4,254 models, 65 weeks, engagement composited from bids, views and comments with
+price again excluded.
+
+| Lag | ≥3 lots/wk, partial r | ≥5 lots/wk, partial r |
+|-----|----------------------|----------------------|
+| +1 week | +0.011 | −0.014 |
+| +2 weeks | +0.013 | −0.012 |
+| +3 weeks | +0.000 | +0.020 |
+| +4 weeks | +0.011 | +0.035 |
+| +6 weeks | −0.001 | −0.077 |
+| +8 weeks | +0.010 | −0.069 |
+
+Every raw correlation is around −0.2, and every partial correlation, controlling
+for today's price, sits within ±0.08 of zero — most within ±0.02. **The null
+result is not an artifact of monthly grain.** Testing the specific horizon the
+literature points to and still finding nothing is a stronger statement than the
+monthly test alone, and it is the version to give anyone who raises the paper.
+
+One boundary worth stating precisely. What was tested is **on-platform
+engagement** — bids, views and comments on the Bring a Trailer listing itself.
+Da, Engelberg and Gao measure **search** volume, which is off-platform and
+arguably prior to it. The MII's own analogue is the Google Trends input, and it
+could not be included here because `data/google_trends.csv` stores monthly
+values. So the accurate claim is: *on-platform engagement does not lead price at
+any horizon between one week and two months.* Whether **search** attention leads
+price in this market is still untested at the grain the literature uses, and
+collecting Trends weekly for a tracked subset of models is what would settle
+it — a concrete, bounded experiment rather than an open question.
+
 ### 2.2 The published weights are not the weights in effect
 
 Because a missing input is dropped and the rest renormalized, the *effective*
@@ -314,6 +352,9 @@ aggregated upstream and arrive pre-built in `mii_results_latest.csv`.
 6. **Document the social axis as nameplate-level**, or source generation-level
    attention elsewhere.
 7. **Backfill 2025-09 and 2026-01.**
+8. **Collect Google Trends weekly for a tracked subset**, so the one open
+   question in §2.1 — whether *search* attention leads price, as the literature
+   finds elsewhere — can actually be tested rather than left unresolved.
 
 ---
 
