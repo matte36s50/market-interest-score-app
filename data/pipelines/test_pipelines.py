@@ -15,6 +15,7 @@ import os
 import sys
 import tempfile
 import unittest
+import unittest.mock
 import urllib.error
 from datetime import date
 
@@ -24,6 +25,7 @@ import signal_lib as lib
 import google_trends
 import youtube_signals
 import social_signals
+import export_live_lots
 
 
 class SearchPhrase(unittest.TestCase):
@@ -504,6 +506,130 @@ class SocialComposite(unittest.TestCase):
         self.assertAlmostEqual(rows[0]["wiki_sov"], 0.75)
         self.assertAlmostEqual(rows[1]["wiki_sov"], 0.25)
         self.assertAlmostEqual(rows[2]["wiki_sov"], 1.0)
+
+
+def _store_lot(**over):
+    lot = {
+        "event": "RM Monterey 2026", "auction_house": "RM Sotheby's",
+        "event_date": "2026-08-14", "source_listing_id": "rm-monterey-2026-lot-112",
+        "year": 1957, "make": "Mercedes-Benz", "model": "300 SL", "trim": "Roadster",
+        "status": "ended", "outcome": "sold", "price": 1500000.0,
+        "price_all_in": 1650000.0, "currency": "USD",
+        "estimate_low": 1400000.0, "estimate_high": 1700000.0, "needs_review": False,
+    }
+    lot.update(over)
+    return lot
+
+
+class LiveLotsExport(unittest.TestCase):
+    """The store replaces hand-entry as the source of auction_lots.csv, so
+    the mapping decides what MAI sees: estimates must survive (the apex rule
+    reads them), and unfinished lots must not count as unsold."""
+
+    def test_sold_lot_maps_to_the_csv_schema(self):
+        row, reason = export_live_lots.to_csv_row(_store_lot())
+        self.assertIsNone(reason)
+        self.assertEqual(row["lot_number"], "112")
+        self.assertEqual(row["model"], "300 SL Roadster")
+        self.assertEqual(row["low_estimate_usd"], "1400000")
+        self.assertEqual(row["sold_price_usd"], "1650000")  # fee-inclusive wins
+        self.assertEqual(row["sold"], "true")
+        self.assertEqual(row["notes"], "store:rm-monterey-2026-lot-112")
+
+    def test_hammer_price_when_no_all_in(self):
+        row, _ = export_live_lots.to_csv_row(_store_lot(price_all_in=None))
+        self.assertEqual(row["sold_price_usd"], "1500000")
+
+    def test_unsold_lot_keeps_estimates_but_no_price(self):
+        row, _ = export_live_lots.to_csv_row(
+            _store_lot(outcome="reserve_not_met", price=None, price_all_in=None))
+        self.assertEqual(row["sold"], "false")
+        self.assertEqual(row["sold_price_usd"], "")
+        self.assertEqual(row["high_estimate_usd"], "1700000")
+
+    def test_lots_that_would_distort_sell_through_are_skipped(self):
+        for over, reason in [
+            ({"status": "upcoming", "outcome": None}, "not ended"),
+            ({"outcome": "withdrawn"}, "withdrawn"),
+            ({"event": None}, "no event"),
+            ({"event_date": None}, "no date"),
+            ({"currency": "EUR"}, "not in USD"),
+        ]:
+            row, why = export_live_lots.to_csv_row(_store_lot(**over))
+            self.assertIsNone(row, over)
+            self.assertEqual(why, reason)
+
+    def test_lots_sort_numerically_within_a_sale(self):
+        rows, _ = export_live_lots.build([
+            _store_lot(source_listing_id="x-lot-110"),
+            _store_lot(source_listing_id="x-lot-9"),
+        ])
+        self.assertEqual([r["lot_number"] for r in rows], ["9", "110"])
+
+    def _run(self, existing, store_rows, *flags):
+        out = os.path.join(tempfile.mkdtemp(), "auction_lots.csv")
+        if existing is not None:
+            lib.write_rows(out, export_live_lots.FIELDNAMES, existing)
+        env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co",
+               "CANONICAL_SUPABASE_ANON_KEY": "anon"}
+        old = {k: os.environ.get(k) for k in env}
+        os.environ.update(env)
+        try:
+            with unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+                export_live_lots.main(["--out", out, *flags],
+                                      fetch=lambda url, key: store_rows)
+        finally:
+            for k, v in old.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
+        return lib.read_rows(out), log.getvalue()
+
+    def test_refuses_to_drop_hand_entered_events(self):
+        legacy = [{"event": "Gooding Amelia Island 2026", "event_date": "2026-03-05",
+                   "manufacturer": "BMW", "model": "M1", "sold": "true"}]
+        rows, log = self._run(legacy, [_store_lot()])
+        self.assertEqual([r["event"] for r in rows], ["Gooding Amelia Island 2026"])
+        self.assertIn("::warning::", log)
+        self.assertIn("Gooding Amelia Island 2026", log)
+
+    def test_writes_once_the_events_are_in_the_store(self):
+        legacy = [{"event": "RM Monterey 2026", "manufacturer": "BMW"}]
+        rows, _ = self._run(legacy, [_store_lot()])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["low_estimate_usd"], "1400000")
+
+    def test_override_flag_drops_them(self):
+        legacy = [{"event": "Old Name 2026", "manufacturer": "BMW"}]
+        rows, _ = self._run(legacy, [_store_lot()], "--allow-drop-events")
+        self.assertEqual([r["event"] for r in rows], ["RM Monterey 2026"])
+
+    def test_skips_cleanly_without_credentials(self):
+        with unittest.mock.patch.dict(os.environ, {"CANONICAL_SUPABASE_URL": ""}), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            self.assertEqual(export_live_lots.main(
+                ["--out", "/nonexistent/x.csv"],
+                fetch=lambda *a: self.fail("must not fetch")), 0)
+        self.assertIn("skipping", log.getvalue())
+
+    def test_pages_until_a_short_page(self):
+        calls = []
+
+        def fake_get(url, headers=None):
+            calls.append(url)
+            n = export_live_lots.PAGE if len(calls) == 1 else 3
+            return [_store_lot()] * n
+
+        rows = export_live_lots.fetch_live_lots("https://x.supabase.co/", "k", get_json=fake_get)
+        self.assertEqual(len(rows), export_live_lots.PAGE + 3)
+        self.assertIn("offset=1000", calls[1])
+        self.assertTrue(calls[0].startswith("https://x.supabase.co/rest/v1/auction_live_lots?"))
+
+    def test_missing_view_says_how_to_fix_it(self):
+        with self.assertRaises(SystemExit) as ctx:
+            export_live_lots.fetch_live_lots("https://x", "k", get_json=lambda *a, **k: None)
+        self.assertIn("schema.sql", str(ctx.exception))
 
 
 if __name__ == "__main__":

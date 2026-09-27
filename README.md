@@ -341,42 +341,42 @@ something else: Superformance, Backdraft, Factory Five, Kirkham and Meyers Manx
 replicas, and listings such as `supercharged-2008-bmw-m3-convertible`. A feed
 with no `category` column filters nothing, so older exports keep working.
 
-## Live-Auction Admin Tab
+## Live-Auction Lots (Manufacturer Apex Index)
 
-`admin.html` (linked as **Admin** in the dashboard header) is a data-entry page
-for results from live auction events (RM Sotheby's, Gooding, Bonhams, Mecum…).
-Enter the event once, quick-add lots (an **APEX** badge lights up at a ≥$500K
-low estimate), then **Save to GitHub** — the page commits the rows to
-`data/auction_lots.csv` via the GitHub Contents API using a fine-grained
-personal access token (scoped to this repo, Contents read/write only) that is
-stored solely in your browser's localStorage.
+Results from live auction events (RM Sotheby's, Gooding, Broad Arrow, Bonhams,
+Mecum…) are entered in the **canonical auction store**, the one table that
+also holds Bring a Trailer and Cars & Bids listings. Enter them in the
+**Live Entry** tab of the store panel (`/store` in garage-draft's admin app):
+catalogue estimates before the sale, results after it. Its Claude importer
+reads a pasted results page, URL or PDF into an editable staging table, and
+nothing is written until you import. Schema and setup live in
+`cc-market-survey/auction-store`.
 
-On each commit touching `data/auction_lots.csv`, the
-`data-pipelines.yml` workflow reruns `auction_rating.py` and `mai.py`, commits
-the regenerated `data/auction_ratings.csv` / `data/mai_scores.csv`, and
-re-triggers the Pages deploy — so the Manufacturer Apex Index chart on the
-dashboard updates within a few minutes of saving.
+`data/pipelines/export_live_lots.py` copies every **ended** lot from the
+store's `public.auction_live_lots` view into `data/auction_lots.csv`: event,
+house, lot, estimates, fee-inclusive price and outcome. Lots still at the
+estimate stage and withdrawn lots are left out, so they never count as unsold.
+The `data-pipelines.yml` workflow runs it daily at 07:41 UTC, reruns
+`auction_rating.py` and `mai.py`, commits the three CSVs and re-triggers the
+Pages deploy, so a sale entered in the store reaches the Manufacturer Apex
+Index chart the next morning. It needs two repository secrets,
+`CANONICAL_SUPABASE_URL` and `CANONICAL_SUPABASE_ANON_KEY`. Without them the
+export is skipped and the existing CSV is used.
 
-Offline/no-token fallback: **Download CSV** exports existing + pending rows as
-a merged `auction_lots.csv` for a manual commit. Pending lots persist in
-localStorage, so closing the tab mid-event loses nothing. Duplicates are
-flagged using the same key as `sync_from_garage_draft.py`
-(event + manufacturer + model + year).
+The export refuses to drop an event that is already in `auction_lots.csv` but
+missing from the store, and says which events those are in the run's
+warnings, so hand-entered lots from before the store can't vanish silently.
+Import those sales through Live Entry, or run the workflow manually with
+**allow_drop_events** once they're in under a different name.
 
-### Claude-powered results importer
+MAI's apex rule reads the **low estimate** (≥ $500K). Results pages alone
+don't carry estimates, which is why lots entered from results only never
+register as apex. Mecum and Barrett-Jackson generally don't publish
+estimates, so their lots can't be apex under the current rule.
 
-Section 2 of the admin page bulk-imports published results: copy any auction
-house's results page (or press release), paste it in — or **attach the PDF
-directly** (sent to the API as a native document, so scanned catalogs are read
-visually; up to 30 MB / ~100 pages per import) — and press **Extract lots**. The page calls the Claude API directly from the browser
-(model `claude-opus-4-8`, streaming, structured outputs constrained to the
-`auction_lots.csv` schema) and drops the extracted rows into the pending table.
-Rows the model was unsure about (currency conversions, buyer's-premium
-ambiguity, missing estimates) are flagged amber for review — nothing is
-committed until you press Save. Requires an Anthropic API key (from
-platform.claude.com) entered in the connection panel; like the GitHub token it
-lives only in the browser's localStorage. A full results page costs a few
-cents to extract.
+`admin.html`, which used to commit lots straight to the CSV with a GitHub
+token, now just points to the store. It removes the token and API key the old
+page kept in the browser, and offers any unsaved lots as a CSV download.
 
 ## Data Maintenance Scripts
 
