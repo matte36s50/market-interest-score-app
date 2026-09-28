@@ -100,7 +100,14 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
 - Exports every **ended** lot from a live source: event, house, event date,
   lot number, make, model (+ trim), year, estimates, price and outcome.
 - Uses the fee-inclusive `price_all_in` where the store has it, else the hammer
-  price. The store holds USD; a lot in any other currency is skipped.
+  price.
+- Converts lots stored in another currency (the game mirror's European sales;
+  Live Entry already writes USD) to USD, price and estimates alike, at the ECB
+  rate for the sale date via frankfurter.dev, the source the admin app's Live
+  Entry uses. The rate is noted on the row (`; EUR at 1.1234 USD`). A currency
+  with no published rate skips the lot and is named in the log; a failed
+  lookup fails the run and writes nothing, so a network blip can't drop the
+  European sales from MAI.
 - Skips lots still at the estimate stage and withdrawn lots, so neither counts
   as unsold in the sell-through figures.
 - `event_date` is one date per sale (the view's earliest lot date), so a
