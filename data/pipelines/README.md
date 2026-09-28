@@ -21,7 +21,7 @@ into `social_score`. The other three are independent of each other.
 from `.github/workflows/data-pipelines.yml`.
 
 ```
-sync_from_garage_draft.py   ← populate auction_lots.csv from Garage Draft
+export_live_lots.py         ← rebuild auction_lots.csv from the canonical store
 auction_rating.py           ← score each event
 mai.py                      ← compute per-manufacturer MAI scores
 wikipedia_pageviews.py      ← can run anytime (independent)
@@ -89,64 +89,38 @@ manually with a larger budget to backfill faster.
 
 ---
 
-## sync_from_garage_draft.py
+## export_live_lots.py
 
-Pulls manually-entered auction lots from the **Garage Draft** Supabase database
-and merges them into `data/auction_lots.csv`, eliminating double-entry.
+Rebuilds `data/auction_lots.csv` from the canonical auction store, where
+live-auction lots are now entered (the `/store` panel in garage-draft's admin
+app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
+`public.auction_live_lots` view, so no service key is involved.
 
 ### What it does
-- Queries the `auctions` table for all rows where `auction_reference IS NOT NULL`
-  (these are the lots you've grouped under a named auction event)
-- Maps garage-draft fields to the MII `auction_lots.csv` schema
-- Derives `low_estimate_usd = price_at_48h ÷ 0.75` (since buy price = 75% of low estimate)
-- Sets `high_estimate_usd = low_estimate_usd` as a conservative proxy
-- Derives `sold` from `final_price IS NOT NULL AND NOT reserve_not_met`
-- Parses `auction_house` from the leading tokens of `auction_reference`
-  (e.g. `RM_Sothebys_Amelia_2025` → `RM Sothebys`)
-- Idempotent: re-running appends only new lots (deduplicates by event + manufacturer + model + year)
+- Exports every **ended** lot from a live source: event, house, event date,
+  lot number, make, model (+ trim), year, estimates, price and outcome.
+- Uses the fee-inclusive `price_all_in` where the store has it, else the hammer
+  price. The store holds USD; a lot in any other currency is skipped.
+- Skips lots still at the estimate stage and withdrawn lots, so neither counts
+  as unsold in the sell-through figures.
+- `event_date` is one date per sale (the view's earliest lot date), so a
+  two-day sale stays one event in `auction_rating.py` and `mai.py`.
+- **Won't drop events.** If an event in the current CSV is missing from the
+  store, it prints a warning naming it and leaves the CSV unchanged. Pass
+  `--allow-drop-events` once those lots are in the store under another name.
 
 ### How to run
 
 ```bash
-export GARAGE_DRAFT_SUPABASE_URL=https://<your-project-ref>.supabase.co
-export GARAGE_DRAFT_SUPABASE_KEY=<your-anon-or-service-key>
-
-pip install requests
-python data/pipelines/sync_from_garage_draft.py
+export CANONICAL_SUPABASE_URL=https://<project-ref>.supabase.co
+export CANONICAL_SUPABASE_ANON_KEY=<anon key>
+python data/pipelines/export_live_lots.py --dry-run    # report only
+python data/pipelines/export_live_lots.py
 ```
 
-Find your Supabase URL and anon key at:
-`Supabase dashboard → Project Settings → API`
-
-### Field mapping
-
-| auction_lots.csv | Source in garage-draft |
-|------------------|------------------------|
-| event | `auction_reference` |
-| event_date | `timestamp_end` (Unix → YYYY-MM-DD) |
-| auction_house | parsed from `auction_reference` prefix |
-| lot_number | — (blank; fill manually if needed) |
-| manufacturer | `make` |
-| model | `model` |
-| year_of_car | `year` |
-| low_estimate_usd | `price_at_48h ÷ 0.75` |
-| high_estimate_usd | same as low_estimate (proxy) |
-| sold_price_usd | `final_price` |
-| sold | `final_price > 0 AND NOT reserve_not_met` |
-| notes | `title` |
-
-### Apex classification note
-The MAI pipeline flags lots as "apex" when `low_estimate_usd >= $500,000`.
-The synced `low_estimate_usd` value (derived from `price_at_48h ÷ 0.75`)
-is the single estimate used for this threshold. `high_estimate_usd` is left
-blank — it's in the schema for optional manual use but not required by any pipeline.
-
-### Customising the auction_house parser
-The `parse_auction_house()` function splits on `_` and `-` and drops the final
-token before the year. If your `auction_reference` naming convention is
-different (e.g. `RMSothebys2025Amelia`), edit that function directly.
-
----
+With either variable unset it prints a skip notice and exits cleanly.
+`.github/workflows/data-pipelines.yml` runs it daily before the two MAI
+scripts, using repository secrets of the same names.
 
 ---
 
@@ -430,7 +404,7 @@ time, and per-sub-signal coverage — matching the checks in
 Computes an Auction Rating for each event in `data/auction_lots.csv`.
 
 ### What it does
-- Identifies "apex" lots: `high_estimate_usd >= $500,000`
+- Identifies "apex" lots: `low_estimate_usd >= $500,000` (the rule in the code)
 - Computes three sub-scores per event, normalised 0–100 across all events:
   - **Apex Concentration** — apex lot count / total lot count
   - **Apex Volume** — total sold price of sold apex lots

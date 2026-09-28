@@ -1,19 +1,34 @@
 name: Data Pipelines (Auction Ratings + MAI)
 
-# Recomputes data/auction_ratings.csv and data/mai_scores.csv whenever new
-# auction lots land (e.g. via the admin tab), commits the results, and
-# re-triggers the Pages deploy so the dashboard's MAI chart picks them up.
-# The explicit deploy dispatch is required because pushes made with
-# GITHUB_TOKEN never trigger other workflows on their own.
+# Pulls live-auction lots from the canonical auction store (entered through
+# the /store panel in garage-draft's admin app) into data/auction_lots.csv,
+# recomputes data/auction_ratings.csv and data/mai_scores.csv, commits the
+# results, and re-triggers the Pages deploy so the dashboard's MAI chart
+# picks them up. The explicit deploy dispatch is required because pushes
+# made with GITHUB_TOKEN never trigger other workflows on their own.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   CANONICAL_SUPABASE_URL       URL of the Supabase project holding the store
+#   CANONICAL_SUPABASE_ANON_KEY  that project's anon key; the export reads the
+#                                anon-readable public.auction_live_lots view
+# Without them the export step is skipped and the existing CSV is used.
 
 on:
+  schedule:
+    - cron: '41 7 * * *'   # 07:41 UTC daily: pick up lots entered the day before
   push:
     branches: [main]
     paths:
       - 'data/auction_lots.csv'
+      - 'data/pipelines/export_live_lots.py'
       - 'data/pipelines/auction_rating.py'
       - 'data/pipelines/mai.py'
   workflow_dispatch:
+    inputs:
+      allow_drop_events:
+        description: 'Write the export even if events in auction_lots.csv are missing from the store'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -36,6 +51,16 @@ jobs:
       - name: Install dependencies
         run: pip install pandas
 
+      # Leaves auction_lots.csv untouched (with a warning) if the secrets are
+      # unset or if the store is missing an event the CSV already has.
+      - name: Export live-auction lots from the canonical store
+        env:
+          CANONICAL_SUPABASE_URL: ${{ secrets.CANONICAL_SUPABASE_URL }}
+          CANONICAL_SUPABASE_ANON_KEY: ${{ secrets.CANONICAL_SUPABASE_ANON_KEY }}
+        run: |
+          python data/pipelines/export_live_lots.py \
+            ${{ github.event.inputs.allow_drop_events == 'true' && '--allow-drop-events' || '' }}
+
       - name: Run pipelines
         run: |
           python data/pipelines/auction_rating.py
@@ -46,12 +71,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/auction_ratings.csv data/mai_scores.csv
+          git add data/auction_lots.csv data/auction_ratings.csv data/mai_scores.csv
           if git diff --cached --quiet; then
-            echo "No changes in derived CSVs — nothing to commit."
+            echo "No changes in auction lots or derived CSVs — nothing to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "data: regenerate auction ratings and MAI scores"
+            git commit -m "data: export live-auction lots and regenerate MAI"
             git pull --rebase origin main
             git push origin main
             echo "pushed=true" >> "$GITHUB_OUTPUT"
