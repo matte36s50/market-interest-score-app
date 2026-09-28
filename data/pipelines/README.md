@@ -112,9 +112,11 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   as unsold in the sell-through figures.
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
-- **Won't drop events.** If an event in the current CSV is missing from the
-  store, it prints a warning naming it and leaves the CSV unchanged. Pass
-  `--allow-drop-events` once those lots are in the store under another name.
+- **Won't drop hand-entered events.** If a hand-entered event in the current
+  CSV is missing from the store, it prints a warning naming it and leaves the
+  CSV unchanged. Pass `--allow-drop-events` once those lots are in the store
+  under another name. Rows the export wrote itself (notes `store:...`) aren't
+  protected, so a sale merged or renamed in Sale Cleanup doesn't stop the run.
 
 ### How to run
 

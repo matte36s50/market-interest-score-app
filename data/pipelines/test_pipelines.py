@@ -657,6 +657,15 @@ class LiveLotsExport(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["low_estimate_usd"], "1400000")
 
+    def test_exported_events_may_be_renamed_in_the_store(self):
+        """A Sale Cleanup merge or rename removes the old name from the store;
+        that must not stop the daily run the way a hand-entered sale does."""
+        exported = [{"event": "RM Monterey (mirror)", "manufacturer": "BMW",
+                     "notes": "store:rm-monterey-2026-lot-12"}]
+        rows, log = self._run(exported, [_store_lot()])
+        self.assertEqual([r["event"] for r in rows], ["RM Monterey 2026"])
+        self.assertNotIn("::warning::", log)
+
     def test_override_flag_drops_them(self):
         legacy = [{"event": "Old Name 2026", "manufacturer": "BMW"}]
         rows, _ = self._run(legacy, [_store_lot()], "--allow-drop-events")
