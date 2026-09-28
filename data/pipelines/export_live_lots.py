@@ -11,8 +11,15 @@ unchanged on whatever the store holds.
 Only ended lots are exported: a lot still at the estimate stage has no
 outcome, and counting it as unsold would drag every sell-through figure
 down. Withdrawn lots are dropped for the same reason. Prices are the
-fee-inclusive price_all_in where the store has one, else the hammer price;
-the store converts non-USD sales to USD at entry.
+fee-inclusive price_all_in where the store has one, else the hammer price.
+
+Currency: Live Entry converts to USD as it writes, but lots that reached the
+store another way (the game mirror's European sales) keep their own currency.
+Those are converted here, price and estimates alike, at the ECB reference
+rate for the sale date, from the same source Live Entry uses
+(frankfurter.dev). A currency with no published rate skips the lot and says
+so; a failed rate lookup fails the run, so a network blip can't quietly drop
+every European sale from MAI.
 
 Environment
 -----------
@@ -39,6 +46,7 @@ import re
 import sys
 import urllib.error
 import urllib.parse
+from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -61,6 +69,37 @@ SELECT = ",".join([
 ])
 
 LOT_ID = re.compile(r"-lot-([^/]+)$")
+FX_URL = "https://api.frankfurter.dev/v1/{day}?base={cur}&symbols=USD"
+ISO_DAY = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+class EcbRates:
+    """USD per 1 unit of a currency on a sale date (ECB reference rates).
+
+    A weekend or holiday resolves to the last business day, and a future or
+    missing date uses the latest rate — the same conventions as the admin
+    app's lib/fx.js. Cached per (currency, day). Returns None when the source
+    has no rate for the currency (HTTP 404); any other failure raises.
+    """
+
+    def __init__(self, get_json=lib.http_get_json, today=None):
+        self.get_json = get_json
+        self.today = today or date.today().isoformat()
+        self.cache = {}
+
+    def __call__(self, currency, day):
+        cur = str(currency or "USD").upper()
+        if cur == "USD":
+            return 1.0
+        d = str(day or "")[:10]
+        if not ISO_DAY.fullmatch(d) or d > self.today:
+            d = "latest"
+        key = (cur, d)
+        if key not in self.cache:
+            data = self.get_json(FX_URL.format(day=d, cur=urllib.parse.quote(cur)))
+            rate = ((data or {}).get("rates") or {}).get("USD")
+            self.cache[key] = float(rate) if isinstance(rate, (int, float)) and rate > 0 else None
+        return self.cache[key]
 
 
 def fmt_num(value):
@@ -71,10 +110,12 @@ def fmt_num(value):
     return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
-def to_csv_row(r):
+def to_csv_row(r, fx=None):
     """Map one auction_live_lots row to the auction_lots.csv schema.
 
-    Returns (row, None) or (None, reason) when the lot can't be exported.
+    `fx(currency, day)` gives USD per unit for a non-USD lot (EcbRates in
+    production). Returns (row, None) or (None, reason) when the lot can't be
+    exported.
     """
     if r.get("status") != "ended":
         return None, "not ended"
@@ -85,8 +126,16 @@ def to_csv_row(r):
         return None, "no event"
     if not r.get("event_date"):
         return None, "no date"
-    if (r.get("currency") or "USD").upper() != "USD":
-        return None, "not in USD"
+
+    currency = (r.get("currency") or "USD").upper()
+    rate = 1.0
+    if currency != "USD":
+        rate = fx(currency, r["event_date"]) if fx else None
+        if rate is None:
+            return None, f"no USD rate for {currency}"
+
+    def usd(value):
+        return None if value is None else round(float(value) * rate, 2)
 
     sold = outcome == "sold"
     price = r.get("price_all_in")
@@ -97,6 +146,8 @@ def to_csv_row(r):
     m = LOT_ID.search(listing_id)
     model = " ".join(p for p in (r.get("model"), r.get("trim")) if p)
     notes = f"store:{listing_id}" + ("; needs review" if r.get("needs_review") else "")
+    if currency != "USD":
+        notes += f"; {currency} at {rate:.4f} USD"
 
     return {
         "event": r["event"],
@@ -106,9 +157,9 @@ def to_csv_row(r):
         "manufacturer": r.get("make") or "",
         "model": model,
         "year_of_car": fmt_num(r.get("year")),
-        "low_estimate_usd": fmt_num(r.get("estimate_low")),
-        "high_estimate_usd": fmt_num(r.get("estimate_high")),
-        "sold_price_usd": fmt_num(price) if sold else "",
+        "low_estimate_usd": fmt_num(usd(r.get("estimate_low"))),
+        "high_estimate_usd": fmt_num(usd(r.get("estimate_high"))),
+        "sold_price_usd": fmt_num(usd(price)) if sold else "",
         "sold": "true" if sold else "false",
         "notes": notes,
     }, None
@@ -167,11 +218,11 @@ def fetch_live_lots(base_url, key, get_json=lib.http_get_json):
         offset += PAGE
 
 
-def build(store_rows):
+def build(store_rows, fx=None):
     """Store rows -> (csv rows, Counter-like dict of skip reasons)."""
     out, skipped = [], {}
     for r in store_rows:
-        row, reason = to_csv_row(r)
+        row, reason = to_csv_row(r, fx)
         if row is None:
             skipped[reason] = skipped.get(reason, 0) + 1
         else:
@@ -187,7 +238,7 @@ def dropped_events(existing_rows, new_rows):
     return sorted(before - after)
 
 
-def main(argv=None, fetch=fetch_live_lots):
+def main(argv=None, fetch=fetch_live_lots, fx=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", default=LOTS_PATH)
     ap.add_argument("--allow-drop-events", action="store_true",
@@ -209,10 +260,16 @@ def main(argv=None, fetch=fetch_live_lots):
             raise
         print(exc.code)  # stdout: where Actions reads ::error:: annotations
         return 1
-    rows, skipped = build(store_rows)
+    try:
+        rows, skipped = build(store_rows, fx or EcbRates())
+    except (urllib.error.URLError, OSError, ValueError, lib.RateLimited, lib.QuotaExhausted) as exc:
+        print(f"::error::Could not fetch the exchange rates needed for non-USD lots: "
+              f"{lib.redact(str(exc))}. Nothing written; the next run retries.")
+        return 1
+    converted = sum(1 for r in rows if r["notes"].endswith(" USD"))
     events = sorted({r["event"] for r in rows})
     print(f"Store: {len(store_rows)} live lots -> {len(rows)} exported "
-          f"across {len(events)} events")
+          f"across {len(events)} events ({converted} converted to USD)")
     for reason, n in sorted(skipped.items()):
         print(f"  skipped {n}: {reason}")
 

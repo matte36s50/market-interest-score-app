@@ -354,8 +354,10 @@ nothing is written until you import. Schema and setup live in
 
 `data/pipelines/export_live_lots.py` copies every **ended** lot from the
 store's `public.auction_live_lots` view into `data/auction_lots.csv`: event,
-house, lot, estimates, fee-inclusive price and outcome. Lots still at the
-estimate stage and withdrawn lots are left out, so they never count as unsold.
+house, lot, estimates, fee-inclusive price and outcome, converted to USD at
+the sale-date ECB rate when a lot is stored in another currency. Lots still at
+the estimate stage and withdrawn lots are left out, so they never count as
+unsold.
 The `data-pipelines.yml` workflow runs it daily at 07:41 UTC, reruns
 `auction_rating.py` and `mai.py`, commits the three CSVs and re-triggers the
 Pages deploy, so a sale entered in the store reaches the Manufacturer Apex
