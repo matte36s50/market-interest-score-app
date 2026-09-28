@@ -30,11 +30,13 @@ With either unset the run is skipped and the CSV left as it is.
 
 Safety
 ------
-The lots already in the CSV were entered by hand before the store existed.
-If an event in the current CSV is missing from the store, the export stops
-without writing, rather than silently dropping those lots from MAI. Import
-the event through /store (Live Entry), or pass --allow-drop-events once
-it's there under a different name.
+Some lots in the CSV were entered by hand before the store existed. If a
+hand-entered event is missing from the store, the export stops without
+writing, rather than silently dropping those lots from MAI. Import the event
+through /store (Live Entry), or pass --allow-drop-events once it's there
+under a different name. Lots an earlier export wrote aren't held back this
+way: when a sale is merged or renamed in Sale Cleanup, its old name simply
+goes.
 
 Stdlib only.
 """
@@ -232,8 +234,14 @@ def build(store_rows, fx=None):
 
 
 def dropped_events(existing_rows, new_rows):
-    """Events in the current CSV that the export would remove."""
-    before = {r.get("event", "") for r in existing_rows if r.get("event")}
+    """Hand-entered events in the current CSV that the export would remove.
+
+    Rows an earlier export wrote (notes "store:...") aren't protected: the
+    store is their source, so a sale merged or renamed in Sale Cleanup must
+    just replace its old name here, not stop the daily run.
+    """
+    before = {r.get("event", "") for r in existing_rows
+              if r.get("event") and not (r.get("notes") or "").startswith("store:")}
     after = {r["event"] for r in new_rows}
     return sorted(before - after)
 

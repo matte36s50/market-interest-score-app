@@ -365,11 +365,13 @@ Index chart the next morning. It needs two repository secrets,
 `CANONICAL_SUPABASE_URL` and `CANONICAL_SUPABASE_ANON_KEY`. Without them the
 export is skipped and the existing CSV is used.
 
-The export refuses to drop an event that is already in `auction_lots.csv` but
-missing from the store, and says which events those are in the run's
-warnings, so hand-entered lots from before the store can't vanish silently.
+The export refuses to drop a hand-entered event (one typed into
+`auction_lots.csv` before the store existed) that is missing from the store,
+and names it in the run's warnings, so those lots can't vanish silently.
 Import those sales through Live Entry, or run the workflow manually with
-**allow_drop_events** once they're in under a different name.
+**allow_drop_events** once they're in under a different name. Events the
+export wrote itself aren't held back: a sale merged or renamed in Sale
+Cleanup just replaces its old name the next morning.
 
 MAI's apex rule reads the **low estimate** (≥ $500K). Results pages alone
 don't carry estimates, which is why lots entered from results only never

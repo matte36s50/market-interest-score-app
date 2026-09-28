@@ -26,7 +26,7 @@ on:
   workflow_dispatch:
     inputs:
       allow_drop_events:
-        description: 'Write the export even if events in auction_lots.csv are missing from the store'
+        description: 'Write the export even if hand-entered events in auction_lots.csv are missing from the store'
         type: boolean
         default: false
 
