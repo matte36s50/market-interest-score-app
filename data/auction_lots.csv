@@ -1,241 +1,985 @@
 event,event_date,auction_house,lot_number,manufacturer,model,year_of_car,low_estimate_usd,high_estimate_usd,sold_price_usd,sold,notes
-RM Woodcote Park,2026-07-08,RM Sotheby's,105,Fiat,500 D Trasformabile,1964,,,19717,true,"Sold for £15,525 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,106,Lagonda,3-Litre Tourer,1930,,,73025,true,"Sold for £57,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,107,Jaguar,E-Type Series 1 3.8-Litre Fixed Head Coupé,1962,,,102235,true,"Sold for £80,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,108,BMW,M3 Sport Evolution,1990,,,513556,true,"Sold for £404,375 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,109,Ferrari,550 Barchetta Pininfarina,2002,,,556319,true,"Sold for £438,125 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,110,Maserati,A6G/54 2000 GT Coupé by Allemano,1956,,,413544,true,"Sold for £325,625 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,111,Ferrari,365 GT4 BB by Scaglietti,1974,,,334963,true,"Sold for £263,750 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,112,Sunbeam,Tiger Mk I,1965,,,56960,true,"Sold for £44,850 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,113,Porsche,911 Carrera RS,1992,,,,true,Marked Sold but no price published
-RM Woodcote Park,2026-07-08,RM Sotheby's,114,Aston Martin,DB5,1965,,,1006475,true,"Sold for £792,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,115,Lancia,Stratos HF Stradale by Bertone,1975,,,,false,"Listed as 'Asking' £525,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,116,MG,K3 Magnette Two-Seater 'Pointed Tail' Works,1934,,,649288,true,"Sold for £511,250 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,117,Ford,GT,2005,,,506413,true,"Sold for £398,750 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,118,Aston Martin,DB6 Vantage Volante,1969,,,549275,true,"Sold for £432,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,119,Ferrari,360 N-GT,2001,,,,false,"Listed as 'Asking' £375,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,120,McLaren,765LT Coupé,2021,,,520700,true,"Sold for £410,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,121,Ferrari,Dino 246 GTS by Scaglietti,1973,,,492125,true,"Sold for £387,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,122,Alfa Romeo,6C 2500 Super Sport Cabriolet by Pinin Farina,1949,,,262890,true,"Sold for £207,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,123,Frazer Nash,TT Replica,1935,,,233680,true,"Sold for £184,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,124,Porsche,924 Carrera GTR IMSA,1981,,,,false,"c. 1981; listed as 'Asking' £175,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,125,Ferrari,Superamerica,2006,,,313531,true,"Sold for £246,875 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,126,Aston Martin,DB4 GT Continuation,2018,,,606425,true,"Sold for £477,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,127,Porsche,911 GT3 RS 4.0,2011,,,827881,true,"Sold for £651,875 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,128,Bentley,4/8-Litre Supercharged Two-Seater Sports,1932,,,,false,"Listed as 'Asking' £450,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,129,Porsche,911 Carrera RS N/GT,1992,,,262890,true,"Sold for £207,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,130,Bentley,Mark VI 4¼-Litre Sedanca Coupé by Gurney Nutting,1948,,,40164,true,"Sold for £31,625 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,131,Aston Martin,DB5 Shooting Brake by Radford,1966,,,1077913,true,"Sold for £848,750 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,132,Mercedes-Benz,300 SL Roadster,1961,,,,false,"Listed as 'Asking' £995,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,133,Frazer Nash,'High Speed' Le Mans Replica,1948,,,377825,true,"Sold for £297,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,134,Ferrari,Dino 246 GT by Scaglietti,1971,,,,false,"Listed as 'Asking' £265,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,135,BRM,P25 'Reconstruction',1959,,,,true,Marked Sold but no price published
-RM Woodcote Park,2026-07-08,RM Sotheby's,136,Ferrari,F40 'Jean Sage' by Michelotto,1990,,,4578350,true,"Sold for £3,605,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,138,Bentley,3-4½-Litre 'Special' Tourer in the style of Vanden Plas,1950,,,320675,true,"Sold for £252,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,139,Alfa Romeo,Sports Coupé by Autotecnica del Lario,1976,,,399256,true,"Sold for £314,375 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,140,Aston Martin,DB4 Series IV,1962,,,,false,"Listed as 'Asking' £325,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,141,Bentley,R-Type Continental Fastback Sports Saloon by H.J. Mulliner,1955,,,,false,"Listed as 'Asking' £440,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,142,Bentley,4-Litre Sports Tourer by Vanden Plas,1931,,,,false,"Listed as 'Asking' £290,000 GBP (buy now)"
-RM Woodcote Park,2026-07-08,RM Sotheby's,143,Williams,FW20,1998,,,327819,true,"Sold for £258,125 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,144,Porsche,911 GT3 RS,2015,,,233680,true,"Sold for £184,000 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,146,Bentley,3-Litre Speed Model Tourist Trophy Two-Seater in the style of Jarvis,1924,,,131445,true,"Sold for £103,500 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,147,Bentley,R-Type Saloon 'Rallye Monte-Carlo',1952,,,45276,true,"Sold for £35,650 GBP"
-RM Woodcote Park,2026-07-08,RM Sotheby's,148,Porsche,911 Carrera RSR 3.8 'Strassenversion',1993,,,4435475,true,"Sold for £3,492,500 GBP"
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,1,Porsche,356 SC Sunroof Coupe,1965,,,95200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,2,Porsche,911,1966,,,140000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,3,Alfa Romeo,Giulietta Spider Veloce,1960,,,95200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,4,Porsche,356 A Super Coupe,1958,,,123200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,5,Porsche,911 Carrera 3.2 M491 Coupe,1985,,,137200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,6,Porsche,356 C Coupe,1965,,,86800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,7,Porsche,911 2.0 S,1967,,,212800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,8,Alfa Romeo,Giulietta Sprint Veloce Alleggerita,1956,,,224000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,10,Porsche,356 A Super Coupe,1959,,,154000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,11,Porsche,911,1967,,,123200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,12,Porsche,356 C Cabriolet,1965,,,179200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,13,Alfa Romeo,Giulia Sprint GTA,1965,,,212800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,14,Porsche,911 GT-S,1969,,,357000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,15,Porsche,356 B Notchback Coupe,1962,,,81200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,16,Alfa Romeo,Giulietta SZ,1960,,,318500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,17,Porsche,356 C Coupe,1965,,,156800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,18,Porsche,911 SC Coupe,1982,,,78400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,19,Porsche,911,1965,,,173600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,20,Porsche,356 A Coupe,1959,,,84000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,21,Alfa Romeo,Giulia TZ,1965,,,885000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,22,Porsche,911 2.0 S,1968,,,151200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,23,Alfa Romeo,Giulietta Sprint Veloce,1959,,,67200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,24,Porsche,356 B Super 90 Coupe,1960,,,109200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,26,Porsche,356 SC Coupe,1964,,,114800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,27,Alfa Romeo,Giulietta SZ 'Coda Tronca',1962,,,291000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,28,Porsche,356 A Super Coupe,1958,,,145600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,29,Porsche,911,1965,,,168000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,30,Rolls-Royce,40/50 HP Silver Ghost Alpine Eagle Roadster,1919,,,340500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,31,Cord,810 Convertible Phaeton,1936,,,173600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,32,Miller,FWD Special,1932,,,3305000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,34,Miller,183 Speed Record Car,1924,,,857500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,35,Detroit Electric,Model 68 Brougham,1917,,,42000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,36,Bugatti,Type 57 Cabriolet,1938,,,709000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,37,Rolls-Royce,Phantom V Touring Limousine,1967,,,89600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,38,Bentley,3 Litre Speed Model Sports Tourer,1924,,,302000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,41,Bugatti,Type 40 Grand Sport,1929,,,240800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,42,Porsche,356 Coupe,1951,,,218400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,43,Morgan,Three-Wheeler Sports,1933,,,9520,true,Three-wheeler
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,44,Ferrari,342 America Coupe,1951,,,533000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,45,Porsche,356 Speedster,1955,,,145600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,47,Ferrari,250 GT Coupe,1959,,,255000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,48,Volkswagen,Super Beetle Convertible,1979,,,73920,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,49,Talbot-Lago,T23 Major 4-Liter Cabriolet,1939,,,229600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,51,Packard,Super Eight 1104 Seven-Passenger Touring,1934,,,123200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,52,Cadillac,Series 370A V-12 Convertible Coupe,1931,,,100800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,53,Cadillac,Series 452 V-16 Seven-Passenger Sedan,1930,,,64400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,54,Cadillac,Series 452 V-16 Convertible Sedan,1930,,,106400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,55,Cadillac,Series 370B V-12 Convertible Coupe,1932,,,106400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,101,Chevrolet,Corvette Pratt & Miller C6RS,2007,,,184800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,102,Mercedes-Benz,SL600,2001,,,196000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,103,Porsche,356 C Coupe,1965,,,95200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,104,Chevrolet,Impala 409 Convertible,1962,,,117600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,105,Bentley,Continental Convertible,1989,,,98000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,106,Aston Martin,V12 Vantage S Roadster,2017,,,240800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,107,Acura,NSX-T,2005,,,252000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,108,Ferrari,330 GT 2+2 Series II,1967,,,280000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,109,Sunbeam,Tiger Mk I,1966,,,67200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,110,Porsche,993 Carrera,1996,,,307500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,111,Mercedes-Benz,280 SL,1969,,,145600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,112,Talbot-Lago,T14LS Sport Coupe,1956,,,260400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,113,Porsche,997 GT2,2009,,,368000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,114,Chevrolet,Corvette Z06 Convertible 3LZ,2023,,,140000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,115,Ferrari,F8 Spider,2022,,,538500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,116,RUF,RGT,2001,,,274400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,117,Ferrari,Dino 246 GTS,1974,,,1325000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,118,Mercedes-Benz,300 SL Roadster,1959,,,1022500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,119,Porsche,993 Carrera Cabriolet,1996,,,162400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,120,Lamborghini,Aventador Superveloce LP 750-4,2016,,,725500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,121,Ferrari,412,1986,,,86800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,122,Ferrari,275 GTB/4,1967,,,3030000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,123,RUF,BTR II,1997,,,850000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,124,Jaguar,XK120 Alloy Roadster,1950,,,156800,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,125,Shelby,289 Cobra,1965,,,967500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,126,OSCA,1600 GT Coupe,1961,,,511000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,127,Chevrolet,Corvette 327/340 Split-Window Coupe,1963,,,257600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,128,Ferrari,212 Export Spider,1951,,,3415000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,129,Ferrari,750 Monza,1955,,,3085000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,130,Porsche,911 Turbo S Exclusive Series Coupe,2018,,,351500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,132,Ferrari,365 GTB/4 Daytona,1972,,,786000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,133,Porsche,930,1979,,,229600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,134,Ferrari,250 GT Lusso,1963,,,1765000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,135,BMW,M1,1980,,,472500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,136,Mercedes-Benz,500E,1992,,,357000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,137,Lamborghini,Diablo 6.0 VT Coupe,2001,,,747500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,138,RUF,Turbo Florio,2016,,,692500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,139,Fiat-Abarth,1000 GT Bialbero,1961,,,252000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,140,Ferrari,550 Maranello,2001,,,274400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,141,Lamborghini,Miura P400 S,1969,,,2590000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,142,Porsche,356 A Coupe,1959,,,224000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,143,Porsche,911 R,2016,,,797000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,144,MG,MGA Twin-Cam Roadster,1959,,,92400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,145,Ferrari,250 GT SWB California Spider,1960,,,16505000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,146,Porsche,911 2.4 S,1972,,,204400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,147,Ferrari,Dino 246 GT,1972,,,516500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,149,BMW,Alpina B8 Gran Coupe,2025,,,145600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,150,Mercedes-Benz,300 SL Gullwing,1957,,,2012500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,152,Austin,Mini Cooper 1275 S,1967,,,75600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,154,Austin-Healey,100S,1955,,,379000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,155,Porsche,Carrera GT,2005,,,3112500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,156,Alfa Romeo,Giulia TI Super Berlina,1964,,,92400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,157,Alfa Romeo,6C 1750 Series V Gran Sport,1932,,,1957500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,159,Lola,T294,1974,,,98000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,160,Ford,Mustang by Revology,1966,,,168000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,161,Porsche,991 GT3 Cup,2017,,,140000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,162,Abarth,1300 OT Periscopio,1966,,,274400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,163,Ferrari,GTC4 Lusso,2020,,,291000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,165,Alfa Romeo,Tipo 33/3,1971,,,885000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,166,Alfa Romeo,Giulia Sprint GTA 1300 Junior Stradale,1968,,,145600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,167,Jaguar,XJR-15,1991,,,1077500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,168,Alfa Romeo,Montreal,1973,,,80640,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,169,Carbir,Sports 2000,2004,,,31360,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,170,Austin-Healey,100M,1956,,,103600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,171,RUF,928R,1989,,,335000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,173,Alfa Romeo,1900C SS Coupe,1954,,,201600,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,174,Ferrari,512 BBi,1983,,,300000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,175,Ferrari,575M,2002,,,126000,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,176,Lamborghini,Gallardo LP 550-2,2012,,,274400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,177,Subaru,Impreza 22B STi,1998,,,329500,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,178,Mercedes-Benz,560 SL,1989,,,120400,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,179,Chevrolet,Impala Convertible,1960,,,109200,true,
-Gooding Amelia Island 2026,2026-03-05,Gooding & Company,180,Ferrari,328 GTS,1986,,,100800,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,105,Ferrari,330 GTC,1968,,,480600,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,106,Aston Martin,V8 Volante,1987,,,211140,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,107,Porsche,356 B 1600 Roadster,1960,,,167670,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,108,Bentley,4½-Litre Vanden Plas Sports Tourer,1928,,,432000,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,109,Bugatti,Type 37 Grand Prix,1926,,,,true,Sold After Auction; price not published
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,110,Maserati,Mistral Coupé 3700,1965,,,142830,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,111,Alfa Romeo,6C 2500 Super Sport Coupé Aerlux by Touring,1947,,,346950,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,112,Fiat,600 Torpedo Marina by Vignale,1963,,,304290,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,113,Lancia,Flaminia Sport Zagato,1960,,,124200,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,114,Ferrari,250 GT Boano Alloy Coupe,1956,,,984825,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,115,Nissan,Skyline GT-R,1999,,,186300,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,116,Nissan,Skyline GT-R V-Spec II Nür,2002,,,223560,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,117,Nissan,Skyline GT-R M-Spec,2001,,,279450,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,118,Nissan,Skyline GT-R V-Spec II Nismo S-Tune,2001,,,444150,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,119,Nissan,Skyline GT-R CRS by Nismo,2002,,,504900,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,120,Ferrari,812 Competizione,2023,,,1525500,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,121,McLaren,675LT by MSO,2016,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,122,Mercedes-Benz,Boschert B300 Biturbo Gullwing Coupe,1989,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,123,Lancia,Aurelia B24 S Convertible,1956,,,217350,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,124,Mercedes-Benz,300 SL Gullwing Coupe,1957,,,1768500,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,125,Facel Vega,Facel II,1964,,,235980,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,126,Ferrari,F40,1990,,,3165750,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,127,BMW,503 Coupé,1958,,,117990,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,128,Aston Martin,DB6 Volante MkI,1968,,,,true,Sold After Auction; price not published
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,129,Alfa Romeo,Giulia GTAm,2022,,,142830,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,130,Lamborghini,Countach 25th Anniversario,1990,,,565650,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,131,Ferrari,599 GTB Fiorano,2008,,,161460,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,132,Fiat,2300 Presidenziale Landaulette by Carrozzeria Lombardi,1963,,,149040,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,206,Porsche,550 Spyder Pennewitz Childrens Car,2004,,,40500,true,Children's car / scaled vehicle
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,207,Ferrari,612 Scaglietti,2004,,,198720,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,208,Ferrari,F512 M,1996,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,209,Ferrari,308 GTS,1979,,,65205,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,210,Porsche,911 Carrera 4S,1998,,,158355,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,211,Porsche,918 Spyder Weissach Package,2015,,,2436750,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,212,Ferrari,Dino 246 GT,1972,,,432000,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,213,Aston Martin,Short Chassis Volante,1966,,,638550,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,214,Lamborghini,Diablo SV,1999,,,492750,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,215,Lamborghini,Diablo VT 6.0,2001,,,523125,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,216,Panhard & Levassor,KB Roadster,1903,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,217,Renault,Type D Thrupp & Maberly Four-Seater,1901,,,180090,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,218,Astra,Coupe,1952,,,55890,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,219,Bizzarrini,5300 GT Strada,1968,,,,false,Estimate Available Upon Request; no result published
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,220,RUF,RCT Evo,1994,,,638550,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,221,Maserati,Mistral Spyder 4000,1966,,,359100,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,222,Porsche,911 S Soft Window Targa Test Car Ex-Neerpasch,1966,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,223,BMW,850 CSi,1993,,,99360,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,224,Sauber,BMW M1 Group 5,1981,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,225,Ferrari,512 TR,1993,,,242190,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,226,Ferrari,599 GTB Fiorano HGTE,2010,,,223560,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,227,Lancia,Delta HF Integrale,1988,,,83835,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,228,Pagani,Zonda Unica,2018,,,,false,Not Sold at Auction
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,229,Alfa Romeo,GT Bertone Restomod by Timeless Garage,1970,,,161460,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,230,Ferrari,330 GTS,1968,,,2072250,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,231,Lancia,Stratos HF Stradale Group 4 Specification,1975,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,232,BMW,M3 GTS,2011,,,204930,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,233,Ferrari,360 Challenge Stradale,2004,,,778275,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,234,Honda,NSX Type S,1999,,,223560,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,235,Honda,NSX-R,2003,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,236,Lancia,Delta HF Integrale Evoluzione,1991,,,167670,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,237,Lamborghini,Murciélago LP640-4 Roadster,2008,,,307395,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,238,Lamborghini,Murciélago LP640-4 Coupé,2009,,,869400,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,239,Lamborghini,Countach LPI 800-4,2022,,,1707750,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,240,Maserati,3500 GTI Sebring,1967,,,136620,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,241,Maserati,3500 GT Vignale Spyder,1960,,,735750,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,242,Lancia,Aurelia B24 S Spider America,1955,,,371250,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,243,Bugatti,Type 43 Roadster by Eugène Matthys,1929,,,1088100,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,244,Fiat,Bertone 850 T Visitors Bus,1977,,,204930,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,245,Porsche,911 Carrera RS Lightweight,1973,,,580230,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,246,Lancia,"Delta HF Integrale Evoluzione ""Martini 6""",1992,,,353025,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,247,Meccanica Maniero,4700 GT by Michelotti,1967,,,186300,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,248,Ferrari,550 Barchetta Pininfarina,2001,,,832950,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,249,Ferrari,328 GTS,1988,,,99360,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,250,Ferrari,430 Scuderia,2008,,,911925,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,251,Ferrari,Dino 246 GTS,1973,,,,false,Not Sold
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,252,Ferrari,SF90 Spider,2024,,,419850,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,253,Ferrari,Daytona SP3,2023,,,6750000,true,
-Broad Arrow Villa d'esme,2026-05-17,Broad Arrow,254,Ferrari,Monza SP2,2020,,,,true,Sold Before Auction; price not published
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Triumph,Bonneville TT Special,1967,,,10800,true,store:manual_1767571128399; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Duryea,Four Wheel Phaeton,1905,,,89600,true,store:manual_1768046866218; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Jaguar,XK120 ,1953,,,61600,true,store:manual_1768046956418; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Lincoln,Model L Sport Touring ,1929,,,44800,true,store:manual_1768047057318; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Stutz,Model BB,1928,,,53200,true,store:manual_1768047445720; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ferrari,328 GTB,1988,,,212800,true,store:manual_1768047816189; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Herreshoff,Model 30,1913,,,44800,true,store:manual_1768048012155; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Delauney-Belleville,1A4,1914,,,134400,true,store:manual_1768048257054; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ferrari,Superamerica,2005,,,313000,true,store:manual_1768048333070; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Pontiac,Trans Am,1974,,,140000,true,store:manual_1768048649719; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ford,Edsel Pacer,1958,,,39200,true,store:manual_1768049085035; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Lincoln,Continental Mark II,1956,,,184800,true,store:manual_1768049204402; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Pontiac,Streamliner Eight Station Wagon,1947,,,34720,true,store:manual_1768049319653; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Mclaren,Senna GTR,2020,,,1270000,true,store:manual_1768049389486; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Chevrolet,Corvette,2013,,,156800,true,store:manual_1768049845439
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Nash,Model 3248 School Bus,1949,,,44800,true,store:manual_1768050526192; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Porsche,356B Super 90 Roadster,1960,,,148400,true,store:manual_1768050627371; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Chrysler,Town and Country Convertible,1947,,,106400,true,store:manual_1768050845416; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Muntz,Jet,1952,,,123200,true,store:manual_1768051176649; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ferrari,F40,1991,,,,false,store:manual_1768051276381; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Jaguar,E-Type Series 1 Roadster,1964,,,162400,true,store:manual_1768051363515; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Porsche,911 Carrera RS N/GT,1992,,,599000,true,store:manual_1768052017597; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ferrari,Testarossa,1985,,,179200,true,store:manual_1768104862497; needs review
+RM Arizona 2026,2026-01-24,RM Arizona 2026,,Ferrari,F50,1995,,,8805000,true,store:manual_1768519007356; needs review
+RM Retromobile 2026,2026-01-28,RM Retromobile 2026,,BMW ,M3 Sport Evolution,1990,,,207000,true,store:manual_1769547087527; needs review
+RM Retromobile 2026,2026-01-28,RM Retromobile 2026,,Mercedez-Benz,300 SL Roadster,1962,,,1355000,true,store:manual_1769547290214; needs review
+RM Retromobile 2026,2026-01-28,RM Retromobile 2026,,Ferrari,360 Challenge,2000,,,,false,store:manual_1769547366181; needs review
+RM Retromobile 2026,2026-01-28,RM Retromobile 2026,,Ferrari,Dino 206S,1967,,,,false,store:manual_1769547606132; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Pininfarina,Testarossa,1984,,,35650,true,store:manual_1769109828752; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Fiat,1100 Industrial,1955,,,,false,store:manual_1769296966672; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Bedelia,BD2 10 CV Cyclecar,1912,,,94300,true,store:manual_1769297094037; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Chevrolet,Corvair 95 Rampside Pickup,1963,,,43700,true,store:manual_1769297190036; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Alfa Romeo,1300 GT Junior,1969,,,41400,true,store:manual_1769298476817; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Alpine,A110 1600S,1971,,,,false,store:manual_1769351824490; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,512 BBi,1981,,,,false,store:manual_1769351940571; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Porsche ,911 Turbo Cabriolet,1989,,,,false,store:manual_1769352000223
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Aston Martin,DB$ Series II,1960,,,258127,true,store:manual_1769352532087; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Renault,R5 Turbo II,1984,,,,false,store:manual_1769352592937; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Talbot-Lago,T26,1947,,,,false,store:manual_1769352665220; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Maserati,Ghibli 4.7 Spyder,1971,,,,false,store:manual_1769352729669; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Mercedes-Benz,220 S Cabriolet,1958,,,,false,store:manual_1769352803469; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Shelby,289 Cobra,1964,,,,false,store:manual_1769353208391; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Rools Royce,Silver Cloud II,1961,,,,false,store:manual_1769353697623; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,250 GT Lusso,1963,,,1242500,true,store:manual_1769353788138; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lamborghini,Miura P400 SV,1971,,,3380000,true,store:manual_1769354956322; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,AC,Ace Bristol,1958,,,,false,store:manual_1769355095755; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Fiat,750 Pulidori,1947,,,,false,store:manual_1769355220755; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,330 GTC,1967,,,410000,true,store:manual_1769377633959; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lancia,Fulvia Sport 1.3,1967,,,25300,true,store:manual_1769377699525; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Bugatti,Type 40,1928,,,,false,store:manual_1769377929891; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Porsche ,356 A,1957,,,348125,true,store:manual_1769378125906; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Maserati,5000 GT,1962,,,657500,true,store:manual_1769378184255; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lamborghini ,Espada Series 1,1969,,,,false,store:manual_1769378443672; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,458 GTE,2013,,,1130000,true,store:manual_1769378756588; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Jaguar,XK140,1955,,,115000,true,store:manual_1769378811419; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,250 GT LWB California Spider,1958,,,,false,store:manual_1769379096253; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Venturi,400 ,1993,,,308750,true,store:manual_1769379160801; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Porsche,930,1976,,,184000,true,store:manual_1769386302942; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Aston Martin,DB MkIII,1958,,,218500,true,store:manual_1769386376140; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Talbot-Lago,T150-C-SS,1938,,,6755000,true,store:manual_1769386458906; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,De Dion,4 1/2 HP,1901,,,55200,true,store:manual_1769386523506; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lancia,Stratos,1975,,,815000,true,store:manual_1769473494622; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Mercedes-Benz,300S ,1953,,,291875,true,store:manual_1769478886321; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Rolls Royce,Phantom II,1932,,,,false,store:manual_1769479188470; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,FXX K EVO,2018,,,6980000,true,store:manual_1769479447951; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari ,FXX EVO,2008,,,4448750,true,store:manual_1769479561100; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,BMW,M1,1981,,,522500,true,store:manual_1769479619583; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Jaguar,MK IV,1948,,,,false,store:manual_1769479677917; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari ,250 GTE,1963,,,410000,true,store:manual_1769479754517; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ford,Escort RS Cosworth,1995,,,63250,true,store:manual_1769480227348; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lamborghini,Diable 6.0 VT,2000,,,,false,store:manual_1769480290013; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Land Rover,109 Series III,1981,,,57500,true,store:manual_1769480347812; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Bugatti,57C Atalante,1938,,,2255000,true,store:manual_1769480406846; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Maserati,Shamal,1991,,,109250,true,store:manual_1769480457562; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,Dino 246 GT,1971,,,,false,store:manual_1769480509862; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Lancia,Aurelia B20 GT,1952,,,60950,true,store:manual_1769480565210; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,400 Superamerica,1962,,,,false,store:manual_1769480625161; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Maserati,Mistral,1967,,,,false,store:manual_1769546639296; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Osca ,Tipo S,1959,,,,false,store:manual_1769546700777; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,250 GT SWB,1960,,,,false,store:manual_1769546822894; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,512 TR Speciale,1994,,,,false,store:manual_1769546909028; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Ferrari,288 GTO,1984,,,9117500,true,store:manual_1769546976762; needs review
+Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,,Porsche ,911 Turbo Ruf BTR II Conversion,1979,,,269375,true,store:manual_1769547180728; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,812 Competizione A,2023,,,2645000,true,store:manual_1770334202866; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,McLaren,Speedtail,2020,,,1974000,true,store:manual_1770383524275; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Bugatti,Veyron 16.4,2006,,,2122500,true,store:manual_1770384092330; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,F12tdF 'Atelier',2017,,,,false,store:manual_1770384779613; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Porsche,968 Cabriolet,1992,,,61600,true,store:manual_auctions-mi26-lots-r0001-1992-porsche-968-cabriolet; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Meyers,Manx,1970,,,61600,true,store:manual_auctions-mi26-lots-r0002-1970-meyers-manx; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,Vantage GT3,2021,,,201600,true,store:manual_auctions-mi26-lots-r0003-2021-aston-martin-vantage-gt3; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,DBS GT Zagato,2020,,,758500,true,store:manual_auctions-mi26-lots-r0004-2020-aston-martin-dbs-gt-zagato; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,Vantage GTE,2021,,,224000,true,store:manual_auctions-mi26-lots-r0005-2021-aston-martin-vantage-gte-2021; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,488 GT3,2017,,,511000,true,store:manual_auctions-mi26-lots-r0006-2017-ferrari-488-gt3; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,V12 Vantage GT3,2016,,,291000,true,store:manual_auctions-mi26-lots-r0007-2016-aston-martin-v12-vantage-gt3; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,DB4 GT Zagato Continuation,2020,,,1270000,true,store:manual_auctions-mi26-lots-r0008-2020-aston-martin-db4-gt-zagato-continuation; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Mercedes-Benz,250 SE Coupe,1967,,,58240,true,store:manual_auctions-mi26-lots-r0010-1967-mercedesbenz-250-se-coupe; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Aston Martin,Vanquish Zagato Speedster,2018,,,555000,true,store:manual_auctions-mi26-lots-r0011-2018-aston-martin-vanquish-zagato-speedster; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,McLaren,720S GT3X,2022,,,610000,true,store:manual_auctions-mi26-lots-r0012-2022-mclaren-720s-gt3x; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Mercedes-Benz,280 SE 3.5 Cabriolet,1971,,,320000,true,store:manual_auctions-mi26-lots-r0013-1971-mercedesbenz-280-se-35-cabriolet
+RM Miami 2026,2026-02-27,RM Miami 2026,,Cadillac,Series 62 Convertible,1947,,,95200,true,store:manual_auctions-mi26-lots-r0014-1947-cadillac-series-62-convertible; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Cosmopolitan Steam Fire Engine,1904,,,176960,true,store:manual_auctions-mi26-lots-r0015-1904-american-lafrance-cosmopolitan-steam-fire-engine; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Silsby/Thomas Manning,Steam Fire Engine,1886,,,263200,true,store:manual_auctions-mi26-lots-r0016-1886-silsbythomas-manning-steam-fire-engine; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 270 Double-Bank Service Truck,1929,,,28000,true,store:manual_auctions-mi26-lots-r0017-1929-american-lafrance-type-270-doublebank-service-truc; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 12 Pumping Engine,1914,,,50400,true,store:manual_auctions-mi26-lots-r0018-1914-american-lafrance-type-12-pumping-engine; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 40 Triple Combination,1920,,,61600,true,store:manual_auctions-mi26-lots-r0019-1920-american-lafrance-type-40-triple-combination; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 75 Triple Combination,1920,,,64400,true,store:manual_auctions-mi26-lots-r0020-1920-american-lafrance-type-75-triple-combination; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance-Ford,Model T Chemical Car,1919,,,35840,true,store:manual_auctions-mi26-lots-r0021-1919-american-lafranceford-model-t-chemical-car; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Button & Blake,Hand Pumper,1858,,,50400,true,store:manual_auctions-mi26-lots-r0022-1858-button-blake-hand-pumper; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 8 Roadster,1911,,,307500,true,store:manual_auctions-mi26-lots-r0023-1911-american-lafrance-type-8-roadster; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 415 RC Pumper,1935,,,100800,true,store:manual_auctions-mi26-lots-r0025-1935-american-lafrance-type-415-rc-pumper; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 191 Pumper,1931,,,56000,true,store:manual_auctions-mi26-lots-r0026-1931-american-lafrance-type-191-pumper; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Metropolitan Steam Fire Engine,1911,,,246400,true,store:manual_auctions-mi26-lots-r0027-1911-american-lafrance-metropolitan-steam-fire-engine; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 5 Double Tank Combination,1911,,,86800,true,store:manual_auctions-mi26-lots-r0028-1911-american-lafrance-type-5-double-tank-combination; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,700 Series '775-PJO' Pumper,1956,,,29120,true,store:manual_auctions-mi26-lots-r0029-1956-american-lafrance-700-series-775pjo-pumper; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,American LaFrance,Type 75 Triple Combination,1927,,,50400,true,store:manual_auctions-mi26-lots-r0030-1927-american-lafrance-type-75-triple-combination; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Mercedes-AMG,GT Black Series Project One Edition,2021,,,665000,true,store:manual_auctions-mi26-lots-r0031-2021-mercedesamg-gt-black-series-project-one-edition; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Mercedes-Benz,SLS AMG GT Final Edition,2015,,,434000,true,store:manual_auctions-mi26-lots-r0032-2015-mercedesbenz-sls-amg-gt-final-edition; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Porsche,911 Carrera RSR 3.8,1993,,,,false,store:manual_auctions-mi26-lots-r0033-1993-porsche-911-carrera-rsr-38; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Packard,1407 Twelve Sport Phaeton,1936,,,401000,true,store:manual_auctions-mi26-lots-r0034-1936-packard-1407-twelve-sport-phaeton; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Packard,1507 Twelve Coupe Roadster,1937,,,329500,true,store:manual_auctions-mi26-lots-r0035-1937-packard-1507-twelve-coupe-roadster; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Auburn,851 Supercharged Speedster,1935,,,852000,true,store:manual_auctions-mi26-lots-r0036-1935-auburn-851-supercharged-speedster; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Chrysler,CL Imperial Dual-Windshield Phaeton,1933,,,313000,true,store:manual_auctions-mi26-lots-r0037-1933-chrysler-cl-imperial-dualwindshield-phaeton-by-leb; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Packard,1108 Twelve Individual Custom Sport Phaeton,1934,,,384500,true,store:manual_auctions-mi26-lots-r0038-1934-packard-1108-twelve-individual-custom-sport-phaeto; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Packard,1107 Twelve Phaeton,1934,,,379000,true,store:manual_auctions-mi26-lots-r0039-1934-packard-1107-twelve-phaeton; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Packard,1601 Eight Convertible Victoria,1938,,,390000,true,store:manual_auctions-mi26-lots-r0040-1938-packard-1601-eight-convertible-victoria-by-darrin; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Cadillac,V-16 Roadster,1931,,,329500,true,store:manual_auctions-mi26-lots-r0041-1931-cadillac-v16-roadster-by-fleetwood; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Lamborghini,Countach 5000 S,1984,,,841000,true,store:manual_auctions-mi26-lots-r0042-1984-lamborghini-countach-5000-s-by-bertone; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Saleen,S7 LM,2007,,,885000,true,store:manual_auctions-mi26-lots-r0043-2007-saleen-s7-lm; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,488 Pista 'Piloti Ferrari',2020,,,1039000,true,store:manual_auctions-mi26-lots-r0044-2020-ferrari-488-pista-piloti-ferrari; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Lamborghini,Diablo SV-R,1996,,,698000,true,store:manual_auctions-mi26-lots-r0045-1996-lamborghini-diablo-svr; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Isdera,Imperator 108i Series 2,1991,,,929000,true,store:manual_auctions-mi26-lots-r0046-1991-isdera-imperator-108i-series-2; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Porsche,906,1966,,,,false,store:manual_auctions-mi26-lots-r0048-1966-porsche-906; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,550 Maranello,1999,,,307500,true,store:manual_auctions-mi26-lots-r0050-1999-ferrari-550-maranello; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Chevrolet,Corvette L88 RED/NART Le Mans,1968,,,,false,store:manual_auctions-mi26-lots-r0051-1968-chevrolet-corvette-l88-rednart-le-mans; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Porsche,911 Speedster Remastered by Gunther Werks,1995,,,,false,store:manual_auctions-mi26-lots-r0053-1995-porsche-911-speedster-remastered-by-gunther-werks; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,348 Serie Speciale,1993,,,335000,true,store:manual_auctions-mi26-lots-r0054-1993-ferrari-348-serie-speciale; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,F355 Spider,1998,,,257600,true,store:manual_auctions-mi26-lots-r0055-1998-ferrari-f355-spider; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Mercedes-Benz,SLR McLaren,2006,,,401000,true,store:manual_auctions-mi26-lots-r0057-2006-mercedesbenz-slr-mclaren; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,Testarossa,1990,,,395500,true,store:manual_auctions-mi26-lots-r0058-1990-ferrari-testarossa; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Lamborghini,Revuelto,2024,,,643000,true,store:manual_auctions-mi26-lots-r0066-2024-lamborghini-revuelto; needs review
+RM Miami 2026,2026-02-27,RM Miami 2026,,Ferrari,Dino 246 GT 'L-Series',1969,,,566000,true,store:manual_auctions-mi26-lots-r0073-1969-ferrari-dino-246-gt-lseries-by-scaglietti; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,Enzo,2003,,,15815000,true,store:manual_1772588834647; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche ,959 Sport,1988,,,5505000,true,store:manual_1772588947129; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,Monza SP2,2021,,,4955000,true,store:manual_1772589165345; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Chevrolet,Corvette 327/360 Fuelie,1962,,,145600,true,store:manual_vehicles-am26r0001-1962-chevrolet-corvette-327-360-fuelie; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Excalibur,SS Series 1,1965,,,58800,true,store:manual_vehicles-am26r0002-1965-excalibur-ss-series-1; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Mercedes-Benz,300 SL Gullwing Coupe,1954,,,1462500,true,store:manual_vehicles-am26r0003-1954-mercedes-benz-300-sl-gullwing-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,E.R.A.,Slabside Cobra Recreation,2000,,,114800,true,store:manual_vehicles-am26r0004-2000-e-r-a-slabside-cobra-recreation; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ford,GT,2005,,,511000,true,store:manual_vehicles-am26r0005-2005-ford-gt; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Nash-Healey,Convertible,1953,,,100800,true,store:manual_vehicles-am26r0006-1953-nash-healey-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Stearns-Knight,J8-90 Seven-Passenger Touring,1929,,,95200,true,store:manual_vehicles-am26r0007-1929-stearns-knight-j8-90-seven-passenger-touring; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Jaguar,XK 150 S 3.8 Fixed Head Coupe,1959,,,112000,true,store:manual_vehicles-am26r0008-1959-jaguar-xk-150-s-3-8-fixed-head-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Rolls-Royce,Phantom I Brewster Newmarket Convertible Sedan,1926,,,106400,true,store:manual_vehicles-am26r0009-1926-rolls-royce-phantom-i-brewster-newmarket-convertible-sed; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Kissel,Model 55 Speedster,1927,,,201600,true,store:manual_vehicles-am26r0010-1927-kissel-model-55-gold-bug-speedster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Buick,Model 17 Touring,1910,,,100800,true,store:manual_vehicles-am26r0011-1910-buick-model-17-touring; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Chevrolet,Impala SS Convertible,1961,,,145600,true,store:manual_vehicles-am26r0012-1961-chevrolet-impala-ss-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,250 GT Pinin Farina Coupe Series I,1959,,,318500,true,store:manual_vehicles-am26r0013-1959-ferrari-250-gt-pinin-farina-coupe-series-i; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,BSA,Lightning,1967,,,16250,true,store:manual_vehicles-am26r0014-1967-bsa-lightning; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lamborghini,Murciélago LP-650-4 Roadster,2010,,,450000,true,store:manual_vehicles-am26r0015-2010-lamborghini-murcielago-lp-650-4-roadster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,718 Spyder,2021,,,117600,true,store:manual_vehicles-am26r0016-2021-porsche-718-spyder; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Bentley,Continental T North American RSE,1998,,,58800,true,store:manual_vehicles-am26r0017-1998-bentley-continental-t-north-american-rse; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Packard,640 Custom Eight Runabout,1929,,,100800,true,store:manual_vehicles-am26r0018-1929-packard-640-custom-eight-runabout; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Series 355A V-8 Fleetwood Convertible Coupe,1931,,,89600,true,store:manual_vehicles-am26r0019-1931-cadillac-series-355a-v-8-fleetwood-convertible-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Series 370A V-12 Fleetwood Five-Passenger Phaeton,1931,,,168000,true,store:manual_vehicles-am26r0020-1931-cadillac-series-370a-v-12-fleetwood-five-passenger-phaet; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Series 452A V-16 Fleetwood Convertible Coupe,1931,,,500000,true,store:manual_vehicles-am26r0021-1931-cadillac-series-452a-v-16-fleetwood-convertible-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,LaSalle,Series 345C V-8 Convertible Coupe,1933,,,128800,true,store:manual_vehicles-am26r0022-1933-lasalle-series-345c-v-8-convertible-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,LaSalle,Series 350 Coupe,1934,,,165200,true,store:manual_vehicles-am26r0023-1934-lasalle-series-350-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,LaSalle,Series 350 Convertible Coupe,1934,,,207500,true,store:manual_vehicles-am26r0024-1934-lasalle-series-350-convertible-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Duesenberg,Supercharged Model J LaGrande Dual-Cowl Phaeton,1935,,,1655000,true,store:manual_vehicles-am26r0025-1935-duesenberg-supercharged-model-j-lagrande-dual-cowl-phaet; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Eldorado,1953,,,190400,true,store:manual_vehicles-am26r0026-1953-cadillac-eldorado; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Series 62 Convertible,1956,,,134400,true,store:manual_vehicles-am26r0027-1956-cadillac-series-62-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Chevrolet,El Camino,1960,,,193200,true,store:manual_vehicles-am26r0028-1960-chevrolet-el-camino; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lincoln,Continental Mark V Convertible,1960,,,84000,true,store:manual_vehicles-am26r0029-1960-lincoln-continental-mark-v-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Eldorado Convertible,1976,,,92400,true,store:manual_vehicles-am26r0031-1976-cadillac-eldorado-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lancia,Aurelia B24 S Spider,1955,,,769500,true,store:manual_vehicles-am26r0032-1955-lancia-aurelia-b24-s-spider; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Shelby,GT500 KR Fastback,1968,,,263200,true,store:manual_vehicles-am26r0033-1968-shelby-gt500-kr-fastback; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Auburn,851 Super-Charged Boattail Speedster,1935,,,527500,true,store:manual_vehicles-am26r0034-1935-auburn-851-super-charged-boattail-speedster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Auburn,8-120 &quot;Boattail&quot; Speedster,1929,,,390000,true,store:manual_vehicles-am26r0035-1929-auburn-8-120-boattail-speedster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Datsun,2000 Sports,1967,,,106400,true,store:manual_vehicles-am26r0036-1967-datsun-2000-sports; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,924 Turbo ex-Monte-Carlo / Safari Rally,1978,,,75600,true,store:manual_vehicles-am26r0038-1978-porsche-924-turbo-ex-monte-carlo-safari-rally; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,968 Turbo RS,1993,,,775000,true,store:manual_vehicles-am26r0039-1993-porsche-968-turbo-rs; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Aston Martin,V8 Volante,1980,,,128800,true,store:manual_vehicles-am26r0040-1980-aston-martin-v8-volante; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Jaguar,E-Type Series 1 3.8 Roadster,1964,,,103600,true,store:manual_vehicles-am26r0041-1964-jaguar-e-type-series-1-3-8-roadster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,944 Turbo Cup “Seabrooke”,1988,,,89600,true,store:manual_vehicles-am26r0043-1988-porsche-944-turbo-cup-seabrooke; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,275 GTS,1966,,,2095000,true,store:manual_vehicles-am26r0044-1966-ferrari-275-gts; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,550 Maranello,1999,,,224000,true,store:manual_vehicles-am26r0045-1999-ferrari-550-maranello; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Siata,208S Motto Spider,1953,,,,false,store:manual_vehicles-am26r0047-1953-siata-208s-motto-spider; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,330 GT 2+2 Series II,1967,,,224000,true,store:manual_vehicles-am26r0048-1967-ferrari-330-gt-2-2-series-ii; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,328 GTS,1988,,,190400,true,store:manual_vehicles-am26r0052-1988-ferrari-328-gts; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Mercedes-Benz,560 SEL,1988,,,53200,true,store:manual_vehicles-am26r0054-1988-mercedes-benz-560-sel; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Mercedes-Benz,SL 70 AMG,1997,,,229600,true,store:manual_vehicles-am26r0055-1997-mercedes-benz-sl-70-amg; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Maserati,Ghibli 4.9 SS Coupe,1971,,,179200,true,store:manual_vehicles-am26r0056-1971-maserati-ghibli-4-9-ss-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ford,Thunderbird,1957,,,50400,true,store:manual_vehicles-am26r0057-1957-ford-thunderbird
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ford,Thunderbird M-Code Sports Roadster,1962,,,140000,true,store:manual_vehicles-am26r0058-1962-ford-thunderbird-m-code-sports-roadster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Jaguar,XJS Convertible,1989,,,39200,true,store:manual_vehicles-am26r0059-1989-jaguar-xjs-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Turbo Slantnose Cabriolet,1989,,,,false,store:manual_vehicles-am26r0060-1989-porsche-911-turbo-slantnose-cabriolet; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Dodge,Viper VoooDoo II Edition ACR Extreme,2017,,,593500,true,store:manual_vehicles-am26r0061-2017-dodge-viper-vooodoo-ii-edition-acr-extreme; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,BMW,Z8,2002,,,165200,true,store:manual_vehicles-am26r0062-2002-bmw-z8; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,488 Spider,2017,,,224000,true,store:manual_vehicles-am26r0063-2017-ferrari-488-spider; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,365 GTB/4 Daytona,1972,,,588000,true,store:manual_vehicles-am26r0064-1972-ferrari-365-gtb-4-daytona; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Targa 4S Heritage Design Edition,2021,,,274400,true,store:manual_vehicles-am26r0065-2021-porsche-911-targa-4s-heritage-design-edition; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Volkswagen,Beetle De Luxe Sunroof Sedan,1955,,,39200,true,store:manual_vehicles-am26r0066-1955-volkswagen-beetle-de-luxe-sunroof-sedan; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,BMW,ALPINA B8 Gran Coupe,2022,,,89600,true,store:manual_vehicles-am26r0067-2022-bmw-alpina-b8-gran-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,250 GT Ellena,1958,,,984000,true,store:manual_vehicles-am26r0069-1958-ferrari-250-gt-ellena; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,"911 GT3 ""Manthey Racing""",2022,,,,false,store:manual_vehicles-am26r0070-2022-porsche-911-gt3-manthey-racing; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,360 Modena,2004,,,263200,true,store:manual_vehicles-am26r0071-2004-ferrari-360-modena; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Packard,Twelve 1107 Formal Sedan,1934,,,98000,true,store:manual_vehicles-am26r0072-1934-packard-twelve-1107-formal-sedan; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lincoln,Continental Lehmann-Peterson Executive Limousine,1967,,,39200,true,store:manual_vehicles-am26r0073-1967-lincoln-continental-lehmann-peterson-executive-limousine; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Mercedes-Benz,250 SL Pagoda,1967,,,95200,true,store:manual_vehicles-am26r0074-1967-mercedes-benz-250-sl-pagoda; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,250 GT Berlinetta Lusso,1963,,,1490000,true,store:manual_vehicles-am26r0076-1963-ferrari-250-gt-berlinetta-lusso; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Speedster,1989,,,249200,true,store:manual_vehicles-am26r0077-1989-porsche-911-speedster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,Scuderia Spider 16M,2009,,,940000,true,store:manual_vehicles-am26r0078-2009-ferrari-scuderia-spider-16m
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 ex-1967 Daytona 24 Hours Winner,1965,,,472500,true,store:manual_vehicles-am26r0079-1965-porsche-911-ex-1967-daytona-24-hours-winner; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,RUF,RGT,2001,,,335000,true,store:manual_vehicles-am26r0080-2001-ruf-rgt; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Turbo,1975,,,302000,true,store:manual_vehicles-am26r0081-1975-porsche-911-turbo
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Land Rover,Defender 110 “Artemis K2”,2025,,,112000,true,store:manual_vehicles-am26r0082-2025-land-rover-defender-110-artemis-k2; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lamborghini,400 GT “Interim”,1966,,,,false,store:manual_vehicles-am26r0083-1966-lamborghini-400-gt-interim; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,Dino 246 GTS,1974,,,786000,true,store:manual_vehicles-am26r0084-1974-ferrari-dino-246-gts-chairs-flares; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Maserati,Bora,1972,,,128800,true,store:manual_vehicles-am26r0087-1972-maserati-bora; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,512 BBi,1982,,,,false,store:manual_vehicles-am26r0088-1982-ferrari-512-bbi; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Aston Martin,DB2 Sports Saloon,1950,,,555000,true,store:manual_vehicles-am26r0090-1950-aston-martin-db2-sports-saloon; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,McLaren,MP4-12C Coupe,2012,,,123200,true,store:manual_vehicles-am26r0091-2012-mclaren-mp4-12c-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Maybach,62,2009,,,226800,true,store:manual_vehicles-am26r0092-2009-maybach-62; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,Testarossa,1991,,,357000,true,store:manual_vehicles-am26r0093-1991-ferrari-testarossa; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Pontiac,GTO 389/360 Hardtop Coupe,1965,,,81200,true,store:manual_vehicles-am26r0094-1965-pontiac-gto-389-360-hardtop-coupe; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Mercedes-Benz,300 SL Roadster,1960,,,1022500,true,store:manual_vehicles-am26r0097-1960-mercedes-benz-300-sl-roadster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Targa Reimagined by Singer “Blueberry”,1991,,,1132500,true,store:manual_vehicles-am26r0100-1991-porsche-911-targa-reimagined-by-singer-blueberry; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Chevrolet,Corvette Sting Ray 327/300 Convertible,1967,,,89600,true,store:manual_vehicles-am26r0101-1967-chevrolet-corvette-sting-ray-327-300-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,968 Club Sport,1993,,,89600,true,store:manual_vehicles-am26r0102-1993-porsche-968-club-sport
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,458 Spider,2015,,,,false,store:manual_vehicles-am26r0104-2015-ferrari-458-spider; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,550 Maranello,1999,,,329500,true,store:manual_vehicles-am26r0106-1999-ferrari-550-maranello; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Lamborghini,400 GT 2+2,1967,,,,false,store:manual_vehicles-am26r0107-1967-lamborghini-400-gt-2-2; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,½,Ford Falcon Sprint V8,1963,,,33600,true,store:manual_vehicles-am26r0108-1963-ford-falcon-sprint-v8; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,BMW,2002te Electric Conversion by Bavarian Econs,1972,,,84000,true,store:manual_vehicles-am26r0109-1972-bmw-2002te-electric-conversion-by-bavarian-econs; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Carrera 4S,1997,,,173600,true,store:manual_vehicles-am26r0110-1997-porsche-911-carrera-4s
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,REO,Runabout,1906,,,31600,true,store:manual_vehicles-am26r0111-1906-reo-runabout; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Packard,Eighteen Five-Passenger Phaeton,1909,,,109200,true,store:manual_vehicles-am26r0112-1909-packard-eighteen-five-passenger-phaeton; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Cadillac,Series 62 Five-Passenger Touring Sedan,1947,,,56000,true,store:manual_vehicles-am26r0113-1947-cadillac-series-62-five-passenger-touring-sedan; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,575M Maranello,2002,,,162400,true,store:manual_vehicles-am26r0115-2002-ferrari-575m-maranello; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ferrari,458 Speciale,2015,,,912500,true,store:manual_vehicles-am26r0116-2015-ferrari-458-speciale
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Rolls-Royce,Dawn,2017,,,196000,true,store:manual_vehicles-am26r0118-2017-rolls-royce-dawn; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Bentley,Continental GT Convertible,2020,,,285500,true,store:manual_vehicles-am26r0119-2020-bentley-continental-gt-convertible; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Rolls-Royce,Dawn,2017,,,274400,true,store:manual_vehicles-am26r0120-2017-rolls-royce-dawn; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Jaguar,E-Type Series 1 4.2 Roadster,1967,,,123200,true,store:manual_vehicles-am26r0126-1967-jaguar-e-type-series-1-4-2-roadster; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Ford,GT,2005,,,571500,true,store:manual_vehicles-am26r0127-2005-ford-gt; needs review
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,,Porsche,911 Sport Classic,2023,,,511000,true,store:manual_vehicles-am26r0128-2023-porsche-911-sport-classic
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,1,Porsche,356 SC Coupe,1965,,,85000,true,store:manual_gooding-amelia-2026-lot-1; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,2,Porsche,911,1966,,,125000,true,store:manual_gooding-amelia-2026-lot-2
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,3,Alfa Romeo,Giulietta Spider Veloce,1960,,,85000,true,store:manual_gooding-amelia-2026-lot-3; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,4,Porsche,356 A Super Coupe,1958,,,110000,true,store:manual_gooding-amelia-2026-lot-4; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,5,Porsche,911 Carrera 3.2 M491 Coupe,1985,,,137200,true,store:manual_gooding-amelia-2026-lot-5; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,6,Porsche,356 C Coupe,1965,,,77500,true,store:manual_gooding-amelia-2026-lot-6; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,7,Porsche,911 2.0 S,1967,,,190000,true,store:manual_gooding-amelia-2026-lot-7; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,8,Alfa Romeo,Giulietta Sprint Veloce Alleggerita,1956,,,200000,true,store:manual_gooding-amelia-2026-lot-8; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,10,Porsche,356 A Super Coupe,1959,,,137500,true,store:manual_gooding-amelia-2026-lot-10; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,11,Porsche,911,1967,,,110000,true,store:manual_gooding-amelia-2026-lot-11
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,12,Porsche,356 C Cabriolet,1965,,,143000,true,store:manual_gooding-amelia-2026-lot-12; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,13,Alfa Romeo,Giulia Sprint GTA,1965,,,190000,true,store:manual_gooding-amelia-2026-lot-13; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,14,Porsche,911 GT-S,1969,,,357000,true,store:manual_gooding-amelia-2026-lot-14; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,15,Porsche,356 B Notchback Coupe,1962,,,72500,true,store:manual_gooding-amelia-2026-lot-15; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,16,Alfa Romeo,Giulietta SZ,1960,,,285000,true,store:manual_gooding-amelia-2026-lot-16; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,17,Porsche,356 C Coupe,1965,,,140000,true,store:manual_gooding-amelia-2026-lot-17; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,18,Porsche,911 SC Coupe,1982,,,70000,true,store:manual_gooding-amelia-2026-lot-18
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,19,Porsche,911,1965,,,155000,true,store:manual_gooding-amelia-2026-lot-19
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,20,Porsche,356 A Coupe,1959,,,75000,true,store:manual_gooding-amelia-2026-lot-20; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,21,Alfa Romeo,Giulia TZ,1965,,,800000,true,store:manual_gooding-amelia-2026-lot-21; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,22,Porsche,911 2.0 S,1968,,,135000,true,store:manual_gooding-amelia-2026-lot-22; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,23,Alfa Romeo,Giulietta Sprint Veloce,1959,,,60000,true,store:manual_gooding-amelia-2026-lot-23; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,24,Porsche,356 B Super 90 Coupe,1960,,,97500,true,store:manual_gooding-amelia-2026-lot-24; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,26,Porsche,356 SC Coupe,1964,,,102500,true,store:manual_gooding-amelia-2026-lot-26; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,27,Alfa Romeo,Giulietta SZ 'Coda Tronca',1962,,,260000,true,store:manual_gooding-amelia-2026-lot-27; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,28,Porsche,356 A Super Coupe,1958,,,123200,true,store:manual_gooding-amelia-2026-lot-28; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,29,Porsche,911,1965,,,150000,true,store:manual_gooding-amelia-2026-lot-29
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,30,Rolls-Royce,40/50 HP Silver Ghost Alpine Eagle Roadster,1919,,,305000,true,store:manual_gooding-amelia-2026-lot-30; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,31,Cord,810 Convertible Phaeton,1936,,,155000,true,store:manual_gooding-amelia-2026-lot-31; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,32,Miller,FWD Special,1932,,,3000000,true,store:manual_gooding-amelia-2026-lot-32; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,33,Studebaker,Special Indy Car,1931,,,,false,store:manual_gooding-amelia-2026-lot-33; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,34,Miller,'183 Convertible' Speed Record Car,1924,,,775000,true,store:manual_gooding-amelia-2026-lot-34; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,35,Detroit Electric,Model 68 Brougham,1917,,,37500,true,store:manual_gooding-amelia-2026-lot-35; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,36,Bugatti,Type 57 Cabriolet,1938,,,640000,true,store:manual_gooding-amelia-2026-lot-36; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,37,Rolls-Royce,Phantom V Limousine,1967,,,89600,true,store:manual_gooding-amelia-2026-lot-37; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,38,Bentley,3 Litre Speed Model Sports Tourer,1924,,,270000,true,store:manual_gooding-amelia-2026-lot-38; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,39,Bentley,R-Type Continental Fastback,1953,,,,false,store:manual_gooding-amelia-2026-lot-39; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,40,Rolls-Royce,40/50 HP Silver Ghost Tourer,1915,,,,false,store:manual_gooding-amelia-2026-lot-40; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,41,Bugatti,Type 40 Grand Sport,1929,,,215000,true,store:manual_gooding-amelia-2026-lot-41; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,42,Porsche,356 Coupe,1951,,,195000,true,store:manual_gooding-amelia-2026-lot-42; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,43,Morgan,Three-Wheeler Sports,1933,,,8500,true,store:manual_gooding-amelia-2026-lot-43; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,44,Ferrari,342 America Coupe,1951,,,480000,true,store:manual_gooding-amelia-2026-lot-44; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,45,Porsche,356 Speedster,1955,,,130000,true,store:manual_gooding-amelia-2026-lot-45; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,46,Vincent,Series C Comet,1951,,,1250,true,store:manual_gooding-amelia-2026-lot-46; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,47,Ferrari,250 GT Coupe,1959,,,,false,store:manual_gooding-amelia-2026-lot-47; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,48,Volkswagen,Super Beetle Convertible,1979,,,66000,true,store:manual_gooding-amelia-2026-lot-48; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,49,Talbot-Lago,T23 Major 4-Liter Cabriolet,1939,,,229600,true,store:manual_gooding-amelia-2026-lot-49; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,50,Rolls-Royce,40/50 HP Silver Ghost Open-Drive Limousine,1913,,,,false,store:manual_gooding-amelia-2026-lot-50; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,51,Packard,Super Eight 1104 Seven-Passenger Touring,1934,,,110000,true,store:manual_gooding-amelia-2026-lot-51; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,52,Cadillac,Series 370A V-12 Convertible Coupe,1931,,,90000,true,store:manual_gooding-amelia-2026-lot-52; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,53,Cadillac,Series 452 V-16 Seven-Passenger Sedan,1930,,,64400,true,store:manual_gooding-amelia-2026-lot-53; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,54,Cadillac,Series 452 V-16 Convertible Sedan,1930,,,95000,true,store:manual_gooding-amelia-2026-lot-54; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,55,Cadillac,Series 370B V12 Convertible Coupe,1932,,,95000,true,store:manual_gooding-amelia-2026-lot-55; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,101,Chevrolet,Corvette Pratt & Miller C6RS,2007,,,165000,true,store:manual_gooding-amelia-2026-lot-101; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,102,Mercedes-Benz,SL600,2001,,,175000,true,store:manual_gooding-amelia-2026-lot-102
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,103,Porsche,356 C Coupe,1965,,,85000,true,store:manual_gooding-amelia-2026-lot-103; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,104,Chevrolet,Impala 409 Convertible,1962,,,105000,true,store:manual_gooding-amelia-2026-lot-104; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,105,Bentley,Continental Convertible,1989,,,87500,true,store:manual_gooding-amelia-2026-lot-105; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,106,Aston Martin,V12 Vantage S Roadster,2017,,,215000,true,store:manual_gooding-amelia-2026-lot-106; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,107,Acura,NSX-T,2005,,,225000,true,store:manual_gooding-amelia-2026-lot-107; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,108,Ferrari,330 GT 2+2 Series II,1967,,,,false,store:manual_gooding-amelia-2026-lot-108; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,109,Sunbeam,Tiger Mk I,1966,,,60000,true,store:manual_gooding-amelia-2026-lot-109; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,110,Porsche,993 Carrera,1996,,,307500,true,store:manual_gooding-amelia-2026-lot-110; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,111,Mercedes-Benz,280 SL,1969,,,130000,true,store:manual_gooding-amelia-2026-lot-111; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,112,Talbot-Lago,T14LS Sport Coupe,1956,,,260400,true,store:manual_gooding-amelia-2026-lot-112; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,113,Porsche,997 GT2,2009,,,330000,true,store:manual_gooding-amelia-2026-lot-113; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,114,Chevrolet,Corvette Z06 Convertible 3LZ,2023,,,140000,true,store:manual_gooding-amelia-2026-lot-114; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,115,Ferrari,F8 Spider,2022,,,485000,true,store:manual_gooding-amelia-2026-lot-115; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,116,RUF,RGT,2001,,,245000,true,store:manual_gooding-amelia-2026-lot-116; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,117,Ferrari,Dino 246 GTS,1974,,,1200000,true,store:manual_gooding-amelia-2026-lot-117; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,118,Mercedes-Benz,300 SL Roadster,1959,,,925000,true,store:manual_gooding-amelia-2026-lot-118; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,119,Porsche,993 Carrera Cabriolet,1996,,,145000,true,store:manual_gooding-amelia-2026-lot-119; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,120,Lamborghini,Aventador Superveloce LP 750-4,2016,,,655000,true,store:manual_gooding-amelia-2026-lot-120; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,121,Ferrari,412,1986,,,77500,true,store:manual_gooding-amelia-2026-lot-121; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,122,Ferrari,275 GTB/4,1967,,,2750000,true,store:manual_gooding-amelia-2026-lot-122; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,123,RUF,BTR II,1997,,,,false,store:manual_gooding-amelia-2026-lot-123; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,124,Jaguar,XK120 Alloy Roadster,1950,,,140000,true,store:manual_gooding-amelia-2026-lot-124; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,125,Shelby,289 Cobra,1965,,,875000,true,store:manual_gooding-amelia-2026-lot-125; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,126,OSCA,1600 GT Coupe,1961,,,460000,true,store:manual_gooding-amelia-2026-lot-126; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,127,Chevrolet,Corvette 327/340 Split-Window Coupe,1963,,,230000,true,store:manual_gooding-amelia-2026-lot-127; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,128,Ferrari,212 Export Spider,1951,,,3100000,true,store:manual_gooding-amelia-2026-lot-128; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,129,Ferrari,750 Monza,1955,,,3085000,true,store:manual_gooding-amelia-2026-lot-129; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,130,Porsche,911 Turbo S Exclusive Series Coupe,2018,,,315000,true,store:manual_gooding-amelia-2026-lot-130; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,131,Fiat,Dino Berlinetta Speciale,1968,,,,false,store:manual_gooding-amelia-2026-lot-131; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,132,Ferrari,365 GTB/4 Daytona,1972,,,710000,true,store:manual_gooding-amelia-2026-lot-132; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,133,Porsche,930,1979,,,205000,true,store:manual_gooding-amelia-2026-lot-133; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,134,Ferrari,250 GT Lusso,1963,,,1600000,true,store:manual_gooding-amelia-2026-lot-134; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,135,BMW,M1,1980,,,425000,true,store:manual_gooding-amelia-2026-lot-135; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,136,Mercedes-Benz,500E,1992,,,320000,true,store:manual_gooding-amelia-2026-lot-136; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,137,Lamborghini,Diablo 6.0 VT Coupe,2001,,,675000,true,store:manual_gooding-amelia-2026-lot-137; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,138,RUF,Turbo Florio,2016,,,625000,true,store:manual_gooding-amelia-2026-lot-138; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,139,Fiat-Abarth,1000 GT Bialbero,1961,,,252000,true,store:manual_gooding-amelia-2026-lot-139; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,140,Ferrari,550 Maranello,2001,,,245000,true,store:manual_gooding-amelia-2026-lot-140; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,141,Lamborghini,Miura P400 S,1969,,,2350000,true,store:manual_gooding-amelia-2026-lot-141; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,142,Porsche,356 A Coupe,1959,,,200000,true,store:manual_gooding-amelia-2026-lot-142; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,143,Porsche,911 R,2016,,,720000,true,store:manual_gooding-amelia-2026-lot-143
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,144,MGA,Twin-Cam Roadster,1959,,,82500,true,store:manual_gooding-amelia-2026-lot-144; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,145,Ferrari,250 GT SWB California Spider,1960,,,15000000,true,store:manual_gooding-amelia-2026-lot-145; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,146,Porsche,911 2.4 S,1972,,,192500,true,store:manual_gooding-amelia-2026-lot-146; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,147,Ferrari,Dino 246 GT,1972,,,465000,true,store:manual_gooding-amelia-2026-lot-147; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,148,Porsche,968 Turbo S,1993,,,,false,store:manual_gooding-amelia-2026-lot-148; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,149,BMW Alpina,B8 Gran Coupe,2025,,,145600,true,store:manual_gooding-amelia-2026-lot-149; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,150,Mercedes-Benz,300 SL Gullwing,1957,,,1254000,true,store:manual_gooding-amelia-2026-lot-150
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,151,Ferrari,275/330 GTC Prototipo,1964,,,,false,store:manual_gooding-amelia-2026-lot-151; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,152,Austin Mini,Cooper 1275 S,1967,,,67500,true,store:manual_gooding-amelia-2026-lot-152; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,153,Vincent,Series C Black Shadow,1952,,,70000,true,store:manual_gooding-amelia-2026-lot-153; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,154,Austin-Healey,100S,1955,,,340000,true,store:manual_gooding-amelia-2026-lot-154; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,155,Porsche,Carrera GT,2005,,,2825000,true,store:manual_gooding-amelia-2026-lot-155
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,156,Alfa Romeo,Giulia TI Super Berlina,1964,,,92400,true,store:manual_gooding-amelia-2026-lot-156; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,157,Alfa Romeo,6C 1750 Series V Gran Sport,1932,,,1775000,true,store:manual_gooding-amelia-2026-lot-157; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,158,Ducati,350 Desmo 'Silver Shotgun',1971,,,20160,true,store:manual_gooding-amelia-2026-lot-158; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,159,Lola,T294,1974,,,98000,true,store:manual_gooding-amelia-2026-lot-159; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,160,Ford,Mustang by Revology,1966,,,168000,true,store:manual_gooding-amelia-2026-lot-160; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,161,Porsche,991 GT3 Cup,2017,,,125000,true,store:manual_gooding-amelia-2026-lot-161; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,162,Abarth,1300 OT Periscopio,1966,,,506000,true,store:manual_gooding-amelia-2026-lot-162; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,163,Ferrari,GTC4 Lusso,2020,,,260000,true,store:manual_gooding-amelia-2026-lot-163; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,164,MV Agusta,750 S America,1977,,,50000,true,store:manual_gooding-amelia-2026-lot-164; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,165,Alfa Romeo,Tipo 33/3,1971,,,800000,true,store:manual_gooding-amelia-2026-lot-165; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,166,Alfa Romeo,Giulia Sprint GTA 1300 Junior Stradale,1968,,,130000,true,store:manual_gooding-amelia-2026-lot-166; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,167,Jaguar,XJR-15,1991,,,975000,true,store:manual_gooding-amelia-2026-lot-167; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,168,Alfa Romeo,Montreal,1973,,,72000,true,store:manual_gooding-amelia-2026-lot-168; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,169,Carbir,Sports 2000,2004,,,31360,true,store:manual_gooding-amelia-2026-lot-169; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,170,Austin-Healey,100M,1956,,,92500,true,store:manual_gooding-amelia-2026-lot-170; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,171,RUF,928R,1989,,,,false,store:manual_gooding-amelia-2026-lot-171; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,173,Alfa Romeo,1900C SS Coupe,1954,,,180000,true,store:manual_gooding-amelia-2026-lot-173; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,174,Ferrari,512 BBi,1983,,,,false,store:manual_gooding-amelia-2026-lot-174; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,175,Ferrari,575M,2002,,,112500,true,store:manual_gooding-amelia-2026-lot-175; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,176,Lamborghini,Gallardo LP 550-2,2012,,,245000,true,store:manual_gooding-amelia-2026-lot-176; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,177,Subaru,Impreza 22B STi,1998,,,295000,true,store:manual_gooding-amelia-2026-lot-177; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,178,Mercedes-Benz,560 SL,1989,,,107500,true,store:manual_gooding-amelia-2026-lot-178; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,179,Chevrolet,Impala Convertible,1960,,,97500,true,store:manual_gooding-amelia-2026-lot-179; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,180,Ferrari,328 GTS,1986,,,90000,true,store:manual_gooding-amelia-2026-lot-180; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,,Porsche,356 SC Coupe,1965,,,,false,store:gooding-amelia-2026-test-1; needs review
+Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,,Porsche,911,1966,,,,false,store:gooding-amelia-2026-test-2
+The Monaco Auction,2026-04-24,RM Sothebys,118,Piaggio,Vespa ET4 'Scuderia Ferrari',2001,,,45255.17,true,store:the-monaco-auction-lot-118; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,121,Jordan,EJ13 Show Car,2003,,,178124.88,true,store:the-monaco-auction-lot-121; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,122,Fiat,500 Jolly Conversion,1971,,,58858.66,true,store:the-monaco-auction-lot-122; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,123,Bentley,Brooklands,1996,,,85190.16,true,store:the-monaco-auction-lot-123; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,124,Alpine-Renault,A110 1300 G,1970,,,116168.40,true,store:the-monaco-auction-lot-124; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,125,BMW,M3 GT,1995,,,216847.68,true,store:the-monaco-auction-lot-125; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,126,WD Denzel,1300,1954,,,147146.64,true,store:the-monaco-auction-lot-126; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,127,Ferrari,Testarossa 'Monospecchio',1986,,,461306.40,true,store:the-monaco-auction-lot-127; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,128,Aston Martin,DB4 Series I,1959,,,324934.80,true,store:the-monaco-auction-lot-128; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,129,Riva,Ariston 'Telstar',1963,,,371738.88,true,store:the-monaco-auction-lot-129; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,130,Ferrari,488 Spider 'Ispirata da Riva',2017,,,400696.80,true,store:the-monaco-auction-lot-130; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,131,Ferrari,430 Scuderia,2008,,,484035,true,store:the-monaco-auction-lot-131; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,132,Ferrari,F355 Spider,1997,,,263315.04,true,store:the-monaco-auction-lot-132; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,133,Ferrari,458 Speciale A,2015,,,1582584,true,store:the-monaco-auction-lot-133; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,134,Ferrari,458 Speciale,2015,,,946183.20,true,store:the-monaco-auction-lot-134; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,135,Ferrari,488 Pista,2019,,,824964,true,store:the-monaco-auction-lot-135; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,136,Lamborghini,Aventador SVJ,2020,644160,761280,,false,store:the-monaco-auction-lot-136; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,137,Porsche,911 GT2 RS 'Weissach',2018,,,627982.80,true,store:the-monaco-auction-lot-137; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,138,Ferrari,488 Pista 'Piloti Ferrari',2019,,,1143164.40,true,store:the-monaco-auction-lot-138; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,139,Ferrari,488 Pista Spider,2019,,,802235.40,true,store:the-monaco-auction-lot-139; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,140,Ferrari,812 Competizione A,2024,,,2279594.40,true,store:the-monaco-auction-lot-140; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,141,Ferrari,Enzo,2004,,,8795126.40,true,store:the-monaco-auction-lot-141; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,142,Ferrari,642,1991,,,5158550.40,true,store:the-monaco-auction-lot-142; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,143,Ferrari,312 T3,1978,,,5840408.40,true,store:the-monaco-auction-lot-143; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,144,Ferrari,275 GTB/4 by Scaglietti,1967,,,3075095.40,true,store:the-monaco-auction-lot-144; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,145,Ferrari,LaFerrari,2014,,,6825314.40,true,store:the-monaco-auction-lot-145; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,146,Dallara,MPS 'Macchina Posto Singolo',2024,,,1346880,true,store:the-monaco-auction-lot-146; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,147,Ferrari,F40,1989,,,5840408.40,true,store:the-monaco-auction-lot-147; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,148,Ferrari,250 GT Cabriolet Series II by Pininfarina,1961,,,2128070.40,true,store:the-monaco-auction-lot-148; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,149,Ferrari,550 Barchetta Pininfarina,2001,,,794659.20,true,store:the-monaco-auction-lot-149; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,150,Toleman,TG183B,1984,3279360,4450560,,false,store:the-monaco-auction-lot-150; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,151,Bugatti,EB112,1999,,,2279594.40,true,store:the-monaco-auction-lot-151; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,152,Mercedes-Benz,190 E 2.5-16 Evolution II,1990,,,415849.20,true,store:the-monaco-auction-lot-152; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,153,Ferrari,365 GTB/4 Daytona Berlinetta by Scaglietti,1972,,,734049.60,true,store:the-monaco-auction-lot-153; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,154,Ferrari,FXX-K Evo,2018,,,6976838.40,true,store:the-monaco-auction-lot-154; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,155,Mercedes-Benz,300 SL Roadster,1963,1756800,1991040,,false,store:the-monaco-auction-lot-155; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,156,Ferrari,296 GTB Assetto Fiorano 'Hungaroring Edition',2024,,,431001.60,true,store:the-monaco-auction-lot-156; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,157,Ferrari,308 GT/M,1984,,,1559855.40,true,store:the-monaco-auction-lot-157; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,158,Aston Martin,DB3S,1955,,,4552454.40,true,store:the-monaco-auction-lot-158; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,159,Porsche,911 Carrera RS 2.7 Touring,1973,527040,644160,,false,store:the-monaco-auction-lot-159; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,160,Ferrari,365 GT4 BB by Scaglietti,1974,,,590101.80,true,store:the-monaco-auction-lot-160; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,161,Ferrari,F40 Competition Conversion by Hamann Motorsport,1990,,,4287287.40,true,store:the-monaco-auction-lot-161; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,162,Ferrari,488 GTE Evo,2020,1522560,1873920,,false,store:the-monaco-auction-lot-162; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,163,Mercedes-AMG,GT Track Series,2022,,,355239.60,true,store:the-monaco-auction-lot-163; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,164,Ferrari,250 GT SWB California Spider by Scaglietti,1961,,,22432286.40,true,store:the-monaco-auction-lot-164; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,165,Porsche,550A Spyder by Wendler,1957,,,,false,store:the-monaco-auction-lot-165; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,166,Porsche,Carrera GT,2005,,,3037214.40,true,store:the-monaco-auction-lot-166; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,167,Lotus,Type 30,1964,,,162635.76,true,store:the-monaco-auction-lot-167; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,168,Mercedes-AMG,ONE,2024,,,3794834.40,true,store:the-monaco-auction-lot-168; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,169,Mercedes-Benz,300 SL Gullwing,1956,1873920,2108160,,false,store:the-monaco-auction-lot-169; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,170,Bugatti,Bolide,2024,,,5840408.40,true,store:the-monaco-auction-lot-170; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,171,Fittipaldi,F6/A,1979,,,688592.40,true,store:the-monaco-auction-lot-171; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,172,Lamborghini,Essenza SCV12,2022,,,1673498.40,true,store:the-monaco-auction-lot-172; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,173,Lamborghini,350 GT by Touring,1964,,,840116.40,true,store:the-monaco-auction-lot-173; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,174,Ferrari,275 GTB/6C by Scaglietti,1966,,,3188738.40,true,store:the-monaco-auction-lot-174; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,175,Aston Martin,DB4 Series IV,1961,,,317358.60,true,store:the-monaco-auction-lot-175; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,176,Ferrari,330 GTS by Pininfarina,1967,1639680,2108160,,false,store:the-monaco-auction-lot-176; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,177,Mercedes-Benz,SLS AMG,2010,,,446154,true,store:the-monaco-auction-lot-177; EUR at 1.1712 USD
+The Monaco Auction,2026-04-24,RM Sothebys,,WD,Denzel 1300,1954,,,127842,true,store:manual_auctions-mc26-r0008-1954-wd-denzel-1300; needs review
+The Monaco Auction,2026-04-24,RM Sothebys,,Ferrari,458 Speciale,2015,,,822051,true,store:manual_auctions-mc26-r0010-2015-ferrari-458-speciale
+Air/Water,2026-04-26,Broad Arrow,201,Harley-Davidson,V-Rod Night Rod Special,2016,,,13062.50,true,store:air-water-lot-201
+Air/Water,2026-04-26,Broad Arrow,202,Porsche,Boxster,1999,,,13552,true,store:air-water-lot-202
+Air/Water,2026-04-26,Broad Arrow,203,Porsche,911 Turbo,2003,,,,false,store:air-water-lot-203
+Air/Water,2026-04-26,Broad Arrow,204,Porsche,911 GT3,2024,,,280280,true,store:air-water-lot-204
+Air/Water,2026-04-26,Broad Arrow,205,Porsche,911 Turbo,2001,,,135520,true,store:air-water-lot-205
+Air/Water,2026-04-26,Broad Arrow,206,Porsche,912,1965,,,157080,true,store:air-water-lot-206
+Air/Water,2026-04-26,Broad Arrow,207,Porsche,911 Carrera RS 3.8 Tribute,1996,,,,false,store:air-water-lot-207
+Air/Water,2026-04-26,Broad Arrow,208,Porsche,911 Carrera 4 Coupe by AP Car Design,1990,,,,false,store:air-water-lot-208
+Air/Water,2026-04-26,Broad Arrow,209,Porsche,356 A 1600 Speedster,1958,,,459250,true,store:air-water-lot-209
+Air/Water,2026-04-26,Broad Arrow,210,Porsche,911 Turbo Cabriolet,2008,,,80080,true,store:air-water-lot-210
+Air/Water,2026-04-26,Broad Arrow,211,Porsche,911 E Coupe,1973,,,,false,store:air-water-lot-211
+Air/Water,2026-04-26,Broad Arrow,212,Porsche,"911 Coupe Reimagined by Singer ""Lindsey Commission""",1990,,,1124750,true,store:air-water-lot-212
+Air/Water,2026-04-26,Broad Arrow,213,Porsche,911 Carrera 4S WLS 3.8,1997,,,289520,true,store:air-water-lot-213
+Air/Water,2026-04-26,Broad Arrow,214,Porsche,718 Cayman GT4 RS Weissach Package,2023,,,218680,true,store:air-water-lot-214
+Air/Water,2026-04-26,Broad Arrow,215,Porsche,356 A 1600 Speedster SCCA Race Car,1958,,,,false,store:air-water-lot-215
+Air/Water,2026-04-26,Broad Arrow,216,Porsche,911 Turbo Slantnose Coupe,1987,,,261800,true,store:air-water-lot-216
+Air/Water,2026-04-26,Broad Arrow,217,Porsche,911 Backdate 4.0L by Van Thull Development,1991,,,,false,store:air-water-lot-217
+Air/Water,2026-04-26,Broad Arrow,218,RUF,RT12,2007,,,,false,store:air-water-lot-218
+Air/Water,2026-04-26,Broad Arrow,219,Porsche,911 Turbo S Cabriolet,2005,,,126280,true,store:air-water-lot-219
+Air/Water,2026-04-26,Broad Arrow,220,Porsche,911 Turbo Cabriolet,1989,,,157080,true,store:air-water-lot-220
+Air/Water,2026-04-26,Broad Arrow,221,Porsche,911 Dakar,2023,,,429000,true,store:air-water-lot-221
+Air/Water,2026-04-26,Broad Arrow,222,Porsche,911 GT3 RS 4.0,2011,,,1094500,true,store:air-water-lot-222
+Air/Water,2026-04-26,Broad Arrow,224,Porsche,911 Targa 4 GTS,2019,,,203280,true,store:air-water-lot-224
+Air/Water,2026-04-26,Broad Arrow,225,Porsche-Kremer,CK5 Group C Endurance Racing Prototype,1983,,,,false,store:air-water-lot-225; needs review
+Air/Water,2026-04-26,Broad Arrow,226,Porsche,911 Carrera 4S,1997,,,317075,true,store:air-water-lot-226
+Air/Water,2026-04-26,Broad Arrow,227,Porsche,959 SC Reimagined by Canepa,1988,,,,false,store:air-water-lot-227
+Air/Water,2026-04-26,Broad Arrow,228,Porsche,911 R,2016,,,822250,true,store:air-water-lot-228
+Air/Water,2026-04-26,Broad Arrow,230,Porsche,911 Turbo S Coupe,2023,,,347325,true,store:air-water-lot-230
+Air/Water,2026-04-26,Broad Arrow,231,Porsche,356 A 1600 Speedster,1957,,,283360,true,store:air-water-lot-231
+Air/Water,2026-04-26,Broad Arrow,232,Porsche,911 Turbo,1979,,,,false,store:air-water-lot-232
+Air/Water,2026-04-26,Broad Arrow,233,Porsche,911,1965,,,221760,true,store:air-water-lot-233
+Air/Water,2026-04-26,Broad Arrow,234,Porsche,911 Turbo Cabriolet X50,2004,,,92400,true,store:air-water-lot-234
+Air/Water,2026-04-26,Broad Arrow,235,RUF,SCR,2025,,,2304500,true,store:air-water-lot-235
+Air/Water,2026-04-26,Broad Arrow,236,Porsche,911 SC Weissach Edition,1980,,,138600,true,store:air-water-lot-236
+Air/Water,2026-04-26,Broad Arrow,237,Porsche,911 Carrera RSR Tribute,1975,,,,false,store:air-water-lot-237
+Air/Water,2026-04-26,Broad Arrow,238,Porsche,"356 B 1600 ""Outlaw"" Coupe",1963,,,,false,store:air-water-lot-238
+Air/Water,2026-04-26,Broad Arrow,239,Porsche,"944 Turbo Cup ""Diet 7Up VIP""",1988,,,,false,store:air-water-lot-239
+Air/Water,2026-04-26,Broad Arrow,240,Porsche,911 Turbo S WLS2,1998,,,749650,true,store:air-water-lot-240
+Air/Water,2026-04-26,Broad Arrow,241,Porsche,911 Turbo Coupe WLS,1989,,,429000,true,store:air-water-lot-241
+Air/Water,2026-04-26,Broad Arrow,242,Porsche,911 Targa 4 GTS,2017,,,163240,true,store:air-water-lot-242
+Air/Water,2026-04-26,Broad Arrow,243,Porsche,356 B 1600 Coupe,1963,,,,false,store:air-water-lot-243
+Air/Water,2026-04-26,Broad Arrow,244,Porsche,911 Sport Classic,2023,,,,false,store:air-water-lot-244
+Air/Water,2026-04-26,Broad Arrow,245,Porsche,911 GT3 Touring,2018,,,323125,true,store:air-water-lot-245
+Air/Water,2026-04-26,Broad Arrow,246,Porsche,911 S Coupe,1973,,,,false,store:air-water-lot-246
+Air/Water,2026-04-26,Broad Arrow,247,Porsche,911 Carrera 2 Coupe,1990,,,,false,store:air-water-lot-247
+Air/Water,2026-04-26,Broad Arrow,248,Porsche,"911 Targa Reimagined by Singer ""Rio Commission""",1992,,,1276000,true,store:air-water-lot-248
+Air/Water,2026-04-26,Broad Arrow,249,Porsche,911 GT3 RS Weissach Package,2025,,,531850,true,store:air-water-lot-249
+Air/Water,2026-04-26,Broad Arrow,250,Porsche,911 GT2 RS,2018,,,610500,true,store:air-water-lot-250
+Air/Water,2026-04-26,Broad Arrow,251,Porsche,911 Carrera Cabriolet,1998,,,123200,true,store:air-water-lot-251
+Air/Water,2026-04-26,Broad Arrow,252,Porsche,912 Coupe,1968,,,83160,true,store:air-water-lot-252
+Air/Water,2026-04-26,Broad Arrow,253,Porsche,718 Cayman GT4 RS Weissach Package,2024,,,264880,true,store:air-water-lot-253
+Air/Water,2026-04-26,Broad Arrow,254,Porsche,911 Carrera 4 Coupe,1996,,,104720,true,store:air-water-lot-254
+Air/Water,2026-04-26,Broad Arrow,255,Porsche,911 Turbo,1996,,,450175,true,store:air-water-lot-255
+Air/Water,2026-04-26,Broad Arrow,256,Porsche,918 Spyder Weissach Package,2015,,,5148000,true,store:air-water-lot-256
+Air/Water,2026-04-26,Broad Arrow,257,Porsche,968 Club Sport,1993,,,80080,true,store:air-water-lot-257
+Air/Water,2026-04-26,Broad Arrow,258,Porsche,924 SCCA D-Production,1980,,,46200,true,store:air-water-lot-258
+Air/Water,2026-04-26,Broad Arrow,259,Porsche,911 Carrera Cabriolet,1984,,,123200,true,store:air-water-lot-259
+Air/Water,2026-04-26,Broad Arrow,260,Porsche,911 Targa,2002,,,71456,true,store:air-water-lot-260
+Air/Water,2026-04-26,Broad Arrow,261,Porsche,911 SC Coupe,1980,,,132440,true,store:air-water-lot-261
+Air/Water,2026-04-26,Broad Arrow,262,Porsche,914,1975,,,27720,true,store:air-water-lot-262
+Air/Water,2026-04-26,Broad Arrow,,Porsche,911 S Targa,1971,,,,false,store:manual_vehicles-po26r0030-1971-porsche-911-s-targa; needs review
+Air/Water,2026-04-26,Broad Arrow,,Porsche,911 E Targa,1973,,,,false,store:manual_vehicles-po26r0031-1973-porsche-911-e-targa; needs review
+Air/Water,2026-04-26,Broad Arrow,,Porsche,356 B 1600 Coupe,1963,,,,false,store:manual_vehicles-po26r0055-1963-porsche-356-b-1600-coupe
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Bugatti,Type 43 Roadster by Eugène Matthys,1929,,,1169000,true,store:manual_vehicles-ve26r0001-1929-bugatti-type-43-roadster-by-eugene-matthys; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,F40,1990,,,3401000,true,store:manual_vehicles-ve26r0002-1990-ferrari-f40; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Honda,NSX-R,2003,,,,false,store:manual_vehicles-ve26r0003-2003-honda-nsx-r; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Meccanica Maniero,4700 GT by Michelotti,1967,,,200000,true,store:manual_vehicles-ve26r0004-1967-meccanica-maniero-4700-gt-by-michelotti; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Honda,NSX Type S,1999,,,240000,true,store:manual_vehicles-ve26r0005-1999-honda-nsx-type-s; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Bugatti,Type 37 Grand Prix,1926,,,,false,store:manual_vehicles-ve26r0006-1926-bugatti-type-37-grand-prix; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Aurelia B24 S Spider America,1955,,,399000,true,store:manual_vehicles-ve26r0007-1955-lancia-aurelia-b24-s-spider-america; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,Dino 246 GT,1972,,,464000,true,store:manual_vehicles-ve26r0008-1972-ferrari-dino-246-gt; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Astra,Coupe,1952,,,60100,true,store:manual_vehicles-ve26r0010-1952-astra-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,812 Competizione,2023,,,1639000,true,store:manual_vehicles-ve26r0011-2023-ferrari-812-competizione
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lamborghini,Countach LPI 800-4,2022,,,1835000,true,store:manual_vehicles-ve26r0012-2022-lamborghini-countach-lpi-800-4; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Maserati,3500 GT Vignale Spyder,1960,,,791000,true,store:manual_vehicles-ve26r0013-1960-maserati-3500-gt-vignale-spyder; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Fiat Bertone,850 T Visitors Bus,1977,,,220000,true,store:manual_vehicles-ve26r0014-1977-fiat-bertone-850-t-visitors-bus; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Bentley,4½ Litre Vanden Plas Sports Tourer,1928,,,464000,true,store:manual_vehicles-ve26r0015-1928-bentley-4-litre-vanden-plas-sports-tourer; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Panhard & Levassor,KB Roadster,1903,,,,false,store:manual_vehicles-ve26r0017-1903-panhard-levassor-kb-roadster; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Renault,Type D Thrupp & Maberly Four-Seater,1901,,,194000,true,store:manual_vehicles-ve26r0018-1901-renault-type-d-thrupp-maberly-four-seater; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,512 TR,1993,,,260000,true,store:manual_vehicles-ve26r0019-1993-ferrari-512-tr; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Facel Vega,Facel II,1964,,,253000,true,store:manual_vehicles-ve26r0020-1964-facel-vega-facel-ii; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lamborghini,Diablo SV,1999,,,529000,true,store:manual_vehicles-ve26r0021-1999-lamborghini-diablo-sv; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,BMW,M3 GTS,2011,,,220000,true,store:manual_vehicles-ve26r0024-2011-bmw-m3-gts; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Maserati,Mistral Spyder 4000,1966,,,386000,true,store:manual_vehicles-ve26r0025-1966-maserati-mistral-spyder-4000; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Maserati,3500 GTi Sebring,1967,,,147000,true,store:manual_vehicles-ve26r0026-1967-maserati-3500-gti-sebring; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,612 Scaglietti,2004,,,213000,true,store:manual_vehicles-ve26r0027-2004-ferrari-612-scaglietti; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Bizzarrini,5300 GT Strada,1968,,,,false,store:manual_vehicles-ve26r0029-1968-bizzarrini-5300-gt-strada; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Maserati,Mistral 3700 Coupe,1965,,,153000,true,store:manual_vehicles-ve26r0030-1965-maserati-mistral-3700-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lamborghini,Murciélago LP640-4 Roadster,2008,,,330000,true,store:manual_vehicles-ve26r0031-2008-lamborghini-murcielago-lp640-4-roadster; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Mercedes-Benz,300 SL Gullwing Coupe,1957,,,1900000,true,store:manual_vehicles-ve26r0032-1957-mercedes-benz-300-sl-gullwing-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Aston Martin,V8 Volante,1987,,,227000,true,store:manual_vehicles-ve26r0034-1987-aston-martin-v8-volante; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Aston Martin,DB6 Volante MKI,1968,,,,false,store:manual_vehicles-ve26r0035-1968-aston-martin-db6-volante-mki; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,430 Scuderia,2008,,,979000,true,store:manual_vehicles-ve26r0036-2008-ferrari-430-scuderia; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Flaminia Sport Zagato,1960,,,133000,true,store:manual_vehicles-ve26r0037-1960-lancia-flaminia-sport-zagato; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Aurelia B24 S Convertible,1956,,,234000,true,store:manual_vehicles-ve26r0038-1956-lancia-aurelia-b24-s-convertible; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,Dino 246 GTS,1973,,,,false,store:manual_vehicles-ve26r0039-1973-ferrari-dino-246-gts; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lamborghini,Murciélago LP640-4 Coupé,2009,,,934000,true,store:manual_vehicles-ve26r0040-2009-lamborghini-murcielago-lp640-4-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Alfa Romeo,GT Bertone Restomod by Timeless Garage,1970,,,173000,true,store:manual_vehicles-ve26r0041-1970-alfa-romeo-gt-bertone-restomod-by-timeless-garage; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,550 Barchetta Pininfarina,2002,,,895000,true,store:manual_vehicles-ve26r0042-2002-ferrari-550-barchetta-pininfarina; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Stratos HF Stradale Group 4 Specification,1975,,,,false,store:manual_vehicles-ve26r0043-1975-lancia-stratos-hf-stradale-group-4-specification; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,"Delta HF Integrale Evoluzione ""Martini 6""",1992,,,379000,true,store:manual_vehicles-ve26r0044-1992-lancia-delta-hf-integrale-evoluzione-martini-6; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Delta HF Integrale Evoluzione I,1991,,,180000,true,store:manual_vehicles-ve26r0045-1991-lancia-delta-hf-integrale-evoluzione-i; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Lancia,Delta HF Integrale,1988,,,90100,true,store:manual_vehicles-ve26r0046-1988-lancia-delta-hf-integrale; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Pagani,Zonda 760 Unica,2018,,,,false,store:manual_vehicles-ve26r0049-2018-pagani-zonda-760-unica; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Mercedes-Benz,"Boschert B300 Biturbo ""Gullwing"" Coupe",1989,,,,false,store:manual_vehicles-ve26r0050-1989-mercedes-benz-boschert-b300-biturbo-gullwing-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Halfscale Cars,Williams FW14-Junior,2025,,,,false,store:manual_vehicles-ve26r0051-2025-halfscale-cars-williams-fw14-junior; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Alfa Romeo,Giulia GTAm,2022,,,153000,true,store:manual_vehicles-ve26r0052-2022-alfa-romeo-giulia-gtam; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,360 Challenge Stradale,2004,,,836000,true,store:manual_vehicles-ve26r0053-2004-ferrari-360-challenge-stradale; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,328 GTS,1988,,,107000,true,store:manual_vehicles-ve26r0055-1988-ferrari-328-gts; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,308 GTS,1979,,,70100,true,store:manual_vehicles-ve26r0056-1979-ferrari-308-gts; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Aston Martin,Short Chassis Volante,1966,,,686000,true,store:manual_vehicles-ve26r0057-1966-aston-martin-short-chassis-volante; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Porsche,911 S Soft Window Targa Experimental Test Car ex-Neerpasch,1966,,,,false,store:manual_vehicles-ve26r0058-1966-porsche-911-s-soft-window-targa-experimental-test-car-ex-neerpasch; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Alfa Romeo,6C 2500 Super Sport Coupé Aerlux by Touring,1947,,,373000,true,store:manual_vehicles-ve26r0059-1947-alfa-romeo-6c-2500-super-sport-coupe-aerlux-by-touring; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,F512 M,1996,,,,false,store:manual_vehicles-ve26r0060-1996-ferrari-f512-m; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,250 GT Boano Alloy Coupe,1956,,,1058000,true,store:manual_vehicles-ve26r0061-1956-ferrari-250-gt-boano-alloy-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,Monza SP2,2020,,,,false,store:manual_vehicles-ve26r0062-2020-ferrari-monza-sp2; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Porsche,356 B 1600 Roadster,1960,,,180000,true,store:manual_vehicles-ve26r0066-1960-porsche-356-b-1600-roadster; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Porsche,550 Spyder Pennewitz Childrens Car,2004,,,43500,true,store:manual_vehicles-ve26r0068-2004-porsche-550-spyder-pennewitz-childrens-car; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,330 GTC,1968,,,516000,true,store:manual_vehicles-ve26r0078-1968-ferrari-330-gtc; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,330 GTS,1968,,,2227000,true,store:manual_vehicles-ve26r0080-1968-ferrari-330-gts; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,SF90 Spider,2022,,,451000,true,store:manual_vehicles-ve26r0081-2022-ferrari-sf90-spider; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,BMW,850 CSi,1993,,,107000,true,store:manual_vehicles-ve26r0083-1993-bmw-850-csi; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,BMW,503 Coupé,1958,,,127000,true,store:manual_vehicles-ve26r0084-1958-bmw-503-coupe; needs review
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,,Ferrari,599 GTB Fiorano,2008,,,173000,true,store:manual_vehicles-ve26r0091-2008-ferrari-599-gtb-fiorano; needs review
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,105,Porsche,911 Turbo Coupé,2002,,,,false,store:the-tegernsee-auction-lot-105; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,106,Mercedes-Benz,190 SL,1960,,,120982.30,true,store:the-tegernsee-auction-lot-106; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,107,Mercedes-Benz,CLK DTM AMG Cabriolet,2006,,,864628.94,true,store:the-tegernsee-auction-lot-107; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,108,Porsche,356 C Carrera 2 Coupé,1964,,,361631.88,true,store:the-tegernsee-auction-lot-108; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,109,Ferrari,Scuderia Spider 16M,2009,,,857231.92,true,store:the-tegernsee-auction-lot-109; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,110,Mercedes-AMG,GT R,2018,,,196596.24,true,store:the-tegernsee-auction-lot-110; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,111,BMW,503 Cabriolet Series I,1957,,,,false,store:the-tegernsee-auction-lot-111
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,112,Porsche,356 B Carrera 1600 GS/GT Coupé,1960,,,524366.22,true,store:the-tegernsee-auction-lot-112; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,113,Ferrari,599XX Evo,2009,,,3335232.16,true,store:the-tegernsee-auction-lot-113; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,114,Porsche,RUF BTR 3.8,1992,,,479984.12,true,store:the-tegernsee-auction-lot-114; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,115,Mercedes-AMG,GT C Coupé Edition 50,2018,,,146691.04,true,store:the-tegernsee-auction-lot-115; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,116,Mercedes-Benz,190 E 2.5-16 Evolution II,1990,,,361631.88,true,store:the-tegernsee-auction-lot-116; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,117,Porsche,Carrera GT,2004,,,1900211.12,true,store:the-tegernsee-auction-lot-117; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,118,Porsche,911 Carrera Cup,1991,,,151227.88,true,store:the-tegernsee-auction-lot-118; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,119,Mercedes-Benz,SL Brabus 7.3S V12,1995,,,294894.36,true,store:the-tegernsee-auction-lot-119; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,120,Ferrari,812 Competizione,2023,,,1929799.19,true,store:the-tegernsee-auction-lot-120; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,121,Porsche,911 GT3 RS 3.8,2011,,,346837.84,true,store:the-tegernsee-auction-lot-121; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,122,Mercedes-Benz,280 SE 3.5 Cabriolet,1971,,,835040.88,true,store:the-tegernsee-auction-lot-122; EUR at 1.1435 USD
+THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,123,Ferrari,458 Speciale,2015,,,894217,true,store:the-tegernsee-auction-lot-123; EUR at 1.1435 USD
+Bonhams Leguna Seca,2026-08-13,Bonhams,1,Triumph,Thunderbird,1952,,,6440,true,store:bonhams-leguna-seca-lot-1; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,2,Harley-Davidson,FLH,1969,,,12622.40,true,store:bonhams-leguna-seca-lot-2; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,3,Panzer,"90ci ""Captain America""",2001,,,18032,true,store:bonhams-leguna-seca-lot-3; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,4,Harley-Davidson,"FL 74ci ""Billy Bike""",1954,,,24472,true,store:bonhams-leguna-seca-lot-4; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,5,Ford,81A 740 Deluxe Convertible Sedan,1938,,,23833.60,true,store:bonhams-leguna-seca-lot-5; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,6,Cadillac,Eldorado Biarritz Convertible,1962,,,45158.40,true,store:bonhams-leguna-seca-lot-6; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,7,Packard,110 Convertible Coupe,1940,,,15052.80,true,store:bonhams-leguna-seca-lot-7; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,8,Buick,Model 65 Sport Phaeton,1932,,,32614.40,true,store:bonhams-leguna-seca-lot-8; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,9,Chevrolet,Bel Air,1956,,,65228.80,true,store:bonhams-leguna-seca-lot-9; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,10,Bancroft,Roadster,1991,,,35123.20,true,store:bonhams-leguna-seca-lot-10; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,11,Jaguar,E-Type Series III V12 Roadster,1972,,,80281.60,true,store:bonhams-leguna-seca-lot-11; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,12,Jaguar,XK120 Roadster,1951,,,50176,true,store:bonhams-leguna-seca-lot-12; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,13,Porsche,356 Pre-A 1500 Continental Coupe,1955,225000,300000,,false,store:bonhams-leguna-seca-lot-13; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,14,Lancia,Aurelia B20S GT,1958,,,150528,true,store:bonhams-leguna-seca-lot-14; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,15,Morgan,Plus 4 Super Sports,1962,,,40140.80,true,store:bonhams-leguna-seca-lot-15; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,16,Morgan,Roadster,2005,,,40140.80,true,store:bonhams-leguna-seca-lot-16; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,17,Ferrari,365 GT 2+2,1969,,,200704,true,store:bonhams-leguna-seca-lot-17; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,19,Lotus,Eleven Le Mans,1956,,,131712,true,store:bonhams-leguna-seca-lot-19; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,21,Jaguar,XK140 Fixed Head Coupe,1956,,,94080,true,store:bonhams-leguna-seca-lot-21; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,22,Porsche,356A 1600 Super Speedster,1956,400000,450000,,false,store:bonhams-leguna-seca-lot-22; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,23,Maserati,Ghibli 4.7 Coupe,1968,,,213248,true,store:bonhams-leguna-seca-lot-23; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,24,Vollstedt-Ford,67 USAC 'Indianapolis' Racing Single-Seater,1967,,,772800,true,store:bonhams-leguna-seca-lot-24; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,25,Alfa Romeo,Giulia GTA 1300 Junior Corsa,1968,250000,300000,,false,store:bonhams-leguna-seca-lot-25; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,26,Alfa Romeo,2000 Touring Spider,1962,,,62720,true,store:bonhams-leguna-seca-lot-26; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,27,Mercedes-Benz,220 SE 'Ponton' Cabriolet,1960,,,100352,true,store:bonhams-leguna-seca-lot-27; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,28,Mercedes-Benz,300 S Coupé,1953,,,225792,true,store:bonhams-leguna-seca-lot-28; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,29,Mercedes-Benz,300 S Cabriolet A,1955,380000,430000,,false,store:bonhams-leguna-seca-lot-29; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,30,Porsche,356 Pre-A 1500 Continental Coupe,1955,225000,300000,,false,store:bonhams-leguna-seca-lot-30; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,31,Lola,Mk I Sports Car,1959,225000,255000,,false,store:bonhams-leguna-seca-lot-31; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,32,Jaguar,"XKE E-Type Competition Coupe ""No. 46""",1963,,,125440,true,store:bonhams-leguna-seca-lot-32; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,33,Ferrari,Dino 246 GT,1972,,,464250,true,store:bonhams-leguna-seca-lot-33; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,34,Ferrari,365 GTC/4,1972,,,195686.40,true,store:bonhams-leguna-seca-lot-34; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,35,Ferrari,550 Maranello,1998,300000,360000,,false,store:bonhams-leguna-seca-lot-35; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,36,BMW,E46 M3 PTG,2000,400000,500000,,false,store:bonhams-leguna-seca-lot-36; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,37,BMW,"635CSi ""The Observer Coupe""",1982,,,31360,true,store:bonhams-leguna-seca-lot-37; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,38,Jaguar,XK140 Drop Head Coupe,1957,,,75264,true,store:bonhams-leguna-seca-lot-38; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,39,Aston Martin,DB4 Series III Coupe,1961,,,213248,true,store:bonhams-leguna-seca-lot-39; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,40,Cord,E-300 Experimental Disappearing Top Cabriolet,1936,,,361400,true,store:bonhams-leguna-seca-lot-40; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,41,Delahaye,135 MS Cabriolet,1937,225000,275000,,false,store:bonhams-leguna-seca-lot-41; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,42,Packard,Twelve Model 1108 Individual Custom Convertible Sedan,1934,,,506600,true,store:bonhams-leguna-seca-lot-42; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,43,Rauch & Lang,BX6 Brougham,1916,,,94080,true,store:bonhams-leguna-seca-lot-43; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,44,Thomas,Model 18 King of Belgium Touring,1903,250000,300000,,false,store:bonhams-leguna-seca-lot-44; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,46,Ford,Mustang Boss 302R1,2011,,,62720,true,store:bonhams-leguna-seca-lot-46; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,47,Meyers Manx,"Dune Buggy ""Lowrider""",1963,,,47667.20,true,store:bonhams-leguna-seca-lot-47; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,48,Mercedes-Benz,E60 AMG Limited,1995,,,349300,true,store:bonhams-leguna-seca-lot-48; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,18p,Lola-Ford,T70 MKII Can-Am Racing Spyder,1966,1100000,1500000,,false,store:bonhams-leguna-seca-lot-18p; needs review
+Bonhams Leguna Seca,2026-08-13,Bonhams,45p,Bugatti,Chiron Super Sport,2024,,,5032000,true,store:bonhams-leguna-seca-lot-45p; needs review
+Gooding Monterey 2026,2026-08-15,Gooding,1,Ferrari,Testa Rossa J 'Lucybelle II' by Hedley Studios,2026,140000,180000,60000,true,store:gooding-monterey-2026-lot-1
+Gooding Monterey 2026,2026-08-15,Gooding,2,Volkswagen,Golf Mk II GTI 16V,1991,60000,80000,68000,true,store:gooding-monterey-2026-lot-2
+Gooding Monterey 2026,2026-08-15,Gooding,3,Porsche,914/6,1970,90000,120000,85000,true,store:gooding-monterey-2026-lot-3
+Gooding Monterey 2026,2026-08-15,Gooding,4,Ferrari,488 Challenge,2019,175000,225000,140000,true,store:gooding-monterey-2026-lot-4
+Gooding Monterey 2026,2026-08-15,Gooding,5,Porsche,991 GT3,2015,150000,180000,165000,true,store:gooding-monterey-2026-lot-5
+Gooding Monterey 2026,2026-08-15,Gooding,6,Ferrari,308 GTB Vetroresina,1976,140000,180000,175000,true,store:gooding-monterey-2026-lot-6
+Gooding Monterey 2026,2026-08-15,Gooding,7,Ferrari,365 GTB/4 Daytona,1971,600000,700000,550000,true,store:gooding-monterey-2026-lot-7
+Gooding Monterey 2026,2026-08-15,Gooding,8,BMW,M3,2004,90000,110000,95000,true,store:gooding-monterey-2026-lot-8
+Gooding Monterey 2026,2026-08-15,Gooding,9,Ferrari,F355 Spider,1997,200000,250000,180000,true,store:gooding-monterey-2026-lot-9
+Gooding Monterey 2026,2026-08-15,Gooding,10,Mercedes-Benz,E500 Limited,1994,175000,225000,170000,true,store:gooding-monterey-2026-lot-10
+Gooding Monterey 2026,2026-08-15,Gooding,11,Porsche,993 Carrera 2S,1998,275000,350000,215000,true,store:gooding-monterey-2026-lot-11
+Gooding Monterey 2026,2026-08-15,Gooding,12,Bentley,Azure,1996,90000,110000,87500,true,store:gooding-monterey-2026-lot-12
+Gooding Monterey 2026,2026-08-15,Gooding,13,Ferrari,360 Modena,2000,275000,350000,230000,true,store:gooding-monterey-2026-lot-13
+Gooding Monterey 2026,2026-08-15,Gooding,14,Toyota,Land Cruiser VX Limited,1993,60000,80000,40000,true,store:gooding-monterey-2026-lot-14
+Gooding Monterey 2026,2026-08-15,Gooding,15,Porsche,993 Cabriolet,1998,150000,180000,130000,true,store:gooding-monterey-2026-lot-15
+Gooding Monterey 2026,2026-08-15,Gooding,16,Ferrari,Dino 246 GT,1972,400000,600000,580000,true,store:gooding-monterey-2026-lot-16
+Gooding Monterey 2026,2026-08-15,Gooding,17,Porsche,356 A Coupe,1956,125000,150000,110000,true,store:gooding-monterey-2026-lot-17
+Gooding Monterey 2026,2026-08-15,Gooding,18,Porsche,911 Classic Turbo Reimagined by Singer,1989,1500000,1800000,1725000,true,store:gooding-monterey-2026-lot-18
+Gooding Monterey 2026,2026-08-15,Gooding,19,Ducati,750 Super Sport,1974,200000,250000,170000,true,store:gooding-monterey-2026-lot-19
+Gooding Monterey 2026,2026-08-15,Gooding,20,Maserati,Tipo 61 Birdcage,1959,3000000,4000000,3850000,true,store:gooding-monterey-2026-lot-20
+Gooding Monterey 2026,2026-08-15,Gooding,21,Ferrari,458 Speciale,2015,900000,1200000,925000,true,store:gooding-monterey-2026-lot-21
+Gooding Monterey 2026,2026-08-15,Gooding,22,Porsche,356 B Super 90 'Twin Grille' Roadster,1962,500000,650000,410000,true,store:gooding-monterey-2026-lot-22
+Gooding Monterey 2026,2026-08-15,Gooding,23,Ferrari,250 GT Lusso,1964,1500000,1800000,1150000,true,store:gooding-monterey-2026-lot-23
+Gooding Monterey 2026,2026-08-15,Gooding,24,Lister-Chevrolet,Sports Racer,1958,600000,800000,490000,true,store:gooding-monterey-2026-lot-24
+Gooding Monterey 2026,2026-08-15,Gooding,25,Ferrari,812 Competizione,2024,2000000,2400000,2300000,true,store:gooding-monterey-2026-lot-25
+Gooding Monterey 2026,2026-08-15,Gooding,26,Ferrari,250 P,1963,15000000,20000000,17000000,true,store:gooding-monterey-2026-lot-26
+Gooding Monterey 2026,2026-08-15,Gooding,28,Mercedes-Benz,280 SE 3.5 Coupe,1971,200000,300000,290000,true,store:gooding-monterey-2026-lot-28
+Gooding Monterey 2026,2026-08-15,Gooding,29,Porsche,356 B 1600 GS/GT Carrera Coupe,1961,550000,650000,380000,true,store:gooding-monterey-2026-lot-29
+Gooding Monterey 2026,2026-08-15,Gooding,30,Land Rover,Defender 90,1997,90000,120000,120000,true,store:gooding-monterey-2026-lot-30
+Gooding Monterey 2026,2026-08-15,Gooding,31,Ferrari,Dino 206 S Berlinetta,1966,3500000,5000000,2700000,true,store:gooding-monterey-2026-lot-31
+Gooding Monterey 2026,2026-08-15,Gooding,32,Porsche,911 Carrera 3.0,1976,120000,150000,135000,true,store:gooding-monterey-2026-lot-32
+Gooding Monterey 2026,2026-08-15,Gooding,33,Porsche,911 2.2 S,1971,250000,325000,,false,store:gooding-monterey-2026-lot-33
+Gooding Monterey 2026,2026-08-15,Gooding,34,Porsche,993 Carrera,1997,125000,175000,100000,true,store:gooding-monterey-2026-lot-34
+Gooding Monterey 2026,2026-08-15,Gooding,35,Porsche,904 Carrera GTS,1964,1800000,2200000,1525000,true,store:gooding-monterey-2026-lot-35
+Gooding Monterey 2026,2026-08-15,Gooding,36,Mercedes-Benz,300 SL Roadster,1961,1500000,1800000,1800000,true,store:gooding-monterey-2026-lot-36
+Gooding Monterey 2026,2026-08-15,Gooding,37,Porsche,911 R,2016,600000,700000,750000,true,store:gooding-monterey-2026-lot-37
+Gooding Monterey 2026,2026-08-15,Gooding,38,Lamborghini,Diablo,1992,275000,325000,280000,true,store:gooding-monterey-2026-lot-38
+Gooding Monterey 2026,2026-08-15,Gooding,39,Shelby,Cobra Daytona Coupe,1964,25000000,,39000000,true,store:gooding-monterey-2026-lot-39
+Gooding Monterey 2026,2026-08-15,Gooding,40,Porsche,356 SC Coupe,1964,90000,110000,70000,true,store:gooding-monterey-2026-lot-40
+Gooding Monterey 2026,2026-08-15,Gooding,41,Ferrari,F355 Spider 'Serie Fiorano',1999,300000,400000,530000,true,store:gooding-monterey-2026-lot-41
+Gooding Monterey 2026,2026-08-15,Gooding,42,Ferrari,Dino 246 GTS,1973,750000,1000000,,false,store:gooding-monterey-2026-lot-42
+Gooding Monterey 2026,2026-08-15,Gooding,43,Porsche,993 Turbo,1997,350000,450000,350000,true,store:gooding-monterey-2026-lot-43
+Gooding Monterey 2026,2026-08-15,Gooding,44,Porsche,907 Langheck,1968,4500000,5500000,3000000,true,store:gooding-monterey-2026-lot-44
+Gooding Monterey 2026,2026-08-15,Gooding,45,Mercedes-Benz,280 SE 3.5 Cabriolet,1971,250000,325000,185000,true,store:gooding-monterey-2026-lot-45
+Gooding Monterey 2026,2026-08-15,Gooding,46,Lancia,Rally 037 Evolution II,1983,900000,1200000,,false,store:gooding-monterey-2026-lot-46
+Gooding Monterey 2026,2026-08-15,Gooding,47,Porsche,911 2.0 S Soft-Window Targa,1967,250000,300000,230000,true,store:gooding-monterey-2026-lot-47
+Gooding Monterey 2026,2026-08-15,Gooding,48,Maserati,200SI,1957,2250000,2750000,2200000,true,store:gooding-monterey-2026-lot-48
+Gooding Monterey 2026,2026-08-15,Gooding,49,Lamborghini,LM002,1988,550000,700000,375000,true,store:gooding-monterey-2026-lot-49
+Gooding Monterey 2026,2026-08-15,Gooding,50,Porsche,356 A 1600 Super GT Speedster,1959,800000,1000000,,false,store:gooding-monterey-2026-lot-50
+Gooding Monterey 2026,2026-08-15,Gooding,51,Porsche,930,1979,175000,225000,220000,true,store:gooding-monterey-2026-lot-51
+Gooding Monterey 2026,2026-08-15,Gooding,52,Mercedes-Benz,300 SL Gullwing,1955,2500000,3000000,2700000,true,store:gooding-monterey-2026-lot-52
+Gooding Monterey 2026,2026-08-15,Gooding,53,Lamborghini,350 GT,1965,650000,750000,,false,store:gooding-monterey-2026-lot-53
+Gooding Monterey 2026,2026-08-15,Gooding,54,Vector,M12,1996,200000,300000,380000,true,store:gooding-monterey-2026-lot-54
+Gooding Monterey 2026,2026-08-15,Gooding,55,Porsche,910,1967,1800000,2200000,1500000,true,store:gooding-monterey-2026-lot-55
+Gooding Monterey 2026,2026-08-15,Gooding,56,Ferrari,Testarossa,1989,175000,225000,230000,true,store:gooding-monterey-2026-lot-56
+Gooding Monterey 2026,2026-08-15,Gooding,57,Porsche,991 GT2 RS Weissach,2018,800000,1000000,740000,true,store:gooding-monterey-2026-lot-57
+Gooding Monterey 2026,2026-08-15,Gooding,58,Porsche,964 Turbo 3.6 S Flachbau,1994,1100000,1300000,,false,store:gooding-monterey-2026-lot-58
+Gooding Monterey 2026,2026-08-15,Gooding,59,Mercedes-Benz,SL63 AMG,2022,125000,150000,100000,true,store:gooding-monterey-2026-lot-59
+Gooding Monterey 2026,2026-08-15,Gooding,60,Aston Martin,Vanquish Zagato Volante,2018,500000,600000,440000,true,store:gooding-monterey-2026-lot-60
+Gooding Monterey 2026,2026-08-15,Gooding,61,Lamborghini,Huracán Super Trofeo EVO2,2021,175000,225000,100000,true,store:gooding-monterey-2026-lot-61
+Gooding Monterey 2026,2026-08-15,Gooding,62,Porsche,930 Slantnose Cabriolet,1989,400000,500000,400000,true,store:gooding-monterey-2026-lot-62
+Gooding Monterey 2026,2026-08-15,Gooding,63,Bugatti,Chiron Sport 'Edition Noire',2020,3000000,3500000,3125000,true,store:gooding-monterey-2026-lot-63
+Gooding Monterey 2026,2026-08-15,Gooding,64,Lamborghini,Aventador LP 720-4 50th Anniversario Roadster,2014,425000,550000,455000,true,store:gooding-monterey-2026-lot-64
+Gooding Monterey 2026,2026-08-15,Gooding,65,McLaren,Elva,2021,1000000,1500000,1200000,true,store:gooding-monterey-2026-lot-65
+Gooding Monterey 2026,2026-08-15,Gooding,66,Ferrari,575 Superamerica,2005,375000,450000,360000,true,store:gooding-monterey-2026-lot-66
+Gooding Monterey 2026,2026-08-15,Gooding,67,Porsche,991 GT2 RS Clubsport,2019,400000,500000,350000,true,store:gooding-monterey-2026-lot-67
+Gooding Monterey 2026,2026-08-15,Gooding,68,Vector,Avtech WX-3R Roadster Prototype,1993,400000,600000,310000,true,store:gooding-monterey-2026-lot-68
+Gooding Monterey 2026,2026-08-15,Gooding,69,Mercedes-Benz,500E,1992,140000,180000,145000,true,store:gooding-monterey-2026-lot-69
+Gooding Monterey 2026,2026-08-15,Gooding,70,Meyers,Manx,1967,40000,60000,27500,true,store:gooding-monterey-2026-lot-70
+Gooding Monterey 2026,2026-08-15,Gooding,101,Chevrolet,Camaro RS/SS 350 Convertible,1967,65000,85000,56000,true,store:gooding-monterey-2026-lot-101
+Gooding Monterey 2026,2026-08-15,Gooding,102,Porsche,928,1979,70000,90000,70000,true,store:gooding-monterey-2026-lot-102
+Gooding Monterey 2026,2026-08-15,Gooding,103,Alfa Romeo,2600 Spider,1964,140000,180000,97500,true,store:gooding-monterey-2026-lot-103
+Gooding Monterey 2026,2026-08-15,Gooding,104,Bentley,Continental Convertible,1992,80000,100000,100000,true,store:gooding-monterey-2026-lot-104
+Gooding Monterey 2026,2026-08-15,Gooding,105,Porsche,911 2.0 S,1969,140000,180000,125000,true,store:gooding-monterey-2026-lot-105
+Gooding Monterey 2026,2026-08-15,Gooding,106,Chrysler,Special,1953,250000,325000,230000,true,store:gooding-monterey-2026-lot-106
+Gooding Monterey 2026,2026-08-15,Gooding,107,Porsche,911 Carrera 3.2 Turbo-Look Cabriolet,1984,100000,130000,87500,true,store:gooding-monterey-2026-lot-107
+Gooding Monterey 2026,2026-08-15,Gooding,108,Mercedes-Benz,280 SE 3.5 Cabriolet,1971,250000,325000,250000,true,store:gooding-monterey-2026-lot-108
+Gooding Monterey 2026,2026-08-15,Gooding,109,Ferrari,250 GTE Series II,1962,300000,350000,255000,true,store:gooding-monterey-2026-lot-109
+Gooding Monterey 2026,2026-08-15,Gooding,110,Lotus,Elite SE,1963,110000,130000,72500,true,store:gooding-monterey-2026-lot-110
+Gooding Monterey 2026,2026-08-15,Gooding,111,Bentley,4 1/4 Litre Sports Coupe,1939,550000,650000,230000,true,store:gooding-monterey-2026-lot-111
+Gooding Monterey 2026,2026-08-15,Gooding,112,Jaguar,XK140 SE Roadster,1956,100000,120000,90000,true,store:gooding-monterey-2026-lot-112
+Gooding Monterey 2026,2026-08-15,Gooding,113,Alfa Romeo,Giulietta SZ 'Coda Tronca',1962,400000,450000,225000,true,store:gooding-monterey-2026-lot-113
+Gooding Monterey 2026,2026-08-15,Gooding,114,Bentley,3 1/2 Litre Drophead Coupe,1935,500000,600000,200000,true,store:gooding-monterey-2026-lot-114
+Gooding Monterey 2026,2026-08-15,Gooding,115,Alfa Romeo,Giulietta Sprint Speciale,1961,110000,130000,70000,true,store:gooding-monterey-2026-lot-115
+Gooding Monterey 2026,2026-08-15,Gooding,116,Jaguar,XK150 3.8-Litre Fixed Head Coupe,1961,100000,120000,65000,true,store:gooding-monterey-2026-lot-116
+Gooding Monterey 2026,2026-08-15,Gooding,117,Ferrari,212 Inter Coupe,1951,500000,700000,660000,true,store:gooding-monterey-2026-lot-117
+Gooding Monterey 2026,2026-08-15,Gooding,118,Ferrari,F355 F1 Spider,1999,140000,180000,150000,true,store:gooding-monterey-2026-lot-118
+Gooding Monterey 2026,2026-08-15,Gooding,119,Aston Martin,DB2 Drophead Coupe,1954,325000,450000,410000,true,store:gooding-monterey-2026-lot-119
+Gooding Monterey 2026,2026-08-15,Gooding,120,Bugatti,Type 57C Ventoux,1937,400000,500000,265000,true,store:gooding-monterey-2026-lot-120
+Gooding Monterey 2026,2026-08-15,Gooding,121,Porsche,356 B Super 90 GT,1961,350000,450000,220000,true,store:gooding-monterey-2026-lot-121
+Gooding Monterey 2026,2026-08-15,Gooding,122,Mercedes-Benz,280 SL,1968,275000,350000,420000,true,store:gooding-monterey-2026-lot-122
+Gooding Monterey 2026,2026-08-15,Gooding,123,Ferrari,250 GT Coupe,1960,450000,550000,,false,store:gooding-monterey-2026-lot-123
+Gooding Monterey 2026,2026-08-15,Gooding,124,Mercedes-Benz,280 TE Wagon,1979,130000,160000,225000,true,store:gooding-monterey-2026-lot-124
+Gooding Monterey 2026,2026-08-15,Gooding,125,Mercedes-Benz,300 Sc Cabriolet,1956,600000,800000,,false,store:gooding-monterey-2026-lot-125
+Gooding Monterey 2026,2026-08-15,Gooding,126,Pope-Hartford,Model W 50 HP Seven-Passenger Touring,1911,350000,450000,480000,true,store:gooding-monterey-2026-lot-126
+Gooding Monterey 2026,2026-08-15,Gooding,127,Ferrari,308 GTB,1979,80000,100000,117500,true,store:gooding-monterey-2026-lot-127
+Gooding Monterey 2026,2026-08-15,Gooding,128,Mercedes-Benz,300 SL Roadster,1958,1200000,1400000,1300000,true,store:gooding-monterey-2026-lot-128
+Gooding Monterey 2026,2026-08-15,Gooding,129,Porsche,356 C Coupe,1965,150000,225000,200000,true,store:gooding-monterey-2026-lot-129
+Gooding Monterey 2026,2026-08-15,Gooding,130,Ferrari,225 Sport 'Tuboscocca' Spider,1952,2000000,3000000,3900000,true,store:gooding-monterey-2026-lot-130
+Gooding Monterey 2026,2026-08-15,Gooding,132,Stevens-Miller,'Bowes Seal Fast Special',1931,2000000,3000000,1450000,true,store:gooding-monterey-2026-lot-132
+Gooding Monterey 2026,2026-08-15,Gooding,133,Stutz,'Weightman Special',1915,900000,1200000,460000,true,store:gooding-monterey-2026-lot-133
+Gooding Monterey 2026,2026-08-15,Gooding,134,Rolls-Royce,40/50 HP Silver Ghost 'Playboy' Roadster,1923,200000,250000,160000,true,store:gooding-monterey-2026-lot-134
+Gooding Monterey 2026,2026-08-15,Gooding,135,Ferrari,250 GT SWB Berlinetta Competizione,1961,8000000,10000000,7350000,true,store:gooding-monterey-2026-lot-135
+Gooding Monterey 2026,2026-08-15,Gooding,136,Porsche,996 GT3,2004,125000,175000,315000,true,store:gooding-monterey-2026-lot-136
+Gooding Monterey 2026,2026-08-15,Gooding,137,Maserati,5000 GT Coupe,1962,600000,800000,490000,true,store:gooding-monterey-2026-lot-137
+Gooding Monterey 2026,2026-08-15,Gooding,138,Allard,J2X,1952,200000,250000,170000,true,store:gooding-monterey-2026-lot-138
+Gooding Monterey 2026,2026-08-15,Gooding,139,Bentley,4 1/2 Litre Supercharged 'Blower' Sports Tourer,1931,3500000,4000000,,false,store:gooding-monterey-2026-lot-139
+Gooding Monterey 2026,2026-08-15,Gooding,140,Avions Voisin,C31 Biscooter,1952,50000,70000,100000,true,store:gooding-monterey-2026-lot-140
+Gooding Monterey 2026,2026-08-15,Gooding,141,Ferrari,Dino 246 GT,1972,575000,650000,500000,true,store:gooding-monterey-2026-lot-141
+Gooding Monterey 2026,2026-08-15,Gooding,142,Bentley,R-Type Continental Fastback,1954,2000000,,1100000,true,store:gooding-monterey-2026-lot-142
+Gooding Monterey 2026,2026-08-15,Gooding,143,Porsche,356 B 'Twin Grille' Roadster,1962,300000,350000,,false,store:gooding-monterey-2026-lot-143
+Gooding Monterey 2026,2026-08-15,Gooding,144,Alfa Romeo,1900C SSZ 'Lusso',1957,1250000,1750000,1250000,true,store:gooding-monterey-2026-lot-144
+Gooding Monterey 2026,2026-08-15,Gooding,145,Alfa Romeo,Giulietta Sprint Veloce Alleggerita,1957,325000,400000,250000,true,store:gooding-monterey-2026-lot-145
+Gooding Monterey 2026,2026-08-15,Gooding,146,Packard,734 Speedster Runabout,1930,1400000,1800000,1600000,true,store:gooding-monterey-2026-lot-146
+Gooding Monterey 2026,2026-08-15,Gooding,147,Rolls-Royce,40/50 HP Silver Ghost All-Weather Sports Tourer,1925,150000,200000,200000,true,store:gooding-monterey-2026-lot-147
+Gooding Monterey 2026,2026-08-15,Gooding,148,AC,Ace Bristol,1962,400000,500000,330000,true,store:gooding-monterey-2026-lot-148
+Gooding Monterey 2026,2026-08-15,Gooding,149,Rolls-Royce,Phantom II Continental Close-Coupled Coupe,1932,500000,700000,500000,true,store:gooding-monterey-2026-lot-149
+Gooding Monterey 2026,2026-08-15,Gooding,150,Ferrari,365 GTC,1969,750000,850000,760000,true,store:gooding-monterey-2026-lot-150
+Gooding Monterey 2026,2026-08-15,Gooding,151,Alfa Romeo,8C 2300 Lungo Spider,1932,2500000,3500000,3000000,true,store:gooding-monterey-2026-lot-151
+Gooding Monterey 2026,2026-08-15,Gooding,152,Ford,Hi-Boy Roadster,1932,100000,150000,170000,true,store:gooding-monterey-2026-lot-152
+Gooding Monterey 2026,2026-08-15,Gooding,153,Alfa Romeo,6C 1500 Series III Super Sport 'Testa Fissa',1929,1000000,1500000,1050000,true,store:gooding-monterey-2026-lot-153
+Gooding Monterey 2026,2026-08-15,Gooding,154,Ferrari,612 Scaglietti,2005,150000,200000,205000,true,store:gooding-monterey-2026-lot-154
+Gooding Monterey 2026,2026-08-15,Gooding,155,Mercedes-Benz,300 S Coupe,1953,250000,300000,300000,true,store:gooding-monterey-2026-lot-155
+Gooding Monterey 2026,2026-08-15,Gooding,156,Rolls-Royce,40/50 HP Silver Ghost Boattail Speedster,1924,250000,325000,230000,true,store:gooding-monterey-2026-lot-156
+Gooding Monterey 2026,2026-08-15,Gooding,157,Stutz,Model 4E 'Bearcat',1914,300000,400000,165000,true,store:gooding-monterey-2026-lot-157
+Gooding Monterey 2026,2026-08-15,Gooding,158,Lancia,Aurelia B24S Spider America,1955,900000,1100000,900000,true,store:gooding-monterey-2026-lot-158
+Gooding Monterey 2026,2026-08-15,Gooding,159,Allison,Daytona Dune Buggy,1966,60000,80000,46000,true,store:gooding-monterey-2026-lot-159
+Gooding Monterey 2026,2026-08-15,Gooding,160,Cunningham,C-3 Coupe,1952,600000,750000,,false,store:gooding-monterey-2026-lot-160
+Gooding Monterey 2026,2026-08-15,Gooding,161,Bugatti,Type 43A Roadster,1930,1400000,1800000,1150000,true,store:gooding-monterey-2026-lot-161
+Gooding Monterey 2026,2026-08-15,Gooding,162,Léon Bollée,45 HP Side-Entrance Tonneau,1905,125000,175000,220000,true,store:gooding-monterey-2026-lot-162
+Gooding Monterey 2026,2026-08-15,Gooding,163,Renault,Model JV 40 HP Phaeton Landaulette,1922,125000,175000,55000,true,store:gooding-monterey-2026-lot-163
+Gooding Monterey 2026,2026-08-15,Gooding,164,Avions Voisin,C3 Strasbourg Recreation,1922,200000,300000,130000,true,store:gooding-monterey-2026-lot-164
+Gooding Monterey 2026,2026-08-15,Gooding,165,Bugatti,Type 46 Convertible Coupe,1930,800000,1200000,575000,true,store:gooding-monterey-2026-lot-165
+Gooding Monterey 2026,2026-08-15,Gooding,166,Talbot,M-75 'De Vizcaya' Touring Coupe,1929,120000,150000,65000,true,store:gooding-monterey-2026-lot-166
+Gooding Monterey 2026,2026-08-15,Gooding,167,Amilcar,M3 Berline,1932,25000,35000,33000,true,store:gooding-monterey-2026-lot-167
+Gooding Monterey 2026,2026-08-15,Gooding,168,Lorraine-Dietrich,B3-6 15CV Sports Roadster,1928,400000,600000,130000,true,store:gooding-monterey-2026-lot-168
+Gooding Monterey 2026,2026-08-15,Gooding,169,Avions Voisin,C3 Limousine,1923,100000,150000,36000,true,store:gooding-monterey-2026-lot-169
+Gooding Monterey 2026,2026-08-15,Gooding,170,Bugatti,Type 43/49 Roadster,1928,700000,900000,660000,true,store:gooding-monterey-2026-lot-170
+Gooding Monterey 2026,2026-08-15,Gooding,171,Chenard & Walcker,T5 Roadster,1924,250000,350000,62500,true,store:gooding-monterey-2026-lot-171
+Gooding Monterey 2026,2026-08-15,Gooding,172,Delaunay-Belleville,Omnibus,1912,200000,300000,140000,true,store:gooding-monterey-2026-lot-172
+Gooding Monterey 2026,2026-08-15,Gooding,173,Avions Voisin,C6 Laboratoire Recreation,1923,200000,300000,110000,true,store:gooding-monterey-2026-lot-173
+Gooding Monterey 2026,2026-08-15,Gooding,174,Peugeot,Type 134 22 HP Touring Car,1910,10000,20000,26000,true,store:gooding-monterey-2026-lot-174
+Gooding Monterey 2026,2026-08-15,Gooding,175,Bugatti,Type 54 Roadster,1934,500000,750000,660000,true,store:gooding-monterey-2026-lot-175
+Gooding Monterey 2026,2026-08-15,Gooding,176,Porsche,550A Spyder,1958,1800000,2200000,1400000,true,store:gooding-monterey-2026-lot-176
+Gooding Monterey 2026,2026-08-15,Gooding,177,Alfa Romeo,2000 Spider,1959,90000,120000,55000,true,store:gooding-monterey-2026-lot-177
+Gooding Monterey 2026,2026-08-15,Gooding,178,Cadillac,V-16 Series 452D Town Sedan,1934,300000,400000,,false,store:gooding-monterey-2026-lot-178
+Gooding Monterey 2026,2026-08-15,Gooding,179,Bentley,S2 Continental Drophead Coupe,1961,225000,275000,150000,true,store:gooding-monterey-2026-lot-179
+Gooding Monterey 2026,2026-08-15,Gooding,180,Bentley,'Speed Six Le Mans' Sports Tourer,1929,600000,800000,480000,true,store:gooding-monterey-2026-lot-180
+Gooding Monterey 2026,2026-08-15,Gooding,181,Alfa Romeo,1900C SS Coupe,1954,100000,130000,72500,true,store:gooding-monterey-2026-lot-181
+Gooding Monterey 2026,2026-08-15,Gooding,182,Porsche,356 A Speedster,1958,300000,350000,290000,true,store:gooding-monterey-2026-lot-182
+Gooding Monterey 2026,2026-08-15,Gooding,183,Aston Martin,DB4 Series V Convertible,1963,900000,1100000,740000,true,store:gooding-monterey-2026-lot-183
+Gooding Monterey 2026,2026-08-15,Gooding,184,Hispano-Suiza,H6B Dual-Cowl Phaeton,1924,150000,200000,220000,true,store:gooding-monterey-2026-lot-184
+Gooding Monterey 2026,2026-08-15,Gooding,185,Ferrari,Dino 246 GTS,1974,475000,575000,560000,true,store:gooding-monterey-2026-lot-185
+Gooding Monterey 2026,2026-08-15,Gooding,186,Porsche,911 2.0 S,1968,130000,160000,100000,true,store:gooding-monterey-2026-lot-186
+Gooding Monterey 2026,2026-08-15,Gooding,187,Bentley,4 1/4 Litre Roadster,1937,350000,450000,365000,true,store:gooding-monterey-2026-lot-187
+Gooding Monterey 2026,2026-08-15,Gooding,188,Ferrari,275 GTS,1966,1000000,1200000,1650000,true,store:gooding-monterey-2026-lot-188
+Gooding Monterey 2026,2026-08-15,Gooding,189,Maserati,Mistral 4000 Spyder,1967,300000,400000,290000,true,store:gooding-monterey-2026-lot-189
+Gooding Monterey 2026,2026-08-15,Gooding,190,Aston Martin,DB2/4 Drophead Coupe,1954,250000,350000,160000,true,store:gooding-monterey-2026-lot-190
+Gooding Monterey 2026,2026-08-15,Gooding,191,Mercedes-Benz,190 SL,1960,140000,180000,175000,true,store:gooding-monterey-2026-lot-191
+Gooding Monterey 2026,2026-08-15,Gooding,192,Rolls-Royce,40/50 HP Silver Ghost Salamanca Landaulette,1926,125000,175000,85000,true,store:gooding-monterey-2026-lot-192
+Gooding Monterey 2026,2026-08-15,Gooding,193,Porsche,911 2.7 S Targa,1977,120000,140000,120000,true,store:gooding-monterey-2026-lot-193
+Gooding Monterey 2026,2026-08-15,Gooding,194,Jaguar,XK140 SE Drophead Coupe,1957,120000,150000,82500,true,store:gooding-monterey-2026-lot-194
+Gooding Monterey 2026,2026-08-15,Gooding,195,Pontiac,Firebird One,1970,200000,250000,240000,true,store:gooding-monterey-2026-lot-195
+Gooding Monterey 2026,2026-08-15,Gooding,196,Ford,Model A Hot Rod,1929,80000,120000,82500,true,store:gooding-monterey-2026-lot-196
+Gooding Monterey 2026,2026-08-15,Gooding,197,Jaguar,XK120 SE Roadster,1953,80000,100000,55000,true,store:gooding-monterey-2026-lot-197
+Gooding Monterey 2026,2026-08-15,Gooding,198,Mercedes-Benz,380 SL,1985,60000,80000,40000,true,store:gooding-monterey-2026-lot-198
+Gooding Monterey 2026,2026-08-15,Gooding,199,Volkswagen,Beetle,1956,60000,80000,150000,true,store:gooding-monterey-2026-lot-199
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,101,Harley-Davidson,Motorcyke Model 4-19 Bicycle,1919,,,16500,true,store:rm-monterey-auction-2026-lot-101
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,102,Indian,8-Valve Twin Board Track Racer,1915,,,66000,true,store:rm-monterey-auction-2026-lot-102
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,103,Indian,Twin,1908,,,52800,true,store:rm-monterey-auction-2026-lot-103
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,105,Pierce,Four,1910,,,165000,true,store:rm-monterey-auction-2026-lot-105
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,106,Buick,Skylark,1954,,,110880,true,store:rm-monterey-auction-2026-lot-106
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,107,Packard,1900 One-Ten Station Wagon,1941,,,80080,true,store:rm-monterey-auction-2026-lot-107
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,108,Rolls-Royce,Silver Cloud III Saloon,1965,,,61600,true,store:rm-monterey-auction-2026-lot-108
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,109,Lincoln,Model K Coupe,1936,,,184800,true,store:rm-monterey-auction-2026-lot-109
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,110,Rolls-Royce,Corniche II,1989,,,138600,true,store:rm-monterey-auction-2026-lot-110
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,111,Rolls-Royce,Phantom I Ascot Tourer,1928,,,234080,true,store:rm-monterey-auction-2026-lot-111
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,112,Tucker,48,1948,,,1397000,true,store:rm-monterey-auction-2026-lot-112
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,113,Mercedes,Simplex 40 HP Rear-Entrance Tonneau,1904,,,4400000,true,store:rm-monterey-auction-2026-lot-113
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,114,Mercedes-Benz,280 SE 3.5 Cabriolet,1971,,,550000,true,store:rm-monterey-auction-2026-lot-114
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,115,Bugatti,Type 57SC Atalante,1937,,,5450500,true,store:rm-monterey-auction-2026-lot-115
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,116,Delage,D8-120 S Coupe,1939,,,1245750,true,store:rm-monterey-auction-2026-lot-116
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,117,Talbot-Lago,T150-C Competition Roadster,1937,,,1820500,true,store:rm-monterey-auction-2026-lot-117
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,118,Delage,D8-120 Coach Aérosport,1937,,,,false,store:rm-monterey-auction-2026-lot-118
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,119,Bugatti,Type 57 Atalante,1938,,,,false,store:rm-monterey-auction-2026-lot-119
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,120,Du Pont,Model G Two-Passenger Speedster,1929,,,973500,true,store:rm-monterey-auction-2026-lot-120
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,121,Chrysler,CH Imperial Speedster,1932,,,3635500,true,store:rm-monterey-auction-2026-lot-121
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,122,Duesenberg,Model JN Convertible Coupe,1935,,,9988000,true,store:rm-monterey-auction-2026-lot-122
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,123,Cord,812 Supercharged Cabriolet,1937,,,184800,true,store:rm-monterey-auction-2026-lot-123
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,125,Avions Voisin,C23/24 Roadster,1934,,,3091000,true,store:rm-monterey-auction-2026-lot-125
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,126,Bentley,6½-Litre Short Chassis Bob-Tail Tourer,1927,,,731500,true,store:rm-monterey-auction-2026-lot-126
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,127,Mercer,Model 35-J Raceabout,1913,,,3998500,true,store:rm-monterey-auction-2026-lot-127
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,128,Hispano-Suiza,H6C Monza Speedster,1924,,,580250,true,store:rm-monterey-auction-2026-lot-128
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,129,Oldsmobile,Model 6C Curved-Dash Runabout,1904,,,64680,true,store:rm-monterey-auction-2026-lot-129
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,130,American Underslung,Model 642 Roadster,1914,,,1034000,true,store:rm-monterey-auction-2026-lot-130
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,131,Delahaye,145 Cabriolet,1937,,,3756500,true,store:rm-monterey-auction-2026-lot-131
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,132,Delahaye,135 M Cabriolet Vedette,1948,,,519750,true,store:rm-monterey-auction-2026-lot-132
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,133,Hispano-Suiza,T15 Alfonso XIII Torpedo,1913,,,761750,true,store:rm-monterey-auction-2026-lot-133
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,134,Rolls-Royce,40/50 HP Silver Ghost Colonial London-to-Edinburgh Skiff,1914,,,2062500,true,store:rm-monterey-auction-2026-lot-134
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,135,Delage,D8-120 S Aerodynamic Coupe,1937,,,6358000,true,store:rm-monterey-auction-2026-lot-135
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,136,Talbot-Lago,T26 Record Cabriolet,1947,,,4482500,true,store:rm-monterey-auction-2026-lot-136
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,137,Duesenberg,Model J Tourster,1931,,,2546500,true,store:rm-monterey-auction-2026-lot-137
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,138,Stutz,DV-32 Convertible Victoria,1933,,,1034000,true,store:rm-monterey-auction-2026-lot-138
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,139,Bugatti,Type 57 Cabriolet,1938,,,2002000,true,store:rm-monterey-auction-2026-lot-139
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,140,Rolls-Royce,Silver Ghost Piccadilly Roadster,1923,,,209440,true,store:rm-monterey-auction-2026-lot-140
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,141,Delahaye,135 M Cabriolet Dandy,1948,,,246400,true,store:rm-monterey-auction-2026-lot-141
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,142,Delage,D8 C Cabriolet,1930,,,184800,true,store:rm-monterey-auction-2026-lot-142
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,204,Audi,R8 Spyder 5.2 FSI quattro,2014,,,160160,true,store:rm-monterey-auction-2026-lot-204
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,205,Audi,5000 CS Quattro Speed Record Development Prototype,1986,,,308000,true,store:rm-monterey-auction-2026-lot-205
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,206,Lancia,Aurelia B24S Convertible,1958,,,172480,true,store:rm-monterey-auction-2026-lot-206
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,207,Fiat-Abarth,750 Bialbero Record Monza Coupe,1959,,,129360,true,store:rm-monterey-auction-2026-lot-207
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,208,Volkswagen,Beetle Wrought Iron,1970,,,64680,true,store:rm-monterey-auction-2026-lot-208
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,209,Meyers,Manx,1967,,,83160,true,store:rm-monterey-auction-2026-lot-209
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,210,Rolls-Royce,Phantom Drophead Coupe,2016,,,489500,true,store:rm-monterey-auction-2026-lot-210
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,211,Porsche,911 Targa 4S Heritage Design Edition,2021,,,234080,true,store:rm-monterey-auction-2026-lot-211
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,212,Ford,GT Mk II,2020,,,913000,true,store:rm-monterey-auction-2026-lot-212
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,213,Volkswagen,Type 2 Delivery Van,1963,,,46200,true,store:rm-monterey-auction-2026-lot-213
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,214,Porsche,Cayman S,2010,,,36960,true,store:rm-monterey-auction-2026-lot-214
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,215,Bentley,Continental GT V8 S,2024,,,283360,true,store:rm-monterey-auction-2026-lot-215
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,216,Ligier,JS P320,2020,,,344300,true,store:rm-monterey-auction-2026-lot-216
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,217,McLaren,Solus GT,2025,,,2546500,true,store:rm-monterey-auction-2026-lot-217
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,218,Bugatti,Chiron Sport,2019,,,4028750,true,store:rm-monterey-auction-2026-lot-218
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,219,McLaren,765LT Spider,2022,,,852500,true,store:rm-monterey-auction-2026-lot-219
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,220,Aston Martin,Valkyrie Spider,2024,,,5208500,true,store:rm-monterey-auction-2026-lot-220
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,221,Pagani,Huayra Roadster Executor,2024,,,8838500,true,store:rm-monterey-auction-2026-lot-221
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,222,McLaren,Artura GT4,2023,,,172480,true,store:rm-monterey-auction-2026-lot-222
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,223,Ferrari,Daytona SP3,2023,,,19607500,true,store:rm-monterey-auction-2026-lot-223
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,224,Porsche,911 European RS,1972,,,882750,true,store:rm-monterey-auction-2026-lot-224
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,225,McLaren,Artura GT4,2023,,,246400,true,store:rm-monterey-auction-2026-lot-225
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,226,Bugatti,Mistral,2025,,,9141000,true,store:rm-monterey-auction-2026-lot-226
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,227,McLaren,P1 GT,2014,,,3514500,true,store:rm-monterey-auction-2026-lot-227
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,228,McLaren,Senna GTR,2020,,,1578500,true,store:rm-monterey-auction-2026-lot-228
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,229,McLaren,Elva,2021,,,1366750,true,store:rm-monterey-auction-2026-lot-229
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,230,Koenigsegg,Regera,2020,,,3575000,true,store:rm-monterey-auction-2026-lot-230
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,231,Aston Martin,Vanquish Zagato Volante,2018,,,519750,true,store:rm-monterey-auction-2026-lot-231
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,232,Aston Martin,DB7 Zagato,2003,,,489500,true,store:rm-monterey-auction-2026-lot-232
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,233,Ferrari,Dino 246 GTS,1974,,,701250,true,store:rm-monterey-auction-2026-lot-233
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,234,Porsche,911 Turbo S,1997,,,1064250,true,store:rm-monterey-auction-2026-lot-234
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,235,Ferrari,250 GT/L Berlinetta Lusso,1964,,,,false,store:rm-monterey-auction-2026-lot-235
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,236,Ferrari,330 GT 2+2 Series I Interim,1965,,,368500,true,store:rm-monterey-auction-2026-lot-236
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,237,Bizzarrini,P538,1976,,,,false,store:rm-monterey-auction-2026-lot-237
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,238,Aston Martin,DB2 Drophead Coupe,1952,,,283360,true,store:rm-monterey-auction-2026-lot-238
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,239,Porsche,911 Speedster,1989,,,489500,true,store:rm-monterey-auction-2026-lot-239
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,240,Lancia,Aurelia B24S Spider America,1955,,,731500,true,store:rm-monterey-auction-2026-lot-240
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,241,Porsche,911 Turbo 3.6,1994,,,779900,true,store:rm-monterey-auction-2026-lot-241
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,242,Rolls-Royce,Phantom II Continental Drophead Coupe,1930,,,221760,true,store:rm-monterey-auction-2026-lot-242
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,243,Hispano-Suiza,J12 Double Cabriolet,1937,,,761750,true,store:rm-monterey-auction-2026-lot-243
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,244,Mercedes-Benz,300 SL Gullwing,1955,,,2002000,true,store:rm-monterey-auction-2026-lot-244
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,245,Ferrari,550 Maranello,1999,,,671000,true,store:rm-monterey-auction-2026-lot-245
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,246,Aston Martin,DB5 Convertible,1964,,,,false,store:rm-monterey-auction-2026-lot-246
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,247,Mercedes-Benz,300 SL Roadster,1963,,,1276000,true,store:rm-monterey-auction-2026-lot-247
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,248,Packard,1108 Twelve Individual Custom Sport Phaeton,1934,,,4724500,true,store:rm-monterey-auction-2026-lot-248
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,249,Elva-Porsche,Mk VII S,1964,,,295680,true,store:rm-monterey-auction-2026-lot-249
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,250,Bugatti,Veyron 16.4,2008,,,2455750,true,store:rm-monterey-auction-2026-lot-250
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,251,Bugatti,Type 57C Cabriolet,1939,,,671000,true,store:rm-monterey-auction-2026-lot-251
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,252,Ferrari,275 GTB,1965,,,2395250,true,store:rm-monterey-auction-2026-lot-252
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,253,Ferrari,Dino 246 GTS,1972,,,610500,true,store:rm-monterey-auction-2026-lot-253
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,254,Porsche,911 Coupe,1966,,,215600,true,store:rm-monterey-auction-2026-lot-254
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,255,Porsche,356 SC Coupe,1965,,,197120,true,store:rm-monterey-auction-2026-lot-255
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,256,Porsche,356 Pre-A Continental Coupe,1955,,,190960,true,store:rm-monterey-auction-2026-lot-256
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,257,Porsche,911 Carrera 3.2 Targa Turbo-Look,1989,,,392700,true,store:rm-monterey-auction-2026-lot-257
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,258,Porsche,911 Carrera RS 3.8,1995,,,876700,true,store:rm-monterey-auction-2026-lot-258
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,259,Saleen,S7 Twin Turbo,2005,,,1215500,true,store:rm-monterey-auction-2026-lot-259
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,260,Talbot-Lago,T150-C Lago Spéciale Cabriolet,1938,,,453200,true,store:rm-monterey-auction-2026-lot-260
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,261,Bugatti,EB110 GT,1993,,,2032250,true,store:rm-monterey-auction-2026-lot-261
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,262,Rolls-Royce,Corniche S,1995,,,646800,true,store:rm-monterey-auction-2026-lot-262
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,263,Ferrari,575M Maranello,2002,,,519750,true,store:rm-monterey-auction-2026-lot-263
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,264,Aston Martin,DBS GT Zagato,2020,,,1009800,true,store:rm-monterey-auction-2026-lot-264
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,265,Alfa Romeo,8C 2300 Cabriolet,1933,,,1094500,true,store:rm-monterey-auction-2026-lot-265
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,266,Ferrari,250 GT Cabriolet Series I,1958,,,5420250,true,store:rm-monterey-auction-2026-lot-266
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,267,Mercedes-Benz,680 S Torpedo-Sport Cannes,1928,,,5450500,true,store:rm-monterey-auction-2026-lot-267
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,268,Ferrari,360 Modena Sunroof,2000,,,489500,true,store:rm-monterey-auction-2026-lot-268
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,269,Ferrari,Enzo,2003,,,10351000,true,store:rm-monterey-auction-2026-lot-269
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,270,Delahaye,135 MS Cabriolet,1948,,,489500,true,store:rm-monterey-auction-2026-lot-270
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,271,Aston Martin,DB6 Volante,1967,,,683100,true,store:rm-monterey-auction-2026-lot-271
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,272,Maserati,A6G/54 2000 Coupe,1956,,,,false,store:rm-monterey-auction-2026-lot-272
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,273,Range Rover,Matched Pair - 2027 SV Ultra LWB & 1993 Classic,,,,1064250,true,store:rm-monterey-auction-2026-lot-273
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,274,Mercedes-Benz,500 K Normal Roadster,1935,,,1760000,true,store:rm-monterey-auction-2026-lot-274
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,275,Ferrari,Superamerica,2005,,,1518000,true,store:rm-monterey-auction-2026-lot-275
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,276,Ferrari,212 Inter Coupe,1953,,,1397000,true,store:rm-monterey-auction-2026-lot-276
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,277,Aston Martin,DB5 Goldfinger Continuation,2020,,,1179200,true,store:rm-monterey-auction-2026-lot-277
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,278,Maserati,Bora 4.9,1973,,,172480,true,store:rm-monterey-auction-2026-lot-278
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,279,Porsche,911 Speedster,1994,,,562100,true,store:rm-monterey-auction-2026-lot-279
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,280,Balchowsky,Ol' Yaller Mk VII,1961,,,209440,true,store:rm-monterey-auction-2026-lot-280
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,281,Porsche,911 Turbo X50,2002,,,308000,true,store:rm-monterey-auction-2026-lot-281
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,282,Mercedes-Benz,600 Pullman,1970,,,240240,true,store:rm-monterey-auction-2026-lot-282
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,283,BMW,M5,2008,,,172480,true,store:rm-monterey-auction-2026-lot-283
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,303,Porsche,911 Speedster,2011,,,543950,true,store:rm-monterey-auction-2026-lot-303
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,304,Porsche,356 A 1600 Speedster,1958,,,,false,store:rm-monterey-auction-2026-lot-304
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,305,Marmon,Sixteen Five-Passenger Sedan,1932,,,,false,store:rm-monterey-auction-2026-lot-305
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,306,Ferrari,F12berlinetta,2014,,,761750,true,store:rm-monterey-auction-2026-lot-306
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,307,Porsche,911 Turbo Flat-Nose Coupe,1988,,,543950,true,store:rm-monterey-auction-2026-lot-307
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,308,Mercedes-Benz,300 SL Gullwing,1955,,,1808400,true,store:rm-monterey-auction-2026-lot-308
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,309,Ferrari,458 Speciale,2015,,,1639000,true,store:rm-monterey-auction-2026-lot-309
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,310,Mercedes-Benz,CLK DTM AMG P900 Prototype,2005,,,913000,true,store:rm-monterey-auction-2026-lot-310
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,311,Ferrari,Testarossa,1988,,,519750,true,store:rm-monterey-auction-2026-lot-311
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,312,Porsche,911 Carrera RS,1992,,,562100,true,store:rm-monterey-auction-2026-lot-312
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,313,Ferrari,812 Competizione A Tailor Made,2024,,,5329500,true,store:rm-monterey-auction-2026-lot-313
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,314,Porsche,911 Turbo Flat-Nose Targa,1989,,,634700,true,store:rm-monterey-auction-2026-lot-314
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,315,Mercedes-Benz,SLR McLaren 722 S Roadster,2009,,,1397000,true,store:rm-monterey-auction-2026-lot-315
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,316,Porsche,911 Reimagined by Singer - Classic Turbo Services - The Paradise Found Commission,1992,,,2183500,true,store:rm-monterey-auction-2026-lot-316
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,317,Ferrari,F40,1991,,,9201500,true,store:rm-monterey-auction-2026-lot-317
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,318,Porsche,911 Carrera RS 3.8,1993,,,2244000,true,store:rm-monterey-auction-2026-lot-318
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,319,Porsche,911 Speedster,1989,,,441100,true,store:rm-monterey-auction-2026-lot-319
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,320,Porsche,911 R,2016,,,913000,true,store:rm-monterey-auction-2026-lot-320
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,321,Porsche,911 Carrera RS 2.7 Touring,1973,,,985600,true,store:rm-monterey-auction-2026-lot-321
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,322,RUF,Turbo R,1998,,,1578500,true,store:rm-monterey-auction-2026-lot-322
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,323,Mercedes-Benz,630 K Torpedo Transformable La Baule,1928,,,592350,true,store:rm-monterey-auction-2026-lot-323
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,324,Delahaye,175 S Cabriolet,1949,,,550000,true,store:rm-monterey-auction-2026-lot-324
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,325,Porsche,959 Sport,1989,,,7749500,true,store:rm-monterey-auction-2026-lot-325
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,327,Fiat,8V Coupe,1953,,,761750,true,store:rm-monterey-auction-2026-lot-327
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,328,McLaren,F1 GTR,1996,,,38120500,true,store:rm-monterey-auction-2026-lot-328
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,329,Bugatti,Type 37A Grand Prix,1927,,,,false,store:rm-monterey-auction-2026-lot-329
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,331,Ferrari,275 GTB Alloy,1966,,,2970000,true,store:rm-monterey-auction-2026-lot-331
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,332,Mercedes-Benz,300 SL Roadster,1957,,,,false,store:rm-monterey-auction-2026-lot-332
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,333,Iso,Grifo A3/C,1965,,,1034000,true,store:rm-monterey-auction-2026-lot-333
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,334,RUF,CTR3 Clubsport,2018,,,2486000,true,store:rm-monterey-auction-2026-lot-334
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,335,Ferrari,512 BB/LM,1979,,,,false,store:rm-monterey-auction-2026-lot-335
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,336,Lamborghini,Sián FKP 37,2021,,,2455750,true,store:rm-monterey-auction-2026-lot-336
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,337,Lamborghini,Miura P400,1967,,,3333000,true,store:rm-monterey-auction-2026-lot-337
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,339,Jaguar,XJR-15,1991,,,,false,store:rm-monterey-auction-2026-lot-339
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,340,Ferrari,288 GTO,1985,,,12710500,true,store:rm-monterey-auction-2026-lot-340
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,341,Chevrolet,Corvette Grand Sport,1963,,,20575500,true,store:rm-monterey-auction-2026-lot-341
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,342,Porsche,356 America Roadster,1952,,,2425500,true,store:rm-monterey-auction-2026-lot-342
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,343,Porsche,911 Turbo,1975,,,368500,true,store:rm-monterey-auction-2026-lot-343
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,344,Chevrolet,Corvette Stingray L88 V.V. Cooke,1969,,,,false,store:rm-monterey-auction-2026-lot-344
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,345,Ferrari,Luce Tailor Made,2026,,,44000000,true,store:rm-monterey-auction-2026-lot-345
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,346,Ferrari,F430,2006,,,925100,true,store:rm-monterey-auction-2026-lot-346
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,347,Ferrari,430 Scuderia,2008,,,1487750,true,store:rm-monterey-auction-2026-lot-347
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,348,Ferrari,LaFerrari,2015,,,9564500,true,store:rm-monterey-auction-2026-lot-348
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,349,Ferrari,F50,1995,,,13315500,true,store:rm-monterey-auction-2026-lot-349
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,350,Chevrolet,Corvette L88 RED/NART Le Mans,1968,,,822250,true,store:rm-monterey-auction-2026-lot-350
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,351,Mercedes-Benz,300 SL Roadster,1957,,,1760000,true,store:rm-monterey-auction-2026-lot-351
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,352,Aston Martin,DB4 Series I,1960,,,513700,true,store:rm-monterey-auction-2026-lot-352
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,353,Chevrolet,Corvette LM,1960,,,,false,store:rm-monterey-auction-2026-lot-353
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,354,BMW,507 Series II Roadster,1958,,,,false,store:rm-monterey-auction-2026-lot-354
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,356,Porsche,356 A Carrera 1500 GT Speedster,1958,,,943250,true,store:rm-monterey-auction-2026-lot-356
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,357,Ferrari,365 GTS/4 Daytona Spider,1972,,,2546500,true,store:rm-monterey-auction-2026-lot-357
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,358,Cizeta-Moroder,V16T,1988,,,,false,store:rm-monterey-auction-2026-lot-358
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,359,Lamborghini,Murciélago LP 670-4 SV,2010,,,3454000,true,store:rm-monterey-auction-2026-lot-359
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,360,Lamborghini,Murciélago 40th Anniversary,2003,,,1215500,true,store:rm-monterey-auction-2026-lot-360
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,361,Lamborghini,Countach LP400 S Series I,1979,,,2607000,true,store:rm-monterey-auction-2026-lot-361
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,362,Lamborghini,Diablo,1991,,,882750,true,store:rm-monterey-auction-2026-lot-362
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,363,Lamborghini,Countach 25th Anniversary Edition,1990,,,876700,true,store:rm-monterey-auction-2026-lot-363
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,364,Lamborghini,Countach LP5000 QV Downdraft,1985,,,1457500,true,store:rm-monterey-auction-2026-lot-364
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,365,Dallara,DW12,2013,,,,false,store:rm-monterey-auction-2026-lot-365
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,366,Czinger,21C,2025,,,2788500,true,store:rm-monterey-auction-2026-lot-366
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,367,Porsche,356 B 1600 Super 90 Roadster,1961,,,416900,true,store:rm-monterey-auction-2026-lot-367
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,368,Chrysler,Special,1953,,,,false,store:rm-monterey-auction-2026-lot-368
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,369,McLaren,Speedtail,2020,,,2486000,true,store:rm-monterey-auction-2026-lot-369
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,370,Lamborghini,350 GT,1965,,,852500,true,store:rm-monterey-auction-2026-lot-370
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,371,Ferrari,308 GTB Vetroresina,1976,,,332200,true,store:rm-monterey-auction-2026-lot-371
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,373,Land Rover,Series III 109 Restomod,1977,,,277200,true,store:rm-monterey-auction-2026-lot-373; needs review
+RM Monterey Auction 2026,2026-08-15,RM Sothebys,374,BMW,M3 Lightweight,1995,,,283360,true,store:rm-monterey-auction-2026-lot-374; needs review
