@@ -626,6 +626,42 @@ class LiveLotsExport(unittest.TestCase):
         self.assertIn("offset=1000", calls[1])
         self.assertTrue(calls[0].startswith("https://x.supabase.co/rest/v1/auction_live_lots?"))
 
+    def test_store_errors_carry_postgrests_message(self):
+        """The first production run died on a bare 'HTTP Error 500'; the
+        cause (a statement timeout) was only in the response body."""
+        body = b'{"code":"57014","details":null,"hint":null,"message":"canceling statement due to statement timeout"}'
+
+        def fake_get(url, headers=None):
+            raise urllib.error.HTTPError(url, 500, "Internal Server Error", {}, io.BytesIO(body))
+
+        with self.assertRaises(SystemExit) as ctx:
+            export_live_lots.fetch_live_lots("https://x", "k", get_json=fake_get)
+        msg = str(ctx.exception)
+        self.assertTrue(msg.startswith("::error::"))
+        self.assertIn("HTTP 500", msg)
+        self.assertIn("canceling statement due to statement timeout", msg)
+        self.assertIn("idx_listings_event", msg)
+
+    def test_a_store_failure_fails_the_run_with_the_message_on_stdout(self):
+        def failing_fetch(url, key):
+            raise SystemExit("::error::Store returned HTTP 500 reading auction_live_lots: boom")
+
+        env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co", "CANONICAL_SUPABASE_ANON_KEY": "anon"}
+        with unittest.mock.patch.dict(os.environ, env), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            code = export_live_lots.main(["--out", "/nonexistent/x.csv"], fetch=failing_fetch)
+        self.assertEqual(code, 1)
+        self.assertIn("::error::Store returned HTTP 500", log.getvalue())
+
+    def test_store_errors_without_a_body_still_name_the_status(self):
+        def fake_get(url, headers=None):
+            raise urllib.error.HTTPError(url, 401, "Unauthorized", {}, io.BytesIO(b""))
+
+        with self.assertRaises(SystemExit) as ctx:
+            export_live_lots.fetch_live_lots("https://x", "k", get_json=fake_get)
+        self.assertIn("HTTP 401", str(ctx.exception))
+        self.assertIn("Unauthorized", str(ctx.exception))
+
     def test_missing_view_says_how_to_fix_it(self):
         with self.assertRaises(SystemExit) as ctx:
             export_live_lots.fetch_live_lots("https://x", "k", get_json=lambda *a, **k: None)

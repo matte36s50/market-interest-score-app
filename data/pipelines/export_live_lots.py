@@ -33,9 +33,11 @@ Stdlib only.
 """
 
 import argparse
+import json
 import os
 import re
 import sys
+import urllib.error
 import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -118,6 +120,28 @@ def sort_key(row):
             (0, int(lot), "") if lot.isdigit() else (1, 0, lot))
 
 
+def store_error(exc):
+    """A readable failure from a store HTTP error, with PostgREST's own message.
+
+    PostgREST answers a cancelled statement (Supabase's short anon
+    statement_timeout) with a bare 500; its JSON body is the only place that
+    says so, and urllib's exception text doesn't include it.
+    """
+    detail = ""
+    try:
+        body = exc.read().decode("utf-8", errors="replace")
+        parsed = json.loads(body) if body else {}
+        detail = " ".join(str(parsed.get(k)) for k in ("code", "message", "hint") if parsed.get(k))
+        detail = detail or body[:300]
+    except Exception:  # noqa: BLE001 — a missing or odd body must not hide the status
+        pass
+    message = f"Store returned HTTP {exc.code} reading {VIEW}: {lib.redact(detail) or exc.reason}"
+    if "57014" in detail or "statement timeout" in detail.lower():
+        message += (". The anon role's statement timeout cancelled the query: re-run "
+                    "auction-store/schema.sql so the view reads through idx_listings_event.")
+    return SystemExit(f"::error::{message}")
+
+
 def fetch_live_lots(base_url, key, get_json=lib.http_get_json):
     """Page through the view. Raises if the view isn't deployed."""
     headers = {"apikey": key, "Authorization": f"Bearer {key}"}
@@ -129,7 +153,10 @@ def fetch_live_lots(base_url, key, get_json=lib.http_get_json):
             "limit": PAGE,
             "offset": offset,
         })
-        page = get_json(f"{base_url.rstrip('/')}/rest/v1/{VIEW}?{query}", headers=headers)
+        try:
+            page = get_json(f"{base_url.rstrip('/')}/rest/v1/{VIEW}?{query}", headers=headers)
+        except urllib.error.HTTPError as exc:
+            raise store_error(exc) from None
         if page is None:
             raise SystemExit(
                 f"{VIEW} not found. Re-run auction-store/schema.sql from "
@@ -175,7 +202,13 @@ def main(argv=None, fetch=fetch_live_lots):
               "skipping the store export; auction_lots.csv left as it is.")
         return 0
 
-    store_rows = fetch(url, key)
+    try:
+        store_rows = fetch(url, key)
+    except SystemExit as exc:
+        if not isinstance(exc.code, str):
+            raise
+        print(exc.code)  # stdout: where Actions reads ::error:: annotations
+        return 1
     rows, skipped = build(store_rows)
     events = sorted({r["event"] for r in rows})
     print(f"Store: {len(store_rows)} live lots -> {len(rows)} exported "
