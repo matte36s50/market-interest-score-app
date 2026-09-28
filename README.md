@@ -146,7 +146,35 @@ wins. When a file is absent the weight renormalization keeps every score
 correct without it; nothing is ever imputed.
 
 `.github/workflows/signals.yml` runs the collectors daily and commits the
-results. See [`data/pipelines/README.md`](data/pipelines/README.md) for the API
+results, then a **signal coverage gate** (`scripts/check-signal-coverage.js`)
+checks that each one actually produced something.
+
+That gate exists because two of the four collectors have been doing nothing,
+silently, for months. A collector with no credentials exits 0 by design:
+
+```
+$ python data/pipelines/reddit_signals.py
+REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET are not set — skipping Reddit collection.
+exit 0, in 0.07s
+```
+
+That is right for the script — a missing optional input should not break the
+run — but from the outside an unset secret is indistinguishable from a healthy
+collector, and the workflow reported success every time. **Reddit has written
+zero rows for its entire life**, and it carries 30% of the social composite's
+mention volume and 25% of its engagement rate. YouTube has reached 7 models of
+3,398 for the same reason: `YOUTUBE_API_KEY` is not set in this repository.
+
+The gate splits severity: a collector that is **not configured** warns and names
+the secret to set; one that **is configured and still produced nothing** fails
+the run, as does one whose newest month has fallen behind. It runs last, so a
+red result never costs the collection, the commit or the deploy that already
+happened.
+
+To switch the two dark collectors on, set these under *Settings → Secrets and
+variables → Actions*: `YOUTUBE_API_KEY` (a YouTube Data API v3 key) and
+`REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET` (a free "script" app at
+https://www.reddit.com/prefs/apps). See [`data/pipelines/README.md`](data/pipelines/README.md) for the API
 keys each one needs and why the schedule is daily rather than monthly.
 
 #### The social composite

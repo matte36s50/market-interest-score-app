@@ -142,3 +142,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy.yml --ref main
+
+      # Runs last on purpose, and is allowed to fail the run. Everything
+      # useful — collection, the commit, the deploy — has already happened, so
+      # a red run here costs nothing but is the only thing that makes a silent
+      # collector visible. Reddit has written zero rows for its entire life
+      # while this workflow reported success every single time.
+      - name: Signal coverage gate
+        if: always()
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+        run: node scripts/check-signal-coverage.js
