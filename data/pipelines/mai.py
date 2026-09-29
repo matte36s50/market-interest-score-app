@@ -5,6 +5,8 @@ Manufacturer Apex Index (MAI) — D-term proxy for the Networked Utility Dividen
 For each manufacturer × event:
   P (Presence)   = manufacturer's share of apex lots at that event
   Q (Quality)    = mean(sold_price / high_estimate) for sold apex lots
+                   with a high estimate (0 in the score where there are none;
+                   left out of avg_Q there)
   R (Performance)= apex lot sell-through rate
 
 MAI per manufacturer = Σ(auction_rating_i × P_i × Q_i × R_i) / Σ(auction_rating_i)
@@ -39,6 +41,7 @@ def main():
     lots["sold"] = lots["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
     lots["low_estimate_usd"] = pd.to_numeric(lots["low_estimate_usd"], errors="coerce").fillna(0)
     lots["sold_price_usd"] = pd.to_numeric(lots["sold_price_usd"], errors="coerce").fillna(0)
+    lots["high_estimate_usd"] = pd.to_numeric(lots["high_estimate_usd"], errors="coerce")
 
     apex = lots[lots["low_estimate_usd"] >= APEX_THRESHOLD].copy()
 
@@ -61,12 +64,16 @@ def main():
             P = len(mfr_apex) / total_apex_at_event if total_apex_at_event > 0 else 0.0
             R = len(mfr_sold) / len(mfr_apex) if len(mfr_apex) > 0 else 0.0
 
-            if len(mfr_sold) > 0:
-                q_ratios = mfr_sold["sold_price_usd"] / mfr_sold["high_estimate_usd"]
-                Q = q_ratios[mfr_sold["high_estimate_usd"] > 0].mean()
-                Q = Q if pd.notna(Q) else 0.0
-            else:
-                Q = 0.0
+            # Q is only known where the manufacturer sold an apex lot that had
+            # a published high estimate. Elsewhere it counts as 0 in P×Q×R
+            # (where nothing sold, R is 0 anyway) but stays out of avg_Q, which
+            # would otherwise report "sold nothing" as poor price realisation.
+            priced = mfr_sold[mfr_sold["high_estimate_usd"] > 0]
+            q_known = (
+                (priced["sold_price_usd"] / priced["high_estimate_usd"]).mean()
+                if len(priced) else float("nan")
+            )
+            Q = q_known if pd.notna(q_known) else 0.0
 
             records.append({
                 "manufacturer": manufacturer,
@@ -75,6 +82,7 @@ def main():
                 "apex_lots": len(mfr_apex),
                 "P": P,
                 "Q": Q,
+                "Q_known": q_known,
                 "R": R,
                 "auction_rating": rating,
                 "pqr": P * Q * R,
@@ -99,7 +107,8 @@ def main():
             "events_present": len(grp),
             "total_apex_lots": int(grp["apex_lots"].sum()),
             "avg_P": round(grp["P"].mean(), 6),
-            "avg_Q": round(grp["Q"].mean(), 6),
+            # Mean over the events where Q is known; blank if there are none.
+            "avg_Q": round(grp["Q_known"].mean(), 6),
             "avg_R": round(grp["R"].mean(), 6),
             "MAI_score": round(mai_score, 6),
         })

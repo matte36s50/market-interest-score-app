@@ -51,6 +51,11 @@ jobs:
       - name: Install dependencies
         run: pip install pandas
 
+      # Only the tests for what this job runs: a failure stops it before it
+      # commits anything, and the published scores stay as they were.
+      - name: Unit tests (export and MAI)
+        run: python data/pipelines/test_pipelines.py LiveLotsExport MaiScores
+
       # Leaves auction_lots.csv untouched (with a warning) if the secrets are
       # unset or if the store is missing an event the CSV already has.
       - name: Export live-auction lots from the canonical store
