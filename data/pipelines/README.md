@@ -451,7 +451,8 @@ operationalises the **D (network density)** term of the Networked Utility Divide
 ### What it does
 For each manufacturer × event combination (apex lots only):
 - **P (Presence)** — manufacturer's share of apex lots at that event
-- **Q (Quality)** — mean(sold price / high estimate) for sold apex lots
+- **Q (Quality)** — mean(sold price / high estimate) for sold apex lots that had a
+  published high estimate; 0 in the score where there are none
 - **R (Performance)** — sell-through rate for manufacturer's apex lots
 
 `MAI = Σ(auction_rating × P × Q × R) / Σ(auction_rating)` across all events
@@ -471,7 +472,7 @@ python data/pipelines/mai.py
 | events_present | Number of events with apex lots |
 | total_apex_lots | Total apex lots across all events |
 | avg_P | Unweighted average Presence across events |
-| avg_Q | Unweighted average Quality across events |
+| avg_Q | Unweighted average Quality across the events where Q is known (blank if none); a sale where the manufacturer sold nothing shows in avg_R, not here |
 | avg_R | Unweighted average Performance across events |
 | MAI_score | Rating-weighted P×Q×R (the headline score) |
 

@@ -10,6 +10,7 @@ the budget rotation, and the weight renormalization in the social composite.
 Run: python3 data/pipelines/test_pipelines.py
 """
 
+import csv
 import io
 import os
 import sys
@@ -26,6 +27,15 @@ import google_trends
 import youtube_signals
 import social_signals
 import export_live_lots
+
+# mai.py needs pandas, which the stdlib-only signals workflow doesn't install;
+# the Data Pipelines workflow does and runs the MAI tests before scoring.
+try:
+    import mai
+except ModuleNotFoundError as e:
+    if e.name != "pandas":
+        raise
+    mai = None
 
 
 class SearchPhrase(unittest.TestCase):
@@ -732,6 +742,54 @@ class LiveLotsExport(unittest.TestCase):
         with self.assertRaises(SystemExit) as ctx:
             export_live_lots.fetch_live_lots("https://x", "k", get_json=lambda *a, **k: None)
         self.assertIn("schema.sql", str(ctx.exception))
+
+
+@unittest.skipIf(mai is None, "pandas not installed")
+class MaiScores(unittest.TestCase):
+    """avg_Q is read as price realisation, so a sale where a manufacturer sold
+    nothing must not drag it down; that belongs to avg_R. The score itself
+    still counts Q as 0 there."""
+
+    LOTS_HEADER = ("event,event_date,auction_house,lot_number,manufacturer,model,"
+                   "year_of_car,low_estimate_usd,high_estimate_usd,sold_price_usd,sold,notes")
+
+    def _score(self, lot_rows, ratings):
+        d = tempfile.mkdtemp()
+        paths = {k: os.path.join(d, f"{k}.csv") for k in ("lots", "ratings", "out")}
+        with open(paths["lots"], "w") as f:
+            f.write("\n".join([self.LOTS_HEADER, *lot_rows]) + "\n")
+        with open(paths["ratings"], "w") as f:
+            f.write("event,event_date,auction_rating\n")
+            f.writelines(f"{e},{day},{r}\n" for e, day, r in ratings)
+        with unittest.mock.patch.object(mai, "LOTS_PATH", paths["lots"]), \
+             unittest.mock.patch.object(mai, "RATINGS_PATH", paths["ratings"]), \
+             unittest.mock.patch.object(mai, "OUTPUT_PATH", paths["out"]), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()):
+            mai.main()
+        with open(paths["out"]) as f:
+            return {r["manufacturer"]: r for r in csv.DictReader(f)}
+
+    def test_a_sale_with_nothing_sold_stays_out_of_avg_q_but_not_the_score(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
+            "E1,2026-08-14,RM,2,BMW,507,1957,600000,800000,,false,",
+            "E2,2026-09-05,RM,1,Ferrari,275 GTB,1966,1000000,1500000,,false,",
+        ], [("E1", "2026-08-14", 100), ("E2", "2026-09-05", 50)])
+        ferrari, bmw = rows["Ferrari"], rows["BMW"]
+        self.assertAlmostEqual(float(ferrari["avg_Q"]), 1.1)   # was 0.55
+        self.assertAlmostEqual(float(ferrari["avg_R"]), 0.5)
+        # E1: P 0.5 × Q 1.1 × R 1 at rating 100; E2 adds rating 50 and nothing else.
+        self.assertAlmostEqual(float(ferrari["MAI_score"]), 100 * 0.5 * 1.1 / 150, places=6)
+        self.assertEqual(bmw["avg_Q"], "")
+        self.assertEqual(float(bmw["MAI_score"]), 0.0)
+
+    def test_a_sold_lot_without_a_high_estimate_leaves_q_unknown(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,Shelby,Cobra,1965,900000,,1100000,true,",
+        ], [("E1", "2026-08-14", 100)])
+        self.assertEqual(rows["Shelby"]["avg_Q"], "")
+        self.assertAlmostEqual(float(rows["Shelby"]["avg_R"]), 1.0)
+        self.assertEqual(float(rows["Shelby"]["MAI_score"]), 0.0)
 
 
 if __name__ == "__main__":
