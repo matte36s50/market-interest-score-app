@@ -1,68 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MII Admin - Live Auction Entry Has Moved</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden { display: none !important; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-        }
     </style>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
 </head>
-<body class="min-h-screen bg-zinc-950 text-zinc-100">
-    <header class="border-b border-zinc-800 bg-zinc-900/50">
-        <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
-                    MII
-                </div>
-                <h1 class="text-xl font-bold tracking-tight">Auction Results Admin</h1>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link">HAGI</a>
+                </nav>
             </div>
-            <a href="index.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
-                &larr; Dashboard
-            </a>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+            </div>
         </div>
     </header>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
+        <div class="flex flex-col gap-2">
+            <span class="text-[13px] text-mute">Admin</span>
+            <h1 class="m-0 text-3xl font-semibold tracking-tight">Auction results</h1>
+        </div>
+        
+    </div>
 
     <main class="max-w-3xl mx-auto px-6 py-10 space-y-6">
-        <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+        <section class="bg-white border border-line rounded-xl p-6 space-y-4">
             <h2 class="text-lg font-semibold">Live-auction entry has moved to the canonical auction store</h2>
-            <p class="text-sm text-zinc-400 leading-relaxed">
+            <p class="text-sm text-mute leading-relaxed">
                 Lots from RM Sotheby's, Gooding, Broad Arrow, Bonhams and the other live houses are now
-                entered once, in the store's <strong class="text-zinc-200">Live Entry</strong> tab: catalogue
+                entered once, in the store's <strong class="text-ink">Live Entry</strong> tab: catalogue
                 estimates before the sale, results after it, with the same Claude importer for results pages
                 and PDFs. Every morning a job copies ended lots from the store into
-                <code class="text-amber-400">data/auction_lots.csv</code> and recomputes the Manufacturer
+                <code class="text-amber-700">data/auction_lots.csv</code> and recomputes the Manufacturer
                 Apex Index, so nothing needs to be saved from this page any more.
             </p>
             <a href="https://bid-prix-admin.vercel.app/store"
-               class="inline-block px-4 py-2 rounded-lg bg-amber-500 text-zinc-950 text-sm font-semibold hover:bg-amber-400 transition-colors">
+               class="inline-block px-4 py-2 rounded-lg bg-ink text-white text-sm font-semibold hover:bg-[#2C2F36] transition-colors">
                 Open the auction store &rarr;
             </a>
         </section>
 
-        <section id="pendingBox" class="hidden bg-zinc-900 border border-amber-500/40 rounded-xl p-6 space-y-3">
-            <h2 class="text-base font-semibold text-amber-400">Unsaved lots found in this browser</h2>
-            <p class="text-sm text-zinc-400">
+        <section id="pendingBox" class="hidden bg-white border border-amber-500/40 rounded-xl p-6 space-y-3">
+            <h2 class="text-base font-semibold text-amber-700">Unsaved lots found in this browser</h2>
+            <p class="text-sm text-mute">
                 <span id="pendingCount"></span> lot(s) were entered on the old page and never saved.
                 Download them, then enter them in the store's Live Entry tab (its importer accepts pasted text).
             </p>
             <div class="flex gap-3">
-                <button id="downloadPending" class="px-3 py-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-sm hover:border-amber-500/50">
+                <button id="downloadPending" class="px-3 py-1.5 rounded-lg bg-[#F3F3EF] border border-[#D9D9D3] text-sm hover:border-amber-500">
                     Download CSV
                 </button>
-                <button id="discardPending" class="px-3 py-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-sm text-zinc-400 hover:text-red-400">
+                <button id="discardPending" class="px-3 py-1.5 rounded-lg bg-[#F3F3EF] border border-[#D9D9D3] text-sm text-mute hover:text-down">
                     Discard
                 </button>
             </div>
         </section>
 
-        <section id="keysBox" class="hidden bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-2">
+        <section id="keysBox" class="hidden bg-white border border-line rounded-xl p-6 space-y-2">
             <h2 class="text-base font-semibold">Saved credentials removed</h2>
-            <p class="text-sm text-zinc-400">
+            <p class="text-sm text-mute">
                 This browser had kept a GitHub token and/or an Anthropic API key for the old page. They have
                 been deleted from this browser. Deleting them here doesn't revoke them: if you no longer use
                 them elsewhere, revoke the token at github.com/settings/tokens and the key at

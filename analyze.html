@@ -1,32 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MII Data Analysis - Underlying S3 Data Explorer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        zinc: { 950: '#09090b' }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-        }
         .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: #27272a; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #71717a; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #ECECE7; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #9A9CA1; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #6B6E75; }
 
         .model-search-wrap {
             position: relative;
@@ -37,7 +25,7 @@
             position: absolute;
             right: 8px;
             cursor: pointer;
-            color: #71717a;
+            color: #6B6E75;
             font-size: 16px;
             line-height: 1;
             display: none;
@@ -46,90 +34,86 @@
             padding: 0;
         }
         .model-clear-btn.visible { display: block; }
-        .model-clear-btn:hover { color: #d4d4d8; }
+        .model-clear-btn:hover { color: #16181D; }
 
+        .tab-btn { white-space: nowrap; flex-shrink: 0; }
         .tab-btn.active {
-            background: #d97706;
+            background: #16181D;
             color: white;
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .stat-card {
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 0.75rem;
+            background: #FFFFFF;
+            border: 1px solid #E4E4DF;
+            border-radius: 10px;
             padding: 1.25rem;
         }
 
-        select option { background: #18181b; }
+        select option { background: #FFFFFF; color: #16181D; }
 
         .chart-container {
             position: relative;
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 0.75rem;
+            background: #FFFFFF;
+            border: 1px solid #E4E4DF;
+            border-radius: 10px;
             padding: 1.25rem;
         }
 
-        .table-row:hover { background: #27272a; }
+        .table-row:hover { background: #FAFAF8; }
         .sortable-header { cursor: pointer; user-select: none; }
-        .sortable-header:hover { color: #f59e0b; }
+        .sortable-header:hover { color: #B45309; }
     </style>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
 </head>
-<body class="min-h-screen bg-zinc-950 text-zinc-100">
-
-    <!-- Header -->
-    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div class="max-w-[1600px] mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
-                        MII
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold tracking-tight">MII Data Analysis</h1>
-                        <p class="text-xs text-zinc-500">Underlying S3 Data Explorer</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a href="index.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium">
-                        &larr; Leaderboard
-                    </a>
-                    <a href="dashboard.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium">
-                        Terminal View
-                    </a>
-                    <a href="analytics.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium">
-                        Model Comparison
-                    </a>
-                    <a href="analyze-hagi.html" class="px-3 py-1.5 bg-zinc-800 border border-amber-700/50 rounded-lg text-xs text-amber-600 hover:text-amber-400 hover:border-amber-500 transition-colors font-medium tracking-wide">
-                        HAGI View &rarr;
-                    </a>
-                    <div class="text-right ml-2">
-                        <div class="text-xs text-zinc-500">Last Updated</div>
-                        <div id="lastUpdated" class="text-sm font-medium text-zinc-300">—</div>
-                    </div>
-                </div>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link is-active" aria-current="page">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link">HAGI</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <span id="lastUpdated"></span>
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
             </div>
         </div>
     </header>
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
+        <div class="flex flex-col gap-2">
+            <span class="text-[13px] text-mute">Underlying S3 data</span>
+            <h1 class="m-0 text-3xl font-semibold tracking-tight">Data analysis</h1>
+        </div>
+        
+    </div>
 
     <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div id="loadingIndicator" class="fixed inset-0 bg-canvas/95 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="text-center">
-            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-zinc-700 border-t-amber-500 mb-4"></div>
-            <div class="text-xl font-semibold text-zinc-100">Loading MII Data...</div>
-            <div class="text-sm text-zinc-500 mt-2">Fetching raw auction data from S3</div>
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#D9D9D3] border-t-amber-500 mb-4"></div>
+            <div class="text-xl font-semibold text-ink">Loading MII Data...</div>
+            <div class="text-sm text-faint mt-2">Fetching raw auction data from S3</div>
         </div>
     </div>
 
     <!-- Error State -->
-    <div id="errorState" class="hidden fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div id="errorState" class="hidden fixed inset-0 bg-canvas/95 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="text-center max-w-md">
-            <div class="text-5xl mb-4">⚠️</div>
-            <div class="text-xl font-semibold text-red-400 mb-2">Failed to Load Data</div>
-            <div id="errorMessage" class="text-sm text-zinc-400 mb-4"></div>
-            <button onclick="location.reload()" class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm hover:bg-amber-700 transition-colors">
+            <div class="text-xl font-semibold text-down mb-2">Failed to Load Data</div>
+            <div id="errorMessage" class="text-sm text-mute mb-4"></div>
+            <button onclick="location.reload()" class="px-4 py-2 bg-ink text-white rounded-lg text-sm hover:bg-[#2C2F36] transition-colors">
                 Retry
             </button>
         </div>
@@ -140,51 +124,51 @@
         <!-- Summary Stats -->
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             <div class="stat-card">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Total Records</div>
-                <div id="statTotalRecords" class="text-2xl font-bold text-zinc-100">—</div>
-                <div class="text-xs text-zinc-500 mt-1">make/model/month combinations</div>
-                <div id="statFilteredNote" class="text-xs text-amber-600 mt-0.5 hidden"></div>
+                <div class="text-xs text-faint uppercase tracking-wider mb-1">Total Records</div>
+                <div id="statTotalRecords" class="text-2xl font-bold text-ink">—</div>
+                <div class="text-xs text-faint mt-1">make/model/month combinations</div>
+                <div id="statFilteredNote" class="text-xs text-amber-700 mt-0.5 hidden"></div>
             </div>
             <div class="stat-card">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Quarters</div>
-                <div id="statQuarters" class="text-2xl font-bold text-zinc-100">—</div>
-                <div id="statQuarterRange" class="text-xs text-zinc-500 mt-1">date range</div>
+                <div class="text-xs text-faint uppercase tracking-wider mb-1">Quarters</div>
+                <div id="statQuarters" class="text-2xl font-bold text-ink">—</div>
+                <div id="statQuarterRange" class="text-xs text-faint mt-1">date range</div>
             </div>
             <div class="stat-card">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Unique Makes</div>
-                <div id="statMakes" class="text-2xl font-bold text-zinc-100">—</div>
-                <div class="text-xs text-zinc-500 mt-1">manufacturers</div>
+                <div class="text-xs text-faint uppercase tracking-wider mb-1">Unique Makes</div>
+                <div id="statMakes" class="text-2xl font-bold text-ink">—</div>
+                <div class="text-xs text-faint mt-1">manufacturers</div>
             </div>
             <div class="stat-card">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Unique Models</div>
-                <div id="statModels" class="text-2xl font-bold text-zinc-100">—</div>
-                <div class="text-xs text-zinc-500 mt-1">distinct models</div>
+                <div class="text-xs text-faint uppercase tracking-wider mb-1">Unique Models</div>
+                <div id="statModels" class="text-2xl font-bold text-ink">—</div>
+                <div class="text-xs text-faint mt-1">distinct models</div>
             </div>
             <div class="stat-card">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Avg MII Score</div>
-                <div id="statAvgMII" class="text-2xl font-bold text-amber-500">—</div>
-                <div class="text-xs text-zinc-500 mt-1">all records</div>
+                <div class="text-xs text-faint uppercase tracking-wider mb-1">Avg MII Score</div>
+                <div id="statAvgMII" class="text-2xl font-bold text-amber-700">—</div>
+                <div class="text-xs text-faint mt-1">all records</div>
             </div>
         </div>
 
         <!-- Tab Navigation -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-1 mb-6 flex gap-1 w-fit">
+        <div class="bg-white border border-line rounded-xl p-1 mb-6 flex gap-1 w-fit max-w-full overflow-x-auto">
             <button class="tab-btn active px-5 py-2 rounded-lg text-sm font-medium transition-all" data-tab="components">
                 Component Breakdown
             </button>
-            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="trends">
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-mute hover:text-ink" data-tab="trends">
                 Trends
             </button>
-            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="outliers">
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-mute hover:text-ink" data-tab="outliers">
                 Outlier Detection
             </button>
-            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="correlations">
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-mute hover:text-ink" data-tab="correlations">
                 Correlation Explorer
             </button>
-            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="models">
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-mute hover:text-ink" data-tab="models">
                 Model Rankings
             </button>
-            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200" data-tab="coverage">
+            <button class="tab-btn px-5 py-2 rounded-lg text-sm font-medium transition-all text-mute hover:text-ink" data-tab="coverage">
                 Data Coverage
             </button>
         </div>
@@ -194,18 +178,18 @@
         <!-- ============================================================ -->
         <div id="tab-components" class="tab-content active">
             <!-- Component Controls Bar -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+            <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Manufacturer:</label>
-                    <select id="radarMfrSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <label class="text-xs text-faint">Manufacturer:</label>
+                    <select id="radarMfrSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">Market Average</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Model:</label>
+                    <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off"
-                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-48" />
+                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-48" />
                         <datalist id="radarModelList"></datalist>
                         <button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -215,8 +199,8 @@
                 <!-- Radar Chart -->
                 <div class="chart-container">
                     <div class="mb-4">
-                        <h2 class="font-semibold text-zinc-100">Normalized Component Scores</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Average normalized score per MII component</p>
+                        <h2 class="font-semibold text-ink">Normalized Component Scores</h2>
+                        <p class="text-xs text-faint mt-0.5">Average normalized score per MII component</p>
                     </div>
                     <div style="height: 320px;">
                         <canvas id="radarChart"></canvas>
@@ -226,8 +210,8 @@
                 <!-- Component Bar Chart: selected vs market -->
                 <div class="chart-container">
                     <div class="mb-4">
-                        <h2 class="font-semibold text-zinc-100">Component Score vs Market Average</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Selected manufacturer compared to all-market baseline</p>
+                        <h2 class="font-semibold text-ink">Component Score vs Market Average</h2>
+                        <p class="text-xs text-faint mt-0.5">Selected manufacturer compared to all-market baseline</p>
                     </div>
                     <div style="height: 320px;">
                         <canvas id="componentBarChart"></canvas>
@@ -239,12 +223,12 @@
             <div class="chart-container mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <h2 class="font-semibold text-zinc-100">Weighted Component Contribution — Top Manufacturers</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Weighted contribution of each component to the final MII score (top 15 by avg MII)</p>
+                        <h2 class="font-semibold text-ink">Weighted Component Contribution — Top Manufacturers</h2>
+                        <p class="text-xs text-faint mt-0.5">Weighted contribution of each component to the final MII score (top 15 by avg MII)</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <label class="text-xs text-zinc-500">Quarter:</label>
-                        <select id="componentQuarterSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <label class="text-xs text-faint">Quarter:</label>
+                        <select id="componentQuarterSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         </select>
                     </div>
                 </div>
@@ -259,10 +243,10 @@
         <!-- ============================================================ -->
         <div id="tab-trends" class="tab-content">
             <!-- Controls -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+            <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Metric:</label>
-                    <select id="trendMetric" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Metric:</label>
+                    <select id="trendMetric" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score">MII Score</option>
                         <option value="price">Avg Sale Price ($)</option>
                         <option value="views">Avg Views</option>
@@ -274,22 +258,22 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Manufacturer:</label>
-                    <select id="trendMfrSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <label class="text-xs text-faint">Manufacturer:</label>
+                    <select id="trendMfrSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">All (Market)</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Compare:</label>
-                    <select id="trendCompare" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <label class="text-xs text-faint">Compare:</label>
+                    <select id="trendCompare" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="none">None</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Model:</label>
+                    <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off"
-                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
                         <datalist id="trendModelList"></datalist>
                         <button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -300,10 +284,10 @@
             <div class="chart-container mb-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <h2 class="font-semibold text-zinc-100" id="trendChartTitle">Month-over-Month MII Score Trend</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5" id="trendChartSubtitle">Average per month across all manufacturers</p>
+                        <h2 class="font-semibold text-ink" id="trendChartTitle">Month-over-Month MII Score Trend</h2>
+                        <p class="text-xs text-faint mt-0.5" id="trendChartSubtitle">Average per month across all manufacturers</p>
                     </div>
-                    <div id="trendLegend" class="flex items-center gap-4 text-xs text-zinc-400"></div>
+                    <div id="trendLegend" class="flex items-center gap-4 text-xs text-mute"></div>
                 </div>
                 <div style="height: 340px;">
                     <canvas id="trendChart"></canvas>
@@ -313,23 +297,23 @@
             <!-- Multi-metric mini charts -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="chart-container">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-2">Avg MII Score</div>
-                    <div id="miniMIIValue" class="text-xl font-bold text-amber-500 mb-2">—</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-2">Avg MII Score</div>
+                    <div id="miniMIIValue" class="text-xl font-bold text-amber-700 mb-2">—</div>
                     <div style="height: 80px;"><canvas id="miniMIIChart"></canvas></div>
                 </div>
                 <div class="chart-container">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-2">Avg Price</div>
-                    <div id="miniPriceValue" class="text-xl font-bold text-emerald-400 mb-2">—</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-2">Avg Price</div>
+                    <div id="miniPriceValue" class="text-xl font-bold text-up mb-2">—</div>
                     <div style="height: 80px;"><canvas id="miniPriceChart"></canvas></div>
                 </div>
                 <div class="chart-container">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-2">Avg Bids</div>
-                    <div id="miniBidsValue" class="text-xl font-bold text-blue-400 mb-2">—</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-2">Avg Bids</div>
+                    <div id="miniBidsValue" class="text-xl font-bold text-blue-700 mb-2">—</div>
                     <div style="height: 80px;"><canvas id="miniBidsChart"></canvas></div>
                 </div>
                 <div class="chart-container">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-2">Auction Volume</div>
-                    <div id="miniVolValue" class="text-xl font-bold text-purple-400 mb-2">—</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-2">Auction Volume</div>
+                    <div id="miniVolValue" class="text-xl font-bold text-purple-700 mb-2">—</div>
                     <div style="height: 80px;"><canvas id="miniVolChart"></canvas></div>
                 </div>
             </div>
@@ -341,12 +325,12 @@
         <div id="tab-outliers" class="tab-content">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <!-- Controls -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                <div class="bg-white border border-line rounded-xl p-5">
                     <h2 class="font-semibold mb-4">Configuration</h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Metric</label>
-                            <select id="outlierMetric" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Metric</label>
+                            <select id="outlierMetric" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="mii_score">MII Score</option>
                                 <option value="price">Sale Price ($)</option>
                                 <option value="views">Views</option>
@@ -357,40 +341,40 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Quarter</label>
-                            <select id="outlierQuarter" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Quarter</label>
+                            <select id="outlierQuarter" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="__all__">All Months</option>
                             </select>
                         </div>
                         <div>
-                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Model</label>
+                            <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Model</label>
                             <div class="model-search-wrap w-full">
                                 <input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off"
-                                    class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50" />
+                                    class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50" />
                                 <datalist id="outlierModelList"></datalist>
                                 <button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">×</button>
                             </div>
                         </div>
                         <div>
-                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-1.5">Top N Records</label>
-                            <select id="outlierN" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Top N Records</label>
+                            <select id="outlierN" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="10">Top 10</option>
                                 <option value="20" selected>Top 20</option>
                                 <option value="50">Top 50</option>
                             </select>
                         </div>
-                        <hr class="border-zinc-800">
+                        <hr class="border-line">
                         <div>
-                            <label class="text-xs text-zinc-500 uppercase tracking-wider block mb-2">Special Analyses</label>
+                            <label class="text-xs text-faint uppercase tracking-wider block mb-2">Special Analyses</label>
                             <div class="space-y-2">
-                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
-                                    High Views, Low Bids <span class="text-zinc-500">(watched but not bought)</span>
+                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                    High Views, Low Bids <span class="text-faint">(watched but not bought)</span>
                                 </button>
-                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
-                                    High Price, Low MII <span class="text-zinc-500">(pricy but low interest)</span>
+                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                    High Price, Low MII <span class="text-faint">(pricy but low interest)</span>
                                 </button>
-                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-xs hover:border-amber-500/50 hover:text-amber-400 transition-colors">
-                                    Low Price, High MII <span class="text-zinc-500">(high interest, low cost)</span>
+                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                    Low Price, High MII <span class="text-faint">(high interest, low cost)</span>
                                 </button>
                             </div>
                         </div>
@@ -400,8 +384,8 @@
                 <!-- Distribution Chart -->
                 <div class="chart-container lg:col-span-2">
                     <div class="mb-4">
-                        <h2 class="font-semibold text-zinc-100" id="outlierDistTitle">MII Score Distribution</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Histogram showing distribution of values</p>
+                        <h2 class="font-semibold text-ink" id="outlierDistTitle">MII Score Distribution</h2>
+                        <p class="text-xs text-faint mt-0.5">Histogram showing distribution of values</p>
                     </div>
                     <div style="height: 280px;">
                         <canvas id="outlierDistChart"></canvas>
@@ -412,15 +396,15 @@
             <!-- Top / Bottom Tables -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- Top Records -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                    <div class="border-b border-zinc-800 px-5 py-3 flex items-center justify-between">
-                        <h3 class="font-semibold text-emerald-400" id="outlierTopTitle">Top 20 by MII Score</h3>
-                        <span id="outlierTopCount" class="text-xs text-zinc-500"></span>
+                <div class="bg-white border border-line rounded-xl overflow-hidden">
+                    <div class="border-b border-line px-5 py-3 flex items-center justify-between">
+                        <h3 class="font-semibold text-up" id="outlierTopTitle">Top 20 by MII Score</h3>
+                        <span id="outlierTopCount" class="text-xs text-faint"></span>
                     </div>
                     <div class="overflow-auto max-h-96 scrollbar-thin">
                         <table class="w-full text-sm">
-                            <thead class="sticky top-0 bg-zinc-900">
-                                <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                            <thead class="sticky top-0 bg-white">
+                                <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                     <th class="text-left px-4 py-2">Make / Model</th>
                                     <th class="text-left px-4 py-2">Quarter</th>
                                     <th class="text-right px-4 py-2" id="outlierTopColHeader">Value</th>
@@ -432,15 +416,15 @@
                 </div>
 
                 <!-- Bottom Records -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                    <div class="border-b border-zinc-800 px-5 py-3 flex items-center justify-between">
-                        <h3 class="font-semibold text-red-400" id="outlierBottomTitle">Bottom 20 by MII Score</h3>
-                        <span id="outlierBottomCount" class="text-xs text-zinc-500"></span>
+                <div class="bg-white border border-line rounded-xl overflow-hidden">
+                    <div class="border-b border-line px-5 py-3 flex items-center justify-between">
+                        <h3 class="font-semibold text-down" id="outlierBottomTitle">Bottom 20 by MII Score</h3>
+                        <span id="outlierBottomCount" class="text-xs text-faint"></span>
                     </div>
                     <div class="overflow-auto max-h-96 scrollbar-thin">
                         <table class="w-full text-sm">
-                            <thead class="sticky top-0 bg-zinc-900">
-                                <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                            <thead class="sticky top-0 bg-white">
+                                <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                     <th class="text-left px-4 py-2">Make / Model</th>
                                     <th class="text-left px-4 py-2">Quarter</th>
                                     <th class="text-right px-4 py-2" id="outlierBottomColHeader">Value</th>
@@ -458,10 +442,10 @@
         <!-- ============================================================ -->
         <div id="tab-correlations" class="tab-content">
             <!-- Controls -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+            <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">X Axis:</label>
-                    <select id="corrX" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">X Axis:</label>
+                    <select id="corrX" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="views">Views</option>
                         <option value="bids">Bids</option>
                         <option value="price">Sale Price</option>
@@ -473,8 +457,8 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Y Axis:</label>
-                    <select id="corrY" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Y Axis:</label>
+                    <select id="corrY" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score" selected>MII Score</option>
                         <option value="price">Sale Price</option>
                         <option value="views">Views</option>
@@ -485,37 +469,37 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Quarter:</label>
-                    <select id="corrQuarter" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Quarter:</label>
+                    <select id="corrQuarter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="__all__">All</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Color by:</label>
-                    <select id="corrColorBy" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Color by:</label>
+                    <select id="corrColorBy" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="manufacturer">Manufacturer</option>
                         <option value="quarter">Quarter</option>
                         <option value="sold">Sold (yes/no)</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Data:</label>
-                    <select id="corrGranularity" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Data:</label>
+                    <select id="corrGranularity" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="individual" selected>Individual auctions</option>
                         <option value="monthly">Monthly averages</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Filter Make:</label>
-                    <select id="corrMfrFilter" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[140px]">
+                    <label class="text-xs text-faint">Filter Make:</label>
+                    <select id="corrMfrFilter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[140px]">
                         <option value="__all__">All</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Model:</label>
+                    <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off"
-                            class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
                         <datalist id="corrModelList"></datalist>
                         <button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -527,11 +511,11 @@
                 <div class="chart-container lg:col-span-2">
                     <div class="flex items-center justify-between mb-4">
                         <div>
-                            <h2 class="font-semibold text-zinc-100" id="corrChartTitle">Views vs MII Score</h2>
-                            <p class="text-xs text-zinc-500 mt-0.5" id="corrChartSubtitle">Scatter plot — hover points for details</p>
+                            <h2 class="font-semibold text-ink" id="corrChartTitle">Views vs MII Score</h2>
+                            <p class="text-xs text-faint mt-0.5" id="corrChartSubtitle">Scatter plot — hover points for details</p>
                         </div>
-                        <div class="text-xs text-zinc-500">
-                            r = <span id="corrCoefficient" class="text-amber-400 font-semibold">—</span>
+                        <div class="text-xs text-faint">
+                            r = <span id="corrCoefficient" class="text-amber-700 font-semibold">—</span>
                         </div>
                     </div>
                     <div style="height: 400px;">
@@ -541,52 +525,52 @@
 
                 <!-- Stats Panel -->
                 <div class="space-y-4">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                    <div class="bg-white border border-line rounded-xl p-5">
                         <h3 class="font-semibold text-sm mb-3">Correlation Stats</h3>
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">Pearson r</span>
-                                <span id="statCorrR" class="font-semibold text-amber-400">—</span>
+                                <span class="text-faint">Pearson r</span>
+                                <span id="statCorrR" class="font-semibold text-amber-700">—</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">R²</span>
-                                <span id="statCorrR2" class="font-semibold text-zinc-300">—</span>
+                                <span class="text-faint">R²</span>
+                                <span id="statCorrR2" class="font-semibold text-ink">—</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">Data points</span>
-                                <span id="statCorrN" class="font-semibold text-zinc-300">—</span>
+                                <span class="text-faint">Data points</span>
+                                <span id="statCorrN" class="font-semibold text-ink">—</span>
                             </div>
-                            <hr class="border-zinc-800">
+                            <hr class="border-line">
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">X mean</span>
-                                <span id="statCorrXMean" class="text-zinc-300">—</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-zinc-500">X std dev</span>
-                                <span id="statCorrXStd" class="text-zinc-300">—</span>
+                                <span class="text-faint">X mean</span>
+                                <span id="statCorrXMean" class="text-ink">—</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">Y mean</span>
-                                <span id="statCorrYMean" class="text-zinc-300">—</span>
+                                <span class="text-faint">X std dev</span>
+                                <span id="statCorrXStd" class="text-ink">—</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-zinc-500">Y std dev</span>
-                                <span id="statCorrYStd" class="text-zinc-300">—</span>
+                                <span class="text-faint">Y mean</span>
+                                <span id="statCorrYMean" class="text-ink">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-faint">Y std dev</span>
+                                <span id="statCorrYStd" class="text-ink">—</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                    <div class="bg-white border border-line rounded-xl p-5">
                         <h3 class="font-semibold text-sm mb-3">Interpretation</h3>
-                        <p id="corrInterpretation" class="text-xs text-zinc-400 leading-relaxed">
+                        <p id="corrInterpretation" class="text-xs text-mute leading-relaxed">
                             Select axes and run the analysis to see interpretation.
                         </p>
                     </div>
 
                     <!-- Color legend -->
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+                    <div class="bg-white border border-line rounded-xl p-5">
                         <h3 class="font-semibold text-sm mb-3">Legend</h3>
-                        <div id="corrLegend" class="space-y-1.5 text-xs text-zinc-400 max-h-48 overflow-auto scrollbar-thin"></div>
+                        <div id="corrLegend" class="space-y-1.5 text-xs text-mute max-h-48 overflow-auto scrollbar-thin"></div>
                     </div>
                 </div>
             </div>
@@ -597,22 +581,22 @@
         <!-- ============================================================ -->
         <div id="tab-models" class="tab-content">
             <!-- Controls -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+            <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Manufacturer:</label>
-                    <select id="modelsRankMfr" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <label class="text-xs text-faint">Manufacturer:</label>
+                    <select id="modelsRankMfr" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">All Manufacturers</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Quarter:</label>
-                    <select id="modelsRankQuarter" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Quarter:</label>
+                    <select id="modelsRankQuarter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="__all__">All Months</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Rank by:</label>
-                    <select id="modelsRankMetric" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Rank by:</label>
+                    <select id="modelsRankMetric" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score">MII Score</option>
                         <option value="price">Avg Sale Price</option>
                         <option value="views">Avg Views</option>
@@ -622,8 +606,8 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-zinc-500">Show top:</label>
-                    <select id="modelsRankN" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <label class="text-xs text-faint">Show top:</label>
+                    <select id="modelsRankN" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="10">10</option>
                         <option value="20" selected>20</option>
                         <option value="50">50</option>
@@ -634,8 +618,8 @@
             <!-- Bar chart -->
             <div class="chart-container mb-6">
                 <div class="mb-4">
-                    <h2 class="font-semibold text-zinc-100" id="modelsRankChartTitle">Top Models by MII Score</h2>
-                    <p class="text-xs text-zinc-500 mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p>
+                    <h2 class="font-semibold text-ink" id="modelsRankChartTitle">Top Models by MII Score</h2>
+                    <p class="text-xs text-faint mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p>
                 </div>
                 <div style="height: 400px;">
                     <canvas id="modelsRankChart"></canvas>
@@ -643,15 +627,15 @@
             </div>
 
             <!-- Full ranked table -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-6">
-                <div class="border-b border-zinc-800 px-5 py-3 flex items-center justify-between">
-                    <h3 class="font-semibold text-zinc-100" id="modelsRankTableTitle">Model Leaderboard</h3>
-                    <span id="modelsRankTableCount" class="text-xs text-zinc-500"></span>
+            <div class="bg-white border border-line rounded-xl overflow-hidden mb-6">
+                <div class="border-b border-line px-5 py-3 flex items-center justify-between">
+                    <h3 class="font-semibold text-ink" id="modelsRankTableTitle">Model Leaderboard</h3>
+                    <span id="modelsRankTableCount" class="text-xs text-faint"></span>
                 </div>
                 <div class="overflow-auto scrollbar-thin">
                     <table class="w-full text-sm">
-                        <thead class="sticky top-0 bg-zinc-900">
-                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                        <thead class="sticky top-0 bg-white">
+                            <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                 <th class="text-left px-4 py-2">#</th>
                                 <th class="text-left px-4 py-2">Make</th>
                                 <th class="text-left px-4 py-2">Model</th>
@@ -677,42 +661,42 @@
             <!-- Summary stat cards -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
                 <div class="stat-card">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">First Record</div>
-                    <div id="covFirstDay" class="text-lg font-bold text-zinc-100 font-mono">—</div>
-                    <div class="text-xs text-zinc-500 mt-1">earliest auction date</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-1">First Record</div>
+                    <div id="covFirstDay" class="text-lg font-bold text-ink font-mono">—</div>
+                    <div class="text-xs text-faint mt-1">earliest auction date</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Last Record</div>
-                    <div id="covLastDay" class="text-lg font-bold text-zinc-100 font-mono">—</div>
-                    <div class="text-xs text-zinc-500 mt-1">most recent auction date</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-1">Last Record</div>
+                    <div id="covLastDay" class="text-lg font-bold text-ink font-mono">—</div>
+                    <div class="text-xs text-faint mt-1">most recent auction date</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Months With Data</div>
-                    <div id="covTotalMonths" class="text-2xl font-bold text-zinc-100">—</div>
-                    <div class="text-xs text-zinc-500 mt-1">distinct months</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-1">Months With Data</div>
+                    <div id="covTotalMonths" class="text-2xl font-bold text-ink">—</div>
+                    <div class="text-xs text-faint mt-1">distinct months</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Days With Data</div>
-                    <div id="covTotalDays" class="text-2xl font-bold text-zinc-100">—</div>
-                    <div class="text-xs text-zinc-500 mt-1">distinct calendar days</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-1">Days With Data</div>
+                    <div id="covTotalDays" class="text-2xl font-bold text-ink">—</div>
+                    <div class="text-xs text-faint mt-1">distinct calendar days</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Flagged Months</div>
-                    <div id="covFlagged" class="text-2xl font-bold text-red-400">—</div>
-                    <div class="text-xs text-zinc-500 mt-1">below 50% of median (<span id="covMedian">—</span> auctions)</div>
+                    <div class="text-xs text-faint uppercase tracking-wider mb-1">Flagged Months</div>
+                    <div id="covFlagged" class="text-2xl font-bold text-down">—</div>
+                    <div class="text-xs text-faint mt-1">below 50% of median (<span id="covMedian">—</span> auctions)</div>
                 </div>
             </div>
 
-            <div id="covNoData" class="hidden text-zinc-500 text-center py-12">No bat.csv data available.</div>
+            <div id="covNoData" class="hidden text-faint text-center py-12">No bat.csv data available.</div>
 
             <!-- Monthly bar chart -->
             <div class="chart-container mb-6">
                 <div class="mb-4 flex items-start justify-between">
                     <div>
-                        <h2 class="font-semibold text-zinc-100">Monthly Auction Record Count</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Records in bat.csv per month — red bars indicate months below 50% of median (likely scraper gaps)</p>
+                        <h2 class="font-semibold text-ink">Monthly Auction Record Count</h2>
+                        <p class="text-xs text-faint mt-0.5">Records in bat.csv per month — red bars indicate months below 50% of median (likely scraper gaps)</p>
                     </div>
-                    <span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-400">—</span>
+                    <span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-xs bg-[#F3F3EF] text-mute">—</span>
                 </div>
                 <div style="height: 320px;">
                     <canvas id="coverageChart"></canvas>
@@ -720,18 +704,18 @@
             </div>
 
             <!-- Gap table -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-6">
-                <div class="border-b border-zinc-800 px-5 py-3">
-                    <h3 class="font-semibold text-zinc-100">Month-by-Month Coverage Report</h3>
-                    <p class="text-xs text-zinc-500 mt-0.5">
+            <div class="bg-white border border-line rounded-xl overflow-hidden mb-6">
+                <div class="border-b border-line px-5 py-3">
+                    <h3 class="font-semibold text-ink">Month-by-Month Coverage Report</h3>
+                    <p class="text-xs text-faint mt-0.5">
                         "Missing days" = calendar days with zero auction records in bat.csv.
-                        Run <code class="text-amber-400 bg-zinc-800 px-1 rounded">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for any flagged month to get a pipeable list of missing dates.
+                        Run <code class="text-amber-700 bg-[#F3F3EF] px-1 rounded">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for any flagged month to get a pipeable list of missing dates.
                     </p>
                 </div>
                 <div class="overflow-auto scrollbar-thin">
                     <table class="w-full text-sm">
-                        <thead class="sticky top-0 bg-zinc-900">
-                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                        <thead class="sticky top-0 bg-white">
+                            <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                 <th class="text-left px-4 py-2">Month</th>
                                 <th class="text-right px-4 py-2">Records</th>
                                 <th class="text-right px-4 py-2">% of Median</th>
@@ -745,12 +729,12 @@
             </div>
 
             <!-- Methodology: nominal vs effective weights, version, noise floor -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-6">
+            <div class="bg-white border border-line rounded-xl p-5 mb-6">
                 <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
-                    <h3 class="font-semibold text-zinc-100">How This Score Is Built</h3>
-                    <span class="text-xs text-zinc-500 font-mono">methodology <span id="miiVersion" class="text-amber-400">—</span></span>
+                    <h3 class="font-semibold text-ink">How This Score Is Built</h3>
+                    <span class="text-xs text-faint font-mono">methodology <span id="miiVersion" class="text-amber-700">—</span></span>
                 </div>
-                <p class="text-sm text-zinc-400 mb-4">
+                <p class="text-sm text-mute mb-4">
                     Published weights are <em>nominal</em>. An input a row has no value for is dropped and the
                     remaining weights are renormalised &mdash; never imputed &mdash; so the weight an input
                     actually carries depends on how widely it is measured. Quote the effective column.
@@ -758,7 +742,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm" id="weightTable">
                         <thead>
-                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                            <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                 <th class="text-left py-2 pr-4 font-medium">Input</th>
                                 <th class="text-right py-2 px-3 font-medium">Nominal</th>
                                 <th class="text-right py-2 px-3 font-medium">Effective</th>
@@ -769,8 +753,8 @@
                         <tbody id="weightTableBody"></tbody>
                     </table>
                 </div>
-                <h4 class="font-semibold text-zinc-100 mt-6 mb-1 text-sm">How big a move has to be to mean anything</h4>
-                <p class="text-sm text-zinc-400 mb-3">
+                <h4 class="font-semibold text-ink mt-6 mb-1 text-sm">How big a move has to be to mean anything</h4>
+                <p class="text-sm text-mute mb-3">
                     Measured from every consecutive month-pair in the dataset, bucketed by the smaller of the
                     two months&rsquo; auction counts. A move under the median is what an unchanged market looks
                     like at that sample size; clearing the 90th percentile is the bar for calling it real.
@@ -778,7 +762,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
-                            <tr class="text-xs text-zinc-500 uppercase tracking-wider border-b border-zinc-800">
+                            <tr class="text-xs text-faint uppercase tracking-wider border-b border-line">
                                 <th class="text-left py-2 pr-4 font-medium">Auctions / month</th>
                                 <th class="text-right py-2 px-3 font-medium">Median swing</th>
                                 <th class="text-right py-2 px-3 font-medium">90th percentile</th>
@@ -790,21 +774,21 @@
             </div>
 
             <!-- Backfill instructions -->
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-6">
-                <h3 class="font-semibold text-zinc-100 mb-2">How to Backfill Missing Data</h3>
-                <div class="text-sm text-zinc-400 space-y-2">
+            <div class="bg-white border border-line rounded-xl p-5 mb-6">
+                <h3 class="font-semibold text-ink mb-2">How to Backfill Missing Data</h3>
+                <div class="text-sm text-mute space-y-2">
                     <p>If months are flagged above, use the CLI scripts to identify and backfill missing dates:</p>
-                    <ol class="list-decimal list-inside space-y-1 ml-2 text-zinc-300">
+                    <ol class="list-decimal list-inside space-y-1 ml-2 text-ink">
                         <li>Run the diagnostic to see all gaps across all months:
-                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/diagnose-data-gaps.js</code>
+                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/diagnose-data-gaps.js</code>
                         </li>
                         <li>Get a pipeable list of missing dates for a specific range:
-                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code>
+                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code>
                         </li>
                         <li>Pass the missing dates to your scraper's backfill command:
-                            <code class="block mt-1 bg-zinc-800 text-amber-400 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code>
+                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code>
                         </li>
-                        <li>After re-running the scraper, regenerate <code class="text-amber-400">mii_results_latest.csv</code> and upload both CSVs to S3.</li>
+                        <li>After re-running the scraper, regenerate <code class="text-amber-700">mii_results_latest.csv</code> and upload both CSVs to S3.</li>
                     </ol>
                 </div>
             </div>
@@ -814,13 +798,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-zinc-800 mt-12 py-6">
-        <div class="max-w-[1600px] mx-auto px-6 flex items-center justify-between text-sm text-zinc-500">
-            <div>Market Interest Index © 2025 — Raw Data Analysis</div>
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="hover:text-zinc-300">Leaderboard</a>
-                <a href="dashboard.html" class="hover:text-zinc-300">Terminal</a>
-            </div>
+    <footer class="border-t border-line mt-12 py-6">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2 text-[13px] text-mute">
+            <span>Market Interest Index</span>
+            <span>Bring a Trailer data, refreshed twice daily at 06:00 and 18:00 UTC</span>
         </div>
     </footer>
 

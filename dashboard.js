@@ -104,28 +104,28 @@ const MANUFACTURER_BRANDING = {
 function getBranding(name) {
     return MANUFACTURER_BRANDING[name] || {
         abbr: name.substring(0, 3).toUpperCase(),
-        color: '#888'
+        color: '#5E6168'
     };
 }
 
 // ---- Colors ----
 const C = {
-    bg: '#0a0a0a',
-    panel: '#111111',
-    border: '#1c1c1c',
-    grid: '#1a1a1a',
-    gridLight: '#222222',
-    text: '#cccccc',
-    muted: '#555555',
-    dim: '#333333',
-    green: '#00c853',
-    greenDim: 'rgba(0,200,83,0.25)',
-    red: '#ff1744',
-    redDim: 'rgba(255,23,68,0.25)',
-    amber: '#ff9800',
-    blue: '#2196f3',
+    bg: '#F6F6F3',
+    panel: '#FFFFFF',
+    border: '#E4E4DF',
+    grid: '#FFFFFF',
+    gridLight: '#ECECE7',
+    text: '#16181D',
+    muted: '#6B6E75',
+    dim: '#D9D9D3',
+    green: '#1F7A45',
+    greenDim: 'rgba(31,122,69,0.25)',
+    red: '#B42318',
+    redDim: 'rgba(180,35,24,0.25)',
+    amber: '#F59E0B',
+    blue: '#2563EB',
     blueDim: 'rgba(33,150,243,0.3)',
-    white: '#e0e0e0',
+    white: '#16181D',
 };
 
 // ---- State ----
@@ -621,18 +621,18 @@ function renderManufacturerGrid() {
         return `
             <div class="mfr-card rounded cursor-pointer ${isExpanded ? 'selected' : ''}"
                  data-mfr="${mfr.name}"
-                 style="background:#111111; border:1px solid #2a2a2a; overflow:hidden;">
+                 style="background:#FFFFFF; border:1px solid #E4E4DF; overflow:hidden;">
                 <!-- Card Header -->
-                <div class="px-3 py-2 border-b border-[#2a2a2a] flex items-center justify-between" style="background:#0f0f0f;">
+                <div class="px-3 py-2 border-b border-[#E4E4DF] flex items-center justify-between" style="background:#FAFAF8;">
                     <div class="flex items-center gap-2">
                         <span class="inline-flex items-center justify-center w-6 h-6 rounded text-[9px] font-bold"
                               style="background:${branding.color}20; color:${branding.color}; border:1px solid ${branding.color}40;">
                             ${branding.abbr}
                         </span>
-                        <span class="text-[11px] font-semibold text-[#e0e0e0]">${mfr.name}</span>
+                        <span class="text-[11px] font-semibold text-[#16181D]">${mfr.name}</span>
                     </div>
                     <div class="text-right">
-                        <span class="text-[13px] font-bold text-[#ff9800]">${mfr.mii.toFixed(1)}</span>
+                        <span class="text-[13px] font-bold text-amber-700">${mfr.mii.toFixed(1)}</span>
                         <span class="text-[10px] font-medium ml-1" style="color:${changeColor}">
                             ${changeSign}${mfr.change.toFixed(1)}%
                         </span>
@@ -646,22 +646,22 @@ function renderManufacturerGrid() {
                 </div>
 
                 <!-- Stats Footer -->
-                <div class="px-3 py-2 border-t border-[#2a2a2a] flex items-center justify-between text-[9px]" style="background:#0f0f0f;">
+                <div class="px-3 py-2 border-t border-[#E4E4DF] flex items-center justify-between text-[9px]" style="background:#FAFAF8;">
                     <div>
-                        <span class="text-[#555]">VOL</span>
-                        <span class="text-[#ccc] ml-1">${mfr.volume}</span>
+                        <span class="text-[#6B6E75]">VOL</span>
+                        <span class="text-[#16181D] ml-1">${mfr.volume}</span>
                     </div>
                     <div>
-                        <span class="text-[#555]">AVG</span>
-                        <span class="text-[#ccc] ml-1">$${(mfr.avgPrice / 1000).toFixed(0)}K</span>
+                        <span class="text-[#6B6E75]">AVG</span>
+                        <span class="text-[#16181D] ml-1">$${(mfr.avgPrice / 1000).toFixed(0)}K</span>
                     </div>
                     <div>
-                        <span class="text-[#555]">H</span>
-                        <span class="text-[#00c853] ml-1">${mfr.high.toFixed(1)}</span>
+                        <span class="text-[#6B6E75]">H</span>
+                        <span class="text-[#1F7A45] ml-1">${mfr.high.toFixed(1)}</span>
                     </div>
                     <div>
-                        <span class="text-[#555]">L</span>
-                        <span class="text-[#ff1744] ml-1">${mfr.low.toFixed(1)}</span>
+                        <span class="text-[#6B6E75]">L</span>
+                        <span class="text-[#B42318] ml-1">${mfr.low.toFixed(1)}</span>
                     </div>
                 </div>
             </div>
@@ -751,33 +751,33 @@ function renderExpandedDetail(mfrName) {
     })).sort((a, b) => b.mii - a.mii);
 
     const isUp = summary.change >= 0;
-    const changeColor = isUp ? '#00c853' : '#ff1744';
+    const changeColor = isUp ? '#1F7A45' : '#B42318';
     const changeSign = isUp ? '+' : '';
 
     detail.innerHTML = `
         <div class="terminal-panel rounded">
             <!-- Header -->
-            <div class="px-4 py-3 border-b border-[#1c1c1c] flex items-center justify-between">
+            <div class="px-4 py-3 border-b border-[#E4E4DF] flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <span class="inline-flex items-center justify-center w-8 h-8 rounded text-[11px] font-bold"
                           style="background:${branding.color}20; color:${branding.color}; border:1px solid ${branding.color}40;">
                         ${branding.abbr}
                     </span>
                     <div>
-                        <span class="text-sm font-semibold text-[#e0e0e0]">${mfrName}</span>
-                        <span class="text-[10px] text-[#555] ml-2">DETAILED VIEW</span>
+                        <span class="text-sm font-semibold text-[#16181D]">${mfrName}</span>
+                        <span class="text-[10px] text-[#6B6E75] ml-2">DETAILED VIEW</span>
                     </div>
                 </div>
-                <button id="closeDetail" class="text-[#555] hover:text-[#ff9800] text-lg transition-colors">&times;</button>
+                <button id="closeDetail" class="text-[#6B6E75] hover:text-amber-700 text-lg transition-colors">&times;</button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
                 <!-- Large Chart -->
-                <div class="lg:col-span-2 p-4 border-r border-[#1c1c1c]">
+                <div class="lg:col-span-2 p-4 border-r border-[#E4E4DF]">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] text-[#555] uppercase tracking-wider">MII OHLC BY QUARTER</span>
+                        <span class="text-[10px] text-[#6B6E75] uppercase tracking-wider">MII OHLC BY QUARTER</span>
                         <div class="flex items-center gap-3 text-[10px]">
-                            <span class="text-[#ff9800] font-semibold">${summary.mii.toFixed(1)}</span>
+                            <span class="text-amber-700 font-semibold">${summary.mii.toFixed(1)}</span>
                             <span style="color:${changeColor}">${changeSign}${summary.change.toFixed(1)}%</span>
                         </div>
                     </div>
@@ -789,7 +789,7 @@ function renderExpandedDetail(mfrName) {
                     <div class="mt-3 overflow-x-auto">
                         <table class="w-full text-[9px]">
                             <thead>
-                                <tr class="text-[#555] border-b border-[#1c1c1c]">
+                                <tr class="text-[#6B6E75] border-b border-[#E4E4DF]">
                                     <th class="text-left py-1 px-2">QTR</th>
                                     <th class="text-right py-1 px-2">OPEN</th>
                                     <th class="text-right py-1 px-2">HIGH</th>
@@ -804,14 +804,14 @@ function renderExpandedDetail(mfrName) {
                                     const chg = d.open > 0 ? ((d.close - d.open) / d.open * 100) : 0;
                                     const up = chg >= 0;
                                     return `
-                                        <tr class="border-b border-[#111] hover:bg-[#151515]">
-                                            <td class="py-1 px-2 text-[#ff9800]">${d.label}</td>
-                                            <td class="py-1 px-2 text-right text-[#ccc]">${d.open.toFixed(1)}</td>
-                                            <td class="py-1 px-2 text-right text-[#00c853]">${d.high.toFixed(1)}</td>
-                                            <td class="py-1 px-2 text-right text-[#ff1744]">${d.low.toFixed(1)}</td>
-                                            <td class="py-1 px-2 text-right" style="color:${up ? '#00c853' : '#ff1744'}">${d.close.toFixed(1)}</td>
-                                            <td class="py-1 px-2 text-right" style="color:${up ? '#00c853' : '#ff1744'}">${up ? '+' : ''}${chg.toFixed(1)}%</td>
-                                            <td class="py-1 px-2 text-right text-[#ccc]">${d.volume}</td>
+                                        <tr class="border-b border-[#FFFFFF] hover:bg-[#FAFAF8]">
+                                            <td class="py-1 px-2 text-amber-700">${d.label}</td>
+                                            <td class="py-1 px-2 text-right text-[#16181D]">${d.open.toFixed(1)}</td>
+                                            <td class="py-1 px-2 text-right text-[#1F7A45]">${d.high.toFixed(1)}</td>
+                                            <td class="py-1 px-2 text-right text-[#B42318]">${d.low.toFixed(1)}</td>
+                                            <td class="py-1 px-2 text-right" style="color:${up ? '#1F7A45' : '#B42318'}">${d.close.toFixed(1)}</td>
+                                            <td class="py-1 px-2 text-right" style="color:${up ? '#1F7A45' : '#B42318'}">${up ? '+' : ''}${chg.toFixed(1)}%</td>
+                                            <td class="py-1 px-2 text-right text-[#16181D]">${d.volume}</td>
                                         </tr>
                                     `;
                                 }).join('')}
@@ -823,39 +823,39 @@ function renderExpandedDetail(mfrName) {
                 <!-- Model Rankings -->
                 <div class="p-4">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] text-[#555] uppercase tracking-wider">MODEL RANKINGS</span>
-                        <span class="text-[10px] text-[#555]">${models.length} MODELS</span>
+                        <span class="text-[10px] text-[#6B6E75] uppercase tracking-wider">MODEL RANKINGS</span>
+                        <span class="text-[10px] text-[#6B6E75]">${models.length} MODELS</span>
                     </div>
 
                     <!-- Summary stats -->
                     <div class="grid grid-cols-2 gap-2 mb-3">
-                        <div class="bg-[#0a0a0a] rounded p-2">
-                            <div class="text-[8px] text-[#555] uppercase">Total Vol</div>
-                            <div class="text-[13px] font-bold text-[#ccc]">${summary.totalVolume}</div>
+                        <div class="bg-[#F6F6F3] rounded p-2">
+                            <div class="text-[8px] text-[#6B6E75] uppercase">Total Vol</div>
+                            <div class="text-[13px] font-bold text-[#16181D]">${summary.totalVolume}</div>
                         </div>
-                        <div class="bg-[#0a0a0a] rounded p-2">
-                            <div class="text-[8px] text-[#555] uppercase">Avg Price</div>
-                            <div class="text-[13px] font-bold text-[#ccc]">$${(summary.avgPrice / 1000).toFixed(0)}K</div>
+                        <div class="bg-[#F6F6F3] rounded p-2">
+                            <div class="text-[8px] text-[#6B6E75] uppercase">Avg Price</div>
+                            <div class="text-[13px] font-bold text-[#16181D]">$${(summary.avgPrice / 1000).toFixed(0)}K</div>
                         </div>
                     </div>
 
                     <!-- Model list -->
                     <div class="max-h-72 overflow-y-auto scrollbar-thin space-y-0.5">
                         ${models.map((m, idx) => `
-                            <div class="flex items-center justify-between py-1.5 px-2 rounded hover:bg-[#151515] transition-colors text-[10px]">
+                            <div class="flex items-center justify-between py-1.5 px-2 rounded hover:bg-[#FAFAF8] transition-colors text-[10px]">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-[#555] w-4 text-right">${idx + 1}</span>
+                                    <span class="text-[#6B6E75] w-4 text-right">${idx + 1}</span>
                                     <div>
-                                        <div class="text-[#e0e0e0] font-medium">${m.model}</div>
-                                        <div class="text-[#555]">${m.auctions} auc &middot; $${(m.avgPrice / 1000).toFixed(0)}K</div>
+                                        <div class="text-[#16181D] font-medium">${m.model}</div>
+                                        <div class="text-[#6B6E75]">${m.auctions} auc &middot; $${(m.avgPrice / 1000).toFixed(0)}K</div>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[#ff9800] font-semibold">${m.mii.toFixed(1)}</div>
+                                    <div class="text-amber-700 font-semibold">${m.mii.toFixed(1)}</div>
                                     <div class="text-[8px]">
-                                        <span class="text-[#00c853]">${m.high.toFixed(0)}</span>
-                                        <span class="text-[#555]">/</span>
-                                        <span class="text-[#ff1744]">${m.low.toFixed(0)}</span>
+                                        <span class="text-[#1F7A45]">${m.high.toFixed(0)}</span>
+                                        <span class="text-[#6B6E75]">/</span>
+                                        <span class="text-[#B42318]">${m.low.toFixed(0)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -984,10 +984,10 @@ async function initializeApp() {
         loadingIndicator.innerHTML = `
             <div class="text-center">
                 <div class="text-4xl mb-3">&#9888;</div>
-                <div class="text-sm text-[#ff1744] font-medium mb-2">DATA LOAD FAILED</div>
-                <div class="text-[10px] text-[#555] mb-4">${error.message}</div>
+                <div class="text-sm text-[#B42318] font-medium mb-2">DATA LOAD FAILED</div>
+                <div class="text-[10px] text-[#6B6E75] mb-4">${error.message}</div>
                 <button onclick="location.reload()"
-                    class="px-4 py-2 bg-[#ff9800] text-[#0a0a0a] rounded text-[11px] font-semibold hover:bg-[#ffb74d] transition-colors">
+                    class="px-4 py-2 bg-amber-500 text-ink rounded text-[11px] font-semibold hover:bg-amber-400 transition-colors">
                     RETRY
                 </button>
             </div>
