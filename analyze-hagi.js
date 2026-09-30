@@ -86,7 +86,7 @@ const COMPONENTS = [
     { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, color: '#8b5cf6' },
     { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, color: '#14b8a6' },
     { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, color: '#ec4899' },
-    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6b7280' },
+    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6B6E75' },
 ];
 
 const METRIC_LABELS = {
@@ -265,8 +265,8 @@ const CHART_DEFAULTS = {
         legend: { display: false },
     },
     scales: {
-        x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af' } },
-        y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af' } },
+        x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75' } },
+        y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75' } },
     },
 };
 
@@ -550,8 +550,8 @@ function renderModelRankings() {
                 }
             },
             scales: {
-                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af' } },
-                y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af', font: { size: 11 } } },
+                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75' } },
+                y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75', font: { size: 11 } } },
             }
         }
     });
@@ -559,15 +559,15 @@ function renderModelRankings() {
     // Table
     const tbody = document.getElementById('modelsRankTable');
     tbody.innerHTML = '';
-    const podiumColors = ['text-[#C5A028]', 'text-gray-600', 'text-[#C5A028]'];
+    const podiumColors = ['text-[#D97706]', 'text-mute', 'text-[#D97706]'];
     topRows.forEach((r, i) => {
-        const rankCls = i < 3 ? podiumColors[i] : 'text-gray-400';
-        const hl = col => col === rankMetric ? 'text-[#C5A028] font-medium' : 'text-gray-600';
+        const rankCls = i < 3 ? podiumColors[i] : 'text-faint';
+        const hl = col => col === rankMetric ? 'text-[#D97706] font-medium' : 'text-mute';
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition-colors';
+        tr.className = 'border-b border-hair hover:bg-[#FAFAF8] transition-colors';
         tr.innerHTML = `
             <td class="px-4 py-2.5 font-bold ${rankCls}">#${i + 1}</td>
-            <td class="px-4 py-2.5 text-gray-500 whitespace-nowrap">${r.manufacturer}</td>
+            <td class="px-4 py-2.5 text-faint whitespace-nowrap">${r.manufacturer}</td>
             <td class="px-4 py-2.5 font-medium">${r.model}</td>
             <td class="px-4 py-2.5 text-right ${hl('volume')}">${r.count.toLocaleString()}</td>
             <td class="px-4 py-2.5 text-right ${hl('mii_score')}">${r.mii_score != null ? r.mii_score.toFixed(2) : '—'}</td>
@@ -644,12 +644,12 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tab-btn').forEach(b => {
                 b.classList.remove('active');
-                b.classList.add('text-gray-500');
+                b.classList.add('text-faint');
             });
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
             btn.classList.add('active');
-            btn.classList.remove('text-gray-500');
+            btn.classList.remove('text-faint');
             document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
         });
     });
@@ -749,10 +749,10 @@ function renderRadarChart(selected, market, mfrLabel) {
                 ...(mfrLabel !== '__all__' ? [{
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
-                    borderColor: '#52525b',
+                    borderColor: '#9A9CA1',
                     backgroundColor: 'rgba(82,82,91,0.1)',
                     borderWidth: 1.5,
-                    pointBackgroundColor: '#52525b',
+                    pointBackgroundColor: '#9A9CA1',
                     pointRadius: 3,
                     borderDash: [4, 4],
                 }] : []),
@@ -764,7 +764,7 @@ function renderRadarChart(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: true,
-                    labels: { color: '#9ca3af', font: { size: 11 } },
+                    labels: { color: '#6B6E75', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -780,13 +780,13 @@ function renderRadarChart(selected, market, mfrLabel) {
                     angleLines: { color: 'rgba(0,0,0,0.07)' },
                     ticks: {
                         display: true,
-                        color: '#52525b',
+                        color: '#9A9CA1',
                         font: { size: 9 },
                         stepSize: 0.25,
                         backdropColor: 'transparent',
                     },
                     pointLabels: {
-                        color: '#9ca3af',
+                        color: '#6B6E75',
                         font: { size: 11 },
                     },
                 }
@@ -820,7 +820,7 @@ function renderComponentBar(selected, market, mfrLabel) {
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
                     backgroundColor: 'rgba(82,82,91,0.3)',
-                    borderColor: '#52525b',
+                    borderColor: '#9A9CA1',
                     borderWidth: 1,
                     borderRadius: 4,
                 }] : []),
@@ -831,7 +831,7 @@ function renderComponentBar(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: mfrLabel !== '__all__',
-                    labels: { color: '#9ca3af', font: { size: 11 } },
+                    labels: { color: '#6B6E75', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -840,13 +840,13 @@ function renderComponentBar(selected, market, mfrLabel) {
                 }
             },
             scales: {
-                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af', font: { size: 11 } } },
+                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75', font: { size: 11 } } },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af' },
+                    ticks: { color: '#6B6E75' },
                     min: 0,
                     max: 1,
-                    title: { display: true, text: 'Normalized Score (0–1)', color: '#52525b', font: { size: 10 } }
+                    title: { display: true, text: 'Normalized Score (0–1)', color: '#9A9CA1', font: { size: 10 } }
                 },
             }
         }
@@ -892,7 +892,7 @@ function renderComponentStacked() {
                 legend: {
                     display: true,
                     position: 'bottom',
-                    labels: { color: '#9ca3af', font: { size: 10 }, boxWidth: 12, padding: 12 },
+                    labels: { color: '#6B6E75', font: { size: 10 }, boxWidth: 12, padding: 12 },
                 },
                 tooltip: {
                     mode: 'index',
@@ -907,14 +907,14 @@ function renderComponentStacked() {
             scales: {
                 x: {
                     stacked: true,
-                    grid: { color: '#1f1f1f' },
-                    ticks: { color: '#9ca3af', font: { size: 10 } },
+                    grid: { color: '#E4E4DF' },
+                    ticks: { color: '#6B6E75', font: { size: 10 } },
                 },
                 y: {
                     stacked: true,
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af' },
-                    title: { display: true, text: 'Weighted Score Contribution', color: '#52525b', font: { size: 10 } },
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: 'Weighted Score Contribution', color: '#9A9CA1', font: { size: 10 } },
                 },
             },
         }
@@ -1014,7 +1014,7 @@ function renderTrends() {
             plugins: {
                 legend: {
                     display: compareValues != null,
-                    labels: { color: '#9ca3af', font: { size: 11 } },
+                    labels: { color: '#6B6E75', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -1023,11 +1023,11 @@ function renderTrends() {
                 }
             },
             scales: {
-                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af' } },
+                x: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75' } },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
                     ticks: {
-                        color: '#9ca3af',
+                        color: '#6B6E75',
                         callback: v => formatTrendValue(v, metric),
                     },
                 },
@@ -1150,13 +1150,13 @@ function renderOutlierTable(tableId, rows, metric, type) {
         const val = parseFloat(row[metric]);
         const color = type === 'top' ? 'text-green-600' : 'text-red-600';
         const tr = document.createElement('tr');
-        tr.className = 'table-row border-b border-gray-100 text-xs';
+        tr.className = 'table-row border-b border-hair text-xs';
         tr.innerHTML = `
             <td class="px-4 py-2">
-                <div class="font-medium text-gray-800">${row.manufacturer}</div>
-                <div class="text-gray-400">${row.model}</div>
+                <div class="font-medium text-ink">${row.manufacturer}</div>
+                <div class="text-faint">${row.model}</div>
             </td>
-            <td class="px-4 py-2 text-gray-500">${row.quarter}</td>
+            <td class="px-4 py-2 text-faint">${row.quarter}</td>
             <td class="px-4 py-2 text-right font-semibold ${color}">${formatMetricValue(val, metric)}</td>
         `;
         tbody.appendChild(tr);
@@ -1219,8 +1219,8 @@ function renderOutlierDist(data, metric, label) {
                 }
             },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 }, maxRotation: 45 } },
-                y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#9ca3af' } },
+                x: { grid: { display: false }, ticks: { color: '#6B6E75', font: { size: 9 }, maxRotation: 45 } },
+                y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#6B6E75' } },
             }
         }
     });
@@ -1284,16 +1284,16 @@ function renderSpecialTable(rows, title, valueFn, colHeaders = []) {
     rows.forEach(row => {
         const vals = valueFn(row);
         const tr = document.createElement('tr');
-        tr.className = 'table-row border-b border-gray-100 text-xs';
+        tr.className = 'table-row border-b border-hair text-xs';
         tr.innerHTML = `
             <td class="px-4 py-2">
-                <div class="font-medium text-gray-800">${row.manufacturer}</div>
-                <div class="text-gray-400">${row.model}</div>
+                <div class="font-medium text-ink">${row.manufacturer}</div>
+                <div class="text-faint">${row.model}</div>
             </td>
-            <td class="px-4 py-2 text-gray-500">${row.quarter}</td>
-            <td class="px-4 py-2 text-right font-semibold text-[#C5A028]">${vals[0]}</td>
-            <td class="px-4 py-2 text-right text-gray-600">${vals[1] || ''}</td>
-            <td class="px-4 py-2 text-right text-gray-500">${vals[2] || ''}</td>
+            <td class="px-4 py-2 text-faint">${row.quarter}</td>
+            <td class="px-4 py-2 text-right font-semibold text-[#D97706]">${vals[0]}</td>
+            <td class="px-4 py-2 text-right text-mute">${vals[1] || ''}</td>
+            <td class="px-4 py-2 text-right text-faint">${vals[2] || ''}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -1463,13 +1463,13 @@ function renderCorrelations() {
             scales: {
                 x: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af' },
-                    title: { display: true, text: xLabel, color: '#9ca3af', font: { size: 11 } }
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: xLabel, color: '#6B6E75', font: { size: 11 } }
                 },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af' },
-                    title: { display: true, text: yLabel, color: '#9ca3af', font: { size: 11 } }
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: yLabel, color: '#6B6E75', font: { size: 11 } }
                 },
             }
         }
@@ -1490,7 +1490,7 @@ function renderCorrelations() {
     });
     if (groupKeys.length > 30) {
         const el = document.createElement('div');
-        el.className = 'text-gray-500';
+        el.className = 'text-faint';
         el.textContent = `+${groupKeys.length - 30} more`;
         legendEl.appendChild(el);
     }
@@ -1530,20 +1530,20 @@ function renderMethodology() {
     const body = document.getElementById('weightTableBody');
     if (body) {
         const STATUS = {
-            ok:     ['measured', 'text-[#2f7d5c]'],
-            sparse: ['too few rows to rank', 'text-[#B8960C]'],
-            static: ['not varying', 'text-[#B8960C]'],
-            empty:  ['no data — weight redistributed', 'text-[#a33a35]'],
+            ok:     ['measured', 'text-[#1F7A45]'],
+            sparse: ['too few rows to rank', 'text-[#B45309]'],
+            static: ['not varying', 'text-[#B45309]'],
+            empty:  ['no data — weight redistributed', 'text-[#B42318]'],
         };
         body.innerHTML = (MII.effectiveWeights || []).map(w => {
-            const [label, cls] = STATUS[w.status] || [w.status, 'text-[#57534e]'];
+            const [label, cls] = STATUS[w.status] || [w.status, 'text-[#5E6168]'];
             // Flag an input whose real contribution is far from its published one.
             const drift = w.nominal > 0 && Math.abs(w.effective - w.nominal) / w.nominal > 0.25;
-            return `<tr class="border-b border-[#e5e0d6]">
-                <td class="py-2 pr-4 text-[#1c1917]">${w.label}</td>
-                <td class="py-2 px-3 text-right font-mono text-[#57534e]">${(w.nominal * 100).toFixed(0)}%</td>
-                <td class="py-2 px-3 text-right font-mono ${drift ? 'text-[#B8960C] font-semibold' : 'text-[#1c1917]'}">${(w.effective * 100).toFixed(1)}%</td>
-                <td class="py-2 px-3 text-right font-mono text-[#57534e]">${(w.coverage * 100).toFixed(1)}%</td>
+            return `<tr class="border-b border-[#E4E4DF]">
+                <td class="py-2 pr-4 text-[#16181D]">${w.label}</td>
+                <td class="py-2 px-3 text-right font-mono text-[#5E6168]">${(w.nominal * 100).toFixed(0)}%</td>
+                <td class="py-2 px-3 text-right font-mono ${drift ? 'text-[#B45309] font-semibold' : 'text-[#16181D]'}">${(w.effective * 100).toFixed(1)}%</td>
+                <td class="py-2 px-3 text-right font-mono text-[#5E6168]">${(w.coverage * 100).toFixed(1)}%</td>
                 <td class="py-2 pl-3 ${cls}">${label}</td>
             </tr>`;
         }).join('');
@@ -1558,10 +1558,10 @@ function renderMethodology() {
                 : next ? (next.minLots - b.minLots === 1 ? String(b.minLots)
                                                          : b.minLots + '–' + (next.minLots - 1))
                        : b.minLots + '+';
-            return `<tr class="border-b border-[#e5e0d6]">
-                <td class="py-2 pr-4 font-mono text-[#1c1917]">${range}</td>
-                <td class="py-2 px-3 text-right font-mono text-[#1c1917]">${b.median.toFixed(1)} pts</td>
-                <td class="py-2 px-3 text-right font-mono text-[#57534e]">${b.p90.toFixed(1)} pts</td>
+            return `<tr class="border-b border-[#E4E4DF]">
+                <td class="py-2 pr-4 font-mono text-[#16181D]">${range}</td>
+                <td class="py-2 px-3 text-right font-mono text-[#16181D]">${b.median.toFixed(1)} pts</td>
+                <td class="py-2 px-3 text-right font-mono text-[#5E6168]">${b.p90.toFixed(1)} pts</td>
             </tr>`;
         }).join('');
     }
@@ -1656,12 +1656,12 @@ function renderDataCoverage(rows) {
             scales: {
                 x: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af', maxRotation: 45 }
+                    ticks: { color: '#6B6E75', maxRotation: 45 }
                 },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.07)' },
-                    ticks: { color: '#9ca3af' },
-                    title: { display: true, text: 'Auction Records', color: '#9ca3af', font: { size: 11 } }
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: 'Auction Records', color: '#6B6E75', font: { size: 11 } }
                 }
             }
         }
@@ -1687,23 +1687,23 @@ function renderDataCoverage(rows) {
         }
 
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition-colors';
+        tr.className = 'border-b border-hair hover:bg-[#FAFAF8] transition-colors';
         tr.innerHTML = `
-            <td class="px-4 py-2.5 font-mono text-sm ${isLow ? 'text-red-600 font-medium' : 'text-gray-700'}">${m}</td>
-            <td class="px-4 py-2.5 text-right ${isLow ? 'text-red-600 font-medium' : 'text-gray-600'}">${cnt.toLocaleString()}</td>
+            <td class="px-4 py-2.5 font-mono text-sm ${isLow ? 'text-red-600 font-medium' : 'text-mute'}">${m}</td>
+            <td class="px-4 py-2.5 text-right ${isLow ? 'text-red-600 font-medium' : 'text-mute'}">${cnt.toLocaleString()}</td>
             <td class="px-4 py-2.5 text-right">
                 <div class="flex items-center justify-end gap-2">
-                    <div class="w-20 bg-gray-200 rounded-full h-1.5">
-                        <div class="h-1.5 rounded-full ${isLow ? 'bg-red-500' : 'bg-[#C5A028]'}" style="width:${Math.min(pct, 100)}%"></div>
+                    <div class="w-20 bg-[#ECECE7] rounded-full h-1.5">
+                        <div class="h-1.5 rounded-full ${isLow ? 'bg-red-500' : 'bg-amber-500'}" style="width:${Math.min(pct, 100)}%"></div>
                     </div>
-                    <span class="${isLow ? 'text-red-500' : 'text-gray-500'} text-xs w-10 text-right">${pct}%</span>
+                    <span class="${isLow ? 'text-red-500' : 'text-faint'} text-xs w-10 text-right">${pct}%</span>
                 </div>
             </td>
-            <td class="px-4 py-2.5 text-right text-gray-500 text-sm">${missingDays} / ${daysInMonth}</td>
+            <td class="px-4 py-2.5 text-right text-faint text-sm">${missingDays} / ${daysInMonth}</td>
             <td class="px-4 py-2.5 text-center">
                 ${isLow
                     ? '<span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-600 border border-red-200">Low</span>'
-                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-500 border border-gray-200">OK</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-[#F3F3EF] text-faint border border-line">OK</span>'
                 }
             </td>
         `;

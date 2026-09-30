@@ -84,7 +84,7 @@ const COMPONENTS = [
     { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, color: '#8b5cf6' },
     { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, color: '#14b8a6' },
     { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, color: '#ec4899' },
-    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6b7280' },
+    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6B6E75' },
 ];
 
 const METRIC_LABELS = {
@@ -263,8 +263,8 @@ const CHART_DEFAULTS = {
         legend: { display: false },
     },
     scales: {
-        x: { grid: { color: '#27272a' }, ticks: { color: '#71717a' } },
-        y: { grid: { color: '#27272a' }, ticks: { color: '#71717a' } },
+        x: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
+        y: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
     },
 };
 
@@ -548,8 +548,8 @@ function renderModelRankings() {
                 }
             },
             scales: {
-                x: { grid: { color: '#27272a' }, ticks: { color: '#71717a' } },
-                y: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa', font: { size: 11 } } },
+                x: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
+                y: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168', font: { size: 11 } } },
             }
         }
     });
@@ -557,15 +557,15 @@ function renderModelRankings() {
     // Table
     const tbody = document.getElementById('modelsRankTable');
     tbody.innerHTML = '';
-    const podiumColors = ['text-amber-400', 'text-zinc-300', 'text-amber-600'];
+    const podiumColors = ['text-amber-700', 'text-ink', 'text-amber-700'];
     topRows.forEach((r, i) => {
-        const rankCls = i < 3 ? podiumColors[i] : 'text-zinc-500';
-        const hl = col => col === rankMetric ? 'text-amber-400 font-medium' : 'text-zinc-300';
+        const rankCls = i < 3 ? podiumColors[i] : 'text-faint';
+        const hl = col => col === rankMetric ? 'text-amber-700 font-medium' : 'text-ink';
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors';
+        tr.className = 'border-b border-hair hover:bg-[#FAFAF8] transition-colors';
         tr.innerHTML = `
             <td class="px-4 py-2.5 font-bold ${rankCls}">#${i + 1}</td>
-            <td class="px-4 py-2.5 text-zinc-400 whitespace-nowrap">${r.manufacturer}</td>
+            <td class="px-4 py-2.5 text-mute whitespace-nowrap">${r.manufacturer}</td>
             <td class="px-4 py-2.5 font-medium">${r.model}</td>
             <td class="px-4 py-2.5 text-right ${hl('volume')}">${r.count.toLocaleString()}</td>
             <td class="px-4 py-2.5 text-right ${hl('mii_score')}">${r.mii_score != null ? r.mii_score.toFixed(2) : '—'}</td>
@@ -642,12 +642,12 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tab-btn').forEach(b => {
                 b.classList.remove('active');
-                b.classList.add('text-zinc-400');
+                b.classList.add('text-mute');
             });
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
             btn.classList.add('active');
-            btn.classList.remove('text-zinc-400');
+            btn.classList.remove('text-mute');
             document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
         });
     });
@@ -747,10 +747,10 @@ function renderRadarChart(selected, market, mfrLabel) {
                 ...(mfrLabel !== '__all__' ? [{
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
-                    borderColor: '#52525b',
+                    borderColor: '#9A9CA1',
                     backgroundColor: 'rgba(82,82,91,0.1)',
                     borderWidth: 1.5,
-                    pointBackgroundColor: '#52525b',
+                    pointBackgroundColor: '#9A9CA1',
                     pointRadius: 3,
                     borderDash: [4, 4],
                 }] : []),
@@ -762,7 +762,7 @@ function renderRadarChart(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: true,
-                    labels: { color: '#a1a1aa', font: { size: 11 } },
+                    labels: { color: '#5E6168', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -774,17 +774,17 @@ function renderRadarChart(selected, market, mfrLabel) {
                 r: {
                     min: 0,
                     max: 1,
-                    grid: { color: '#27272a' },
-                    angleLines: { color: '#27272a' },
+                    grid: { color: '#ECECE7' },
+                    angleLines: { color: '#ECECE7' },
                     ticks: {
                         display: true,
-                        color: '#52525b',
+                        color: '#9A9CA1',
                         font: { size: 9 },
                         stepSize: 0.25,
                         backdropColor: 'transparent',
                     },
                     pointLabels: {
-                        color: '#a1a1aa',
+                        color: '#5E6168',
                         font: { size: 11 },
                     },
                 }
@@ -818,7 +818,7 @@ function renderComponentBar(selected, market, mfrLabel) {
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
                     backgroundColor: 'rgba(82,82,91,0.3)',
-                    borderColor: '#52525b',
+                    borderColor: '#9A9CA1',
                     borderWidth: 1,
                     borderRadius: 4,
                 }] : []),
@@ -829,7 +829,7 @@ function renderComponentBar(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: mfrLabel !== '__all__',
-                    labels: { color: '#a1a1aa', font: { size: 11 } },
+                    labels: { color: '#5E6168', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -838,13 +838,13 @@ function renderComponentBar(selected, market, mfrLabel) {
                 }
             },
             scales: {
-                x: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa', font: { size: 11 } } },
+                x: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168', font: { size: 11 } } },
                 y: {
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a' },
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75' },
                     min: 0,
                     max: 1,
-                    title: { display: true, text: 'Normalized Score (0–1)', color: '#52525b', font: { size: 10 } }
+                    title: { display: true, text: 'Normalized Score (0–1)', color: '#9A9CA1', font: { size: 10 } }
                 },
             }
         }
@@ -890,7 +890,7 @@ function renderComponentStacked() {
                 legend: {
                     display: true,
                     position: 'bottom',
-                    labels: { color: '#a1a1aa', font: { size: 10 }, boxWidth: 12, padding: 12 },
+                    labels: { color: '#5E6168', font: { size: 10 }, boxWidth: 12, padding: 12 },
                 },
                 tooltip: {
                     mode: 'index',
@@ -905,14 +905,14 @@ function renderComponentStacked() {
             scales: {
                 x: {
                     stacked: true,
-                    grid: { color: '#1f1f1f' },
-                    ticks: { color: '#a1a1aa', font: { size: 10 } },
+                    grid: { color: '#E4E4DF' },
+                    ticks: { color: '#5E6168', font: { size: 10 } },
                 },
                 y: {
                     stacked: true,
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a' },
-                    title: { display: true, text: 'Weighted Score Contribution', color: '#52525b', font: { size: 10 } },
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: 'Weighted Score Contribution', color: '#9A9CA1', font: { size: 10 } },
                 },
             },
         }
@@ -1011,7 +1011,7 @@ function renderTrends() {
             plugins: {
                 legend: {
                     display: compareValues != null,
-                    labels: { color: '#a1a1aa', font: { size: 11 } },
+                    labels: { color: '#5E6168', font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -1020,11 +1020,11 @@ function renderTrends() {
                 }
             },
             scales: {
-                x: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa' } },
+                x: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168' } },
                 y: {
-                    grid: { color: '#27272a' },
+                    grid: { color: '#ECECE7' },
                     ticks: {
-                        color: '#71717a',
+                        color: '#6B6E75',
                         callback: v => formatTrendValue(v, metric),
                     },
                 },
@@ -1145,15 +1145,15 @@ function renderOutlierTable(tableId, rows, metric, type) {
     tbody.innerHTML = '';
     rows.forEach((row, i) => {
         const val = parseFloat(row[metric]);
-        const color = type === 'top' ? 'text-emerald-400' : 'text-red-400';
+        const color = type === 'top' ? 'text-up' : 'text-down';
         const tr = document.createElement('tr');
-        tr.className = 'table-row border-b border-zinc-800/50 text-xs';
+        tr.className = 'table-row border-b border-hair text-xs';
         tr.innerHTML = `
             <td class="px-4 py-2">
-                <div class="font-medium text-zinc-200">${row.manufacturer}</div>
-                <div class="text-zinc-500">${row.model}</div>
+                <div class="font-medium text-ink">${row.manufacturer}</div>
+                <div class="text-faint">${row.model}</div>
             </td>
-            <td class="px-4 py-2 text-zinc-400">${row.quarter}</td>
+            <td class="px-4 py-2 text-mute">${row.quarter}</td>
             <td class="px-4 py-2 text-right font-semibold ${color}">${formatMetricValue(val, metric)}</td>
         `;
         tbody.appendChild(tr);
@@ -1216,8 +1216,8 @@ function renderOutlierDist(data, metric, label) {
                 }
             },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#71717a', font: { size: 9 }, maxRotation: 45 } },
-                y: { grid: { color: '#27272a' }, ticks: { color: '#71717a' } },
+                x: { grid: { display: false }, ticks: { color: '#6B6E75', font: { size: 9 }, maxRotation: 45 } },
+                y: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
             }
         }
     });
@@ -1281,16 +1281,16 @@ function renderSpecialTable(rows, title, valueFn, colHeaders = []) {
     rows.forEach(row => {
         const vals = valueFn(row);
         const tr = document.createElement('tr');
-        tr.className = 'table-row border-b border-zinc-800/50 text-xs';
+        tr.className = 'table-row border-b border-hair text-xs';
         tr.innerHTML = `
             <td class="px-4 py-2">
-                <div class="font-medium text-zinc-200">${row.manufacturer}</div>
-                <div class="text-zinc-500">${row.model}</div>
+                <div class="font-medium text-ink">${row.manufacturer}</div>
+                <div class="text-faint">${row.model}</div>
             </td>
-            <td class="px-4 py-2 text-zinc-400">${row.quarter}</td>
-            <td class="px-4 py-2 text-right font-semibold text-amber-400">${vals[0]}</td>
-            <td class="px-4 py-2 text-right text-zinc-300">${vals[1] || ''}</td>
-            <td class="px-4 py-2 text-right text-zinc-400">${vals[2] || ''}</td>
+            <td class="px-4 py-2 text-mute">${row.quarter}</td>
+            <td class="px-4 py-2 text-right font-semibold text-amber-700">${vals[0]}</td>
+            <td class="px-4 py-2 text-right text-ink">${vals[1] || ''}</td>
+            <td class="px-4 py-2 text-right text-mute">${vals[2] || ''}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -1459,14 +1459,14 @@ function renderCorrelations() {
             },
             scales: {
                 x: {
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a' },
-                    title: { display: true, text: xLabel, color: '#71717a', font: { size: 11 } }
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: xLabel, color: '#6B6E75', font: { size: 11 } }
                 },
                 y: {
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a' },
-                    title: { display: true, text: yLabel, color: '#71717a', font: { size: 11 } }
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: yLabel, color: '#6B6E75', font: { size: 11 } }
                 },
             }
         }
@@ -1487,7 +1487,7 @@ function renderCorrelations() {
     });
     if (groupKeys.length > 30) {
         const el = document.createElement('div');
-        el.className = 'text-zinc-600';
+        el.className = 'text-faint';
         el.textContent = `+${groupKeys.length - 30} more`;
         legendEl.appendChild(el);
     }
@@ -1527,20 +1527,20 @@ function renderMethodology() {
     const body = document.getElementById('weightTableBody');
     if (body) {
         const STATUS = {
-            ok:     ['measured', 'text-emerald-400'],
-            sparse: ['too few rows to rank', 'text-amber-400'],
-            static: ['not varying', 'text-amber-400'],
-            empty:  ['no data — weight redistributed', 'text-rose-400'],
+            ok:     ['measured', 'text-up'],
+            sparse: ['too few rows to rank', 'text-amber-700'],
+            static: ['not varying', 'text-amber-700'],
+            empty:  ['no data — weight redistributed', 'text-down'],
         };
         body.innerHTML = (MII.effectiveWeights || []).map(w => {
-            const [label, cls] = STATUS[w.status] || [w.status, 'text-zinc-400'];
+            const [label, cls] = STATUS[w.status] || [w.status, 'text-mute'];
             // Flag an input whose real contribution is far from its published one.
             const drift = w.nominal > 0 && Math.abs(w.effective - w.nominal) / w.nominal > 0.25;
-            return `<tr class="border-b border-zinc-800/60">
-                <td class="py-2 pr-4 text-zinc-200">${w.label}</td>
-                <td class="py-2 px-3 text-right font-mono text-zinc-400">${(w.nominal * 100).toFixed(0)}%</td>
-                <td class="py-2 px-3 text-right font-mono ${drift ? 'text-amber-400 font-semibold' : 'text-zinc-200'}">${(w.effective * 100).toFixed(1)}%</td>
-                <td class="py-2 px-3 text-right font-mono text-zinc-400">${(w.coverage * 100).toFixed(1)}%</td>
+            return `<tr class="border-b border-hair">
+                <td class="py-2 pr-4 text-ink">${w.label}</td>
+                <td class="py-2 px-3 text-right font-mono text-mute">${(w.nominal * 100).toFixed(0)}%</td>
+                <td class="py-2 px-3 text-right font-mono ${drift ? 'text-amber-700 font-semibold' : 'text-ink'}">${(w.effective * 100).toFixed(1)}%</td>
+                <td class="py-2 px-3 text-right font-mono text-mute">${(w.coverage * 100).toFixed(1)}%</td>
                 <td class="py-2 pl-3 ${cls}">${label}</td>
             </tr>`;
         }).join('');
@@ -1555,10 +1555,10 @@ function renderMethodology() {
                 : next ? (next.minLots - b.minLots === 1 ? String(b.minLots)
                                                          : b.minLots + '–' + (next.minLots - 1))
                        : b.minLots + '+';
-            return `<tr class="border-b border-zinc-800/60">
-                <td class="py-2 pr-4 font-mono text-zinc-200">${range}</td>
-                <td class="py-2 px-3 text-right font-mono text-zinc-200">${b.median.toFixed(1)} pts</td>
-                <td class="py-2 px-3 text-right font-mono text-zinc-400">${b.p90.toFixed(1)} pts</td>
+            return `<tr class="border-b border-hair">
+                <td class="py-2 pr-4 font-mono text-ink">${range}</td>
+                <td class="py-2 px-3 text-right font-mono text-ink">${b.median.toFixed(1)} pts</td>
+                <td class="py-2 px-3 text-right font-mono text-mute">${b.p90.toFixed(1)} pts</td>
             </tr>`;
         }).join('');
     }
@@ -1650,13 +1650,13 @@ function renderDataCoverage(rows) {
             },
             scales: {
                 x: {
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a', maxRotation: 45 }
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75', maxRotation: 45 }
                 },
                 y: {
-                    grid: { color: '#27272a' },
-                    ticks: { color: '#71717a' },
-                    title: { display: true, text: 'Auction Records', color: '#71717a', font: { size: 11 } }
+                    grid: { color: '#ECECE7' },
+                    ticks: { color: '#6B6E75' },
+                    title: { display: true, text: 'Auction Records', color: '#6B6E75', font: { size: 11 } }
                 }
             }
         }
@@ -1683,23 +1683,23 @@ function renderDataCoverage(rows) {
         }
 
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-zinc-800/50 table-row';
+        tr.className = 'border-b border-hair table-row';
         tr.innerHTML = `
-            <td class="px-4 py-2.5 font-mono text-sm ${isLow ? 'text-red-400 font-medium' : 'text-zinc-200'}">${m}</td>
-            <td class="px-4 py-2.5 text-right ${isLow ? 'text-red-400 font-medium' : 'text-zinc-300'}">${cnt.toLocaleString()}</td>
+            <td class="px-4 py-2.5 font-mono text-sm ${isLow ? 'text-down font-medium' : 'text-ink'}">${m}</td>
+            <td class="px-4 py-2.5 text-right ${isLow ? 'text-down font-medium' : 'text-ink'}">${cnt.toLocaleString()}</td>
             <td class="px-4 py-2.5 text-right">
                 <div class="flex items-center justify-end gap-2">
-                    <div class="w-20 bg-zinc-800 rounded-full h-1.5">
+                    <div class="w-20 bg-[#F3F3EF] rounded-full h-1.5">
                         <div class="h-1.5 rounded-full ${isLow ? 'bg-red-500' : 'bg-amber-500'}" style="width:${Math.min(pct, 100)}%"></div>
                     </div>
-                    <span class="${isLow ? 'text-red-400' : 'text-zinc-400'} text-xs w-10 text-right">${pct}%</span>
+                    <span class="${isLow ? 'text-down' : 'text-mute'} text-xs w-10 text-right">${pct}%</span>
                 </div>
             </td>
-            <td class="px-4 py-2.5 text-right text-zinc-400 text-sm">${missingDays} / ${daysInMonth}</td>
+            <td class="px-4 py-2.5 text-right text-mute text-sm">${missingDays} / ${daysInMonth}</td>
             <td class="px-4 py-2.5 text-center">
                 ${isLow
-                    ? '<span class="px-2 py-0.5 rounded-full text-xs bg-red-900/40 text-red-400 border border-red-800/50">Low</span>'
-                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-400">OK</span>'
+                    ? '<span class="px-2 py-0.5 rounded-full text-xs bg-red-50 text-down border border-red-200">Low</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-[#F3F3EF] text-mute">OK</span>'
                 }
             </td>
         `;
@@ -1711,6 +1711,6 @@ function renderDataCoverage(rows) {
         flaggedCount > 0 ? `${flaggedCount} month${flaggedCount > 1 ? 's' : ''} flagged` : 'No gaps detected';
     document.getElementById('covFlaggedBadge').className =
         flaggedCount > 0
-            ? 'px-2 py-0.5 rounded-full text-xs bg-red-900/40 text-red-400 border border-red-800/50'
-            : 'px-2 py-0.5 rounded-full text-xs bg-green-900/40 text-green-400 border border-green-800/50';
+            ? 'px-2 py-0.5 rounded-full text-xs bg-red-50 text-down border border-red-200'
+            : 'px-2 py-0.5 rounded-full text-xs bg-green-50 text-up border border-green-200';
 }

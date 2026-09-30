@@ -104,7 +104,7 @@ const MANUFACTURER_BRANDING = {
 function getBranding(name) {
     return MANUFACTURER_BRANDING[name] || {
         abbr: name.substring(0, 3).toUpperCase(),
-        color: '#888'
+        color: '#5E6168'
     };
 }
 
@@ -112,20 +112,20 @@ function getBranding(name) {
 const C = {
     bg: '#f0f0f0',
     panel: '#ffffff',
-    border: '#e5e7eb',
+    border: '#E4E4DF',
     grid: 'rgba(0,0,0,0.06)',
     gridLight: 'rgba(0,0,0,0.04)',
-    text: '#111827',
-    muted: '#9ca3af',
-    dim: '#6b7280',
+    text: '#16181D',
+    muted: '#6B6E75',
+    dim: '#6B6E75',
     green: '#16a34a',
     greenDim: 'rgba(22,163,74,0.15)',
     red: '#dc2626',
     redDim: 'rgba(220,38,38,0.15)',
-    amber: '#C5A028',
+    amber: '#D97706',
     blue: '#2563eb',
     blueDim: 'rgba(37,99,235,0.15)',
-    white: '#111827',
+    white: '#16181D',
 };
 
 // ---- State ----
@@ -508,8 +508,8 @@ function setupChartTooltip(canvas, tooltipEl) {
             const change = d.open > 0 ? ((d.close - d.open) / d.open * 100).toFixed(1) : '0.0';
 
             tooltipEl.innerHTML = `
-                <div style="color:#8B1A1A;font-weight:700;margin-bottom:3px;">${d.label}</div>
-                <div>O: <span style="color:#111827">${d.open.toFixed(1)}</span></div>
+                <div style="color:#B45309;font-weight:700;margin-bottom:3px;">${d.label}</div>
+                <div>O: <span style="color:#16181D">${d.open.toFixed(1)}</span></div>
                 <div>H: <span style="color:#16a34a">${d.high.toFixed(1)}</span></div>
                 <div>L: <span style="color:#dc2626">${d.low.toFixed(1)}</span></div>
                 <div>C: <span style="color:${changeColor}">${d.close.toFixed(1)}</span> <span style="color:${changeColor}">${changeSign}${change}%</span></div>
@@ -621,18 +621,18 @@ function renderManufacturerGrid() {
         return `
             <div class="mfr-card rounded-xl cursor-pointer ${isExpanded ? 'selected' : ''}"
                  data-mfr="${mfr.name}"
-                 style="background:#ffffff; border:1px solid #e5e7eb; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                 style="background:#ffffff; border:1px solid #E4E4DF; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
                 <!-- Card Header -->
-                <div class="px-3 py-2.5 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+                <div class="px-3 py-2.5 border-b border-hair flex items-center justify-between bg-[#FAFAF8]">
                     <div class="flex items-center gap-2">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-md text-[9px] font-bold"
-                              style="background:#f5f5f5; color:${branding.color}; border:2px solid ${branding.color}60;">
+                              style="background:#F3F3EF; color:${branding.color}; border:2px solid ${branding.color}60;">
                             ${branding.abbr}
                         </span>
-                        <span class="text-xs font-semibold text-gray-900">${mfr.name}</span>
+                        <span class="text-xs font-semibold text-ink">${mfr.name}</span>
                     </div>
                     <div class="text-right">
-                        <span class="text-sm font-bold text-[#8B1A1A]">${mfr.mii.toFixed(1)}</span>
+                        <span class="text-sm font-bold text-[#B45309]">${mfr.mii.toFixed(1)}</span>
                         <span class="text-[10px] font-semibold ml-1" style="color:${changeColor}">
                             ${changeSign}${mfr.change.toFixed(1)}%
                         </span>
@@ -642,25 +642,25 @@ function renderManufacturerGrid() {
                 <!-- Mini Candlestick Chart -->
                 <div class="px-2 py-1 relative bg-white" style="height: 130px; overflow:hidden;">
                     <canvas class="mfr-chart" data-mfr="${mfr.name}"></canvas>
-                    <div class="hidden mfr-tooltip absolute pointer-events-none bg-white border border-gray-200 shadow-md px-2 py-1.5 text-[10px] rounded z-10 whitespace-nowrap" data-mfr="${mfr.name}"></div>
+                    <div class="hidden mfr-tooltip absolute pointer-events-none bg-white border border-line shadow-md px-2 py-1.5 text-[10px] rounded z-10 whitespace-nowrap" data-mfr="${mfr.name}"></div>
                 </div>
 
                 <!-- Stats Footer -->
-                <div class="px-3 py-2 border-t border-gray-100 flex items-center justify-between text-[10px] bg-gray-50">
+                <div class="px-3 py-2 border-t border-hair flex items-center justify-between text-[10px] bg-[#FAFAF8]">
                     <div>
-                        <span class="text-gray-400">Vol</span>
-                        <span class="text-gray-700 ml-1 font-medium">${mfr.volume}</span>
+                        <span class="text-faint">Vol</span>
+                        <span class="text-mute ml-1 font-medium">${mfr.volume}</span>
                     </div>
                     <div>
-                        <span class="text-gray-400">Avg</span>
-                        <span class="text-gray-700 ml-1 font-medium">$${(mfr.avgPrice / 1000).toFixed(0)}K</span>
+                        <span class="text-faint">Avg</span>
+                        <span class="text-mute ml-1 font-medium">$${(mfr.avgPrice / 1000).toFixed(0)}K</span>
                     </div>
                     <div>
-                        <span class="text-gray-400">H</span>
+                        <span class="text-faint">H</span>
                         <span class="text-green-600 ml-1 font-medium">${mfr.high.toFixed(1)}</span>
                     </div>
                     <div>
-                        <span class="text-gray-400">L</span>
+                        <span class="text-faint">L</span>
                         <span class="text-red-600 ml-1 font-medium">${mfr.low.toFixed(1)}</span>
                     </div>
                 </div>
@@ -755,41 +755,41 @@ function renderExpandedDetail(mfrName) {
     const changeSign = isUp ? '+' : '';
 
     detail.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="bg-white border border-line rounded-xl shadow-sm overflow-hidden">
             <!-- Header -->
-            <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+            <div class="px-5 py-3.5 border-b border-hair flex items-center justify-between bg-[#FAFAF8]">
                 <div class="flex items-center gap-3">
                     <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-xs font-bold"
-                          style="background:#f5f5f5; color:${branding.color}; border:2px solid ${branding.color}60;">
+                          style="background:#F3F3EF; color:${branding.color}; border:2px solid ${branding.color}60;">
                         ${branding.abbr}
                     </span>
                     <div>
-                        <span class="text-sm font-semibold text-gray-900">${mfrName}</span>
-                        <span class="text-xs text-gray-400 ml-2">Detailed View</span>
+                        <span class="text-sm font-semibold text-ink">${mfrName}</span>
+                        <span class="text-xs text-faint ml-2">Detailed View</span>
                     </div>
                 </div>
-                <button id="closeDetail" class="text-gray-400 hover:text-[#8B1A1A] text-xl transition-colors leading-none">&times;</button>
+                <button id="closeDetail" class="text-faint hover:text-[#B45309] text-xl transition-colors leading-none">&times;</button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
                 <!-- Large Chart -->
-                <div class="lg:col-span-2 p-5 border-r border-gray-100">
+                <div class="lg:col-span-2 p-5 border-r border-hair">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs text-gray-400 uppercase tracking-wider font-medium">MII OHLC by Quarter</span>
+                        <span class="text-xs text-faint uppercase tracking-wider font-medium">MII OHLC by Quarter</span>
                         <div class="flex items-center gap-3 text-sm">
-                            <span class="text-[#8B1A1A] font-bold">${summary.mii.toFixed(1)}</span>
+                            <span class="text-[#B45309] font-bold">${summary.mii.toFixed(1)}</span>
                             <span class="font-semibold" style="color:${changeColor}">${changeSign}${summary.change.toFixed(1)}%</span>
                         </div>
                     </div>
-                    <div class="relative rounded-lg overflow-hidden border border-gray-100" style="height: 240px;">
+                    <div class="relative rounded-lg overflow-hidden border border-hair" style="height: 240px;">
                         <canvas id="detailChart"></canvas>
-                        <div id="detailTooltip" class="hidden absolute pointer-events-none bg-white border border-gray-200 shadow-lg px-2 py-1.5 text-[10px] rounded z-10 whitespace-nowrap"></div>
+                        <div id="detailTooltip" class="hidden absolute pointer-events-none bg-white border border-line shadow-lg px-2 py-1.5 text-[10px] rounded z-10 whitespace-nowrap"></div>
                     </div>
                     <!-- OHLC Data Table -->
                     <div class="mt-4 overflow-x-auto">
                         <table class="w-full text-xs">
                             <thead>
-                                <tr class="text-gray-400 border-b border-gray-100">
+                                <tr class="text-faint border-b border-hair">
                                     <th class="text-left py-1.5 px-2 font-medium">Period</th>
                                     <th class="text-right py-1.5 px-2 font-medium">Open</th>
                                     <th class="text-right py-1.5 px-2 font-medium">High</th>
@@ -804,14 +804,14 @@ function renderExpandedDetail(mfrName) {
                                     const chg = d.open > 0 ? ((d.close - d.open) / d.open * 100) : 0;
                                     const up = chg >= 0;
                                     return `
-                                        <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                            <td class="py-1.5 px-2 text-[#8B1A1A] font-medium">${d.label}</td>
-                                            <td class="py-1.5 px-2 text-right text-gray-600">${d.open.toFixed(1)}</td>
+                                        <tr class="border-b border-hair hover:bg-[#FAFAF8] transition-colors">
+                                            <td class="py-1.5 px-2 text-[#B45309] font-medium">${d.label}</td>
+                                            <td class="py-1.5 px-2 text-right text-mute">${d.open.toFixed(1)}</td>
                                             <td class="py-1.5 px-2 text-right text-green-600">${d.high.toFixed(1)}</td>
                                             <td class="py-1.5 px-2 text-right text-red-600">${d.low.toFixed(1)}</td>
                                             <td class="py-1.5 px-2 text-right font-medium" style="color:${up ? '#16a34a' : '#dc2626'}">${d.close.toFixed(1)}</td>
                                             <td class="py-1.5 px-2 text-right font-medium" style="color:${up ? '#16a34a' : '#dc2626'}">${up ? '+' : ''}${chg.toFixed(1)}%</td>
-                                            <td class="py-1.5 px-2 text-right text-gray-600">${d.volume}</td>
+                                            <td class="py-1.5 px-2 text-right text-mute">${d.volume}</td>
                                         </tr>
                                     `;
                                 }).join('')}
@@ -823,38 +823,38 @@ function renderExpandedDetail(mfrName) {
                 <!-- Model Rankings -->
                 <div class="p-5">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs text-gray-500 uppercase tracking-wider font-medium">Model Rankings</span>
-                        <span class="text-xs text-gray-400">${models.length} models</span>
+                        <span class="text-xs text-faint uppercase tracking-wider font-medium">Model Rankings</span>
+                        <span class="text-xs text-faint">${models.length} models</span>
                     </div>
 
                     <!-- Summary stats -->
                     <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
-                            <div class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Total Vol</div>
-                            <div class="text-xl font-bold text-gray-900">${summary.totalVolume}</div>
+                        <div class="bg-[#FAFAF8] border border-hair rounded-lg p-3">
+                            <div class="text-[10px] text-faint uppercase tracking-wider mb-1">Total Vol</div>
+                            <div class="text-xl font-bold text-ink">${summary.totalVolume}</div>
                         </div>
-                        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
-                            <div class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Avg Price</div>
-                            <div class="text-xl font-bold text-gray-900">$${(summary.avgPrice / 1000).toFixed(0)}K</div>
+                        <div class="bg-[#FAFAF8] border border-hair rounded-lg p-3">
+                            <div class="text-[10px] text-faint uppercase tracking-wider mb-1">Avg Price</div>
+                            <div class="text-xl font-bold text-ink">$${(summary.avgPrice / 1000).toFixed(0)}K</div>
                         </div>
                     </div>
 
                     <!-- Model list -->
                     <div class="max-h-72 overflow-y-auto scrollbar-thin space-y-0.5">
                         ${models.map((m, idx) => `
-                            <div class="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-[#FAFAF8] transition-colors">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-gray-400 w-4 text-right text-xs">${idx + 1}</span>
+                                    <span class="text-faint w-4 text-right text-xs">${idx + 1}</span>
                                     <div>
-                                        <div class="text-gray-900 font-medium text-xs">${m.model}</div>
-                                        <div class="text-gray-400 text-[10px]">${m.auctions} auc &middot; $${(m.avgPrice / 1000).toFixed(0)}K</div>
+                                        <div class="text-ink font-medium text-xs">${m.model}</div>
+                                        <div class="text-faint text-[10px]">${m.auctions} auc &middot; $${(m.avgPrice / 1000).toFixed(0)}K</div>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[#8B1A1A] font-bold text-xs">${m.mii.toFixed(1)}</div>
+                                    <div class="text-[#B45309] font-bold text-xs">${m.mii.toFixed(1)}</div>
                                     <div class="text-[10px]">
                                         <span class="text-green-600">${m.high.toFixed(0)}</span>
-                                        <span class="text-gray-300">/</span>
+                                        <span class="text-[#9A9CA1]">/</span>
                                         <span class="text-red-600">${m.low.toFixed(0)}</span>
                                     </div>
                                 </div>
@@ -984,10 +984,10 @@ async function initializeApp() {
         loadingIndicator.innerHTML = `
             <div class="text-center">
                 <div class="text-4xl mb-3">&#9888;</div>
-                <div class="text-sm text-[#ff1744] font-medium mb-2">DATA LOAD FAILED</div>
-                <div class="text-[10px] text-[#555] mb-4">${error.message}</div>
+                <div class="text-sm text-[#B42318] font-medium mb-2">DATA LOAD FAILED</div>
+                <div class="text-[10px] text-[#6B6E75] mb-4">${error.message}</div>
                 <button onclick="location.reload()"
-                    class="px-4 py-2 bg-[#ff9800] text-[#0a0a0a] rounded text-[11px] font-semibold hover:bg-[#ffb74d] transition-colors">
+                    class="px-4 py-2 bg-amber-500 text-ink rounded text-[11px] font-semibold hover:bg-amber-400 transition-colors">
                     RETRY
                 </button>
             </div>

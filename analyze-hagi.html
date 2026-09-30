@@ -6,23 +6,25 @@
     <title>MII Data Analysis — S3 Data Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
     /* ── Chart.js professional defaults ── */
-    Chart.defaults.font.family="'DM Sans',sans-serif";
+    Chart.defaults.font.family="'Hanken Grotesk',sans-serif";
     Chart.defaults.font.size=11;
-    Chart.defaults.color='#a8a29e';
+    Chart.defaults.color='#6B6E75';
     Chart.defaults.borderColor='rgba(0,0,0,0.04)';
     Chart.defaults.animation.duration=350;
     Chart.defaults.animation.easing='easeOutQuart';
     Object.assign(Chart.defaults.plugins.tooltip,{
-        backgroundColor:'#18181b',padding:{x:12,y:10},cornerRadius:9,
-        borderColor:'rgba(255,255,255,0.07)',borderWidth:1,
-        titleFont:{family:"'DM Sans',sans-serif",weight:'600',size:12},
-        bodyFont:{family:"'DM Sans',sans-serif",size:11},
-        titleColor:'#f5f5f4',bodyColor:'#a8a29e',
+        backgroundColor:'#16181D',padding:{x:12,y:10},cornerRadius:9,
+        borderColor:'#ECECE7',borderWidth:1,
+        titleFont:{family:"'Hanken Grotesk',sans-serif",weight:'600',size:12},
+        bodyFont:{family:"'Hanken Grotesk',sans-serif",size:11},
+        titleColor:'#F3F3EF',bodyColor:'#6B6E75',
         titleMarginBottom:5,boxPadding:5,usePointStyle:true,caretSize:5,
     });
 
@@ -40,25 +42,25 @@
                 if(key==='x'&&(type==='bar'||type==='line'))scale.grid.display=false;
                 if(!scale.border)scale.border={};scale.border.display=false;
                 if(!scale.ticks)scale.ticks={};
-                scale.ticks.color='#b5afa8';
+                scale.ticks.color='#6B6E75';
                 if(!scale.ticks.font)scale.ticks.font={};
-                scale.ticks.font.family="'DM Sans',sans-serif";scale.ticks.font.size=10;
+                scale.ticks.font.family="'Hanken Grotesk',sans-serif";scale.ticks.font.size=10;
                 if(scale.ticks.padding===undefined)scale.ticks.padding=10;
             });
             if(type==='radar'&&scales.r){
                 const r=scales.r;
                 if(!r.grid)r.grid={};r.grid.color='rgba(0,0,0,0.06)';
                 if(!r.angleLines)r.angleLines={};r.angleLines.color='rgba(0,0,0,0.06)';
-                if(!r.ticks)r.ticks={};r.ticks.backdropColor='transparent';r.ticks.color='#b5afa8';
+                if(!r.ticks)r.ticks={};r.ticks.backdropColor='transparent';r.ticks.color='#6B6E75';
                 if(!r.ticks.font)r.ticks.font={};r.ticks.font.size=9;
-                if(!r.pointLabels)r.pointLabels={};r.pointLabels.color='#78716c';
+                if(!r.pointLabels)r.pointLabels={};r.pointLabels.color='#5E6168';
                 if(!r.pointLabels.font)r.pointLabels.font={};
-                Object.assign(r.pointLabels.font,{family:"'DM Sans',sans-serif",size:11,weight:'500'});
+                Object.assign(r.pointLabels.font,{family:"'Hanken Grotesk',sans-serif",size:11,weight:'500'});
             }
             const legend=opts.plugins&&opts.plugins.legend;
             if(legend&&legend.display!==false){
                 if(!legend.labels)legend.labels={};
-                Object.assign(legend.labels,{font:{family:"'DM Sans',sans-serif",size:11},padding:18,usePointStyle:true,pointStyleWidth:8,boxHeight:8,color:'#78716c'});
+                Object.assign(legend.labels,{font:{family:"'Hanken Grotesk',sans-serif",size:11},padding:18,usePointStyle:true,pointStyleWidth:8,boxHeight:8,color:'#5E6168'});
             }
             const datasets=(chart.config.data||{}).datasets||[];
             datasets.forEach(ds=>{
@@ -124,80 +126,80 @@
     }});
     </script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script>tailwind.config={theme:{extend:{fontFamily:{sans:["'DM Sans'","sans-serif"]},colors:{brand:{red:'#8B1A1A',gold:'#B8960C'},warm:{50:'#f6f4ef',100:'#f0ebe2',200:'#e5e0d6',300:'#cfc8bc'}}}}}</script>
     <style>
-    *,*::before,*::after{font-family:'DM Sans',sans-serif;}
-    body{background:#f6f4ef;}
-    .scrollbar-thin::-webkit-scrollbar{width:6px;}.scrollbar-thin::-webkit-scrollbar-track{background:#f6f4ef;}.scrollbar-thin::-webkit-scrollbar-thumb{background:#cfc8bc;border-radius:3px;}.scrollbar-thin::-webkit-scrollbar-thumb:hover{background:#a8a29e;}
-    .card{background:#fff;border:1px solid #e8e3da;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.03);}
-    .stat-card{background:#fff;border:1px solid #e8e3da;border-radius:14px;padding:1.1rem 1.25rem;box-shadow:0 1px 2px rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.03);}
-    .chart-container{background:#fff;border:1px solid #e8e3da;border-radius:14px;padding:1.4rem 1.5rem;box-shadow:0 1px 2px rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.03);}
-    .input-field{background:#f6f4ef;border:1px solid #e5e0d6;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#1c1917;transition:border-color .15s,box-shadow .15s;}
-    .input-field:focus{outline:none;border-color:#8B1A1A;box-shadow:0 0 0 3px rgba(139,26,26,.07);}
-    .nav-link{font-size:13px;font-weight:500;color:#57534e;padding:5px 11px;border-radius:7px;transition:all .15s;text-decoration:none;white-space:nowrap;}
-    .nav-link:hover{color:#8B1A1A;background:#fdf2f2;}.nav-link.current{color:#8B1A1A;background:#fdf2f2;font-weight:600;}
-    .tab-nav{display:flex;border-bottom:1px solid #e5e0d6;margin-bottom:24px;gap:0;overflow-x:auto;}
+    body{background:#F6F6F3;}
+    .scrollbar-thin::-webkit-scrollbar{width:6px;}.scrollbar-thin::-webkit-scrollbar-track{background:#F6F6F3;}.scrollbar-thin::-webkit-scrollbar-thumb{background:#9A9CA1;border-radius:3px;}.scrollbar-thin::-webkit-scrollbar-thumb:hover{background:#6B6E75;}
+    .card{background:#fff;border:1px solid #E4E4DF;border-radius: 10px;}
+    .stat-card{background:#fff;border:1px solid #E4E4DF;border-radius: 10px;padding:1.1rem 1.25rem;}
+    .chart-container{background:#fff;border:1px solid #E4E4DF;border-radius: 10px;padding:1.4rem 1.5rem;}
+    .input-field{background: #FFFFFF;border: 1px solid #D9D9D3;border-radius:8px;font-size:13px;color:#16181D;transition:border-color .15s,box-shadow .15s;}
+    .input-field:focus{outline:none;border-color: #F59E0B;box-shadow:0 0 0 3px rgba(245,158,11,0.2);}
+    .tab-nav{display:flex;border-bottom:1px solid #E4E4DF;margin-bottom:24px;gap:0;overflow-x:auto;}
     .tab-nav::-webkit-scrollbar{height:0;}
-    .tab-btn{padding:10px 18px;font-size:12.5px;font-weight:500;color:#a8a29e;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;}
-    .tab-btn:hover{color:#57534e;}
-    .tab-btn.active{color:#8B1A1A!important;border-bottom-color:#8B1A1A!important;background:transparent!important;font-weight:600;}
+    .tab-btn{padding:10px 18px;font-size:12.5px;font-weight:500;color:#6B6E75;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;}
+    .tab-btn:hover{color:#5E6168;}
+    .tab-btn.active{color:#B45309!important;border-bottom-color:#B45309!important;background:transparent!important;font-weight:600;}
     .tab-content{display:none;}.tab-content.active{display:block;}
-    .table-row:hover{background:#faf9f7;}
+    .table-row:hover{background:#FAFAF8;}
     .table-row td { transition: background 0.1s; }
-    .sortable-header{cursor:pointer;user-select:none;}.sortable-header:hover{color:#8B1A1A;}
+    .sortable-header{cursor:pointer;user-select:none;}.sortable-header:hover{color:#B45309;}
     .model-search-wrap{position:relative;display:inline-flex;align-items:center;}
-    .model-clear-btn{position:absolute;right:8px;cursor:pointer;color:#a8a29e;font-size:16px;line-height:1;display:none;background:none;border:none;padding:0;}
-    .model-clear-btn.visible{display:block;}.model-clear-btn:hover{color:#1c1917;}
-    select option{background:#fff;color:#1c1917;}
+    .model-clear-btn{position:absolute;right:8px;cursor:pointer;color:#6B6E75;font-size:16px;line-height:1;display:none;background:none;border:none;padding:0;}
+    .model-clear-btn.visible{display:block;}.model-clear-btn:hover{color:#16181D;}
+    select option{background:#fff;color:#16181D;}
     </style>
-    <link rel="stylesheet" href="mii-dark-theme.css">
     <script>
     window.addEventListener('error',function(e){if(e.message&&e.message.includes('ResizeObserver')){e.stopImmediatePropagation();return false;}});
-    if(typeof Chart!=='undefined'){const BF="'Barlow',sans-serif";Chart.defaults.color='#7a8898';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family=BF;Chart.defaults.font.size=11;Object.assign(Chart.defaults.plugins.tooltip,{backgroundColor:'#0d1828',borderColor:'rgba(255,255,255,0.12)',titleColor:'#f0eeea',bodyColor:'#7a8898',titleFont:{family:BF,weight:'500',size:12},bodyFont:{family:BF,size:11}});try{Chart.register({id:'miiDarkGrid',beforeInit(chart){const s=(chart.config.options||{}).scales||{};Object.values(s).forEach(sc=>{if(!sc)return;if(!sc.grid)sc.grid={};sc.grid.color='rgba(255,255,255,0.06)';if(!sc.ticks)sc.ticks={};sc.ticks.color='#7a8898';if(!sc.ticks.font)sc.ticks.font={};sc.ticks.font.family=BF;});if(chart.config.type==='radar'&&s.r){const r=s.r;if(!r.grid)r.grid={};r.grid.color='rgba(255,255,255,0.06)';if(!r.angleLines)r.angleLines={};r.angleLines.color='rgba(255,255,255,0.06)';if(!r.pointLabels)r.pointLabels={};if(!r.pointLabels.font)r.pointLabels.font={};r.pointLabels.font.family=BF;}const lg=(chart.config.options?.plugins||{}).legend;if(lg?.labels){if(!lg.labels.font)lg.labels.font={};lg.labels.font.family=BF;lg.labels.color='#7a8898';}}})}catch(e){}}
     </script>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
 </head>
-<body class="min-h-screen text-[#1c1917]">
-
-<div class="h-[3px] bg-[#c9a84c] w-full fixed top-0 left-0 z-50"></div>
-
-<header class="bg-white sticky top-[3px] z-40 border-b border-[#e5e0d6]" style="box-shadow:0 1px 8px rgba(0,0,0,.04);">
-    <div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3 flex-shrink-0">
-            <svg viewBox="0 0 200 200" width="46" height="46" style="flex-shrink:0;display:block;"><defs><linearGradient id="nsg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#e0c878"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a7030"/><stop offset="100%" stop-color="#e0c878"/></linearGradient><radialGradient id="nbg" cx="42%" cy="32%" r="65%"><stop offset="0%" stop-color="#1a2e4a"/><stop offset="100%" stop-color="#080e1a"/></radialGradient></defs><circle cx="100" cy="100" r="93" fill="url(#nbg)" stroke="url(#nsg)" stroke-width="3"/><line x1="100" y1="40" x2="152" y2="70" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="152" y1="70" x2="152" y2="130" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="152" y1="130" x2="100" y2="160" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="100" y1="160" x2="48" y2="130" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="48" y1="130" x2="48" y2="70" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="48" y1="70" x2="100" y2="40" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="100" y1="40" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="152" y1="70" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="152" y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="100" y1="160" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="48" y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><line x1="48" y1="70" x2="100" y2="100" stroke="#c9a84c" stroke-width="1.2" opacity="0.38"/><circle cx="100" cy="40" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="152" cy="70" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="152" cy="130" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="100" cy="160" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="48" cy="130" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="48" cy="70" r="5" fill="url(#nsg)" opacity="0.75"/><circle cx="100" cy="100" r="26" fill="url(#nbg)" stroke="url(#nsg)" stroke-width="1.4"/><circle cx="100" cy="100" r="7" fill="url(#nsg)" opacity="0.95"/></svg>
-            <div class="w-px h-5 bg-[#e5e0d6]"></div>
-            <span class="font-semibold text-[#1c1917] text-sm">MII Data Analysis</span>
-            <span class="text-[11px] text-[#a8a29e] hidden lg:block">S3 Data Explorer</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <a href="index-hagi.html" class="nav-link">&larr; Leaderboard</a>
-            <a href="dashboard-hagi.html" class="nav-link">Dashboard</a>
-            <a href="analyze-hagi.html" class="nav-link current">Analysis</a>
-            <a href="analytics.html" class="nav-link">Model Comparison</a>
-            <div class="w-px h-5 bg-[#e5e0d6] mx-2"></div>
-            <a href="analyze.html" class="text-[11px] text-[#cfc8bc] hover:text-[#a8a29e] transition-colors">Classic View</a>
-            <div class="text-right ml-3 hidden md:block">
-                <div class="text-[10px] text-[#a8a29e] uppercase tracking-widest font-medium">Updated</div>
-                <div id="lastUpdated" class="text-[11px] font-semibold text-[#57534e]">—</div>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link is-active" aria-current="page">HAGI</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <span id="lastUpdated"></span>
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
             </div>
         </div>
+    </header>
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
+        <div class="flex flex-col gap-2">
+            <nav aria-label="HAGI view" class="flex flex-wrap items-center gap-5 text-[13px]"><span class="text-faint">HAGI view</span><a href="index-hagi.html" class="text-mute hover:text-ink pb-1">Leaderboard</a><a href="dashboard-hagi.html" class="text-mute hover:text-ink pb-1">Dashboard</a><a href="analyze-hagi.html" class="font-semibold text-ink border-b-2 border-amber-500 pb-1" aria-current="page">Analysis</a></nav>
+            <h1 class="m-0 text-3xl font-semibold tracking-tight">Data analysis</h1>
+        </div>
+        
     </div>
-</header>
 
-<div id="loadingIndicator" class="fixed inset-0 bg-white/88 z-50 flex items-center justify-center" style="backdrop-filter:blur(4px);">
+<div id="loadingIndicator" class="fixed inset-0 bg-white z-50 flex items-center justify-center" style="backdrop-filter:blur(4px);">
     <div class="text-center">
-        <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 border-[#e5e0d6] border-t-[#8B1A1A] mb-5"></div>
-        <div class="text-sm font-semibold text-[#1c1917]">Loading MII Data</div>
-        <div class="text-xs text-[#a8a29e] mt-1">Fetching raw auction data from S3</div>
+        <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 border-[#E4E4DF] border-t-[#B45309] mb-5"></div>
+        <div class="text-sm font-semibold text-[#16181D]">Loading MII Data</div>
+        <div class="text-xs text-[#6B6E75] mt-1">Fetching raw auction data from S3</div>
     </div>
 </div>
-<div id="errorState" class="hidden fixed inset-0 bg-white/88 z-50 flex items-center justify-center" style="backdrop-filter:blur(4px);">
+<div id="errorState" class="hidden fixed inset-0 bg-white z-50 flex items-center justify-center" style="backdrop-filter:blur(4px);">
     <div class="card p-10 text-center max-w-md">
         <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-[#8B1A1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            <svg class="w-6 h-6 text-[#B45309]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
         </div>
-        <div class="text-base font-semibold text-[#8B1A1A] mb-2">Failed to Load Data</div>
-        <div id="errorMessage" class="text-xs text-[#a8a29e] mb-5"></div>
-        <button onclick="location.reload()" class="px-4 py-2 bg-[#8B1A1A] text-white rounded-lg text-sm font-medium hover:bg-[#6B1414] transition-colors">Retry</button>
+        <div class="text-base font-semibold text-[#B45309] mb-2">Failed to Load Data</div>
+        <div id="errorMessage" class="text-xs text-[#6B6E75] mb-5"></div>
+        <button onclick="location.reload()" class="px-4 py-2 bg-ink text-white rounded-lg text-sm font-medium hover:bg-[#2C2F36] transition-colors">Retry</button>
     </div>
 </div>
 
@@ -205,31 +207,31 @@
 
 <!-- Summary Stats -->
 <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-    <div class="stat-card" style="border-top:2.5px solid #cfc8bc;">
-        <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2">Total Records</div>
-        <div id="statTotalRecords" class="text-[1.6rem] font-bold text-[#1c1917] leading-none tabular-nums">—</div>
-        <div class="text-[11px] text-[#a8a29e] mt-1.5">make/model/month combos</div>
-        <div id="statFilteredNote" class="text-[11px] text-[#B8960C] mt-0.5 hidden"></div>
+    <div class="stat-card">
+        <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2">Total Records</div>
+        <div id="statTotalRecords" class="text-[1.6rem] font-bold text-[#16181D] leading-none tabular-nums">—</div>
+        <div class="text-[11px] text-[#6B6E75] mt-1.5">make/model/month combos</div>
+        <div id="statFilteredNote" class="text-[11px] text-[#B45309] mt-0.5 hidden"></div>
     </div>
-    <div class="stat-card" style="border-top:2.5px solid #3b82f6;">
-        <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2">Quarters</div>
-        <div id="statQuarters" class="text-[1.6rem] font-bold text-[#1c1917] leading-none tabular-nums">—</div>
-        <div id="statQuarterRange" class="text-[11px] text-[#a8a29e] mt-1.5">date range</div>
+    <div class="stat-card">
+        <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2">Quarters</div>
+        <div id="statQuarters" class="text-[1.6rem] font-bold text-[#16181D] leading-none tabular-nums">—</div>
+        <div id="statQuarterRange" class="text-[11px] text-[#6B6E75] mt-1.5">date range</div>
     </div>
-    <div class="stat-card" style="border-top:2.5px solid #8B1A1A;">
-        <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2">Unique Makes</div>
-        <div id="statMakes" class="text-[1.6rem] font-bold text-[#1c1917] leading-none tabular-nums">—</div>
-        <div class="text-[11px] text-[#a8a29e] mt-1.5">manufacturers</div>
+    <div class="stat-card">
+        <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2">Unique Makes</div>
+        <div id="statMakes" class="text-[1.6rem] font-bold text-[#16181D] leading-none tabular-nums">—</div>
+        <div class="text-[11px] text-[#6B6E75] mt-1.5">manufacturers</div>
     </div>
-    <div class="stat-card" style="border-top:2.5px solid #57534e;">
-        <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2">Unique Models</div>
-        <div id="statModels" class="text-[1.6rem] font-bold text-[#1c1917] leading-none tabular-nums">—</div>
-        <div class="text-[11px] text-[#a8a29e] mt-1.5">distinct models</div>
+    <div class="stat-card">
+        <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2">Unique Models</div>
+        <div id="statModels" class="text-[1.6rem] font-bold text-[#16181D] leading-none tabular-nums">—</div>
+        <div class="text-[11px] text-[#6B6E75] mt-1.5">distinct models</div>
     </div>
-    <div class="stat-card" style="border-top:2.5px solid #B8960C;">
-        <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2">Avg MII Score</div>
-        <div id="statAvgMII" class="text-[1.6rem] font-bold text-[#8B1A1A] leading-none tabular-nums">—</div>
-        <div class="text-[11px] text-[#a8a29e] mt-1.5">all records</div>
+    <div class="stat-card">
+        <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2">Avg MII Score</div>
+        <div id="statAvgMII" class="text-[1.6rem] font-bold text-[#B45309] leading-none tabular-nums">—</div>
+        <div class="text-[11px] text-[#6B6E75] mt-1.5">all records</div>
     </div>
 </div>
 
@@ -246,15 +248,15 @@
 <!-- TAB: Components -->
 <div id="tab-components" class="tab-content active">
     <div class="card p-4 mb-5 flex flex-wrap items-center gap-4">
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Manufacturer</label><select id="radarMfrSelect" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">Market Average</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Model</label><div class="model-search-wrap"><input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-48 focus:outline-none"/><datalist id="radarModelList"></datalist><button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Manufacturer</label><select id="radarMfrSelect" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">Market Average</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Model</label><div class="model-search-wrap"><input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-48 focus:outline-none"/><datalist id="radarModelList"></datalist><button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-        <div class="chart-container"><div class="mb-4"><h2 class="font-semibold text-[#1c1917] text-[13px]">Normalized Component Scores</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Average normalized score per MII component</p></div><div style="height:320px;"><canvas id="radarChart"></canvas></div></div>
-        <div class="chart-container"><div class="mb-4"><h2 class="font-semibold text-[#1c1917] text-[13px]">Component Score vs Market Average</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Selected manufacturer vs all-market baseline</p></div><div style="height:320px;"><canvas id="componentBarChart"></canvas></div></div>
+        <div class="chart-container"><div class="mb-4"><h2 class="font-semibold text-[#16181D] text-[13px]">Normalized Component Scores</h2><p class="text-[11px] text-[#6B6E75] mt-0.5">Average normalized score per MII component</p></div><div style="height:320px;"><canvas id="radarChart"></canvas></div></div>
+        <div class="chart-container"><div class="mb-4"><h2 class="font-semibold text-[#16181D] text-[13px]">Component Score vs Market Average</h2><p class="text-[11px] text-[#6B6E75] mt-0.5">Selected manufacturer vs all-market baseline</p></div><div style="height:320px;"><canvas id="componentBarChart"></canvas></div></div>
     </div>
     <div class="chart-container mb-5">
-        <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#1c1917] text-[13px]">Weighted Component Contribution — Top Manufacturers</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Weighted contribution per component (top 15 by avg MII)</p></div><div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e]">Quarter</label><select id="componentQuarterSelect" class="input-field px-3 py-1.5 focus:outline-none"></select></div></div>
+        <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#16181D] text-[13px]">Weighted Component Contribution — Top Manufacturers</h2><p class="text-[11px] text-[#6B6E75] mt-0.5">Weighted contribution per component (top 15 by avg MII)</p></div><div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75]">Quarter</label><select id="componentQuarterSelect" class="input-field px-3 py-1.5 focus:outline-none"></select></div></div>
         <div style="height:380px;"><canvas id="componentStackedChart"></canvas></div>
     </div>
 </div>
@@ -262,20 +264,20 @@
 <!-- TAB: Trends -->
 <div id="tab-trends" class="tab-content">
     <div class="card p-4 mb-5 flex flex-wrap items-center gap-4">
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Metric</label><select id="trendMetric" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Avg Sale Price ($)</option><option value="views">Avg Views</option><option value="bids">Avg Bids</option><option value="comments">Avg Comments</option><option value="social_score">Social Score</option><option value="sold_rate">Sell-Through Rate (%)</option><option value="volume">Auction Volume</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Manufacturer</label><select id="trendMfrSelect" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">All (Market)</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Compare</label><select id="trendCompare" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="none">None</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Model</label><div class="model-search-wrap"><input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-44 focus:outline-none"/><datalist id="trendModelList"></datalist><button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Metric</label><select id="trendMetric" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Avg Sale Price ($)</option><option value="views">Avg Views</option><option value="bids">Avg Bids</option><option value="comments">Avg Comments</option><option value="social_score">Social Score</option><option value="sold_rate">Sell-Through Rate (%)</option><option value="volume">Auction Volume</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Manufacturer</label><select id="trendMfrSelect" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">All (Market)</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Compare</label><select id="trendCompare" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="none">None</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Model</label><div class="model-search-wrap"><input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-44 focus:outline-none"/><datalist id="trendModelList"></datalist><button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
     </div>
     <div class="chart-container mb-5">
-        <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#1c1917] text-[13px]" id="trendChartTitle">Month-over-Month MII Score Trend</h2><p class="text-[11px] text-[#a8a29e] mt-0.5" id="trendChartSubtitle">Average per month across all manufacturers</p></div><div id="trendLegend" class="flex items-center gap-4 text-[11px] text-[#a8a29e]"></div></div>
+        <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#16181D] text-[13px]" id="trendChartTitle">Month-over-Month MII Score Trend</h2><p class="text-[11px] text-[#6B6E75] mt-0.5" id="trendChartSubtitle">Average per month across all manufacturers</p></div><div id="trendLegend" class="flex items-center gap-4 text-[11px] text-[#6B6E75]"></div></div>
         <div style="height:340px;"><canvas id="trendChart"></canvas></div>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <div class="chart-container"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Avg MII Score</div><div id="miniMIIValue" class="text-[1.3rem] font-bold text-amber-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniMIIChart"></canvas></div></div>
-        <div class="chart-container"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Avg Price</div><div id="miniPriceValue" class="text-[1.3rem] font-bold text-emerald-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniPriceChart"></canvas></div></div>
-        <div class="chart-container"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Avg Bids</div><div id="miniBidsValue" class="text-[1.3rem] font-bold text-blue-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniBidsChart"></canvas></div></div>
-        <div class="chart-container"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Auction Volume</div><div id="miniVolValue" class="text-[1.3rem] font-bold text-violet-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniVolChart"></canvas></div></div>
+        <div class="chart-container"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Avg MII Score</div><div id="miniMIIValue" class="text-[1.3rem] font-bold text-amber-700 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniMIIChart"></canvas></div></div>
+        <div class="chart-container"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Avg Price</div><div id="miniPriceValue" class="text-[1.3rem] font-bold text-emerald-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniPriceChart"></canvas></div></div>
+        <div class="chart-container"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Avg Bids</div><div id="miniBidsValue" class="text-[1.3rem] font-bold text-blue-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniBidsChart"></canvas></div></div>
+        <div class="chart-container"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Auction Volume</div><div id="miniVolValue" class="text-[1.3rem] font-bold text-violet-500 mb-2 tabular-nums">—</div><div style="height:80px;"><canvas id="miniVolChart"></canvas></div></div>
     </div>
 </div>
 
@@ -283,54 +285,54 @@
 <div id="tab-outliers" class="tab-content">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
         <div class="card p-5">
-            <h2 class="font-semibold text-[#1c1917] text-[13px] mb-4">Configuration</h2>
+            <h2 class="font-semibold text-[#16181D] text-[13px] mb-4">Configuration</h2>
             <div class="space-y-4">
-                <div><label class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest block mb-1.5">Metric</label><select id="outlierMetric" class="w-full input-field px-3 py-2 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Sale Price ($)</option><option value="views">Views</option><option value="bids">Bids</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends Interest</option></select></div>
-                <div><label class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest block mb-1.5">Quarter</label><select id="outlierQuarter" class="w-full input-field px-3 py-2 focus:outline-none"><option value="__all__">All Months</option></select></div>
-                <div><label class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest block mb-1.5">Model</label><div class="model-search-wrap w-full"><input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off" class="w-full input-field pl-3 pr-7 py-2 focus:outline-none"/><datalist id="outlierModelList"></datalist><button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
-                <div><label class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest block mb-1.5">Top N Records</label><select id="outlierN" class="w-full input-field px-3 py-2 focus:outline-none"><option value="10">Top 10</option><option value="20" selected>Top 20</option><option value="50">Top 50</option></select></div>
-                <hr class="border-[#f0ebe2]">
-                <div><label class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest block mb-2">Special Analyses</label>
+                <div><label class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest block mb-1.5">Metric</label><select id="outlierMetric" class="w-full input-field px-3 py-2 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Sale Price ($)</option><option value="views">Views</option><option value="bids">Bids</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends Interest</option></select></div>
+                <div><label class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest block mb-1.5">Quarter</label><select id="outlierQuarter" class="w-full input-field px-3 py-2 focus:outline-none"><option value="__all__">All Months</option></select></div>
+                <div><label class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest block mb-1.5">Model</label><div class="model-search-wrap w-full"><input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off" class="w-full input-field pl-3 pr-7 py-2 focus:outline-none"/><datalist id="outlierModelList"></datalist><button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
+                <div><label class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest block mb-1.5">Top N Records</label><select id="outlierN" class="w-full input-field px-3 py-2 focus:outline-none"><option value="10">Top 10</option><option value="20" selected>Top 20</option><option value="50">Top 50</option></select></div>
+                <hr class="border-[#ECECE7]">
+                <div><label class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest block mb-2">Special Analyses</label>
                     <div class="space-y-1.5">
-                        <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-[#f6f4ef] border border-[#e5e0d6] rounded-lg text-[11px] text-[#57534e] hover:border-[#B8960C] hover:text-[#B8960C] transition-colors">High Views, Low Bids <span class="text-[#a8a29e]">(watched, not bought)</span></button>
-                        <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-[#f6f4ef] border border-[#e5e0d6] rounded-lg text-[11px] text-[#57534e] hover:border-[#B8960C] hover:text-[#B8960C] transition-colors">High Price, Low MII <span class="text-[#a8a29e]">(pricey, low interest)</span></button>
-                        <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-[#f6f4ef] border border-[#e5e0d6] rounded-lg text-[11px] text-[#57534e] hover:border-[#B8960C] hover:text-[#B8960C] transition-colors">Low Price, High MII <span class="text-[#a8a29e]">(affordable, high interest)</span></button>
+                        <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-[#F6F6F3] border border-[#E4E4DF] rounded-lg text-[11px] text-[#5E6168] hover:border-[#B45309] hover:text-[#B45309] transition-colors">High Views, Low Bids <span class="text-[#6B6E75]">(watched, not bought)</span></button>
+                        <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-[#F6F6F3] border border-[#E4E4DF] rounded-lg text-[11px] text-[#5E6168] hover:border-[#B45309] hover:text-[#B45309] transition-colors">High Price, Low MII <span class="text-[#6B6E75]">(pricey, low interest)</span></button>
+                        <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-[#F6F6F3] border border-[#E4E4DF] rounded-lg text-[11px] text-[#5E6168] hover:border-[#B45309] hover:text-[#B45309] transition-colors">Low Price, High MII <span class="text-[#6B6E75]">(affordable, high interest)</span></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="chart-container lg:col-span-2"><div class="mb-4"><h2 class="font-semibold text-[#1c1917] text-[13px]" id="outlierDistTitle">MII Score Distribution</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Histogram of value distribution</p></div><div style="height:280px;"><canvas id="outlierDistChart"></canvas></div></div>
+        <div class="chart-container lg:col-span-2"><div class="mb-4"><h2 class="font-semibold text-[#16181D] text-[13px]" id="outlierDistTitle">MII Score Distribution</h2><p class="text-[11px] text-[#6B6E75] mt-0.5">Histogram of value distribution</p></div><div style="height:280px;"><canvas id="outlierDistChart"></canvas></div></div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-        <div class="card overflow-hidden"><div class="border-b border-[#f0ebe2] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-emerald-600 text-[13px]" id="outlierTopTitle">Top 20 by MII Score</h3><span id="outlierTopCount" class="text-[11px] text-[#a8a29e]"></span></div><div class="overflow-auto max-h-96 scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#a8a29e] uppercase tracking-wider border-b border-[#f0ebe2]"><th class="text-left px-4 py-2.5">Make / Model</th><th class="text-left px-4 py-2.5">Quarter</th><th class="text-right px-4 py-2.5" id="outlierTopColHeader">Value</th></tr></thead><tbody id="outlierTopTable"></tbody></table></div></div>
-        <div class="card overflow-hidden"><div class="border-b border-[#f0ebe2] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-red-500 text-[13px]" id="outlierBottomTitle">Bottom 20 by MII Score</h3><span id="outlierBottomCount" class="text-[11px] text-[#a8a29e]"></span></div><div class="overflow-auto max-h-96 scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#a8a29e] uppercase tracking-wider border-b border-[#f0ebe2]"><th class="text-left px-4 py-2.5">Make / Model</th><th class="text-left px-4 py-2.5">Quarter</th><th class="text-right px-4 py-2.5" id="outlierBottomColHeader">Value</th></tr></thead><tbody id="outlierBottomTable"></tbody></table></div></div>
+        <div class="card overflow-hidden"><div class="border-b border-[#ECECE7] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-emerald-600 text-[13px]" id="outlierTopTitle">Top 20 by MII Score</h3><span id="outlierTopCount" class="text-[11px] text-[#6B6E75]"></span></div><div class="overflow-auto max-h-96 scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#6B6E75] uppercase tracking-wider border-b border-[#ECECE7]"><th class="text-left px-4 py-2.5">Make / Model</th><th class="text-left px-4 py-2.5">Quarter</th><th class="text-right px-4 py-2.5" id="outlierTopColHeader">Value</th></tr></thead><tbody id="outlierTopTable"></tbody></table></div></div>
+        <div class="card overflow-hidden"><div class="border-b border-[#ECECE7] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-red-500 text-[13px]" id="outlierBottomTitle">Bottom 20 by MII Score</h3><span id="outlierBottomCount" class="text-[11px] text-[#6B6E75]"></span></div><div class="overflow-auto max-h-96 scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#6B6E75] uppercase tracking-wider border-b border-[#ECECE7]"><th class="text-left px-4 py-2.5">Make / Model</th><th class="text-left px-4 py-2.5">Quarter</th><th class="text-right px-4 py-2.5" id="outlierBottomColHeader">Value</th></tr></thead><tbody id="outlierBottomTable"></tbody></table></div></div>
     </div>
 </div>
 
 <!-- TAB: Correlations -->
 <div id="tab-correlations" class="tab-content">
     <div class="card p-4 mb-4 flex flex-wrap items-center gap-4">
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">X Axis</label><select id="corrX" class="input-field px-3 py-1.5 focus:outline-none"><option value="views">Views</option><option value="bids">Bids</option><option value="price">Sale Price</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends</option><option value="youtube_total_views">YouTube Views</option><option value="age">Vehicle Age (yrs)</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Y Axis</label><select id="corrY" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score" selected>MII Score</option><option value="price">Sale Price</option><option value="views">Views</option><option value="bids">Bids</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Quarter</label><select id="corrQuarter" class="input-field px-3 py-1.5 focus:outline-none"><option value="__all__">All</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Color by</label><select id="corrColorBy" class="input-field px-3 py-1.5 focus:outline-none"><option value="manufacturer">Manufacturer</option><option value="quarter">Quarter</option><option value="sold">Sold (yes/no)</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Data</label><select id="corrGranularity" class="input-field px-3 py-1.5 focus:outline-none"><option value="individual" selected>Individual auctions</option><option value="monthly">Monthly averages</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Make</label><select id="corrMfrFilter" class="input-field px-3 py-1.5 focus:outline-none min-w-[140px]"><option value="__all__">All</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Model</label><div class="model-search-wrap"><input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-44 focus:outline-none"/><datalist id="corrModelList"></datalist><button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">X Axis</label><select id="corrX" class="input-field px-3 py-1.5 focus:outline-none"><option value="views">Views</option><option value="bids">Bids</option><option value="price">Sale Price</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends</option><option value="youtube_total_views">YouTube Views</option><option value="age">Vehicle Age (yrs)</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Y Axis</label><select id="corrY" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score" selected>MII Score</option><option value="price">Sale Price</option><option value="views">Views</option><option value="bids">Bids</option><option value="comments">Comments</option><option value="social_score">Social Score</option><option value="google_trends_interest">Google Trends</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Quarter</label><select id="corrQuarter" class="input-field px-3 py-1.5 focus:outline-none"><option value="__all__">All</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Color by</label><select id="corrColorBy" class="input-field px-3 py-1.5 focus:outline-none"><option value="manufacturer">Manufacturer</option><option value="quarter">Quarter</option><option value="sold">Sold (yes/no)</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Data</label><select id="corrGranularity" class="input-field px-3 py-1.5 focus:outline-none"><option value="individual" selected>Individual auctions</option><option value="monthly">Monthly averages</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Make</label><select id="corrMfrFilter" class="input-field px-3 py-1.5 focus:outline-none min-w-[140px]"><option value="__all__">All</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Model</label><div class="model-search-wrap"><input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off" class="input-field pl-3 pr-7 py-1.5 w-44 focus:outline-none"/><datalist id="corrModelList"></datalist><button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">&times;</button></div></div>
     </div>
-    <div class="flex items-center gap-3 mb-4 text-[11px] text-[#a8a29e]">
-        <span class="inline-flex items-center gap-1.5 bg-white border border-[#e5e0d6] rounded-lg px-3 py-1.5"><span class="w-6 border-t border-dashed border-[#a8a29e] inline-block"></span>95% confidence band</span>
-        <span class="inline-flex items-center gap-1.5 bg-white border border-[#e5e0d6] rounded-lg px-3 py-1.5"><span class="w-6 border-t-2 border-[#57534e] inline-block"></span>Regression line</span>
+    <div class="flex items-center gap-3 mb-4 text-[11px] text-[#6B6E75]">
+        <span class="inline-flex items-center gap-1.5 bg-white border border-[#E4E4DF] rounded-lg px-3 py-1.5"><span class="w-6 border-t border-dashed border-[#6B6E75] inline-block"></span>95% confidence band</span>
+        <span class="inline-flex items-center gap-1.5 bg-white border border-[#E4E4DF] rounded-lg px-3 py-1.5"><span class="w-6 border-t-2 border-[#5E6168] inline-block"></span>Regression line</span>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
         <div class="chart-container lg:col-span-2">
-            <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#1c1917] text-[13px]" id="corrChartTitle">Views vs MII Score</h2><p class="text-[11px] text-[#a8a29e] mt-0.5" id="corrChartSubtitle">Scatter plot — hover points for details</p></div><div class="text-[11px] text-[#a8a29e]">r = <span id="corrCoefficient" class="text-[#B8960C] font-semibold tabular-nums">—</span></div></div>
+            <div class="flex items-center justify-between mb-4"><div><h2 class="font-semibold text-[#16181D] text-[13px]" id="corrChartTitle">Views vs MII Score</h2><p class="text-[11px] text-[#6B6E75] mt-0.5" id="corrChartSubtitle">Scatter plot — hover points for details</p></div><div class="text-[11px] text-[#6B6E75]">r = <span id="corrCoefficient" class="text-[#B45309] font-semibold tabular-nums">—</span></div></div>
             <div style="height:420px;"><canvas id="corrScatterChart"></canvas></div>
         </div>
         <div class="space-y-4">
-            <div class="card p-5"><h3 class="font-semibold text-[#1c1917] text-[13px] mb-3">Correlation Stats</h3><div class="space-y-2.5 text-[12px]"><div class="flex justify-between"><span class="text-[#a8a29e]">Pearson r</span><span id="statCorrR" class="font-semibold text-[#B8960C] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#a8a29e]">R²</span><span id="statCorrR2" class="font-semibold text-[#57534e] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#a8a29e]">Data points</span><span id="statCorrN" class="font-semibold text-[#57534e] tabular-nums">—</span></div><hr class="border-[#f0ebe2]"><div class="flex justify-between"><span class="text-[#a8a29e]">X mean</span><span id="statCorrXMean" class="text-[#57534e] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#a8a29e]">X std dev</span><span id="statCorrXStd" class="text-[#57534e] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#a8a29e]">Y mean</span><span id="statCorrYMean" class="text-[#57534e] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#a8a29e]">Y std dev</span><span id="statCorrYStd" class="text-[#57534e] tabular-nums">—</span></div></div></div>
-            <div class="card p-5"><h3 class="font-semibold text-[#1c1917] text-[13px] mb-2">Interpretation</h3><p id="corrInterpretation" class="text-[11px] text-[#a8a29e] leading-relaxed">Select axes and run the analysis to see interpretation.</p></div>
-            <div class="card p-5"><h3 class="font-semibold text-[#1c1917] text-[13px] mb-2">Legend</h3><div id="corrLegend" class="space-y-1.5 text-[11px] text-[#a8a29e] max-h-48 overflow-auto scrollbar-thin"></div></div>
+            <div class="card p-5"><h3 class="font-semibold text-[#16181D] text-[13px] mb-3">Correlation Stats</h3><div class="space-y-2.5 text-[12px]"><div class="flex justify-between"><span class="text-[#6B6E75]">Pearson r</span><span id="statCorrR" class="font-semibold text-[#B45309] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#6B6E75]">R²</span><span id="statCorrR2" class="font-semibold text-[#5E6168] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#6B6E75]">Data points</span><span id="statCorrN" class="font-semibold text-[#5E6168] tabular-nums">—</span></div><hr class="border-[#ECECE7]"><div class="flex justify-between"><span class="text-[#6B6E75]">X mean</span><span id="statCorrXMean" class="text-[#5E6168] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#6B6E75]">X std dev</span><span id="statCorrXStd" class="text-[#5E6168] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#6B6E75]">Y mean</span><span id="statCorrYMean" class="text-[#5E6168] tabular-nums">—</span></div><div class="flex justify-between"><span class="text-[#6B6E75]">Y std dev</span><span id="statCorrYStd" class="text-[#5E6168] tabular-nums">—</span></div></div></div>
+            <div class="card p-5"><h3 class="font-semibold text-[#16181D] text-[13px] mb-2">Interpretation</h3><p id="corrInterpretation" class="text-[11px] text-[#6B6E75] leading-relaxed">Select axes and run the analysis to see interpretation.</p></div>
+            <div class="card p-5"><h3 class="font-semibold text-[#16181D] text-[13px] mb-2">Legend</h3><div id="corrLegend" class="space-y-1.5 text-[11px] text-[#6B6E75] max-h-48 overflow-auto scrollbar-thin"></div></div>
         </div>
     </div>
 </div>
@@ -338,34 +340,34 @@
 <!-- TAB: Model Rankings -->
 <div id="tab-models" class="tab-content">
     <div class="card p-4 mb-5 flex flex-wrap items-center gap-4">
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Manufacturer</label><select id="modelsRankMfr" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">All Manufacturers</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Quarter</label><select id="modelsRankQuarter" class="input-field px-3 py-1.5 focus:outline-none"><option value="__all__">All Months</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Rank by</label><select id="modelsRankMetric" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Avg Sale Price</option><option value="views">Avg Views</option><option value="bids">Avg Bids</option><option value="sold_rate">Sell-Through Rate</option><option value="volume">Auction Volume</option></select></div>
-        <div class="flex items-center gap-2"><label class="text-[11px] text-[#a8a29e] font-medium">Show top</label><select id="modelsRankN" class="input-field px-3 py-1.5 focus:outline-none"><option value="10">10</option><option value="20" selected>20</option><option value="50">50</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Manufacturer</label><select id="modelsRankMfr" class="input-field px-3 py-1.5 focus:outline-none min-w-[160px]"><option value="__all__">All Manufacturers</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Quarter</label><select id="modelsRankQuarter" class="input-field px-3 py-1.5 focus:outline-none"><option value="__all__">All Months</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Rank by</label><select id="modelsRankMetric" class="input-field px-3 py-1.5 focus:outline-none"><option value="mii_score">MII Score</option><option value="price">Avg Sale Price</option><option value="views">Avg Views</option><option value="bids">Avg Bids</option><option value="sold_rate">Sell-Through Rate</option><option value="volume">Auction Volume</option></select></div>
+        <div class="flex items-center gap-2"><label class="text-[11px] text-[#6B6E75] font-medium">Show top</label><select id="modelsRankN" class="input-field px-3 py-1.5 focus:outline-none"><option value="10">10</option><option value="20" selected>20</option><option value="50">50</option></select></div>
     </div>
-    <div class="chart-container mb-5"><div class="mb-4"><h2 class="font-semibold text-[#1c1917] text-[13px]" id="modelsRankChartTitle">Top Models by MII Score</h2><p class="text-[11px] text-[#a8a29e] mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p></div><div style="height:400px;"><canvas id="modelsRankChart"></canvas></div></div>
-    <div class="card overflow-hidden mb-5"><div class="border-b border-[#f0ebe2] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-[#1c1917] text-[13px]" id="modelsRankTableTitle">Model Leaderboard</h3><span id="modelsRankTableCount" class="text-[11px] text-[#a8a29e]"></span></div><div class="overflow-auto scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#a8a29e] uppercase tracking-wider border-b border-[#f0ebe2]"><th class="text-left px-4 py-2.5">#</th><th class="text-left px-4 py-2.5">Make</th><th class="text-left px-4 py-2.5">Model</th><th class="text-right px-4 py-2.5">Auctions</th><th class="text-right px-4 py-2.5">MII Score</th><th class="text-right px-4 py-2.5">Avg Price</th><th class="text-right px-4 py-2.5">Avg Views</th><th class="text-right px-4 py-2.5">Avg Bids</th><th class="text-right px-4 py-2.5">Sell-Thru</th></tr></thead><tbody id="modelsRankTable"></tbody></table></div></div>
+    <div class="chart-container mb-5"><div class="mb-4"><h2 class="font-semibold text-[#16181D] text-[13px]" id="modelsRankChartTitle">Top Models by MII Score</h2><p class="text-[11px] text-[#6B6E75] mt-0.5" id="modelsRankChartSubtitle">Average across all quarters</p></div><div style="height:400px;"><canvas id="modelsRankChart"></canvas></div></div>
+    <div class="card overflow-hidden mb-5"><div class="border-b border-[#ECECE7] px-5 py-3 flex items-center justify-between"><h3 class="font-semibold text-[#16181D] text-[13px]" id="modelsRankTableTitle">Model Leaderboard</h3><span id="modelsRankTableCount" class="text-[11px] text-[#6B6E75]"></span></div><div class="overflow-auto scrollbar-thin"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#6B6E75] uppercase tracking-wider border-b border-[#ECECE7]"><th class="text-left px-4 py-2.5">#</th><th class="text-left px-4 py-2.5">Make</th><th class="text-left px-4 py-2.5">Model</th><th class="text-right px-4 py-2.5">Auctions</th><th class="text-right px-4 py-2.5">MII Score</th><th class="text-right px-4 py-2.5">Avg Price</th><th class="text-right px-4 py-2.5">Avg Views</th><th class="text-right px-4 py-2.5">Avg Bids</th><th class="text-right px-4 py-2.5">Sell-Thru</th></tr></thead><tbody id="modelsRankTable"></tbody></table></div></div>
 </div>
 
 <!-- TAB: Data Coverage -->
 <div id="tab-coverage" class="tab-content">
     <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-        <div class="stat-card"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">First Record</div><div id="covFirstDay" class="text-[1.1rem] font-bold text-[#1c1917] font-mono">—</div><div class="text-[11px] text-[#a8a29e] mt-1">earliest auction</div></div>
-        <div class="stat-card"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Last Record</div><div id="covLastDay" class="text-[1.1rem] font-bold text-[#1c1917] font-mono">—</div><div class="text-[11px] text-[#a8a29e] mt-1">most recent</div></div>
-        <div class="stat-card"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Months With Data</div><div id="covTotalMonths" class="text-[1.6rem] font-bold text-[#1c1917] tabular-nums">—</div><div class="text-[11px] text-[#a8a29e] mt-1">distinct months</div></div>
-        <div class="stat-card"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Days With Data</div><div id="covTotalDays" class="text-[1.6rem] font-bold text-[#1c1917] tabular-nums">—</div><div class="text-[11px] text-[#a8a29e] mt-1">calendar days</div></div>
-        <div class="stat-card" style="border-left:3px solid #dc2626;"><div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-1.5">Flagged Months</div><div id="covFlagged" class="text-[1.6rem] font-bold text-red-600 tabular-nums">—</div><div class="text-[11px] text-[#a8a29e] mt-1">below 50% of median (<span id="covMedian">—</span>)</div></div>
+        <div class="stat-card"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">First Record</div><div id="covFirstDay" class="text-[1.1rem] font-bold text-[#16181D] font-mono">—</div><div class="text-[11px] text-[#6B6E75] mt-1">earliest auction</div></div>
+        <div class="stat-card"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Last Record</div><div id="covLastDay" class="text-[1.1rem] font-bold text-[#16181D] font-mono">—</div><div class="text-[11px] text-[#6B6E75] mt-1">most recent</div></div>
+        <div class="stat-card"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Months With Data</div><div id="covTotalMonths" class="text-[1.6rem] font-bold text-[#16181D] tabular-nums">—</div><div class="text-[11px] text-[#6B6E75] mt-1">distinct months</div></div>
+        <div class="stat-card"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Days With Data</div><div id="covTotalDays" class="text-[1.6rem] font-bold text-[#16181D] tabular-nums">—</div><div class="text-[11px] text-[#6B6E75] mt-1">calendar days</div></div>
+        <div class="stat-card" style="border-left:3px solid #dc2626;"><div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-1.5">Flagged Months</div><div id="covFlagged" class="text-[1.6rem] font-bold text-red-600 tabular-nums">—</div><div class="text-[11px] text-[#6B6E75] mt-1">below 50% of median (<span id="covMedian">—</span>)</div></div>
     </div>
-    <div id="covNoData" class="hidden text-[#a8a29e] text-center py-12 text-sm">No bat.csv data available.</div>
-    <div class="card p-5 mb-5"><div class="mb-4 flex items-start justify-between"><div><h2 class="font-semibold text-[#1c1917] text-[13px]">Monthly Auction Record Count</h2><p class="text-[11px] text-[#a8a29e] mt-0.5">Records per month — red bars = below 50% of median (likely scraper gaps)</p></div><span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-[11px] bg-[#f6f4ef] text-[#a8a29e] border border-[#e5e0d6]">—</span></div><div style="height:320px;"><canvas id="coverageChart"></canvas></div></div>
-    <div class="card overflow-hidden mb-5"><div class="border-b border-[#f0ebe2] px-5 py-3"><h3 class="font-semibold text-[#1c1917] text-[13px]">Month-by-Month Coverage Report</h3><p class="text-[11px] text-[#a8a29e] mt-0.5">"Missing days" = calendar days with zero records. Run <code class="text-[#B8960C] bg-[#f6f4ef] px-1.5 py-0.5 rounded text-[10px] font-mono">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for flagged months.</p></div><div class="overflow-auto"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#a8a29e] uppercase tracking-wider border-b border-[#f0ebe2]"><th class="text-left px-4 py-2.5">Month</th><th class="text-right px-4 py-2.5">Records</th><th class="text-right px-4 py-2.5">% of Median</th><th class="text-right px-4 py-2.5">Missing Days</th><th class="text-center px-4 py-2.5">Status</th></tr></thead><tbody id="covGapTable"></tbody></table></div></div>
+    <div id="covNoData" class="hidden text-[#6B6E75] text-center py-12 text-sm">No bat.csv data available.</div>
+    <div class="card p-5 mb-5"><div class="mb-4 flex items-start justify-between"><div><h2 class="font-semibold text-[#16181D] text-[13px]">Monthly Auction Record Count</h2><p class="text-[11px] text-[#6B6E75] mt-0.5">Records per month — red bars = below 50% of median (likely scraper gaps)</p></div><span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-[11px] bg-[#F6F6F3] text-[#6B6E75] border border-[#E4E4DF]">—</span></div><div style="height:320px;"><canvas id="coverageChart"></canvas></div></div>
+    <div class="card overflow-hidden mb-5"><div class="border-b border-[#ECECE7] px-5 py-3"><h3 class="font-semibold text-[#16181D] text-[13px]">Month-by-Month Coverage Report</h3><p class="text-[11px] text-[#6B6E75] mt-0.5">"Missing days" = calendar days with zero records. Run <code class="text-[#B45309] bg-[#F6F6F3] px-1.5 py-0.5 rounded text-[10px] font-mono">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for flagged months.</p></div><div class="overflow-auto"><table class="w-full text-xs"><thead class="sticky top-0 bg-white"><tr class="text-[10px] text-[#6B6E75] uppercase tracking-wider border-b border-[#ECECE7]"><th class="text-left px-4 py-2.5">Month</th><th class="text-right px-4 py-2.5">Records</th><th class="text-right px-4 py-2.5">% of Median</th><th class="text-right px-4 py-2.5">Missing Days</th><th class="text-center px-4 py-2.5">Status</th></tr></thead><tbody id="covGapTable"></tbody></table></div></div>
             <!-- Methodology: nominal vs effective weights, version, noise floor -->
             <div class="card p-5 mb-5">
                 <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
-                    <h3 class="font-semibold text-[#1c1917]">How This Score Is Built</h3>
-                    <span class="text-xs text-[#a8a29e] font-mono">methodology <span id="miiVersion" class="text-[#B8960C]">—</span></span>
+                    <h3 class="font-semibold text-[#16181D]">How This Score Is Built</h3>
+                    <span class="text-xs text-[#6B6E75] font-mono">methodology <span id="miiVersion" class="text-[#B45309]">—</span></span>
                 </div>
-                <p class="text-sm text-[#57534e] mb-4">
+                <p class="text-sm text-[#5E6168] mb-4">
                     Published weights are <em>nominal</em>. An input a row has no value for is dropped and the
                     remaining weights are renormalised &mdash; never imputed &mdash; so the weight an input
                     actually carries depends on how widely it is measured. Quote the effective column.
@@ -373,7 +375,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm" id="weightTable">
                         <thead>
-                            <tr class="text-xs text-[#a8a29e] uppercase tracking-wider border-b border-[#e5e0d6]">
+                            <tr class="text-xs text-[#6B6E75] uppercase tracking-wider border-b border-[#E4E4DF]">
                                 <th class="text-left py-2 pr-4 font-medium">Input</th>
                                 <th class="text-right py-2 px-3 font-medium">Nominal</th>
                                 <th class="text-right py-2 px-3 font-medium">Effective</th>
@@ -384,8 +386,8 @@
                         <tbody id="weightTableBody"></tbody>
                     </table>
                 </div>
-                <h4 class="font-semibold text-[#1c1917] mt-6 mb-1 text-sm">How big a move has to be to mean anything</h4>
-                <p class="text-sm text-[#57534e] mb-3">
+                <h4 class="font-semibold text-[#16181D] mt-6 mb-1 text-sm">How big a move has to be to mean anything</h4>
+                <p class="text-sm text-[#5E6168] mb-3">
                     Measured from every consecutive month-pair in the dataset, bucketed by the smaller of the
                     two months&rsquo; auction counts. A move under the median is what an unchanged market looks
                     like at that sample size; clearing the 90th percentile is the bar for calling it real.
@@ -393,7 +395,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
-                            <tr class="text-xs text-[#a8a29e] uppercase tracking-wider border-b border-[#e5e0d6]">
+                            <tr class="text-xs text-[#6B6E75] uppercase tracking-wider border-b border-[#E4E4DF]">
                                 <th class="text-left py-2 pr-4 font-medium">Auctions / month</th>
                                 <th class="text-right py-2 px-3 font-medium">Median swing</th>
                                 <th class="text-right py-2 px-3 font-medium">90th percentile</th>
@@ -404,17 +406,17 @@
                 </div>
             </div>
 
-    <div class="card p-5 mb-5"><h3 class="font-semibold text-[#1c1917] text-[13px] mb-3">How to Backfill Missing Data</h3><div class="text-[12px] text-[#57534e] space-y-2"><p>Use the CLI scripts to identify and backfill missing dates:</p><ol class="list-decimal list-inside space-y-2 ml-2"><li>Diagnose all gaps: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/diagnose-data-gaps.js</code></li><li>Get missing dates: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code></li><li>Pipe to scraper: <code class="block mt-1 bg-[#f6f4ef] text-[#B8960C] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#e5e0d6]">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code></li><li>Regenerate <code class="text-[#B8960C] font-mono">mii_results_latest.csv</code> and upload both CSVs to S3.</li></ol></div></div>
+    <div class="card p-5 mb-5"><h3 class="font-semibold text-[#16181D] text-[13px] mb-3">How to Backfill Missing Data</h3><div class="text-[12px] text-[#5E6168] space-y-2"><p>Use the CLI scripts to identify and backfill missing dates:</p><ol class="list-decimal list-inside space-y-2 ml-2"><li>Diagnose all gaps: <code class="block mt-1 bg-[#F6F6F3] text-[#B45309] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#E4E4DF]">node scripts/diagnose-data-gaps.js</code></li><li>Get missing dates: <code class="block mt-1 bg-[#F6F6F3] text-[#B45309] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#E4E4DF]">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code></li><li>Pipe to scraper: <code class="block mt-1 bg-[#F6F6F3] text-[#B45309] rounded-lg px-3 py-2 font-mono text-[11px] border border-[#E4E4DF]">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code></li><li>Regenerate <code class="text-[#B45309] font-mono">mii_results_latest.csv</code> and upload both CSVs to S3.</li></ol></div></div>
 </div>
 
 </main>
 
-<footer class="border-t border-[#e5e0d6] py-5 bg-white mt-8">
-    <div class="max-w-[1600px] mx-auto px-6 flex items-center justify-between text-[11px] text-[#a8a29e]">
-        <div class="flex items-center gap-2"><span class="text-[#8B1A1A] font-bold tracking-[0.08em]">MII</span><span>Market Interest Index &copy; 2025 — Raw Data Analysis</span></div>
-        <div class="flex items-center gap-4"><a href="index-hagi.html" class="hover:text-[#57534e] transition-colors">Leaderboard</a><a href="dashboard-hagi.html" class="hover:text-[#57534e] transition-colors">Dashboard</a><span class="text-[#e5e0d6]">|</span><a href="analyze.html" class="hover:text-[#57534e] transition-colors">Classic View</a></div>
-    </div>
-</footer>
+<footer class="border-t border-line mt-12 py-6">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2 text-[13px] text-mute">
+            <span>Market Interest Index</span>
+            <span>Bring a Trailer data, refreshed twice daily at 06:00 and 18:00 UTC</span>
+        </div>
+    </footer>
 
 <script src="mii-normalize.js?v=2"></script>
 <script src="analyze-hagi.js?v=2"></script>

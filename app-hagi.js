@@ -143,9 +143,9 @@ const MANUFACTURER_BRANDING = {
     'Nissan':        { abbr: 'NIS', color: '#c3002f', bg: '#1a0006', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nissan_logo.svg/80px-Nissan_logo.svg.png' },
     'Toyota':        { abbr: 'TOY', color: '#eb0a1e', bg: '#1f0103', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Toyota_logo_%28Red%29.svg/80px-Toyota_logo_%28Red%29.svg.png' },
     'Audi':          { abbr: 'AUD', color: '#bb0a30', bg: '#1a0105', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/80px-Audi-Logo_2016.svg.png' },
-    'Chevrolet':     { abbr: 'CHV', color: '#c8a84b', bg: '#262109', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Chevrolet_logo.svg/80px-Chevrolet_logo.svg.png' },
+    'Chevrolet':     { abbr: 'CHV', color: '#F59E0B', bg: '#262109', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Chevrolet_logo.svg/80px-Chevrolet_logo.svg.png' },
     'Ford':          { abbr: 'FOR', color: '#003478', bg: '#000a14', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/80px-Ford_logo_flat.svg.png' },
-    'Lamborghini':   { abbr: 'LAM', color: '#c8a84b', bg: '#262209', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Lamborghini_Logo.svg/80px-Lamborghini_Logo.svg.png' },
+    'Lamborghini':   { abbr: 'LAM', color: '#F59E0B', bg: '#262209', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Lamborghini_Logo.svg/80px-Lamborghini_Logo.svg.png' },
     'Jaguar':        { abbr: 'JAG', color: '#006633', bg: '#00140a', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Jaguar_logo_%282012%29.svg/80px-Jaguar_logo_%282012%29.svg.png' },
     'Land Rover':    { abbr: 'LRV', color: '#005a2b', bg: '#001108', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Land_Rover_logo.svg/80px-Land_Rover_logo.svg.png' },
     'Lexus':         { abbr: 'LEX', color: '#0061aa', bg: '#001220', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Lexus_division_emblem.svg/80px-Lexus_division_emblem.svg.png' },
@@ -165,23 +165,23 @@ const MANUFACTURER_BRANDING = {
 window._mfrLogoErr = function(img) {
     const make = img.alt;
     const b = MANUFACTURER_BRANDING[make] || {};
-    const color = b.color || '#555';
+    const color = b.color || '#6B6E75';
     const abbr = b.abbr || make.substring(0, 3).toUpperCase();
     img.closest('.mfr-logo-wrap').outerHTML =
-        `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#f5f5f5;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
+        `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#F3F3EF;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
 };
 
 // Helper function to generate manufacturer logo HTML (light-theme variant)
 function getManufacturerLogo(manufacturer) {
-    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#555' };
-    const color = branding.color || '#555';
+    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#6B6E75' };
+    const color = branding.color || '#6B6E75';
     const abbr = branding.abbr || manufacturer.substring(0, 3).toUpperCase();
     if (branding.logoUrl) {
-        return `<div class="mfr-logo-wrap flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg overflow-hidden bg-white" style="border:1px solid #e5e7eb;">
+        return `<div class="mfr-logo-wrap flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg overflow-hidden bg-white" style="border:1px solid #E4E4DF;">
             <img src="${branding.logoUrl}" alt="${manufacturer}" style="width:30px;height:30px;object-fit:contain;" onerror="_mfrLogoErr(this)">
         </div>`;
     }
-    return `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#f5f5f5;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
+    return `<div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background:#F3F3EF;color:${color};border:2px solid ${color}60;">${abbr}</div>`;
 }
 
 // Populate the ticker strip with manufacturer data after load
@@ -719,21 +719,20 @@ async function initializeApp() {
 
         loadingIndicator.innerHTML = `
             <div class="text-center max-w-2xl mx-auto">
-                <div class="text-6xl mb-4">⚠️</div>
-                <div class="text-xl font-semibold text-[#8B1A1A] mb-2">Failed to Load Data</div>
-                <div class="text-sm text-gray-500 mt-2 mb-4">${error.message}</div>
+                <div class="text-xl font-semibold text-[#B45309] mb-2">Failed to Load Data</div>
+                <div class="text-sm text-faint mt-2 mb-4">${error.message}</div>
                 <button
                     onclick="location.reload()"
-                    class="px-4 py-2 bg-[#8B1A1A] hover:bg-[#6B1414] text-white rounded-lg transition-colors mb-6">
+                    class="px-4 py-2 bg-ink hover:bg-[#2C2F36] text-white rounded-lg transition-colors mb-6">
                     Retry
                 </button>
-                <details class="text-left bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                    <summary class="cursor-pointer text-sm text-gray-600 mb-2">Troubleshooting Steps</summary>
-                    <ol class="text-xs text-gray-500 space-y-1 list-decimal list-inside">
+                <details class="text-left bg-[#FAFAF8] border border-line p-4 rounded-lg">
+                    <summary class="cursor-pointer text-sm text-mute mb-2">Troubleshooting Steps</summary>
+                    <ol class="text-xs text-faint space-y-1 list-decimal list-inside">
                         ${troubleshootingSteps.map(step => `<li>${step}</li>`).join('')}
                     </ol>
-                    <div class="mt-3 text-xs text-gray-400">
-                        <strong>S3 URL:</strong> <span class="text-gray-500">${CSV_URL}</span>
+                    <div class="mt-3 text-xs text-faint">
+                        <strong>S3 URL:</strong> <span class="text-faint">${CSV_URL}</span>
                     </div>
                 </details>
             </div>
@@ -807,14 +806,14 @@ function getTrendIndicator(value, size = 'normal', opts = {}) {
     const textSize = size === 'large' ? 'text-lg' : 'text-sm';
 
     if (isNeutral) {
-        return `<span class="${textSize} text-gray-400 font-medium">→ ${Math.abs(value).toFixed(1)}%</span>`;
+        return `<span class="${textSize} text-faint font-medium">→ ${Math.abs(value).toFixed(1)}%</span>`;
     }
 
     const arrow = isPositive ? '▲' : '▼';
     if (window.MII && opts.points != null && opts.auctions != null
         && MII.moveStrength(opts.points, opts.auctions) === 'noise') {
         const floor = MII.noiseFloor(opts.auctions);
-        return `<span class="${textSize} font-medium text-gray-400 decoration-dotted underline underline-offset-2"
+        return `<span class="${textSize} font-medium text-faint decoration-dotted underline underline-offset-2"
                       title="${Math.abs(opts.points).toFixed(1)} MII points on ${opts.auctions} auction(s) — under the ${floor.median} point median swing at this sample size, so it is within normal sampling noise">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
     }
 
@@ -822,7 +821,7 @@ function getTrendIndicator(value, size = 'normal', opts = {}) {
     return `<span class="${textSize} font-semibold ${color}">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
 }
 
-function createSparkline(data, color = '#8B1A1A') {
+function createSparkline(data, color = '#B45309') {
     const min = Math.min(...data);
     const max = Math.max(...data);
     const range = max - min || 1;
@@ -982,9 +981,9 @@ function renderTopModels() {
 
     if (topModels.length === 0) {
         if (isSearching) {
-            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found matching "${state.modelSearchTerm}"</div>`;
+            container.innerHTML = `<div class="col-span-full text-center text-faint py-8">No models found matching "${state.modelSearchTerm}"</div>`;
         } else {
-            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found in this ${isYTD ? 'period' : 'quarter'}</div>`;
+            container.innerHTML = `<div class="col-span-full text-center text-faint py-8">No models found in this ${isYTD ? 'period' : 'quarter'}</div>`;
         }
         return;
     }
@@ -992,22 +991,22 @@ function renderTopModels() {
     container.innerHTML = topModels.map((model, idx) => {
         const auctionText = model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`;
         return `
-            <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-gray-300 transition-all">
+            <div class="bg-white border border-line rounded-lg p-4 hover:shadow-md hover:border-[#D9D9D3] transition-all">
                 <div class="flex items-start justify-between mb-2">
                     <div class="flex items-center gap-2">
                         ${getManufacturerLogo(model.make)}
                         <div>
-                            <div class="font-semibold text-sm text-gray-900">${model.model}</div>
-                            <div class="text-xs text-gray-500">${model.make}</div>
+                            <div class="font-semibold text-sm text-ink">${model.model}</div>
+                            <div class="text-xs text-faint">${model.make}</div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-xl font-bold text-[#8B1A1A]">${model.mii.toFixed(1)}</div>
-                        <div class="text-xs text-gray-400">#${idx + 1}</div>
+                        <div class="text-xl font-bold text-[#B45309]">${model.mii.toFixed(1)}</div>
+                        <div class="text-xs text-faint">#${idx + 1}</div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between text-xs">
-                    <div class="text-gray-500">
+                    <div class="text-faint">
                         ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                     </div>
                     <div class="flex items-center gap-2">
@@ -1028,23 +1027,23 @@ function renderLeaderboard() {
         `Showing ${filtered.length} manufacturers with ${state.minAuctions}+ auctions`;
 
     container.innerHTML = filtered.map((mfr, idx) => {
-        const sparklineColor = mfr.trend > 0 ? '#16a34a' : mfr.trend < 0 ? '#dc2626' : '#9ca3af';
+        const sparklineColor = mfr.trend > 0 ? '#16a34a' : mfr.trend < 0 ? '#dc2626' : '#6B6E75';
         const isSelected = state.selectedMake === mfr.make;
         const isComparing = state.compareList.includes(mfr.make);
         const isFirst = idx === 0;
-        const borderColor = 'border-l-4 border-[#c9a84c]';
-        const selectedBg = isSelected ? 'bg-[#172840]' : 'bg-[#112033] hover:bg-[#1e3350]';
+        const borderColor = '';
+        const selectedBg = isSelected ? 'bg-[#FFF8EB]' : 'bg-white hover:bg-[#FAFAF8]';
 
         // Rank badge style
         let rankBadge;
         if (idx === 0) {
-            rankBadge = `<div class="w-7 h-7 rounded-full bg-[#C5A028] flex items-center justify-center font-bold text-white text-xs">1</div>`;
+            rankBadge = `<div class="w-7 h-7 rounded-full bg-amber-500 flex items-center justify-center font-bold text-white text-xs">1</div>`;
         } else if (idx === 1) {
             rankBadge = `<div class="w-7 h-7 rounded-full bg-gray-400 flex items-center justify-center font-bold text-white text-xs">2</div>`;
         } else if (idx === 2) {
             rankBadge = `<div class="w-7 h-7 rounded-full bg-amber-700 flex items-center justify-center font-bold text-white text-xs">3</div>`;
         } else {
-            rankBadge = `<div class="w-7 h-7 text-center font-semibold text-gray-400 text-sm flex items-center justify-center">${idx + 1}</div>`;
+            rankBadge = `<div class="w-7 h-7 text-center font-semibold text-faint text-sm flex items-center justify-center">${idx + 1}</div>`;
         }
 
         return `
@@ -1055,8 +1054,8 @@ function renderLeaderboard() {
                         ${rankBadge}
                         ${getManufacturerLogo(mfr.make)}
                         <div>
-                            <div class="font-semibold text-gray-900">${mfr.make}</div>
-                            <div class="text-xs text-gray-500">
+                            <div class="font-semibold text-ink">${mfr.make}</div>
+                            <div class="text-xs text-faint">
                                 ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg • ${mfr.sellThrough}% sold
                             </div>
                         </div>
@@ -1067,11 +1066,11 @@ function renderLeaderboard() {
                             ${createSparkline(mfr.history, sparklineColor)}
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-bold text-[#8B1A1A]">${mfr.miiScore.toFixed(1)}</div>
+                            <div class="text-2xl font-bold text-[#B45309]">${mfr.miiScore.toFixed(1)}</div>
                             ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
                         </div>
                         ${getConfidenceBadge(mfr.confidence)}
-                        <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isComparing ? 'bg-[#8B1A1A] text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}"
+                        <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isComparing ? 'bg-ink text-white' : 'bg-[#F3F3EF] text-faint hover:bg-[#ECECE7]'}"
                                 data-make="${mfr.make}">
                             ${isComparing ? '✓' : '+'}
                         </button>
@@ -1104,10 +1103,9 @@ function renderManufacturerDetail() {
 
     if (!mfr) {
         container.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
-                <div class="text-4xl mb-4">👈</div>
-                <h3 class="font-semibold text-gray-700">Select a Manufacturer</h3>
-                <p class="text-sm text-gray-400 mt-2">
+            <div class="bg-white border border-line rounded-xl p-8 text-center">
+                <h3 class="font-semibold text-mute">Select a Manufacturer</h3>
+                <p class="text-sm text-faint mt-2">
                     Click on any manufacturer in the leaderboard to view detailed model breakdowns and trends
                 </p>
             </div>
@@ -1117,70 +1115,70 @@ function renderManufacturerDetail() {
 
     container.innerHTML = `
         <!-- Manufacturer Header -->
-        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <div class="bg-white border border-line rounded-xl p-5 shadow-sm">
             <div class="flex items-center gap-4 mb-4">
                 ${getManufacturerLogo(mfr.make)}
                 <div>
-                    <h3 class="text-xl font-bold text-gray-900">${mfr.make}</h3>
-                    <div class="text-sm text-gray-500">
+                    <h3 class="text-xl font-bold text-ink">${mfr.make}</h3>
+                    <div class="text-sm text-faint">
                         ${mfr.auctions} auctions this month
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider">MII Score</div>
-                    <div class="text-2xl font-bold text-[#8B1A1A]">
+                <div class="bg-[#FAFAF8] border border-hair rounded-lg p-3">
+                    <div class="text-xs text-faint uppercase tracking-wider">MII Score</div>
+                    <div class="text-2xl font-bold text-[#B45309]">
                         ${mfr.miiScore.toFixed(1)}
                     </div>
                     ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
                 </div>
-                <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider">Sell-Through</div>
+                <div class="bg-[#FAFAF8] border border-hair rounded-lg p-3">
+                    <div class="text-xs text-faint uppercase tracking-wider">Sell-Through</div>
                     <div class="text-2xl font-bold text-green-700">
                         ${mfr.sellThrough}%
                     </div>
-                    <div class="text-xs text-gray-400">of auctions sold</div>
+                    <div class="text-xs text-faint">of auctions sold</div>
                 </div>
             </div>
         </div>
 
         <!-- MII Trend Chart -->
-        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <h4 class="font-semibold mb-4 text-gray-800">MII Trend</h4>
+        <div class="bg-white border border-line rounded-xl p-5 shadow-sm">
+            <h4 class="font-semibold mb-4 text-ink">MII Trend</h4>
             <canvas id="trendChart" style="max-height: 160px;"></canvas>
         </div>
 
         <!-- Model Rankings -->
-        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-            <div class="border-b border-gray-100 px-5 py-4">
-                <h4 class="font-semibold text-gray-800">Model Rankings</h4>
-                <p class="text-xs text-gray-400 mt-1">
+        <div class="bg-white border border-line rounded-xl overflow-hidden shadow-sm">
+            <div class="border-b border-hair px-5 py-4">
+                <h4 class="font-semibold text-ink">Model Rankings</h4>
+                <p class="text-xs text-faint mt-1">
                     ${mfr.models.length} models tracked
                 </p>
             </div>
-            <div class="divide-y divide-gray-100 max-h-96 overflow-y-auto scrollbar-thin">
+            <div class="divide-y divide-hair max-h-96 overflow-y-auto scrollbar-thin">
                 ${mfr.models
                     .sort((a, b) => b.mii - a.mii)
                     .map((model, idx) => `
-                        <div class="model-row px-5 py-3 hover:bg-[#172840] transition-colors cursor-pointer"
+                        <div class="model-row px-5 py-3 hover:bg-[#2C2F36] transition-colors cursor-pointer"
                              data-make="${mfr.make}" data-model="${model.model.replace(/"/g, '&quot;')}"
                              title="View individual auction sales for ${model.model.replace(/"/g, '&quot;')}">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <span class="w-6 text-center text-sm font-medium text-gray-400">
+                                    <span class="w-6 text-center text-sm font-medium text-faint">
                                         ${idx + 1}
                                     </span>
                                     <div>
-                                        <div class="font-medium text-sm text-gray-900 flex items-center gap-1.5">${model.model}<span class="text-gray-400 text-xs">→</span></div>
-                                        <div class="text-xs text-gray-500">
+                                        <div class="font-medium text-sm text-ink flex items-center gap-1.5">${model.model}<span class="text-faint text-xs">→</span></div>
+                                        <div class="text-xs text-faint">
                                             ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="font-bold text-[#8B1A1A]">${model.mii.toFixed(1)}</div>
+                                    <div class="font-bold text-[#B45309]">${model.mii.toFixed(1)}</div>
                                     <div class="flex items-center gap-2">
                                         ${getTrendIndicator(model.trend, "normal", { points: model.trendPoints, auctions: model.auctions })}
                                         ${getConfidenceBadge(model.confidence)}
@@ -1234,21 +1232,21 @@ function showLotDetail(make, model) {
         : 'No individual auction records found for this model in bat.csv.';
 
     if (!lots.length) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-gray-400 text-sm">No lot-level data available.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-faint text-sm">No lot-level data available.</td></tr>`;
     } else {
         tableBody.innerHTML = lots.map(l => {
-            const statusColor = l.sold ? 'text-emerald-600' : 'text-gray-400';
+            const statusColor = l.sold ? 'text-emerald-600' : 'text-faint';
             const statusLabel = l.sold ? 'sold' : (l.saleType || 'unsold');
             const link = l.url
                 ? `<a href="${l.url}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-500 underline">view ↗</a>`
                 : '—';
             return `
-                <tr class="border-t border-gray-100 hover:bg-gray-50">
-                    <td class="px-4 py-2 text-sm text-gray-700 whitespace-nowrap">${l.date}</td>
-                    <td class="px-4 py-2 text-sm text-gray-500">${l.year ? Math.round(l.year) : '—'}</td>
-                    <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap">${formatCurrency(l.amount, l.currency)}</td>
+                <tr class="border-t border-hair hover:bg-[#FAFAF8]">
+                    <td class="px-4 py-2 text-sm text-mute whitespace-nowrap">${l.date}</td>
+                    <td class="px-4 py-2 text-sm text-faint">${l.year ? Math.round(l.year) : '—'}</td>
+                    <td class="px-4 py-2 text-sm font-medium text-ink whitespace-nowrap">${formatCurrency(l.amount, l.currency)}</td>
                     <td class="px-4 py-2 text-sm ${statusColor} whitespace-nowrap">${statusLabel}</td>
-                    <td class="px-4 py-2 text-sm text-gray-500 whitespace-nowrap">${l.bids != null ? l.bids : '—'} bids • ${l.comments != null ? l.comments : '—'} comments</td>
+                    <td class="px-4 py-2 text-sm text-faint whitespace-nowrap">${l.bids != null ? l.bids : '—'} bids • ${l.comments != null ? l.comments : '—'} comments</td>
                     <td class="px-4 py-2 text-sm">${link}</td>
                 </tr>`;
         }).join('');
@@ -1283,22 +1281,22 @@ function renderLotScatter(lots) {
         data: {
             datasets: [
                 { label: 'Sold', data: soldPoints, backgroundColor: '#059669', pointRadius: 5, pointHoverRadius: 7 },
-                { label: 'Unsold / bid', data: unsoldPoints, backgroundColor: '#9ca3af', pointRadius: 4, pointHoverRadius: 6 }
+                { label: 'Unsold / bid', data: unsoldPoints, backgroundColor: '#6B6E75', pointRadius: 4, pointHoverRadius: 6 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: { type: 'category', ticks: { color: '#6b7280', maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#f3f4f6' } },
+                x: { type: 'category', ticks: { color: '#6B6E75', maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#F3F3EF' } },
                 y: {
-                    ticks: { color: '#6b7280', callback: v => '$' + (v / 1000) + 'K' },
-                    grid: { color: '#f3f4f6' },
-                    title: { display: true, text: 'Sale price (USD)', color: '#6b7280' }
+                    ticks: { color: '#6B6E75', callback: v => '$' + (v / 1000) + 'K' },
+                    grid: { color: '#F3F3EF' },
+                    title: { display: true, text: 'Sale price (USD)', color: '#6B6E75' }
                 }
             },
             plugins: {
-                legend: { labels: { color: '#374151' } },
+                legend: { labels: { color: '#5E6168' } },
                 tooltip: {
                     callbacks: {
                         label: ctx => `${ctx.dataset.label}: $${Math.round(ctx.parsed.y).toLocaleString()} (${ctx.raw.date || ctx.parsed.x})`
@@ -1343,12 +1341,12 @@ function renderTrendChart(mfr) {
             datasets: [{
                 label: 'MII Score',
                 data: trendData,
-                borderColor: '#c9a84c',
-                backgroundColor: 'rgba(201,168,76,0.08)',
+                borderColor: '#F59E0B',
+                backgroundColor: 'rgba(245,158,11,0.08)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
-                pointBackgroundColor: '#c9a84c'
+                pointBackgroundColor: '#F59E0B'
             }]
         },
         options: {
@@ -1358,9 +1356,9 @@ function renderTrendChart(mfr) {
                 legend: { display: false },
                 tooltip: {
                     backgroundColor: '#ffffff',
-                    titleColor: '#111827',
-                    bodyColor: '#374151',
-                    borderColor: '#e5e7eb',
+                    titleColor: '#16181D',
+                    bodyColor: '#5E6168',
+                    borderColor: '#E4E4DF',
                     borderWidth: 1,
                     padding: 12,
                     displayColors: false
@@ -1369,11 +1367,11 @@ function renderTrendChart(mfr) {
             scales: {
                 x: {
                     grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
-                    ticks: { color: '#9ca3af', font: { size: 11 } }
+                    ticks: { color: '#6B6E75', font: { size: 11 } }
                 },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
-                    ticks: { color: '#9ca3af', font: { size: 11 } }
+                    ticks: { color: '#6B6E75', font: { size: 11 } }
                 }
             }
         }
@@ -1395,10 +1393,10 @@ function renderComparePanel() {
     listContainer.innerHTML = state.compareList.map(make => {
         const mfr = dashboardData.manufacturers.find(m => m.make === make);
         return `
-            <span class="inline-flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-full px-3 py-1 text-sm">
+            <span class="inline-flex items-center gap-2 bg-[#F3F3EF] border border-line rounded-full px-3 py-1 text-sm">
                 ${getManufacturerLogo(make)}
-                <span class="ml-1 text-gray-800">${make}</span>
-                <button class="remove-compare text-gray-400 hover:text-gray-600" data-make="${make}">
+                <span class="ml-1 text-ink">${make}</span>
+                <button class="remove-compare text-faint hover:text-ink" data-make="${make}">
                     &times;
                 </button>
             </span>
@@ -1451,9 +1449,9 @@ function renderCompareChart() {
                 legend: { display: false },
                 tooltip: {
                     backgroundColor: '#ffffff',
-                    titleColor: '#111827',
-                    bodyColor: '#374151',
-                    borderColor: '#e5e7eb',
+                    titleColor: '#16181D',
+                    bodyColor: '#5E6168',
+                    borderColor: '#E4E4DF',
                     borderWidth: 1,
                     padding: 8,
                     titleFont: { size: 11 },
@@ -1463,11 +1461,11 @@ function renderCompareChart() {
             scales: {
                 x: {
                     grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
-                    ticks: { color: '#9ca3af', font: { size: 10 } }
+                    ticks: { color: '#6B6E75', font: { size: 10 } }
                 },
                 y: {
                     grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
-                    ticks: { color: '#9ca3af', font: { size: 10 } }
+                    ticks: { color: '#6B6E75', font: { size: 10 } }
                 }
             }
         }
@@ -1496,10 +1494,10 @@ function renderQuarterMIIChart() {
     const changeColorLight = change >= 0 ? '#16a34a' : '#dc2626';
     container.classList.remove('hidden');
     container.innerHTML = `
-        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <div class="bg-white border border-line rounded-xl p-5 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2">
-                    <h3 class="font-semibold text-gray-900">Market Interest Index — Month over Month</h3>
+                    <h3 class="font-semibold text-ink">Market Interest Index — Month over Month</h3>
                     ${isMTD ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Live</span>' : ''}
                 </div>
                 <div class="text-xs font-semibold" style="color:${changeColorLight}">${changeSign}${changePercent}% overall</div>
@@ -1527,7 +1525,7 @@ function renderQuarterMIIChart() {
 
         // Remap selected point colors for light theme
         const pointColorsLight = trendData.labels.map(l =>
-            l === selectedLabel ? '#8B1A1A' : '#C5A028'
+            l === selectedLabel ? '#B45309' : '#D97706'
         );
 
         charts.quarterMII = new Chart(ctx, {
@@ -1537,8 +1535,8 @@ function renderQuarterMIIChart() {
                 datasets: [{
                     label: 'Market Avg MII',
                     data: trendData.data,
-                    borderColor: '#c9a84c',
-                    backgroundColor: 'rgba(201,168,76,0.08)',
+                    borderColor: '#F59E0B',
+                    backgroundColor: 'rgba(245,158,11,0.08)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: pointRadii,
@@ -1556,9 +1554,9 @@ function renderQuarterMIIChart() {
                     legend: { display: false },
                     tooltip: {
                         backgroundColor: '#ffffff',
-                        titleColor: '#111827',
-                        bodyColor: '#374151',
-                        borderColor: '#e5e7eb',
+                        titleColor: '#16181D',
+                        bodyColor: '#5E6168',
+                        borderColor: '#E4E4DF',
                         borderWidth: 1,
                         padding: 12,
                         displayColors: false,
@@ -1570,12 +1568,12 @@ function renderQuarterMIIChart() {
                 scales: {
                     x: {
                         grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
-                        ticks: { color: '#9ca3af', font: { size: 10 }, maxRotation: 45 }
+                        ticks: { color: '#6B6E75', font: { size: 10 }, maxRotation: 45 }
                     },
                     y: {
                         grid: { color: 'rgba(0,0,0,0.06)', drawBorder: false },
                         ticks: {
-                            color: '#9ca3af',
+                            color: '#6B6E75',
                             font: { size: 11 },
                             callback: v => v.toFixed(1)
                         },
@@ -1667,11 +1665,11 @@ function init() {
     document.querySelectorAll('.view-mode-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.view-mode-btn').forEach(b => {
-                b.classList.remove('bg-[#8B1A1A]', 'text-white');
-                b.classList.add('text-gray-500');
+                b.classList.remove('bg-ink', 'text-white');
+                b.classList.add('text-faint');
             });
-            btn.classList.add('bg-[#8B1A1A]', 'text-white');
-            btn.classList.remove('text-gray-500');
+            btn.classList.add('bg-ink', 'text-white');
+            btn.classList.remove('text-faint');
             state.viewMode = btn.dataset.mode;
         });
     });

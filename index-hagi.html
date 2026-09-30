@@ -6,29 +6,31 @@
     <title>Market Interest Index — Collector Car Analytics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         /* ── Chart.js professional defaults ── */
-        Chart.defaults.font.family = "'DM Sans', sans-serif";
+        Chart.defaults.font.family = "'Hanken Grotesk', sans-serif";
         Chart.defaults.font.size = 11;
-        Chart.defaults.color = '#a8a29e';
+        Chart.defaults.color = '#6B6E75';
         Chart.defaults.borderColor = 'rgba(0,0,0,0.04)';
         Chart.defaults.animation.duration = 350;
         Chart.defaults.animation.easing = 'easeOutQuart';
 
         /* Tooltip */
         Object.assign(Chart.defaults.plugins.tooltip, {
-            backgroundColor: '#18181b',
+            backgroundColor: '#16181D',
             padding: { x: 12, y: 10 },
             cornerRadius: 9,
-            borderColor: 'rgba(255,255,255,0.07)',
+            borderColor: '#ECECE7',
             borderWidth: 1,
-            titleFont: { family: "'DM Sans', sans-serif", weight: '600', size: 12 },
-            bodyFont:  { family: "'DM Sans', sans-serif", size: 11 },
-            titleColor: '#f5f5f4',
-            bodyColor:  '#a8a29e',
+            titleFont: { family: "'Hanken Grotesk', sans-serif", weight: '600', size: 12 },
+            bodyFont:  { family: "'Hanken Grotesk', sans-serif", size: 11 },
+            titleColor: '#F3F3EF',
+            bodyColor:  '#6B6E75',
             titleMarginBottom: 5,
             boxPadding: 5,
             usePointStyle: true,
@@ -58,9 +60,9 @@
                     scale.border.display = false;
                     /* Better tick labels */
                     if (!scale.ticks) scale.ticks = {};
-                    scale.ticks.color = '#b5afa8';
+                    scale.ticks.color = '#6B6E75';
                     if (!scale.ticks.font) scale.ticks.font = {};
-                    scale.ticks.font.family = "'DM Sans', sans-serif";
+                    scale.ticks.font.family = "'Hanken Grotesk', sans-serif";
                     scale.ticks.font.size   = 10;
                     if (scale.ticks.padding === undefined) scale.ticks.padding = 10;
                 });
@@ -71,12 +73,12 @@
                     if (!r.grid) r.grid = {};         r.grid.color = 'rgba(0,0,0,0.06)';
                     if (!r.angleLines) r.angleLines = {}; r.angleLines.color = 'rgba(0,0,0,0.06)';
                     if (!r.ticks) r.ticks = {};
-                    r.ticks.backdropColor = 'transparent'; r.ticks.color = '#b5afa8';
+                    r.ticks.backdropColor = 'transparent'; r.ticks.color = '#6B6E75';
                     if (!r.ticks.font) r.ticks.font = {}; r.ticks.font.size = 9;
                     if (!r.pointLabels) r.pointLabels = {};
-                    r.pointLabels.color = '#78716c';
+                    r.pointLabels.color = '#5E6168';
                     if (!r.pointLabels.font) r.pointLabels.font = {};
-                    Object.assign(r.pointLabels.font, { family: "'DM Sans', sans-serif", size: 11, weight: '500' });
+                    Object.assign(r.pointLabels.font, { family: "'Hanken Grotesk', sans-serif", size: 11, weight: '500' });
                 }
 
                 /* Legend */
@@ -84,8 +86,8 @@
                 if (legend && legend.display !== false) {
                     if (!legend.labels) legend.labels = {};
                     Object.assign(legend.labels, {
-                        font: { family: "'DM Sans', sans-serif", size: 11 },
-                        padding: 18, usePointStyle: true, pointStyleWidth: 8, boxHeight: 8, color: '#78716c'
+                        font: { family: "'Hanken Grotesk', sans-serif", size: 11 },
+                        padding: 18, usePointStyle: true, pointStyleWidth: 8, boxHeight: 8, color: '#5E6168'
                     });
                 }
 
@@ -136,22 +138,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ["'DM Sans'", 'sans-serif'] },
-                    colors: {
-                        brand: { red: '#8B1A1A', gold: '#B8960C' },
-                        warm: { 50: '#f6f4ef', 100: '#f0ebe2', 200: '#e5e0d6', 300: '#cfc8bc' }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        *, *::before, *::after { font-family: 'DM Sans', sans-serif; }
-        body { background: #f6f4ef; }
+        body { background: #F6F6F3; }
 
         @keyframes tickerMove {
             0%   { transform: translateX(0); }
@@ -161,53 +149,37 @@
         .ticker-animate:hover { animation-play-state: paused; }
 
         .scrollbar-thin::-webkit-scrollbar { width: 5px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: #f6f4ef; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cfc8bc; border-radius: 3px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #F6F6F3; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #9A9CA1; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #6B6E75; }
 
         .card {
             background: #fff;
-            border: 1px solid #e8e3da;
-            border-radius: 14px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #E4E4DF;
+            border-radius: 10px;
         }
         .kpi-card {
             background: #fff;
-            border: 1px solid #e8e3da;
-            border-radius: 14px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #E4E4DF;
+            border-radius: 10px;
             padding: 1.25rem 1.35rem 1.1rem;
-            border-top: 2.5px solid transparent;
             overflow: hidden;
         }
         .input-field {
-            background: #f6f4ef;
-            border: 1px solid #e5e0d6;
+            background: #FFFFFF;
+            border: 1px solid #D9D9D3;
             border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
             font-size: 13px;
-            color: #1c1917;
+            color: #16181D;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
         .input-field:focus {
             outline: none;
-            border-color: #8B1A1A;
-            box-shadow: 0 0 0 3px rgba(139,26,26,0.07);
+            border-color: #F59E0B;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.2);
         }
-        .nav-link {
-            font-size: 13px;
-            font-weight: 500;
-            color: #57534e;
-            padding: 5px 11px;
-            border-radius: 7px;
-            transition: all 0.15s;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .nav-link:hover { color: #8B1A1A; background: #fdf2f2; }
-        .nav-link.current { color: #8B1A1A; background: #fdf2f2; font-weight: 600; }
 
-        select option { background: #ffffff; color: #1c1917; }
+        select option { background: #ffffff; color: #16181D; }
 
         /* Loading */
         #loadingIndicator { backdrop-filter: blur(4px); }
@@ -217,8 +189,8 @@
             animation: miiLoaderGlow 2.4s ease-in-out infinite;
         }
         @keyframes miiLoaderGlow {
-            0%, 100% { filter: drop-shadow(0 0 4px rgba(201,168,76,0.25)); }
-            50%      { filter: drop-shadow(0 0 14px rgba(201,168,76,0.6)); }
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(245,158,11,0.25)); }
+            50%      { filter: drop-shadow(0 0 14px rgba(245,158,11,0.6)); }
         }
         /* Lines draw themselves in, staggered, then loop */
         .mii-loader-lines line {
@@ -275,72 +247,71 @@
             .mii-loader-lines line { stroke-dashoffset: 0; opacity: 0.72; }
         }
     </style>
-    <link rel="stylesheet" href="mii-dark-theme.css">
     <script>
     window.addEventListener('error',function(e){if(e.message&&e.message.includes('ResizeObserver')){e.stopImmediatePropagation();return false;}});
-    if(typeof Chart!=='undefined'){const BF="'Barlow',sans-serif";Chart.defaults.color='#7a8898';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family=BF;Chart.defaults.font.size=11;Object.assign(Chart.defaults.plugins.tooltip,{backgroundColor:'#0d1828',borderColor:'rgba(255,255,255,0.12)',titleColor:'#f0eeea',bodyColor:'#7a8898',titleFont:{family:BF,weight:'500',size:12},bodyFont:{family:BF,size:11}});try{Chart.register({id:'miiDarkGrid',beforeInit(chart){const s=(chart.config.options||{}).scales||{};Object.values(s).forEach(sc=>{if(!sc)return;if(!sc.grid)sc.grid={};sc.grid.color='rgba(255,255,255,0.06)';if(!sc.ticks)sc.ticks={};sc.ticks.color='#7a8898';if(!sc.ticks.font)sc.ticks.font={};sc.ticks.font.family=BF;});if(chart.config.type==='radar'&&s.r){const r=s.r;if(!r.grid)r.grid={};r.grid.color='rgba(255,255,255,0.06)';if(!r.angleLines)r.angleLines={};r.angleLines.color='rgba(255,255,255,0.06)';if(!r.pointLabels)r.pointLabels={};if(!r.pointLabels.font)r.pointLabels.font={};r.pointLabels.font.family=BF;}const lg=(chart.config.options?.plugins||{}).legend;if(lg?.labels){if(!lg.labels.font)lg.labels.font={};lg.labels.font.family=BF;lg.labels.color='#7a8898';}}})}catch(e){}}
     </script>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
 </head>
-<body class="min-h-screen text-[#1c1917]">
-
-    <!-- Gold accent top bar -->
-    <div class="h-[3px] bg-[#c9a84c] w-full fixed top-0 left-0 z-50"></div>
-
-    <!-- Navigation -->
-    <header class="bg-white sticky top-[3px] z-40 border-b border-[#e5e0d6]" style="box-shadow: 0 1px 8px rgba(0,0,0,0.04);">
-        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 flex-shrink-0">
-                <svg viewBox="0 0 200 200" width="54" height="54" style="flex-shrink:0;display:block;"><defs><linearGradient id="nsg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#e0c878"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a7030"/><stop offset="100%" stop-color="#e0c878"/></linearGradient><radialGradient id="nbg" cx="42%" cy="32%" r="65%"><stop offset="0%" stop-color="#1a2e4a"/><stop offset="100%" stop-color="#080e1a"/></radialGradient></defs><circle cx="100" cy="100" r="93" fill="url(#nbg)" stroke="url(#nsg)" stroke-width="4"/><line x1="100" y1="40" x2="152" y2="70" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="152" y1="70" x2="152" y2="130" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="152" y1="130" x2="100" y2="160" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="100" y1="160" x2="48" y2="130" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="48" y1="130" x2="48" y2="70" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="48" y1="70" x2="100" y2="40" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="100" y1="40" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="152" y1="70" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="152" y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="100" y1="160" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="48" y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><line x1="48" y1="70" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/><circle cx="100" cy="40" r="7" fill="url(#nsg)" opacity="1"/><circle cx="152" cy="70" r="7" fill="url(#nsg)" opacity="1"/><circle cx="152" cy="130" r="7" fill="url(#nsg)" opacity="1"/><circle cx="100" cy="160" r="7" fill="url(#nsg)" opacity="1"/><circle cx="48" cy="130" r="7" fill="url(#nsg)" opacity="1"/><circle cx="48" cy="70" r="7" fill="url(#nsg)" opacity="1"/><circle cx="100" cy="100" r="26" fill="url(#nbg)" stroke="url(#nsg)" stroke-width="1.4"/><circle cx="100" cy="100" r="7" fill="url(#nsg)" opacity="0.95"/></svg>
-                <div class="w-px h-5 bg-[#e5e0d6]"></div>
-                <span class="font-semibold text-[#1c1917] text-sm leading-none hidden sm:block">Market Interest Index</span>
-                <span class="text-[11px] text-[#a8a29e] hidden lg:block">Collector Car Analytics</span>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link is-active" aria-current="page">HAGI</a>
+                </nav>
             </div>
-
-            <!-- Nav + Controls -->
-            <div class="flex items-center gap-1">
-                <a href="index-hagi.html" class="nav-link current">Leaderboard</a>
-                <a href="dashboard-hagi.html" class="nav-link">Dashboard</a>
-                <a href="analyze-hagi.html" class="nav-link">Analysis</a>
-                <a href="analytics.html" class="nav-link">Model Comparison</a>
-                <div class="w-px h-5 bg-[#e5e0d6] mx-2"></div>
-                <div class="text-right mr-2 hidden md:block">
-                    <div class="text-[10px] text-[#a8a29e] uppercase tracking-widest font-medium">Updated</div>
-                    <div id="lastUpdated" class="text-[11px] font-semibold text-[#57534e] leading-tight"></div>
-                </div>
-                <select id="quarterSelect" class="input-field px-2.5 py-1.5 cursor-pointer text-xs"></select>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <span id="lastUpdated"></span>
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
             </div>
         </div>
     </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
+        <div class="flex flex-col gap-2">
+            <nav aria-label="HAGI view" class="flex flex-wrap items-center gap-5 text-[13px]"><span class="text-faint">HAGI view</span><a href="index-hagi.html" class="font-semibold text-ink border-b-2 border-amber-500 pb-1" aria-current="page">Leaderboard</a><a href="dashboard-hagi.html" class="text-mute hover:text-ink pb-1">Dashboard</a><a href="analyze-hagi.html" class="text-mute hover:text-ink pb-1">Analysis</a></nav>
+            <h1 class="m-0 text-3xl font-semibold tracking-tight">Leaderboard</h1>
+        </div>
+        <div class="flex flex-wrap items-center gap-3"><div class="flex items-center gap-2"><label for="quarterSelect" class="text-[13px] text-mute">Period</label><select id="quarterSelect" class="field"></select></div></div>
+    </div>
 
     <!-- Ticker Strip -->
-    <div class="bg-[#1c1917] overflow-hidden h-7 flex items-center sticky top-[59px] z-30">
-        <div class="flex-shrink-0 bg-[#B8960C] text-black text-[9px] font-bold px-3 h-full flex items-center uppercase tracking-widest">Live</div>
+    <div class="bg-white border-y border-line overflow-hidden h-8 flex items-center mt-6">
+        <div class="flex-shrink-0 bg-amber-500 text-ink text-[10px] font-semibold px-3 h-full flex items-center uppercase tracking-widest">Live</div>
         <div class="overflow-hidden flex-1 relative h-full">
-            <div id="tickerContent" class="text-[10px] text-[#78716c] absolute top-0 left-0 h-full flex items-center">
+            <div id="tickerContent" class="text-[10px] text-[#5E6168] absolute top-0 left-0 h-full flex items-center">
                 <span class="px-4">Loading market data…</span>
             </div>
         </div>
     </div>
 
     <!-- Loading -->
-    <div id="loadingIndicator" class="fixed inset-0 bg-white/88 z-50 flex items-center justify-center">
+    <div id="loadingIndicator" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
         <div class="text-center">
             <svg id="miiLoaderSvg" viewBox="0 0 200 200" width="84" height="84" class="mii-loader" style="display:block;margin:0 auto 1.4rem;">
                 <defs>
                     <linearGradient id="lsg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#e0c878"/>
-                        <stop offset="35%" stop-color="#c9a84c"/>
-                        <stop offset="65%" stop-color="#8a7030"/>
-                        <stop offset="100%" stop-color="#e0c878"/>
+                        <stop offset="0%" stop-color="#FCD34D"/>
+                        <stop offset="35%" stop-color="#F59E0B"/>
+                        <stop offset="65%" stop-color="#92400E"/>
+                        <stop offset="100%" stop-color="#FCD34D"/>
                     </linearGradient>
                     <radialGradient id="lbg" cx="42%" cy="32%" r="65%">
-                        <stop offset="0%" stop-color="#1a2e4a"/>
-                        <stop offset="100%" stop-color="#080e1a"/>
+                        <stop offset="0%" stop-color="#16181D"/>
+                        <stop offset="100%" stop-color="#16181D"/>
                     </radialGradient>
                 </defs>
                 <circle cx="100" cy="100" r="93" fill="url(#lbg)" stroke="url(#lsg)" stroke-width="4"/>
-                <g class="mii-loader-lines" stroke="#c9a84c" stroke-width="2.4" stroke-linecap="round">
+                <g class="mii-loader-lines" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round">
                     <line x1="100" y1="40"  x2="152" y2="70"/>
                     <line x1="152" y1="70"  x2="152" y2="130"/>
                     <line x1="152" y1="130" x2="100" y2="160"/>
@@ -364,8 +335,8 @@
                 </g>
                 <circle class="mii-loader-core" cx="100" cy="100" r="9" fill="url(#lsg)"/>
             </svg>
-            <div class="text-sm font-semibold text-[#1c1917]">Loading MII Data</div>
-            <div class="text-xs text-[#a8a29e] mt-1">Fetching from S3</div>
+            <div class="text-sm font-semibold text-[#16181D]">Loading MII Data</div>
+            <div class="text-xs text-[#6B6E75] mt-1">Fetching from S3</div>
         </div>
     </div>
 
@@ -376,25 +347,25 @@
 
         <!-- KPI Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="kpi-card" style="border-top-color:#cfc8bc;">
-                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Qualifying Makes</div>
-                <div id="qualifyingMakes" class="text-[2rem] font-bold text-[#1c1917] leading-none tabular-nums">0</div>
-                <div id="totalMakes" class="text-[11px] text-[#a8a29e] mt-2"></div>
+            <div class="kpi-card">
+                <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2.5">Qualifying Makes</div>
+                <div id="qualifyingMakes" class="text-[2rem] font-bold text-[#16181D] leading-none tabular-nums">0</div>
+                <div id="totalMakes" class="text-[11px] text-[#6B6E75] mt-2"></div>
             </div>
-            <div class="kpi-card" style="border-top-color:#8B1A1A;">
-                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Total Auctions</div>
-                <div id="totalAuctions" class="text-[2rem] font-bold text-[#1c1917] leading-none tabular-nums">0</div>
-                <div class="text-[11px] text-[#a8a29e] mt-2">this period</div>
+            <div class="kpi-card">
+                <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2.5">Total Auctions</div>
+                <div id="totalAuctions" class="text-[2rem] font-bold text-[#16181D] leading-none tabular-nums">0</div>
+                <div class="text-[11px] text-[#6B6E75] mt-2">this period</div>
             </div>
-            <div class="kpi-card" style="border-top-color:#B8960C;">
-                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Market MII Avg</div>
-                <div id="marketMII" class="text-[2rem] font-bold text-[#8B1A1A] leading-none tabular-nums">0.0</div>
-                <div class="text-[11px] text-[#a8a29e] mt-2">index points</div>
+            <div class="kpi-card">
+                <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2.5">Market MII Avg</div>
+                <div id="marketMII" class="text-[2rem] font-bold text-[#B45309] leading-none tabular-nums">0.0</div>
+                <div class="text-[11px] text-[#6B6E75] mt-2">index points</div>
             </div>
-            <div class="kpi-card" style="border-top-color:#15803d;">
-                <div class="text-[10px] font-semibold text-[#a8a29e] uppercase tracking-widest mb-2.5">Avg Sale Price</div>
-                <div id="avgPrice" class="text-[2rem] font-bold text-[#15803d] leading-none tabular-nums">$0K</div>
-                <div class="text-[11px] text-[#a8a29e] mt-2">across all makes</div>
+            <div class="kpi-card">
+                <div class="text-[10px] font-semibold text-[#6B6E75] uppercase tracking-widest mb-2.5">Avg Sale Price</div>
+                <div id="avgPrice" class="text-[2rem] font-bold text-[#1F7A45] leading-none tabular-nums">$0K</div>
+                <div class="text-[11px] text-[#6B6E75] mt-2">across all makes</div>
             </div>
         </div>
 
@@ -406,13 +377,13 @@
                     <div class="relative">
                         <input type="text" id="searchInput" placeholder="Search manufacturer…"
                             class="input-field pl-9 pr-4 py-2 w-56 focus:outline-none" />
-                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#a8a29e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6B6E75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
                     <!-- Min Auctions -->
                     <div class="flex items-center gap-2">
-                        <label class="text-[11px] text-[#a8a29e] font-medium whitespace-nowrap">Min auctions</label>
+                        <label class="text-[11px] text-[#6B6E75] font-medium whitespace-nowrap">Min auctions</label>
                         <select id="minAuctions" class="input-field px-3 py-2 focus:outline-none">
                             <option value="5">5+</option>
                             <option value="10" selected>10+</option>
@@ -422,7 +393,7 @@
                     </div>
                     <!-- Sort -->
                     <div class="flex items-center gap-2">
-                        <label class="text-[11px] text-[#a8a29e] font-medium">Sort</label>
+                        <label class="text-[11px] text-[#6B6E75] font-medium">Sort</label>
                         <select id="sortBy" class="input-field px-3 py-2 focus:outline-none">
                             <option value="miiScore" selected>MII Score</option>
                             <option value="auctions">Auction Volume</option>
@@ -430,28 +401,28 @@
                             <option value="trend">Trend</option>
                             <option value="sellThrough">Sell-Through %</option>
                         </select>
-                        <button id="sortOrder" class="input-field w-8 h-8 flex items-center justify-center hover:bg-[#f0ebe2] transition-colors text-[#57534e] text-sm font-medium cursor-pointer">↓</button>
+                        <button id="sortOrder" class="input-field w-8 h-8 flex items-center justify-center hover:bg-[#ECECE7] transition-colors text-[#5E6168] text-sm font-medium cursor-pointer">↓</button>
                     </div>
                 </div>
                 <!-- View Toggle -->
-                <div class="flex items-center bg-[#f6f4ef] rounded-lg p-1 gap-0.5">
-                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all bg-[#8B1A1A] text-white shadow-sm">Leaderboard</button>
-                    <button data-mode="compare"     class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#a8a29e] hover:text-[#57534e]">Compare</button>
-                    <button data-mode="trends"      class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#a8a29e] hover:text-[#57534e]">Trends</button>
+                <div class="flex items-center bg-[#F6F6F3] rounded-lg p-1 gap-0.5">
+                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all bg-ink text-white shadow-sm">Leaderboard</button>
+                    <button data-mode="compare"     class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#6B6E75] hover:text-[#5E6168]">Compare</button>
+                    <button data-mode="trends"      class="view-mode-btn px-4 py-1.5 rounded-md text-[13px] font-medium transition-all text-[#6B6E75] hover:text-[#5E6168]">Trends</button>
                 </div>
             </div>
         </div>
 
         <!-- Main Grid -->
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 [&>*]:min-w-0">
             <!-- Leaderboard -->
-            <div class="col-span-2">
+            <div class="lg:col-span-2">
                 <div class="card overflow-hidden">
-                    <div class="border-b border-[#f0ebe2] px-5 py-4">
-                        <h2 class="font-semibold text-[#1c1917] text-[13px]">Manufacturer Leaderboard</h2>
-                        <p id="leaderboardSubtitle" class="text-[11px] text-[#a8a29e] mt-0.5"></p>
+                    <div class="border-b border-[#ECECE7] px-5 py-4">
+                        <h2 class="font-semibold text-[#16181D] text-[13px]">Manufacturer Leaderboard</h2>
+                        <p id="leaderboardSubtitle" class="text-[11px] text-[#6B6E75] mt-0.5"></p>
                     </div>
-                    <div id="leaderboardContainer" class="divide-y divide-[#f6f4ef]"></div>
+                    <div id="leaderboardContainer" class="divide-y divide-[#F6F6F3]"></div>
                 </div>
             </div>
 
@@ -459,20 +430,20 @@
             <div class="space-y-5">
                 <div id="manufacturerDetail">
                     <div class="card p-7 text-center">
-                        <div class="w-9 h-9 rounded-full bg-[#f6f4ef] flex items-center justify-center mx-auto mb-3.5">
-                            <svg class="w-4 h-4 text-[#cfc8bc]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-9 h-9 rounded-full bg-[#F6F6F3] flex items-center justify-center mx-auto mb-3.5">
+                            <svg class="w-4 h-4 text-[#9A9CA1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                             </svg>
                         </div>
-                        <h3 class="font-semibold text-[#78716c] text-[13px]">Select a Manufacturer</h3>
-                        <p class="text-[11px] text-[#a8a29e] mt-2 leading-relaxed">Click any row in the leaderboard to view model breakdowns and trend details</p>
+                        <h3 class="font-semibold text-[#5E6168] text-[13px]">Select a Manufacturer</h3>
+                        <p class="text-[11px] text-[#6B6E75] mt-2 leading-relaxed">Click any row in the leaderboard to view model breakdowns and trend details</p>
                     </div>
                 </div>
                 <!-- Compare Panel -->
-                <div id="comparePanel" class="hidden card p-5" style="border-color: rgba(139,26,26,0.2);">
+                <div id="comparePanel" class="hidden card p-5" style="border-color: rgba(180,83,9,0.2);">
                     <div class="flex items-center justify-between mb-3">
-                        <h4 class="font-semibold text-[#1c1917] text-[13px]"><span id="compareCount">Compare (0/4)</span></h4>
-                        <button id="clearCompare" class="text-[11px] text-[#a8a29e] hover:text-[#57534e] transition-colors">Clear all</button>
+                        <h4 class="font-semibold text-[#16181D] text-[13px]"><span id="compareCount">Compare (0/4)</span></h4>
+                        <button id="clearCompare" class="text-[11px] text-[#6B6E75] hover:text-[#5E6168] transition-colors">Clear all</button>
                     </div>
                     <div id="compareList" class="flex flex-wrap gap-1.5 mb-4"></div>
                     <div style="height: 110px;"><canvas id="compareChart"></canvas></div>
@@ -482,18 +453,18 @@
 
         <!-- Top Models -->
         <div class="card overflow-hidden mt-6 mb-6">
-            <div class="border-b border-[#f0ebe2] px-5 py-4">
+            <div class="border-b border-[#ECECE7] px-5 py-4">
                 <div class="flex items-center justify-between mb-2">
-                    <h2 class="font-semibold text-[#1c1917] text-[13px]">Top 20 Models Overall</h2>
+                    <h2 class="font-semibold text-[#16181D] text-[13px]">Top 20 Models Overall</h2>
                 </div>
-                <p id="topModelsSubtitle" class="text-[11px] text-[#a8a29e] mb-3">Top 20 models with highest market interest this period</p>
+                <p id="topModelsSubtitle" class="text-[11px] text-[#6B6E75] mb-3">Top 20 models with highest market interest this period</p>
                 <div class="relative">
                     <input type="text" id="modelSearch" placeholder="Search for any model…"
                         class="w-full input-field pl-9 pr-8 py-2 focus:outline-none" />
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#a8a29e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6B6E75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <div id="modelSearchClear" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#a8a29e] hover:text-[#57534e] cursor-pointer hidden text-base leading-none">&times;</div>
+                    <div id="modelSearchClear" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B6E75] hover:text-[#5E6168] cursor-pointer hidden text-base leading-none">&times;</div>
                 </div>
             </div>
             <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5"></div>
@@ -501,31 +472,31 @@
 
         <!-- Methodology -->
         <div class="card p-6 mb-6">
-            <h3 class="font-semibold text-[#1c1917] mb-5 text-[13px]">About the Market Interest Index (MII)</h3>
+            <h3 class="font-semibold text-[#16181D] mb-5 text-[13px]">About the Market Interest Index (MII)</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Formula Weights</h4>
+                    <h4 class="text-[10px] font-bold text-[#6B6E75] uppercase tracking-widest mb-3">Formula Weights</h4>
                     <ul class="space-y-2">
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#f59e0b] flex-shrink-0"></span>Sale Price — 30%</li>
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#3b82f6] flex-shrink-0"></span>Bid Activity — 30%</li>
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#10b981] flex-shrink-0"></span>View Count — 20%</li>
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#8b5cf6] flex-shrink-0"></span>Comments — 12%</li>
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#ec4899] flex-shrink-0"></span>Social Engagement — 5%</li>
-                        <li class="flex items-center gap-2 text-[12px] text-[#57534e]"><span class="w-2 h-2 rounded-full bg-[#6b7280] flex-shrink-0"></span>Vehicle Age — 3%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#f59e0b] flex-shrink-0"></span>Sale Price — 30%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#3b82f6] flex-shrink-0"></span>Bid Activity — 30%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#10b981] flex-shrink-0"></span>View Count — 20%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#8b5cf6] flex-shrink-0"></span>Comments — 12%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#ec4899] flex-shrink-0"></span>Social Engagement — 5%</li>
+                        <li class="flex items-center gap-2 text-[12px] text-[#5E6168]"><span class="w-2 h-2 rounded-full bg-[#6B6E75] flex-shrink-0"></span>Vehicle Age — 3%</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Confidence Levels</h4>
+                    <h4 class="text-[10px] font-bold text-[#6B6E75] uppercase tracking-widest mb-3">Confidence Levels</h4>
                     <ul class="space-y-2">
-                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-green-600 text-base leading-none">●</span> High: 50+ auctions</li>
-                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-teal-600 text-base leading-none">◐</span> Medium-High: 20–49</li>
-                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-amber-600 text-base leading-none">◐</span> Medium: 10–19</li>
-                        <li class="text-[12px] text-[#57534e] flex items-center gap-2"><span class="text-red-500 text-base leading-none">○</span> Low: 5–9 auctions</li>
+                        <li class="text-[12px] text-[#5E6168] flex items-center gap-2"><span class="text-green-600 text-base leading-none">●</span> High: 50+ auctions</li>
+                        <li class="text-[12px] text-[#5E6168] flex items-center gap-2"><span class="text-teal-600 text-base leading-none">◐</span> Medium-High: 20–49</li>
+                        <li class="text-[12px] text-[#5E6168] flex items-center gap-2"><span class="text-amber-700 text-base leading-none">◐</span> Medium: 10–19</li>
+                        <li class="text-[12px] text-[#5E6168] flex items-center gap-2"><span class="text-red-500 text-base leading-none">○</span> Low: 5–9 auctions</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-[10px] font-bold text-[#a8a29e] uppercase tracking-widest mb-3">Data Sources</h4>
-                    <p class="text-[12px] text-[#57534e] leading-relaxed">MII scores are calculated from auction data aggregated from Bring a Trailer and Cars &amp; Bids. Refreshed twice daily at 6 AM and 6 PM UTC.</p>
+                    <h4 class="text-[10px] font-bold text-[#6B6E75] uppercase tracking-widest mb-3">Data Sources</h4>
+                    <p class="text-[12px] text-[#5E6168] leading-relaxed">MII scores are calculated from auction data aggregated from Bring a Trailer and Cars &amp; Bids. Refreshed twice daily at 6 AM and 6 PM UTC.</p>
                 </div>
             </div>
         </div>
@@ -534,21 +505,21 @@
 
     <!-- Lot-level drill-down modal: individual auction sales behind a model's monthly average -->
     <div id="lotModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-        <div class="bg-white border border-[#e5e0d6] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex items-start justify-between px-6 py-4 border-b border-[#e5e0d6]">
+        <div class="bg-white border border-[#E4E4DF] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex items-start justify-between px-6 py-4 border-b border-[#E4E4DF]">
                 <div>
-                    <h3 id="lotModalTitle" class="text-lg font-bold text-gray-900">Model</h3>
-                    <p id="lotModalSubtitle" class="text-xs text-gray-500 mt-1"></p>
+                    <h3 id="lotModalTitle" class="text-lg font-bold text-ink">Model</h3>
+                    <p id="lotModalSubtitle" class="text-xs text-faint mt-1"></p>
                 </div>
-                <button id="lotModalClose" class="text-gray-400 hover:text-gray-700 text-2xl leading-none px-2" aria-label="Close">&times;</button>
+                <button id="lotModalClose" class="text-faint hover:text-ink text-2xl leading-none px-2" aria-label="Close">&times;</button>
             </div>
             <div class="px-6 py-4 overflow-y-auto scrollbar-thin">
-                <div class="bg-[#faf8f3] rounded-xl p-3 mb-4" style="height: 240px;">
+                <div class="bg-[#FAFAF8] rounded-xl p-3 mb-4" style="height: 240px;">
                     <canvas id="lotScatterChart"></canvas>
                 </div>
-                <div class="overflow-x-auto rounded-xl border border-[#e5e0d6]">
+                <div class="overflow-x-auto rounded-xl border border-[#E4E4DF]">
                     <table class="w-full text-left">
-                        <thead class="bg-[#faf8f3] text-xs uppercase text-gray-500">
+                        <thead class="bg-[#FAFAF8] text-xs uppercase text-faint">
                             <tr>
                                 <th class="px-4 py-2 font-medium">Sale date</th>
                                 <th class="px-4 py-2 font-medium">Year</th>
@@ -561,7 +532,7 @@
                         <tbody id="lotTableBody"></tbody>
                     </table>
                 </div>
-                <p class="text-xs text-gray-400 mt-3">
+                <p class="text-xs text-faint mt-3">
                     Each row is an individual auction lot from bring-a-trailer data. The monthly model average shown elsewhere
                     is the mean of these sales. Click a point or "view" to open the original listing. Non-USD sales are listed
                     but omitted from the chart axis.
@@ -571,17 +542,10 @@
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-[#e5e0d6] py-5 bg-white mt-4">
-        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-[11px] text-[#a8a29e]">
-            <div class="flex items-center gap-2">
-                <span class="text-[#8B1A1A] font-bold tracking-[0.08em]">MII</span>
-                <span>Market Interest Index &copy; 2025</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="hover:text-[#57534e] transition-colors">Classic View</a>
-                <a href="dashboard-hagi.html" class="hover:text-[#57534e] transition-colors">Dashboard</a>
-                <a href="analyze-hagi.html" class="hover:text-[#57534e] transition-colors">Analysis</a>
-            </div>
+    <footer class="border-t border-line mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2 text-[13px] text-mute">
+            <span>Market Interest Index</span>
+            <span>Bring a Trailer data, refreshed twice daily at 06:00 and 18:00 UTC</span>
         </div>
     </footer>
 
@@ -600,32 +564,32 @@
                 if (emojiEl && emojiEl.textContent.includes('\uD83D\uDC48')) {
                     emojiEl.outerHTML = [
                         '<div style="margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;">',
-                        '<svg viewBox="0 0 200 200" width="88" height="88" style="display:block;filter:drop-shadow(0 0 10px rgba(201,168,76,0.45));">',
+                        '<svg viewBox="0 0 200 200" width="88" height="88" style="display:block;filter:drop-shadow(0 0 10px rgba(245,158,11,0.45));">',
                           '<defs>',
                             '<linearGradient id="dsg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">',
-                              '<stop offset="0%" stop-color="#e0c878"/>',
-                              '<stop offset="35%" stop-color="#c9a84c"/>',
-                              '<stop offset="65%" stop-color="#8a7030"/>',
-                              '<stop offset="100%" stop-color="#e0c878"/>',
+                              '<stop offset="0%" stop-color="#FCD34D"/>',
+                              '<stop offset="35%" stop-color="#F59E0B"/>',
+                              '<stop offset="65%" stop-color="#92400E"/>',
+                              '<stop offset="100%" stop-color="#FCD34D"/>',
                             '</linearGradient>',
                             '<radialGradient id="dbg" cx="42%" cy="32%" r="65%">',
-                              '<stop offset="0%" stop-color="#1a2e4a"/>',
-                              '<stop offset="100%" stop-color="#080e1a"/>',
+                              '<stop offset="0%" stop-color="#16181D"/>',
+                              '<stop offset="100%" stop-color="#16181D"/>',
                             '</radialGradient>',
                           '</defs>',
                           '<circle cx="100" cy="100" r="93" fill="url(#dbg)" stroke="url(#dsg)" stroke-width="4"/>',
-                          '<line x1="100" y1="40" x2="152" y2="70"  stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="152" y1="70"  x2="152" y2="130" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="152" y1="130" x2="100" y2="160" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="100" y1="160" x2="48"  y2="130" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="48"  y1="130" x2="48"  y2="70"  stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="48"  y1="70"  x2="100" y2="40"  stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="100" y1="40"  x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="152" y1="70"  x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="152" y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="100" y1="160" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="48"  y1="130" x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
-                          '<line x1="48"  y1="70"  x2="100" y2="100" stroke="#c9a84c" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="100" y1="40" x2="152" y2="70"  stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="152" y1="70"  x2="152" y2="130" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="152" y1="130" x2="100" y2="160" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="100" y1="160" x2="48"  y2="130" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="48"  y1="130" x2="48"  y2="70"  stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="48"  y1="70"  x2="100" y2="40"  stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="100" y1="40"  x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="152" y1="70"  x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="152" y1="130" x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="100" y1="160" x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="48"  y1="130" x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
+                          '<line x1="48"  y1="70"  x2="100" y2="100" stroke="#F59E0B" stroke-width="2.4" opacity="0.72"/>',
                           '<circle cx="100" cy="40"  r="7" fill="url(#dsg)" opacity="1"/>',
                           '<circle cx="152" cy="70"  r="7" fill="url(#dsg)" opacity="1"/>',
                           '<circle cx="152" cy="130" r="7" fill="url(#dsg)" opacity="1"/>',
@@ -639,7 +603,7 @@
                 }
                 const card = mfrDetail.querySelector('[class*="rounded-xl"]');
                 if (card) {
-                    card.style.borderColor  = '#e8e3da';
+                    card.style.borderColor  = '#E4E4DF';
                     card.style.borderRadius = '14px';
                     card.style.boxShadow    = '0 1px 2px rgba(0,0,0,0.04),0 2px 10px rgba(0,0,0,0.03)';
                 }
@@ -653,7 +617,7 @@
                 topModels.querySelectorAll('.bg-white').forEach(function(card) {
                     if (card.dataset.warmPatched) return;
                     card.dataset.warmPatched = '1';
-                    card.style.borderColor  = '#e8e3da';
+                    card.style.borderColor  = '#E4E4DF';
                     card.style.borderRadius = '12px';
                     card.style.boxShadow    = '0 1px 2px rgba(0,0,0,0.04),0 2px 8px rgba(0,0,0,0.03)';
                 });
@@ -687,7 +651,7 @@
         /* Professional createSparkline override */
         function patchSparkline() {
             window.createSparkline = function(data, color) {
-                color = color || '#8B1A1A';
+                color = color || '#B45309';
                 if (!data || data.length < 2) return '<div style="width:108px;height:30px;"></div>';
 
                 var last   = data[data.length - 1];
@@ -724,7 +688,7 @@
                 /* Change indicator */
                 var absChg = Math.abs(change);
                 var noChg  = absChg < 0.05;
-                var chgColor = noChg ? '#a8a29e' : (change > 0 ? '#16a34a' : '#dc2626');
+                var chgColor = noChg ? '#6B6E75' : (change > 0 ? '#16a34a' : '#dc2626');
                 var chgText  = noChg ? '—' : (change > 0 ? '+' : '−') + absChg.toFixed(1);
 
                 return [
@@ -741,8 +705,8 @@
                         '<circle cx="' + lastX + '" cy="' + lastY.toFixed(1) + '" r="2.8" fill="' + color + '" stroke="#fff" stroke-width="1.5"/>',
                       '</svg>',
                       '<div style="text-align:right;line-height:1.25;min-width:42px;">',
-                        '<div style="font-size:12px;font-weight:600;color:#1c1917;font-family:\'DM Sans\',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-0.01em;">' + last.toFixed(1) + '</div>',
-                        '<div style="font-size:9.5px;color:' + chgColor + ';font-family:\'DM Sans\',sans-serif;font-weight:500;">' + chgText + '</div>',
+                        '<div style="font-size:12px;font-weight:600;color:#16181D;font-family:\'Hanken Grotesk\',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-0.01em;">' + last.toFixed(1) + '</div>',
+                        '<div style="font-size:9.5px;color:' + chgColor + ';font-family:\'Hanken Grotesk\',sans-serif;font-weight:500;">' + chgText + '</div>',
                       '</div>',
                     '</div>'
                 ].join('');
@@ -818,12 +782,12 @@
                 if (!wrap) return;
                 var mfr   = wrap.dataset.mfr || '';
                 var B     = (window.MANUFACTURER_BRANDING || {})[mfr] || {};
-                var color = B.color || '#8B1A1A';
+                var color = B.color || '#B45309';
                 var abbr  = B.abbr  || mfr.substring(0, 3).toUpperCase();
                 wrap.innerHTML =
                     '<span style="font-size:9px;font-weight:700;letter-spacing:0.05em;' +
-                    'font-family:\'DM Sans\',sans-serif;color:' + color + ';">' + abbr + '</span>';
-                wrap.style.background = '#f6f4ef';
+                    'font-family:\'Hanken Grotesk\',sans-serif;color:' + color + ';">' + abbr + '</span>';
+                wrap.style.background = '#F6F6F3';
             };
 
             /* Override the function the app uses to build logo HTML — removed badges */
