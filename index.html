@@ -1,491 +1,262 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Interest Index - Collector Car Analytics Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        zinc: {
-                            950: '#09090b',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-        }
-        .scrollbar-thin::-webkit-scrollbar {
-            width: 6px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-track {
-            background: #27272a;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-            background: #52525b;
-            border-radius: 3px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-            background: #71717a;
-        }
-    </style>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
 </head>
-<body class="min-h-screen bg-zinc-950 text-zinc-100">
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
     <!-- Header -->
-    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-lg">
-                        MII
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold tracking-tight">Market Interest Index</h1>
-                        <p class="text-xs text-zinc-500">Collector Car Analytics Dashboard</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <a href="analytics.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
-                        Model Comparison &rarr;
-                    </a>
-                    <a href="dashboard.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
-                        Terminal View &rarr;
-                    </a>
-                    <a href="analyze.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
-                        Data Analysis &rarr;
-                    </a>
-                    <a href="index-hagi.html" class="px-3 py-1.5 bg-zinc-800 border border-amber-700/50 rounded-lg text-xs text-amber-600 hover:text-amber-400 hover:border-amber-500 transition-colors font-medium tracking-wide">
-                        HAGI View &rarr;
-                    </a>
-                    <a href="admin.html" class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-400 hover:text-amber-500 hover:border-amber-500/50 transition-colors font-medium tracking-wide">
-                        Admin &rarr;
-                    </a>
-                    <div class="text-right">
-                        <div class="text-xs text-zinc-500">Last Updated</div>
-                        <div id="lastUpdated" class="text-sm font-medium text-zinc-300"></div>
-                    </div>
-                    <select id="quarterSelect" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
-                    </select>
-                </div>
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link is-active" aria-current="page">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link">HAGI</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <span>Loaded <span id="lastUpdated"></span></span>
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
             </div>
         </div>
     </header>
 
     <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div id="loadingIndicator" class="fixed inset-0 bg-canvas/95 z-50 flex items-center justify-center px-4">
         <div class="text-center">
-            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-zinc-700 border-t-amber-500 mb-4"></div>
-            <div class="text-xl font-semibold text-zinc-100">Loading MII Data...</div>
-            <div class="text-sm text-zinc-500 mt-2">Fetching from S3 bucket</div>
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-[3px] border-line border-t-amber-500 mb-4"></div>
+            <div class="text-lg font-semibold">Loading MII data</div>
+            <div class="text-sm text-mute mt-1">Fetching the latest results</div>
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-6 py-8">
-        <!-- Quarter MII Trend Chart -->
-        <div id="quarterProgressContainer" class="mb-6 hidden">
-            <!-- MII trend chart will be inserted here -->
-        </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
+        <!-- Page title + period -->
+        <section class="flex flex-wrap items-end justify-between gap-6">
+            <div class="flex flex-col gap-1.5">
+                <span class="text-[13px] text-mute">Bring a Trailer</span>
+                <h1 id="periodTitle" class="m-0 text-4xl font-semibold tracking-tight">&nbsp;</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <label for="quarterSelect" class="text-[13px] text-mute">Period</label>
+                <select id="quarterSelect" class="field"></select>
+            </div>
+        </section>
 
-        <!-- Market Overview Cards -->
-        <div class="grid grid-cols-4 gap-4 mb-8">
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Qualifying Makes</div>
-                <div id="qualifyingMakes" class="text-3xl font-bold text-zinc-100">0</div>
-                <div id="totalMakes" class="text-xs text-zinc-500 mt-1"></div>
-            </div>
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Total Auctions</div>
-                <div id="totalAuctions" class="text-3xl font-bold text-zinc-100">0</div>
-                <div class="text-xs text-zinc-500 mt-1">this month</div>
-            </div>
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Market MII Avg</div>
-                <div id="marketMII" class="text-3xl font-bold text-amber-500">0.0</div>
-                <div class="text-xs text-zinc-500 mt-1">index points</div>
-            </div>
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-                <div class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Avg Sale Price</div>
-                <div id="avgPrice" class="text-3xl font-bold text-emerald-400">$0K</div>
-                <div class="text-xs text-zinc-500 mt-1">across all makes</div>
-            </div>
-        </div>
-
-        <!-- Controls Bar -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-6">
-            <div class="flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <!-- Search -->
-                    <div class="relative">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search manufacturer..."
-                            class="bg-zinc-800 border border-zinc-700 rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-                        />
-                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+        <!-- Market overview: headline, trend chart, key stats -->
+        <section class="panel flex flex-wrap">
+            <div class="flex-[2_1_560px] min-w-0 p-6 sm:p-7 flex flex-col gap-5 border-b lg:border-b-0 lg:border-r border-hair">
+                <div class="flex flex-wrap items-baseline gap-4">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[13px] text-mute">Market MII, average of qualifying makes</span>
+                        <span id="marketMII" class="text-[56px] font-semibold tracking-[-0.03em] leading-none">0.0</span>
                     </div>
+                    <span id="marketChange" class="font-mono text-sm"></span>
+                </div>
+                <div id="quarterProgressContainer" class="hidden">
+                    <!-- Market MII trend chart is rendered here -->
+                </div>
+            </div>
+            <div class="flex-[1_1_280px] flex flex-col">
+                <div class="px-7 py-6 flex flex-col gap-1 border-b border-hair">
+                    <span class="text-[13px] text-mute">Auctions</span>
+                    <span id="totalAuctions" class="text-[30px] font-semibold tracking-tight">0</span>
+                    <span class="text-[13px] text-mute">listed by qualifying makes</span>
+                </div>
+                <div class="px-7 py-6 flex flex-col gap-1 border-b border-hair">
+                    <span class="text-[13px] text-mute">Qualifying makes</span>
+                    <span class="text-[30px] font-semibold tracking-tight"><span id="qualifyingMakes">0</span> <span id="totalMakes" class="text-base font-normal text-mute"></span></span>
+                    <span id="qualifyingRule" class="text-[13px] text-mute">with 10 or more auctions</span>
+                </div>
+                <div class="px-7 py-6 flex flex-col gap-1">
+                    <span class="text-[13px] text-mute">Average sale price</span>
+                    <span id="avgPrice" class="text-[30px] font-semibold tracking-tight">$0K</span>
+                    <span class="text-[13px] text-mute">mean across qualifying makes</span>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Min Auctions Filter -->
-                    <div class="flex items-center gap-2">
-                        <label class="text-xs text-zinc-500">Min Auctions:</label>
-                        <select id="minAuctions" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
-                            <option value="5">5+</option>
-                            <option value="10" selected>10+ (Default)</option>
-                            <option value="20">20+</option>
-                            <option value="50">50+</option>
+        <!-- Leaderboard + selected make -->
+        <section class="flex flex-wrap gap-6 items-start">
+            <div class="panel flex-[2_1_640px] min-w-0">
+                <div class="px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex flex-col gap-0.5">
+                        <h2 class="m-0 text-lg font-semibold">Manufacturers</h2>
+                        <p id="leaderboardSubtitle" class="m-0 text-[13px] text-mute"></p>
+                    </div>
+                    <div class="flex flex-wrap gap-2.5 items-center">
+                        <label for="searchInput" class="sr-only">Search manufacturers</label>
+                        <input type="search" id="searchInput" placeholder="Search makes" class="field w-52">
+                        <label for="minAuctions" class="sr-only">Minimum auctions</label>
+                        <select id="minAuctions" class="field">
+                            <option value="5">5+ auctions</option>
+                            <option value="10" selected>10+ auctions</option>
+                            <option value="20">20+ auctions</option>
+                            <option value="50">50+ auctions</option>
                         </select>
                     </div>
-
-                    <!-- Sort Controls -->
-                    <div class="flex items-center gap-2">
-                        <label class="text-xs text-zinc-500">Sort:</label>
-                        <select id="sortBy" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
-                            <option value="miiScore" selected>MII Score</option>
-                            <option value="auctions">Auction Volume</option>
-                            <option value="avgPrice">Avg Price</option>
-                            <option value="trend">Trend</option>
-                            <option value="sellThrough">Sell-Through %</option>
-                        </select>
-                        <button id="sortOrder" class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm hover:bg-zinc-700 transition-colors">
-                            ↓
-                        </button>
-                    </div>
                 </div>
-
-                <!-- View Mode Toggle -->
-                <div class="flex items-center bg-zinc-800 rounded-lg p-1">
-                    <button data-mode="leaderboard" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-amber-600 text-white">
-                        Leaderboard
-                    </button>
-                    <button data-mode="compare" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200">
-                        Compare
-                    </button>
-                    <button data-mode="trends" class="view-mode-btn px-4 py-1.5 rounded-md text-sm font-medium transition-all text-zinc-400 hover:text-zinc-200">
-                        Trends
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-6">
-            <!-- Main Leaderboard -->
-            <div class="col-span-2">
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                    <div class="border-b border-zinc-800 px-5 py-4">
-                        <h2 class="font-semibold">Manufacturer Leaderboard</h2>
-                        <p id="leaderboardSubtitle" class="text-xs text-zinc-500 mt-1"></p>
-                    </div>
-
-                    <div id="leaderboardContainer" class="divide-y divide-zinc-800/50">
-                        <!-- Leaderboard items will be inserted here -->
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="pl-6 w-12">#</th>
+                                <th><button class="sort-btn" data-sort="make">Make</button></th>
+                                <th class="w-40"><button class="sort-btn" data-sort="miiScore">MII</button></th>
+                                <th class="text-right"><button class="sort-btn" data-sort="trendPoints">Change</button></th>
+                                <th>History</th>
+                                <th class="text-right"><button class="sort-btn" data-sort="auctions">Auctions</button></th>
+                                <th class="text-right"><button class="sort-btn" data-sort="avgPrice">Avg price</button></th>
+                                <th class="text-right"><button class="sort-btn" data-sort="sellThrough">Sold</button></th>
+                                <th title="Confidence, from the number of auctions">Conf.</th>
+                                <th class="pr-6 text-right"><span class="sr-only">Compare</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardContainer">
+                            <!-- Leaderboard rows are rendered here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Right Sidebar -->
-            <div class="space-y-6">
+            <!-- Right column -->
+            <div class="flex-[1_1_320px] min-w-0 flex flex-col gap-6">
                 <div id="manufacturerDetail">
-                    <!-- Manufacturer detail will be inserted here -->
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
-                        <div class="text-4xl mb-4">👈</div>
-                        <h3 class="font-semibold text-zinc-300">Select a Manufacturer</h3>
-                        <p class="text-sm text-zinc-500 mt-2">
-                            Click on any manufacturer in the leaderboard to view detailed model breakdowns and trends
-                        </p>
-                    </div>
+                    <!-- Selected make detail is rendered here -->
                 </div>
 
                 <!-- Compare Panel -->
-                <div id="comparePanel" class="hidden bg-zinc-900 border border-amber-900/50 rounded-xl p-5">
+                <div id="comparePanel" class="hidden panel p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h4 class="font-semibold"><span id="compareCount">Compare (0/4)</span></h4>
-                        <button id="clearCompare" class="text-xs text-zinc-500 hover:text-zinc-300">
-                            Clear all
-                        </button>
+                        <h3 id="compareCount" class="m-0 text-base font-semibold">Compare (0/4)</h3>
+                        <button id="clearCompare" class="text-[13px] text-mute hover:text-amber-700">Clear all</button>
                     </div>
                     <div id="compareList" class="flex flex-wrap gap-2 mb-4">
-                        <!-- Compare items will be inserted here -->
+                        <!-- Compared makes are rendered here -->
                     </div>
-
-                    <!-- Mini comparison chart -->
-                    <div style="height: 120px;">
+                    <div style="height: 160px;">
                         <canvas id="compareChart"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Top Models Overall -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-6 mb-6">
-            <div class="border-b border-zinc-800 px-5 py-4">
-                <div class="flex items-center justify-between mb-2">
-                    <h2 class="font-semibold">Top 20 Models Overall</h2>
+        <!-- Top models -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex flex-col gap-0.5">
+                    <h2 class="m-0 text-lg font-semibold">Top models</h2>
+                    <p id="topModelsSubtitle" class="m-0 text-[13px] text-mute">Top 20 models by market interest</p>
                 </div>
-                <p id="topModelsSubtitle" class="text-xs text-zinc-500 mb-3">Top 20 models with highest market interest this month</p>
-                <!-- Model Search -->
                 <div class="relative">
-                    <input
-                        type="text"
-                        id="modelSearch"
-                        placeholder="Search for any model..."
-                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 placeholder-zinc-500"
-                    />
-                    <div id="modelSearchClear" class="absolute right-3 top-2.5 text-zinc-500 hover:text-zinc-300 cursor-pointer hidden">
-                        ×
-                    </div>
+                    <label for="modelSearch" class="sr-only">Search models</label>
+                    <input type="search" id="modelSearch" placeholder="Search any model" class="field w-64">
+                    <button id="modelSearchClear" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 text-mute hover:text-ink" aria-label="Clear model search">&times;</button>
                 </div>
             </div>
-            <div id="topModelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
-                <!-- Top models will be inserted here -->
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6 w-12">#</th>
+                            <th>Model</th>
+                            <th class="text-right">Auctions</th>
+                            <th class="text-right">Avg price</th>
+                            <th class="text-right">Sold</th>
+                            <th class="text-right">Change</th>
+                            <th>Confidence</th>
+                            <th class="pr-6 text-right">MII</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topModelsContainer">
+                        <!-- Top models are rendered here -->
+                    </tbody>
+                </table>
             </div>
-        </div>
+        </section>
 
-        <!-- Manufacturer Apex Index (MAI) -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-6 mb-6">
-            <div class="border-b border-zinc-800 px-5 py-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="font-semibold">Manufacturer Apex Index (MAI)</h2>
-                        <p class="text-xs text-zinc-500 mt-1 max-w-2xl">
-                            MAI measures manufacturer presence and performance at apex classic car auction events.
-                            It proxies the network density (D) term in the Networked Utility Dividend framework:
-                            <span class="font-mono text-zinc-400">U = (Fun × Exp) + Nostalgia + (CulturalSalience × N<sup>α</sup> × D) × (1/Survivorship)</span>
-                        </p>
-                    </div>
-                    <div class="flex-shrink-0 ml-4 text-xs text-zinc-500 bg-zinc-800 rounded-lg px-3 py-1.5 border border-zinc-700 font-mono">
-                        D-term proxy
-                    </div>
-                </div>
+        <!-- Apex Index pointer -->
+        <section class="panel px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-col gap-0.5">
+                <h2 class="m-0 text-lg font-semibold">Manufacturer Apex Index</h2>
+                <p class="m-0 text-[13px] text-mute">How each make performs at top-tier auctions (lots estimated at $500K+), on its own page.</p>
             </div>
-            <div class="p-5">
-                <div id="maiChartContainer" style="position: relative;">
-                    <canvas id="maiChart"></canvas>
-                </div>
-                <div id="maiEmptyState" class="hidden py-12 text-center">
-                    <div class="text-3xl mb-3 text-zinc-600">📊</div>
-                    <p class="font-medium text-zinc-400">No MAI data yet</p>
-                    <p class="text-sm mt-1 text-zinc-600">Populate <code class="font-mono text-zinc-500">data/auction_lots.csv</code> then run <code class="font-mono text-zinc-500">auction_rating.py</code> and <code class="font-mono text-zinc-500">mai.py</code>.</p>
-                </div>
-                <div class="mt-5 grid grid-cols-3 gap-4">
-                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
-                        <div class="text-zinc-300 font-semibold mb-1">P — Presence</div>
-                        <div class="text-zinc-500">Manufacturer's share of apex lots (≥$500K estimate) at each event</div>
-                    </div>
-                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
-                        <div class="text-zinc-300 font-semibold mb-1">Q — Quality</div>
-                        <div class="text-zinc-500">Mean(sold price / high estimate) for sold apex lots — measures price realisation</div>
-                    </div>
-                    <div class="bg-zinc-800/60 border border-zinc-700/50 rounded-lg p-3 text-xs">
-                        <div class="text-zinc-300 font-semibold mb-1">R — Performance</div>
-                        <div class="text-zinc-500">Sell-through rate for apex lots — measures market confidence</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <a href="mai.html" class="btn">Open the Apex Index</a>
+        </section>
 
-        <!-- MII Methodology Footer -->
-        <div class="mt-12 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
-            <h3 class="font-semibold mb-4">About the Market Interest Index (MII)</h3>
-            <div class="grid grid-cols-3 gap-6 text-sm text-zinc-400">
-                <div>
-                    <h4 class="font-medium text-zinc-300 mb-2">Formula Weights</h4>
-                    <ul class="space-y-1">
-                        <li>• Sale Price: 30%</li>
-                        <li>• Bid Activity: 30%</li>
-                        <li>• View Count: 20%</li>
-                        <li>• Comments: 12%</li>
-                        <li>• Social Engagement: 5%</li>
-                        <li>• Vehicle Age: 3%</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-medium text-zinc-300 mb-2">Confidence Levels</h4>
-                    <ul class="space-y-1">
-                        <li><span class="text-emerald-400">●</span> High: 50+ auctions</li>
-                        <li><span class="text-teal-400">◐</span> Medium-High: 20-49 auctions</li>
-                        <li><span class="text-amber-400">◐</span> Medium: 10-19 auctions</li>
-                        <li><span class="text-red-400">○</span> Low: 5-9 auctions</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-medium text-zinc-300 mb-2">Data Sources</h4>
-                    <p>
-                        MII scores are calculated from auction data from Bring a Trailer.
-                        Data is refreshed twice daily at 6 AM and 6 PM UTC.
-                    </p>
-                </div>
+        <!-- Methodology -->
+        <footer class="border-t border-line pt-6 grid gap-8 md:grid-cols-3 text-[13px] text-mute leading-relaxed">
+            <div>
+                <h3 class="m-0 mb-2 text-sm font-semibold text-ink">How MII is built</h3>
+                <p class="m-0">A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views (10%), social engagement (5%) and vehicle age (5%). Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed.</p>
             </div>
-        </div>
+            <div>
+                <h3 class="m-0 mb-2 text-sm font-semibold text-ink">Confidence</h3>
+                <p class="m-0">Based on auctions in the month: High 15+, Medium-High 8+, Medium 4+, Low below 4. Changes smaller than the normal swing for a sample that size are shown in grey with a dotted underline.</p>
+            </div>
+            <div>
+                <h3 class="m-0 mb-2 text-sm font-semibold text-ink">Data</h3>
+                <p class="m-0">Bring a Trailer auction results, refreshed twice daily at 6 AM and 6 PM UTC. Cars &amp; Bids is not included.</p>
+            </div>
+        </footer>
     </main>
 
     <!-- Lot-level drill-down modal: individual auction sales behind a model's monthly average -->
-    <div id="lotModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-        <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex items-start justify-between px-6 py-4 border-b border-zinc-800">
+    <div id="lotModal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-ink/40 p-4" role="dialog" aria-modal="true" aria-labelledby="lotModalTitle">
+        <div class="bg-white border border-line rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-xl">
+            <div class="flex items-start justify-between px-6 py-4 border-b border-hair">
                 <div>
-                    <h3 id="lotModalTitle" class="text-lg font-bold text-zinc-100">Model</h3>
-                    <p id="lotModalSubtitle" class="text-xs text-zinc-500 mt-1"></p>
+                    <h3 id="lotModalTitle" class="m-0 text-lg font-semibold">Model</h3>
+                    <p id="lotModalSubtitle" class="m-0 text-[13px] text-mute mt-1"></p>
                 </div>
-                <button id="lotModalClose" class="text-zinc-500 hover:text-zinc-200 text-2xl leading-none px-2" aria-label="Close">&times;</button>
+                <button id="lotModalClose" class="w-9 h-9 rounded-md border border-line text-mute hover:text-ink text-xl leading-none" aria-label="Close">&times;</button>
             </div>
-            <div class="px-6 py-4 overflow-y-auto scrollbar-thin">
-                <div class="bg-zinc-950/40 rounded-xl p-3 mb-4" style="height: 240px;">
+            <div class="px-6 py-4 overflow-y-auto">
+                <div class="rounded-lg border border-hair p-3 mb-4" style="height: 240px;">
                     <canvas id="lotScatterChart"></canvas>
                 </div>
-                <div class="overflow-x-auto rounded-xl border border-zinc-800">
-                    <table class="w-full text-left">
-                        <thead class="bg-zinc-800/50 text-xs uppercase text-zinc-500">
+                <div class="overflow-x-auto rounded-lg border border-hair">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <th class="px-4 py-2 font-medium">Sale date</th>
-                                <th class="px-4 py-2 font-medium">Year</th>
-                                <th class="px-4 py-2 font-medium">Price</th>
-                                <th class="px-4 py-2 font-medium">Status</th>
-                                <th class="px-4 py-2 font-medium">Activity</th>
-                                <th class="px-4 py-2 font-medium">Listing</th>
+                                <th class="pl-4">Sale date</th>
+                                <th>Year</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Activity</th>
+                                <th class="pr-4">Listing</th>
                             </tr>
                         </thead>
                         <tbody id="lotTableBody"></tbody>
                     </table>
                 </div>
-                <p class="text-xs text-zinc-600 mt-3">
-                    Each row is an individual auction lot from bring-a-trailer data. The monthly model average shown elsewhere
-                    is the mean of these sales. Click a point or "view" to open the original listing. Non-USD sales are listed
-                    but omitted from the chart axis.
+                <p class="text-xs text-faint mt-3">
+                    Each row is an individual Bring a Trailer lot. The monthly model average shown elsewhere is the mean of
+                    these sales. Select a point or "View" to open the original listing. Non-USD sales are listed but left off
+                    the chart axis.
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 mt-12 py-6">
-        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-sm text-zinc-500">
-            <div>Market Interest Index © 2025</div>
-            <div class="flex items-center gap-4">
-                <a href="#" class="hover:text-zinc-300">Documentation</a>
-                <a href="#" class="hover:text-zinc-300">API</a>
-                <a href="#" class="hover:text-zinc-300">Contact</a>
-            </div>
-        </div>
-    </footer>
-
     <script src="mii-normalize.js?v=2"></script>
-    <script src="app.js?v=2"></script>
-    <script>
-    // MAI chart — loads data/mai_scores.csv and renders a horizontal bar chart
-    (function () {
-        var csvUrl = 'data/mai_scores.csv';
-
-        Papa.parse(csvUrl, {
-            download: true,
-            header: true,
-            dynamicTyping: true,
-            complete: function (results) {
-                var data = (results.data || []).filter(function (r) {
-                    return r.manufacturer && r.MAI_score != null && !isNaN(r.MAI_score);
-                });
-                if (!data.length) {
-                    showEmpty();
-                    return;
-                }
-                data.sort(function (a, b) { return b.MAI_score - a.MAI_score; });
-                renderMAI(data.slice(0, 20));
-            },
-            error: function () { showEmpty(); }
-        });
-
-        function showEmpty() {
-            document.getElementById('maiChartContainer').classList.add('hidden');
-            document.getElementById('maiEmptyState').classList.remove('hidden');
-        }
-
-        function renderMAI(data) {
-            var container = document.getElementById('maiChartContainer');
-            var height = Math.max(320, data.length * 38 + 60);
-            container.style.height = height + 'px';
-
-            var labels = data.map(function (d) { return d.manufacturer; });
-            var scores = data.map(function (d) { return d.MAI_score; });
-
-            // Amber gradient: brightest at rank 1, fading toward rank N
-            var bgColors = data.map(function (_, i) {
-                var alpha = 1 - (i / Math.max(data.length - 1, 1)) * 0.55;
-                return 'rgba(245, 158, 11, ' + alpha + ')';
-            });
-
-            new Chart(document.getElementById('maiChart').getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'MAI Score',
-                        data: scores,
-                        backgroundColor: bgColors,
-                        borderColor: 'transparent',
-                        borderRadius: 4,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function (ctx) {
-                                    var d = data[ctx.dataIndex];
-                                    var pct = function (v) {
-                                        return v != null ? (v * 100).toFixed(1) + '%' : 'n/a';
-                                    };
-                                    return [
-                                        'MAI Score: ' + (d.MAI_score || 0).toFixed(4),
-                                        'P  Presence:    ' + pct(d.avg_P),
-                                        'Q  Quality:     ' + pct(d.avg_Q),
-                                        'R  Performance: ' + pct(d.avg_R),
-                                        'Events: ' + (d.events_present || 0),
-                                        'Apex lots: ' + (d.total_apex_lots || 0),
-                                    ];
-                                }
-                            },
-                            backgroundColor: '#18181b',
-                            borderColor: '#3f3f46',
-                            borderWidth: 1,
-                            titleColor: '#f4f4f5',
-                            bodyColor: '#a1a1aa',
-                            padding: 12,
-                            bodyFont: { family: 'monospace', size: 12 },
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#71717a', font: { size: 11 } },
-                            border: { color: '#3f3f46' },
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { color: '#d4d4d8', font: { size: 12 } },
-                            border: { display: false },
-                        }
-                    }
-                }
-            });
-        }
-    })();
-    </script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>

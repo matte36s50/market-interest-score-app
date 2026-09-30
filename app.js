@@ -180,39 +180,6 @@ function injectAuctionCounts(rows, batCounts) {
     });
 }
 
-// Manufacturer branding (colors and abbreviations for better visual identity)
-const MANUFACTURER_BRANDING = {
-    'Porsche': { abbr: 'POR', color: '#d5001c', bg: '#1a0003' },
-    'BMW': { abbr: 'BMW', color: '#1c69d4', bg: '#001a33' },
-    'Mercedes-Benz': { abbr: 'MB', color: '#00adef', bg: '#001a24' },
-    'Ferrari': { abbr: 'FER', color: '#dc0000', bg: '#1f0000' },
-    'Nissan': { abbr: 'NIS', color: '#c3002f', bg: '#1a0006' },
-    'Toyota': { abbr: 'TOY', color: '#eb0a1e', bg: '#1f0103' },
-    'Audi': { abbr: 'AUD', color: '#bb0a30', bg: '#1a0105' },
-    'Chevrolet': { abbr: 'CHV', color: '#ffc72c', bg: '#262109' },
-    'Ford': { abbr: 'FOR', color: '#003478', bg: '#000a14' },
-    'Lamborghini': { abbr: 'LAM', color: '#ffd700', bg: '#262209' },
-    'Jaguar': { abbr: 'JAG', color: '#006633', bg: '#00140a' },
-    'Land Rover': { abbr: 'LRV', color: '#005a2b', bg: '#001108' },
-    'Lexus': { abbr: 'LEX', color: '#0061aa', bg: '#001220' },
-    'Honda': { abbr: 'HON', color: '#cc0000', bg: '#1a0000' },
-    'Acura': { abbr: 'ACU', color: '#700000', bg: '#120000' },
-    'Mazda': { abbr: 'MAZ', color: '#c1272d', bg: '#1a0405' },
-    'Subaru': { abbr: 'SUB', color: '#0052a5', bg: '#001019' },
-    'Volkswagen': { abbr: 'VW', color: '#001e50', bg: '#00060f' },
-    'Mercedes-AMG': { abbr: 'AMG', color: '#00adef', bg: '#001a24' },
-    'Dodge': { abbr: 'DOD', color: '#cc162c', bg: '#1a0304' },
-    'Plymouth': { abbr: 'PLY', color: '#ff6600', bg: '#1f1100' },
-    'Pontiac': { abbr: 'PON', color: '#ee3124', bg: '#1f0605' },
-    'Oldsmobile': { abbr: 'OLD', color: '#003da5', bg: '#000c19' }
-};
-
-// Helper function to generate manufacturer logo HTML
-function getManufacturerLogo(manufacturer) {
-    const branding = MANUFACTURER_BRANDING[manufacturer] || { abbr: manufacturer.substring(0, 3).toUpperCase(), color: '#888', bg: '#1a1a1a' };
-    return `<div class="flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs" style="background: ${branding.bg}; color: ${branding.color}; border: 1px solid ${branding.color}40;">${branding.abbr}</div>`;
-}
-
 // Global data object (will be populated from CSV)
 let dashboardData = {
     lastUpdated: new Date().toISOString(),
@@ -741,23 +708,16 @@ async function initializeApp() {
         ];
 
         loadingIndicator.innerHTML = `
-            <div class="text-center max-w-2xl mx-auto">
-                <div class="text-6xl mb-4">⚠️</div>
-                <div class="text-xl font-semibold text-red-400 mb-2">Failed to Load Data</div>
-                <div class="text-sm text-zinc-400 mt-2 mb-4">${error.message}</div>
-                <button
-                    onclick="location.reload()"
-                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mb-6">
-                    Retry
-                </button>
-                <details class="text-left bg-zinc-900 p-4 rounded-lg">
-                    <summary class="cursor-pointer text-sm text-zinc-400 mb-2">Troubleshooting Steps</summary>
-                    <ol class="text-xs text-zinc-500 space-y-1 list-decimal list-inside">
+            <div class="max-w-xl mx-auto panel p-8 text-left">
+                <h2 class="m-0 text-lg font-semibold text-down">Could not load the MII data</h2>
+                <p class="m-0 mt-2 text-sm text-mute">${esc(error.message)}</p>
+                <button onclick="location.reload()" class="btn mt-5">Try again</button>
+                <details class="mt-6 text-sm">
+                    <summary class="cursor-pointer text-mute">Troubleshooting steps</summary>
+                    <ol class="mt-2 pl-5 list-decimal text-[13px] text-mute space-y-1">
                         ${troubleshootingSteps.map(step => `<li>${step}</li>`).join('')}
                     </ol>
-                    <div class="mt-3 text-xs text-zinc-600">
-                        <strong>S3 URL:</strong> <span class="text-zinc-500">${CSV_URL}</span>
-                    </div>
+                    <p class="mt-3 text-xs text-faint break-all">S3 URL: ${CSV_URL}</p>
                 </details>
             </div>
         `;
@@ -777,8 +737,15 @@ let state = {
     modelSearchTerm: '',
     viewMode: 'leaderboard',
     compareList: [],
+    showAllMakes: false,
     selectedQuarter: 'YTD'
 };
+
+// Leaderboard rows shown before "Show all".
+const LEADERBOARD_ROWS = 20;
+// A model needs this many auctions in the period to make the Top models list;
+// below it, single lucky sales crowd out everything else. Search ignores it.
+const TOP_MODELS_MIN_AUCTIONS = 3;
 
 let charts = {
     trend: null,
@@ -803,70 +770,88 @@ function formatQuarterDisplay(quarterStr) {
     return isMTD ? `${base} (MTD)` : base;
 }
 
-function getConfidenceBadge(level) {
-    const styles = {
-        High: { bg: 'bg-emerald-900/30', text: 'text-emerald-400', icon: '●' },
-        'Medium-High': { bg: 'bg-teal-900/30', text: 'text-teal-400', icon: '◐' },
-        Medium: { bg: 'bg-amber-900/30', text: 'text-amber-400', icon: '◐' },
-        Low: { bg: 'bg-red-900/30', text: 'text-red-400', icon: '○' }
-    };
-    const style = styles[level] || styles.Medium;
+// Escape text from the CSVs before it goes into innerHTML.
+function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
-    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${style.bg} ${style.text}">
-        <span>${style.icon}</span>
-        <span>${level}</span>
+// "$171K" under a million, "$1.66M" above.
+function formatPrice(amount) {
+    if (amount == null || !isFinite(amount) || amount <= 0) return '—';
+    if (amount >= 1e6) return `$${(amount / 1e6).toFixed(2)}M`;
+    return `$${(amount / 1000).toFixed(0)}K`;
+}
+
+// Three-step signal meter plus the level's name; filled steps are the only
+// colour, so it reads the same for colour-blind viewers.
+function getConfidenceBadge(level, opts = {}) {
+    const filled = { High: 3, 'Medium-High': 2, Medium: 1, Low: 0 }[level] ?? 1;
+    const bars = [0, 1, 2].map(i =>
+        `<span class="block w-1 rounded-[1px]" style="height:${6 + i * 3}px;background:${i < filled ? '#16181D' : '#D9D9D3'}"></span>`
+    ).join('');
+    return `<span class="inline-flex items-center gap-2" title="${esc(level)} confidence">
+        <span class="inline-flex items-end gap-0.5 h-3" aria-hidden="true">${bars}</span>
+        <span class="${opts.compact ? 'sr-only' : 'text-[13px] text-mute'}">${esc(level)}</span>
     </span>`;
 }
 
 // `points` is the raw MII change behind the percentage, and `auctions` the
-// sample it rests on. With both, a move smaller than the measured noise floor
-// for that sample size is drawn greyed with a dotted underline rather than as a
-// confident arrow: at one auction a month the median swing is 10.5 MII points,
+// sample it rests on. With `points` the change is shown in MII points (a thin
+// prior month turns small point moves into huge percentages), with the
+// percentage in the tooltip. A move smaller than the measured noise floor for
+// that sample size is drawn greyed with a dotted underline rather than as a
+// confident move: at one auction a month the median swing is 10.5 MII points,
 // so most small movements are which cars happened to cross the block, not the
-// market moving. Called without them, behaviour is unchanged.
+// market moving. Called without them, the percentage is shown.
 function getTrendIndicator(value, size = 'normal', opts = {}) {
-    const isPositive = value > 0;
-    const isNeutral = Math.abs(value) < 0.5;
-    const textSize = size === 'large' ? 'text-lg' : 'text-sm';
-
-    if (isNeutral) {
-        return `<span class="${textSize} text-zinc-500 font-medium">→ ${Math.abs(value).toFixed(1)}%</span>`;
+    const textSize = size === 'large' ? 'text-base' : 'text-[13px]';
+    const hasPoints = opts.points != null && isFinite(opts.points);
+    const shown = hasPoints ? opts.points : value;
+    if (shown == null || !isFinite(shown)) {
+        return `<span class="font-mono ${textSize} text-faint">—</span>`;
     }
 
-    const arrow = isPositive ? '↑' : '↓';
-    if (window.MII && opts.points != null && opts.auctions != null
+    const sign = shown > 0 ? '+' : shown < 0 ? '−' : '';
+    const label = `${sign}${Math.abs(shown).toFixed(1)}${hasPoints ? '' : '%'}`;
+    const pctNote = hasPoints && value != null && isFinite(value) ? ` (${value > 0 ? '+' : ''}${value.toFixed(1)}%)` : '';
+    const isNeutral = hasPoints ? Math.abs(shown) < 0.05 : Math.abs(value) < 0.5;
+    if (isNeutral) {
+        return `<span class="font-mono ${textSize} text-faint">${label}</span>`;
+    }
+
+    if (window.MII && hasPoints && opts.auctions != null
         && MII.moveStrength(opts.points, opts.auctions) === 'noise') {
         const floor = MII.noiseFloor(opts.auctions);
-        return `<span class="${textSize} font-medium text-zinc-500 decoration-dotted underline underline-offset-2"
-                      title="${Math.abs(opts.points).toFixed(1)} MII points on ${opts.auctions} auction(s) — under the ${floor.median} point median swing at this sample size, so it is within normal sampling noise">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
+        return `<span class="font-mono ${textSize} text-faint decoration-dotted underline underline-offset-2"
+                      title="${Math.abs(opts.points).toFixed(1)} MII points${pctNote} on ${opts.auctions} auction(s), under the ${floor.median} point median swing at this sample size, so it is within normal sampling noise">${label}</span>`;
     }
 
-    const color = isPositive ? 'text-emerald-400' : 'text-rose-400';
-    return `<span class="${textSize} font-semibold ${color}">${arrow} ${Math.abs(value).toFixed(1)}%</span>`;
+    const color = shown > 0 ? 'text-up' : 'text-down';
+    const title = hasPoints ? `MII points vs the previous period${pctNote}` : 'vs the previous period';
+    return `<span class="font-mono ${textSize} ${color}" title="${title}">${label}</span>`;
 }
 
-function createSparkline(data, color = '#10b981') {
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+function createSparkline(data) {
+    const values = (data || []).filter(v => v != null && isFinite(v));
+    if (values.length < 2) return '<span class="text-faint">—</span>';
+
+    const min = Math.min(...values);
+    const max = Math.max(...values);
     const range = max - min || 1;
-    const height = 24;
-    const width = 80;
+    const width = 72;
+    const height = 20;
+    const pad = 2.5;
 
-    const points = data.map((val, i) => {
-        const x = (i / (data.length - 1)) * width;
-        const y = height - ((val - min) / range) * height;
-        return `${x},${y}`;
-    }).join(' ');
+    const coords = values.map((val, i) => ({
+        x: pad + (i / (values.length - 1)) * (width - pad * 2),
+        y: pad + (1 - (val - min) / range) * (height - pad * 2)
+    }));
+    const last = coords[coords.length - 1];
 
-    return `<svg width="${width}" height="${height}" class="inline-block">
-        <polyline
-            points="${points}"
-            fill="none"
-            stroke="${color}"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
+    return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" class="block" aria-hidden="true">
+        <polyline points="${coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ')}"
+            fill="none" stroke="#B9BAB4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="2.5" fill="#F59E0B" />
     </svg>`;
 }
 
@@ -874,13 +859,22 @@ function getFilteredManufacturers() {
     // Get manufacturers for the selected quarter
     const quarterKey = state.selectedQuarter;
     const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
+    const direction = state.sortOrder === 'desc' ? -1 : 1;
 
     return manufacturers
         .filter(m => m.auctions >= state.minAuctions)
         .filter(m => m.make.toLowerCase().includes(state.searchTerm.toLowerCase()))
         .sort((a, b) => {
-            const multiplier = state.sortOrder === 'desc' ? -1 : 1;
-            return (a[state.sortBy] - b[state.sortBy]) * multiplier;
+            const av = a[state.sortBy];
+            const bv = b[state.sortBy];
+            if (typeof av === 'string' || typeof bv === 'string') {
+                return String(av ?? '').localeCompare(String(bv ?? '')) * direction;
+            }
+            // Missing values (no prior period to compare) sort last either way.
+            const aMissing = av == null || !isFinite(av);
+            const bMissing = bv == null || !isFinite(bv);
+            if (aMissing || bMissing) return aMissing === bMissing ? 0 : aMissing ? 1 : -1;
+            return (av - bv) * direction;
         });
 }
 
@@ -943,10 +937,8 @@ function searchAllModels(searchTerm, limit = 50) {
         .slice(0, limit);
 }
 
-function calculateMarketStats() {
-    // Get manufacturers for the selected quarter
-    const quarterKey = state.selectedQuarter;
-    const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
+function calculateMarketStats(periodKey = state.selectedQuarter) {
+    const manufacturers = (dashboardData.quarterData[periodKey]?.manufacturers) || dashboardData.manufacturers || [];
     const filtered = manufacturers.filter(m => m.auctions >= state.minAuctions);
 
     if (filtered.length === 0) {
@@ -966,17 +958,50 @@ function calculateMarketStats() {
     };
 }
 
-// Render functions
+// "August 2026", "September 2026, to date", "Year to date".
+function formatPeriodLong(periodKey) {
+    if (periodKey === 'YTD') return 'Year to date';
+    const isMTD = periodKey.endsWith('-MTD');
+    const base = isMTD ? periodKey.replace('-MTD', '') : periodKey;
+    const monthMatch = base.match(/^(\d{4})-(\d{2})$/);
+    if (!monthMatch) return formatQuarterDisplay(periodKey);
+    const date = new Date(parseInt(monthMatch[1]), parseInt(monthMatch[2]) - 1, 1);
+    const label = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    return isMTD ? `${label}, to date` : label;
+}
+
+// The month before `periodKey`, or null for the first month and for YTD.
+function previousPeriodKey(periodKey) {
+    const months = dashboardData.quarters.filter(q => q !== 'YTD');
+    const idx = months.indexOf(periodKey);
+    return idx > 0 ? months[idx - 1] : null;
+}
+
 function renderMarketStats() {
     const stats = calculateMarketStats();
     const quarterKey = state.selectedQuarter;
     const manufacturers = (dashboardData.quarterData[quarterKey]?.manufacturers) || dashboardData.manufacturers || [];
 
+    document.getElementById('periodTitle').textContent = formatPeriodLong(quarterKey);
     document.getElementById('qualifyingMakes').textContent = stats.totalManufacturers;
-    document.getElementById('totalMakes').textContent = `of ${manufacturers.length} total`;
+    document.getElementById('totalMakes').textContent = `of ${manufacturers.length}`;
+    document.getElementById('qualifyingRule').textContent = `with ${state.minAuctions} or more auctions`;
     document.getElementById('totalAuctions').textContent = stats.totalAuctions.toLocaleString();
     document.getElementById('marketMII').textContent = stats.avgMII.toFixed(1);
-    document.getElementById('avgPrice').textContent = `$${(stats.avgPrice / 1000).toFixed(0)}K`;
+    document.getElementById('avgPrice').textContent = formatPrice(stats.avgPrice);
+
+    // Market change vs the month before, on the same qualifying rule.
+    const changeEl = document.getElementById('marketChange');
+    const prevKey = previousPeriodKey(quarterKey);
+    const prevStats = prevKey ? calculateMarketStats(prevKey) : null;
+    if (!prevStats || !prevStats.totalManufacturers || !stats.totalManufacturers) {
+        changeEl.textContent = '';
+        return;
+    }
+    const diff = stats.avgMII - prevStats.avgMII;
+    const sign = diff > 0 ? '+' : diff < 0 ? '−' : '';
+    changeEl.textContent = `${sign}${Math.abs(diff).toFixed(1)} pts vs ${formatQuarterDisplay(prevKey)}`;
+    changeEl.className = `font-mono text-sm ${Math.abs(diff) < 0.05 ? 'text-faint' : diff > 0 ? 'text-up' : 'text-down'}`;
 }
 
 function renderTopModels() {
@@ -985,62 +1010,42 @@ function renderTopModels() {
     const isYTD = state.selectedQuarter === 'YTD';
 
     // Use search results if searching, otherwise show top models
+    const isSearching = state.modelSearchTerm && state.modelSearchTerm.length > 0;
     let topModels;
-    let isSearching = state.modelSearchTerm && state.modelSearchTerm.length > 0;
 
     if (isSearching) {
         topModels = searchAllModels(state.modelSearchTerm, 50);
-        if (subtitle) {
-            subtitle.textContent = `Search results for "${state.modelSearchTerm}" (${topModels.length} found)`;
-        }
+        subtitle.textContent = `${topModels.length} results for "${state.modelSearchTerm}"`;
     } else {
-        topModels = getTopModels(0, 20);
-        // Update subtitle based on selected quarter
-        if (subtitle) {
-            subtitle.textContent = isYTD
-                ? 'Top 20 models across all manufacturers for the year'
-                : 'Top 20 models with highest market interest this month';
-        }
+        topModels = getTopModels(TOP_MODELS_MIN_AUCTIONS, 20);
+        subtitle.textContent = `Top 20 models with ${TOP_MODELS_MIN_AUCTIONS}+ auctions ${isYTD ? 'this year' : 'in this period'}. Select one for its individual sales.`;
     }
 
     if (topModels.length === 0) {
-        if (isSearching) {
-            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found matching "${state.modelSearchTerm}"</div>`;
-        } else {
-            container.innerHTML = `<div class="col-span-full text-center text-zinc-500 py-8">No models found in this ${isYTD ? 'period' : 'quarter'}</div>`;
-        }
+        const message = isSearching
+            ? `No models match "${esc(state.modelSearchTerm)}"`
+            : `No models in this ${isYTD ? 'period' : 'month'}`;
+        container.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-mute">${message}</td></tr>`;
         return;
     }
 
-    container.innerHTML = topModels.map((model, idx) => {
-        const auctionText = model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`;
-        return `
-            <div class="bg-zinc-800/50 rounded-lg p-4 hover:bg-zinc-800 transition-colors">
-                <div class="flex items-start justify-between mb-2">
-                    <div class="flex items-center gap-2">
-                        ${getManufacturerLogo(model.make)}
-                        <div>
-                            <div class="font-semibold text-sm">${model.model}</div>
-                            <div class="text-xs text-zinc-500">${model.make}</div>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xl font-bold text-amber-500">${model.mii.toFixed(1)}</div>
-                        <div class="text-xs text-zinc-500">#${idx + 1}</div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between text-xs">
-                    <div class="text-zinc-500">
-                        ${auctionText} • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
-                    </div>
-                    <div class="flex items-center gap-2">
-                        ${getTrendIndicator(model.trend, "normal", { points: model.trendPoints, auctions: model.auctions })}
-                        ${getConfidenceBadge(model.confidence)}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    container.innerHTML = topModels.map((model, idx) => `
+        <tr class="is-clickable model-row" data-make="${esc(model.make)}" data-model="${esc(model.model)}"
+            title="View individual auction sales for ${esc(model.make)} ${esc(model.model)}">
+            <td class="pl-6 font-mono text-[13px] text-faint">${String(idx + 1).padStart(2, '0')}</td>
+            <td><span class="font-semibold">${esc(model.model)}</span> <span class="text-mute">${esc(model.make)}</span></td>
+            <td class="num">${model.auctions.toLocaleString()}</td>
+            <td class="num">${formatPrice(model.avgPrice)}</td>
+            <td class="num">${model.sellThrough}%</td>
+            <td class="num">${getTrendIndicator(model.trend, 'normal', { points: model.trendPoints, auctions: model.auctions })}</td>
+            <td>${getConfidenceBadge(model.confidence)}</td>
+            <td class="num pr-6 !text-sm font-medium">${model.mii.toFixed(1)}</td>
+        </tr>
+    `).join('');
+
+    container.querySelectorAll('.model-row').forEach(row => {
+        row.addEventListener('click', () => showLotDetail(row.dataset.make, row.dataset.model));
+    });
 }
 
 function renderLeaderboard() {
@@ -1048,60 +1053,91 @@ function renderLeaderboard() {
     const container = document.getElementById('leaderboardContainer');
 
     document.getElementById('leaderboardSubtitle').textContent =
-        `Showing ${filtered.length} manufacturers with ${state.minAuctions}+ auctions`;
+        `${filtered.length} makes with ${state.minAuctions}+ auctions. Select one for its models.`;
+    updateSortHeaders();
 
-    container.innerHTML = filtered.map((mfr, idx) => {
-        const sparklineColor = mfr.trend > 0 ? '#10b981' : mfr.trend < 0 ? '#f43f5e' : '#71717a';
+    if (filtered.length === 0) {
+        container.innerHTML = `<tr><td colspan="10" class="px-6 py-10 text-center text-mute">No makes match these filters</td></tr>`;
+        return;
+    }
+
+    const maxScore = Math.max(...filtered.map(m => m.miiScore), 1);
+    const visible = state.showAllMakes ? filtered : filtered.slice(0, LEADERBOARD_ROWS);
+
+    container.innerHTML = visible.map((mfr, idx) => {
         const isSelected = state.selectedMake === mfr.make;
         const isComparing = state.compareList.includes(mfr.make);
+        const barWidth = Math.max(2, (mfr.miiScore / maxScore) * 100).toFixed(0);
 
         return `
-            <div class="px-5 py-4 cursor-pointer transition-all hover:bg-zinc-800/50 ${isSelected ? 'bg-amber-900/20 border-l-2 border-amber-500' : ''}"
-                 data-make="${mfr.make}">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-8 text-center font-bold text-zinc-500">
-                            ${idx + 1}
-                        </div>
-                        ${getManufacturerLogo(mfr.make)}
-                        <div>
-                            <div class="font-semibold text-zinc-100">${mfr.make}</div>
-                            <div class="text-xs text-zinc-500">
-                                ${mfr.auctions} auctions • $${(mfr.avgPrice / 1000).toFixed(0)}K avg • ${mfr.sellThrough}% sold
-                            </div>
-                        </div>
+            <tr class="is-clickable ${isSelected ? 'is-selected' : ''}" data-make="${esc(mfr.make)}">
+                <td class="pl-6 font-mono text-[13px] text-faint">${String(idx + 1).padStart(2, '0')}</td>
+                <td><button class="font-semibold text-[15px] text-left hover:text-amber-700" aria-pressed="${isSelected}">${esc(mfr.make)}</button></td>
+                <td class="w-40">
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono text-[15px] font-medium w-10 text-right">${mfr.miiScore.toFixed(1)}</span>
+                        <span class="score-bar"><span style="width:${barWidth}%"></span></span>
                     </div>
-
-                    <div class="flex items-center gap-6">
-                        <div class="hidden md:block">
-                            ${createSparkline(mfr.history, sparklineColor)}
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-bold text-amber-500">${mfr.miiScore.toFixed(1)}</div>
-                            ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
-                        </div>
-                        ${getConfidenceBadge(mfr.confidence)}
-                        <button class="compare-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isComparing ? 'bg-amber-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}"
-                                data-make="${mfr.make}">
-                            ${isComparing ? '✓' : '+'}
-                        </button>
-                    </div>
-                </div>
-            </div>
+                </td>
+                <td class="num">${getTrendIndicator(mfr.trend, 'normal', { points: mfr.trendPoints, auctions: mfr.auctions })}</td>
+                <td>${createSparkline(mfr.history)}</td>
+                <td class="num">${mfr.auctions.toLocaleString()}</td>
+                <td class="num">${formatPrice(mfr.avgPrice)}</td>
+                <td class="num">${mfr.sellThrough}%</td>
+                <td>${getConfidenceBadge(mfr.confidence, { compact: true })}</td>
+                <td class="pr-6 text-right">
+                    <button class="compare-btn icon-btn ${isComparing ? 'is-on' : ''}" data-make="${esc(mfr.make)}"
+                            aria-pressed="${isComparing}"
+                            aria-label="${isComparing ? 'Remove' : 'Add'} ${esc(mfr.make)} ${isComparing ? 'from' : 'to'} comparison"
+                            ${!isComparing && state.compareList.length >= 4 ? 'disabled title="Compare holds up to 4 makes"' : ''}>
+                        ${isComparing ? '&#10003;' : '+'}
+                    </button>
+                </td>
+            </tr>
         `;
-    }).join('');
+    }).join('') + (filtered.length > LEADERBOARD_ROWS ? `
+        <tr>
+            <td colspan="10" class="px-6 py-3.5">
+                <button id="toggleAllMakes" class="text-sm font-medium hover:text-amber-700">
+                    ${state.showAllMakes ? `Show top ${LEADERBOARD_ROWS} only` : `Show all ${filtered.length} makes`}
+                </button>
+            </td>
+        </tr>` : '');
 
-    // Add event listeners
-    container.querySelectorAll('[data-make]').forEach(el => {
-        if (el.classList.contains('compare-btn')) {
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleCompare(el.dataset.make);
-            });
+    const toggleAll = document.getElementById('toggleAllMakes');
+    if (toggleAll) {
+        toggleAll.addEventListener('click', () => {
+            state.showAllMakes = !state.showAllMakes;
+            renderLeaderboard();
+        });
+    }
+
+    container.querySelectorAll('.compare-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCompare(btn.dataset.make);
+        });
+    });
+    container.querySelectorAll('tr[data-make]').forEach(row => {
+        row.addEventListener('click', () => {
+            selectManufacturer(row.dataset.make === state.selectedMake ? null : row.dataset.make);
+        });
+    });
+}
+
+// Mark the active sort column on the leaderboard's header buttons.
+function updateSortHeaders() {
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        const th = btn.closest('th');
+        const active = btn.dataset.sort === state.sortBy;
+        const arrow = btn.querySelector('.sort-arrow');
+        if (arrow) arrow.remove();
+        if (active) {
+            th.setAttribute('aria-sort', state.sortOrder === 'desc' ? 'descending' : 'ascending');
+            btn.insertAdjacentHTML('beforeend',
+                `<span class="sort-arrow" aria-hidden="true">${state.sortOrder === 'desc' ? '&#8595;' : '&#8593;'}</span>`);
         } else {
-            el.addEventListener('click', () => {
-                selectManufacturer(el.dataset.make === state.selectedMake ? null : el.dataset.make);
-            });
+            th.removeAttribute('aria-sort');
         }
     });
 }
@@ -1114,96 +1150,78 @@ function renderManufacturerDetail() {
 
     if (!mfr) {
         container.innerHTML = `
-            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
-                <div class="text-4xl mb-4">👈</div>
-                <h3 class="font-semibold text-zinc-300">Select a Manufacturer</h3>
-                <p class="text-sm text-zinc-500 mt-2">
-                    Click on any manufacturer in the leaderboard to view detailed model breakdowns and trends
-                </p>
+            <div class="panel p-6 flex flex-col gap-1.5">
+                <h3 class="m-0 text-base font-semibold">No make selected</h3>
+                <p class="m-0 text-sm text-mute">Select a make in the table to see its MII history and model rankings.</p>
             </div>
         `;
         return;
     }
 
+    const models = mfr.models.slice().sort((a, b) => b.mii - a.mii);
+
     container.innerHTML = `
-        <!-- Manufacturer Header -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <div class="flex items-center gap-4 mb-4">
-                ${getManufacturerLogo(mfr.make)}
-                <div>
-                    <h3 class="text-xl font-bold">${mfr.make}</h3>
-                    <div class="text-sm text-zinc-500">
-                        ${mfr.auctions} auctions this month
-                    </div>
+        <div class="panel p-6 flex flex-col gap-6">
+            <div class="flex justify-between items-start gap-3">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-[13px] text-mute">Selected make</span>
+                    <h2 class="m-0 text-2xl font-semibold tracking-tight">${esc(mfr.make)}</h2>
+                </div>
+                <button id="closeDetail" class="icon-btn" aria-label="Close ${esc(mfr.make)} detail">&times;</button>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-xs text-mute">MII</span>
+                    <span class="text-2xl font-semibold">${mfr.miiScore.toFixed(1)}</span>
+                    ${getTrendIndicator(mfr.trend, 'normal', { points: mfr.trendPoints, auctions: mfr.auctions })}
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-xs text-mute">Auctions</span>
+                    <span class="text-2xl font-semibold">${mfr.auctions.toLocaleString()}</span>
+                    <span class="text-xs text-mute">${mfr.sellThrough}% sold</span>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-xs text-mute">Avg price</span>
+                    <span class="text-2xl font-semibold">${formatPrice(mfr.avgPrice)}</span>
+                    <span class="text-xs text-mute">sold lots</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-zinc-800/50 rounded-lg p-3">
-                    <div class="text-xs text-zinc-500">MII Score</div>
-                    <div class="text-2xl font-bold text-amber-500">
-                        ${mfr.miiScore.toFixed(1)}
-                    </div>
-                    ${getTrendIndicator(mfr.trend, "normal", { points: mfr.trendPoints, auctions: mfr.auctions })}
-                </div>
-                <div class="bg-zinc-800/50 rounded-lg p-3">
-                    <div class="text-xs text-zinc-500">Sell-Through</div>
-                    <div class="text-2xl font-bold text-emerald-400">
-                        ${mfr.sellThrough}%
-                    </div>
-                    <div class="text-xs text-zinc-500">of auctions sold</div>
-                </div>
+            <div class="flex flex-col gap-2">
+                <span class="text-[13px] font-medium">MII over time</span>
+                <div style="height: 150px;"><canvas id="trendChart"></canvas></div>
             </div>
-        </div>
 
-        <!-- MII Trend Chart -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h4 class="font-semibold mb-4">MII Trend</h4>
-            <canvas id="trendChart" style="max-height: 160px;"></canvas>
-        </div>
-
-        <!-- Model Rankings -->
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-            <div class="border-b border-zinc-800 px-5 py-4">
-                <h4 class="font-semibold">Model Rankings</h4>
-                <p class="text-xs text-zinc-500 mt-1">
-                    ${mfr.models.length} models tracked
-                </p>
-            </div>
-            <div class="divide-y divide-zinc-800/50 max-h-96 overflow-y-auto scrollbar-thin">
-                ${mfr.models
-                    .sort((a, b) => b.mii - a.mii)
-                    .map((model, idx) => `
-                        <div class="model-row px-5 py-3 hover:bg-zinc-800/30 transition-colors cursor-pointer"
-                             data-make="${mfr.make}" data-model="${model.model.replace(/"/g, '&quot;')}"
-                             title="View individual auction sales for ${model.model.replace(/"/g, '&quot;')}">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-6 text-center text-sm font-medium text-zinc-500">
-                                        ${idx + 1}
-                                    </span>
-                                    <div>
-                                        <div class="font-medium text-sm flex items-center gap-1.5">${model.model}<span class="text-zinc-600 text-xs">→</span></div>
-                                        <div class="text-xs text-zinc-500">
-                                            ${model.auctions} auctions • $${(model.avgPrice / 1000).toFixed(0)}K avg • ${model.sellThrough}% sold
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="font-bold text-amber-500">${model.mii.toFixed(1)}</div>
-                                    <div class="flex items-center gap-2">
-                                        ${getTrendIndicator(model.trend, "normal", { points: model.trendPoints, auctions: model.auctions })}
-                                        ${getConfidenceBadge(model.confidence)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="flex flex-col">
+                <div class="flex justify-between items-baseline gap-3 pb-2">
+                    <span class="text-[13px] font-medium">Models <span class="text-mute font-normal">${models.length}</span></span>
+                    <span class="text-xs text-faint">Select one for individual sales</span>
+                </div>
+                <ul class="m-0 p-0 list-none max-h-96 overflow-y-auto">
+                    ${models.map(model => `
+                        <li class="border-t border-hair">
+                            <button class="model-row w-full flex items-center justify-between gap-3 py-3 text-left hover:bg-[#FAFAF8]"
+                                    data-make="${esc(mfr.make)}" data-model="${esc(model.model)}">
+                                <span class="flex flex-col gap-0.5 min-w-0">
+                                    <span class="text-sm font-medium">${esc(model.model)}</span>
+                                    <span class="text-xs text-faint">${model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`} · ${formatPrice(model.avgPrice)} · ${model.sellThrough}% sold</span>
+                                </span>
+                                <span class="flex flex-col items-end gap-0.5 shrink-0">
+                                    <span class="font-mono text-sm font-medium">${model.mii.toFixed(1)}</span>
+                                    ${getTrendIndicator(model.trend, 'normal', { points: model.trendPoints, auctions: model.auctions })}
+                                </span>
+                            </button>
+                        </li>
                     `).join('')}
+                </ul>
             </div>
         </div>
     `;
 
-    // Wire up lot-level drill-down: clicking a model row opens individual sales.
+    document.getElementById('closeDetail').addEventListener('click', () => selectManufacturer(null));
+
+    // Lot-level drill-down: clicking a model row opens its individual sales.
     container.querySelectorAll('.model-row').forEach(row => {
         row.addEventListener('click', () => showLotDetail(row.dataset.make, row.dataset.model));
     });
@@ -1239,34 +1257,34 @@ function showLotDetail(make, model) {
     const avg = usdSold.length ? usdSold.reduce((s, l) => s + l.amount, 0) / usdSold.length : null;
     const high = usdSold.length ? Math.max(...usdSold.map(l => l.amount)) : null;
     const low = usdSold.length ? Math.min(...usdSold.map(l => l.amount)) : null;
-    subtitleEl.innerHTML = lots.length
-        ? `${lots.length} listings • ${soldCount} sold • USD avg ${formatCurrency(avg, 'USD')} • range ${formatCurrency(low, 'USD')}–${formatCurrency(high, 'USD')}`
+    subtitleEl.textContent = lots.length
+        ? `${lots.length} listings · ${soldCount} sold · USD average ${formatCurrency(avg, 'USD')} · range ${formatCurrency(low, 'USD')} to ${formatCurrency(high, 'USD')}`
         : 'No individual auction records found for this model in bat.csv.';
 
     // Build the table (most recent first), linking each lot back to its BAT listing.
     if (!lots.length) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-zinc-500 text-sm">No lot-level data available.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-mute">No lot-level data available.</td></tr>`;
     } else {
         tableBody.innerHTML = lots.map(l => {
-            const statusColor = l.sold ? 'text-emerald-400' : 'text-zinc-500';
-            const statusLabel = l.sold ? 'sold' : (l.saleType || 'unsold');
+            const statusLabel = l.sold ? 'Sold' : (l.saleType || 'unsold');
             const link = l.url
-                ? `<a href="${l.url}" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">view ↗</a>`
+                ? `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-amber-700 hover:text-ink underline underline-offset-2">View</a>`
                 : '—';
             return `
-                <tr class="border-t border-zinc-800/60 hover:bg-zinc-800/30">
-                    <td class="px-4 py-2 text-sm text-zinc-300 whitespace-nowrap">${l.date}</td>
-                    <td class="px-4 py-2 text-sm text-zinc-400">${l.year ? Math.round(l.year) : '—'}</td>
-                    <td class="px-4 py-2 text-sm font-medium text-zinc-100 whitespace-nowrap">${formatCurrency(l.amount, l.currency)}</td>
-                    <td class="px-4 py-2 text-sm ${statusColor} whitespace-nowrap">${statusLabel}</td>
-                    <td class="px-4 py-2 text-sm text-zinc-400 whitespace-nowrap">${l.bids != null ? l.bids : '—'} bids • ${l.comments != null ? l.comments : '—'} comments</td>
-                    <td class="px-4 py-2 text-sm">${link}</td>
+                <tr>
+                    <td class="pl-4 font-mono text-[13px]">${esc(l.date)}</td>
+                    <td class="text-mute">${l.year ? Math.round(l.year) : '—'}</td>
+                    <td class="font-mono text-[13px] font-medium">${formatCurrency(l.amount, l.currency)}</td>
+                    <td class="${l.sold ? 'text-up' : 'text-mute'}">${esc(statusLabel)}</td>
+                    <td class="text-mute">${l.bids != null ? l.bids : '—'} bids · ${l.comments != null ? l.comments : '—'} comments</td>
+                    <td class="pr-4">${link}</td>
                 </tr>`;
         }).join('');
     }
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+    document.getElementById('lotModalClose').focus();
     setTimeout(() => renderLotScatter(lots), 0);
 }
 
@@ -1278,10 +1296,22 @@ function hideLotDetail() {
     if (charts.lots) { charts.lots.destroy(); charts.lots = null; }
 }
 
+// Shared axis styling for the light charts.
+function lightScale(extra = {}) {
+    const t = window.MII_THEME;
+    return {
+        grid: { color: t.grid },
+        border: { display: false },
+        ...extra,
+        ticks: { color: t.faint, font: { size: 11 }, ...(extra.ticks || {}) }
+    };
+}
+
 function renderLotScatter(lots) {
     const canvas = document.getElementById('lotScatterChart');
     if (!canvas) return;
     if (charts.lots) charts.lots.destroy();
+    const t = window.MII_THEME;
 
     // Plot USD lots only (mixed currencies would distort the axis); split sold vs unsold.
     const usdLots = lots.filter(l => l.currency === 'USD' && l.amount != null);
@@ -1293,24 +1323,24 @@ function renderLotScatter(lots) {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Sold', data: soldPoints, backgroundColor: '#10b981', pointRadius: 5, pointHoverRadius: 7 },
-                { label: 'Unsold / bid', data: unsoldPoints, backgroundColor: '#71717a', pointRadius: 4, pointHoverRadius: 6 }
+                { label: 'Sold', data: soldPoints, backgroundColor: t.amber, borderColor: t.amberText, borderWidth: 1, pointRadius: 5, pointHoverRadius: 7 },
+                { label: 'Unsold / bid to', data: unsoldPoints, backgroundColor: '#FFFFFF', borderColor: t.faint, borderWidth: 1.5, pointRadius: 4, pointHoverRadius: 6 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: { type: 'category', ticks: { color: '#a1a1aa', maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#27272a' } },
-                y: {
-                    ticks: { color: '#a1a1aa', callback: v => '$' + (v / 1000) + 'K' },
-                    grid: { color: '#27272a' },
-                    title: { display: true, text: 'Sale price (USD)', color: '#a1a1aa' }
-                }
+                x: lightScale({ type: 'category', ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } }),
+                y: lightScale({
+                    ticks: { callback: v => '$' + (v / 1000) + 'K' },
+                    title: { display: true, text: 'Sale price (USD)', color: t.faint }
+                })
             },
             plugins: {
-                legend: { labels: { color: '#d4d4d8' } },
+                legend: { labels: { color: t.mute, usePointStyle: true, boxWidth: 8 } },
                 tooltip: {
+                    ...t.tooltip,
                     callbacks: {
                         label: ctx => `${ctx.dataset.label}: $${Math.round(ctx.parsed.y).toLocaleString()} (${ctx.raw.date || ctx.parsed.x})`
                     }
@@ -1329,8 +1359,7 @@ function renderLotScatter(lots) {
 function renderTrendChart(mfr) {
     const canvas = document.getElementById('trendChart');
     if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
+    const t = window.MII_THEME;
 
     if (charts.trend) {
         charts.trend.destroy();
@@ -1348,63 +1377,32 @@ function renderTrendChart(mfr) {
         }
     });
 
-    charts.trend = new Chart(ctx, {
+    charts.trend = new Chart(canvas.getContext('2d'), {
         type: 'line',
         data: {
             labels: trendLabels,
             datasets: [{
-                label: 'MII Score',
+                label: 'MII',
                 data: trendData,
-                borderColor: '#f59e0b',
-                backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointBackgroundColor: '#f59e0b'
+                borderColor: t.amber,
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointBackgroundColor: t.amber
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: '#18181b',
-                    titleColor: '#f4f4f5',
-                    bodyColor: '#f4f4f5',
-                    borderColor: '#27272a',
-                    borderWidth: 1,
-                    padding: 12,
-                    displayColors: false
-                }
+                legend: { display: false },
+                tooltip: { ...t.tooltip, callbacks: { label: ctx => `MII ${ctx.parsed.y.toFixed(1)}` } }
             },
             scales: {
-                x: {
-                    grid: {
-                        color: '#27272a',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: '#71717a',
-                        font: {
-                            size: 11
-                        }
-                    }
-                },
-                y: {
-                    grid: {
-                        color: '#27272a',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: '#71717a',
-                        font: {
-                            size: 11
-                        }
-                    }
-                }
+                x: lightScale({ grid: { display: false }, ticks: { maxTicksLimit: 4, maxRotation: 0 } }),
+                y: lightScale({ ticks: { maxTicksLimit: 4 } })
             }
         }
     });
@@ -1413,6 +1411,7 @@ function renderTrendChart(mfr) {
 function renderComparePanel() {
     const panel = document.getElementById('comparePanel');
     const listContainer = document.getElementById('compareList');
+    const colors = window.MII_THEME.series;
 
     if (state.compareList.length === 0) {
         panel.classList.add('hidden');
@@ -1422,20 +1421,14 @@ function renderComparePanel() {
     panel.classList.remove('hidden');
     document.getElementById('compareCount').textContent = `Compare (${state.compareList.length}/4)`;
 
-    listContainer.innerHTML = state.compareList.map(make => {
-        const mfr = dashboardData.manufacturers.find(m => m.make === make);
-        return `
-            <span class="inline-flex items-center gap-2 bg-zinc-800 rounded-full px-3 py-1 text-sm">
-                ${getManufacturerLogo(make)}
-                <span class="ml-1">${make}</span>
-                <button class="remove-compare text-zinc-500 hover:text-zinc-300" data-make="${make}">
-                    ×
-                </button>
-            </span>
-        `;
-    }).join('');
+    listContainer.innerHTML = state.compareList.map((make, i) => `
+        <span class="inline-flex items-center gap-2 border border-line rounded-full pl-3 pr-1 h-8 text-[13px]">
+            <span class="w-2 h-2 rounded-full" style="background: ${colors[i]}" aria-hidden="true"></span>
+            ${esc(make)}
+            <button class="remove-compare w-6 h-6 rounded-full text-mute hover:text-ink hover:bg-canvas" data-make="${esc(make)}" aria-label="Remove ${esc(make)} from comparison">&times;</button>
+        </span>
+    `).join('');
 
-    // Add event listeners
     listContainer.querySelectorAll('.remove-compare').forEach(btn => {
         btn.addEventListener('click', () => toggleCompare(btn.dataset.make));
     });
@@ -1446,81 +1439,43 @@ function renderComparePanel() {
 function renderCompareChart() {
     const canvas = document.getElementById('compareChart');
     if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
+    const t = window.MII_THEME;
 
     if (charts.compare) {
         charts.compare.destroy();
     }
 
-    const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
-
     const datasets = state.compareList.map((make, i) => {
         const mfr = dashboardData.manufacturers.find(m => m.make === make);
         return {
             label: make,
-            data: mfr.history,
-            borderColor: colors[i],
-            backgroundColor: 'transparent',
-            tension: 0.4,
+            data: mfr ? mfr.history : [],
+            borderColor: t.series[i],
+            backgroundColor: t.series[i],
+            tension: 0.3,
             pointRadius: 0,
+            pointHoverRadius: 3,
             borderWidth: 2
         };
     });
 
-    charts.compare = new Chart(ctx, {
+    charts.compare = new Chart(canvas.getContext('2d'), {
         type: 'line',
         data: {
-            labels: dashboardData.quarters,
+            labels: dashboardData.quarters.map(formatQuarterDisplay),
             datasets: datasets
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: '#18181b',
-                    titleColor: '#f4f4f5',
-                    bodyColor: '#f4f4f5',
-                    borderColor: '#27272a',
-                    borderWidth: 1,
-                    padding: 8,
-                    titleFont: {
-                        size: 11
-                    },
-                    bodyFont: {
-                        size: 11
-                    }
-                }
+                legend: { display: false },
+                tooltip: { ...t.tooltip, displayColors: true, boxWidth: 8, boxHeight: 8 }
             },
             scales: {
-                x: {
-                    grid: {
-                        color: '#27272a',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: '#71717a',
-                        font: {
-                            size: 10
-                        }
-                    }
-                },
-                y: {
-                    grid: {
-                        color: '#27272a',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: '#71717a',
-                        font: {
-                            size: 10
-                        }
-                    }
-                }
+                x: lightScale({ grid: { display: false }, ticks: { maxTicksLimit: 5, maxRotation: 0, font: { size: 10 } } }),
+                y: lightScale({ ticks: { maxTicksLimit: 4, font: { size: 10 } } })
             }
         }
     });
@@ -1529,6 +1484,7 @@ function renderCompareChart() {
 function renderQuarterMIIChart() {
     const container = document.getElementById('quarterProgressContainer');
     if (!container) return;
+    const t = window.MII_THEME;
 
     const trendData = dashboardData.quarterMIITrends['__market__'];
     if (!trendData || !trendData.data.some(v => v !== null)) {
@@ -1536,98 +1492,69 @@ function renderQuarterMIIChart() {
         return;
     }
 
-    const isMTD = state.selectedQuarter.endsWith('-MTD');
-    const validData = trendData.data.filter(v => v !== null);
-    const currentValue = validData[validData.length - 1];
-    const startValue = validData[0];
-    const change = currentValue - startValue;
-    const changePercent = startValue > 0 ? ((change / startValue) * 100).toFixed(1) : '0.0';
-    const changeColor = change >= 0 ? '#10b981' : '#f43f5e';
-    const changeSign = change >= 0 ? '+' : '';
+    // The newest month is always the partial, month-to-date one.
+    const lastIndex = trendData.data.length - 1;
+    const latestIsPartial = dashboardData.quarters.some(q => q.endsWith('-MTD'));
 
     container.classList.remove('hidden');
     container.innerHTML = `
-        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <h3 class="font-semibold">Market Interest Index — Month over Month</h3>
-                    ${isMTD ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-900/30 text-amber-400 border border-amber-800/50"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Live</span>' : ''}
-                </div>
-                <div class="text-xs font-medium" style="color:${changeColor}">${changeSign}${changePercent}% overall</div>
+        <div class="flex flex-col gap-2">
+            <div style="height: 190px;">
+                <canvas id="quarterMIIChart" aria-label="Market MII by month"></canvas>
             </div>
-            <div style="height: 200px;">
-                <canvas id="quarterMIIChart"></canvas>
-            </div>
+            <span class="text-xs text-faint">Market MII by month${latestIsPartial ? '. The dashed segment is the current month, still in progress.' : '.'}</span>
         </div>
     `;
 
     setTimeout(() => {
         const canvas = document.getElementById('quarterMIIChart');
         if (!canvas) return;
-        const ctx = canvas.getContext('2d');
         if (charts.quarterMII) charts.quarterMII.destroy();
 
         // Highlight the currently selected period
         const selectedLabel = formatQuarterDisplay(state.selectedQuarter);
-        const pointColors = trendData.labels.map(l =>
-            l === selectedLabel ? '#ffffff' : '#f59e0b'
-        );
-        const pointRadii = trendData.labels.map(l =>
-            l === selectedLabel ? 6 : 3
-        );
+        const pointRadii = trendData.labels.map(l => l === selectedLabel ? 5 : 0);
 
-        charts.quarterMII = new Chart(ctx, {
+        charts.quarterMII = new Chart(canvas.getContext('2d'), {
             type: 'line',
             data: {
                 labels: trendData.labels,
                 datasets: [{
-                    label: 'Market Avg MII',
+                    label: 'Market MII',
                     data: trendData.data,
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                    fill: true,
-                    tension: 0.4,
+                    borderColor: t.amber,
+                    borderWidth: 2.25,
+                    tension: 0.3,
                     pointRadius: pointRadii,
-                    pointBackgroundColor: pointColors,
-                    pointBorderColor: '#18181b',
+                    pointBackgroundColor: t.amber,
+                    pointBorderColor: '#FFFFFF',
                     pointBorderWidth: 2,
-                    pointHoverRadius: 6,
-                    spanGaps: true
+                    pointHoverRadius: 5,
+                    spanGaps: true,
+                    segment: {
+                        borderDash: ctx => (latestIsPartial && ctx.p1DataIndex === lastIndex ? [4, 4] : undefined)
+                    }
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#18181b',
-                        titleColor: '#f4f4f5',
-                        bodyColor: '#f4f4f5',
-                        borderColor: '#27272a',
-                        borderWidth: 1,
-                        padding: 12,
-                        displayColors: false,
+                        ...t.tooltip,
                         callbacks: {
-                            label: ctx => 'Avg MII: ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '—')
+                            label: ctx => 'Market MII ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '—')
                         }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: { color: '#27272a', drawBorder: false },
-                        ticks: { color: '#71717a', font: { size: 10 }, maxRotation: 45 }
-                    },
-                    y: {
-                        grid: { color: '#27272a', drawBorder: false },
-                        ticks: {
-                            color: '#71717a',
-                            font: { size: 11 },
-                            callback: v => v.toFixed(1)
-                        },
-                        min: Math.min(...validData) - 2,
-                        max: Math.max(...validData) + 2
-                    }
+                    x: lightScale({ grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 13 } }),
+                    y: lightScale({
+                        ticks: { maxTicksLimit: 5, callback: v => v.toFixed(0) },
+                        grace: '10%'
+                    })
                 }
             }
         });
@@ -1657,28 +1584,26 @@ function updateFilters() {
     renderLeaderboard();
 }
 
-// Initialize
 function init() {
-    // Set last updated
+    // This is when the page fetched the data, not when the pipeline last ran.
     const date = new Date(dashboardData.lastUpdated);
-    document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-US', {
+    document.getElementById('lastUpdated').textContent = date.toLocaleString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
     });
 
     // Populate quarter select
     const quarterSelect = document.getElementById('quarterSelect');
-    quarterSelect.innerHTML = dashboardData.quarters.map(q =>
-        `<option value="${q}" ${q === state.selectedQuarter ? 'selected' : ''}>${formatQuarterDisplay(q)}</option>`
+    quarterSelect.innerHTML = dashboardData.quarters.slice().reverse().map(q =>
+        `<option value="${q}" ${q === state.selectedQuarter ? 'selected' : ''}>${formatPeriodLong(q)}</option>`
     ).join('');
 
-    // Event listener for quarter select
     quarterSelect.addEventListener('change', (e) => {
         state.selectedQuarter = e.target.value;
         updateFilters();
+        renderManufacturerDetail();
         renderQuarterMIIChart();
     });
 
@@ -1688,7 +1613,6 @@ function init() {
     lotModal.addEventListener('click', (e) => { if (e.target === lotModal) hideLotDetail(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideLotDetail(); });
 
-    // Event listeners
     document.getElementById('searchInput').addEventListener('input', (e) => {
         state.searchTerm = e.target.value;
         updateFilters();
@@ -1699,26 +1623,17 @@ function init() {
         updateFilters();
     });
 
-    document.getElementById('sortBy').addEventListener('change', (e) => {
-        state.sortBy = e.target.value;
-        updateFilters();
-    });
-
-    document.getElementById('sortOrder').addEventListener('click', () => {
-        state.sortOrder = state.sortOrder === 'desc' ? 'asc' : 'desc';
-        document.getElementById('sortOrder').textContent = state.sortOrder === 'desc' ? '↓' : '↑';
-        updateFilters();
-    });
-
-    document.querySelectorAll('.view-mode-btn').forEach(btn => {
+    // Column headers sort the leaderboard; a second click flips the order.
+    document.querySelectorAll('.sort-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.view-mode-btn').forEach(b => {
-                b.classList.remove('bg-amber-600', 'text-white');
-                b.classList.add('text-zinc-400');
-            });
-            btn.classList.add('bg-amber-600', 'text-white');
-            btn.classList.remove('text-zinc-400');
-            state.viewMode = btn.dataset.mode;
+            const key = btn.dataset.sort;
+            if (state.sortBy === key) {
+                state.sortOrder = state.sortOrder === 'desc' ? 'asc' : 'desc';
+            } else {
+                state.sortBy = key;
+                state.sortOrder = key === 'make' ? 'asc' : 'desc';
+            }
+            renderLeaderboard();
         });
     });
 
@@ -1728,20 +1643,13 @@ function init() {
         renderComparePanel();
     });
 
-    // Model search functionality
+    // Model search
     const modelSearchInput = document.getElementById('modelSearch');
     const modelSearchClear = document.getElementById('modelSearchClear');
 
     modelSearchInput.addEventListener('input', (e) => {
         state.modelSearchTerm = e.target.value;
-
-        // Show/hide clear button
-        if (state.modelSearchTerm.length > 0) {
-            modelSearchClear.classList.remove('hidden');
-        } else {
-            modelSearchClear.classList.add('hidden');
-        }
-
+        modelSearchClear.classList.toggle('hidden', state.modelSearchTerm.length === 0);
         renderTopModels();
     });
 
@@ -1750,6 +1658,7 @@ function init() {
         modelSearchInput.value = '';
         modelSearchClear.classList.add('hidden');
         renderTopModels();
+        modelSearchInput.focus();
     });
 
     // Initial render

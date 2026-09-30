@@ -1,0 +1,55 @@
+/* Shared component styles for the light MII pages (index.html, mai.html).
+   Table rules sit under :where() so Tailwind utilities on a cell still win. */
+body { font-family: "Hanken Grotesk", system-ui, sans-serif; }
+
+.panel { background: #fff; border: 1px solid #E4E4DF; border-radius: 10px; }
+
+.nav-link { color: #5E6168; padding: 21px 0 19px; border-bottom: 2px solid transparent; }
+.nav-link:hover { color: #16181D; }
+.nav-link.is-active { color: #16181D; font-weight: 600; border-bottom-color: #F59E0B; }
+
+.field {
+    font: inherit; font-size: 14px; height: 40px; padding: 0 12px;
+    border: 1px solid #D9D9D3; border-radius: 6px; background: #fff; color: #16181D;
+}
+.field:focus { outline: 2px solid #F59E0B; outline-offset: -1px; border-color: #F59E0B; }
+.field::placeholder { color: #6B6E75; }
+
+.btn {
+    display: inline-flex; align-items: center; height: 40px; padding: 0 16px;
+    border-radius: 6px; background: #16181D; color: #fff; font-size: 14px; font-weight: 500;
+}
+.btn:hover { background: #2C2F36; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+:where(.data-table) thead tr { background: #FAFAF8; border-top: 1px solid #E4E4DF; }
+:where(.data-table) th {
+    font-weight: 500; font-size: 12px; color: #5E6168; text-align: left;
+    padding: 10px 12px; white-space: nowrap; letter-spacing: 0.02em;
+}
+:where(.data-table) td { padding: 12px; white-space: nowrap; border-top: 1px solid #ECECE7; font-size: 14px; }
+:where(.data-table) .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; text-align: right; }
+.data-table tbody tr.is-clickable { cursor: pointer; }
+.data-table tbody tr.is-clickable:hover { background: #FAFAF8; }
+.data-table tbody tr.is-selected, .data-table tbody tr.is-selected:hover { background: #FFF8EB; }
+
+.sort-btn { font: inherit; color: inherit; letter-spacing: inherit; display: inline-flex; gap: 4px; align-items: center; }
+.sort-btn:hover { color: #16181D; }
+th[aria-sort] .sort-btn { color: #16181D; }
+
+.score-bar { flex-grow: 1; min-width: 48px; height: 6px; background: #EEEEE9; border-radius: 3px; overflow: hidden; }
+.score-bar > span { display: block; height: 100%; background: #F59E0B; border-radius: 3px; }
+
+.icon-btn {
+    width: 32px; height: 32px; border-radius: 6px; border: 1px solid #D9D9D3;
+    background: #fff; color: #5E6168; font-size: 15px; line-height: 1;
+}
+.icon-btn:hover { border-color: #16181D; color: #16181D; }
+.icon-btn.is-on { background: #16181D; border-color: #16181D; color: #fff; }
+
+:focus-visible { outline: 2px solid #F59E0B; outline-offset: 2px; }
+.icon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Anchor absolutely positioned children (sr-only labels in cells) inside the
+   scroller, or they escape it and widen the page on phones. */
+.overflow-x-auto { position: relative; }
+@media (max-width: 767px) { .nav-link { padding: 10px 0 8px; } }

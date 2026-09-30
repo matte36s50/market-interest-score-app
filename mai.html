@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturer Apex Index - Market Interest Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
+</head>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link is-active" aria-current="page">Apex Index</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link">HAGI</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
+        <!-- Title -->
+        <section class="flex flex-col gap-3 max-w-3xl">
+            <span class="text-[13px] text-mute">Apex auctions · lots with a low estimate of $500K or more</span>
+            <h1 class="m-0 text-4xl font-semibold tracking-tight">Manufacturer Apex Index</h1>
+            <p class="m-0 text-lg text-mute leading-relaxed">
+                How strongly each make shows up at the very top of the collector market, and how well those cars do
+                when they cross the block. MII tracks broad enthusiast interest on Bring a Trailer. MAI looks only at
+                the rarest, most expensive lots at the major live auctions.
+            </p>
+        </section>
+
+        <!-- Ranking -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex flex-col gap-0.5">
+                    <h2 class="m-0 text-lg font-semibold">Ranking</h2>
+                    <p id="rankingSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+                </div>
+                <a href="#how-it-works" class="text-[13px] text-mute hover:text-amber-700">How the score works</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6 w-12">#</th>
+                            <th>Make</th>
+                            <th>MAI</th>
+                            <th class="text-right" title="Average share of apex lots at the events where the make appeared">P · Presence</th>
+                            <th class="text-right" title="Average sold price as a share of the high estimate">Q · Quality</th>
+                            <th class="text-right" title="Average apex sell-through">R · Sell-through</th>
+                            <th class="text-right">Events</th>
+                            <th class="pr-6 text-right">Apex lots</th>
+                        </tr>
+                    </thead>
+                    <tbody id="maiRows">
+                        <tr><td colspan="8" class="px-6 py-10 text-center text-mute">Loading MAI scores…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Explanation -->
+        <section id="how-it-works" class="flex flex-col gap-6 scroll-mt-24 [&>*]:min-w-0">
+            <div class="flex flex-col gap-1 max-w-3xl">
+                <h2 class="m-0 text-2xl font-semibold tracking-tight">How the score works</h2>
+                <p class="m-0 text-mute leading-relaxed">
+                    For every auction event, MAI measures three things about each make's apex lots. It then multiplies them
+                    together, so a make only scores well if it is present, sells, and sells well.
+                </p>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3 [&>*]:min-w-0">
+                <div class="panel p-6 flex flex-col gap-3">
+                    <span class="font-mono text-3xl font-medium text-amber-700">P</span>
+                    <h3 class="m-0 text-base font-semibold">Presence</h3>
+                    <p class="m-0 text-sm text-mute leading-relaxed">
+                        The make's share of the apex lots at the event. If 40 apex lots cross the block and 10 of
+                        them are one make, that make's P is 25%.
+                    </p>
+                </div>
+                <div class="panel p-6 flex flex-col gap-3">
+                    <span class="font-mono text-3xl font-medium text-amber-700">Q</span>
+                    <h3 class="m-0 text-base font-semibold">Quality</h3>
+                    <p class="m-0 text-sm text-mute leading-relaxed">
+                        Sold price divided by the auction house's high estimate, averaged over the make's sold apex lots.
+                        1.0 means cars sold right at the top of their estimate.
+                    </p>
+                </div>
+                <div class="panel p-6 flex flex-col gap-3">
+                    <span class="font-mono text-3xl font-medium text-amber-700">R</span>
+                    <h3 class="m-0 text-base font-semibold">Sell-through</h3>
+                    <p class="m-0 text-sm text-mute leading-relaxed">
+                        The share of the make's apex lots that actually sold. It reflects how confident buyers are at
+                        that price level.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 [&>*]:min-w-0">
+                <div class="panel p-6 flex flex-col gap-3">
+                    <h3 class="m-0 text-base font-semibold">Combining events</h3>
+                    <p class="m-0 font-mono text-sm bg-canvas border border-hair rounded-md px-4 py-3 overflow-x-auto whitespace-nowrap">
+                        MAI = Σ(rating × P × Q × R) / Σ(rating)
+                    </p>
+                    <p class="m-0 text-sm text-mute leading-relaxed">
+                        Each event's P × Q × R is weighted by that event's auction rating, so a strong showing at a
+                        deep, high-value sale counts for more than one at a thin sale. The rating is
+                        30% apex concentration, 40% apex sold volume and 30% apex sell-through, each scaled 0 to 100
+                        across all events.
+                    </p>
+                </div>
+                <div class="panel p-6 flex flex-col gap-3">
+                    <h3 class="m-0 text-base font-semibold">Reading the numbers</h3>
+                    <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
+                        <li>Scores are small because they multiply three fractions. Compare makes against each other, not against a fixed scale.</li>
+                        <li>Q is left blank for a make with no priced sale. That case already shows up as a low R.</li>
+                        <li>A make with a handful of apex lots at one event can post a high R of 100%. Check the Events and Apex lots columns before reading much into it.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel p-6 flex flex-col gap-3">
+                <h3 class="m-0 text-base font-semibold">Where MAI fits</h3>
+                <p class="m-0 text-sm text-mute leading-relaxed max-w-4xl">
+                    MAI stands in for the network density term (D) of the Networked Utility Dividend framework: how
+                    embedded a make is in the circle of top collectors, auction houses and concours. The full framework is
+                </p>
+                <p class="m-0 font-mono text-sm bg-canvas border border-hair rounded-md px-4 py-3 overflow-x-auto whitespace-nowrap">
+                    U = (Fun × Exp) + Nostalgia + (CulturalSalience × N<sup>α</sup> × D) × (1 / Survivorship)
+                </p>
+            </div>
+        </section>
+
+        <!-- Events -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 class="m-0 text-lg font-semibold">Events in the index</h2>
+                <p id="eventsSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Event</th>
+                            <th>Date</th>
+                            <th>Auction house</th>
+                            <th class="text-right">Apex lots</th>
+                            <th class="text-right">Total lots</th>
+                            <th class="pr-6 text-right">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventRows">
+                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading events…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        function esc(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function pct(v) {
+            return v != null && v !== '' && isFinite(v) ? Math.round(v * 100) + '%' : '<span class="text-faint">—</span>';
+        }
+        function num(v) {
+            return v != null && v !== '' && isFinite(v) ? Number(v) : null;
+        }
+        function load(url) {
+            return new Promise(function (resolve) {
+                Papa.parse(url, {
+                    download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
+                    complete: function (r) { resolve(r.data || []); },
+                    error: function () { resolve(null); }
+                });
+            });
+        }
+
+        load('data/mai_scores.csv').then(function (rows) {
+            var body = document.getElementById('maiRows');
+            var subtitle = document.getElementById('rankingSubtitle');
+            var data = (rows || []).filter(function (r) {
+                return r.manufacturer && num(r.MAI_score) != null;
+            }).sort(function (a, b) { return b.MAI_score - a.MAI_score; });
+
+            if (!data.length) {
+                subtitle.textContent = 'No MAI scores yet';
+                body.innerHTML = '<tr><td colspan="8" class="px-6 py-10 text-center text-mute">' +
+                    'No MAI data yet. Populate <code class="font-mono">data/auction_lots.csv</code>, then run ' +
+                    '<code class="font-mono">auction_rating.py</code> and <code class="font-mono">mai.py</code>.</td></tr>';
+                return;
+            }
+
+            subtitle.textContent = data.length + ' makes with at least one apex lot, ranked by MAI';
+            var max = data[0].MAI_score || 1;
+            body.innerHTML = data.map(function (d, i) {
+                var width = Math.max(2, (d.MAI_score / max) * 100).toFixed(0);
+                return '<tr>' +
+                    '<td class="pl-6 font-mono text-[13px] text-faint">' + String(i + 1).padStart(2, '0') + '</td>' +
+                    '<td class="font-semibold">' + esc(d.manufacturer) + '</td>' +
+                    '<td class="w-64"><div class="flex items-center gap-3">' +
+                        '<span class="font-mono text-sm font-medium w-12 text-right">' + Number(d.MAI_score).toFixed(3) + '</span>' +
+                        '<span class="score-bar"><span style="width:' + width + '%"></span></span>' +
+                    '</div></td>' +
+                    '<td class="num">' + pct(d.avg_P) + '</td>' +
+                    '<td class="num">' + pct(d.avg_Q) + '</td>' +
+                    '<td class="num">' + pct(d.avg_R) + '</td>' +
+                    '<td class="num">' + (num(d.events_present) != null ? d.events_present : '—') + '</td>' +
+                    '<td class="num pr-6">' + (num(d.total_apex_lots) != null ? d.total_apex_lots : '—') + '</td>' +
+                '</tr>';
+            }).join('');
+        });
+
+        load('data/auction_ratings.csv').then(function (rows) {
+            var body = document.getElementById('eventRows');
+            var subtitle = document.getElementById('eventsSubtitle');
+            var data = (rows || []).filter(function (r) { return r.event; })
+                .sort(function (a, b) { return String(b.event_date).localeCompare(String(a.event_date)); });
+
+            if (!data.length) {
+                subtitle.textContent = 'No events rated yet';
+                body.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No events rated yet.</td></tr>';
+                return;
+            }
+
+            var withApex = data.filter(function (d) { return (num(d.apex_lots) || 0) > 0; }).length;
+            subtitle.textContent = data.length + ' events tracked. ' + withApex + ' of them had apex lots and count toward MAI; ' +
+                'events without apex lots (often lots missing estimates) carry no weight.';
+
+            body.innerHTML = data.map(function (d) {
+                var apex = num(d.apex_lots) || 0;
+                var muted = apex === 0 ? ' text-faint' : '';
+                return '<tr>' +
+                    '<td class="pl-6 font-medium' + muted + '">' + esc(d.event) + '</td>' +
+                    '<td class="font-mono text-[13px]' + muted + '">' + esc(d.event_date) + '</td>' +
+                    '<td class="' + (apex === 0 ? 'text-faint' : 'text-mute') + '">' + esc(d.auction_house) + '</td>' +
+                    '<td class="num' + muted + '">' + apex + '</td>' +
+                    '<td class="num' + muted + '">' + (num(d.total_lots) != null ? d.total_lots : '—') + '</td>' +
+                    '<td class="num pr-6' + muted + '">' + (num(d.auction_rating) != null ? Number(d.auction_rating).toFixed(1) : '—') + '</td>' +
+                '</tr>';
+            }).join('');
+        });
+    })();
+    </script>
+</body>
+</html>
