@@ -28,6 +28,7 @@ Alfa Romeo,105/115 Spider Series 4,Alfa_Romeo_105/115_Series_Coupés,resolved
 Alfa Romeo,106-Series 2600,Alfa_Romeo_2600,resolved
 Alfa Romeo,155,Alfa_Romeo_155,resolved
 Alfa Romeo,164,Alfa_Romeo_164,resolved
+Alfa Romeo,1750 SPIDER VELOCE,Alfa_Romeo_Spider,resolved
 Alfa Romeo,1900,Alfa_Romeo_1900,resolved
 Alfa Romeo,4C,Alfa_Romeo_4C,resolved
 Alfa Romeo,75/Milano,Alfa_Romeo_75,resolved
@@ -38,6 +39,7 @@ Alfa Romeo,ALFA ROMEO,Museo_Alfa_Romeo,resolved
 Alfa Romeo,AR 51,Alfa_Romeo_Matta,resolved
 Alfa Romeo,Alfetta,Alfa_Romeo_Alfetta,resolved
 Alfa Romeo,BRERA,Alfa_Romeo_Brera_and_Spider,resolved
+Alfa Romeo,FORMULA ALFA BOXER RACE CAR,Alfa_Romeo_Alfasud,resolved
 Alfa Romeo,GRAN SPORT QUATTRORUOTE,Alfa_Romeo_Gran_Sport_Quattroruote,resolved
 Alfa Romeo,GTV & Spider (Type 916),Alfa_Romeo_GTV_and_Spider,resolved
 Alfa Romeo,GTV6,Alfa_Romeo_Alfetta,resolved
@@ -67,8 +69,10 @@ Amc,AMC RAMBLER REBEL,AMC_Rebel,resolved
 Amc,AMC SPIRIT,AMC_Pacer,resolved
 American Bantam,AMERICAN BANTAM CAR COMPANY MODEL 65 ROADSTER,Ford_Model_A_(1927–1932),resolved
 American Bantam,AMERICAN BANTAM WOODY WAGON,,unresolved
+American Bantam,American Bantam 60 & 65,Bantam_Books,resolved
 American Ironhorse,AMERICAN IRONHORSE SLAMMER,American_IronHorse,resolved
 American Lafrance,AMERICAN LAFRANCE 900 PUMPER,American_LaFrance,resolved
+American Lafrance,AMERICAN LAFRANCE FIRE TRUCK,American_LaFrance,resolved
 American Lafrance,AMERICAN LAFRANCE TYPE 75 HOSE TURRET WAGON W CHEMICAL TANK WITH A DECK GUN 1000 GALLONS PER MINUTE CAPACITY,,unresolved
 Amphicar,Amphicar 770,Amphicar,resolved
 Apollo,APOLLO 5000 GT 3,Apollo_GT,resolved
@@ -190,6 +194,7 @@ Austin-Healey,Austin-Healey 3000,Austin-Healey,resolved
 Austin-Healey,Austin-Healey Bugeye Sprite,Austin-Healey_Sprite,resolved
 Austin-Healey,Austin-Healey Replica,Austin-Healey_Sprite,resolved
 Austin-Healey,"Austin-Healey Sprite Mk II, III, & IV",Austin-Healey,resolved
+Austin-Healey,Healey Silverstone,Austin-Healey_Sprite,resolved
 Autobianchi,Autobianchi A112,Autobianchi_A111,resolved
 Autobianchi,Autobianchi Bianchina,Autobianchi,resolved
 Autocar,AUTO CAR DIESEL RAT ROD 5 TON FRED WRECKER,,unresolved
@@ -291,6 +296,7 @@ BMW,M2,BMW_M2,resolved
 BMW,M2 COMPETITION,BMW_M2,resolved
 BMW,M2 CS,BMW_M2,resolved
 BMW,M2 CS 58,BMW_M5,resolved
+BMW,Neue Klasse,BMW_New_Class,resolved
 BMW,Other Motorcycles,BMW_Motorrad,resolved
 BMW,R nineT,BMW_R_nineT,resolved
 BMW,R100,BMW_R100,resolved
@@ -311,6 +317,7 @@ BMW,R80,BMW_R80G/S,resolved
 BMW,R80 G/S,BMW_R80G/S,resolved
 BMW,R90S,BMW_R90S,resolved
 BMW,S1000 Series,,unresolved
+BMW,X1,BMW_X1,resolved
 BMW,X1 SDRIVE28I,BMW_X1_(F48),resolved
 BMW,X1 XDRIVE28I,BMW_X1_(F48),resolved
 BMW,X1 XDRIVE35I,BMW_X1_(E84),resolved
@@ -357,8 +364,10 @@ Bentley,S-Type,Bentley_R_Type,resolved
 Bentley,SZ Coupe,Bentley_Continental_R,resolved
 Bentley,SZ Saloon,Rolls-Royce_SZ,resolved
 Berkeley,BERKELEY SE492,Berkeley_Cars,resolved
+Berkeley,BERKELEY SPORTS SE328,Berkeley_Cars,resolved
 Bimota,BIMOTA BB1 SUPERMONO,List_of_Bimota_motorcycles,resolved
 Bimota,BIMOTA DB3 MANTRA,List_of_Bimota_motorcycles,resolved
+Bimota,BIMOTA SB6R,List_of_Bimota_motorcycles,resolved
 Bimota,BIMOTA SB8K SANTAMONICA,,unresolved
 Bimota,BIMOTA SB8R,Bimota_SB8K,resolved
 Bimota,BIMOTA TESI FINAL EDITION,Bimota_Tesi,resolved
@@ -370,6 +379,7 @@ Boston Whaler,BOSTON WHALER SPORT,Boston_Whaler,resolved
 Bourget,BOURGET DRAGON,,unresolved
 Bourget,BOURGET FAT DADDY,,unresolved
 Bricklin,Bricklin SV-1,Bricklin_SV-1,resolved
+Bridgestone,BRIDGESTONE TMX,Bridgestone_(motorcycle),resolved
 Bsa,BSA 441 VICTOR,BSA_motorcycles,resolved
 Bsa,BSA A10 SUPER ROCKET,BSA_motorcycles,resolved
 Bsa,BSA A50 ROYAL STAR,BSA_Lightning,resolved
@@ -399,7 +409,9 @@ Buell,BUELL XB12X ULYSSES,Buell_Motorcycle_Company,resolved
 Buell,BUELL XB9R FIREBOLT,Buell_XB9,resolved
 Bugatti,Chiron,Bugatti_Chiron,resolved
 Bugatti,Replica,Bugatti_Royale,resolved
+Buick,BUICK 29 57 4 DR SEDAN,,unresolved
 Buick,BUICK APOLLO,Buick,resolved
+Buick,BUICK CASCADA,Buick,resolved
 Buick,BUICK ESTATE WAGON,Buick_Estate,resolved
 Buick,BUICK INVICTA CUSTOM ESTATE WAGON,Buick_Invicta,resolved
 Buick,BUICK LACROSSE,Buick,resolved
@@ -414,6 +426,7 @@ Buick,Buick GNX,Buick_Regal,resolved
 Buick,Buick GSX,Buick_V6_engine,resolved
 Buick,Buick Gran Sport,Buick_Gran_Sport,resolved
 Buick,Buick Grand National,Buick_Regal,resolved
+Buick,Buick Invicta,Buick,resolved
 Buick,Buick LeSabre,Buick_LeSabre,resolved
 Buick,Buick Park Avenue,Buick_LaCrosse,resolved
 Buick,Buick Reatta,Buick_Reatta,resolved
@@ -506,6 +519,7 @@ Chevrolet,CORVETTE C7 R,Chevrolet_Corvette_C7.R,resolved
 Chevrolet,CORVETTE C7 R CONVERTIBLE,Chevrolet_Corvette_(C7),resolved
 Chevrolet,CORVETTE CALLAWAY TWIN TURBO,Callaway_Cars,resolved
 Chevrolet,CORVETTE CHASSIS,Chevrolet_Corvette_(C8),resolved
+Chevrolet,CORVETTE COLLECTOR EDITION,Chevrolet_Corvette_(C7),resolved
 Chevrolet,CORVETTE CONVERTIBLE,Chevrolet_Corvette_(C6),resolved
 Chevrolet,CORVETTE CONVERTIBLE 101,Chevrolet_Camaro_(first_generation),resolved
 Chevrolet,CORVETTE CONVERTIBLE 22,Chevrolet_Corvette_(C8),resolved
@@ -514,15 +528,19 @@ Chevrolet,CORVETTE CONVERTIBLE 268,Chevrolet_Corvette_(C2),resolved
 Chevrolet,CORVETTE CONVERTIBLE 284,Chevrolet_Camaro_(sixth_generation),resolved
 Chevrolet,CORVETTE CONVERTIBLE 289,Chevrolet_K5_Blazer,resolved
 Chevrolet,CORVETTE CONVERTIBLE 37,Chevrolet_Corvette_(C5),resolved
+Chevrolet,CORVETTE CONVERTIBLE 39,Chevrolet_Camaro_(sixth_generation),resolved
 Chevrolet,CORVETTE CONVERTIBLE 46,Chevrolet_Corvette_(C1),resolved
 Chevrolet,CORVETTE CONVERTIBLE 48,Chevrolet_Corvette_(C6),resolved
 Chevrolet,CORVETTE CONVERTIBLE 48 2,Chevrolet_Corvette_(C8),resolved
+Chevrolet,CORVETTE CONVERTIBLE 64,Chevrolet_Corvette_(C5),resolved
 Chevrolet,CORVETTE CONVERTIBLE 68,Chevrolet_Corvette_(C3),resolved
 Chevrolet,CORVETTE CONVERTIBLE 77,Chevrolet_Corvette_(C2),resolved
 Chevrolet,CORVETTE CONVERTIBLE 82,Chevrolet_Corvette_(C5),resolved
 Chevrolet,CORVETTE CONVERTIBLE 84,Chevrolet_Corvette_(C3),resolved
+Chevrolet,CORVETTE CONVERTIBLE COLLECTORS EDITION,Chevrolet_Corvette_(C6),resolved
 Chevrolet,CORVETTE CONVERTIBLE CONVERSION,Chevrolet_Corvette_(C4),resolved
 Chevrolet,CORVETTE COUPE,Chevrolet_Corvette_(C2),resolved
+Chevrolet,CORVETTE COUPE 110,Chevrolet_Impala,resolved
 Chevrolet,CORVETTE COUPE 116,Chevrolet_Monte_Carlo,resolved
 Chevrolet,CORVETTE COUPE 216,,unresolved
 Chevrolet,CORVETTE COUPE 217,Chevrolet_Impala,resolved
@@ -550,6 +568,7 @@ Chevrolet,CORVETTE STINGRAY COUPE,Chevrolet_Corvette_(C8),resolved
 Chevrolet,CORVETTE Z06,Chevrolet_Corvette_(C6),resolved
 Chevrolet,CORVETTE Z06 104,Chevrolet_Corvette_(C5),resolved
 Chevrolet,CORVETTE Z06 188,Chevrolet_small-block_engine_(1954–2003),resolved
+Chevrolet,CORVETTE Z06 212,Chevrolet_Corvette_(C8),resolved
 Chevrolet,CORVETTE Z06 87,Chevrolet_Gemini_small-block_engine,resolved
 Chevrolet,CORVETTE Z06 CONVERTIBLE,Chevrolet_Corvette_(C5),resolved
 Chevrolet,CORVETTE Z06 CONVERTIBLE 42,Chevrolet_Corvette_(C2),resolved
@@ -567,6 +586,7 @@ Chevrolet,CORVETTE ZR1,Chevrolet_Corvette_ZR1,resolved
 Chevrolet,CORVETTE ZR1 CONVERTIBLE,Chevrolet_Corvette_(C4),resolved
 Chevrolet,CORVETTE ZR1 COUPE,Chevrolet_Corvette_(C6),resolved
 Chevrolet,CORVETTE ZR1X,Chevrolet_Corvette_(C8),resolved
+Chevrolet,CORVETTE ZR1X COUPE 3LZ ZTK,Chevrolet_Corvette_(C8),resolved
 Chevrolet,Camaro (1st Generation – 1967-1969),Chevrolet_small-block_engine_(1954–2003),resolved
 Chevrolet,Camaro (2nd Generation – 1970-1981),Chevrolet_Camaro_(second_generation),resolved
 Chevrolet,Camaro (3rd Generation – 1982-1992),Chevrolet_Camaro_(third_generation),resolved
@@ -624,12 +644,14 @@ Chevrolet,LUMINA 3,Chevrolet_Lumina,resolved
 Chevrolet,LUMINA NASCAR RACE CAR,Chevrolet_Lumina,resolved
 Chevrolet,LUV,Chevrolet_LUV,resolved
 Chevrolet,MALIBU,Chevrolet_Malibu,resolved
+Chevrolet,MONZA,Chevrolet_Monza,resolved
 Chevrolet,MONZA V8 TOWNE COUPE,Chevrolet_Monza,resolved
 Chevrolet,Monte Carlo,Chevrolet_Monte_Carlo,resolved
 Chevrolet,"National, International, & Universal",Chevrolet_Series_AD_Universal,resolved
 Chevrolet,Nomad,Chevrolet_Nomad,resolved
 Chevrolet,Nova,Chevrolet_Chevy_II_/_Nova,resolved
 Chevrolet,P30 STEP VAN,Chevrolet_Step-Van,resolved
+Chevrolet,PRIZM,Geo_Prizm,resolved
 Chevrolet,Parts and Automobilia – Engines,,unresolved
 Chevrolet,Pickup,List_of_Chevrolet_pickup_trucks,resolved
 Chevrolet,S-10,Chevrolet_S-10,resolved
@@ -675,6 +697,7 @@ Chrysler,CHRYSLER CM6 ROADSTER,,unresolved
 Chrysler,CHRYSLER E CLASS,Chrysler,resolved
 Chrysler,CHRYSLER LHS,Chrysler_300,resolved
 Chrysler,CHRYSLER MODEL 75 4 DOOR TOURING,Chrysler_300,resolved
+Chrysler,CHRYSLER MODEL CM6,,unresolved
 Chrysler,CHRYSLER SEBRING,Chrysler_300,resolved
 Chrysler,CHRYSLER SERIES 72 ROADSTER,Chrysler_LeBaron,resolved
 Chrysler,CHRYSLER SERIES 75 COUPE WITH RUMBLE SEAT,Chrysler_Hemi_engine,resolved
@@ -705,6 +728,7 @@ Cisitalia,CISITALIA,Cisitalia,resolved
 Cisitalia,CISITALIA 808 XF,Cisitalia,resolved
 Citroën,CITROEN BX,Citroën_C1,resolved
 Citroën,CITROEN GS,Citroën_Visa,resolved
+Citroën,CITROEN GS BIROTOR,Citroën_GS,resolved
 Citroën,CITROEN HY,Citroën_H_Van,resolved
 Citroën,Citroen 2CV,Citroën_2CV,resolved
 Citroën,Citroen CX,Citroën_C5,resolved
@@ -714,6 +738,7 @@ Citroën,Citroen SM,Citroën_Saxo,resolved
 Citroën,Citroen Traction Avant,Citroën_Traction_Avant,resolved
 Classic Roadsters,500K REPLICA BY CLASSIC ROADSTERS,,unresolved
 Classic Roadsters,CLASSIC ROADSTERS MARLENE,,unresolved
+Clenet,CLENET SERIES I ROADSTER,,unresolved
 Confederate,CONFEDERATE HELLCAT G2 F131,,unresolved
 Confederate,CONFEDERATE MOTORCYCLE HELLCAT,,unresolved
 Cord,Cord 810/812,Cord_810/812,resolved
@@ -762,6 +787,7 @@ Devin,DEVIN D,Devin_Booker,resolved
 Devin,DEVIN SPECIAL,Devin_Booker,resolved
 Diamond T,DIAMOND T 201 PICKUP,Diamond_T,resolved
 Diamond T,DIAMOND T COE,Diamond_T,resolved
+Divco,DIVCO 300D,,unresolved
 Dkw,DKW 3,DKW_RT_125,resolved
 Dkw,DKW Tin Banana,,unresolved
 Dodge,& Plymouth Neon,Chrysler_Neon,resolved
@@ -769,6 +795,7 @@ Dodge,"330, 440, & 880",Dodge_330,resolved
 Dodge,A100 Pickup,Dodge_A100,resolved
 Dodge,ASPEN,Dodge_Aspen,resolved
 Dodge,B-Series,Dodge_B_series,resolved
+Dodge,BROTHERS,Dodge,resolved
 Dodge,C-Series,Dodge_C_series,resolved
 Dodge,COUPE,Dodge_Viper,resolved
 Dodge,Caravan & Grand Caravan,Dodge_Caravan,resolved
@@ -781,6 +808,7 @@ Dodge,Charger,Dodge_Charger,resolved
 Dodge,Coronet,Dodge_Coronet,resolved
 Dodge,D-50 & Ram 50,Dodge_50_Series,resolved
 Dodge,D-Series,Dodge_D_series,resolved
+Dodge,"D2, D5, & D8",Dodge_Series_D5,resolved
 Dodge,D5 TOURING SEDAN,Dodge_Series_D5,resolved
 Dodge,DB SENIOR,Dodge,resolved
 Dodge,Dakota,Dodge_Dakota,resolved
@@ -807,6 +835,7 @@ Dodge,Ram TRX,Ram_1500_TRX,resolved
 Dodge,Ram Van,Dodge_Ram_Van,resolved
 Dodge,Ramcharger / Plymouth Trail Duster,Dodge_Ramcharger,resolved
 Dodge,Royal,Dodge_Royal,resolved
+Dodge,SEDAN,Dodge_Stratus,resolved
 Dodge,STRATUS,Dodge_Stratus,resolved
 Dodge,Shelby,Dodge_Charger_(1981),resolved
 Dodge,Stealth,,unresolved
@@ -832,10 +861,12 @@ Ducati,DUCATI 848,Ducati,resolved
 Ducati,DUCATI 860GT,Ducati,resolved
 Ducati,DUCATI 888,Ducati_Corse,resolved
 Ducati,DUCATI 907 IE,Ducati,resolved
+Ducati,DUCATI 907IE,Ducati,resolved
 Ducati,DUCATI DESERTX,Ducati,resolved
 Ducati,DUCATI DIANA MARK 3,Ducati_Diana_Mark_3,resolved
 Ducati,DUCATI F1 750,Ducati_851,resolved
 Ducati,DUCATI HYPERMOTARD 950SP,,unresolved
+Ducati,DUCATI MECCANICA 907 IE,Ducati,resolved
 Ducati,DUCATI MONZA,Ducati_Diana,resolved
 Ducati,DUCATI PASO 750 LIMITED,Ducati,resolved
 Ducati,DUCATI ROAD,Ducati,resolved
@@ -856,6 +887,7 @@ Ducati,Ducati 750 & 900 Super Sport,Ducati,resolved
 Ducati,Ducati 750 F1,Ducati_851,resolved
 Ducati,Ducati 750 Sport,Ducati,resolved
 Ducati,"Ducati 750, 800, 900, & 1000 Supersport",Ducati_Monster,resolved
+Ducati,Ducati 750GT,Ducati_750_GT,resolved
 Ducati,Ducati 851,Ducati,resolved
 Ducati,Ducati 916,Ducati,resolved
 Ducati,Ducati 996,Ducati,resolved
@@ -889,6 +921,7 @@ Excalibur,Excalibur Phaeton,Excalibur_(automobile),resolved
 Exomotive,EXOMOTIVE EXOCET SPORT,,unresolved
 Facel Vega,FACEL VEGA FV4 TYPHOON,Facel_Vega_FV,resolved
 Facel Vega,FACEL VEGA FVS,Facel_Vega_FV,resolved
+Factory Five,Factory Five 818,Factory_Five_Racing,resolved
 Factory Five,Factory Five GTM,Factory_Five_Racing,resolved
 Fargo,FARGO F SERIES,Fargo_(1996_film),resolved
 Feather Craft,FEATHER CRAFT VAGABOND,,unresolved
@@ -903,6 +936,7 @@ Ferrari,308 GT4,Ferrari_GT4,resolved
 Ferrari,308 GTB/GTS,Ferrari_308_GTB/GTS,resolved
 Ferrari,328,Ferrari_328,resolved
 Ferrari,330 GT 2+2,Ferrari_330,resolved
+Ferrari,330 GTC,Ferrari_330,resolved
 Ferrari,348,Ferrari_348,resolved
 Ferrari,360,Ferrari_360,resolved
 Ferrari,365 GT 2+2,Ferrari_365,resolved
@@ -930,6 +964,7 @@ Ferrari,GTC4Lusso,Ferrari_GTC4Lusso,resolved
 Ferrari,LaFerrari,LaFerrari,resolved
 Ferrari,Mondial,Ferrari_Mondial,resolved
 Ferrari,Portofino,Ferrari_Portofino,resolved
+Ferrari,Purosangue,Ferrari_Purosangue,resolved
 Ferrari,Roma,Ferrari_Roma,resolved
 Ferrari,SF90,Ferrari_SF90,resolved
 Ferrari,Testarossa,Ferrari_Testarossa,resolved
@@ -955,6 +990,7 @@ Fiat,Fiat Dino,Fiat_Panda,resolved
 Fiat,Fiat Nuova 500,Fiat_500,resolved
 Fiat,Fiat Panda,Fiat_Punto,resolved
 Fiat,Fiat Pininfarina Coupe and Cabriolet,Fiat_Coupé,resolved
+Fiat,Fiat Topolino EV,Fiat_600_(2023),resolved
 Fiat,Fiat X1/9,Fiat_X1/9,resolved
 Fisker,FISKER OCEAN,Fisker_Ocean,resolved
 Fisker,Fisker Karma,Fisker_Ocean,resolved
@@ -967,6 +1003,7 @@ Ford,A,Ford,resolved
 Ford,A Pickup & AA,Ford_Model_AA,resolved
 Ford,AEROSTAR,Ford_Aerostar,resolved
 Ford,ANGLIA,Ford_Anglia,resolved
+Ford,Anglia,Ford_Anglia,resolved
 Ford,B,1932_Ford,resolved
 Ford,Bronco 2nd Generation 1978-1979,Ford_Mustang,resolved
 Ford,Bronco 3rd Generation 1980-1986,Ford_Bronco,resolved
@@ -1019,6 +1056,7 @@ Ford,Fairlane,Ford_Fairlane_(Americas),resolved
 Ford,Falcon,Ford_Falcon_(Australia),resolved
 Ford,Fiesta,Ford_Fiesta,resolved
 Ford,Focus,Ford_Focus,resolved
+Ford,Formula Ford,Ford_Mustang,resolved
 Ford,Fox-Body Mustang,Ford_Mustang_(third_generation),resolved
 Ford,Fusion,Ford_Fusion_(Americas),resolved
 Ford,GRANADA,Ford_Granada_(Europe),resolved
@@ -1058,6 +1096,7 @@ Ford,MUSTANG GT,Ford_Mustang,resolved
 Ford,MUSTANG GT CARROLL SHELBY SIGNATURE SERIES,Shelby_Mustang,resolved
 Ford,MUSTANG GT CONVERTIBLE,Ford_Mustang,resolved
 Ford,MUSTANG GT COUPE,Ford_Mustang,resolved
+Ford,MUSTANG GT COUPE 14,Ford_Mustang_(fifth_generation),resolved
 Ford,MUSTANG GT500CR,,unresolved
 Ford,MUSTANG GT500CR 900S 5 SPEED BY CLASSIC RECREATIONS,,unresolved
 Ford,MUSTANG GT500CR 900S 6 SPEED BY CLASSIC RECREATIONS,,unresolved
@@ -1079,6 +1118,7 @@ Ford,MUSTANG SHELBY GT,Shelby_Mustang,resolved
 Ford,MUSTANG SHELBY GT CONVERTIBLE,Ford_Mustang,resolved
 Ford,MUSTANG SHELBY GT COUPE,Shelby_Mustang,resolved
 Ford,MUSTANG SHELBY GT H,Shelby_Mustang,resolved
+Ford,MUSTANG SHELBY GT H CONVERTIBLE,Shelby_Mustang,resolved
 Ford,MUSTANG SHELBY GT350,Shelby_Mustang,resolved
 Ford,MUSTANG SHELBY GT350 75,Shelby_Mustang,resolved
 Ford,MUSTANG SHELBY GT350 78,Ford_Mustang_(sixth_generation),resolved
@@ -1133,6 +1173,7 @@ Ford,Ranger 2019-2023,Ford_Ranger_(T6),resolved
 Ford,Roush,,unresolved
 Ford,S197 Shelby Mustang,Shelby_Mustang,resolved
 Ford,S550 Shelby Mustang,Ford_Mustang_(sixth_generation),resolved
+Ford,SALEEN MUSTANG S281,Saleen_S281,resolved
 Ford,SCORPIO,Ford_Scorpio,resolved
 Ford,SHELBY GT350,Shelby_Mustang,resolved
 Ford,SHELBY MUSTANG GT350,Shelby_Mustang,resolved
@@ -1143,6 +1184,7 @@ Ford,SHELBY MUSTANG GT500KR,Shelby_Mustang,resolved
 Ford,SHELBY MUSTANG GT500KR CONVERTIBLE,Shelby_Mustang,resolved
 Ford,SHELBY MUSTANG SHELBY GT H,Shelby_Mustang,resolved
 Ford,SHELBY SUPER SNAKE,Shelby_Mustang,resolved
+Ford,SIX WHEELED CUSTOM 2019 ECOSPORT TITANIUM,Ford_EcoSport,resolved
 Ford,Saleen,Saleen_302_Series,resolved
 Ford,Shelby Pickup,Shelby_American,resolved
 Ford,Shoebox,1949_Ford,resolved
@@ -1179,6 +1221,7 @@ GMC,GMC C/K 1960-1966,GMC_(automobile),resolved
 GMC,GMC C/K 1967-1972,GMC_Brigadier,resolved
 GMC,GMC C/K 1973-1991,GMC_Motorhome,resolved
 GMC,GMC C7000,,unresolved
+GMC,GMC C7000 TOTERHOME,,unresolved
 GMC,GMC COE,,unresolved
 GMC,GMC Caballero,GMC_(automobile),resolved
 GMC,GMC Canyon,GMC_(automobile),resolved
@@ -1223,9 +1266,11 @@ Graham,GRAHAM BROS 1 5 TON TRUCK,Graham-Paige,resolved
 Graham,GRAHAM BROTHERS TRUCK,Graham-Paige,resolved
 Graham,GRAHAM HOLLYWOOD SUPERCHARGED,Graham-Paige,resolved
 Graham,GRAHAM SHARKNOSE,Sharknose,resolved
+Graham,Graham Hollywood,Billy_Graham,resolved
 Griffith,GRIFFITH 200,Griffith_Park,resolved
 Griffith,GRIFFITH SERIES 200,Griffith_Park,resolved
 Grumman,GRUMMAN KUBVAN,Grumman_LLV,resolved
+Harley Davidson,HARLEY DAVIDSON S 125,Harley-Davidson_WLA,resolved
 Harley-Davidson,HARLEY DAVIDSON,William_S._Harley,resolved
 Harley-Davidson,HARLEY DAVIDSON FREEWHEELER,Harley-Davidson_Fat_Boy,resolved
 Harley-Davidson,HARLEY DAVIDSON J,Harley-Davidson_WLA,resolved
@@ -1245,6 +1290,7 @@ Harley-Davidson,Harley-Davidson Dyna,Harley-Davidson_Fat_Boy,resolved
 Harley-Davidson,Harley-Davidson FXR,Harley-Davidson_Super_Glide,resolved
 Harley-Davidson,Harley-Davidson Knucklehead,Harley-Davidson_Evolution_engine,resolved
 Harley-Davidson,Harley-Davidson Panhead,Harley-Davidson_FL,resolved
+Harley-Davidson,Harley-Davidson Servi-Car,Harley-Davidson_Sportster,resolved
 Harley-Davidson,Harley-Davidson Shovelhead,Harley-Davidson_FL,resolved
 Harley-Davidson,Harley-Davidson Softail,Harley-Davidson_Sportster,resolved
 Harley-Davidson,Harley-Davidson Sportster,Harley-Davidson_Sportster,resolved
@@ -1252,6 +1298,7 @@ Harley-Davidson,Harley-Davidson Sprint,Harley-Davidson_Street,resolved
 Harley-Davidson,Harley-Davidson Touring,Harley-Davidson_Sportster,resolved
 Harley-Davidson,Harley-Davidson V-Rod,Harley-Davidson_Sportster,resolved
 Heinkel,Heinkel Tourist,Ernst_Heinkel,resolved
+Hillman,HILLMAN HUSKY,Hillman_Imp,resolved
 Hillman,HILLMAN MINX,Hillman,resolved
 Hillman,Hillman Minx,Hillman,resolved
 Hispano-Suiza,HISPANO SUIZA J12 COACH PROJECT BY POURTOUT,Carrosserie_Pourtout,resolved
@@ -1287,6 +1334,7 @@ Honda,CB650,Honda_CB650,resolved
 Honda,CB750 & CB750A,Honda_CB750_and_CR750,resolved
 Honda,CBR,Honda_CBR_series,resolved
 Honda,CBX,Honda_CBX,resolved
+Honda,CL70 & CL90,Honda_CL70,resolved
 Honda,"CL72, CB72, CA72, & C72",Honda_Dream_250_and_300,resolved
 Honda,CR & CRF,Honda_CRF_series,resolved
 Honda,CR-V,Honda_CR-V,resolved
@@ -1306,6 +1354,7 @@ Honda,EZ90 Cub,,unresolved
 Honda,Element,Honda_Element,resolved
 Honda,Elsinore,Honda_CR_series,resolved
 Honda,FIT,Honda_Fit,resolved
+Honda,Fat Cat,Honda_TR200,resolved
 Honda,GB500 Tourist Trophy,Honda_GB500,resolved
 Honda,Gold Wing,Honda_Gold_Wing,resolved
 Honda,Grom,Honda_Grom,resolved
@@ -1345,6 +1394,7 @@ Honda,TL125 & TL250,Honda_TLR200,resolved
 Honda,TODAY,Honda_Today,resolved
 Honda,VAMOS,Honda_Vamos,resolved
 Honda,VF & VFR,Honda_VF_and_VFR,resolved
+Honda,Valkyrie,Honda_Valkyrie,resolved
 Honda,XL & XR,Honda_HR-V,resolved
 Honda,Z50,Honda_Z_series,resolved
 Honda,Z600,Honda_Z,resolved
@@ -1365,6 +1415,7 @@ Husqvarna,HUSQVARNA 400 CROSS,Husqvarna_Motorcycles,resolved
 Husqvarna,HUSQVARNA 701 ENDURO,Husqvarna_Motorcycles,resolved
 Husqvarna,HUSQVARNA CR125,,unresolved
 Husqvarna,HUSQVARNA FE 501S,,unresolved
+Husqvarna,HUSQVARNA FE501S,,unresolved
 Husqvarna,HUSQVARNA NORDEN,Husqvarna_Motorcycles,resolved
 Husqvarna,Husqvarna CR,,unresolved
 Husqvarna,Husqvarna WR,,unresolved
@@ -1374,6 +1425,7 @@ Hyundai,HYUNDAI SANTA FE,Hyundai_Santa_Fe,resolved
 Hyundai,HYUNDAI TIBURON,Hyundai_Accent,resolved
 Hyundai,Hyundai Equus,Hyundai_Accent,resolved
 Indian,Indian Chief,Indian_Army,resolved
+Indian,Indian Four,Indian_Army,resolved
 Indian,Indian Scout,Indian_Motorcycle,resolved
 Ineos,INEOS Grenadier,Ineos,resolved
 Infiniti,FX,Infiniti_QX70,resolved
@@ -1475,6 +1527,7 @@ Jeep,Jeep Forward Control,Jeep,resolved
 Jeep,Jeep J-Series,Jeep_Grand_Cherokee,resolved
 Jeep,Jeep JT Gladiator,Jeep_Gladiator_(JT),resolved
 Jeep,Jeep Jeepster Commando,Jeepster_Commando,resolved
+Jeep,Jeep KL Cherokee,Jeep_Cherokee_(XJ),resolved
 Jeep,Jeep Liberty,Jeep_Compass,resolved
 Jeep,Jeep Pickup,Jeep_Grand_Cherokee,resolved
 Jeep,Jeep SJ Cherokee,Jeep_Cherokee_(XJ),resolved
@@ -1513,6 +1566,7 @@ John Deere,John Deere B,John_Deere,resolved
 Kaiser,KAISER DELUXE,Kaiser-Frazer,resolved
 Kaiser,KAISER DELUXE 4 DOOR SEDAN,Kaiser-Frazer,resolved
 Kaiser,KAISER HENRY J CUSTOM PROJECT,Kaiser-Frazer,resolved
+Kaiser,KAISER K512,,unresolved
 Kaiser,KAISER MANHATTAN,Henry_J._Kaiser,resolved
 Kaiser,Kaiser Darrin,Henry_J._Kaiser,resolved
 Kaiser,Kaiser – Jeep M715,Kaiser_Jeep_M715,resolved
@@ -1521,6 +1575,7 @@ Kawasaki,KAWASAKI 454 LTD,Kawasaki_Motors,resolved
 Kawasaki,KAWASAKI A7 AVENGER,Kawasaki_A7_Avenger,resolved
 Kawasaki,KAWASAKI COMCOURS,,unresolved
 Kawasaki,KAWASAKI F,Kawasaki_Frontale,resolved
+Kawasaki,KAWASAKI F3 BUSHWHACKER,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI F5 BIGHORN,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI F9A 350CC ENDURO,,unresolved
 Kawasaki,KAWASAKI G 4,Kawasaki_T-4,resolved
@@ -1529,8 +1584,10 @@ Kawasaki,KAWASAKI GPZ550 ZX550 A1,,unresolved
 Kawasaki,KAWASAKI GPZ750,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI KD80X,,unresolved
 Kawasaki,KAWASAKI KE100,Kawasaki_KE100,resolved
+Kawasaki,KAWASAKI KH100,,unresolved
 Kawasaki,KAWASAKI KH400,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI KLT250 P1,,unresolved
+Kawasaki,KAWASAKI KLX110,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI KLX250,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI KT250,List_of_Kawasaki_motorcycles,resolved
 Kawasaki,KAWASAKI KV75 PARNELLI JONES,,unresolved
@@ -1541,6 +1598,7 @@ Kawasaki,KAWASAKI Z900RS,Kawasaki_KLR650,resolved
 Kawasaki,KAWASAKI Z900RS CAFE,Kawasaki_Z900,resolved
 Kawasaki,KAWASAKI ZL1000 ELIMINATOR,Kawasaki_Eliminator,resolved
 Kawasaki,KAWASAKI ZR1100 ZEPHYR,,unresolved
+Kawasaki,KAWASAKI ZRX 1200R,,unresolved
 Kawasaki,KAWASAKI ZRX1100,Kawasaki_ZRX1100,resolved
 Kawasaki,KAWASAKI ZRX1200R,Kawasaki_ZRX1200R,resolved
 Kawasaki,KAWASAKI100 G3TR BUSHMASTER,,unresolved
@@ -1564,6 +1622,7 @@ Ktm,KTM 200 JACKPINER 30TH ANNIVERSARY ADDITION,,unresolved
 Ktm,KTM 390 ADVENTURE,KTM_390_series,resolved
 Ktm,KTM 620 CAFE RACER,,unresolved
 Ktm,KTM 950 ADVENTURE,KTM_990_Adventure,resolved
+Ktm,KTM 950 SUPERMOTO,,unresolved
 Ktm,KTM ADVENTURE,KTM_990_Adventure,resolved
 Ktm,KTM Duke & Super Duke,KTM_390_series,resolved
 Lada,LADA,Lada_Niva_Travel,resolved
@@ -1571,6 +1630,7 @@ Lada,LADA NIVA,Lada_Niva,resolved
 Lada,LADA VAZ,Lada_Niva,resolved
 Laforza,LAFORZA,,unresolved
 Laforza,LAFORZA 3,,unresolved
+Laforza,LAFORZA LAFORZA,,unresolved
 Lagonda,LAGONDA LG45 SPECIAL,Lagonda,resolved
 Lamborghini,350 GT & 400 GT,Lamborghini_350_GT,resolved
 Lamborghini,Aventador,Lamborghini_Aventador,resolved
@@ -1612,7 +1672,10 @@ Land Rover,L538 Range Rover Evoque,Range_Rover_Evoque,resolved
 Land Rover,LR2,Land_Rover_Freelander,resolved
 Land Rover,LR3,Land_Rover_Discovery,resolved
 Land Rover,LR4,Land_Rover_Discovery,resolved
+Land Rover,Range Rover Autobiography LWB L405,Range_Rover,resolved
 Land Rover,Range Rover Classic,Range_Rover_Classic,resolved
+Land Rover,Range Rover HSE D260 SWB L405,,unresolved
+Land Rover,Range Rover HSE P400 SWB L405,Range_Rover_(L460),resolved
 Land Rover,Range Rover HSE P525 SWB L405,,unresolved
 Land Rover,Range Rover HSE SWB (3.0L SC V6) L405,,unresolved
 Land Rover,Range Rover HSE SWB (3.0L TD6) L405,,unresolved
@@ -1620,6 +1683,7 @@ Land Rover,Range Rover L322,Range_Rover_(L322),resolved
 Land Rover,Range Rover L405,Range_Rover_(L405),resolved
 Land Rover,Range Rover L460,Range_Rover_(L460),resolved
 Land Rover,Range Rover P38A,Range_Rover_(P38A),resolved
+Land Rover,Range Rover SVAutobiography Dynamic SWB L405,,unresolved
 Land Rover,Range Rover SVAutobiography LWB L405,Range_Rover_(L405),resolved
 Land Rover,Range Rover Sport L320,Range_Rover_Sport,resolved
 Land Rover,Range Rover Sport L494,Jaguar_Land_Rover_car_platforms,resolved
@@ -1665,6 +1729,7 @@ Lincoln,LINCOLN COSMOPOLITAN CAPRI,Lincoln_Cosmopolitan,resolved
 Lincoln,LINCOLN KA 4 DOOR SEDAN,Lincoln_Continental,resolved
 Lincoln,LINCOLN LS,Lincoln_LS,resolved
 Lincoln,LINCOLN MKS,Lincoln_Continental,resolved
+Lincoln,LINCOLN MKT,Lincoln_MKT,resolved
 Lincoln,LINCOLN MKZ,Lincoln_MKZ,resolved
 Lincoln,LINCOLN MODEL L,Lincoln_Corsair,resolved
 Lincoln,LINCOLN ZEPHYR 3,Lincoln-Zephyr,resolved
@@ -1686,6 +1751,7 @@ Lincoln,Lincoln Town Car,Lincoln_Town_Car,resolved
 Lincoln,Lincoln Zephyr,Lincoln-Zephyr,resolved
 Local Motors,LOCAL MOTORS RALLY FIGHTER,Local_Motors,resolved
 Lola,LOLA B07,Lola_Cars,resolved
+Lola,LOLA INDY CAR,Lola_Mk6,resolved
 Lola,LOLA T,Lola_Young,resolved
 Lola,LOLA T 70 MK3B,,unresolved
 Lola,LOLA T 86,Lola_B08/80,resolved
@@ -1700,6 +1766,7 @@ Lotus,Elise,Lotus_Elise,resolved
 Lotus,Elite,Lotus_Elite,resolved
 Lotus,Emira,Lotus_Emira,resolved
 Lotus,Esprit,Lotus_Esprit,resolved
+Lotus,Esprit S2,Lotus_Esprit,resolved
 Lotus,Esprit S3,Lotus_Esprit,resolved
 Lotus,Esprit S4,Lotus_Esprit,resolved
 Lotus,Esprit V8,Lotus_Esprit,resolved
@@ -1713,6 +1780,7 @@ Lotus,Seven & Super Seven,Lotus_Seven,resolved
 Lti,LTI TXII,TXII,resolved
 Lucid,Lucid Air,Lucid_Motors,resolved
 MG,MG F,MG_MGB,resolved
+MG,MG J2,MG_J-type,resolved
 MG,MG MGA,MG_Cars,resolved
 MG,MG MGB,MG_Cars,resolved
 MG,MG MGC,MG_Cars,resolved
@@ -1733,6 +1801,7 @@ Maico,MAICO 490 MEGA2,,unresolved
 Maico,MAICO AW400,,unresolved
 Maico,MAICO MC250 5 AW,,unresolved
 Maico,MAICO MC440,,unresolved
+March,MARCH 81C COSWORTH INDY CAR,March_81C,resolved
 Marcos,Marcos GT,Marcos_GT,resolved
 Maserati,3500 GT,Maserati_3500_GT,resolved
 Maserati,Biturbo,Maserati_Biturbo,resolved
@@ -1753,6 +1822,7 @@ Maserati,Merak,Maserati_Merak,resolved
 Maserati,Mexico,Maserati_Mexico,resolved
 Maserati,Mistral,Maserati_Mistral,resolved
 Maserati,Quattroporte,Maserati_Quattroporte,resolved
+Maserati,Quattroporte M156,Maserati_Quattroporte,resolved
 Maserati,Race Car,Maserati_MC20,resolved
 Maserati,Sebring,Maserati_Sebring,resolved
 Matchless,MATCHLESS G12,Matchless,resolved
@@ -1783,9 +1853,11 @@ Mazda,Mazda RX-7 FC,Mazda_RX-7,resolved
 Mazda,Mazda RX-7 FD,Mazda_RX-7,resolved
 Mazda,Mazda RX-8,Mazda_RX-8,resolved
 McLaren,570GT,McLaren_570S,resolved
+McLaren,570S,McLaren_570S,resolved
 McLaren,650S,McLaren_650S,resolved
 McLaren,720S,McLaren_720S,resolved
 McLaren,750S,McLaren_720S,resolved
+McLaren,765LT,McLaren_720S,resolved
 McLaren,Artura,McLaren_Artura,resolved
 McLaren,GT,McLaren_GT,resolved
 McLaren,MP4-12C,McLaren_12C,resolved
@@ -1794,6 +1866,7 @@ McLaren,Sports Series,McLaren_570S,resolved
 McLaren,Super Series,McLaren_720S,resolved
 McLaren,Ultimate Series,McLaren_Senna,resolved
 Mccormick,FARMALL 450 DIESEL,Farmall_M,resolved
+Mccormick,INTERNATIONAL HARVESTER H,International_Harvester,resolved
 Mercedes-Benz,190E 2.3-16 & 2.5-16,Mercedes-Benz_C-Class,resolved
 Mercedes-Benz,190SL,Mercedes-Benz_190_SL,resolved
 Mercedes-Benz,260 STUTTGART CABRIOLET C 2,List_of_Mercedes-Benz_vehicles,resolved
@@ -1802,6 +1875,7 @@ Mercedes-Benz,300E,Mercedes-Benz_W124,resolved
 Mercedes-Benz,300SL Gullwing & Roadster,Mercedes-Benz_300_SL,resolved
 Mercedes-Benz,300TE 3 4 AMG WAGON,Mercedes-Benz_W124,resolved
 Mercedes-Benz,320 CABRIOLET A,Mercedes-Benz_W142,resolved
+Mercedes-Benz,408 VAN,Mercedes-Benz_Sprinter,resolved
 Mercedes-Benz,450SEL 6.9,Mercedes-Benz_450SEL_6.9,resolved
 Mercedes-Benz,500E & E500,Mercedes-Benz_500_E,resolved
 Mercedes-Benz,560SEL,Mercedes-Benz_560,resolved
@@ -1837,6 +1911,7 @@ Mercedes-Benz,AMG GLS 63 AMG,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GLS63,Mercedes-AMG,resolved
 Mercedes-Benz,AMG GT,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT BLACK SERIES,Mercedes-AMG_GT,resolved
+Mercedes-Benz,AMG GT BLACK SERIES 10,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT BLACK SERIES 11,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT C,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT C ROADSTER,Mercedes-Benz_SLS_AMG,resolved
@@ -1857,18 +1932,23 @@ Mercedes-Benz,AMG GT63,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT63 S,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG GT63 S FOUR DOOR,Mercedes-AMG_GT,resolved
 Mercedes-Benz,AMG S63 CABRIOLET,Mercedes-Benz_S-Class,resolved
+Mercedes-Benz,AMG S63 COUPE,Mercedes-Benz_S-Class,resolved
 Mercedes-Benz,AMG S63 E PERFORMANCE,Mercedes-AMG,resolved
 Mercedes-Benz,AMG S63 SEDAN,Mercedes-Benz_S-Class,resolved
+Mercedes-Benz,AMG S65 COUPE,Mercedes-Benz_S-Class,resolved
 Mercedes-Benz,AMG S65 SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,AMG SL 63,Mercedes-Benz_SL_(R232),resolved
 Mercedes-Benz,AMG SL43,Mercedes-Benz_SL-Class,resolved
 Mercedes-Benz,AMG SL55,Mercedes-AMG,resolved
+Mercedes-Benz,AMG SL55 12,Mercedes-AMG,resolved
+Mercedes-Benz,AMG SL55 AMG,Mercedes-Benz_SL-Class_(R230),resolved
 Mercedes-Benz,AMG SL63,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,AMG SL65,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,AMG SL72,Mercedes-AMG,resolved
 Mercedes-Benz,Benz AMG,Mercedes-Benz_CLS,resolved
 Mercedes-Benz,Brabus,Brabus,resolved
 Mercedes-Benz,C107 SLC,Mercedes-Benz_R107_and_C107,resolved
+Mercedes-Benz,C124 E320 Coupe,Mercedes-Benz_E-Class,resolved
 Mercedes-Benz,C126,Mercedes-Benz_W126,resolved
 Mercedes-Benz,C140,Mercedes-Benz_CL-Class,resolved
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,Mercedes-Benz_E-Class_(C207),resolved
@@ -1885,6 +1965,7 @@ Mercedes-Benz,C43 AMG SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,C55 AMG,Mercedes-AMG,resolved
 Mercedes-Benz,C55 AMG 21,Mercedes-AMG,resolved
 Mercedes-Benz,C63 AMG,Mercedes-Benz_C-Class_(W204),resolved
+Mercedes-Benz,C63 AMG 23,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,C63 AMG 30 2,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,C63 AMG P31,Mercedes-Benz_C-Class_(W204),resolved
 Mercedes-Benz,C63 S AMG,Mercedes-Benz_SLS_AMG,resolved
@@ -1922,6 +2003,7 @@ Mercedes-Benz,E55 AMG 31,Mercedes-AMG,resolved
 Mercedes-Benz,E55 AMG 40,Mercedes-Benz_S-Class_(W220),resolved
 Mercedes-Benz,E55 AMG SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,E55 AMG SEDAN 14,Mercedes-AMG,resolved
+Mercedes-Benz,E55 AMG SEDAN 26,Mercedes-Benz_E-Class,resolved
 Mercedes-Benz,E55 AMG STATION WAGON,Mercedes-Benz_E-Class_(W211),resolved
 Mercedes-Benz,E55 AMG WAGON,Mercedes-AMG,resolved
 Mercedes-Benz,E55 AMG WAGON 28,Mercedes-AMG,resolved
@@ -1933,6 +2015,7 @@ Mercedes-Benz,E63 AMG 37,Mercedes-Benz_E63_AMG_(V8_Supercar),resolved
 Mercedes-Benz,E63 AMG S MODEL SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,E63 AMG SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,E63 AMG WAGON,Mercedes-AMG,resolved
+Mercedes-Benz,E63 AMG WAGON 44,Mercedes-Benz_E-Class_(W213),resolved
 Mercedes-Benz,E63 S AMG SEDAN,Mercedes-AMG,resolved
 Mercedes-Benz,E63 S AMG SEDAN 5,Mercedes-AMG,resolved
 Mercedes-Benz,E63 S AMG SEDAN 6,Mercedes-AMG,resolved
@@ -1964,6 +2047,9 @@ Mercedes-Benz,ML63 AMG 9,Mercedes-AMG,resolved
 Mercedes-Benz,Metris,Mercedes-Benz_Vito,resolved
 Mercedes-Benz,O 309D,,unresolved
 Mercedes-Benz,Ponton,Mercedes-Benz_Ponton,resolved
+Mercedes-Benz,R107 380SL,Mercedes-Benz_R107_and_C107,resolved
+Mercedes-Benz,R107 450SL,Mercedes-Benz_R107_and_C107,resolved
+Mercedes-Benz,R107 560SL,Mercedes-Benz_R107_and_C107,resolved
 Mercedes-Benz,R107 SL,Mercedes-Benz_R107_and_C107,resolved
 Mercedes-Benz,R129 SL,Mercedes-Benz_SL-Class_(R129),resolved
 Mercedes-Benz,R230 SL,Mercedes-Benz_SL-Class_(R230),resolved
@@ -1997,6 +2083,7 @@ Mercedes-Benz,SL63 AMG 20,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,SL63 AMG 73,Mercedes-Benz_SL-Class,resolved
 Mercedes-Benz,SL63 AMG 8,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,SL65 AMG,Mercedes-Benz_SL-Class_(R230),resolved
+Mercedes-Benz,SL65 AMG 111,Mercedes-Benz_R107_and_C107,resolved
 Mercedes-Benz,SL65 AMG 59,Mercedes-Benz_SLS_AMG,resolved
 Mercedes-Benz,SL65 AMG 65,Mercedes-AMG,resolved
 Mercedes-Benz,SL65 AMG 99,Mercedes-Benz_SLS_AMG,resolved
@@ -2025,6 +2112,9 @@ Mercedes-Benz,W113 SL,Mercedes-Benz_300_SL,resolved
 Mercedes-Benz,W114 & W115,Mercedes-Benz_W114/W115,resolved
 Mercedes-Benz,W116 S-Class,Mercedes-Benz_S-Class,resolved
 Mercedes-Benz,W123,Mercedes-Benz_W123,resolved
+Mercedes-Benz,W124 260E & 300E 2.6 Sedan,Mercedes-Benz_W124,resolved
+Mercedes-Benz,W124 300D 2.5 Turbo Sedan,Mercedes-Benz_W124,resolved
+Mercedes-Benz,W124 300E & E320 Sedan,Mercedes-Benz_E-Class,resolved
 Mercedes-Benz,"W124 400E, E400, & E420 Sedan",,unresolved
 Mercedes-Benz,W124 500E & E500,Mercedes-Benz_E-Class,resolved
 Mercedes-Benz,W124 E-Class,Mercedes-Benz_E-Class_(W210),resolved
@@ -2045,6 +2135,7 @@ Mercedes-Benz,W211 E-Class AMG,Mercedes-Benz_E-Class_(W211),resolved
 Mercedes-Benz,W212 E-Class,Mercedes-Benz_E-Class_(W212),resolved
 Mercedes-Benz,W212 E-Class AMG,Mercedes-Benz_E-Class_(W212),resolved
 Mercedes-Benz,W213 E-Class,Mercedes-Benz_E-Class,resolved
+Mercedes-Benz,W213 E-Class AMG,Mercedes-Benz_E-Class,resolved
 Mercedes-Benz,W220 S-Class,Mercedes-Benz_S-Class_(W220),resolved
 Mercedes-Benz,W221 S-Class,Mercedes-Benz_S-Class_(W221),resolved
 Mercedes-Benz,W222 S-Class,Mercedes-Benz_S-Class,resolved
@@ -2062,9 +2153,11 @@ Mercedes-Benz,X290 AMG GT Four-Door,Mercedes-AMG_GT,resolved
 Mercury,MERCURY COMMUTER,Mercury_(automobile),resolved
 Mercury,MERCURY CUSTOM SPORT COUPE,Mercury_Eight,resolved
 Mercury,MERCURY MILAN,Mercury_Milan,resolved
+Mercury,MERCURY MONARCH,Mercury_(automobile),resolved
 Mercury,MERCURY MONTEGO,Mercury_(automobile),resolved
 Mercury,MERCURY MOUNTAINEER,Mercury_(automobile),resolved
 Mercury,MERCURY PARK LANE,Mercury_Park_Lane,resolved
+Mercury,MERCURY SABLE,Mercury_(automobile),resolved
 Mercury,MERCURY SABLE LS WAGON,Mercury_Sable,resolved
 Mercury,MERCURY TOPAZ,Mercury_(automobile),resolved
 Mercury,MERCURY TURNPIKE CRUISER,Mercury_Turnpike_Cruiser,resolved
@@ -2079,6 +2172,7 @@ Mercury,Mercury Marauder,Mercury_(automobile),resolved
 Mercury,Mercury Marquis & Grand Marquis,Mercury_Grand_Marquis,resolved
 Mercury,Mercury Montclair,Mercury_(automobile),resolved
 Mercury,Mercury Monterey,Mercury_(automobile),resolved
+Mercury,Mercury Pickup,Mercury_(automobile),resolved
 Merkur,Merkur XR4Ti,Merkur_XR4Ti,resolved
 Messerschmitt,Messerschmitt Kabinenroller & FMR Tg500,Messerschmitt,resolved
 Meyers,Meyers Manx,Meyers_Manx,resolved
@@ -2105,6 +2199,7 @@ Mini,Mini R58 & R59 Coupe & Roadster,Mini_Coupé_and_Roadster,resolved
 Mini,Mini R60 Countryman,Mini_Countryman,resolved
 Mini,Mini R61 Paceman,Mini_Paceman,resolved
 Minneapolis Moline,MINNEAPOLIS MOLINE ZTU,,unresolved
+Minneapolis-Moline,MINNEAPOLIS MOLINE R ROW CROP TRACTOR,Tractor,resolved
 Mitsubishi,MITSUBISHI I MIEV,Mitsubishi_i-MiEV,resolved
 Mitsubishi,MITSUBISHI LANCER GSR,Mitsubishi_Lancer,resolved
 Mitsubishi,MITSUBISHI MIGHTY MAX,Mitsubishi_Triton,resolved
@@ -2135,7 +2230,9 @@ Morris,Morris Minor,Morris_Minor,resolved
 Mosler,MOSLER CONSULIER GTP,Consulier_GTP,resolved
 Moto Guzzi,MOTO GUZZI 1100 SPORT,Moto_Guzzi,resolved
 Moto Guzzi,MOTO GUZZI CALIFORNIA VINTAGE,Moto_Guzzi,resolved
+Moto Guzzi,MOTO GUZZI COPPA ITALIA,List_of_Moto_Guzzi_motorcycles,resolved
 Moto Guzzi,MOTO GUZZI DAYTONA 1000 8,Moto_Guzzi,resolved
+Moto Guzzi,MOTO GUZZI GALLETTO,Moto_Guzzi,resolved
 Moto Guzzi,MOTO GUZZI GRISO 1200 8V SE,,unresolved
 Moto Guzzi,MOTO GUZZI GTV,,unresolved
 Moto Guzzi,MOTO GUZZI NUOVO FALCONE,Moto_Guzzi,resolved
@@ -2190,6 +2287,7 @@ Nissan,DATSUN 200SX,Nissan_Silvia,resolved
 Nissan,DATSUN 200SX 2,Nissan_200SX,resolved
 Nissan,DATSUN 200SX SL,Nissan_Silvia,resolved
 Nissan,DATSUN 210,Datsun_210,resolved
+Nissan,DATSUN 411 SSS WAGON,Nissan_Bluebird,resolved
 Nissan,DATSUN F 10 SPORTWAGON,Nissan_Pulsar,resolved
 Nissan,Datsun 240Z,Nissan_Fairlady_Z_(S30),resolved
 Nissan,Datsun 260Z,Nissan_Fairlady_Z_(S30),resolved
@@ -2198,6 +2296,7 @@ Nissan,Datsun 280ZX,Nissan_Fairlady_Z_(S130),resolved
 Nissan,Datsun 510,Datsun_510,resolved
 Nissan,Datsun Pickup,Datsun_truck,resolved
 Nissan,Datsun Roadster,Datsun_Sports,resolved
+Nissan,EL GRAND,Nissan_Livina,resolved
 Nissan,Figaro,Nissan_Figaro,resolved
 Nissan,GLORIA,Nissan_Gloria,resolved
 Nissan,GT-R R35,Nissan_GT-R,resolved
@@ -2206,6 +2305,7 @@ Nissan,MURANO CROSSCABRIOLET 8,Nissan_Murano,resolved
 Nissan,Maxima,Nissan_Maxima,resolved
 Nissan,NV2500,Nissan_NV_(North_America),resolved
 Nissan,NV3500,Nissan_NV_(North_America),resolved
+Nissan,NV3500 SL CARGO VAN,Nissan_NV_(North_America),resolved
 Nissan,PRESIDENT,Nissan_President,resolved
 Nissan,PRIMERA,Nissan_Primera,resolved
 Nissan,PULSAR GTI R,Nissan_Pulsar,resolved
@@ -2240,12 +2340,15 @@ Oldsmobile,OLDSMOBILE,Oldsmobile,resolved
 Oldsmobile,OLDSMOBILE ALERO,Oldsmobile_Alero,resolved
 Oldsmobile,OLDSMOBILE AURORA,Oldsmobile,resolved
 Oldsmobile,OLDSMOBILE BRAVADA,Oldsmobile_Bravada,resolved
+Oldsmobile,OLDSMOBILE CALAIS SUPREME,Oldsmobile_Cutlass_Supreme,resolved
+Oldsmobile,OLDSMOBILE CIERA SL,Oldsmobile_Cutlass_Ciera,resolved
 Oldsmobile,OLDSMOBILE FIRENZA WAGON,Oldsmobile_Firenza,resolved
 Oldsmobile,OLDSMOBILE HENNEY HEARSE,,unresolved
 Oldsmobile,OLDSMOBILE L37,,unresolved
 Oldsmobile,Oldsmobile 442,Oldsmobile,resolved
 Oldsmobile,Oldsmobile 88,Oldsmobile_88,resolved
 Oldsmobile,Oldsmobile 98,Oldsmobile_Cutlass,resolved
+Oldsmobile,Oldsmobile Aurora,Oldsmobile_88,resolved
 Oldsmobile,Oldsmobile Custom Cruiser,Oldsmobile_Vista_Cruiser,resolved
 Oldsmobile,Oldsmobile Cutlass,Oldsmobile_88,resolved
 Oldsmobile,Oldsmobile F-85 & Jetfire,Oldsmobile_88,resolved
@@ -2267,6 +2370,7 @@ Ossa,OSSA SUPER PIONEER,Ossa_(motorcycle),resolved
 Ossa,OSSA TR280I,,unresolved
 Owosso,PULSE AUTOCAR,,unresolved
 Packard,PACKARD 200 DELUXE,Packard,resolved
+Packard,PACKARD HERITAGE,Packard_V-1650_Merlin,resolved
 Packard,PACKARD PACKARD HENNEY AMBULANCE,Packard_Patrician,resolved
 Packard,PACKARD PATRICIAN,Packard,resolved
 Packard,Packard Caribbean,Hewlett_Packard_Enterprise,resolved
@@ -2279,6 +2383,7 @@ Panhard,PANHARD,,unresolved
 Panhard,PANHARD DYNA Z16 GRAND STANDING,,unresolved
 Panoz,Panoz Esperante,Panoz_Esperante_GTR-1,resolved
 Panoz,Panoz Roadster,Panoz_Esperante,resolved
+Panther Westwinds,PANTHER J72,Panther_Westwinds,resolved
 Panther Westwinds,PANTHER KALLISTA,Panther_Westwinds,resolved
 Parts And Automobilia,CORVETTE COUPE,,unresolved
 Parts And Automobilia,Parts and Automobilia – Artwork,,unresolved
@@ -2296,7 +2401,9 @@ Parts And Automobilia,Parts and Automobilia – Racing Simulators,,unresolved
 Parts And Automobilia,Parts and Automobilia – Rolling Chassis,,unresolved
 Parts And Automobilia,Parts and Automobilia – Signs,,unresolved
 Parts And Automobilia,Parts and Automobilia – Trailers,,unresolved
+Peterbilt,PETERBILT 335 CAR HAULER RV,,unresolved
 Peterbilt,PETERBILT CAR HAULER,Peterbilt,resolved
+Peugeot,PEUGEOT,Peugeot_5008,resolved
 Peugeot,PEUGEOT 103,Peugeot_208,resolved
 Peugeot,PEUGEOT 306,Peugeot_206,resolved
 Peugeot,PEUGEOT 404,Peugeot_206,resolved
@@ -2349,6 +2456,7 @@ Pontiac,PONTIAC G6,Pontiac_(automobile),resolved
 Pontiac,PONTIAC GRAND AM,Pontiac_Grand_Prix,resolved
 Pontiac,PONTIAC GRAND AM SE,Pontiac_Grand_Am,resolved
 Pontiac,PONTIAC GRAND PRIX,Pontiac_Grand_Am,resolved
+Pontiac,PONTIAC STREAMLINER,Pontiac_(automobile),resolved
 Pontiac,PONTIAC SUNFIRE,Pontiac_Sunfire,resolved
 Pontiac,PONTIAC TORPEDO,Pontiac_Firebird,resolved
 Pontiac,PONTIAC TORPEDO COUPE,Pontiac_Catalina,resolved
@@ -2404,11 +2512,13 @@ Porsche,958 Cayenne,List_of_Porsche_engines,resolved
 Porsche,964 911 (Non-Turbo),Porsche_911_(964),resolved
 Porsche,964 911 Carrera 2,Porsche_911_(964),resolved
 Porsche,964 911 Carrera 4,Porsche_911_(964),resolved
+Porsche,964 911 Carrera 4 Widebody,Porsche_911,resolved
 Porsche,964 911 Carrera RS,Porsche_911_(964),resolved
 Porsche,964 911 RS America,Porsche_911_(964),resolved
 Porsche,964 911 Singer,Singer_Vehicle_Design,resolved
 Porsche,964 911 Speedster,Porsche_911_(964),resolved
 Porsche,964 911 Turbo,Porsche_911_(964),resolved
+Porsche,964 911 Turbo 3.3,Porsche_911_(964),resolved
 Porsche,964 911 by Singer,Singer_Vehicle_Design,resolved
 Porsche,964 Carrera RS,Porsche_911,resolved
 Porsche,964 Turbo,Porsche_911_(964),resolved
@@ -2451,6 +2561,7 @@ Porsche,992 911 Carrera 4S,Porsche_911_(992),resolved
 Porsche,992 911 Carrera GTS,Porsche_911_(992),resolved
 Porsche,992 911 Carrera S,Porsche_911_(992),resolved
 Porsche,992 911 Carrera T,Porsche_911_(992),resolved
+Porsche,992 911 Carrera T Club Coupe,Porsche_911,resolved
 Porsche,992 911 Dakar,Porsche_911_(992),resolved
 Porsche,992 911 GT3,Porsche_911_(992),resolved
 Porsche,992 911 S/T,Porsche_911_(992),resolved
@@ -2470,6 +2581,9 @@ Porsche,993 911 Carrera 4S,Porsche_911_(993),resolved
 Porsche,993 911 Carrera S,Porsche_911_(993),resolved
 Porsche,993 911 Gunther Werks,,unresolved
 Porsche,993 911 Kaege Retro,,unresolved
+Porsche,993 911 Race Car,Porsche_911_(993),resolved
+Porsche,993 911 Turbo,Porsche_911_(993),resolved
+Porsche,993 911 Turbo S,Porsche_911_(993),resolved
 Porsche,993 GT2,Porsche_911_(993),resolved
 Porsche,993 Turbo,Porsche_911_(993),resolved
 Porsche,996 911 (Non-Turbo/GT2/GT3),Porsche_911_GT2,resolved
@@ -2511,8 +2625,11 @@ Porsche,Cayenne Diesel (958),List_of_Porsche_engines,resolved
 Porsche,Cayenne Diesel Platinum Edition (958),,unresolved
 Porsche,Cayenne GTS (957),Porsche_Cayenne,resolved
 Porsche,Cayenne GTS (958),List_of_Porsche_engines,resolved
+Porsche,Cayenne GTS Coupe (9Y3),Porsche_Cayenne,resolved
 Porsche,Cayenne S (955/957),Porsche_Cayenne,resolved
 Porsche,Cayenne S (958),List_of_Porsche_engines,resolved
+Porsche,Cayenne S (9Y0),Porsche_Cayenne,resolved
+Porsche,Cayenne S E-Hybrid & S Hybrid (958),List_of_Porsche_engines,resolved
 Porsche,Cayenne S E-Hybrid Platinum Edition (958),,unresolved
 Porsche,Cayenne S Titanium Edition (955),Porsche_Cayenne,resolved
 Porsche,Cayenne Turbo (955/957),Porsche_Cayenne,resolved
@@ -2522,6 +2639,7 @@ Porsche,Cayenne Turbo Coupe (9Y3),Porsche_Cayenne,resolved
 Porsche,Cayenne Turbo GT (9Y3),Porsche_Cayenne,resolved
 Porsche,Cayenne Turbo S (955/957),Porsche_Cayenne,resolved
 Porsche,Cayenne Turbo S (958),,unresolved
+Porsche,Cayenne Turbo S E-Hybrid (9Y0),Porsche_Cayenne,resolved
 Porsche,Cayenne V6 (955/957),Porsche_Cayenne,resolved
 Porsche,Cayenne V6 (958),List_of_Porsche_engines,resolved
 Porsche,Cayenne V6 Platinum Edition (958),,unresolved
@@ -2600,6 +2718,7 @@ Rover,P6,Rover_P6,resolved
 Rover,ROVER,Rover_75,resolved
 Rover,ROVER 2000,Opportunity_(rover),resolved
 Rover,ROVER 2000 8,Opportunity_(rover),resolved
+Rover,ROVER 3500,Rover_P6,resolved
 Rover,ROVER P5B,Rover_P5,resolved
 Rover,Rover Cooper,Land_Rover_series,resolved
 Royal Enfield,ROYAL ENFIELD CLASSIC 350,Royal_Enfield_Bullet,resolved
@@ -2629,6 +2748,7 @@ Scion,SCION TC,Scion_(automobile),resolved
 Scion,SCION XA,Scion_(automobile),resolved
 Scion,SCION XB,Scion_(automobile),resolved
 Scion,Scion FR-S,,unresolved
+Scion,Scion xB,Scion_(automobile),resolved
 Shelby,Shelby CSX Cobra Continuation,Shelby_Daytona,resolved
 Shelby,"Shelby Cobra Mk I, II, & III",Shelby_Daytona,resolved
 Shelby,Shelby Cobra Replica,Shelby_Mustang,resolved
@@ -2644,6 +2764,7 @@ Smart,Smart Fortwo,Smart_Fortwo,resolved
 Spartan,SPARTAN FMC PUMPER,,unresolved
 Spartan,SPARTAN TRAVEL TRAILER,Spartan_Aircraft_Company,resolved
 Speed Utv,SPEED UTV BAJA BANDIT RG,,unresolved
+Speed Utv,SPEED UTV EL DIABLO,,unresolved
 Spyker,Spyker C8,Spyker_Cars,resolved
 Stewart & Stevenson,STEWART AND STEVENSON M 1078 A1,,unresolved
 Stewart & Stevenson,STEWART STEVENSON LMTV M,,unresolved
@@ -2783,6 +2904,7 @@ Toyota,Land Cruiser Prado 70-Series,Toyota_Land_Cruiser_Prado,resolved
 Toyota,Land Cruiser Prado 90-Series,Toyota_Land_Cruiser_Prado,resolved
 Toyota,LiteAce & TownAce,Toyota_LiteAce,resolved
 Toyota,Mega Cruiser,Toyota_Mega_Cruiser,resolved
+Toyota,PRIUS,Toyota_Prius,resolved
 Toyota,Pickup (N30/N40 1978-1983),Toyota_4Runner,resolved
 Toyota,Pickup (N50/N60/N70 1984-1988),Toyota_Hilux,resolved
 Toyota,Pickup (N80/90/100/110 1989-1997),Toyota_4Runner,resolved
@@ -2800,6 +2922,7 @@ Toyota,SW20 MR2,Toyota_MR2,resolved
 Toyota,Sequoia,Toyota_Sequoia,resolved
 Toyota,Sera,Toyota_Sera,resolved
 Toyota,Sienna,Toyota_Sienna,resolved
+Toyota,Soarer,Toyota_Soarer,resolved
 Toyota,Stout,Toyota_Stout,resolved
 Toyota,Supra A70,Toyota_Supra,resolved
 Toyota,Supra A80,Toyota_Supra,resolved
@@ -2841,6 +2964,7 @@ Triumph,Triumph Scrambler,Triumph_Bonneville,resolved
 Triumph,Triumph Speed Triple,Triumph_Street_Triple,resolved
 Triumph,Triumph Speed Twin 900 & 1200,Triumph_Bonneville,resolved
 Triumph,Triumph Spitfire,Triumph_Spitfire,resolved
+Triumph,Triumph Sprint,Triumph_TR7,resolved
 Triumph,Triumph Stag,Triumph_Stag,resolved
 Triumph,Triumph TR2,Triumph_TR2,resolved
 Triumph,Triumph TR3,Triumph_TR4,resolved
@@ -2865,6 +2989,7 @@ Ural,Ural Gear Up,IMZ-Ural,resolved
 Vanderhall,Vanderhall Carmel,Vanderhall_Venice,resolved
 Vanderhall,Vanderhall Venice,Vanderhall_Carmel,resolved
 Vauxhall,CARLTON,Vauxhall_Carlton,resolved
+Velocette,VELOCETTE KTS,Velocette,resolved
 Velocette,VELOCETTE THRUXTON,Velocette_Thruxton,resolved
 Velosolex,VELOSOLEX,,unresolved
 Vespa,Vespa 400,Vespa,resolved
@@ -2885,6 +3010,7 @@ Volkswagen,TIGUAN,Volkswagen_Tiguan,resolved
 Volkswagen,VOLKSWAGEN ATLAS,Volkswagen_Golf,resolved
 Volkswagen,VOLKSWAGEN CC,Volkswagen_Gol,resolved
 Volkswagen,VOLKSWAGEN CC SPORT,Volkswagen_CC,resolved
+Volkswagen,VOLKSWAGEN FOX GL WAGON,Volkswagen_Fox,resolved
 Volkswagen,VOLKSWAGEN TIGUAN,Volkswagen_Tiguan,resolved
 Volkswagen,Volkswagen A5 Beetle,Volkswagen_Beetle_(A5),resolved
 Volkswagen,Volkswagen Bay-Window Bus,Volkswagen_Bus,resolved
@@ -2930,6 +3056,8 @@ Volkswagen,Volkswagen Tiguan,Volkswagen_Tiguan,resolved
 Volkswagen,Volkswagen Touareg,Volkswagen_Touareg,resolved
 Volkswagen,Volkswagen Type 3,Volkswagen_Type_3,resolved
 Volkswagen,Volkswagen Vanagon,Volkswagen_Type_2_(T3),resolved
+Volvo,VOLVO 164,Volvo_200_Series,resolved
+Volvo,VOLVO 164 E,Volvo_Amazon,resolved
 Volvo,VOLVO 960 WAGON,Volvo_900_Series,resolved
 Volvo,VOLVO C304,Volvo_Cars,resolved
 Volvo,VOLVO S40,Volvo,resolved
@@ -2939,6 +3067,7 @@ Volvo,VOLVO S90,Volvo_XC60,resolved
 Volvo,VOLVO V50,Volvo_V50,resolved
 Volvo,VOLVO V60 CROSS COUNTRY,Volvo_V60,resolved
 Volvo,VOLVO V60 POLESTAR,Volvo_V60,resolved
+Volvo,VOLVO V90 CROSS COUNTRY,Volvo_V90,resolved
 Volvo,VOLVO XC60,Volvo_XC60,resolved
 Volvo,Volvo 140,Volvo_S40,resolved
 Volvo,Volvo 1800ES,Volvo_P1800,resolved
@@ -2976,6 +3105,7 @@ Willys,Willys Jeepster,Willys-Overland_Jeepster,resolved
 Willys,Willys M38,Willys_M38,resolved
 Willys,Willys MB,Willys_MB,resolved
 Willys,Willys Pickup,Willys_MB,resolved
+Winnebago,WINNEBAGO ADVENTURE LIMITED,,unresolved
 Winnebago,WINNEBAGO ASPECT 30J,,unresolved
 Winnebago,WINNEBAGO BRAVE D20,,unresolved
 Winnebago,WINNEBAGO VISTA,,unresolved
@@ -2993,6 +3123,7 @@ Yamaha,YAMAHA FJ1100,Yamaha_FJR1300,resolved
 Yamaha,YAMAHA FJ1200A,Yamaha_FJ,resolved
 Yamaha,YAMAHA FJR1300,Yamaha_FJR1300,resolved
 Yamaha,YAMAHA FZR1000,Yamaha_GTS1000,resolved
+Yamaha,YAMAHA FZR400,Yamaha_FZR400,resolved
 Yamaha,YAMAHA FZR600,Yamaha_FZR600,resolved
 Yamaha,YAMAHA IT465,List_of_Yamaha_motorcycles,resolved
 Yamaha,YAMAHA LB50 CHAPPY,,unresolved
@@ -3009,9 +3140,12 @@ Yamaha,YAMAHA SRX600,Yamaha_SRX,resolved
 Yamaha,YAMAHA TENERE 700,Yamaha_Ténéré_700,resolved
 Yamaha,YAMAHA TRI MOTO YTM200ERN YAMAHAULER,,unresolved
 Yamaha,YAMAHA TT500,Yamaha_XT_500,resolved
+Yamaha,YAMAHA TX750,Yamaha_TX750,resolved
+Yamaha,YAMAHA TY250,List_of_Yamaha_motorcycles,resolved
 Yamaha,YAMAHA V STAR,Yamaha_VMAX,resolved
 Yamaha,YAMAHA V STAR 1300 TOURER,Yamaha_V_Star_1300,resolved
 Yamaha,YAMAHA V STAR 950 TOURER,Yamaha_V_Star_1300,resolved
+Yamaha,YAMAHA VIRAGO XV920,Yamaha_Virago,resolved
 Yamaha,YAMAHA WR200,List_of_Yamaha_motorcycles,resolved
 Yamaha,YAMAHA WR450F,Yamaha_WR450F,resolved
 Yamaha,YAMAHA XJ550 SECA,List_of_Yamaha_motorcycles,resolved
