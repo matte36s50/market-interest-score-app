@@ -1314,8 +1314,12 @@ function renderLotScatter(lots) {
     const t = window.MII_THEME;
 
     // Plot USD lots only (mixed currencies would distort the axis); split sold vs unsold.
-    const usdLots = lots.filter(l => l.currency === 'USD' && l.amount != null);
-    const toPoint = l => ({ x: l.date, y: l.amount, url: l.url, saleType: l.saleType, date: l.date });
+    // x is a timestamp on a linear axis so sold and unsold lots share one chronological scale
+    // (a category axis appends the unsold dataset's dates after the sold ones).
+    const usdLots = lots
+        .filter(l => l.currency === 'USD' && l.amount != null && !isNaN(Date.parse(l.date)))
+        .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    const toPoint = l => ({ x: Date.parse(l.date), y: l.amount, url: l.url, saleType: l.saleType, date: l.date });
     const soldPoints = usdLots.filter(l => l.sold).map(toPoint);
     const unsoldPoints = usdLots.filter(l => !l.sold).map(toPoint);
 
@@ -1331,7 +1335,10 @@ function renderLotScatter(lots) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: lightScale({ type: 'category', ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } }),
+                x: lightScale({
+                    type: 'linear',
+                    ticks: { maxRotation: 45, maxTicksLimit: 10, callback: v => new Date(v).toISOString().slice(0, 7) }
+                }),
                 y: lightScale({
                     ticks: { callback: v => '$' + (v / 1000) + 'K' },
                     title: { display: true, text: 'Sale price (USD)', color: t.faint }
