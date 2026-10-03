@@ -71,12 +71,26 @@ description can never drift from what the dashboard is doing.
 
 ### Methodology version
 
-`MII.VERSION` (currently **2026.09**) stamps the scoring rules in force. Scoring
+`MII.VERSION` (currently **2026.10**) stamps the scoring rules in force. Scoring
 has changed materially over this index's life — min-max scaling gave way to
-percentile rank, weight renormalization was added, and the model and
-manufacturer confidence scales were unified — so a score is only reproducible
+percentile rank, weight renormalization was added, the model and
+manufacturer confidence scales were unified, and the manufacturer score became
+volume-weighted (below) — so a score is only reproducible
 against a stated version. Cite it with any figure taken from the dashboard, and
 bump it whenever a change moves published scores.
+
+### Manufacturer score
+
+A make's score is built from its model-month rows by `MII.manufacturerScore`:
+
+1. Each row is weighted by **√auction_count**, so a model with 16 lots counts
+   four times a one-lot model. That cuts month-over-month noise as much as a
+   linear weight (3.89 → 3.47 points for makes with 15+ lots) without letting one
+   high-volume model stand in for the whole brand.
+2. The result is **shrunk toward the market score** for the same period with 10
+   lots of credibility: `(lots × score + 10 × market) / (lots + 10)`. A one-lot
+   make lands about 90% of the way to the market. Before this, a single Rimac
+   sale put Rimac at #1 for the year.
 
 ## Reading a change: the noise floor
 

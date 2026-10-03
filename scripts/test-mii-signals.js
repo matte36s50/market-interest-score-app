@@ -158,5 +158,17 @@ check('sign is ignored — a fall is judged like a rise',
     MII.moveStrength(-12, 21), MII.moveStrength(12, 21));
 check('a move between median and p90 reads as weak', MII.moveStrength(6, 21), 'weak');
 
+console.log('manufacturerScore');
+const busy = { mii_score: '80', auction_count: '16' };
+const thin = { mii_score: '40', auction_count: '1' };
+near('rows weigh by sqrt of auction count', MII.volumeWeightedMII([busy, thin]), (4 * 80 + 40) / 5);
+near('a row with no count weighs as one lot',
+    MII.volumeWeightedMII([{ mii_score: '60' }, { mii_score: '20', auction_count: '' }]), 40);
+near('no market score leaves the weighted score alone', MII.manufacturerScore([busy, thin]), 72);
+near('one lot is pulled most of the way to the market',
+    MII.manufacturerScore([{ mii_score: '90', auction_count: '1' }], 50), (90 + 10 * 50) / 11);
+near('a deep make barely moves',
+    MII.manufacturerScore([{ mii_score: '70', auction_count: '990' }], 50), (990 * 70 + 10 * 50) / 1000);
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);

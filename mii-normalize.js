@@ -297,11 +297,12 @@
 
     // Methodology version. Scoring has changed materially over this index's life
     // (min-max scaling -> percentile rank; weight renormalization added;
-    // model and manufacturer confidence scales unified), and a score is only
+    // model and manufacturer confidence scales unified; manufacturer score
+    // volume-weighted and shrunk toward the market), and a score is only
     // reproducible if the reader knows which rules produced it. Bump this
     // whenever a change moves published scores, and cite it alongside any
     // figure taken from the dashboard.
-    var VERSION = '2026.09';
+    var VERSION = '2026.10';
 
     // Mean EFFECTIVE weight of each input over the rows last scored.
     //
@@ -406,6 +407,53 @@
         return '';
     }
 
+    // Manufacturer score from its model-month rows.
+    //
+    // A plain mean of the rows counts a model that crossed the block once the
+    // same as one that sold thirty times, and a make with a single lot can top
+    // the table on that one car. Two corrections, measured on the 2026-10 data:
+    //
+    // 1. Each row is weighted by sqrt(auction_count). That removes the same
+    //    month-over-month noise as weighting by the raw count (3.89 -> 3.47
+    //    points for makes with 15+ lots, against 3.48 for linear), without
+    //    letting one dominant model become the whole make: Shelby is 85% Cobra
+    //    Replica lots, and a linear weight scores the brand as that one model.
+    //
+    // 2. The weighted score is shrunk toward the market score for the same
+    //    period by MFR_PRIOR_LOTS lots of credibility:
+    //        (lots * score + MFR_PRIOR_LOTS * market) / (lots + MFR_PRIOR_LOTS)
+    //    A make with one lot lands about 90% of the way to the market; one with
+    //    hundreds keeps its own score. No weighting of models can do this,
+    //    because a one-model make scores the same however it is weighted.
+    //
+    // A row with no auction count weighs as one lot.
+    var MFR_PRIOR_LOTS = 10;
+    function rowLots(row) {
+        var n = parseFloat(row.auction_count);
+        return n > 0 ? n : 1;
+    }
+    // sqrt(auction_count)-weighted mean MII of a set of model-month rows. Used
+    // for a make's own score and, over every row of a period, for the market
+    // score it is shrunk toward.
+    function volumeWeightedMII(rows) {
+        var s = 0, w = 0;
+        (rows || []).forEach(function (r) {
+            var v = parseFloat(r.mii_score);
+            if (isNaN(v)) return;
+            var wt = Math.sqrt(rowLots(r));
+            s += wt * v;
+            w += wt;
+        });
+        return w > 0 ? s / w : 0;
+    }
+    function manufacturerScore(rows, marketScore) {
+        var own = volumeWeightedMII(rows);
+        var prior = parseFloat(marketScore);
+        if (isNaN(prior)) return own;
+        var lots = (rows || []).reduce(function (sum, r) { return sum + rowLots(r); }, 0);
+        return (lots * own + MFR_PRIOR_LOTS * prior) / (lots + MFR_PRIOR_LOTS);
+    }
+
     // Bring a Trailer files memorabilia and hard parts under the car's own
     // make and model — wheels, seats, engines, manuals, signs — so a naive row
     // count treats a $300 steering wheel as an auction of the car. It also
@@ -442,6 +490,9 @@
         CONFIDENCE_THRESHOLDS: CONFIDENCE_THRESHOLDS,
         qualitySuffix: qualitySuffix,
         confidenceFor: confidenceFor,
+        MFR_PRIOR_LOTS: MFR_PRIOR_LOTS,
+        volumeWeightedMII: volumeWeightedMII,
+        manufacturerScore: manufacturerScore,
         recompute: recompute,
         percentileRanker: percentileRanker,
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
