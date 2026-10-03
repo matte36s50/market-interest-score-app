@@ -6,6 +6,10 @@ const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
 // Lets the dashboard drill down from a monthly model average to the individual sales behind it.
 let batLots = {};
 
+// Watchers per make/model/month from bat.csv, for the attention-share signal
+// shown beside MII (see mii-share.js). Null if that module failed to load.
+const batShare = window.MIIShare ? MIIShare.createTracker() : null;
+
 // Some manufacturers appear under more than one brand name across the two data
 // sources: MII files Datsun-era cars under "Nissan" (keeping "Datsun" in the
 // model name), while bat.csv files them under make "Datsun". MAKE_ALIASES maps
@@ -129,6 +133,8 @@ async function loadBatAuctionCounts() {
 
                         const countKey = `${key}|${period}`;
                         counts[countKey] = (counts[countKey] || 0) + 1;
+
+                        if (batShare) batShare.add(canonicalMake(make), key, period, parseBatNumber(row.watchers));
 
                         const { amount, currency } = parseSaleAmount(row.sale_amount);
                         const saleType = (row.sale_type || '').trim().toLowerCase();
@@ -688,6 +694,7 @@ async function initializeApp() {
         ]);
         injectAuctionCounts(rawData, batCounts);
         processCSVData(rawData);
+        attachAttentionShare();
 
         // Update last updated time
         dashboardData.lastUpdated = new Date().toISOString();
@@ -730,6 +737,28 @@ async function initializeApp() {
             </div>
         `;
     }
+}
+
+// Calendar months a dashboard period covers: '2026-09' and '2026-10-MTD' are
+// one month each; 'YTD' is every month of the latest year in the data.
+function periodMonthList(periodKey) {
+    if (periodKey === 'YTD') {
+        const months = dashboardData.quarters.filter(q => q !== 'YTD').map(q => q.replace('-MTD', ''));
+        const latestYear = months.length ? months[months.length - 1].slice(0, 4) : '';
+        return months.filter(m => m.startsWith(latestYear));
+    }
+    return [periodKey.replace('-MTD', '')];
+}
+
+// Put each make's share of BaT watchers (and each model's share of its make)
+// on the aggregated period data. A display signal beside MII, not an input.
+function attachAttentionShare() {
+    if (!batShare || !window.MIIShare) return;
+    MIIShare.attach(dashboardData.quarterData, batShare, {
+        monthsFor: periodMonthList,
+        previous: previousPeriodKey,
+        modelKey: modelJoinKey,
+    });
 }
 
 // Manufacturers populated from CSV data on load
@@ -1065,7 +1094,7 @@ function renderLeaderboard() {
     updateSortHeaders();
 
     if (filtered.length === 0) {
-        container.innerHTML = `<tr><td colspan="10" class="px-6 py-10 text-center text-mute">No makes match these filters</td></tr>`;
+        container.innerHTML = `<tr><td colspan="11" class="px-6 py-10 text-center text-mute">No makes match these filters</td></tr>`;
         return;
     }
 
@@ -1090,6 +1119,7 @@ function renderLeaderboard() {
                 <td class="num">${getTrendIndicator(mfr.trend, 'normal', { points: mfr.trendPoints, auctions: mfr.auctions })}</td>
                 <td>${createSparkline(mfr.history)}</td>
                 <td class="num">${mfr.auctions.toLocaleString()}</td>
+                <td class="num">${shareCell(mfr)}</td>
                 <td class="num">${formatPrice(mfr.avgPrice)}</td>
                 <td class="num">${mfr.sellThrough}%</td>
                 <td>${getConfidenceBadge(mfr.confidence, { compact: true })}</td>
@@ -1105,7 +1135,7 @@ function renderLeaderboard() {
         `;
     }).join('') + (filtered.length > LEADERBOARD_ROWS ? `
         <tr>
-            <td colspan="10" class="px-6 py-3.5">
+            <td colspan="11" class="px-6 py-3.5">
                 <button id="toggleAllMakes" class="text-sm font-medium hover:text-amber-700">
                     ${state.showAllMakes ? `Show top ${LEADERBOARD_ROWS} only` : `Show all ${filtered.length} makes`}
                 </button>
@@ -1131,6 +1161,15 @@ function renderLeaderboard() {
             selectManufacturer(row.dataset.make === state.selectedMake ? null : row.dataset.make);
         });
     });
+}
+
+// Leaderboard cell for a make's share of BaT watchers in the period.
+function shareCell(mfr) {
+    if (!window.MIIShare || mfr.share == null) return '<span class="text-faint">—</span>';
+    const change = MIIShare.formatChange(mfr.shareChange);
+    const tip = `${MIIShare.format(mfr.share)} of all Bring a Trailer watchers in this period` +
+        (change ? ` (${change} vs the month before)` : '');
+    return `<span title="${esc(tip)}">${MIIShare.format(mfr.share)}</span>`;
 }
 
 // Mark the active sort column on the leaderboard's header buttons.
@@ -1178,7 +1217,7 @@ function renderManufacturerDetail() {
                 <button id="closeDetail" class="icon-btn" aria-label="Close ${esc(mfr.make)} detail">&times;</button>
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-0.5">
                     <span class="text-xs text-mute">MII</span>
                     <span class="text-2xl font-semibold">${mfr.miiScore.toFixed(1)}</span>
@@ -1193,6 +1232,11 @@ function renderManufacturerDetail() {
                     <span class="text-xs text-mute">Avg price</span>
                     <span class="text-2xl font-semibold">${formatPrice(mfr.avgPrice)}</span>
                     <span class="text-xs text-mute">sold lots</span>
+                </div>
+                <div class="flex flex-col gap-0.5" title="Share of all Bring a Trailer watchers in this period. Shown beside MII, not part of it.">
+                    <span class="text-xs text-mute">Attention share</span>
+                    <span class="text-2xl font-semibold">${window.MIIShare ? MIIShare.format(mfr.share) : '—'}</span>
+                    <span class="text-xs text-mute">${shareChangeLabel(mfr)}</span>
                 </div>
             </div>
 
@@ -1213,7 +1257,7 @@ function renderManufacturerDetail() {
                                     data-make="${esc(mfr.make)}" data-model="${esc(model.model)}">
                                 <span class="flex flex-col gap-0.5 min-w-0">
                                     <span class="text-sm font-medium">${esc(model.model)}</span>
-                                    <span class="text-xs text-faint">${model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`} · ${formatPrice(model.avgPrice)} · ${model.sellThrough}% sold</span>
+                                    <span class="text-xs text-faint">${model.auctions === 1 ? '1 auction' : `${model.auctions} auctions`} · ${formatPrice(model.avgPrice)} · ${model.sellThrough}% sold${modelShareLabel(model, mfr.make)}</span>
                                 </span>
                                 <span class="flex flex-col items-end gap-0.5 shrink-0">
                                     <span class="font-mono text-sm font-medium">${model.mii.toFixed(1)}</span>
@@ -1236,6 +1280,19 @@ function renderManufacturerDetail() {
 
     // Render trend chart
     setTimeout(() => renderTrendChart(mfr), 0);
+}
+
+// "+0.4 pts vs Sep 2026" under the share tile, or what the number is.
+function shareChangeLabel(mfr) {
+    const change = window.MIIShare ? MIIShare.formatChange(mfr.shareChange) : '';
+    const prevKey = previousPeriodKey(state.selectedQuarter);
+    return change && prevKey ? `${change} vs ${formatQuarterDisplay(prevKey)}` : 'of BaT watchers';
+}
+
+// " · 12% of Porsche watchers" on a model row.
+function modelShareLabel(model, make) {
+    if (!window.MIIShare || model.shareOfMake == null) return '';
+    return ` · ${MIIShare.format(model.shareOfMake)} of ${esc(make)} watchers`;
 }
 
 // ---------------------------------------------------------------------------

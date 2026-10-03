@@ -123,6 +123,7 @@
                                 <th class="text-right"><button class="sort-btn" data-sort="trendPoints">Change</button></th>
                                 <th>History</th>
                                 <th class="text-right"><button class="sort-btn" data-sort="auctions">Auctions</button></th>
+                                <th class="text-right" title="Share of all Bring a Trailer watchers in the period. Shown beside MII, not part of it."><button class="sort-btn" data-sort="share">Share</button></th>
                                 <th class="text-right"><button class="sort-btn" data-sort="avgPrice">Avg price</button></th>
                                 <th class="text-right"><button class="sort-btn" data-sort="sellThrough">Sold</button></th>
                                 <th title="Confidence, from the number of auctions">Conf.</th>
@@ -202,10 +203,14 @@
         </section>
 
         <!-- Methodology -->
-        <footer class="border-t border-line pt-6 grid gap-8 md:grid-cols-3 text-[13px] text-mute leading-relaxed">
+        <footer class="border-t border-line pt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-4 text-[13px] text-mute leading-relaxed">
             <div>
                 <h3 class="m-0 mb-2 text-sm font-semibold text-ink">How MII is built</h3>
                 <p class="m-0">A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views (10%), social engagement (5%) and vehicle age (5%). Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed.</p>
+            </div>
+            <div>
+                <h3 class="m-0 mb-2 text-sm font-semibold text-ink">Attention share</h3>
+                <p class="m-0">A make's share of all Bring a Trailer watchers in the period; on a model, its share of the make's watchers. MII measures how hot each listing is; share measures how much of the market a make holds. It is shown beside MII, not blended into it, because it mostly tracks how many cars were listed.</p>
             </div>
             <div>
                 <h3 class="m-0 mb-2 text-sm font-semibold text-ink">Confidence</h3>
@@ -257,6 +262,7 @@
     </div>
 
     <script src="mii-normalize.js?v=5"></script>
-    <script src="app.js?v=4"></script>
+    <script src="mii-share.js?v=1"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>
