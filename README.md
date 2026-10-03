@@ -92,6 +92,25 @@ A make's score is built from its model-month rows by `MII.manufacturerScore`:
    make lands about 90% of the way to the market. Before this, a single Rimac
    sale put Rimac at #1 for the year.
 
+### Attention share (shown beside MII, not part of it)
+
+The leaderboard's **Share** column and the make panel's **Attention share** tile
+show a make's share of all Bring a Trailer watchers in the period, computed
+within the period from `bat.csv` (`mii-share.js`). Each model row shows its
+share of the make's watchers.
+
+MII's views, bids and comments are per-listing averages, so MII says how hot
+each listing is and nothing about how much of the market a make holds. Share
+fills that gap, but it is deliberately not an MII input: a make's watcher share
+is ~95% rank-correlated with its listing count, so blending it in would mostly
+re-add volume and tilt MII toward Porsche, Chevrolet and Ford. Read the two
+together: Ferrari has a top-three MII on ~4% of attention; Chevrolet has a
+mid-table MII on ~12%.
+
+Model share is given as a share of the make, not the market, because BaT files
+one family under many labels (`MUSTANG`, `Mustang Fastback`, ...). A
+market-level model share needs a model-family mapping first.
+
 ## Reading a change: the noise floor
 
 A model's monthly MII moves even when nothing about the market has, because a
