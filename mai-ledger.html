@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Ledger - Market Interest Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="mii-light-theme.js"></script>
+    <link rel="stylesheet" href="mii-light-theme.css">
+    <style>
+        .seg-btn { height: 32px; padding: 0 12px; border-radius: 6px; font-size: 13px; color: #5E6168; border: 1px solid transparent; }
+        .seg-btn:hover { color: #16181D; }
+        .seg-btn[aria-pressed="true"] { background: #fff; color: #16181D; font-weight: 600; border-color: #E4E4DF; }
+    </style>
+</head>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="bg-white border-b border-line md:sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
+            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
+                    <span class="font-semibold text-[15px]">Market Interest Index</span>
+                </a>
+                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
+                    <a href="index.html" class="nav-link">Overview</a>
+                    <a href="mai.html" class="nav-link">Apex Index</a>
+                    <a href="mai-ledger.html" class="nav-link is-active" aria-current="page">Apex Ledger</a>
+                    <a href="analytics.html" class="nav-link">Model comparison</a>
+                    <a href="dashboard.html" class="nav-link">Terminal</a>
+                    <a href="analyze.html" class="nav-link">Data analysis</a>
+                    <a href="index-hagi.html" class="nav-link">HAGI</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
+                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
+        <!-- Title -->
+        <section class="flex flex-col gap-3 max-w-3xl">
+            <span id="asOf" class="text-[13px] text-mute">Weekly Auction Results Ledgers · apex = high estimate of $500K or more</span>
+            <h1 class="m-0 text-4xl font-semibold tracking-tight">Apex Ledger</h1>
+            <p class="m-0 text-lg text-mute leading-relaxed">
+                The Manufacturer Apex Index rebuilt from the weekly results ledgers. Each lot counts once, at its
+                latest restatement. Lots without a published high estimate can't be classed as apex or non-apex,
+                so they are counted separately and never treated as non-apex.
+            </p>
+        </section>
+
+        <!-- Basis: always visible above the numbers -->
+        <section aria-label="What these figures are built on" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
+            <div class="panel p-5 flex flex-col gap-1.5">
+                <span class="text-[12px] text-mute">Status filter</span>
+                <span id="tileStatus" class="text-lg font-semibold">—</span>
+                <span id="tileStatusSub" class="text-[13px] text-mute"></span>
+            </div>
+            <div class="panel p-5 flex flex-col gap-1.5 border-amber-300">
+                <span class="text-[12px] text-mute">Apex unknown (no high estimate)</span>
+                <span id="tileUnknown" class="text-lg font-semibold">—</span>
+                <span id="tileUnknownSub" class="text-[13px] text-mute"></span>
+            </div>
+            <div class="panel p-5 flex flex-col gap-1.5">
+                <span class="text-[12px] text-mute">Buyer's premium in price</span>
+                <span id="tilePremium" class="text-lg font-semibold">—</span>
+                <span class="text-[13px] text-mute">Hammer-only and premium-inclusive figures differ by about 15%. Split them below.</span>
+            </div>
+            <div class="panel p-5 flex flex-col gap-1.5">
+                <span class="text-[12px] text-mute">MAI score</span>
+                <span id="tileMai" class="text-lg font-semibold">—</span>
+                <span id="tileMaiSub" class="text-[13px] text-mute"></span>
+            </div>
+        </section>
+
+        <!-- Manufacturers -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex flex-col gap-0.5">
+                    <h2 class="m-0 text-lg font-semibold">Manufacturers</h2>
+                    <p id="makerSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+                </div>
+                <div role="group" aria-label="Buyer's premium segment" class="flex flex-wrap gap-1 bg-canvas border border-hair rounded-lg p-1">
+                    <button type="button" class="seg-btn" data-seg="all" aria-pressed="true">All</button>
+                    <button type="button" class="seg-btn" data-seg="premium_yes" aria-pressed="false">Premium included</button>
+                    <button type="button" class="seg-btn" data-seg="premium_no" aria-pressed="false">Hammer only</button>
+                    <button type="button" class="seg-btn" data-seg="premium_unknown" aria-pressed="false">Premium unknown</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Make</th>
+                            <th class="text-right">MAI</th>
+                            <th class="text-right" title="High estimate of $500K or more">Apex</th>
+                            <th class="text-right" title="No high estimate in USD, so apex status is unknown">Apex unknown</th>
+                            <th class="text-right">Non-apex</th>
+                            <th class="text-right" title="Apex lots sold with a published price">Apex sold</th>
+                            <th class="text-right" title="Apex lots the house reports sold but whose price is withheld">Sold, price withheld</th>
+                            <th class="text-right">Apex not sold</th>
+                            <th class="pr-6 text-right">Events</th>
+                        </tr>
+                    </thead>
+                    <tbody id="makerRows">
+                        <tr><td colspan="9" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Events -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 class="m-0 text-lg font-semibold">Events in the ledgers</h2>
+                <p id="eventsSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Event</th>
+                            <th>Date</th>
+                            <th>Auction house</th>
+                            <th class="text-right">Lots</th>
+                            <th class="text-right">Apex</th>
+                            <th class="pr-6 text-right">Apex unknown</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventRows">
+                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Data quality -->
+        <section class="panel p-6 flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <h2 class="m-0 text-lg font-semibold">Ingest and validation</h2>
+                <p id="ingestSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div id="ingestBody" class="text-sm text-mute leading-relaxed flex flex-col gap-3"></div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        var SEG_LABEL = { all: 'all lots', premium_yes: 'premium-inclusive prices', premium_no: 'hammer-only prices', premium_unknown: 'lots with premium treatment unknown' };
+        var state = { data: null, seg: 'all' };
+
+        function esc(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function getJSON(url) {
+            return fetch(url, { cache: 'no-cache' })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .catch(function () { return null; });
+        }
+        function n(v) { return v ? String(v) : '<span class="text-faint">0</span>'; }
+        function text(id, v) { document.getElementById(id).textContent = v; }
+
+        function renderTiles(d) {
+            var sf = d.status_filter;
+            text('asOf', 'Weekly Auction Results Ledgers · as of ' + d.as_of + ' · apex = USD high estimate of $500K or more');
+            text('tileStatus', sf.included.join(' + '));
+            var ex = Object.keys(sf.rows_excluded_by_status).map(function (k) { return sf.rows_excluded_by_status[k] + ' ' + k; });
+            text('tileStatusSub', sf.rows_included + ' of ' + sf.rows_in_dataset + ' lots used. Excluded: ' + (ex.length ? ex.join(', ') : 'none') + '.');
+
+            var t = d.segments.all.totals;
+            var classified = t.apex + t.non_apex;
+            text('tileUnknown', t.apex_unknown + ' of ' + t.lots + ' lots');
+            text('tileUnknownSub', t.apex + ' apex and ' + t.non_apex + ' non-apex classified. ' +
+                (t.lots ? Math.round(100 * t.apex_unknown / t.lots) + '% of lots can’t be classified, so apex counts are a floor.' : ''));
+
+            var mix = d.premium_mix;
+            text('tilePremium', ['yes', 'no', 'unknown'].map(function (k) { return (mix[k] || 0) + ' ' + k; }).join(' · '));
+
+            if (d.mai_status === 'pending_formula') {
+                text('tileMai', 'Not computed yet');
+                text('tileMaiSub', 'Waiting on the formula for this dataset. Coverage counts below are final.');
+            } else {
+                text('tileMai', 'Computed');
+                text('tileMaiSub', 'Read each score with its apex-unknown count.');
+            }
+        }
+
+        function renderMakers() {
+            var seg = state.data.segments[state.seg];
+            var body = document.getElementById('makerRows');
+            var t = seg.totals;
+            text('makerSubtitle', seg.manufacturers.length + ' makes · ' + SEG_LABEL[state.seg] + ' · ' +
+                t.apex + ' apex, ' + t.apex_unknown + ' apex unknown, ' + t.non_apex + ' non-apex');
+            if (!seg.manufacturers.length) {
+                body.innerHTML = '<tr><td colspan="9" class="px-6 py-10 text-center text-mute">No lots in this segment.</td></tr>';
+                return;
+            }
+            var pending = state.data.mai_status === 'pending_formula';
+            body.innerHTML = seg.manufacturers.map(function (m) {
+                var mai = m.mai != null ? Number(m.mai).toFixed(3)
+                    : '<span class="text-faint" title="' + (pending ? 'Formula pending' : 'Not computable from known data') + '">' + (pending ? 'pending' : 'n/a') + '</span>';
+                var r = m.apex_by_result;
+                return '<tr>' +
+                    '<td class="pl-6 font-semibold">' + esc(m.manufacturer) + '</td>' +
+                    '<td class="num font-mono">' + mai + '</td>' +
+                    '<td class="num font-medium">' + n(m.apex) + '</td>' +
+                    '<td class="num' + (m.apex_unknown ? ' text-amber-700 font-medium' : '') + '">' + n(m.apex_unknown) + '</td>' +
+                    '<td class="num">' + n(m.non_apex) + '</td>' +
+                    '<td class="num">' + n(r.sold_with_price) + '</td>' +
+                    '<td class="num">' + n(r.sold_without_price) + '</td>' +
+                    '<td class="num">' + n(r.not_sold) + '</td>' +
+                    '<td class="num pr-6">' + m.events + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function renderEvents() {
+            var events = state.data.segments.all.events;
+            var body = document.getElementById('eventRows');
+            text('eventsSubtitle', events.length + ' events. The ledgers list selected results, not full catalogues, so lot counts are what was reported, not what crossed the block.');
+            body.innerHTML = events.map(function (e) {
+                return '<tr>' +
+                    '<td class="pl-6 font-medium">' + esc(e.event) + '</td>' +
+                    '<td class="font-mono text-[13px]">' + esc(e.event_date) + '</td>' +
+                    '<td class="text-mute">' + esc(e.auction_house) + '</td>' +
+                    '<td class="num">' + e.lots + '</td>' +
+                    '<td class="num">' + n(e.apex) + '</td>' +
+                    '<td class="num pr-6' + (e.apex_unknown ? ' text-amber-700 font-medium' : '') + '">' + n(e.apex_unknown) + '</td>' +
+                '</tr>';
+            }).join('') || '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No events.</td></tr>';
+        }
+
+        function renderIngest(rep) {
+            var body = document.getElementById('ingestBody');
+            if (!rep) {
+                text('ingestSubtitle', 'No validation report published yet.');
+                return;
+            }
+            text('ingestSubtitle', (rep.ok ? 'Last ingest passed validation' : 'Last ingest FAILED validation; the published dataset was not updated') +
+                (rep.as_of ? ' · ledgers through ' + rep.as_of : ''));
+            var html = [];
+            if (rep.errors.length) {
+                html.push('<div class="border border-red-200 bg-red-50 text-down rounded-md px-4 py-3"><p class="m-0 font-semibold">' +
+                    rep.errors.length + ' error(s)</p><ul class="m-0 mt-1 pl-5 list-disc">' +
+                    rep.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div>');
+            }
+            if (rep.files.length) {
+                html.push('<p class="m-0">Ledgers read: ' + rep.files.map(function (f) {
+                    return esc(f.ledger_date) + (f.rev_replacement ? ' (rev)' : '') + ' · ' + f.rows_read + ' rows';
+                }).join('; ') + '.</p>');
+            }
+            var c = rep.counts;
+            if (c) {
+                html.push('<p class="m-0">' + c.rows_read + ' rows read, ' + c.rows_superseded + ' superseded by a later restatement, ' +
+                    c.rows_after_dedupe + ' lots after dedupe. ' + c.rows_missing_high_estimate_usd + ' without a USD high estimate; ' +
+                    c.rows_missing_price + ' without a price (' + Object.keys(c.rows_missing_price_by_outcome).map(function (k) {
+                        return c.rows_missing_price_by_outcome[k] + ' ' + k.replace('_', ' ');
+                    }).join(', ') + ').</p>');
+                html.push('<p class="m-0"><span class="font-semibold text-ink">' + rep.review_queue_count +
+                    ' row(s) in the review queue.</span> Their notes mention possible outliers (charity lots, one-offs, works cars, ' +
+                    'specification premiums). They are still counted. Outlier status is free text only for now, a known gap in the ledger schema.</p>');
+            }
+            if (rep.warnings.length) {
+                html.push('<details><summary class="cursor-pointer">' + rep.warnings.length + ' warning(s)</summary><ul class="m-0 mt-1 pl-5 list-disc">' +
+                    rep.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul></details>');
+            }
+            body.innerHTML = html.join('');
+        }
+
+        function renderEmpty(rep) {
+            var msg = rep && !rep.ok
+                ? 'The last ingest failed validation, so there is no ledger dataset to show. See the errors below.'
+                : 'No ledger dataset has been published yet. Run ledger_ingest.py and ledger_mai.py.';
+            ['tileStatus', 'tileUnknown', 'tilePremium', 'tileMai'].forEach(function (id) { text(id, '—'); });
+            text('makerSubtitle', msg);
+            text('eventsSubtitle', msg);
+            document.getElementById('makerRows').innerHTML = '<tr><td colspan="9" class="px-6 py-10 text-center text-mute">' + esc(msg) + '</td></tr>';
+            document.getElementById('eventRows').innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No events.</td></tr>';
+        }
+
+        document.querySelectorAll('.seg-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (!state.data) return;
+                state.seg = btn.getAttribute('data-seg');
+                document.querySelectorAll('.seg-btn').forEach(function (b) {
+                    b.setAttribute('aria-pressed', String(b === btn));
+                });
+                renderMakers();
+            });
+        });
+
+        Promise.all([getJSON('data/ledger/mai_ledger.json'), getJSON('data/ledger/validation_report.json')])
+            .then(function (res) {
+                var mai = res[0], rep = res[1];
+                renderIngest(rep);
+                if (!mai) { renderEmpty(rep); return; }
+                state.data = mai;
+                renderTiles(mai);
+                renderMakers();
+                renderEvents();
+            });
+    })();
+    </script>
+</body>
+</html>

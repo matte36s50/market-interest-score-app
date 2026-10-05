@@ -1,0 +1,4 @@
+# Only for the live Sheets source of ledger_ingest.py. Offline builds,
+# --source-dir builds, ledger_mai.py and test_ledger.py are stdlib-only.
+google-api-python-client>=2.100
+google-auth>=2.23

@@ -27,6 +27,10 @@ mai.py                      ← compute per-manufacturer MAI scores
 wikipedia_pageviews.py      ← can run anytime (independent)
 ```
 
+**Weekly ledger ingest** (separate from both of the above) reads the weekly Auction Results
+Ledger Google Sheets into `data/ledger/` and feeds the Apex Ledger tab. See
+[`LEDGER_README.md`](LEDGER_README.md).
+
 Everything is stdlib-only except `auction_rating.py` / `mai.py`, which need
 pandas.
 
