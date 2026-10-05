@@ -96,6 +96,9 @@
                         <tr>
                             <th class="pl-6">Manufacturer</th>
                             <th class="text-right">MAI</th>
+                            <th class="text-right" title="Average share of the event's apex lots">P</th>
+                            <th class="text-right" title="Average price / high estimate, priced apex sales only">Q</th>
+                            <th class="text-right" title="Average apex sell-through">R</th>
                             <th class="text-right" title="High estimate of $500K or more">Apex</th>
                             <th class="text-right" title="No high estimate in USD, so apex status is unknown">Apex unknown</th>
                             <th class="text-right">Non-apex</th>
@@ -106,10 +109,26 @@
                         </tr>
                     </thead>
                     <tbody id="makerRows">
-                        <tr><td colspan="9" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                        <tr><td colspan="12" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
                     </tbody>
                 </table>
             </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="panel p-6 flex flex-col gap-3">
+            <h2 class="m-0 text-lg font-semibold">How the score works</h2>
+            <p class="m-0 font-mono text-sm bg-canvas border border-hair rounded-md px-4 py-3 overflow-x-auto whitespace-nowrap">
+                MAI = mean over events of (P × Q × R)
+            </p>
+            <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5 max-w-4xl">
+                <li><b class="text-ink">P</b>: the manufacturer's share of the event's apex lots. Apex-unknown lots are left out of both counts and shown beside the score.</li>
+                <li><b class="text-ink">Q</b>: price ÷ high estimate, averaged over apex lots sold with a published price. Uses the house's own currency when the price and estimate are in the same currency, otherwise the recorded USD figures.</li>
+                <li><b class="text-ink">R</b>: sold ÷ (sold + not sold). A sale with the price withheld counts as sold. Withdrawn lots are left out.</li>
+                <li>If nothing sold, R is 0 and so is that event's term. If something sold but no price is usable, the event is <i>unscored</i>: it is left out, not counted as 0.</li>
+                <li>Events count equally. Makes are grouped by manufacturer (for example, Mercedes-AMG and Maybach under Mercedes-Benz).</li>
+                <li>Scores rest on few lots. Check the apex and apex-unknown columns before reading much into a difference.</li>
+            </ul>
         </section>
 
         <!-- Events -->
@@ -162,6 +181,7 @@
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .catch(function () { return null; });
         }
+        function frac(v) { return v != null ? Number(v).toFixed(2) : '<span class="text-faint">—</span>'; }
         function n(v) { return v ? String(v) : '<span class="text-faint">0</span>'; }
         function text(id, v) { document.getElementById(id).textContent = v; }
 
@@ -181,13 +201,11 @@
             var mix = d.premium_mix;
             text('tilePremium', ['yes', 'no', 'unknown'].map(function (k) { return (mix[k] || 0) + ' ' + k; }).join(' · '));
 
-            if (d.mai_status === 'pending_formula') {
-                text('tileMai', 'Not computed yet');
-                text('tileMaiSub', 'Waiting on the formula for this dataset. Coverage counts below are final.');
-            } else {
-                text('tileMai', 'Computed');
-                text('tileMaiSub', 'Read each score with its apex-unknown count.');
-            }
+            var scored = d.segments.all.manufacturers.filter(function (m) { return m.mai != null; }).length;
+            var unscored = d.segments.all.manufacturers.reduce(function (a, m) { return a + m.events_unscored; }, 0);
+            text('tileMai', scored + ' manufacturer' + (scored === 1 ? '' : 's') + ' scored');
+            text('tileMaiSub', (unscored ? unscored + ' event result(s) left unscored: sold, but no usable price. ' : '') +
+                'Read each score with its apex lots and apex-unknown count.');
         }
 
         function groupedNote(m) {
@@ -205,17 +223,22 @@
             text('makerSubtitle', seg.manufacturers.length + ' manufacturers · ' + SEG_LABEL[state.seg] + ' · ' +
                 t.apex + ' apex, ' + t.apex_unknown + ' apex unknown, ' + t.non_apex + ' non-apex');
             if (!seg.manufacturers.length) {
-                body.innerHTML = '<tr><td colspan="9" class="px-6 py-10 text-center text-mute">No lots in this segment.</td></tr>';
+                body.innerHTML = '<tr><td colspan="12" class="px-6 py-10 text-center text-mute">No lots in this segment.</td></tr>';
                 return;
             }
-            var pending = state.data.mai_status === 'pending_formula';
             body.innerHTML = seg.manufacturers.map(function (m) {
-                var mai = m.mai != null ? Number(m.mai).toFixed(3)
-                    : '<span class="text-faint" title="' + (pending ? 'Formula pending' : 'Not computable from known data') + '">' + (pending ? 'pending' : 'n/a') + '</span>';
+                var why = m.apex ? 'Apex lots sold, but none with a usable price' : 'No apex lots';
+                var mai = m.mai != null ? '<span class="font-medium">' + Number(m.mai).toFixed(3) + '</span>'
+                    : '<span class="text-faint" title="' + why + '">n/a</span>';
+                if (m.events_unscored) mai += '<span class="block text-[12px] text-amber-700" title="Events where it sold but no price is usable">' +
+                    m.events_unscored + ' unscored</span>';
                 var r = m.apex_by_result;
                 return '<tr>' +
                     '<td class="pl-6"><span class="font-semibold">' + esc(m.manufacturer) + '</span>' + groupedNote(m) + '</td>' +
                     '<td class="num font-mono">' + mai + '</td>' +
+                    '<td class="num">' + frac(m.avg_P) + '</td>' +
+                    '<td class="num">' + frac(m.avg_Q) + '</td>' +
+                    '<td class="num">' + frac(m.avg_R) + '</td>' +
                     '<td class="num font-medium">' + n(m.apex) + '</td>' +
                     '<td class="num' + (m.apex_unknown ? ' text-amber-700 font-medium' : '') + '">' + n(m.apex_unknown) + '</td>' +
                     '<td class="num">' + n(m.non_apex) + '</td>' +
@@ -287,7 +310,7 @@
             ['tileStatus', 'tileUnknown', 'tilePremium', 'tileMai'].forEach(function (id) { text(id, '—'); });
             text('makerSubtitle', msg);
             text('eventsSubtitle', msg);
-            document.getElementById('makerRows').innerHTML = '<tr><td colspan="9" class="px-6 py-10 text-center text-mute">' + esc(msg) + '</td></tr>';
+            document.getElementById('makerRows').innerHTML = '<tr><td colspan="12" class="px-6 py-10 text-center text-mute">' + esc(msg) + '</td></tr>';
             document.getElementById('eventRows').innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No events.</td></tr>';
         }
 

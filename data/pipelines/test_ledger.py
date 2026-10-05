@@ -348,11 +348,83 @@ class LedgerMai(unittest.TestCase):
         finally:
             os.remove(fh.name)
 
-    def test_mai_is_pending_and_null_not_zero(self):
-        self.assertEqual(self.out["mai_status"], "pending_formula")
-        for seg in self.out["segments"].values():
-            for m in seg["manufacturers"]:
-                self.assertIsNone(m["mai"])
+    def test_fixture_mai_by_hand(self):
+        """Zurich is the only event with apex lots (CONFIRMED + REPORTED):
+        Ferrari F40 and Daytona sold, the Mercedes-AMG ONE did not.
+          Ferrari  P = 2/3, R = 1,
+                   Q = mean(3,323,750 / 3,500,000 CHF native,
+                            822,610 / 855,225 USD, since CHF price vs EUR estimate)
+          Mercedes-Benz  P = 1/3, R = 0 -> term 0 (a real zero, not a filled-in Q)"""
+        makers = {m["manufacturer"]: m for m in self.out["segments"]["all"]["manufacturers"]}
+        q = (3323750 / 3500000 + 822610 / 855225) / 2
+        self.assertAlmostEqual(makers["Ferrari"]["mai"], 2 / 3 * q * 1, places=6)
+        self.assertEqual(makers["Ferrari"]["q_basis"], {"native": 1, "usd": 1})
+        self.assertEqual(makers["Mercedes-Benz"]["mai"], 0.0)
+        self.assertIsNone(makers["Mercedes-Benz"]["avg_Q"])
+        self.assertEqual(self.out["segments"]["all"]["manufacturers"][0]["manufacturer"], "Ferrari")
+
+    def test_no_apex_lots_means_no_score_not_zero(self):
+        # A manufacturer whose lots are all non-apex or apex_unknown has no MAI.
+        no_apex = [m for seg in self.out["segments"].values() for m in seg["manufacturers"] if m["apex"] == 0]
+        self.assertTrue(no_apex)
+        for m in no_apex:
+            self.assertIsNone(m["mai"])
+            self.assertEqual(m["events_scored"], 0)
+
+
+def lot(manufacturer, state, price="", currency="USD", estimate_high="", estimate_currency="USD",
+        price_usd="", high_estimate_usd="1000000", event="E", event_date="2026-01-01"):
+    return {"manufacturer": manufacturer, "make": manufacturer, "result_state": state, "price": price,
+            "currency": currency, "estimate_high": estimate_high, "estimate_currency": estimate_currency,
+            "price_usd": price_usd, "high_estimate_usd": high_estimate_usd,
+            "event": event, "event_date": event_date}
+
+
+class MaiFormula(unittest.TestCase):
+    def test_sold_with_price_withheld_counts_in_r_but_not_q(self):
+        rows = [lot("A", "sold_with_price", "900000", estimate_high="1000000"),
+                lot("A", "sold_without_price")]
+        a = ledger_mai.compute_mai(rows, rows)["A"]
+        self.assertEqual((a["avg_R"], a["avg_Q"], a["avg_P"]), (1.0, 0.9, 1.0))
+        self.assertAlmostEqual(a["mai"], 0.9)
+
+    def test_only_unpriced_sales_leave_the_event_unscored(self):
+        rows = [lot("A", "sold_without_price"), lot("B", "sold_with_price", "1000000", estimate_high="1000000")]
+        out = ledger_mai.compute_mai(rows, rows)
+        self.assertIsNone(out["A"]["mai"])
+        self.assertEqual((out["A"]["events_scored"], out["A"]["events_unscored"]), (0, 1))
+        self.assertAlmostEqual(out["B"]["mai"], 0.5)  # P = 1/2, Q = 1, R = 1
+
+    def test_unscored_event_is_left_out_of_the_mean_not_counted_as_zero(self):
+        rows = [lot("A", "sold_with_price", "1000000", estimate_high="1000000", event="E1"),
+                lot("A", "sold_without_price", event="E2")]
+        a = ledger_mai.compute_mai(rows, rows)["A"]
+        self.assertEqual((a["mai"], a["events_scored"], a["events_unscored"]), (1.0, 1, 1))
+
+    def test_withdrawn_is_neither_presence_nor_no_sale(self):
+        rows = [lot("A", "sold_with_price", "1000000", estimate_high="1000000"), lot("A", "withdrawn"),
+                lot("B", "withdrawn")]
+        out = ledger_mai.compute_mai(rows, rows)
+        self.assertEqual((out["A"]["avg_P"], out["A"]["avg_R"]), (1.0, 1.0))
+        self.assertNotIn("B", out)
+
+    def test_unsold_make_scores_zero_and_dilutes_its_mean(self):
+        rows = [lot("A", "sold_with_price", "1000000", estimate_high="1000000", event="E1"),
+                lot("A", "not_sold", event="E2")]
+        self.assertAlmostEqual(ledger_mai.compute_mai(rows, rows)["A"]["mai"], 0.5)
+
+    def test_q_uses_house_currency_when_price_and_estimate_match(self):
+        # CHF price and CHF estimate: ratio in CHF, whatever the recorded USD says.
+        rows = [lot("A", "sold_with_price", "900000", currency="CHF", estimate_high="1000000",
+                    estimate_currency="CHF", price_usd="1", high_estimate_usd="1000000")]
+        a = ledger_mai.compute_mai(rows, rows)["A"]
+        self.assertAlmostEqual(a["avg_Q"], 0.9)
+        self.assertEqual(a["q_basis"], {"native": 1})
+
+    def test_q_falls_back_to_recorded_usd_across_currencies(self):
+        rows = [lot("A", "sold_with_price", "900000", currency="CHF", estimate_high="800000",
+                    estimate_currency="EUR", price_usd="1080000", high_estimate_usd="1200000")]
+        self.assertAlmostEqual(ledger_mai.compute_mai(rows, rows)["A"]["avg_Q"], 0.9)
 
 
 if __name__ == "__main__":

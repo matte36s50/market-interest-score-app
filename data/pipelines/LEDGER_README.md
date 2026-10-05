@@ -182,7 +182,27 @@ lasting fix is a structured column in the ledger.
   segment: apex / non-apex / apex_unknown, with apex lots split into sold-with-price,
   sold-without-price, not sold and withdrawn.
 
-**The MAI formula is not implemented.** `compute_mai()` in `ledger_mai.py` is a clearly marked
-stub that raises `MaiFormulaPending`. Until it's filled in, every score is `null` and the tab
-shows "pending". The repo's existing MAI (`mai.py`) can't be applied to this data as written
-without imputing values. The reasons are in `PENDING_REASON` and in the change summary.
+**Formula** (`compute_mai()` in `ledger_mai.py`): the P × Q × R core of the repo's MAI v1, adapted so
+nothing is imputed. Per manufacturer × event, over that event's apex lots:
+
+| Term | Definition |
+|---|---|
+| P | Manufacturer's apex lots ÷ all apex lots at the event. apex_unknown lots are in neither count |
+| Q | Mean of price ÷ high estimate over apex lots **sold with a price**. Uses the house's currency (`price / estimate_high`) when price and estimate share a currency, so no FX enters; otherwise `price_usd / high_estimate_usd` as recorded. `q_basis` counts which was used |
+| R | Sold (with or without a published price) ÷ (sold + not sold) |
+
+```
+MAI = mean over events of (P × Q × R)        # events unweighted
+```
+
+- **Withdrawn** lots are left out of P and R, matching `export_live_lots.py`.
+- **Nothing sold** → R = 0 → the term is 0. That's the product's real value, not a filled-in Q.
+- **Sold but no usable price** (for example, the GT2 Clubsport) → Q unknown → the term is unknown. It
+  is left out of the mean and counted in `events_unscored`; it is never counted as 0.
+- **No known term** → `mai` is null, shown as "n/a".
+- **Unweighted events.** v1 weights events by an auction rating built on each sale's total lot count,
+  which a curated weekly ledger doesn't have. Weighting by apex sold USD would hit withheld prices.
+- Scores are computed separately for each `premium_included` segment and for `all`.
+
+Each manufacturer row in `mai_ledger.json` carries `mai`, `avg_P`, `avg_Q`, `avg_R`, `events_scored`,
+`events_unscored`, `q_basis`, the makes grouped into it, and the apex / non_apex / apex_unknown counts.

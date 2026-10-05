@@ -22,9 +22,7 @@ What is implemented:
     premium_included (all / yes / no / unknown), so hammer-only and
     premium-inclusive figures are never blended without it being visible.
 
-What is NOT implemented: the MAI formula itself. See compute_mai() below —
-it is a deliberate stub pending a decision from the index owner, and every
-MAI figure is written as null with mai_status "pending_formula" until then.
+  * MAI per manufacturer, per segment: see compute_mai() for the formula.
 
 Run:
     python data/pipelines/ledger_mai.py
@@ -82,38 +80,119 @@ def apex_class(row):
 
 
 # ════════════════════════════════════════════════════════════════════════════
-#  MAI FORMULA — STUB, PENDING A DECISION.  Nothing else in this module scores.
+#  MAI FORMULA.  Nothing else in this module scores.
 # ════════════════════════════════════════════════════════════════════════════
+#
+#  The P x Q x R core of the repo's MAI v1 (mai.py), adapted so nothing is
+#  imputed. Per manufacturer x event, over that event's apex lots:
+#
+#    P  presence     = manufacturer's apex lots / all apex lots at the event.
+#                      apex_unknown lots are in neither count (they are shown
+#                      beside the score instead).
+#    Q  realisation  = mean of price / high estimate over the manufacturer's
+#                      apex lots sold WITH a price. In the house's currency
+#                      (price / estimate_high) when price and estimate share a
+#                      currency, so no FX enters; otherwise price_usd /
+#                      high_estimate_usd as recorded. A lot sold with the
+#                      price withheld is left out of Q. No priced sale: Q is
+#                      unknown, never 0.
+#    R  sell-through = sold (with or without a published price) /
+#                      (sold + not sold).
+#
+#  Withdrawn lots are left out of P and R, as export_live_lots.py does for the
+#  store-fed MAI: a lot that never crossed the block is neither presence nor a
+#  no-sale.
+#
+#  term = P x Q x R. Where nothing sold, R = 0 and the term is 0 whatever Q
+#  is: that is the product's value, not a filled-in Q. Where something sold
+#  but no sale has a usable price, Q is unknown and so is the term; it is
+#  left out and counted in events_unscored.
+#
+#  MAI = the plain mean of a manufacturer's known terms across events. v1
+#  weights events by an auction rating built on each sale's total lot count,
+#  which a curated weekly ledger does not contain, so events are unweighted.
+#  No known term: MAI is None, shown as "n/a", never 0.
 
-class MaiFormulaPending(NotImplementedError):
-    pass
+APEX_STATES_SCORED = ("sold_with_price", "sold_without_price", "not_sold")
+NO_APEX_SCORE = {"mai": None, "avg_P": None, "avg_Q": None, "avg_R": None,
+                 "events_scored": 0, "events_unscored": 0, "q_basis": {}}
+MAI_FORMULA = ("MAI = mean over events of P x Q x R. P = share of the event's apex lots; "
+               "Q = mean price / high estimate over apex lots sold with a price (house currency where "
+               "price and estimate match, else recorded USD); R = sold / (sold + not sold). Withdrawn "
+               "lots excluded; apex_unknown lots excluded and counted; an event where something sold "
+               "but no price is usable is unscored, never 0.")
 
 
-PENDING_REASON = (
-    "The repo's existing MAI (data/pipelines/mai.py + auction_rating.py) cannot be applied to the "
-    "ledger data as written without imputing or inventing: it defines apex on the LOW estimate, counts "
-    "an unknown Q as 0, fills missing prices and estimates with 0, and weights events by an auction "
-    "rating whose apex concentration term divides by the event's total lot count, which a curated "
-    "weekly ledger does not contain. The formula for this dataset needs the index owner's decision."
-)
+def lot_ratio(row):
+    """(price / high estimate, basis) for an apex lot sold with a price, or
+    (None, None) when no ratio can be formed from what was recorded."""
+    if row["result_state"] != "sold_with_price":
+        return None, None
+    if row["currency"] and row["currency"] == row["estimate_currency"] and row["estimate_high"]:
+        return Decimal(row["price"]) / Decimal(row["estimate_high"]), "native"
+    if row["price_usd"] and row["high_estimate_usd"]:
+        return Decimal(row["price_usd"]) / Decimal(row["high_estimate_usd"]), "usd"
+    return None, None
+
+
+def _mean(values):
+    return sum(values) / len(values) if values else None
 
 
 def compute_mai(apex_rows, segment_rows):
-    """>>> THE MAI FORMULA GOES HERE. <<<
+    """MAI per manufacturer over apex_rows (already filtered by status and
+    premium segment, each carrying `manufacturer` after grouping).
 
-    Inputs, already filtered by status and premium segment:
-      apex_rows     rows classified 'apex' (high_estimate_usd >= 500,000), each
-                    with manufacturer (make after grouping), make as
-                    recorded, event, event_date, result_state
-                    (sold_with_price / sold_without_price / not_sold /
-                    withdrawn), price_usd, high_estimate_usd as recorded.
-      segment_rows  every row in the segment, including non_apex and
-                    apex_unknown, for any per-event denominator.
-
-    Must return {manufacturer: mai_score or None}. None means "cannot be
-    computed from what is known" and must be shown as such, never as 0.
+    Returns {manufacturer: {mai, avg_P, avg_Q, avg_R, events_scored,
+    events_unscored, q_basis}}; mai and the averages are None where unknown.
+    segment_rows is unused by this formula; it is passed for formulas that
+    need a per-event denominator beyond the apex lots.
     """
-    raise MaiFormulaPending(PENDING_REASON)
+    scored_rows = [r for r in apex_rows if r["result_state"] in APEX_STATES_SCORED]
+    by_event = group_coverage(scored_rows, lambda r: (r["event"], r["event_date"]))
+
+    per_maker = defaultdict(lambda: {"terms": [], "P": [], "Q": [], "R": [], "unscored": 0,
+                                     "q_basis": Counter()})
+    for _, event_rows in sorted(by_event.items()):
+        event_apex = len(event_rows)
+        for manufacturer, mrows in group_coverage(event_rows, lambda r: r["manufacturer"]).items():
+            acc = per_maker[manufacturer]
+            sold = sum(1 for r in mrows if r["result_state"] != "not_sold")
+            P = Decimal(len(mrows)) / event_apex
+            R = Decimal(sold) / len(mrows)
+            ratios = []
+            for r in mrows:
+                ratio, basis = lot_ratio(r)
+                if ratio is not None:
+                    ratios.append(ratio)
+                    acc["q_basis"][basis] += 1
+            Q = _mean(ratios)
+            acc["P"].append(P)
+            acc["R"].append(R)
+            if Q is not None:
+                acc["Q"].append(Q)
+            if R == 0:
+                acc["terms"].append(Decimal(0))
+            elif Q is None:
+                acc["unscored"] += 1
+            else:
+                acc["terms"].append(P * Q * R)
+
+    def rnd(d):
+        return None if d is None else round(float(d), 6)
+
+    return {
+        manufacturer: {
+            "mai": rnd(_mean(acc["terms"])),
+            "avg_P": rnd(_mean(acc["P"])),
+            "avg_Q": rnd(_mean(acc["Q"])),
+            "avg_R": rnd(_mean(acc["R"])),
+            "events_scored": len(acc["terms"]),
+            "events_unscored": acc["unscored"],
+            "q_basis": dict(sorted(acc["q_basis"].items())),
+        }
+        for manufacturer, acc in per_maker.items()
+    }
 
 # ════════════════════════════════════════════════════════════════════════════
 
@@ -141,22 +220,18 @@ def build(rows, statuses=DEFAULT_STATUSES, groups=None):
     excluded = Counter(r["status"] for r in rows if r["status"] not in statuses)
 
     segments = {}
-    mai_status, mai_note = "computed", None
     for name, keep in SEGMENTS.items():
         seg = [r for r in included if keep(r)]
-        try:
-            scores = compute_mai([r for r in seg if apex_class(r) == "apex"], seg)
-        except MaiFormulaPending as e:
-            scores, mai_status, mai_note = {}, "pending_formula", str(e)
+        scores = compute_mai([r for r in seg if apex_class(r) == "apex"], seg)
 
         makers = []
         for manufacturer, mrows in sorted(group_coverage(seg, lambda r: r["manufacturer"]).items()):
             makers.append(dict(
-                {"manufacturer": manufacturer, "mai": scores.get(manufacturer),
+                {"manufacturer": manufacturer, **scores.get(manufacturer, NO_APEX_SCORE),
                  "makes": dict(sorted(Counter(r["make"] for r in mrows).items())),
                  "events": len({(r["event"], r["event_date"]) for r in mrows})},
                 **coverage(mrows)))
-        makers.sort(key=lambda m: (-m["apex"], -m["apex_unknown"], m["manufacturer"]))
+        makers.sort(key=lambda m: (m["mai"] is None, -(m["mai"] or 0), -m["apex"], m["manufacturer"]))
 
         events = []
         for (event, event_date, house), erows in group_coverage(
@@ -182,8 +257,7 @@ def build(rows, statuses=DEFAULT_STATUSES, groups=None):
             if any(r["make"] == make for r in included)
         },
         "premium_mix": dict(sorted(Counter(r["premium_included"] for r in included).items())),
-        "mai_status": mai_status,
-        "mai_note": mai_note,
+        "mai_formula": MAI_FORMULA,
         "segments": segments,
     }
 
@@ -223,9 +297,10 @@ def main(argv=None):
     print(f"  premium_included mix {out['premium_mix']}")
     if out["manufacturer_groups"]:
         print(f"  makes grouped {out['manufacturer_groups']}")
-    print(f"  MAI: {out['mai_status']}")
-    if out["mai_note"]:
-        print(f"  {out['mai_note']}")
+    for m in out["segments"]["all"]["manufacturers"]:
+        if m["mai"] is not None or m["events_unscored"]:
+            print(f"  {m['manufacturer']:<16} MAI {m['mai']}  (scored {m['events_scored']}, "
+                  f"unscored {m['events_unscored']}, apex {m['apex']}, apex_unknown {m['apex_unknown']})")
     print(f"Wrote {os.path.abspath(args.output)}")
     return 0
 
