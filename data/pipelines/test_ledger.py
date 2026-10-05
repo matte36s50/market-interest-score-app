@@ -323,6 +323,31 @@ class LedgerMai(unittest.TestCase):
         self.assertEqual(total, parts)
         self.assertEqual(sum(self.out["premium_mix"].values()), total)
 
+    def test_mercedes_sub_brands_roll_up_and_raw_make_is_kept(self):
+        makers = {m["manufacturer"]: m for m in self.out["segments"]["all"]["manufacturers"]}
+        self.assertNotIn("Mercedes-AMG", makers)
+        mb = makers["Mercedes-Benz"]
+        self.assertEqual(mb["makes"], {"Mercedes-AMG": 2, "Mercedes-Benz": 3})
+        self.assertEqual(mb["lots"], 5)
+        self.assertEqual(self.out["manufacturer_groups"], {"Mercedes-AMG": "Mercedes-Benz"})
+        # The dataset itself still carries the make as recorded.
+        self.assertEqual(by_lot(self.rows)["20260926-RMS-L111"]["make"], "Mercedes-AMG")
+
+    def test_grouping_is_explicit_not_by_name_pattern(self):
+        groups = ledger_mai.load_groups()
+        self.assertEqual(groups["Maybach"], "Mercedes-Benz")
+        self.assertEqual(groups["Mercedes-Maybach"], "Mercedes-Benz")
+        self.assertNotIn("Frazer Nash-BMW", groups)  # licence-built, not a BMW
+
+    def test_make_listed_twice_in_groups_is_an_error(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as fh:
+            fh.write("make,manufacturer,note\nMaybach,Mercedes-Benz,\nMaybach,Maybach,\n")
+        try:
+            with self.assertRaises(ValueError):
+                ledger_mai.load_groups(fh.name)
+        finally:
+            os.remove(fh.name)
+
     def test_mai_is_pending_and_null_not_zero(self):
         self.assertEqual(self.out["mai_status"], "pending_formula")
         for seg in self.out["segments"].values():

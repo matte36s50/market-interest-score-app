@@ -94,7 +94,7 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th class="pl-6">Make</th>
+                            <th class="pl-6">Manufacturer</th>
                             <th class="text-right">MAI</th>
                             <th class="text-right" title="High estimate of $500K or more">Apex</th>
                             <th class="text-right" title="No high estimate in USD, so apex status is unknown">Apex unknown</th>
@@ -190,11 +190,19 @@
             }
         }
 
+        function groupedNote(m) {
+            var makes = Object.keys(m.makes || {});
+            if (makes.length === 1 && makes[0] === m.manufacturer) return '';
+            return '<span class="block text-[12px] text-mute">incl. ' + makes.map(function (k) {
+                return esc(k) + ' ' + m.makes[k];
+            }).join(', ') + '</span>';
+        }
+
         function renderMakers() {
             var seg = state.data.segments[state.seg];
             var body = document.getElementById('makerRows');
             var t = seg.totals;
-            text('makerSubtitle', seg.manufacturers.length + ' makes · ' + SEG_LABEL[state.seg] + ' · ' +
+            text('makerSubtitle', seg.manufacturers.length + ' manufacturers · ' + SEG_LABEL[state.seg] + ' · ' +
                 t.apex + ' apex, ' + t.apex_unknown + ' apex unknown, ' + t.non_apex + ' non-apex');
             if (!seg.manufacturers.length) {
                 body.innerHTML = '<tr><td colspan="9" class="px-6 py-10 text-center text-mute">No lots in this segment.</td></tr>';
@@ -206,7 +214,7 @@
                     : '<span class="text-faint" title="' + (pending ? 'Formula pending' : 'Not computable from known data') + '">' + (pending ? 'pending' : 'n/a') + '</span>';
                 var r = m.apex_by_result;
                 return '<tr>' +
-                    '<td class="pl-6 font-semibold">' + esc(m.manufacturer) + '</td>' +
+                    '<td class="pl-6"><span class="font-semibold">' + esc(m.manufacturer) + '</span>' + groupedNote(m) + '</td>' +
                     '<td class="num font-mono">' + mai + '</td>' +
                     '<td class="num font-medium">' + n(m.apex) + '</td>' +
                     '<td class="num' + (m.apex_unknown ? ' text-amber-700 font-medium' : '') + '">' + n(m.apex_unknown) + '</td>' +

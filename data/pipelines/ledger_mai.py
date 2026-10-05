@@ -13,6 +13,11 @@ What is implemented:
         apex          high_estimate_usd >= 500,000
         non_apex      high_estimate_usd <  500,000
         apex_unknown  high_estimate_usd blank — unclassifiable, never non-apex
+  * Manufacturer grouping: the ledger's `make` is kept as recorded, and
+    ledger_manufacturer_groups.csv maps sub-brands onto their manufacturer
+    (Mercedes-AMG, Mercedes-Maybach, Maybach -> Mercedes-Benz). Makes not in
+    the file are their own manufacturer. The mapping is explicit on purpose:
+    a name pattern would wrongly fold "Frazer Nash-BMW" into BMW.
   * Coverage counts per manufacturer and per event, segmented by
     premium_included (all / yes / no / unknown), so hammer-only and
     premium-inclusive figures are never blended without it being visible.
@@ -38,6 +43,7 @@ from decimal import Decimal
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 DEFAULT_DATASET = os.path.join(ROOT, "ledger", "ledger_results.csv")
 DEFAULT_OUTPUT = os.path.join(ROOT, "ledger", "mai_ledger.json")
+DEFAULT_GROUPS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ledger_manufacturer_groups.csv")
 
 APEX_THRESHOLD_USD = Decimal("500000")
 DEFAULT_STATUSES = ("CONFIRMED", "REPORTED")
@@ -49,6 +55,21 @@ SEGMENTS = {
     "premium_unknown": lambda r: r["premium_included"] == "unknown",
 }
 RESULT_STATES = ("sold_with_price", "sold_without_price", "not_sold", "withdrawn")
+
+
+def load_groups(path=DEFAULT_GROUPS):
+    """{make: manufacturer} from the mapping file. A make listed twice is an
+    error: which group it belongs to would depend on row order."""
+    groups = {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            make, manufacturer = row["make"].strip(), row["manufacturer"].strip()
+            if not make or not manufacturer:
+                raise ValueError(f"{path}: blank make or manufacturer in {row}")
+            if make in groups:
+                raise ValueError(f"{path}: make {make!r} is listed twice")
+            groups[make] = manufacturer
+    return groups
 
 
 def apex_class(row):
@@ -82,7 +103,8 @@ def compute_mai(apex_rows, segment_rows):
 
     Inputs, already filtered by status and premium segment:
       apex_rows     rows classified 'apex' (high_estimate_usd >= 500,000), each
-                    with manufacturer = make, event, event_date, result_state
+                    with manufacturer (make after grouping), make as
+                    recorded, event, event_date, result_state
                     (sold_with_price / sold_without_price / not_sold /
                     withdrawn), price_usd, high_estimate_usd as recorded.
       segment_rows  every row in the segment, including non_apex and
@@ -111,8 +133,10 @@ def group_coverage(rows, key):
     return groups
 
 
-def build(rows, statuses=DEFAULT_STATUSES):
+def build(rows, statuses=DEFAULT_STATUSES, groups=None):
     statuses = tuple(statuses)
+    groups = load_groups() if groups is None else groups
+    rows = [dict(r, manufacturer=groups.get(r["make"], r["make"])) for r in rows]
     included = [r for r in rows if r["status"] in statuses]
     excluded = Counter(r["status"] for r in rows if r["status"] not in statuses)
 
@@ -126,9 +150,10 @@ def build(rows, statuses=DEFAULT_STATUSES):
             scores, mai_status, mai_note = {}, "pending_formula", str(e)
 
         makers = []
-        for make, mrows in sorted(group_coverage(seg, lambda r: r["make"]).items()):
+        for manufacturer, mrows in sorted(group_coverage(seg, lambda r: r["manufacturer"]).items()):
             makers.append(dict(
-                {"manufacturer": make, "mai": scores.get(make),
+                {"manufacturer": manufacturer, "mai": scores.get(manufacturer),
+                 "makes": dict(sorted(Counter(r["make"] for r in mrows).items())),
                  "events": len({(r["event"], r["event_date"]) for r in mrows})},
                 **coverage(mrows)))
         makers.sort(key=lambda m: (-m["apex"], -m["apex_unknown"], m["manufacturer"]))
@@ -152,6 +177,10 @@ def build(rows, statuses=DEFAULT_STATUSES):
             "rows_excluded": sum(excluded.values()),
             "rows_excluded_by_status": dict(sorted(excluded.items())),
         },
+        "manufacturer_groups": {
+            make: manufacturer for make, manufacturer in sorted(groups.items())
+            if any(r["make"] == make for r in included)
+        },
         "premium_mix": dict(sorted(Counter(r["premium_included"] for r in included).items())),
         "mai_status": mai_status,
         "mai_note": mai_note,
@@ -168,6 +197,7 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="MAI over the weekly ledger dataset")
     p.add_argument("--dataset", default=DEFAULT_DATASET)
     p.add_argument("--output", default=DEFAULT_OUTPUT)
+    p.add_argument("--groups", default=DEFAULT_GROUPS, help="make -> manufacturer mapping CSV")
     p.add_argument("--status", default=",".join(DEFAULT_STATUSES),
                    help="comma-separated statuses to include (default CONFIRMED,REPORTED)")
     args = p.parse_args(argv)
@@ -180,7 +210,7 @@ def main(argv=None):
         print(f"No dataset at {args.dataset}. Run ledger_ingest.py first.", file=sys.stderr)
         return 1
 
-    out = build(load(args.dataset), statuses)
+    out = build(load(args.dataset), statuses, load_groups(args.groups))
     with open(args.output, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
@@ -191,6 +221,8 @@ def main(argv=None):
           f"{sf['rows_excluded']} excluded {sf['rows_excluded_by_status']}")
     print(f"  apex {t['apex']}, non-apex {t['non_apex']}, apex_unknown {t['apex_unknown']} (blank high_estimate_usd)")
     print(f"  premium_included mix {out['premium_mix']}")
+    if out["manufacturer_groups"]:
+        print(f"  makes grouped {out['manufacturer_groups']}")
     print(f"  MAI: {out['mai_status']}")
     if out["mai_note"]:
         print(f"  {out['mai_note']}")

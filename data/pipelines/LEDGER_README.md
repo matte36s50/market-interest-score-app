@@ -9,7 +9,8 @@ This runs separately from the MII pipeline and from the store-fed MAI
 ```
 ledger_source.py   where ledgers come from: Sheets (live), a CSV directory, or the local cache
 ledger_ingest.py   discover → read by header → normalize → dedupe → validate → write
-ledger_mai.py      status filter, apex classification, coverage counts, MAI (formula pending)
+ledger_mai.py      status filter, manufacturer grouping, apex classification, coverage counts, MAI (formula pending)
+ledger_manufacturer_groups.csv   make → manufacturer roll-ups (edit by hand)
 test_ledger.py     offline tests over fixtures/ledgers
 ```
 
@@ -168,6 +169,12 @@ lasting fix is a structured column in the ledger.
 
 - **Status filter** (`--status`). The default includes CONFIRMED and REPORTED and excludes
   UNVERIFIED. The excluded count is written next to the figures and shown on the tab.
+- **Manufacturer grouping:** `ledger_manufacturer_groups.csv` maps sub-brands onto their manufacturer
+  (Mercedes-AMG, Mercedes-Maybach and Maybach → Mercedes-Benz). The dataset keeps `make` as recorded; the
+  grouping is applied here, and the tab lists the makes rolled into each manufacturer. Makes not in the file are
+  their own manufacturer. To add a group, add a row; a make listed twice is an error. The mapping is explicit,
+  not a name pattern, because a pattern would fold "Frazer Nash-BMW" (licence-built, not a BMW) into BMW.
+  It works on the make only, so a pre-war Maybach would also land under Mercedes-Benz.
 - **Apex rule:** `high_estimate_usd ≥ 500,000`. A blank `high_estimate_usd` is
   **`apex_unknown`**, counted separately and shown next to every manufacturer figure.
   It never counts as non-apex.
