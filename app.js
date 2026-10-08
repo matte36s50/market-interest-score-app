@@ -295,6 +295,8 @@ function processCSVData(rawData) {
     quarters.forEach((quarter, qIndex) => {
         const quarterKey = (qIndex === quarters.length - 1) ? qtdQuarter : quarter;
         const quarterRows = dataByQuarter[quarter];
+        // Market score for this period: what each make's score is shrunk toward.
+        const marketMII = window.MII ? MII.volumeWeightedMII(quarterRows) : null;
 
         // Group by manufacturer
         const mfrGroups = {};
@@ -312,8 +314,11 @@ function processCSVData(rawData) {
             // auction_count is stored per row by pipeline (sum of raw auctions per make/model/month)
             const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
-            // Calculate average MII score for manufacturer
-            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
+            // Weighted by auction volume and shrunk toward the market so a
+            // one-lot make cannot top the table (see MII.manufacturerScore).
+            const avgMII = window.MII
+                ? MII.manufacturerScore(mfrData, marketMII)
+                : mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
 
             // Calculate average price (sold only)
             const pricedMfrRows = mfrData.filter(row => parseFloat(row.price) > 0);
@@ -471,6 +476,7 @@ function processCSVData(rawData) {
     if (ytdQuarters.length > 0) {
         // Combine all YTD quarter data
         const ytdRows = ytdQuarters.flatMap(q => dataByQuarter[q]);
+        const ytdMarketMII = window.MII ? MII.volumeWeightedMII(ytdRows) : null;
 
         // Group by manufacturer
         const ytdMfrGroups = {};
@@ -487,7 +493,9 @@ function processCSVData(rawData) {
             const mfrData = ytdMfrGroups[mfrName];
             const auctions = mfrData.reduce((sum, row) => sum + (parseFloat(row.auction_count) || 0), 0);
 
-            const avgMII = mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
+            const avgMII = window.MII
+                ? MII.manufacturerScore(mfrData, ytdMarketMII)
+                : mfrData.reduce((sum, row) => sum + parseFloat(row.mii_score), 0) / mfrData.length;
             const pricedYtdRows = mfrData.filter(row => parseFloat(row.price) > 0);
             const avgPrice = pricedYtdRows.length > 0 ? pricedYtdRows.reduce((sum, row) => sum + parseFloat(row.price), 0) / pricedYtdRows.length : 0;
 

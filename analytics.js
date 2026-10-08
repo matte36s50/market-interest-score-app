@@ -130,32 +130,31 @@ function buildModels(rawData) {
 
     modelKeys = Object.keys(models).sort((a, b) => a.localeCompare(b));
 
-    // Market and per-manufacturer benchmarks, averaged per month so they can be
-    // plotted as trend lines. Each month is the mean MII of every row in that
-    // month (market) or every row of that manufacturer in that month.
-    const marketSums = {};                 // quarter -> { sum, n }
-    const mfrSums = {};                     // manufacturer -> quarter -> { sum, n }
+    // Market and per-manufacturer benchmarks per month, plotted as trend lines.
+    // Scored the same way as the leaderboard (MII.manufacturerScore): rows
+    // weighted by sqrt(auction_count), and each make shrunk toward that month's
+    // market score so a one-lot month does not swing its line.
+    const rowsByQuarter = {};                // quarter -> rows
+    const mfrRows = {};                      // manufacturer -> quarter -> rows
     valid.forEach(row => {
-        const mii = parseFloat(row.mii_score);
         const q = String(row.quarter).trim();
         const mfr = String(row.manufacturer).trim();
-        (marketSums[q] = marketSums[q] || { sum: 0, n: 0 });
-        marketSums[q].sum += mii;
-        marketSums[q].n += 1;
-        (mfrSums[mfr] = mfrSums[mfr] || {});
-        (mfrSums[mfr][q] = mfrSums[mfr][q] || { sum: 0, n: 0 });
-        mfrSums[mfr][q].sum += mii;
-        mfrSums[mfr][q].n += 1;
+        (rowsByQuarter[q] = rowsByQuarter[q] || []).push(row);
+        (mfrRows[mfr] = mfrRows[mfr] || {});
+        (mfrRows[mfr][q] = mfrRows[mfr][q] || []).push(row);
     });
+    const plainMean = rows => rows.reduce((s, r) => s + parseFloat(r.mii_score), 0) / rows.length;
     marketMIIByQuarter = {};
-    Object.entries(marketSums).forEach(([q, { sum, n }]) => {
-        marketMIIByQuarter[q] = n ? sum / n : null;
+    Object.entries(rowsByQuarter).forEach(([q, rows]) => {
+        marketMIIByQuarter[q] = window.MII ? MII.volumeWeightedMII(rows) : plainMean(rows);
     });
     manufacturerMIIByQuarter = {};
-    Object.entries(mfrSums).forEach(([mfr, byQ]) => {
+    Object.entries(mfrRows).forEach(([mfr, byQ]) => {
         manufacturerMIIByQuarter[mfr] = {};
-        Object.entries(byQ).forEach(([q, { sum, n }]) => {
-            manufacturerMIIByQuarter[mfr][q] = n ? sum / n : null;
+        Object.entries(byQ).forEach(([q, rows]) => {
+            manufacturerMIIByQuarter[mfr][q] = window.MII
+                ? MII.manufacturerScore(rows, marketMIIByQuarter[q])
+                : plainMean(rows);
         });
     });
 }
