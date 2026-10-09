@@ -373,6 +373,17 @@ Import those sales through Live Entry, or run the workflow manually with
 export wrote itself aren't held back: a sale merged or renamed in Sale
 Cleanup just replaces its old name the next morning.
 
+Lots of a sale **still to come** (catalogue estimates entered, no results
+yet) are written to `data/upcoming_lots.csv` on the same run, with estimates
+converted at the latest ECB rate. `mai.html` shows them in **Upcoming apex
+consignments**: each make's apex lot count and share across the upcoming
+sales, the sum of their low estimates and the make's current MAI rank. They
+are kept out of the MAI score: with no results there is no sell-through (R)
+or price realisation (Q), and counting the lots as unsold would sink every
+make consigned to the sale. Once results are entered, the lots move into
+`auction_lots.csv` and the ranking the next morning. A lot whose sale date
+has passed without results appears in neither file until it's updated.
+
 MAI's apex rule reads the **low estimate** (≥ $500K). Results pages alone
 don't carry estimates, which is why lots entered from results only never
 register as apex. Mecum and Barrett-Jackson generally don't publish

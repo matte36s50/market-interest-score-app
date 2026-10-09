@@ -21,7 +21,7 @@ into `social_score`. The other three are independent of each other.
 from `.github/workflows/data-pipelines.yml`.
 
 ```
-export_live_lots.py         ← rebuild auction_lots.csv from the canonical store
+export_live_lots.py         ← rebuild auction_lots.csv (+ upcoming_lots.csv) from the canonical store
 auction_rating.py           ← score each event
 mai.py                      ← compute per-manufacturer MAI scores
 wikipedia_pageviews.py      ← can run anytime (independent)
@@ -110,6 +110,12 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   European sales from MAI.
 - Skips lots still at the estimate stage and withdrawn lots, so neither counts
   as unsold in the sell-through figures.
+- Writes lots of sales still to come (not ended, not withdrawn, sale date
+  today or later) to `data/upcoming_lots.csv`, estimates only, converted at
+  the latest rate. `mai.html` reads it for the pre-sale **Upcoming apex
+  consignments** panel; neither `auction_rating.py` nor `mai.py` reads it.
+  It's written even when the hand-entered-events guard below holds
+  `auction_lots.csv` back (`--upcoming-out` sets the path).
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
 - **Won't drop hand-entered events.** If a hand-entered event in the current
