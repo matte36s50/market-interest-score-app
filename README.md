@@ -382,7 +382,8 @@ are kept out of the MAI score: with no results there is no sell-through (R)
 or price realisation (Q), and counting the lots as unsold would sink every
 make consigned to the sale. Once results are entered, the lots move into
 `auction_lots.csv` and the ranking the next morning. A lot whose sale date
-has passed without results appears in neither file until it's updated.
+has passed without results appears in neither file until it's updated;
+the daily run log names each such sale in a warning.
 
 MAI's apex rule reads the **low estimate** (≥ $500K). Results pages alone
 don't carry estimates, which is why lots entered from results only never

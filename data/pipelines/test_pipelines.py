@@ -723,6 +723,26 @@ class LiveLotsExport(unittest.TestCase):
         self._run(legacy, [future])
         self.assertEqual(len(lib.read_rows(self.upcoming_out)), 1)
 
+    def test_sales_past_their_date_without_results_are_named(self):
+        lots = [
+            _store_lot(status="upcoming", outcome=None, event="RM London 2026", event_date="2026-10-31"),
+            _store_lot(status="upcoming", outcome=None, event="RM London 2026", event_date="2026-10-31"),
+            _store_lot(status="upcoming", outcome=None, event="Munich 2026", event_date="2026-11-20"),
+            _store_lot(status="upcoming", outcome="withdrawn", event="Withdrawn 2026", event_date="2026-10-01"),
+            _store_lot(),  # ended
+        ]
+        self.assertEqual(export_live_lots.awaiting_results(lots, today="2026-11-02"),
+                         [("RM London 2026", "2026-10-31", 2, 2)])
+        self.assertEqual(export_live_lots.awaiting_results(lots, today="2026-10-31"), [])
+
+    def test_the_run_log_warns_about_sales_awaiting_results(self):
+        stale = _store_lot(status="upcoming", outcome=None, event="Old Sale 2020", event_date="2020-01-01")
+        _, log = self._run(None, [_store_lot(), stale])
+        self.assertIn("::warning::1 sale(s) past their date with no results", log)
+        self.assertIn("Old Sale 2020 (2020-01-01, ", log)
+        _, log = self._run(None, [_store_lot()])
+        self.assertNotIn("past their date", log)
+
     def test_skips_cleanly_without_credentials(self):
         with unittest.mock.patch.dict(os.environ, {"CANONICAL_SUPABASE_URL": ""}), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:

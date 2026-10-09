@@ -277,6 +277,28 @@ def build(store_rows, fx=None, mapper=to_csv_row):
     return out, skipped
 
 
+def awaiting_results(store_rows, today=None):
+    """Sales whose date has passed but whose lots aren't ended yet.
+
+    These lots are in neither CSV: too late for the pre-sale view, no outcome
+    for MAI. Returns [(event, event_date, days since, lot count)], oldest
+    first, so the run log can name each sale that still needs its results.
+    """
+    today = today or date.today().isoformat()
+    sales = {}
+    for r in store_rows:
+        if r.get("status") == "ended" or r.get("outcome") == "withdrawn":
+            continue
+        day = str(r.get("event_date") or "")[:10]
+        if not r.get("event") or not ISO_DAY.fullmatch(day) or day >= today:
+            continue
+        key = (r["event"], day)
+        sales[key] = sales.get(key, 0) + 1
+    t = date.fromisoformat(today)
+    return [(event, day, (t - date.fromisoformat(day)).days, n)
+            for (event, day), n in sorted(sales.items(), key=lambda kv: (kv[0][1], kv[0][0]))]
+
+
 def dropped_events(existing_rows, new_rows):
     """Hand-entered events in the current CSV that the export would remove.
 
@@ -330,6 +352,14 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
     upcoming_events = sorted({r["event"] for r in upcoming})
     print(f"Upcoming: {len(upcoming)} lots across {len(upcoming_events)} sales"
           + (": " + "; ".join(upcoming_events) if upcoming_events else ""))
+
+    stale = awaiting_results(store_rows)
+    if stale:
+        print(f"::warning::{len(stale)} sale(s) past their date with no results in the store "
+              "(in neither auction_lots.csv nor the upcoming panel): "
+              + "; ".join(f"{e} ({d}, {days} day{'s' if days != 1 else ''} ago, {n} lots)"
+                          for e, d, days, n in stale)
+              + ". Enter results through /store Live Entry if the feed hasn't brought them in.")
 
     # The pre-sale view has no hand-entered history to protect, so it is
     # written even when the guard below holds auction_lots.csv back.

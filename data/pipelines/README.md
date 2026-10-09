@@ -116,6 +116,9 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   consignments** panel; neither `auction_rating.py` nor `mai.py` reads it.
   It's written even when the hand-entered-events guard below holds
   `auction_lots.csv` back (`--upcoming-out` sets the path).
+- Warns in the run log, naming each sale, when a sale's date has passed but
+  its lots aren't ended in the store yet. Those lots are in neither CSV until
+  the results arrive (from the catalogue feed or Live Entry).
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
 - **Won't drop hand-entered events.** If a hand-entered event in the current
