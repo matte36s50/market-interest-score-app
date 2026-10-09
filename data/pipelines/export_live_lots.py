@@ -13,6 +13,12 @@ outcome, and counting it as unsold would drag every sell-through figure
 down. Withdrawn lots are dropped for the same reason. Prices are the
 fee-inclusive price_all_in where the store has one, else the hammer price.
 
+Lots of a sale that hasn't happened yet go to data/upcoming_lots.csv
+instead: catalogue estimates only, no outcome. mai.html reads it for the
+pre-sale view of apex consignments; nothing in the MAI score does. Once a
+sale's results are in the store, its lots move to auction_lots.csv on the
+next run.
+
 Currency: Live Entry converts to USD as it writes, but lots that reached the
 store another way (the game mirror's European sales) keep their own currency.
 Those are converted here, price and estimates alike, at the ECB reference
@@ -55,6 +61,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import signal_lib as lib
 
 LOTS_PATH = os.path.join(lib.DATA_DIR, "auction_lots.csv")
+UPCOMING_PATH = os.path.join(lib.DATA_DIR, "upcoming_lots.csv")
 VIEW = "auction_live_lots"
 PAGE = 1000
 
@@ -62,6 +69,11 @@ FIELDNAMES = [
     "event", "event_date", "auction_house", "lot_number", "manufacturer",
     "model", "year_of_car", "low_estimate_usd", "high_estimate_usd",
     "sold_price_usd", "sold", "notes",
+]
+
+UPCOMING_FIELDNAMES = [
+    "event", "event_date", "auction_house", "lot_number", "manufacturer",
+    "model", "year_of_car", "low_estimate_usd", "high_estimate_usd", "notes",
 ]
 
 SELECT = ",".join([
@@ -112,37 +124,26 @@ def fmt_num(value):
     return str(int(n)) if n.is_integer() else f"{n:.2f}"
 
 
-def to_csv_row(r, fx=None):
-    """Map one auction_live_lots row to the auction_lots.csv schema.
+def _lot_fields(r, fx):
+    """Fields shared by ended and upcoming lots, estimates in USD.
 
-    `fx(currency, day)` gives USD per unit for a non-USD lot (EcbRates in
-    production). Returns (row, None) or (None, reason) when the lot can't be
-    exported.
+    Returns (fields, usd, None) or (None, None, reason). `usd` converts a
+    store amount at the lot's rate.
     """
-    if r.get("status") != "ended":
-        return None, "not ended"
-    outcome = r.get("outcome")
-    if outcome == "withdrawn":
-        return None, "withdrawn"
     if not r.get("event"):
-        return None, "no event"
+        return None, None, "no event"
     if not r.get("event_date"):
-        return None, "no date"
+        return None, None, "no date"
 
     currency = (r.get("currency") or "USD").upper()
     rate = 1.0
     if currency != "USD":
         rate = fx(currency, r["event_date"]) if fx else None
         if rate is None:
-            return None, f"no USD rate for {currency}"
+            return None, None, f"no USD rate for {currency}"
 
     def usd(value):
         return None if value is None else round(float(value) * rate, 2)
-
-    sold = outcome == "sold"
-    price = r.get("price_all_in")
-    if price is None:
-        price = r.get("price")
 
     listing_id = r.get("source_listing_id") or ""
     m = LOT_ID.search(listing_id)
@@ -161,10 +162,53 @@ def to_csv_row(r, fx=None):
         "year_of_car": fmt_num(r.get("year")),
         "low_estimate_usd": fmt_num(usd(r.get("estimate_low"))),
         "high_estimate_usd": fmt_num(usd(r.get("estimate_high"))),
-        "sold_price_usd": fmt_num(usd(price)) if sold else "",
-        "sold": "true" if sold else "false",
         "notes": notes,
-    }, None
+    }, usd, None
+
+
+def to_csv_row(r, fx=None):
+    """Map one auction_live_lots row to the auction_lots.csv schema.
+
+    `fx(currency, day)` gives USD per unit for a non-USD lot (EcbRates in
+    production). Returns (row, None) or (None, reason) when the lot can't be
+    exported.
+    """
+    if r.get("status") != "ended":
+        return None, "not ended"
+    outcome = r.get("outcome")
+    if outcome == "withdrawn":
+        return None, "withdrawn"
+    row, usd, reason = _lot_fields(r, fx)
+    if row is None:
+        return None, reason
+
+    sold = outcome == "sold"
+    price = r.get("price_all_in")
+    if price is None:
+        price = r.get("price")
+    row["sold_price_usd"] = fmt_num(usd(price)) if sold else ""
+    row["sold"] = "true" if sold else "false"
+    return row, None
+
+
+def to_upcoming_row(r, fx=None, today=None):
+    """Map a lot of a sale still to come to the upcoming_lots.csv schema.
+
+    Estimates convert at the latest rate (EcbRates' rule for a future date).
+    A lot whose sale date has passed without results is left out: it belongs
+    in auction_lots.csv once its outcome is entered, not in the pre-sale view.
+    Returns (row, None) or (None, reason).
+    """
+    if r.get("status") == "ended":
+        return None, "ended"
+    if r.get("outcome") == "withdrawn":
+        return None, "withdrawn"
+    row, _, reason = _lot_fields(r, fx)
+    if row is None:
+        return None, reason
+    if row["event_date"] < (today or date.today().isoformat()):
+        return None, "sale date passed, no results yet"
+    return row, None
 
 
 def sort_key(row):
@@ -220,11 +264,11 @@ def fetch_live_lots(base_url, key, get_json=lib.http_get_json):
         offset += PAGE
 
 
-def build(store_rows, fx=None):
+def build(store_rows, fx=None, mapper=to_csv_row):
     """Store rows -> (csv rows, Counter-like dict of skip reasons)."""
     out, skipped = [], {}
     for r in store_rows:
-        row, reason = to_csv_row(r, fx)
+        row, reason = mapper(r, fx)
         if row is None:
             skipped[reason] = skipped.get(reason, 0) + 1
         else:
@@ -249,6 +293,7 @@ def dropped_events(existing_rows, new_rows):
 def main(argv=None, fetch=fetch_live_lots, fx=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", default=LOTS_PATH)
+    ap.add_argument("--upcoming-out", default=UPCOMING_PATH)
     ap.add_argument("--allow-drop-events", action="store_true",
                     help="write even if events in the current CSV are missing from the store")
     ap.add_argument("--dry-run", action="store_true", help="report only; don't write")
@@ -268,8 +313,10 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
             raise
         print(exc.code)  # stdout: where Actions reads ::error:: annotations
         return 1
+    fx = fx or EcbRates()
     try:
-        rows, skipped = build(store_rows, fx or EcbRates())
+        rows, skipped = build(store_rows, fx)
+        upcoming, _ = build(store_rows, fx, mapper=to_upcoming_row)
     except (urllib.error.URLError, OSError, ValueError, lib.RateLimited, lib.QuotaExhausted) as exc:
         print(f"::error::Could not fetch the exchange rates needed for non-USD lots: "
               f"{lib.redact(str(exc))}. Nothing written; the next run retries.")
@@ -280,6 +327,14 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
           f"across {len(events)} events ({converted} converted to USD)")
     for reason, n in sorted(skipped.items()):
         print(f"  skipped {n}: {reason}")
+    upcoming_events = sorted({r["event"] for r in upcoming})
+    print(f"Upcoming: {len(upcoming)} lots across {len(upcoming_events)} sales"
+          + (": " + "; ".join(upcoming_events) if upcoming_events else ""))
+
+    # The pre-sale view has no hand-entered history to protect, so it is
+    # written even when the guard below holds auction_lots.csv back.
+    if not args.dry_run:
+        lib.write_rows(args.upcoming_out, UPCOMING_FIELDNAMES, upcoming)
 
     existing = lib.read_rows(args.out)
     missing = dropped_events(existing, rows)

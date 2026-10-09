@@ -77,6 +77,32 @@
             </div>
         </section>
 
+        <!-- Upcoming -->
+        <section class="panel">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 class="m-0 text-lg font-semibold">Upcoming apex consignments</h2>
+                <p id="upcomingSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Make</th>
+                            <th class="text-right" title="Apex lots consigned across the upcoming sales">Apex lots</th>
+                            <th class="text-right" title="Share of all upcoming apex lots">Share</th>
+                            <th class="text-right" title="Sum of the low estimates of the make's upcoming apex lots">Low estimates</th>
+                            <th>Sales</th>
+                            <th class="pr-6 text-right" title="The make's current position in the MAI ranking">MAI rank</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcomingRows">
+                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading upcoming sales…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p id="upcomingEvents" class="m-0 px-6 py-4 text-[13px] text-mute border-t border-hair"></p>
+        </section>
+
         <!-- Explanation -->
         <section id="how-it-works" class="flex flex-col gap-6 scroll-mt-24 [&>*]:min-w-0">
             <div class="flex flex-col gap-1 max-w-3xl">
@@ -177,6 +203,8 @@
 
     <script>
     (function () {
+        var APEX_THRESHOLD = 500000;  // mai.py's apex rule: low estimate >= $500K
+
         function esc(value) {
             return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -229,6 +257,70 @@
                     '<td class="num">' + pct(d.avg_R) + '</td>' +
                     '<td class="num">' + (num(d.events_present) != null ? d.events_present : '—') + '</td>' +
                     '<td class="num pr-6">' + (num(d.total_apex_lots) != null ? d.total_apex_lots : '—') + '</td>' +
+                '</tr>';
+            }).join('');
+        });
+
+        function usd(v) {
+            if (!(v > 0)) return '<span class="text-faint">—</span>';
+            return v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + Math.round(v / 1e3) + 'K';
+        }
+
+        // Pre-sale lots never enter the score: with no results yet, R and Q
+        // don't exist, and counting the lots as unsold would sink every make
+        // consigned to the sale. This panel shows presence (P) only.
+        Promise.all([load('data/upcoming_lots.csv'), load('data/mai_scores.csv')]).then(function (res) {
+            var lots = (res[0] || []).filter(function (r) { return r.event && r.manufacturer; });
+            var body = document.getElementById('upcomingRows');
+            var subtitle = document.getElementById('upcomingSubtitle');
+            var eventsLine = document.getElementById('upcomingEvents');
+            var rank = {};
+            (res[1] || []).filter(function (r) { return r.manufacturer && num(r.MAI_score) != null; })
+                .sort(function (a, b) { return b.MAI_score - a.MAI_score; })
+                .forEach(function (r, i) { rank[r.manufacturer] = i + 1; });
+
+            var events = {}, makes = {}, apexTotal = 0;
+            lots.forEach(function (r) {
+                var e = events[r.event] || (events[r.event] = { name: r.event, date: r.event_date, house: r.auction_house, total: 0, apex: 0 });
+                e.total++;
+                if (!((num(r.low_estimate_usd) || 0) >= APEX_THRESHOLD)) return;
+                e.apex++;
+                apexTotal++;
+                var m = makes[r.manufacturer] || (makes[r.manufacturer] = { name: r.manufacturer, apex: 0, low: 0, events: {} });
+                m.apex++;
+                m.low += num(r.low_estimate_usd) || 0;
+                m.events[r.event] = true;
+            });
+
+            var eventList = Object.keys(events).map(function (k) { return events[k]; })
+                .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
+            eventsLine.innerHTML = eventList.length
+                ? 'Sales: ' + eventList.map(function (e) {
+                    return '<span class="text-ink font-medium">' + esc(e.name) + '</span> ' +
+                        '<span class="font-mono">' + esc(e.date) + '</span> · ' + e.apex + ' apex of ' + e.total + ' lots';
+                }).join('; ') + '. Lots move into the ranking the morning after results are entered.'
+                : 'Enter catalogue estimates for an upcoming sale in the store\'s Live Entry tab and it appears here the next morning.';
+
+            var data = Object.keys(makes).map(function (k) { return makes[k]; })
+                .sort(function (a, b) { return b.apex - a.apex || b.low - a.low; });
+            if (!data.length) {
+                subtitle.textContent = eventList.length
+                    ? 'No lots with a low estimate of $500K or more in the upcoming sales yet'
+                    : 'No upcoming sales with estimates yet';
+                body.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No upcoming apex lots.</td></tr>';
+                return;
+            }
+
+            subtitle.textContent = apexTotal + ' apex lots across ' + eventList.length + ' upcoming sale' +
+                (eventList.length === 1 ? '' : 's') + '. Presence only, from catalogue estimates; not part of the MAI score.';
+            body.innerHTML = data.map(function (m) {
+                return '<tr>' +
+                    '<td class="pl-6 font-semibold">' + esc(m.name) + '</td>' +
+                    '<td class="num">' + m.apex + '</td>' +
+                    '<td class="num">' + pct(m.apex / apexTotal) + '</td>' +
+                    '<td class="num">' + usd(m.low) + '</td>' +
+                    '<td class="text-mute text-[13px]">' + Object.keys(m.events).map(esc).join(', ') + '</td>' +
+                    '<td class="num pr-6">' + (rank[m.name] ? '#' + rank[m.name] : '<span class="text-faint">new</span>') + '</td>' +
                 '</tr>';
             }).join('');
         });

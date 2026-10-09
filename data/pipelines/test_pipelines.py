@@ -634,7 +634,9 @@ class LiveLotsExport(unittest.TestCase):
         self.assertEqual([r["lot_number"] for r in rows], ["9", "110"])
 
     def _run(self, existing, store_rows, *flags):
-        out = os.path.join(tempfile.mkdtemp(), "auction_lots.csv")
+        d = tempfile.mkdtemp()
+        out = os.path.join(d, "auction_lots.csv")
+        self.upcoming_out = os.path.join(d, "upcoming_lots.csv")
         if existing is not None:
             lib.write_rows(out, export_live_lots.FIELDNAMES, existing)
         env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co",
@@ -643,8 +645,8 @@ class LiveLotsExport(unittest.TestCase):
         os.environ.update(env)
         try:
             with unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
-                export_live_lots.main(["--out", out, *flags],
-                                      fetch=lambda url, key: store_rows)
+                export_live_lots.main(["--out", out, "--upcoming-out", self.upcoming_out, *flags],
+                                      fetch=lambda url, key: store_rows, fx=lambda c, d: 1.25)
         finally:
             for k, v in old.items():
                 if v is None:
@@ -680,6 +682,46 @@ class LiveLotsExport(unittest.TestCase):
         legacy = [{"event": "Old Name 2026", "manufacturer": "BMW"}]
         rows, _ = self._run(legacy, [_store_lot()], "--allow-drop-events")
         self.assertEqual([r["event"] for r in rows], ["RM Monterey 2026"])
+
+    def test_upcoming_lot_keeps_its_estimates_for_the_pre_sale_view(self):
+        row, why = export_live_lots.to_upcoming_row(
+            _store_lot(status="upcoming", outcome=None, price=None, price_all_in=None,
+                       event="RM London 2026", event_date="2026-11-01", currency="GBP",
+                       estimate_low=800000.0, estimate_high=1000000.0),
+            lambda c, d: 1.25, today="2026-10-09")
+        self.assertIsNone(why)
+        self.assertEqual(row["event"], "RM London 2026")
+        self.assertEqual(row["low_estimate_usd"], "1000000")
+        self.assertEqual(row["high_estimate_usd"], "1250000")
+        self.assertNotIn("sold", row)
+        self.assertTrue(row["notes"].endswith("; GBP at 1.2500 USD"))
+
+    def test_upcoming_view_leaves_out_what_is_not_still_to_come(self):
+        for over, reason in [
+            ({}, "ended"),
+            ({"status": "upcoming", "outcome": "withdrawn"}, "withdrawn"),
+            ({"status": "upcoming", "outcome": None}, "sale date passed, no results yet"),
+        ]:
+            row, why = export_live_lots.to_upcoming_row(_store_lot(**over), today="2026-10-09")
+            self.assertIsNone(row, over)
+            self.assertEqual(why, reason)
+
+    def test_upcoming_lots_go_to_their_own_csv_not_into_mai(self):
+        future = _store_lot(status="upcoming", outcome=None, price=None, price_all_in=None,
+                            event="Gooding Retromobile 2027", event_date="2099-02-04",
+                            source_listing_id="gooding-retro-2027-lot-7")
+        rows, log = self._run(None, [_store_lot(), future])
+        self.assertEqual([r["event"] for r in rows], ["RM Monterey 2026"])
+        upcoming = lib.read_rows(self.upcoming_out)
+        self.assertEqual([(r["event"], r["lot_number"]) for r in upcoming],
+                         [("Gooding Retromobile 2027", "7")])
+        self.assertIn("Upcoming: 1 lots across 1 sales: Gooding Retromobile 2027", log)
+
+    def test_upcoming_csv_is_written_even_when_the_guard_holds_lots_back(self):
+        legacy = [{"event": "Gooding Amelia Island 2026", "manufacturer": "BMW"}]
+        future = _store_lot(status="upcoming", outcome=None, event_date="2099-01-01")
+        self._run(legacy, [future])
+        self.assertEqual(len(lib.read_rows(self.upcoming_out)), 1)
 
     def test_skips_cleanly_without_credentials(self):
         with unittest.mock.patch.dict(os.environ, {"CANONICAL_SUPABASE_URL": ""}), \
