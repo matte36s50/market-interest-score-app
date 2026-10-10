@@ -1,22 +1,27 @@
 """
-The apex rule shared by auction_rating.py and mai.py.
+The apex (highlight) rule shared by auction_rating.py and mai.py.
 
-A lot is apex when its apex value is at least APEX_THRESHOLD. The apex value
-is the high estimate where the lot has one (the weekly digest's rule: "MAI
-tests high_estimate_usd >= 500,000"); otherwise the sold price if it sold;
-otherwise there is none and the lot is not apex.
+An apex lot is one of the highlights of its sale: the top HIGHLIGHT_PERCENT
+of the sale's lots, ranked by apex value. A fixed dollar line can't do this:
+$500K is an ordinary lot at Monterey and the top of the sale at Hershey. How
+much a sale's highlights are worth is carried instead by the sale's weight in
+auction_rating.py (the apex value it takes to be a highlight there).
 
-Most lots in auction_lots.csv carry no estimate, so without the sold-price
-fallback a sale like RM Monterey scores no apex lots at all. The fallback
-only reaches lots that sold, though: an unsold lot with no estimate can never
-be apex, so apex sell-through (R) is biased upward wherever lots come in
-through it. apex_basis says which rule admitted each lot so the outputs can
-report how many came each way.
+A sale needs at least MIN_LOTS lots to have highlights; below that, one car
+would be 100% of the top of the sale.
+
+The apex value is the high estimate where the lot has one; otherwise the sold
+price if it sold; otherwise there is none and the lot can't be ranked. An
+unsold lot with no estimate therefore never makes the top of its sale, so
+apex sell-through (R) reads high wherever lots are ranked by sold price.
+apex_basis says where each lot's value came from so the outputs can report
+how many highlights came each way.
 """
 
 import math
 
-APEX_THRESHOLD = 500_000
+HIGHLIGHT_PERCENT = 10
+MIN_LOTS = 20
 
 BASIS_ESTIMATE = "estimate"
 BASIS_SOLD_PRICE = "sold_price"
@@ -55,15 +60,30 @@ def apex_value(lot):
     return None
 
 
-def is_apex(lot):
-    value = apex_value(lot)
-    return value is not None and value >= APEX_THRESHOLD
+def highlight_count(total_lots):
+    """How many of a sale's lots are its highlights: the top 10%, rounded up.
+
+    0 for a sale under MIN_LOTS. Integer arithmetic, so 30 lots give 3, not
+    ceil(3.0000000000000004) = 4.
+    """
+    if total_lots < MIN_LOTS:
+        return 0
+    return -(-total_lots * HIGHLIGHT_PERCENT // 100)
 
 
-def add_apex_columns(df):
-    """Add apex_value, apex_basis and is_apex columns to a lots DataFrame."""
+def add_apex_columns(df, sale=("event", "event_date")):
+    """Add apex_basis, apex_value and is_apex columns to a lots DataFrame.
+
+    is_apex marks the top highlight_count(lots in the sale) lots of each sale
+    by apex value. Lots without a value are never highlights; ties at the
+    cutoff go to the lot listed first.
+    """
     records = df.to_dict("records")
     df["apex_basis"] = [apex_basis(r) for r in records]
     df["apex_value"] = [apex_value(r) for r in records]
-    df["is_apex"] = [is_apex(r) for r in records]
+    df["is_apex"] = False
+    for _, group in df.groupby(list(sale), sort=False):
+        n = highlight_count(len(group))
+        ranked = group["apex_value"].dropna().sort_values(ascending=False, kind="stable")
+        df.loc[ranked.index[:n], "is_apex"] = True
     return df

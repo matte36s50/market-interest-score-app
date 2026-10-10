@@ -828,38 +828,59 @@ class LiveLotsExport(unittest.TestCase):
 
 
 class ApexRule(unittest.TestCase):
-    """High estimate first (the weekly digest's rule), sold price only for a
-    lot that sold, and nothing for an unsold lot with no estimate."""
+    """A lot's apex value is its high estimate, else its sold price if it
+    sold; the highlights of a sale are its top 10% of lots by that value."""
 
-    def test_no_estimate_but_sold_at_600k_is_apex_by_sold_price(self):
+    def test_no_estimate_but_sold_uses_the_sold_price(self):
         lot = {"high_estimate_usd": "", "sold_price_usd": "600000", "sold": "true"}
         self.assertEqual(apex.apex_value(lot), 600000)
         self.assertEqual(apex.apex_basis(lot), "sold_price")
-        self.assertTrue(apex.is_apex(lot))
 
     def test_the_high_estimate_counts_not_the_low_one(self):
         lot = {"low_estimate_usd": "450000", "high_estimate_usd": "600000",
                "sold_price_usd": "", "sold": "false"}
+        self.assertEqual(apex.apex_value(lot), 600000)
         self.assertEqual(apex.apex_basis(lot), "estimate")
-        self.assertTrue(apex.is_apex(lot))
 
-    def test_no_estimate_and_not_sold_is_not_apex(self):
+    def test_no_estimate_and_not_sold_has_no_value(self):
         lot = {"high_estimate_usd": float("nan"), "sold_price_usd": float("nan"), "sold": False}
         self.assertIsNone(apex.apex_value(lot))
         self.assertEqual(apex.apex_basis(lot), "none")
-        self.assertFalse(apex.is_apex(lot))
 
     def test_an_estimate_wins_over_the_sold_price(self):
         lot = {"high_estimate_usd": "400000", "sold_price_usd": "700000", "sold": "true"}
-        self.assertEqual(apex.apex_basis(lot), "estimate")
-        self.assertFalse(apex.is_apex(lot))
+        self.assertEqual(apex.apex_value(lot), 400000)
+
+    def test_highlights_are_the_top_ten_percent_rounded_up_from_twenty_lots(self):
+        self.assertEqual([apex.highlight_count(n) for n in (4, 19, 20, 21, 30, 187)],
+                         [0, 0, 2, 3, 3, 19])
+
+    @unittest.skipIf(mai is None, "pandas not installed")
+    def test_top_lots_of_each_sale_are_marked(self):
+        import pandas as pd
+        lots = [{"event": "E", "event_date": "d", "high_estimate_usd": None,
+                 "sold_price_usd": 1000 * (i + 1), "sold": "true"} for i in range(20)]
+        lots[3] = {**lots[3], "sold_price_usd": None, "sold": "false"}   # unranked
+        lots[5] = {**lots[5], "high_estimate_usd": 20000}                # ties lot 19
+        df = apex.add_apex_columns(pd.DataFrame(lots))
+        self.assertEqual(list(df.index[df["is_apex"]]), [5, 19])          # tie: listed first
+        small = apex.add_apex_columns(pd.DataFrame(lots[:19]))
+        self.assertFalse(small["is_apex"].any())
+
+
+def _sale(event, date, top, filler_price=1000, n=20):
+    """CSV rows for one sale of n lots: `top` rows (strings without the sale
+    prefix) followed by cheap filler lots that never make its top 10%."""
+    rows = [f"{event},{date},RM,{i},{t}" for i, t in enumerate(top, 1)]
+    rows += [f"{event},{date},RM,{i},Filler,Car,1990,,,{filler_price},true,"
+             for i in range(len(top) + 1, n + 1)]
+    return rows
 
 
 @unittest.skipIf(mai is None, "pandas not installed")
 class MaiScores(unittest.TestCase):
-    """avg_Q is read as price realisation, so a sale where a manufacturer sold
-    nothing, or sold only lots without a high estimate, must not drag it down
-    or zero the score; that belongs to avg_R."""
+    """MAI is a make's share of all highlight value: its share of each sale's
+    top lots, weighted by what it takes to be a top lot there."""
 
     LOTS_HEADER = ("event,event_date,auction_house,lot_number,manufacturer,model,"
                    "year_of_car,low_estimate_usd,high_estimate_usd,sold_price_usd,sold,notes")
@@ -880,84 +901,106 @@ class MaiScores(unittest.TestCase):
         with open(paths["out"]) as f:
             return {r["manufacturer"]: r for r in csv.DictReader(f)}
 
-    def test_a_sale_with_nothing_sold_stays_out_of_avg_q(self):
-        rows = self._score([
-            "E1,2026-08-14,RM,1,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
-            "E1,2026-08-14,RM,2,BMW,507,1957,600000,800000,,false,",
-            "E2,2026-09-05,RM,1,Ferrari,275 GTB,1966,1000000,1500000,,false,",
-        ], [("E1", "2026-08-14", 100), ("E2", "2026-09-05", 50)])
-        ferrari, bmw = rows["Ferrari"], rows["BMW"]
-        self.assertAlmostEqual(float(ferrari["avg_Q"]), 1.1)   # was 0.55
-        self.assertAlmostEqual(float(ferrari["avg_R"]), 0.5)
-        # E1: P 0.5 × Q 1.1 × R 1 at rating 100; E2 adds rating 50 and nothing else.
-        self.assertAlmostEqual(float(ferrari["MAI_score"]), 100 * 0.5 * 1.1 / 150, places=6)
-        self.assertEqual(bmw["avg_Q"], "")
-        self.assertEqual(float(bmw["MAI_score"]), 0.0)   # R is 0: nothing sold
+    def test_score_is_rating_weighted_share_of_all_highlights(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Ferrari,250 GT,1960,,,3000000,true,",
+                                       "Porsche,550,1955,,,2000000,true,"])
+            + _sale("E2", "2026-09-05", ["Ferrari,275,1966,,,900000,true,",
+                                         "Ferrari,330,1966,,,800000,true,"]),
+            [("E1", "2026-08-14", 100), ("E2", "2026-09-05", 25)])
+        # Ferrari: half of E1 at 100 plus all of E2 at 25, over 125 of rating.
+        self.assertAlmostEqual(float(rows["Ferrari"]["MAI_score"]), (100 * 0.5 + 25 * 1.0) / 125, places=6)
+        self.assertAlmostEqual(float(rows["Porsche"]["MAI_score"]), 100 * 0.5 / 125, places=6)
+        self.assertEqual(rows["Ferrari"]["events_present"], "2")
+        self.assertNotIn("Filler", rows)
 
-    def test_no_estimate_but_sold_at_600k_is_apex_via_sold_price(self):
-        rows = self._score([
-            "E1,2026-08-14,RM,1,BMW,M1,1980,,,600000,true,",
-            "E1,2026-08-14,RM,2,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
-        ], [("E1", "2026-08-14", 100)])
-        self.assertIn("BMW", rows)
-        self.assertEqual(rows["BMW"]["apex_from_sold_price"], "1")
-        self.assertEqual(rows["BMW"]["apex_from_estimate"], "0")
-        self.assertEqual(rows["Ferrari"]["apex_from_estimate"], "1")
+    def test_topping_one_small_sale_does_not_beat_being_a_highlight_everywhere(self):
+        rows = self._score(
+            _sale("Big", "2026-08-14", ["Ferrari,250 GT,1960,,,6000000,true,",
+                                        "Ferrari,275,1966,,,5000000,true,"])
+            + _sale("Small", "2026-01-28", ["Mercedes-Benz,300 SL,1957,,,1300000,true,",
+                                            "Mercedes-Benz,190 SL,1957,,,1200000,true,"]),
+            [("Big", "2026-08-14", 100), ("Small", "2026-01-28", 20)])
+        self.assertGreater(float(rows["Ferrari"]["MAI_score"]),
+                           float(rows["Mercedes-Benz"]["MAI_score"]))
+        self.assertAlmostEqual(float(rows["Mercedes-Benz"]["MAI_score"]), 20 / 120, places=6)
 
-    def test_a_high_estimate_of_600k_with_a_low_of_450k_is_apex(self):
-        rows = self._score([
-            "E1,2026-08-14,RM,1,Porsche,550,1955,450000,600000,,false,",
-        ], [("E1", "2026-08-14", 100)])
-        self.assertEqual(rows["Porsche"]["total_apex_lots"], "1")
-        self.assertEqual(rows["Porsche"]["apex_from_estimate"], "1")
+    def test_sales_under_twenty_lots_have_no_highlights(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Ferrari,250 GT,1960,,,3000000,true,"])
+            + _sale("Tiny", "2026-01-28", ["Mercedes-Benz,300 SL,1957,,,9000000,true,"], n=4),
+            [("E1", "2026-08-14", 100), ("Tiny", "2026-01-28", 0)])
+        self.assertNotIn("Mercedes-Benz", rows)
 
-    def test_no_estimate_and_not_sold_is_not_apex(self):
-        rows = self._score([
-            "E1,2026-08-14,RM,1,BMW,507,1957,,,,false,",
-            "E1,2026-08-14,RM,2,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
-        ], [("E1", "2026-08-14", 100)])
+    def test_an_unsold_highlight_still_counts_for_presence(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Lola-Ford,T70,1967,1100000,1500000,,false,",
+                                       "Ferrari,250 GT,1960,,,3000000,true,"]),
+            [("E1", "2026-08-14", 100)])
+        lola = rows["Lola-Ford"]
+        self.assertAlmostEqual(float(lola["MAI_score"]), 0.5)   # R isn't multiplied in
+        self.assertEqual(float(lola["avg_R"]), 0.0)
+        self.assertEqual(lola["avg_Q"], "")
+        self.assertEqual(lola["apex_from_estimate"], "1")
+
+    def test_an_unsold_lot_without_an_estimate_is_never_a_highlight(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["BMW,507,1957,,,,false,",
+                                       "Ferrari,250 GT,1960,,,3000000,true,"]),
+            [("E1", "2026-08-14", 100)])
         self.assertNotIn("BMW", rows)
-        self.assertEqual(float(rows["Ferrari"]["avg_P"]), 1.0)
+        self.assertEqual(float(rows["Filler"]["avg_P"]), 0.5)   # next-best lot moves up
 
-    def test_unknown_q_is_left_out_of_the_score_not_zeroed(self):
-        # Sold with only a low estimate: apex by sold price, Q unknown.
-        rows = self._score([
-            "E1,2026-08-14,RM,1,Shelby,Cobra,1965,900000,,1100000,true,",
-        ], [("E1", "2026-08-14", 100)])
-        self.assertEqual(rows["Shelby"]["avg_Q"], "")
-        self.assertAlmostEqual(float(rows["Shelby"]["avg_R"]), 1.0)
-        self.assertAlmostEqual(float(rows["Shelby"]["MAI_score"]), 1.0)  # P 1 × R 1
-
-    def test_the_sold_price_never_stands_in_for_a_missing_high_estimate_in_q(self):
-        rows = self._score([
-            "E1,2026-08-14,RM,1,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
-            "E1,2026-08-14,RM,2,Ferrari,275 GTB,1966,,,2000000,true,",
-        ], [("E1", "2026-08-14", 100)])
+    def test_q_uses_only_real_high_estimates(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
+                                       "Ferrari,275 GTB,1966,,,2000000,true,"]),
+            [("E1", "2026-08-14", 100)])
         self.assertAlmostEqual(float(rows["Ferrari"]["avg_Q"]), 1.1)
+        self.assertEqual(rows["Ferrari"]["apex_from_sold_price"], "1")
+
+    def test_trailing_spaces_do_not_split_a_make(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Ferrari ,250 GT,1960,,,3000000,true,",
+                                       "Ferrari,275,1966,,,2000000,true,"]),
+            [("E1", "2026-08-14", 100)])
+        self.assertEqual(rows["Ferrari"]["total_apex_lots"], "2")
 
 
 @unittest.skipIf(auction_rating is None, "pandas not installed")
 class AuctionRatings(unittest.TestCase):
+    """The rating is what it takes to be a highlight at the sale, scaled so
+    the sale with the highest line rates 100."""
 
-    def test_apex_lots_are_counted_by_basis(self):
+    def _rate(self, lot_rows):
         d = tempfile.mkdtemp()
         lots, out = os.path.join(d, "lots.csv"), os.path.join(d, "out.csv")
         with open(lots, "w") as f:
-            f.write(MaiScores.LOTS_HEADER + "\n" + "\n".join([
-                "E1,2026-08-14,RM Sotheby's,1,BMW,M1,1980,,,600000,true,",
-                "E1,2026-08-14,RM Sotheby's,2,Porsche,550,1955,450000,600000,,false,",
-                "E1,2026-08-14,RM Sotheby's,3,BMW,507,1957,,,,false,",
-                "E1,2026-08-14,RM Sotheby's,4,Fiat,500,1960,,,20000,true,",
-            ]) + "\n")
+            f.write(MaiScores.LOTS_HEADER + "\n" + "\n".join(lot_rows) + "\n")
         with unittest.mock.patch.object(auction_rating, "LOTS_PATH", lots), \
              unittest.mock.patch.object(auction_rating, "OUTPUT_PATH", out), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()):
             auction_rating.main()
         with open(out) as f:
-            row = next(csv.DictReader(f))
-        self.assertEqual((row["apex_lots"], row["apex_from_estimate"], row["apex_from_sold_price"]),
+            return {r["event"]: r for r in csv.DictReader(f)}
+
+    def test_rating_is_the_highlight_line_relative_to_the_highest(self):
+        rows = self._rate(
+            _sale("Monterey", "2026-08-14", ["BMW,M1,1980,,,6000000,true,",
+                                             "Porsche,550,1955,450000,5000000,,false,"])
+            + _sale("Hershey", "2026-10-07", ["Cadillac,V16,1931,,,300000,true,",
+                                              "Buick,8,1931,,,200000,true,"], filler_price=50000)
+            + _sale("Tiny", "2026-01-28", ["Mercedes-Benz,300 SL,1957,,,9000000,true,"], n=4))
+        mon, her, tiny = rows["Monterey"], rows["Hershey"], rows["Tiny"]
+        self.assertEqual(float(mon["highlight_line_usd"]), 5000000)
+        self.assertEqual(float(mon["auction_rating"]), 100)
+        self.assertEqual(float(her["highlight_line_usd"]), 200000)
+        self.assertAlmostEqual(float(her["auction_rating"]), 4.0)
+        self.assertEqual((tiny["apex_lots"], float(tiny["auction_rating"])), ("0", 0.0))
+        self.assertEqual((mon["apex_lots"], mon["apex_from_estimate"], mon["apex_from_sold_price"]),
                          ("2", "1", "1"))
-        self.assertEqual(row["total_lots"], "4")
+        self.assertEqual(float(mon["apex_sell_through"]), 0.5)
+        self.assertEqual(mon["total_lots"], "20")
 
 
 if __name__ == "__main__":

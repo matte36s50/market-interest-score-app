@@ -38,12 +38,13 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
         <!-- Title -->
         <section class="flex flex-col gap-3 max-w-3xl">
-            <span class="text-[13px] text-mute">Apex auctions · lots with a low estimate of $500K or more</span>
+            <span class="text-[13px] text-mute">Apex auctions · the top 10% of lots at each sale</span>
             <h1 class="m-0 text-4xl font-semibold tracking-tight">Manufacturer Apex Index</h1>
             <p class="m-0 text-lg text-mute leading-relaxed">
                 How strongly each make shows up at the very top of the collector market, and how well those cars do
                 when they cross the block. MII tracks broad enthusiast interest on Bring a Trailer. MAI looks only at
-                the rarest, most expensive lots at the major live auctions.
+                the highlights of the major live auctions, and counts a highlight at Monterey for more than one at a
+                smaller sale.
             </p>
         </section>
 
@@ -63,9 +64,9 @@
                             <th class="pl-6 w-12">#</th>
                             <th>Make</th>
                             <th>MAI</th>
-                            <th class="text-right" title="Average share of apex lots at the events where the make appeared">P · Presence</th>
-                            <th class="text-right" title="Average sold price as a share of the high estimate">Q · Quality</th>
-                            <th class="text-right" title="Average apex sell-through">R · Sell-through</th>
+                            <th class="text-right" title="Average share of the top 10% of lots at the sales where the make appeared">P · Presence</th>
+                            <th class="text-right" title="Average sold price as a share of the high estimate (shown, not part of the score)">Q · Quality</th>
+                            <th class="text-right" title="Average sell-through of the make's top-10% lots (shown, not part of the score)">R · Sell-through</th>
                             <th class="text-right">Events</th>
                             <th class="pr-6 text-right">Apex lots</th>
                         </tr>
@@ -88,9 +89,9 @@
                     <thead>
                         <tr>
                             <th class="pl-6">Make</th>
-                            <th class="text-right" title="Apex lots consigned across the upcoming sales">Apex lots</th>
+                            <th class="text-right" title="Top-10% lots consigned across the upcoming sales, by high estimate">Apex lots</th>
                             <th class="text-right" title="Share of all upcoming apex lots">Share</th>
-                            <th class="text-right" title="Sum of the low estimates of the make's upcoming apex lots">Low estimates</th>
+                            <th class="text-right" title="Sum of the high estimates of the make's upcoming apex lots">High estimates</th>
                             <th>Sales</th>
                             <th class="pr-6 text-right" title="The make's current position in the MAI ranking">MAI rank</th>
                         </tr>
@@ -108,8 +109,9 @@
             <div class="flex flex-col gap-1 max-w-3xl">
                 <h2 class="m-0 text-2xl font-semibold tracking-tight">How the score works</h2>
                 <p class="m-0 text-mute leading-relaxed">
-                    For every auction event, MAI measures three things about each make's apex lots. It then multiplies them
-                    together, so a make only scores well if it is present, sells, and sells well.
+                    At every sale with at least 20 lots, the top 10% of lots by value are its highlights (apex lots). A
+                    lot's value is its high estimate, or its sold price where there is no estimate. MAI measures how much
+                    of that top end each make holds; Q and R are shown alongside it.
                 </p>
             </div>
 
@@ -118,24 +120,25 @@
                     <span class="font-mono text-3xl font-medium text-amber-700">P</span>
                     <h3 class="m-0 text-base font-semibold">Presence</h3>
                     <p class="m-0 text-sm text-mute leading-relaxed">
-                        The make's share of the apex lots at the event. If 40 apex lots cross the block and 10 of
-                        them are one make, that make's P is 25%.
+                        The make's share of a sale's top-10% lots. If a 200-lot sale has 20 highlights and 5 of
+                        them are one make, that make's P is 25%. This is what the score is built on.
                     </p>
                 </div>
                 <div class="panel p-6 flex flex-col gap-3">
                     <span class="font-mono text-3xl font-medium text-amber-700">Q</span>
                     <h3 class="m-0 text-base font-semibold">Quality</h3>
                     <p class="m-0 text-sm text-mute leading-relaxed">
-                        Sold price divided by the auction house's high estimate, averaged over the make's sold apex lots.
-                        1.0 means cars sold right at the top of their estimate.
+                        Sold price divided by the auction house's high estimate, averaged over the make's sold apex lots
+                        that had one. 1.0 means cars sold right at the top of their estimate. Shown, not scored: most lots
+                        carry no estimate.
                     </p>
                 </div>
                 <div class="panel p-6 flex flex-col gap-3">
                     <span class="font-mono text-3xl font-medium text-amber-700">R</span>
                     <h3 class="m-0 text-base font-semibold">Sell-through</h3>
                     <p class="m-0 text-sm text-mute leading-relaxed">
-                        The share of the make's apex lots that actually sold. It reflects how confident buyers are at
-                        that price level.
+                        The share of the make's apex lots that actually sold. Shown, not scored: an unsold lot with no
+                        estimate can't be ranked, so R reads high at sales without estimates.
                     </p>
                 </div>
             </div>
@@ -144,20 +147,20 @@
                 <div class="panel p-6 flex flex-col gap-3">
                     <h3 class="m-0 text-base font-semibold">Combining events</h3>
                     <p class="m-0 font-mono text-sm bg-canvas border border-hair rounded-md px-4 py-3 overflow-x-auto whitespace-nowrap">
-                        MAI = Σ(rating × P × Q × R) / Σ(rating)
+                        MAI = Σ(rating × P) / Σ(rating of every sale)
                     </p>
                     <p class="m-0 text-sm text-mute leading-relaxed">
-                        Each event's P × Q × R is weighted by that event's auction rating, so a strong showing at a
-                        deep, high-value sale counts for more than one at a thin sale. The rating is
-                        30% apex concentration, 40% apex sold volume and 30% apex sell-through, each scaled 0 to 100
-                        across all events.
+                        A sale's rating is what it took to be a top-10% lot there, scaled so the highest sale rates
+                        100. A highlight at a sale whose line is $5M counts 25 times one at a sale whose line is $200K.
+                        Summing over every sale makes MAI a make's share of all highlight value, so topping one small
+                        sale can't outrank being among the highlights everywhere.
                     </p>
                 </div>
                 <div class="panel p-6 flex flex-col gap-3">
                     <h3 class="m-0 text-base font-semibold">Reading the numbers</h3>
                     <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
-                        <li>Scores are small because they multiply three fractions. Compare makes against each other, not against a fixed scale.</li>
-                        <li>Q is left blank for a make with no priced sale. That case already shows up as a low R.</li>
+                        <li>Scores across all makes add up to 1. Compare makes against each other.</li>
+                        <li>Q is left blank for a make with no sold apex lot that had a high estimate.</li>
                         <li>A make with a handful of apex lots at one event can post a high R of 100%. Check the Events and Apex lots columns before reading much into it.</li>
                     </ul>
                 </div>
@@ -190,11 +193,12 @@
                             <th>Auction house</th>
                             <th class="text-right">Apex lots</th>
                             <th class="text-right">Total lots</th>
+                            <th class="text-right" title="The value of the sale's lowest-ranked top-10% lot">Top-10% line</th>
                             <th class="pr-6 text-right">Rating</th>
                         </tr>
                     </thead>
                     <tbody id="eventRows">
-                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading events…</td></tr>
+                        <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading events…</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -203,7 +207,8 @@
 
     <script>
     (function () {
-        var APEX_THRESHOLD = 500000;  // mai.py's apex rule: low estimate >= $500K
+        // apex.py's rule: the top 10% of a sale's lots (rounded up), from 20 lots.
+        function highlightCount(total) { return total < 20 ? 0 : Math.ceil(total * 10 / 100 - 1e-9); }
 
         function esc(value) {
             return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
@@ -279,17 +284,24 @@
                 .sort(function (a, b) { return b.MAI_score - a.MAI_score; })
                 .forEach(function (r, i) { rank[r.manufacturer] = i + 1; });
 
+            // Upcoming lots have estimates only, so they rank by high estimate.
             var events = {}, makes = {}, apexTotal = 0;
             lots.forEach(function (r) {
-                var e = events[r.event] || (events[r.event] = { name: r.event, date: r.event_date, house: r.auction_house, total: 0, apex: 0 });
+                var e = events[r.event] || (events[r.event] = { name: r.event, date: r.event_date, house: r.auction_house, total: 0, apex: 0, lots: [] });
                 e.total++;
-                if (!((num(r.low_estimate_usd) || 0) >= APEX_THRESHOLD)) return;
-                e.apex++;
-                apexTotal++;
-                var m = makes[r.manufacturer] || (makes[r.manufacturer] = { name: r.manufacturer, apex: 0, low: 0, events: {} });
-                m.apex++;
-                m.low += num(r.low_estimate_usd) || 0;
-                m.events[r.event] = true;
+                if (num(r.high_estimate_usd) > 0) e.lots.push(r);
+            });
+            Object.keys(events).forEach(function (k) {
+                var e = events[k];
+                e.lots.sort(function (a, b) { return b.high_estimate_usd - a.high_estimate_usd; })
+                    .slice(0, highlightCount(e.total)).forEach(function (r) {
+                        e.apex++;
+                        apexTotal++;
+                        var m = makes[r.manufacturer] || (makes[r.manufacturer] = { name: r.manufacturer, apex: 0, high: 0, events: {} });
+                        m.apex++;
+                        m.high += num(r.high_estimate_usd) || 0;
+                        m.events[r.event] = true;
+                    });
             });
 
             var eventList = Object.keys(events).map(function (k) { return events[k]; })
@@ -302,10 +314,10 @@
                 : 'Enter catalogue estimates for an upcoming sale in the store\'s Live Entry tab and it appears here the next morning.';
 
             var data = Object.keys(makes).map(function (k) { return makes[k]; })
-                .sort(function (a, b) { return b.apex - a.apex || b.low - a.low; });
+                .sort(function (a, b) { return b.apex - a.apex || b.high - a.high; });
             if (!data.length) {
                 subtitle.textContent = eventList.length
-                    ? 'No lots with a low estimate of $500K or more in the upcoming sales yet'
+                    ? 'No upcoming sale with 20 or more estimated lots yet'
                     : 'No upcoming sales with estimates yet';
                 body.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No upcoming apex lots.</td></tr>';
                 return;
@@ -318,7 +330,7 @@
                     '<td class="pl-6 font-semibold">' + esc(m.name) + '</td>' +
                     '<td class="num">' + m.apex + '</td>' +
                     '<td class="num">' + pct(m.apex / apexTotal) + '</td>' +
-                    '<td class="num">' + usd(m.low) + '</td>' +
+                    '<td class="num">' + usd(m.high) + '</td>' +
                     '<td class="text-mute text-[13px]">' + Object.keys(m.events).map(esc).join(', ') + '</td>' +
                     '<td class="num pr-6">' + (rank[m.name] ? '#' + rank[m.name] : '<span class="text-faint">new</span>') + '</td>' +
                 '</tr>';
@@ -333,13 +345,13 @@
 
             if (!data.length) {
                 subtitle.textContent = 'No events rated yet';
-                body.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-mute">No events rated yet.</td></tr>';
+                body.innerHTML = '<tr><td colspan="7" class="px-6 py-10 text-center text-mute">No events rated yet.</td></tr>';
                 return;
             }
 
             var withApex = data.filter(function (d) { return (num(d.apex_lots) || 0) > 0; }).length;
-            subtitle.textContent = data.length + ' events tracked. ' + withApex + ' of them had apex lots and count toward MAI; ' +
-                'events without apex lots (often lots missing estimates) carry no weight.';
+            subtitle.textContent = data.length + ' events tracked. ' + withApex + ' of them have 20 or more lots and count toward MAI; ' +
+                'smaller sales carry no weight.';
 
             body.innerHTML = data.map(function (d) {
                 var apex = num(d.apex_lots) || 0;
@@ -350,6 +362,7 @@
                     '<td class="' + (apex === 0 ? 'text-faint' : 'text-mute') + '">' + esc(d.auction_house) + '</td>' +
                     '<td class="num' + muted + '">' + apex + '</td>' +
                     '<td class="num' + muted + '">' + (num(d.total_lots) != null ? d.total_lots : '—') + '</td>' +
+                    '<td class="num' + muted + '">' + usd(num(d.highlight_line_usd)) + '</td>' +
                     '<td class="num pr-6' + muted + '">' + (num(d.auction_rating) != null ? Number(d.auction_rating).toFixed(1) : '—') + '</td>' +
                 '</tr>';
             }).join('');

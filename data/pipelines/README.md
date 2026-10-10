@@ -423,19 +423,20 @@ time, and per-sub-signal coverage — matching the checks in
 
 ## auction_rating.py
 
-Computes an Auction Rating for each event in `data/auction_lots.csv`.
+Computes an Auction Rating for each event in `data/auction_lots.csv`: how much
+a highlight at that sale is worth.
 
 ### What it does
-- Identifies "apex" lots (`apex.py`, shared with `mai.py`): apex value
-  `>= $500,000`, where the apex value is `high_estimate_usd` if the lot has one,
-  else `sold_price_usd` if it sold, else none (not apex). The sold-price
-  fallback only reaches sold lots, so sell-through is biased upward at sales
-  that lean on it; `apex_from_estimate` / `apex_from_sold_price` show how many.
-- Computes three sub-scores per event, normalised 0–100 across all events:
-  - **Apex Concentration** — apex lot count / total lot count
-  - **Apex Volume** — total sold price of sold apex lots
-  - **Apex Sell-Through** — sold apex lots / apex lots
-- Composite rating: `0.3×Concentration + 0.4×Volume + 0.3×Sell-Through`
+- Identifies apex lots (`apex.py`, shared with `mai.py`): the **top 10% of each
+  sale's lots** (rounded up) by apex value. A sale needs **20 or more lots** to
+  have any. The apex value is `high_estimate_usd` if the lot has one, else
+  `sold_price_usd` if it sold; an unsold lot with no estimate can't be ranked,
+  so sell-through reads high at sales that lean on sold prices.
+- `highlight_line_usd` — the apex value of the sale's lowest-ranked highlight:
+  what it took to be a top-10% lot there.
+- `auction_rating = 100 × highlight_line_usd / the highest line of any sale`.
+  Linear on purpose: a highlight at a $5M-line sale counts 25× one at a
+  $200K-line sale. Total sales would overrate high-volume, low-price sales.
 
 ### How to run
 ```bash
@@ -450,34 +451,38 @@ python data/pipelines/auction_rating.py
 | event | Event name |
 | event_date | Date of the event |
 | auction_house | Auction house |
-| apex_lots | Count of apex lots |
+| apex_lots | Highlights (top 10% of lots; 0 under 20 lots) |
 | total_lots | Total lots |
-| apex_concentration | Normalised concentration (0–100) |
-| apex_volume | Normalised apex sold volume (0–100) |
-| apex_sell_through | Normalised sell-through rate (0–100) |
-| auction_rating | Composite score (0–100) |
-| apex_from_estimate | Apex lots admitted by high estimate |
-| apex_from_sold_price | Apex lots admitted by sold price (no estimate) |
+| highlight_line_usd | Apex value of the lowest-ranked highlight |
+| auction_rating | 100 × line / highest line (0 under 20 lots) |
+| apex_sell_through | Share of highlights that sold (not in the rating) |
+| total_sold_usd | Sum of sold prices (not in the rating) |
+| median_sold_usd | Median sold price (not in the rating) |
+| apex_from_estimate | Highlights ranked by high estimate |
+| apex_from_sold_price | Highlights ranked by sold price (no estimate) |
 
 ---
 
 ## mai.py
 
-Computes the **Manufacturer Apex Index (MAI)** — a ranked score for each
-manufacturer's presence and performance at apex auction events. This
-operationalises the **D (network density)** term of the Networked Utility Dividend.
+Computes the **Manufacturer Apex Index (MAI)** — how much of the top end of the
+live-auction market each make holds. This operationalises the **D (network
+density)** term of the Networked Utility Dividend.
 
 ### What it does
-For each manufacturer × event combination (apex lots only):
-- **P (Presence)** — manufacturer's share of apex lots at that event
-- **Q (Quality)** — mean(sold price / high estimate) for sold apex lots that had a
-  published high estimate; the sold price never stands in for a missing one.
-  Where no lot has one, Q is unknown and left out of that event's term (P × R)
-- **R (Performance)** — sell-through rate for manufacturer's apex lots
+For each manufacturer × event (apex lots as in `auction_rating.py`):
+- **P (Presence)** — manufacturer's share of the sale's highlights
+- **R (Performance)** — sell-through of its highlights (reported, not scored)
+- **Q (Quality)** — mean(sold price / high estimate) over its sold highlights
+  that had a published high estimate (reported, not scored; blank if none)
 
-`MAI = Σ(auction_rating × P × Q × R) / Σ(auction_rating)` across all events,
-with Q dropped from the term where it is unknown. Apex lots follow the same
-rule as `auction_rating.py`.
+`MAI = Σ(auction_rating × P) / Σ(auction_rating of every sale with highlights)`
+
+The denominator covers every sale, so MAI is a make's share of all highlight
+value (scores sum to 1) and topping one small sale can't outrank being among
+the highlights everywhere. R and Q stay out of the score: most highlights have
+no estimate (Q unknown), and unsold lots without one can't be ranked (R high).
+Manufacturer names are whitespace-trimmed; spelling variants are not merged.
 
 ### How to run
 ```bash
@@ -491,13 +496,13 @@ python data/pipelines/mai.py
 | Column | Description |
 |--------|-------------|
 | manufacturer | Manufacturer name |
-| events_present | Number of events with apex lots |
-| total_apex_lots | Total apex lots across all events |
-| avg_P | Unweighted average Presence across events |
-| avg_Q | Unweighted average Quality across the events where Q is known (blank if none); a sale where the manufacturer sold nothing shows in avg_R, not here |
-| avg_R | Unweighted average Performance across events |
-| MAI_score | Rating-weighted P×Q×R (the headline score) |
-| apex_from_estimate | Apex lots admitted by high estimate |
-| apex_from_sold_price | Apex lots admitted by sold price (no estimate) |
+| events_present | Number of sales where it had a highlight |
+| total_apex_lots | Total highlights across all sales |
+| avg_P | Unweighted average Presence across those sales |
+| avg_Q | Unweighted average Quality where Q is known (blank if none) |
+| avg_R | Unweighted average sell-through of its highlights |
+| MAI_score | Rating-weighted share of all highlights (the headline score) |
+| apex_from_estimate | Highlights ranked by high estimate |
+| apex_from_sold_price | Highlights ranked by sold price (no estimate) |
 
 Rows are sorted descending by `MAI_score`.

@@ -2,22 +2,28 @@
 """
 Manufacturer Apex Index (MAI) — D-term proxy for the Networked Utility Dividend.
 
-Apex lots follow apex.py: high estimate >= $500K, else sold price >= $500K
-for a lot that sold. The sold-price fallback only reaches sold lots, so R is
-biased upward for makes whose apex lots came in that way; apex_from_estimate
-and apex_from_sold_price say how many did.
+Apex lots are the highlights of each sale: its top 10% of lots by apex value
+(see apex.py). Sales under 20 lots have none.
 
 For each manufacturer × event:
-  P (Presence)   = manufacturer's share of apex lots at that event
-  Q (Quality)    = mean(sold_price / high_estimate) for sold apex lots
-                   with a real high estimate. Lots without one are skipped;
-                   the sold price never stands in for the estimate. Where no
-                   lot has one, Q is unknown and left out of the event's term
-                   (P × R instead of P × Q × R) and out of avg_Q.
-  R (Performance)= apex lot sell-through rate
+  P (Presence)   = manufacturer's share of the sale's highlights
+  R (Performance)= sell-through of the manufacturer's highlights
+  Q (Quality)    = mean(sold_price / high_estimate) over its sold highlights
+                   with a real high estimate (blank where none have one)
 
-MAI per manufacturer = Σ(auction_rating_i × term_i) / Σ(auction_rating_i)
-                       summed over all events where the manufacturer appears in apex lots.
+MAI per manufacturer = Σ(auction_rating_i × P_i) / Σ(auction_rating_j)
+
+The numerator runs over the sales where the make had a highlight; the
+denominator over every sale with highlights, so MAI is the make's share of
+all highlight value, and a make that topped one small sale can't outrank one
+that is among the highlights everywhere. auction_rating is what it takes to
+be a highlight at that sale (auction_rating.py), so a highlight at Monterey
+counts for more than one at Hershey.
+
+R and Q are reported, not multiplied in. Most highlights have no estimate,
+so Q is unknown for most makes; and an unsold lot with no estimate can't be
+ranked, so R reads high wherever highlights are ranked by sold price
+(apex_from_estimate / apex_from_sold_price say how many were).
 
 Outputs mai_scores.csv sorted descending by MAI_score.
 """
@@ -53,6 +59,7 @@ def main():
     lots["sold"] = lots["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
     lots["sold_price_usd"] = pd.to_numeric(lots["sold_price_usd"], errors="coerce")
     lots["high_estimate_usd"] = pd.to_numeric(lots["high_estimate_usd"], errors="coerce")
+    lots["manufacturer"] = lots["manufacturer"].astype(str).str.strip()
     add_apex_columns(lots)
 
     apex = lots[lots["is_apex"]].copy()
@@ -66,8 +73,10 @@ def main():
     ratings_lookup = ratings.set_index(["event", "event_date"])["auction_rating"].to_dict()
 
     records = []
+    total_rating = 0.0
     for (event, event_date), event_apex in apex.groupby(["event", "event_date"]):
         rating = ratings_lookup.get((event, event_date), 0.0)
+        total_rating += rating
         total_apex_at_event = len(event_apex)
 
         for manufacturer, mfr_apex in event_apex.groupby("manufacturer"):
@@ -76,16 +85,13 @@ def main():
             P = len(mfr_apex) / total_apex_at_event if total_apex_at_event > 0 else 0.0
             R = len(mfr_sold) / len(mfr_apex) if len(mfr_apex) > 0 else 0.0
 
-            # Q is only known where the manufacturer sold an apex lot that had
-            # a published high estimate. Elsewhere it is left out: the term is
-            # P×R rather than zeroing the event, and avg_Q skips it, so "no
-            # estimate" never reads as poor price realisation.
+            # Q is only known where the manufacturer sold a highlight that had
+            # a published high estimate; the sold price never stands in.
             priced = mfr_sold[mfr_sold["high_estimate_usd"] > 0]
             q_known = (
                 (priced["sold_price_usd"] / priced["high_estimate_usd"]).mean()
                 if len(priced) else float("nan")
             )
-            term = P * R * (q_known if pd.notna(q_known) else 1.0)
 
             records.append({
                 "manufacturer": manufacturer,
@@ -98,7 +104,6 @@ def main():
                 "Q_known": q_known,
                 "R": R,
                 "auction_rating": rating,
-                "term": term,
             })
 
     if not records:
@@ -110,9 +115,8 @@ def main():
     # Aggregate per manufacturer
     agg_rows = []
     for manufacturer, grp in detail.groupby("manufacturer"):
-        total_rating = grp["auction_rating"].sum()
         mai_score = (
-            (grp["auction_rating"] * grp["term"]).sum() / total_rating
+            (grp["auction_rating"] * grp["P"]).sum() / total_rating
             if total_rating > 0 else 0.0
         )
         agg_rows.append({
@@ -135,11 +139,10 @@ def main():
     )
     out.to_csv(OUTPUT_PATH, index=False)
     print(f"Wrote {len(out)} manufacturer scores to {os.path.abspath(OUTPUT_PATH)}")
-    print(f"Apex lots: {len(apex)} ({int(out['apex_from_estimate'].sum())} by high estimate, "
-          f"{int(out['apex_from_sold_price'].sum())} by sold price; R is biased upward "
-          "where the sold-price fallback applies). "
-          f"Q unknown, left out of the term: {int(detail['Q_known'].isna().sum())} "
-          f"of {len(detail)} manufacturer-event cells")
+    print(f"Apex lots: {len(apex)} across {detail[['event', 'event_date']].drop_duplicates().shape[0]} "
+          f"sales ({int(out['apex_from_estimate'].sum())} ranked by high estimate, "
+          f"{int(out['apex_from_sold_price'].sum())} by sold price; R reads high where sold "
+          "prices are used)")
 
 
 if __name__ == "__main__":
