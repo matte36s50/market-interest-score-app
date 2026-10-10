@@ -377,17 +377,19 @@ Lots of a sale **still to come** (catalogue estimates entered, no results
 yet) are written to `data/upcoming_lots.csv` on the same run, with estimates
 converted at the latest ECB rate. `mai.html` shows them in **Upcoming apex
 consignments**: each make's apex lot count and share across the upcoming
-sales, the sum of their low estimates and the make's current MAI rank. They
-are kept out of the MAI score: with no results there is no sell-through (R)
-or price realisation (Q), and counting the lots as unsold would sink every
-make consigned to the sale. Once results are entered, the lots move into
+sales (the top 10% of each sale of 20+ lots by high estimate), the sum of
+their high estimates and the make's current MAI rank. They are kept out of
+the MAI score: with no results there is no sell-through, and counting the
+lots as unsold would sink every make consigned to the sale. Once results are entered, the lots move into
 `auction_lots.csv` and the ranking the next morning. A lot whose sale date
 has passed without results appears in neither file until it's updated.
 
-MAI's apex rule reads the **low estimate** (≥ $500K). Results pages alone
-don't carry estimates, which is why lots entered from results only never
-register as apex. Mecum and Barrett-Jackson generally don't publish
-estimates, so their lots can't be apex under the current rule.
+MAI's apex lots are the **top 10% of each sale** (20 lots or more), ranked
+by high estimate, or by sold price for a lot with no estimate. Lots entered
+from results pages only (and Mecum and Barrett-Jackson, which generally don't
+publish estimates) still rank once sold; an unsold lot with no estimate can't
+be ranked. Each sale is weighted by what it took to be a top-10% lot there.
+See `data/pipelines/README.md`.
 
 `admin.html`, which used to commit lots straight to the CSV with a GitHub
 token, now just points to the store. It removes the token and API key the old
