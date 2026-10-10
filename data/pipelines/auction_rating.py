@@ -3,17 +3,29 @@
 Auction Rating Pipeline
 Reads auction_lots.csv and outputs a per-event Auction Rating score.
 
-Apex lot = low_estimate_usd >= 500000
+Apex lot: see apex.py (high estimate >= $500K, else sold price >= $500K
+for a lot that sold). apex_from_estimate / apex_from_sold_price count the
+apex lots admitted each way. The sold-price fallback can only admit lots that
+sold, so apex_sell_through is biased upward at sales that lean on it.
 Sub-scores are min-max normalized 0-100 across all events in the dataset.
 Rating = 0.3*Concentration + 0.4*Volume + 0.3*Sell-Through
 """
 
 import os
+import sys
 import pandas as pd
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns
 
 LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_ratings.csv")
-APEX_THRESHOLD = 500_000
+OUTPUT_COLS = [
+    "event", "event_date", "auction_house", "apex_lots", "total_lots",
+    "apex_concentration", "apex_volume", "apex_sell_through", "auction_rating",
+    "apex_from_estimate", "apex_from_sold_price",
+]
 
 
 def minmax(series: pd.Series) -> pd.Series:
@@ -28,18 +40,17 @@ def main():
 
     if df.empty:
         print("auction_lots.csv is empty — writing empty auction_ratings.csv")
-        pd.DataFrame(columns=[
-            "event", "event_date", "auction_house", "apex_lots", "total_lots",
-            "apex_concentration", "apex_volume", "apex_sell_through", "auction_rating",
-        ]).to_csv(OUTPUT_PATH, index=False)
+        pd.DataFrame(columns=OUTPUT_COLS).to_csv(OUTPUT_PATH, index=False)
         return
 
     # Normalise the sold column to boolean
     df["sold"] = df["sold"].astype(str).str.strip().str.lower().isin(["true", "1", "yes"])
-    df["low_estimate_usd"] = pd.to_numeric(df["low_estimate_usd"], errors="coerce").fillna(0)
-    df["sold_price_usd"] = pd.to_numeric(df["sold_price_usd"], errors="coerce").fillna(0)
+    df["high_estimate_usd"] = pd.to_numeric(df["high_estimate_usd"], errors="coerce")
+    df["sold_price_usd"] = pd.to_numeric(df["sold_price_usd"], errors="coerce")
+    add_apex_columns(df)
+    df["sold_price_usd"] = df["sold_price_usd"].fillna(0)
 
-    apex = df[df["low_estimate_usd"] >= APEX_THRESHOLD].copy()
+    apex = df[df["is_apex"]].copy()
 
     events = df.groupby(["event", "event_date", "auction_house"])
 
@@ -63,6 +74,8 @@ def main():
             "event_date": event_date,
             "auction_house": auction_house,
             "apex_lots": apex_lot_count,
+            "apex_from_estimate": int((apex_group["apex_basis"] == BASIS_ESTIMATE).sum()),
+            "apex_from_sold_price": int((apex_group["apex_basis"] == BASIS_SOLD_PRICE).sum()),
             "total_lots": total_lots,
             "_concentration_raw": concentration_raw,
             "_volume_raw": volume_raw,
@@ -81,13 +94,13 @@ def main():
         + 0.3 * result["apex_sell_through"]
     )
 
-    out = result[[
-        "event", "event_date", "auction_house", "apex_lots", "total_lots",
-        "apex_concentration", "apex_volume", "apex_sell_through", "auction_rating",
-    ]]
+    out = result[OUTPUT_COLS]
 
     out.to_csv(OUTPUT_PATH, index=False, float_format="%.4f")
     print(f"Wrote {len(out)} event ratings to {os.path.abspath(OUTPUT_PATH)}")
+    print(f"Apex lots: {len(apex)} ({int(out['apex_from_estimate'].sum())} by high estimate, "
+          f"{int(out['apex_from_sold_price'].sum())} by sold price; sell-through is biased "
+          "upward where the sold-price fallback applies)")
 
 
 if __name__ == "__main__":
