@@ -34,6 +34,16 @@ Environment
 
 With either unset the run is skipped and the CSV left as it is.
 
+Auction houses
+--------------
+The store's auction_house field is free text: "RM Sothebys" and
+"RM Sotheby's" both occur, and some lots carry the sale name there instead
+("Gooding Amelia Island 2026"). Each is resolved to one of HOUSES, the codes
+the weekly digest uses; the display name goes to auction_house and the code
+to auction_house_code. A value that resolves to no house fails the run and
+names it, so a new house is added here rather than passed through.
+EVENT_NAMES corrects misspelt sale names the same way.
+
 Safety
 ------
 Some lots in the CSV were entered by hand before the store existed. If a
@@ -66,13 +76,13 @@ VIEW = "auction_live_lots"
 PAGE = 1000
 
 FIELDNAMES = [
-    "event", "event_date", "auction_house", "lot_number", "manufacturer",
+    "event", "event_date", "auction_house", "auction_house_code", "lot_number", "manufacturer",
     "model", "year_of_car", "low_estimate_usd", "high_estimate_usd",
     "sold_price_usd", "sold", "notes",
 ]
 
 UPCOMING_FIELDNAMES = [
-    "event", "event_date", "auction_house", "lot_number", "manufacturer",
+    "event", "event_date", "auction_house", "auction_house_code", "lot_number", "manufacturer",
     "model", "year_of_car", "low_estimate_usd", "high_estimate_usd", "notes",
 ]
 
@@ -85,6 +95,80 @@ SELECT = ",".join([
 LOT_ID = re.compile(r"-lot-([^/]+)$")
 FX_URL = "https://api.frankfurter.dev/v1/{day}?base={cur}&symbols=USD"
 ISO_DAY = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+# The weekly digest's house codes -> display name written to auction_house.
+HOUSES = {
+    "RMS": "RM Sotheby's",
+    "GCH": "Gooding Christie's",
+    "BON": "Bonhams",
+    "BCO": "Bonhams|Cars Online",
+    "BAA": "Broad Arrow",
+    "MEC": "Mecum",
+    "BJA": "Barrett-Jackson",
+    "ART": "Artcurial",
+    "DOR": "Dorotheum",
+}
+
+# Spellings of a house name seen in the store, normalised by _house_key.
+HOUSE_ALIASES = {
+    **{name: code for code, name in HOUSES.items()},
+    "RM Sothebys": "RMS",
+    "Gooding": "GCH",
+    "Gooding & Company": "GCH",
+    "Broad Arrow Auctions": "BAA",
+    "Bonhams Cars Online": "BCO",
+}
+
+# A sale name in the house field: its leading words name the house. Longest
+# prefix first, so "Bonhams|Cars Online ..." isn't read as Bonhams.
+HOUSE_PREFIXES = [
+    ("Bonhams Cars Online", "BCO"),
+    ("Broad Arrow", "BAA"),
+    ("Gooding", "GCH"),
+    ("Bonhams", "BON"),
+    ("Air/Water", "BAA"),
+    ("RM", "RMS"),
+]
+
+# Sale names misspelt in the store.
+EVENT_NAMES = {
+    "Bonhams Leguna Seca": "Bonhams Laguna Seca",
+    "THE TEGERNSEE AUCTION": "The Tegernsee Auction",
+}
+
+
+def _house_key(value):
+    """Case, apostrophes, '|' and spacing don't distinguish houses."""
+    value = re.sub(r"[\u2019'`]", "", str(value or "")).replace("|", " ")
+    return " ".join(value.lower().split())
+
+
+_ALIAS_KEYS = {_house_key(k): v for k, v in HOUSE_ALIASES.items()}
+_PREFIX_KEYS = [(_house_key(p), c) for p, c in HOUSE_PREFIXES]
+
+
+def house_code(value):
+    """HOUSES code for a store auction_house value (a house or sale name), or None."""
+    key = _house_key(value)
+    if not key:
+        return None
+    if key in _ALIAS_KEYS:
+        return _ALIAS_KEYS[key]
+    for prefix, code in _PREFIX_KEYS:
+        if key == prefix or key.startswith(prefix + " "):
+            return code
+    return None
+
+
+class UnknownAuctionHouse(Exception):
+    """Store auction_house values that resolve to no entry in HOUSES."""
+
+    def __init__(self, values):
+        self.values = sorted(values)
+        super().__init__(
+            "Unknown auction house value(s) in the store: "
+            + "; ".join(repr(v) for v in self.values)
+            + ". Add them to HOUSE_ALIASES or HOUSE_PREFIXES in export_live_lots.py.")
 
 
 class EcbRates:
@@ -152,10 +236,15 @@ def _lot_fields(r, fx):
     if currency != "USD":
         notes += f"; {currency} at {rate:.4f} USD"
 
+    code = house_code(r.get("auction_house"))
+    if code is None:
+        raise UnknownAuctionHouse([r.get("auction_house") or ""])
+
     return {
-        "event": r["event"],
+        "event": EVENT_NAMES.get(r["event"], r["event"]),
         "event_date": str(r["event_date"])[:10],
-        "auction_house": r.get("auction_house") or "",
+        "auction_house": HOUSES[code],
+        "auction_house_code": code,
         "lot_number": m.group(1) if m else "",
         "manufacturer": r.get("make") or "",
         "model": model,
@@ -265,14 +354,23 @@ def fetch_live_lots(base_url, key, get_json=lib.http_get_json):
 
 
 def build(store_rows, fx=None, mapper=to_csv_row):
-    """Store rows -> (csv rows, Counter-like dict of skip reasons)."""
-    out, skipped = [], {}
+    """Store rows -> (csv rows, Counter-like dict of skip reasons).
+
+    Raises UnknownAuctionHouse naming every unresolvable house value.
+    """
+    out, skipped, unknown = [], {}, set()
     for r in store_rows:
-        row, reason = mapper(r, fx)
+        try:
+            row, reason = mapper(r, fx)
+        except UnknownAuctionHouse as exc:
+            unknown.update(exc.values)
+            continue
         if row is None:
             skipped[reason] = skipped.get(reason, 0) + 1
         else:
             out.append(row)
+    if unknown:
+        raise UnknownAuctionHouse(unknown)
     out.sort(key=sort_key)
     return out, skipped
 
@@ -317,6 +415,9 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
     try:
         rows, skipped = build(store_rows, fx)
         upcoming, _ = build(store_rows, fx, mapper=to_upcoming_row)
+    except UnknownAuctionHouse as exc:
+        print(f"::error::{exc} Nothing written.")
+        return 1
     except (urllib.error.URLError, OSError, ValueError, lib.RateLimited, lib.QuotaExhausted) as exc:
         print(f"::error::Could not fetch the exchange rates needed for non-USD lots: "
               f"{lib.redact(str(exc))}. Nothing written; the next run retries.")

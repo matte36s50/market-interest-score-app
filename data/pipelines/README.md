@@ -116,6 +116,13 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   consignments** panel; neither `auction_rating.py` nor `mai.py` reads it.
   It's written even when the hand-entered-events guard below holds
   `auction_lots.csv` back (`--upcoming-out` sets the path).
+- Standardises the auction house. The store's free-text value (a house name
+  in any spelling, or a sale name such as "Gooding Amelia Island 2026") is
+  resolved to one of `HOUSES`, the weekly digest's codes (RMS, GCH, BON, BCO,
+  BAA, MEC, BJA, ART, DOR): the display name goes to `auction_house`, the code
+  to `auction_house_code`. A value that resolves to no house fails the run,
+  naming every such value, and nothing is written. `EVENT_NAMES` corrects
+  misspelt sale names ("Bonhams Leguna Seca" → "Bonhams Laguna Seca").
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
 - **Won't drop hand-entered events.** If a hand-entered event in the current
@@ -419,7 +426,11 @@ time, and per-sub-signal coverage — matching the checks in
 Computes an Auction Rating for each event in `data/auction_lots.csv`.
 
 ### What it does
-- Identifies "apex" lots: `low_estimate_usd >= $500,000` (the rule in the code)
+- Identifies "apex" lots (`apex.py`, shared with `mai.py`): apex value
+  `>= $500,000`, where the apex value is `high_estimate_usd` if the lot has one,
+  else `sold_price_usd` if it sold, else none (not apex). The sold-price
+  fallback only reaches sold lots, so sell-through is biased upward at sales
+  that lean on it; `apex_from_estimate` / `apex_from_sold_price` show how many.
 - Computes three sub-scores per event, normalised 0–100 across all events:
   - **Apex Concentration** — apex lot count / total lot count
   - **Apex Volume** — total sold price of sold apex lots
@@ -445,6 +456,8 @@ python data/pipelines/auction_rating.py
 | apex_volume | Normalised apex sold volume (0–100) |
 | apex_sell_through | Normalised sell-through rate (0–100) |
 | auction_rating | Composite score (0–100) |
+| apex_from_estimate | Apex lots admitted by high estimate |
+| apex_from_sold_price | Apex lots admitted by sold price (no estimate) |
 
 ---
 
@@ -458,10 +471,13 @@ operationalises the **D (network density)** term of the Networked Utility Divide
 For each manufacturer × event combination (apex lots only):
 - **P (Presence)** — manufacturer's share of apex lots at that event
 - **Q (Quality)** — mean(sold price / high estimate) for sold apex lots that had a
-  published high estimate; 0 in the score where there are none
+  published high estimate; the sold price never stands in for a missing one.
+  Where no lot has one, Q is unknown and left out of that event's term (P × R)
 - **R (Performance)** — sell-through rate for manufacturer's apex lots
 
-`MAI = Σ(auction_rating × P × Q × R) / Σ(auction_rating)` across all events
+`MAI = Σ(auction_rating × P × Q × R) / Σ(auction_rating)` across all events,
+with Q dropped from the term where it is unknown. Apex lots follow the same
+rule as `auction_rating.py`.
 
 ### How to run
 ```bash
@@ -481,5 +497,7 @@ python data/pipelines/mai.py
 | avg_Q | Unweighted average Quality across the events where Q is known (blank if none); a sale where the manufacturer sold nothing shows in avg_R, not here |
 | avg_R | Unweighted average Performance across events |
 | MAI_score | Rating-weighted P×Q×R (the headline score) |
+| apex_from_estimate | Apex lots admitted by high estimate |
+| apex_from_sold_price | Apex lots admitted by sold price (no estimate) |
 
 Rows are sorted descending by `MAI_score`.

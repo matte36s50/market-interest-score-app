@@ -23,6 +23,7 @@ from datetime import date
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import signal_lib as lib
+import apex
 import google_trends
 import youtube_signals
 import social_signals
@@ -32,10 +33,11 @@ import export_live_lots
 # the Data Pipelines workflow does and runs the MAI tests before scoring.
 try:
     import mai
+    import auction_rating
 except ModuleNotFoundError as e:
     if e.name != "pandas":
         raise
-    mai = None
+    mai = auction_rating = None
 
 
 class SearchPhrase(unittest.TestCase):
@@ -785,12 +787,79 @@ class LiveLotsExport(unittest.TestCase):
             export_live_lots.fetch_live_lots("https://x", "k", get_json=lambda *a, **k: None)
         self.assertIn("schema.sql", str(ctx.exception))
 
+    def test_house_names_and_sale_names_resolve_to_the_digest_codes(self):
+        for raw, code in [("RM Sothebys", "RMS"), ("RM Sotheby's", "RMS"),
+                          ("RM Miami 2026", "RMS"), ("Gooding", "GCH"),
+                          ("Gooding Amelia Island 2026", "GCH"),
+                          ("Broad Arrow Villa d'Este 2026", "BAA"), ("Air/Water", "BAA"),
+                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO")]:
+            row, _ = export_live_lots.to_csv_row(_store_lot(auction_house=raw))
+            self.assertEqual(row["auction_house_code"], code, raw)
+            self.assertEqual(row["auction_house"], export_live_lots.HOUSES[code], raw)
+
+    def test_misspelt_sale_names_are_corrected(self):
+        for raw, fixed in [("Bonhams Leguna Seca", "Bonhams Laguna Seca"),
+                           ("THE TEGERNSEE AUCTION", "The Tegernsee Auction")]:
+            row, _ = export_live_lots.to_csv_row(_store_lot(event=raw))
+            self.assertEqual(row["event"], fixed)
+
+    def test_unknown_houses_fail_the_run_naming_each_and_write_nothing(self):
+        out = os.path.join(tempfile.mkdtemp(), "lots.csv")
+        store = [_store_lot(), _store_lot(auction_house="Christie's"),
+                 _store_lot(auction_house="Osenat"), _store_lot(auction_house="Osenat")]
+        env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co", "CANONICAL_SUPABASE_ANON_KEY": "anon"}
+        with unittest.mock.patch.dict(os.environ, env), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            code = export_live_lots.main(["--out", out, "--upcoming-out", out + ".up"],
+                                         fetch=lambda url, key: store, fx=lambda c, d: 1.0)
+        self.assertEqual(code, 1)
+        self.assertIn("::error::Unknown auction house value(s) in the store: \"Christie's\"; 'Osenat'",
+                      log.getvalue())
+        self.assertFalse(os.path.exists(out))
+        self.assertFalse(os.path.exists(out + ".up"))
+
+    def test_every_house_in_the_committed_csvs_is_in_houses(self):
+        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH):
+            rows = lib.read_rows(path)
+            self.assertTrue(rows, path)
+            bad = {(r.get("auction_house"), r.get("auction_house_code")) for r in rows
+                   if export_live_lots.HOUSES.get(r.get("auction_house_code")) != r.get("auction_house")}
+            self.assertEqual(bad, set(), os.path.basename(path))
+
+
+class ApexRule(unittest.TestCase):
+    """High estimate first (the weekly digest's rule), sold price only for a
+    lot that sold, and nothing for an unsold lot with no estimate."""
+
+    def test_no_estimate_but_sold_at_600k_is_apex_by_sold_price(self):
+        lot = {"high_estimate_usd": "", "sold_price_usd": "600000", "sold": "true"}
+        self.assertEqual(apex.apex_value(lot), 600000)
+        self.assertEqual(apex.apex_basis(lot), "sold_price")
+        self.assertTrue(apex.is_apex(lot))
+
+    def test_the_high_estimate_counts_not_the_low_one(self):
+        lot = {"low_estimate_usd": "450000", "high_estimate_usd": "600000",
+               "sold_price_usd": "", "sold": "false"}
+        self.assertEqual(apex.apex_basis(lot), "estimate")
+        self.assertTrue(apex.is_apex(lot))
+
+    def test_no_estimate_and_not_sold_is_not_apex(self):
+        lot = {"high_estimate_usd": float("nan"), "sold_price_usd": float("nan"), "sold": False}
+        self.assertIsNone(apex.apex_value(lot))
+        self.assertEqual(apex.apex_basis(lot), "none")
+        self.assertFalse(apex.is_apex(lot))
+
+    def test_an_estimate_wins_over_the_sold_price(self):
+        lot = {"high_estimate_usd": "400000", "sold_price_usd": "700000", "sold": "true"}
+        self.assertEqual(apex.apex_basis(lot), "estimate")
+        self.assertFalse(apex.is_apex(lot))
+
 
 @unittest.skipIf(mai is None, "pandas not installed")
 class MaiScores(unittest.TestCase):
     """avg_Q is read as price realisation, so a sale where a manufacturer sold
-    nothing must not drag it down; that belongs to avg_R. The score itself
-    still counts Q as 0 there."""
+    nothing, or sold only lots without a high estimate, must not drag it down
+    or zero the score; that belongs to avg_R."""
 
     LOTS_HEADER = ("event,event_date,auction_house,lot_number,manufacturer,model,"
                    "year_of_car,low_estimate_usd,high_estimate_usd,sold_price_usd,sold,notes")
@@ -811,7 +880,7 @@ class MaiScores(unittest.TestCase):
         with open(paths["out"]) as f:
             return {r["manufacturer"]: r for r in csv.DictReader(f)}
 
-    def test_a_sale_with_nothing_sold_stays_out_of_avg_q_but_not_the_score(self):
+    def test_a_sale_with_nothing_sold_stays_out_of_avg_q(self):
         rows = self._score([
             "E1,2026-08-14,RM,1,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
             "E1,2026-08-14,RM,2,BMW,507,1957,600000,800000,,false,",
@@ -823,15 +892,72 @@ class MaiScores(unittest.TestCase):
         # E1: P 0.5 × Q 1.1 × R 1 at rating 100; E2 adds rating 50 and nothing else.
         self.assertAlmostEqual(float(ferrari["MAI_score"]), 100 * 0.5 * 1.1 / 150, places=6)
         self.assertEqual(bmw["avg_Q"], "")
-        self.assertEqual(float(bmw["MAI_score"]), 0.0)
+        self.assertEqual(float(bmw["MAI_score"]), 0.0)   # R is 0: nothing sold
 
-    def test_a_sold_lot_without_a_high_estimate_leaves_q_unknown(self):
+    def test_no_estimate_but_sold_at_600k_is_apex_via_sold_price(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,BMW,M1,1980,,,600000,true,",
+            "E1,2026-08-14,RM,2,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
+        ], [("E1", "2026-08-14", 100)])
+        self.assertIn("BMW", rows)
+        self.assertEqual(rows["BMW"]["apex_from_sold_price"], "1")
+        self.assertEqual(rows["BMW"]["apex_from_estimate"], "0")
+        self.assertEqual(rows["Ferrari"]["apex_from_estimate"], "1")
+
+    def test_a_high_estimate_of_600k_with_a_low_of_450k_is_apex(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,Porsche,550,1955,450000,600000,,false,",
+        ], [("E1", "2026-08-14", 100)])
+        self.assertEqual(rows["Porsche"]["total_apex_lots"], "1")
+        self.assertEqual(rows["Porsche"]["apex_from_estimate"], "1")
+
+    def test_no_estimate_and_not_sold_is_not_apex(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,BMW,507,1957,,,,false,",
+            "E1,2026-08-14,RM,2,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
+        ], [("E1", "2026-08-14", 100)])
+        self.assertNotIn("BMW", rows)
+        self.assertEqual(float(rows["Ferrari"]["avg_P"]), 1.0)
+
+    def test_unknown_q_is_left_out_of_the_score_not_zeroed(self):
+        # Sold with only a low estimate: apex by sold price, Q unknown.
         rows = self._score([
             "E1,2026-08-14,RM,1,Shelby,Cobra,1965,900000,,1100000,true,",
         ], [("E1", "2026-08-14", 100)])
         self.assertEqual(rows["Shelby"]["avg_Q"], "")
         self.assertAlmostEqual(float(rows["Shelby"]["avg_R"]), 1.0)
-        self.assertEqual(float(rows["Shelby"]["MAI_score"]), 0.0)
+        self.assertAlmostEqual(float(rows["Shelby"]["MAI_score"]), 1.0)  # P 1 × R 1
+
+    def test_the_sold_price_never_stands_in_for_a_missing_high_estimate_in_q(self):
+        rows = self._score([
+            "E1,2026-08-14,RM,1,Ferrari,250 GT,1960,1000000,1200000,1320000,true,",
+            "E1,2026-08-14,RM,2,Ferrari,275 GTB,1966,,,2000000,true,",
+        ], [("E1", "2026-08-14", 100)])
+        self.assertAlmostEqual(float(rows["Ferrari"]["avg_Q"]), 1.1)
+
+
+@unittest.skipIf(auction_rating is None, "pandas not installed")
+class AuctionRatings(unittest.TestCase):
+
+    def test_apex_lots_are_counted_by_basis(self):
+        d = tempfile.mkdtemp()
+        lots, out = os.path.join(d, "lots.csv"), os.path.join(d, "out.csv")
+        with open(lots, "w") as f:
+            f.write(MaiScores.LOTS_HEADER + "\n" + "\n".join([
+                "E1,2026-08-14,RM Sotheby's,1,BMW,M1,1980,,,600000,true,",
+                "E1,2026-08-14,RM Sotheby's,2,Porsche,550,1955,450000,600000,,false,",
+                "E1,2026-08-14,RM Sotheby's,3,BMW,507,1957,,,,false,",
+                "E1,2026-08-14,RM Sotheby's,4,Fiat,500,1960,,,20000,true,",
+            ]) + "\n")
+        with unittest.mock.patch.object(auction_rating, "LOTS_PATH", lots), \
+             unittest.mock.patch.object(auction_rating, "OUTPUT_PATH", out), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()):
+            auction_rating.main()
+        with open(out) as f:
+            row = next(csv.DictReader(f))
+        self.assertEqual((row["apex_lots"], row["apex_from_estimate"], row["apex_from_sold_price"]),
+                         ("2", "1", "1"))
+        self.assertEqual(row["total_lots"], "4")
 
 
 if __name__ == "__main__":
