@@ -123,6 +123,10 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   to `auction_house_code`. A value that resolves to no house fails the run,
   naming every such value, and nothing is written. `EVENT_NAMES` corrects
   misspelt sale names ("Bonhams Leguna Seca" → "Bonhams Laguna Seca").
+- Trims manufacturer names and corrects misspellings and variants through
+  `MAKES` ("Mercedez-Benz" → "Mercedes-Benz", "Mclaren" → "McLaren"). An
+  unlisted make passes through unchanged; "Mercedes" (pre-1926 cars) and
+  marque-engine pairs like "Lola-Ford" are deliberately kept apart.
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
 - **Won't drop hand-entered events.** If a hand-entered event in the current

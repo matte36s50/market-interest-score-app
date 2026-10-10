@@ -797,6 +797,19 @@ class LiveLotsExport(unittest.TestCase):
             self.assertEqual(row["auction_house_code"], code, raw)
             self.assertEqual(row["auction_house"], export_live_lots.HOUSES[code], raw)
 
+    def test_manufacturer_names_are_trimmed_and_corrected(self):
+        for raw, fixed in [("Mercedez-Benz", "Mercedes-Benz"), ("Mclaren", "McLaren"),
+                           ("Ferrari ", "Ferrari"), (" Osca ", "OSCA"), ("Rools  Royce", "Rolls-Royce"),
+                           ("Mercedes", "Mercedes"), ("Lola-Ford", "Lola-Ford"), ("Zagato", "Zagato")]:
+            row, _ = export_live_lots.to_csv_row(_store_lot(make=raw))
+            self.assertEqual(row["manufacturer"], fixed, raw)
+
+    def test_committed_csvs_carry_only_corrected_manufacturer_names(self):
+        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH):
+            makes = {r["manufacturer"] for r in lib.read_rows(path)}
+            bad = {m for m in makes if export_live_lots.make_name(m) != m}
+            self.assertEqual(bad, set(), os.path.basename(path))
+
     def test_misspelt_sale_names_are_corrected(self):
         for raw, fixed in [("Bonhams Leguna Seca", "Bonhams Laguna Seca"),
                            ("THE TEGERNSEE AUCTION", "The Tegernsee Auction")]:
