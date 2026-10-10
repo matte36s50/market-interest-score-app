@@ -1,17 +1,17 @@
 event,event_date,auction_house,apex_lots,total_lots,apex_concentration,apex_volume,apex_sell_through,auction_rating,apex_from_estimate,apex_from_sold_price
 Air/Water,2026-04-26,Broad Arrow,9,63,20.5045,3.4100,100.0000,37.5154,0,9
-Bonhams Leguna Seca,2026-08-13,Bonhams,5,47,14.7871,1.5753,60.0000,23.0663,2,3
-Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow Amelia Island 2026,23,105,32.4475,11.1464,100.0000,44.1928,0,23
-Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow Villa d'Este 2026,15,61,36.6569,4.8410,100.0000,42.9335,0,15
+Bonhams Laguna Seca,2026-08-13,Bonhams,5,47,14.7871,1.5753,60.0000,23.0663,2,3
+Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,23,105,32.4475,11.1464,100.0000,44.1928,0,23
+Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,15,61,36.6569,4.8410,100.0000,42.9335,0,15
 Global Icons: Zoute Online 2026,2026-10-05,Broad Arrow,2,32,7.9084,0.0000,0.0000,2.3725,2,0
-Gooding Amelia Island 2026,2026-03-07,Gooding Amelia Island 2026,24,134,26.1863,11.8860,100.0000,42.6103,0,24
-Gooding Monterey 2026,2026-08-15,Gooding,68,167,61.9384,31.7566,86.7647,57.3136,66,2
-Gooding Retromobile 2026,2026-01-29,Gooding Retromobile 2026,11,55,29.4618,9.3110,100.0000,42.5629,0,11
-RM Arizona 2026,2026-01-24,RM Arizona 2026,3,24,17.7054,2.6642,100.0000,36.3773,0,3
-RM Miami 2026,2026-02-27,RM Miami 2026,17,58,44.0559,4.3840,100.0000,44.9704,0,17
-RM Monterey Auction 2026,2026-08-15,RM Sothebys,116,187,95.3477,100.0000,100.0000,98.6043,0,116
-RM Retromobile 2026,2026-01-28,RM Retromobile 2026,1,4,37.2993,0.3382,100.0000,41.3251,0,1
-THE TEGERNSEE AUCTION,2026-07-19,RM Sothebys,8,19,64.1121,2.7807,100.0000,50.3459,0,8
+Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,24,134,26.1863,11.8860,100.0000,42.6103,0,24
+Gooding Monterey 2026,2026-08-15,Gooding Christie's,68,167,61.9384,31.7566,86.7647,57.3136,66,2
+Gooding Retromobile 2026,2026-01-29,Gooding Christie's,11,55,29.4618,9.3110,100.0000,42.5629,0,11
+RM Arizona 2026,2026-01-24,RM Sotheby's,3,24,17.7054,2.6642,100.0000,36.3773,0,3
+RM Miami 2026,2026-02-27,RM Sotheby's,17,58,44.0559,4.3840,100.0000,44.9704,0,17
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,116,187,95.3477,100.0000,100.0000,98.6043,0,116
+RM Retromobile 2026,2026-01-28,RM Sotheby's,1,4,37.2993,0.3382,100.0000,41.3251,0,1
 The Audrain Auction 2026,2026-10-02,Broad Arrow,7,65,14.9924,0.7638,57.1429,21.9461,7,0
 The Hershey Auction 2026,2026-10-07,RM Sotheby's,2,166,0.0000,0.3361,100.0000,30.1344,2,0
-The Monaco Auction,2026-04-24,RM Sothebys,39,60,100.0000,27.7828,82.0513,65.7285,7,32
+The Monaco Auction,2026-04-24,RM Sotheby's,39,60,100.0000,27.7828,82.0513,65.7285,7,32
+The Tegernsee Auction,2026-07-19,RM Sotheby's,8,19,64.1121,2.7807,100.0000,50.3459,0,8

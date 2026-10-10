@@ -787,6 +787,45 @@ class LiveLotsExport(unittest.TestCase):
             export_live_lots.fetch_live_lots("https://x", "k", get_json=lambda *a, **k: None)
         self.assertIn("schema.sql", str(ctx.exception))
 
+    def test_house_names_and_sale_names_resolve_to_the_digest_codes(self):
+        for raw, code in [("RM Sothebys", "RMS"), ("RM Sotheby's", "RMS"),
+                          ("RM Miami 2026", "RMS"), ("Gooding", "GCH"),
+                          ("Gooding Amelia Island 2026", "GCH"),
+                          ("Broad Arrow Villa d'Este 2026", "BAA"), ("Air/Water", "BAA"),
+                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO")]:
+            row, _ = export_live_lots.to_csv_row(_store_lot(auction_house=raw))
+            self.assertEqual(row["auction_house_code"], code, raw)
+            self.assertEqual(row["auction_house"], export_live_lots.HOUSES[code], raw)
+
+    def test_misspelt_sale_names_are_corrected(self):
+        for raw, fixed in [("Bonhams Leguna Seca", "Bonhams Laguna Seca"),
+                           ("THE TEGERNSEE AUCTION", "The Tegernsee Auction")]:
+            row, _ = export_live_lots.to_csv_row(_store_lot(event=raw))
+            self.assertEqual(row["event"], fixed)
+
+    def test_unknown_houses_fail_the_run_naming_each_and_write_nothing(self):
+        out = os.path.join(tempfile.mkdtemp(), "lots.csv")
+        store = [_store_lot(), _store_lot(auction_house="Christie's"),
+                 _store_lot(auction_house="Osenat"), _store_lot(auction_house="Osenat")]
+        env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co", "CANONICAL_SUPABASE_ANON_KEY": "anon"}
+        with unittest.mock.patch.dict(os.environ, env), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            code = export_live_lots.main(["--out", out, "--upcoming-out", out + ".up"],
+                                         fetch=lambda url, key: store, fx=lambda c, d: 1.0)
+        self.assertEqual(code, 1)
+        self.assertIn("::error::Unknown auction house value(s) in the store: \"Christie's\"; 'Osenat'",
+                      log.getvalue())
+        self.assertFalse(os.path.exists(out))
+        self.assertFalse(os.path.exists(out + ".up"))
+
+    def test_every_house_in_the_committed_csvs_is_in_houses(self):
+        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH):
+            rows = lib.read_rows(path)
+            self.assertTrue(rows, path)
+            bad = {(r.get("auction_house"), r.get("auction_house_code")) for r in rows
+                   if export_live_lots.HOUSES.get(r.get("auction_house_code")) != r.get("auction_house")}
+            self.assertEqual(bad, set(), os.path.basename(path))
+
 
 class ApexRule(unittest.TestCase):
     """High estimate first (the weekly digest's rule), sold price only for a
