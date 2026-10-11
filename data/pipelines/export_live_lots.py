@@ -42,7 +42,9 @@ The store's auction_house field is free text: "RM Sothebys" and
 the weekly digest uses; the display name goes to auction_house and the code
 to auction_house_code. A value that resolves to no house fails the run and
 names it, so a new house is added here rather than passed through.
-EVENT_NAMES corrects misspelt sale names the same way.
+EVENT_NAMES corrects misspelt sale names the same way, and MAKES misspelt
+or variant manufacturer names (after trimming spaces). An unlisted make
+passes through: new marques are routine, new houses aren't.
 
 Safety
 ------
@@ -135,6 +137,29 @@ EVENT_NAMES = {
     "Bonhams Leguna Seca": "Bonhams Laguna Seca",
     "THE TEGERNSEE AUCTION": "The Tegernsee Auction",
 }
+
+# Manufacturer names misspelt or written several ways in the store. Keys are
+# the trimmed store value. Deliberately not merged: "Mercedes" (pre-1926 cars),
+# "Pierce" (pre-1909), and marque-engine pairs like "Lola-Ford".
+MAKES = {
+    "Mercedez-Benz": "Mercedes-Benz",
+    "Mclaren": "McLaren",
+    "Rools Royce": "Rolls-Royce",
+    "Rolls Royce": "Rolls-Royce",
+    "Osca": "OSCA",
+    "Reo": "REO",
+    "Delauney-Belleville": "Delaunay-Belleville",
+    "Meyers Manx": "Meyers",       # the Manx is the model
+    "WD": "WD Denzel",
+    "Range Rover": "Land Rover",   # Range Rover is a Land Rover model line
+    "½": "Ford",                   # a 1963 Ford Falcon Sprint at Broad Arrow Amelia
+}
+
+
+def make_name(value):
+    """A store make, trimmed and corrected through MAKES."""
+    make = " ".join(str(value or "").split())
+    return MAKES.get(make, make)
 
 
 def _house_key(value):
@@ -246,7 +271,7 @@ def _lot_fields(r, fx):
         "auction_house": HOUSES[code],
         "auction_house_code": code,
         "lot_number": m.group(1) if m else "",
-        "manufacturer": r.get("make") or "",
+        "manufacturer": make_name(r.get("make")),
         "model": model,
         "year_of_car": fmt_num(r.get("year")),
         "low_estimate_usd": fmt_num(usd(r.get("estimate_low"))),

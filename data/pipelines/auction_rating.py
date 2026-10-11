@@ -3,12 +3,26 @@
 Auction Rating Pipeline
 Reads auction_lots.csv and outputs a per-event Auction Rating score.
 
-Apex lot: see apex.py (high estimate >= $500K, else sold price >= $500K
-for a lot that sold). apex_from_estimate / apex_from_sold_price count the
-apex lots admitted each way. The sold-price fallback can only admit lots that
-sold, so apex_sell_through is biased upward at sales that lean on it.
-Sub-scores are min-max normalized 0-100 across all events in the dataset.
-Rating = 0.3*Concentration + 0.4*Volume + 0.3*Sell-Through
+Apex lots are the highlights of each sale: its top 10% of lots by apex value
+(see apex.py). The rating says how much a highlight at that sale is worth:
+
+  highlight_line_usd = the apex value of the sale's lowest-ranked highlight,
+                       i.e. what it took to be a top-10% lot there
+  auction_rating     = 100 × highlight_line_usd / the largest line of any sale
+
+The scale is linear, so a highlight at a sale whose line is $5M counts 25
+times one at a sale whose line is $200K. That is the point: being a top lot at
+Monterey says more than being a top lot at Hershey. Total sales would rank a
+high-volume, low-price sale (Mecum Indianapolis) far too high.
+
+A sale under 20 lots has no highlights and a rating of 0, so it carries no
+weight in MAI.
+
+apex_sell_through, total_sold_usd and median_sold_usd are reported for
+reading the table; they don't enter the rating. apex_from_estimate /
+apex_from_sold_price count the highlights ranked each way. An unsold lot with
+no estimate can't be ranked, so apex_sell_through reads high at sales that
+lean on sold prices.
 """
 
 import os
@@ -23,16 +37,9 @@ LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_ratings.csv")
 OUTPUT_COLS = [
     "event", "event_date", "auction_house", "apex_lots", "total_lots",
-    "apex_concentration", "apex_volume", "apex_sell_through", "auction_rating",
-    "apex_from_estimate", "apex_from_sold_price",
+    "highlight_line_usd", "auction_rating", "apex_sell_through",
+    "total_sold_usd", "median_sold_usd", "apex_from_estimate", "apex_from_sold_price",
 ]
-
-
-def minmax(series: pd.Series) -> pd.Series:
-    lo, hi = series.min(), series.max()
-    if hi == lo:
-        return pd.Series([100.0 if lo > 0 else 0.0] * len(series), index=series.index)
-    return (series - lo) / (hi - lo) * 100
 
 
 def main():
@@ -48,59 +55,37 @@ def main():
     df["high_estimate_usd"] = pd.to_numeric(df["high_estimate_usd"], errors="coerce")
     df["sold_price_usd"] = pd.to_numeric(df["sold_price_usd"], errors="coerce")
     add_apex_columns(df)
-    df["sold_price_usd"] = df["sold_price_usd"].fillna(0)
-
-    apex = df[df["is_apex"]].copy()
-
-    events = df.groupby(["event", "event_date", "auction_house"])
 
     rows = []
-    for (event, event_date, auction_house), group in events:
-        total_lots = len(group)
-        apex_group = apex[
-            (apex["event"] == event) & (apex["event_date"] == event_date)
-        ]
-        apex_lot_count = len(apex_group)
-        apex_sold = apex_group[apex_group["sold"]]
-
-        concentration_raw = apex_lot_count / total_lots if total_lots > 0 else 0.0
-        volume_raw = apex_sold["sold_price_usd"].sum()
-        sell_through_raw = (
-            len(apex_sold) / apex_lot_count if apex_lot_count > 0 else 0.0
-        )
-
+    for (event, event_date, auction_house), group in df.groupby(["event", "event_date", "auction_house"]):
+        apex = group[group["is_apex"]]
+        sold_prices = group.loc[group["sold"], "sold_price_usd"].dropna()
         rows.append({
             "event": event,
             "event_date": event_date,
             "auction_house": auction_house,
-            "apex_lots": apex_lot_count,
-            "apex_from_estimate": int((apex_group["apex_basis"] == BASIS_ESTIMATE).sum()),
-            "apex_from_sold_price": int((apex_group["apex_basis"] == BASIS_SOLD_PRICE).sum()),
-            "total_lots": total_lots,
-            "_concentration_raw": concentration_raw,
-            "_volume_raw": volume_raw,
-            "_sell_through_raw": sell_through_raw,
+            "apex_lots": len(apex),
+            "total_lots": len(group),
+            "highlight_line_usd": apex["apex_value"].min() if len(apex) else 0.0,
+            "apex_sell_through": apex["sold"].mean() if len(apex) else 0.0,
+            "total_sold_usd": sold_prices.sum(),
+            "median_sold_usd": sold_prices.median() if len(sold_prices) else 0.0,
+            "apex_from_estimate": int((apex["apex_basis"] == BASIS_ESTIMATE).sum()),
+            "apex_from_sold_price": int((apex["apex_basis"] == BASIS_SOLD_PRICE).sum()),
         })
 
-    result = pd.DataFrame(rows)
-
-    result["apex_concentration"] = minmax(result["_concentration_raw"])
-    result["apex_volume"] = minmax(result["_volume_raw"])
-    result["apex_sell_through"] = minmax(result["_sell_through_raw"])
-
-    result["auction_rating"] = (
-        0.3 * result["apex_concentration"]
-        + 0.4 * result["apex_volume"]
-        + 0.3 * result["apex_sell_through"]
-    )
-
-    out = result[OUTPUT_COLS]
+    out = pd.DataFrame(rows)
+    top_line = out["highlight_line_usd"].max()
+    out["auction_rating"] = out["highlight_line_usd"] / top_line * 100 if top_line > 0 else 0.0
+    out = out[OUTPUT_COLS]
 
     out.to_csv(OUTPUT_PATH, index=False, float_format="%.4f")
-    print(f"Wrote {len(out)} event ratings to {os.path.abspath(OUTPUT_PATH)}")
-    print(f"Apex lots: {len(apex)} ({int(out['apex_from_estimate'].sum())} by high estimate, "
-          f"{int(out['apex_from_sold_price'].sum())} by sold price; sell-through is biased "
-          "upward where the sold-price fallback applies)")
+    rated = out[out["apex_lots"] > 0]
+    print(f"Wrote {len(out)} event ratings to {os.path.abspath(OUTPUT_PATH)} "
+          f"({len(rated)} with highlights; {len(out) - len(rated)} under 20 lots carry no weight)")
+    print(f"Apex lots: {int(rated['apex_lots'].sum())} ({int(out['apex_from_estimate'].sum())} "
+          f"ranked by high estimate, {int(out['apex_from_sold_price'].sum())} by sold price; "
+          "sell-through reads high where sold prices are used)")
 
 
 if __name__ == "__main__":
