@@ -22,6 +22,7 @@ from `.github/workflows/data-pipelines.yml`.
 
 ```
 export_live_lots.py         ← rebuild auction_lots.csv (+ upcoming_lots.csv) from the canonical store
+export_online_sales.py      ← Bring a Trailer's completed months → online_lots.csv
 auction_rating.py           ← score each event
 mai.py                      ← compute per-manufacturer MAI scores
 wikipedia_pageviews.py      ← can run anytime (independent)
@@ -425,14 +426,43 @@ time, and per-sub-signal coverage — matching the checks in
 
 ---
 
+## export_online_sales.py
+
+Writes Bring a Trailer results to `data/online_lots.csv` in the
+`auction_lots.csv` schema, from car-scrapers' `bat.csv` (public S3, refreshed
+daily). Online platforms hold no sales, so each **completed calendar month**
+is one sale ("Bring a Trailer – August 2026"), rated and scored like a live
+one. BaT's top end has grown into the live houses' range (its 25th-best sale
+of August 2026 made $725K; $214M sold that month), and because a sale's weight
+is its highlight line, BaT's weight grows with it.
+
+- Completed months only; a month with under 60% of the typical month's
+  listings is left out as an incomplete scrape (September 2025, January 2026).
+- Sold price is BaT's hammer, without its buyer's fee (5%, capped at $7,500).
+  "High bid" listings are unsold and carry no price. No estimates.
+- EUR/GBP results convert at the ECB rate for the month's last day.
+- Makes go through `export_live_lots.make_name`.
+- If `bat.csv` or the rates can't be read, it warns and keeps the last file.
+
+```bash
+python data/pipelines/export_online_sales.py --dry-run
+python data/pipelines/export_online_sales.py
+```
+
+---
+
 ## auction_rating.py
 
 Computes an Auction Rating for each event in `data/auction_lots.csv`: how much
 a highlight at that sale is worth.
 
 ### What it does
+- Reads `auction_lots.csv` (live sales) and `online_lots.csv` (online
+  platforms, one sale per completed month, from `export_online_sales.py`).
 - Identifies apex lots (`apex.py`, shared with `mai.py`): the **top 10% of each
-  sale's lots** (rounded up) by apex value. A sale needs **20 or more lots** to
+  sale's lots** (rounded up, **at most 25**) by apex value. The cap only
+  reaches online months: 10% of a Bring a Trailer month is 300+ cars down to
+  about $95K, its top 25 the marquee results. A sale needs **20 or more lots** to
   have any. The apex value is `high_estimate_usd` if the lot has one, else
   `sold_price_usd` if it sold; an unsold lot with no estimate can't be ranked,
   so sell-through reads high at sales that lean on sold prices.

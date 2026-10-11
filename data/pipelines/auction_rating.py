@@ -16,7 +16,8 @@ Monterey says more than being a top lot at Hershey. Total sales would rank a
 high-volume, low-price sale (Mecum Indianapolis) far too high.
 
 A sale under 20 lots has no highlights and a rating of 0, so it carries no
-weight in MAI.
+weight in MAI. Online platforms come in from online_lots.csv, one sale per
+completed month (export_online_sales.py), and are rated the same way.
 
 apex_sell_through, total_sold_usd and median_sold_usd are reported for
 reading the table; they don't enter the rating. apex_from_estimate /
@@ -31,9 +32,10 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns
+from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns, read_lots
 
 LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
+ONLINE_PATH = os.path.join(os.path.dirname(__file__), "..", "online_lots.csv")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_ratings.csv")
 OUTPUT_COLS = [
     "event", "event_date", "auction_house", "apex_lots", "total_lots",
@@ -43,7 +45,7 @@ OUTPUT_COLS = [
 
 
 def main():
-    df = pd.read_csv(LOTS_PATH)
+    df = read_lots(LOTS_PATH, ONLINE_PATH)
 
     if df.empty:
         print("auction_lots.csv is empty — writing empty auction_ratings.csv")

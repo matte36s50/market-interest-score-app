@@ -3,7 +3,8 @@ name: Data Pipelines (Auction Ratings + MAI)
 # Pulls live-auction lots from the canonical auction store (entered through
 # the /store panel in garage-draft's admin app) into data/auction_lots.csv,
 # writes lots of sales still to come (estimates only) to
-# data/upcoming_lots.csv for the pre-sale view on mai.html,
+# data/upcoming_lots.csv for the pre-sale view on mai.html, writes Bring a
+# Trailer's completed months to data/online_lots.csv (one sale per month),
 # recomputes data/auction_ratings.csv and data/mai_scores.csv, commits the
 # results, and re-triggers the Pages deploy so the dashboard's MAI chart
 # picks them up. The explicit deploy dispatch is required because pushes
@@ -23,6 +24,8 @@ on:
     paths:
       - 'data/auction_lots.csv'
       - 'data/pipelines/export_live_lots.py'
+      - 'data/pipelines/export_online_sales.py'
+      - 'data/pipelines/apex.py'
       - 'data/pipelines/auction_rating.py'
       - 'data/pipelines/mai.py'
   workflow_dispatch:
@@ -55,8 +58,8 @@ jobs:
 
       # Only the tests for what this job runs: a failure stops it before it
       # commits anything, and the published scores stay as they were.
-      - name: Unit tests (export and MAI)
-        run: python data/pipelines/test_pipelines.py LiveLotsExport MaiScores
+      - name: Unit tests (exports and MAI)
+        run: python data/pipelines/test_pipelines.py LiveLotsExport OnlineSales ApexRule MaiScores AuctionRatings
 
       # Leaves auction_lots.csv untouched (with a warning) if the secrets are
       # unset or if the store is missing an event the CSV already has.
@@ -68,6 +71,11 @@ jobs:
           python data/pipelines/export_live_lots.py \
             ${{ github.event.inputs.allow_drop_events == 'true' && '--allow-drop-events' || '' }}
 
+      # Public data, no secrets. Leaves online_lots.csv untouched (with a
+      # warning) if bat.csv or the exchange rates can't be read.
+      - name: Export online auction results (Bring a Trailer)
+        run: python data/pipelines/export_online_sales.py
+
       - name: Run pipelines
         run: |
           python data/pipelines/auction_rating.py
@@ -78,7 +86,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/auction_lots.csv data/upcoming_lots.csv data/auction_ratings.csv data/mai_scores.csv
+          git add data/auction_lots.csv data/upcoming_lots.csv data/online_lots.csv data/auction_ratings.csv data/mai_scores.csv
           if git diff --cached --quiet; then
             echo "No changes in auction lots or derived CSVs — nothing to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"

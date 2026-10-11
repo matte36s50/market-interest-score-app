@@ -110,6 +110,7 @@ HOUSES = {
     "ART": "Artcurial",
     "DOR": "Dorotheum",
     "DPR": "duPont REGISTRY Live",
+    "BAT": "Bring a Trailer",   # online: one sale per month (export_online_sales.py)
 }
 
 # Spellings of a house name seen in the store, normalised by _house_key.
