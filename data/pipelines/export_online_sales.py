@@ -22,7 +22,9 @@ auction_lots.csv schema, so the two files are read together.
 - No estimates: BaT doesn't publish them, so lots rank by sold price.
 - EUR and GBP results convert at the ECB rate for the month's last day, one
   lookup per currency and month (EcbRates, as export_live_lots uses).
-- Makes go through export_live_lots.make_name, so spellings match.
+- Makes go through export_live_lots.make_name, then spellings that differ
+  only in case, spaces or hyphens take the most common one (apex.unify_makes):
+  'Mercedes Benz' becomes 'Mercedes-Benz', 'Harley Davidson' 'Harley-Davidson'.
 
 With bat.csv unreachable the run warns and leaves online_lots.csv as it is.
 
@@ -42,6 +44,7 @@ from datetime import date, datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import signal_lib as lib
+from apex import unify_makes
 from export_live_lots import FIELDNAMES, EcbRates, fmt_num, make_name
 
 BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv"
@@ -167,6 +170,9 @@ def build(bat_rows, today, fx):
                 "sold": "true" if sold else "false",
                 "notes": f"bat:{slug or r.get('auction_url') or ''}{note}",
             })
+    spelling = unify_makes(r["manufacturer"] for r in out)   # 'Mercedes Benz' -> 'Mercedes-Benz'
+    for r in out:
+        r["manufacturer"] = spelling.get(r["manufacturer"], r["manufacturer"])
     out.sort(key=lambda row: (row["event_date"], row["notes"]))
     report = {
         "months": [f"{y}-{m:02d}" for y, m in kept],
