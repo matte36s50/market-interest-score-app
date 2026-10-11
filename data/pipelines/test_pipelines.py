@@ -813,6 +813,21 @@ class LiveLotsExport(unittest.TestCase):
             bad = {m for m in makes if export_live_lots.make_name(m) != m}
             self.assertEqual(bad, set(), os.path.basename(path))
 
+    def test_excluded_lots_stay_out_and_say_why(self):
+        lot = _store_lot(source_listing_id="rm-monterey-auction-2026-lot-345", make="Ferrari",
+                         model="Luce", trim="Tailor Made", price_all_in=44000000.0)
+        row, why = export_live_lots.to_csv_row(lot)
+        self.assertIsNone(row)
+        self.assertTrue(why.startswith("excluded: one-off commission"))
+        row, why = export_live_lots.to_upcoming_row(dict(lot, status="upcoming", event_date="2099-01-01"))
+        self.assertIsNone(row)
+        self.assertTrue(why.startswith("excluded:"))
+
+    def test_committed_csvs_hold_no_excluded_lot(self):
+        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH):
+            ids = {(r.get("notes") or "").split(";")[0].removeprefix("store:") for r in lib.read_rows(path)}
+            self.assertEqual(ids & set(export_live_lots.EXCLUDED_LOTS), set(), os.path.basename(path))
+
     def test_misspelt_sale_names_are_corrected(self):
         for raw, fixed in [("Bonhams Leguna Seca", "Bonhams Laguna Seca"),
                            ("THE TEGERNSEE AUCTION", "The Tegernsee Auction")]:
