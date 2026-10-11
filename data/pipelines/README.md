@@ -119,7 +119,7 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
 - Standardises the auction house. The store's free-text value (a house name
   in any spelling, or a sale name such as "Gooding Amelia Island 2026") is
   resolved to one of `HOUSES`, the weekly digest's codes (RMS, GCH, BON, BCO,
-  BAA, MEC, BJA, ART, DOR): the display name goes to `auction_house`, the code
+  BAA, MEC, BJA, ART, DOR, DPR): the display name goes to `auction_house`, the code
   to `auction_house_code`. A value that resolves to no house fails the run,
   naming every such value, and nothing is written. `EVENT_NAMES` corrects
   misspelt sale names ("Bonhams Leguna Seca" → "Bonhams Laguna Seca").
