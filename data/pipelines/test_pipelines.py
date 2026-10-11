@@ -792,7 +792,9 @@ class LiveLotsExport(unittest.TestCase):
                           ("RM Miami 2026", "RMS"), ("Gooding", "GCH"),
                           ("Gooding Amelia Island 2026", "GCH"),
                           ("Broad Arrow Villa d'Este 2026", "BAA"), ("Air/Water", "BAA"),
-                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO")]:
+                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO"),
+                          ("duPont REGISTRY Live", "DPR"), ("duPont Registry", "DPR"),
+                          ("duPont Registry Live Week 47", "DPR")]:
             row, _ = export_live_lots.to_csv_row(_store_lot(auction_house=raw))
             self.assertEqual(row["auction_house_code"], code, raw)
             self.assertEqual(row["auction_house"], export_live_lots.HOUSES[code], raw)
