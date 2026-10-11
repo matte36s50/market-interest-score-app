@@ -902,7 +902,7 @@ def _sale(event, date, top, filler_price=1000, n=20):
 
 def _bat(day, make, amount, sold=True, slug=None, model="Model"):
     return {"auction_url": f"https://bringatrailer.com/listing/{slug or f'{make}-{day}-{amount}'}/",
-            "sale_date": day, "make": make, "model": model, "year": "1990",
+            "sale_date": day, "make": make, "model": model, "year": "",
             "sale_amount": amount, "sale_type": "sold" if sold else "high bid"}
 
 
@@ -930,10 +930,17 @@ class OnlineSales(unittest.TestCase):
         self.assertEqual((rs["sold_price_usd"], rs["sold"]), ("725000", "true"))
         self.assertEqual(rs["notes"], "bat:1973-porsche-911-carrera-rs")
         self.assertEqual(rs["high_estimate_usd"], "")
+        self.assertEqual(rs["year_of_car"], "1973")                    # from the listing slug
         unsold = by_make["Mercedes-Benz"]            # make corrected, high bid never a price
         self.assertEqual((unsold["sold_price_usd"], unsold["sold"]), ("", "false"))
         self.assertEqual(by_make["Ferrari"]["sold_price_usd"], "500000")
         self.assertTrue(by_make["Ferrari"]["notes"].endswith("; EUR at 1.2500 USD"))
+
+    def test_the_make_is_not_repeated_in_the_model(self):
+        rows, _ = self._build([_bat("8/1/2026", "Porsche", "USD $1", model="Porsche 918 Spyder"),
+                               _bat("8/2/2026", "Mercedez-Benz", "USD $1", model="Mercedez-Benz 300SL"),
+                               _bat("8/3/2026", "Ford", "USD $1", model="GT")])
+        self.assertEqual(sorted(r["model"] for r in rows), ["300SL", "918 Spyder", "GT"])
 
     def test_only_completed_months_and_never_a_partial_scrape(self):
         rows = [_bat(f"{m}/{d}/2026", "Ford", "USD $50,000") for m in (6, 7, 8) for d in range(1, 21)]
@@ -982,6 +989,8 @@ class MaiScores(unittest.TestCase):
              unittest.mock.patch.object(mai, "ONLINE_PATH", paths.get("online", os.path.join(d, "none.csv"))), \
              unittest.mock.patch.object(mai, "RATINGS_PATH", paths["ratings"]), \
              unittest.mock.patch.object(mai, "OUTPUT_PATH", paths["out"]), \
+             unittest.mock.patch.object(mai, "DETAIL_PATH", os.path.join(d, "detail.csv")), \
+             unittest.mock.patch.object(mai, "APEX_LOTS_PATH", os.path.join(d, "apex_lots.csv")), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()):
             mai.main()
         with open(paths["out"]) as f:
@@ -1058,6 +1067,28 @@ class MaiScores(unittest.TestCase):
                            online=online)
         self.assertEqual(rows["Porsche"]["total_apex_lots"], "25")   # capped, all from the BaT month
         self.assertAlmostEqual(float(rows["Porsche"]["MAI_score"]), 25 * 1.0 / 125, places=6)
+
+    def test_drilldown_contributions_sum_to_the_score_and_list_the_cars(self):
+        d = tempfile.mkdtemp()
+        with unittest.mock.patch("tempfile.mkdtemp", return_value=d):
+            rows = self._score(
+                _sale("E1", "2026-08-14", ["Ferrari,250 GT,1960,,,3000000,true,",
+                                           "Porsche,550,1955,450000,2500000,,false,"])
+                + _sale("E2", "2026-09-05", ["Ferrari,275,1966,,,900000,true,",
+                                             "Ferrari,330,1966,,,800000,true,"]),
+                [("E1", "2026-08-14", 100), ("E2", "2026-09-05", 25)])
+        with open(os.path.join(d, "detail.csv")) as f:
+            detail = list(csv.DictReader(f))
+        ferrari = [r for r in detail if r["manufacturer"] == "Ferrari"]
+        self.assertEqual([r["event"] for r in ferrari], ["E1", "E2"])          # biggest contribution first
+        self.assertAlmostEqual(sum(float(r["contribution"]) for r in ferrari),
+                               float(rows["Ferrari"]["MAI_score"]), places=5)
+        self.assertEqual((ferrari[0]["apex_lots"], ferrari[0]["sale_apex_lots"]), ("1", "2"))
+        with open(os.path.join(d, "apex_lots.csv")) as f:
+            lots = list(csv.DictReader(f))
+        e1 = [(r["rank"], r["manufacturer"], r["apex_value_usd"], r["apex_basis"], r["sold"]) for r in lots if r["event"] == "E1"]
+        self.assertEqual(e1, [("1", "Ferrari", "3000000", "sold_price", "true"),
+                              ("2", "Porsche", "2500000", "estimate", "false")])
 
     def test_trailing_spaces_do_not_split_a_make(self):
         rows = self._score(

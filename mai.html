@@ -11,6 +11,13 @@
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="mii-light-theme.js"></script>
     <link rel="stylesheet" href="mii-light-theme.css">
+    <style>
+        /* An expanded row spans the whole table, which is wider than a phone
+           screen; keep its contents in view while the table scrolls. */
+        @media (max-width: 767px) {
+            .drill-inner { position: sticky; left: 24px; width: calc(100vw - 82px); }
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
     <header class="bg-white border-b border-line md:sticky top-0 z-40">
@@ -43,8 +50,9 @@
             <p class="m-0 text-lg text-mute leading-relaxed">
                 How strongly each make shows up at the very top of the collector market, and how well those cars do
                 when they cross the block. MII tracks broad enthusiast interest on Bring a Trailer. MAI looks only at
-                the highlights of the major live auctions, and counts a highlight at Monterey for more than one at a
-                smaller sale.
+                the highlights of the major live auctions and Bring a Trailer's best results each month, and counts a
+                highlight at Monterey for more than one at a smaller sale. Click a make or a sale to see what is behind
+                its numbers.
             </p>
         </section>
 
@@ -162,6 +170,7 @@
                     <h3 class="m-0 text-base font-semibold">Reading the numbers</h3>
                     <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
                         <li>Scores across all makes add up to 1. Compare makes against each other.</li>
+                        <li>Click a make in the ranking to see which sales its score comes from, and the cars behind it.</li>
                         <li>Q is left blank for a make with no sold apex lot that had a high estimate.</li>
                         <li>A make with a handful of apex lots at one event can post a high R of 100%. Check the Events and Apex lots columns before reading much into it.</li>
                     </ul>
@@ -210,7 +219,7 @@
     <script>
     (function () {
         // apex.py's rule: the top 10% of a sale's lots (rounded up), from 20 lots.
-        function highlightCount(total) { return total < 20 ? 0 : Math.ceil(total * 10 / 100 - 1e-9); }
+        function highlightCount(total) { return total < 20 ? 0 : Math.min(25, Math.ceil(total * 10 / 100 - 1e-9)); }
 
         function esc(value) {
             return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
@@ -233,6 +242,91 @@
             });
         }
 
+        /* ---------------- drill-down data (mai.py writes both files) ---------------- */
+
+        var saleKey = function (event, date) { return event + '|' + date; };
+        var saleId = function (key) { return 'sale-' + key.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); };
+        var isTrue = function (v) { return v === true || String(v).toLowerCase() === 'true'; };
+
+        var drill = Promise.all([load('data/mai_detail.csv'), load('data/apex_lots.csv')]).then(function (res) {
+            var byMake = {}, bySale = {};
+            (res[0] || []).forEach(function (r) {
+                if (r.manufacturer) (byMake[r.manufacturer] = byMake[r.manufacturer] || []).push(r);
+            });
+            (res[1] || []).forEach(function (r) {
+                if (r.event) (bySale[saleKey(r.event, r.event_date)] = bySale[saleKey(r.event, r.event_date)] || []).push(r);
+            });
+            Object.keys(bySale).forEach(function (k) { bySale[k].sort(function (a, b) { return a.rank - b.rank; }); });
+            return { byMake: byMake, bySale: bySale, ok: !!(res[0] && res[1]) };
+        });
+
+        function carName(lot, withMake) {
+            return [lot.year_of_car, withMake ? lot.manufacturer : null, lot.model].filter(function (x) { return x != null && x !== ''; }).join(' ');
+        }
+
+        function carResult(lot) {
+            var sold = isTrue(lot.sold);
+            var value = num(lot.apex_value_usd);
+            var basis = lot.apex_basis === 'estimate'
+                ? '<span class="text-faint" title="Ranked by its high estimate">est. ' + usd(value) + '</span>'
+                : '<span title="Ranked by its sold price (no estimate published)">' + usd(value) + '</span>';
+            var outcome = sold
+                ? (lot.apex_basis === 'estimate' && num(lot.sold_price_usd) ? 'sold ' + usd(num(lot.sold_price_usd)) : 'sold')
+                : '<span class="text-amber-700">not sold</span>';
+            return basis + ' · ' + outcome;
+        }
+
+        function carList(lots, withMake) {
+            return '<ul class="m-0 mt-2 p-0 list-none grid gap-1 text-[13px]">' + lots.map(function (l) {
+                return '<li class="flex flex-wrap gap-x-3 gap-y-0.5">' +
+                    '<span class="font-mono text-faint w-8">#' + esc(l.rank) + '</span>' +
+                    '<span class="text-ink">' + esc(carName(l, withMake)) + '</span>' +
+                    '<span class="text-mute">' + carResult(l) + '</span></li>';
+            }).join('') + '</ul>';
+        }
+
+        function makeDetail(make, score, d) {
+            var sales = d.byMake[make] || [];
+            if (!sales.length) return '<p class="m-0 text-mute">No breakdown available for this make yet.</p>';
+            var total = sales.reduce(function (s, r) { return s + (num(r.contribution) || 0); }, 0) || 1;
+            var top3 = sales.slice(0, 3).reduce(function (s, r) { return s + (num(r.contribution) || 0); }, 0);
+            var LIMIT = 8;
+            var cards = sales.map(function (r, i) {
+                var key = saleKey(r.event, r.event_date);
+                var share = (num(r.contribution) || 0) / total;
+                var cars = (d.bySale[key] || []).filter(function (l) { return l.manufacturer === make; });
+                return '<div class="panel p-4' + (i >= LIMIT ? ' hidden" data-extra="1' : '') + '">' +
+                    '<div class="flex flex-wrap justify-between items-start gap-x-6 gap-y-2">' +
+                        '<div class="min-w-0">' +
+                            '<a href="#' + saleId(key) + '" data-sale="' + esc(key) + '" class="font-medium hover:text-amber-700">' + esc(r.event) + '</a>' +
+                            '<div class="text-[13px] text-mute">' + esc(r.auction_house) + ' · <span class="font-mono">' + esc(r.event_date) + '</span>' +
+                            ' · rating ' + Number(r.auction_rating).toFixed(1) + '</div>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-3 w-full sm:w-auto sm:min-w-[260px]">' +
+                            '<span class="font-mono text-[13px] text-mute whitespace-nowrap" title="The make\'s highlights out of the sale\'s">' +
+                                esc(r.apex_lots) + ' of ' + esc(r.sale_apex_lots) + '</span>' +
+                            '<span class="score-bar"><span style="width:' + Math.max(2, share * 100).toFixed(0) + '%"></span></span>' +
+                            '<span class="font-mono text-[13px] w-12 text-right" title="Share of the make\'s MAI">' + Math.round(share * 100) + '%</span>' +
+                        '</div>' +
+                    '</div>' + (cars.length ? carList(cars, false) : '') +
+                '</div>';
+            }).join('');
+            return '<p class="m-0 mb-3 text-sm text-mute">' +
+                '<span class="text-ink font-semibold">' + esc(make) + '</span> scores ' + Number(score).toFixed(3) +
+                ' from ' + sales.length + ' sale' + (sales.length === 1 ? '' : 's') + '.' +
+                (sales.length > 3 ? ' The top three give ' + Math.round(top3 / total * 100) + '% of it.' : '') +
+                ' Each sale\'s share is its rating times the make\'s share of its highlights.</p>' +
+                '<div class="grid gap-3">' + cards + '</div>' +
+                (sales.length > LIMIT ? '<button type="button" data-more="1" class="mt-3 text-[13px] text-mute hover:text-amber-700">' +
+                    'Show all ' + sales.length + ' sales</button>' : '');
+        }
+
+        function setHash(make) {
+            try {
+                history.replaceState(null, '', make ? '#make=' + encodeURIComponent(make) : location.pathname + location.search);
+            } catch (e) { /* file:// or sandboxed: the drill-down still works */ }
+        }
+
         load('data/mai_scores.csv').then(function (rows) {
             var body = document.getElementById('maiRows');
             var subtitle = document.getElementById('rankingSubtitle');
@@ -248,13 +342,16 @@
                 return;
             }
 
-            subtitle.textContent = data.length + ' makes with at least one apex lot, ranked by MAI';
+            subtitle.textContent = data.length + ' makes with at least one apex lot, ranked by MAI. Click a make to see where its score comes from.';
             var max = data[0].MAI_score || 1;
+            var scores = {};
             body.innerHTML = data.map(function (d, i) {
+                scores[d.manufacturer] = d.MAI_score;
                 var width = Math.max(2, (d.MAI_score / max) * 100).toFixed(0);
-                return '<tr>' +
+                return '<tr class="is-clickable" data-make="' + esc(d.manufacturer) + '">' +
                     '<td class="pl-6 font-mono text-[13px] text-faint">' + String(i + 1).padStart(2, '0') + '</td>' +
-                    '<td class="font-semibold">' + esc(d.manufacturer) + '</td>' +
+                    '<td class="font-semibold"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
+                        '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + esc(d.manufacturer) + '</button></td>' +
                     '<td class="w-64"><div class="flex items-center gap-3">' +
                         '<span class="font-mono text-sm font-medium w-12 text-right">' + Number(d.MAI_score).toFixed(3) + '</span>' +
                         '<span class="score-bar"><span style="width:' + width + '%"></span></span>' +
@@ -266,6 +363,59 @@
                     '<td class="num pr-6">' + (num(d.total_apex_lots) != null ? d.total_apex_lots : '—') + '</td>' +
                 '</tr>';
             }).join('');
+
+            function toggle(tr, open) {
+                var make = tr.getAttribute('data-make');
+                var btn = tr.querySelector('button[aria-expanded]');
+                var next = tr.nextElementSibling;
+                var isOpen = next && next.classList.contains('drill-row');
+                if (open === undefined) open = !isOpen;
+                if (!open) {
+                    if (isOpen) next.remove();
+                    tr.classList.remove('is-selected');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('.chev').style.transform = '';
+                    setHash(null);
+                    return;
+                }
+                if (isOpen) return;
+                var row = document.createElement('tr');
+                row.className = 'drill-row';
+                row.innerHTML = '<td colspan="8" class="px-6 py-5 bg-canvas" style="white-space:normal"><div class="drill-inner">Loading…</div></td>';
+                tr.after(row);
+                tr.classList.add('is-selected');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.querySelector('.chev').style.transform = 'rotate(90deg)';
+                setHash(make);
+                drill.then(function (d) {
+                    row.querySelector('.drill-inner').innerHTML = d.ok ? makeDetail(make, scores[make], d)
+                        : '<p class="m-0 text-mute">The breakdown files (mai_detail.csv, apex_lots.csv) are not published yet.</p>';
+                });
+            }
+
+            body.addEventListener('click', function (e) {
+                var more = e.target.closest('button[data-more]');
+                if (more) {
+                    more.parentElement.querySelectorAll('[data-extra]').forEach(function (el) { el.classList.remove('hidden'); });
+                    more.remove();
+                    return;
+                }
+                var link = e.target.closest('a[data-sale]');
+                if (link) {
+                    e.preventDefault();
+                    window.openSale && window.openSale(link.getAttribute('data-sale'));
+                    return;
+                }
+                var tr = e.target.closest('tr[data-make]');
+                if (tr) toggle(tr);
+            });
+
+            var m = /^#make=(.+)$/.exec(location.hash);
+            if (m) {
+                var want = decodeURIComponent(m[1]);
+                var tr = [].find.call(body.querySelectorAll('tr[data-make]'), function (r) { return r.getAttribute('data-make') === want; });
+                if (tr) { toggle(tr, true); tr.scrollIntoView({ block: 'start' }); }
+            }
         });
 
         function usd(v) {
@@ -339,6 +489,22 @@
             }).join('');
         });
 
+        function saleDetail(r, d) {
+            var lots = d.bySale[saleKey(r.event, r.event_date)] || [];
+            if (!(num(r.apex_lots) > 0)) {
+                return '<p class="m-0 text-mute text-sm">Under 20 lots, so no highlights: this sale carries no weight in MAI.</p>';
+            }
+            if (!lots.length) return '<p class="m-0 text-mute text-sm">No highlight list published for this sale yet.</p>';
+            var counts = {};
+            lots.forEach(function (l) { counts[l.manufacturer] = (counts[l.manufacturer] || 0) + 1; });
+            var makes = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b); });
+            return '<p class="m-0 text-sm text-mute">' + lots.length + ' highlights: the top ' +
+                (lots.length >= 25 ? '25' : '10%') + ' of ' + esc(r.total_lots) + ' lots, each worth at least ' +
+                usd(num(r.highlight_line_usd)) + '. By make: ' +
+                makes.map(function (m) { return '<span class="text-ink">' + esc(m) + '</span> ' + counts[m]; }).join(' · ') + '</p>' +
+                carList(lots, true);
+        }
+
         load('data/auction_ratings.csv').then(function (rows) {
             var body = document.getElementById('eventRows');
             var subtitle = document.getElementById('eventsSubtitle');
@@ -353,13 +519,17 @@
 
             var withApex = data.filter(function (d) { return (num(d.apex_lots) || 0) > 0; }).length;
             subtitle.textContent = data.length + ' events tracked. ' + withApex + ' of them have 20 or more lots and count toward MAI; ' +
-                'smaller sales carry no weight.';
+                'smaller sales carry no weight. Click a sale to see its highlights.';
 
+            var byKey = {};
             body.innerHTML = data.map(function (d) {
+                var key = saleKey(d.event, d.event_date);
+                byKey[key] = d;
                 var apex = num(d.apex_lots) || 0;
                 var muted = apex === 0 ? ' text-faint' : '';
-                return '<tr>' +
-                    '<td class="pl-6 font-medium' + muted + '">' + esc(d.event) + '</td>' +
+                return '<tr class="is-clickable" id="' + saleId(key) + '" data-key="' + esc(key) + '">' +
+                    '<td class="pl-6 font-medium' + muted + '"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
+                        '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + esc(d.event) + '</button></td>' +
                     '<td class="font-mono text-[13px]' + muted + '">' + esc(d.event_date) + '</td>' +
                     '<td class="' + (apex === 0 ? 'text-faint' : 'text-mute') + '">' + esc(d.auction_house) + '</td>' +
                     '<td class="num' + muted + '">' + apex + '</td>' +
@@ -368,6 +538,46 @@
                     '<td class="num pr-6' + muted + '">' + (num(d.auction_rating) != null ? Number(d.auction_rating).toFixed(1) : '—') + '</td>' +
                 '</tr>';
             }).join('');
+
+            function toggle(tr, open) {
+                var btn = tr.querySelector('button[aria-expanded]');
+                var next = tr.nextElementSibling;
+                var isOpen = next && next.classList.contains('drill-row');
+                if (open === undefined) open = !isOpen;
+                if (!open) {
+                    if (isOpen) next.remove();
+                    tr.classList.remove('is-selected');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('.chev').style.transform = '';
+                    return;
+                }
+                if (isOpen) return;
+                var row = document.createElement('tr');
+                row.className = 'drill-row';
+                row.innerHTML = '<td colspan="7" class="px-6 py-5 bg-canvas" style="white-space:normal"><div class="drill-inner">Loading…</div></td>';
+                tr.after(row);
+                tr.classList.add('is-selected');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.querySelector('.chev').style.transform = 'rotate(90deg)';
+                drill.then(function (d) {
+                    row.querySelector('.drill-inner').innerHTML = d.ok ? saleDetail(byKey[tr.getAttribute('data-key')], d)
+                        : '<p class="m-0 text-mute">The highlight list (apex_lots.csv) is not published yet.</p>';
+                });
+            }
+
+            body.addEventListener('click', function (e) {
+                var tr = e.target.closest('tr[data-key]');
+                if (tr) toggle(tr);
+            });
+
+            // Used by the ranking's drill-down: a sale name there opens it here.
+            window.openSale = function (key) {
+                var tr = [].find.call(body.querySelectorAll('tr[data-key]'), function (r) { return r.getAttribute('data-key') === key; });
+                if (!tr) return;
+                toggle(tr, true);
+                tr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                tr.querySelector('button').focus({ preventScroll: true });
+            };
         });
     })();
     </script>

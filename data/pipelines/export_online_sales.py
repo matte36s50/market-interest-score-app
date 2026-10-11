@@ -52,6 +52,7 @@ PLATFORM_CODE = "BAT"
 MIN_MONTH_SHARE = 0.6   # of the median month's listing count
 EARLIEST = date(2000, 1, 1)  # "12/31/69" is a missing date, not a 1969 sale
 
+SLUG_YEAR = re.compile(r"^((?:18|19|20)\d\d)-")
 AMOUNT = re.compile(r"^\s*([A-Z]{3})?\s*[^\d]*([\d,]+(?:\.\d+)?)")
 SLUG = re.compile(r"/listing/([^/?#]+)")
 
@@ -72,6 +73,24 @@ def parse_day(text):
         except ValueError:
             continue
     return None
+
+
+def clean_model(make, model):
+    """BaT repeats the make in the model ('Porsche 918 Spyder'); drop it."""
+    model = " ".join(str(model or "").split())
+    for prefix in {str(make or "").strip(), make_name(make)}:
+        if prefix and model.lower().startswith(prefix.lower() + " "):
+            return model[len(prefix) + 1:]
+    return model
+
+
+def car_year(row, slug):
+    """bat.csv's year column is mostly empty; the listing slug starts with it."""
+    raw = (row.get("year") or "").strip()
+    if raw:
+        return fmt_num(raw)
+    m = SLUG_YEAR.match(slug or "")
+    return m.group(1) if m else ""
 
 
 def month_end(year, month):
@@ -132,6 +151,7 @@ def build(bat_rows, today, fx):
                 if currency != "USD":
                     note = f"; {currency} at {rate:.4f} USD"
             m = SLUG.search(r.get("auction_url") or "")
+            slug = m.group(1) if m else ""
             out.append({
                 "event": event_name(year, month),
                 "event_date": end.isoformat(),
@@ -139,13 +159,13 @@ def build(bat_rows, today, fx):
                 "auction_house_code": PLATFORM_CODE,
                 "lot_number": "",
                 "manufacturer": make_name(r.get("make")),
-                "model": (r.get("model") or "").strip(),
-                "year_of_car": fmt_num(r.get("year")) if (r.get("year") or "").strip() else "",
+                "model": clean_model(r.get("make"), r.get("model")),
+                "year_of_car": car_year(r, slug),
                 "low_estimate_usd": "",
                 "high_estimate_usd": "",
                 "sold_price_usd": price,
                 "sold": "true" if sold else "false",
-                "notes": f"bat:{m.group(1) if m else url}{note}",
+                "notes": f"bat:{slug or r.get('auction_url') or ''}{note}",
             })
     out.sort(key=lambda row: (row["event_date"], row["notes"]))
     report = {
