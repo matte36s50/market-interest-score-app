@@ -28,6 +28,7 @@ import google_trends
 import youtube_signals
 import social_signals
 import export_live_lots
+import export_online_sales
 
 # mai.py needs pandas, which the stdlib-only signals workflow doesn't install;
 # the Data Pipelines workflow does and runs the MAI tests before scoring.
@@ -792,7 +793,9 @@ class LiveLotsExport(unittest.TestCase):
                           ("RM Miami 2026", "RMS"), ("Gooding", "GCH"),
                           ("Gooding Amelia Island 2026", "GCH"),
                           ("Broad Arrow Villa d'Este 2026", "BAA"), ("Air/Water", "BAA"),
-                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO")]:
+                          ("Bonhams", "BON"), ("Bonhams|Cars Online", "BCO"),
+                          ("duPont REGISTRY Live", "DPR"), ("duPont Registry", "DPR"),
+                          ("duPont Registry Live Week 47", "DPR")]:
             row, _ = export_live_lots.to_csv_row(_store_lot(auction_house=raw))
             self.assertEqual(row["auction_house_code"], code, raw)
             self.assertEqual(row["auction_house"], export_live_lots.HOUSES[code], raw)
@@ -832,7 +835,10 @@ class LiveLotsExport(unittest.TestCase):
         self.assertFalse(os.path.exists(out + ".up"))
 
     def test_every_house_in_the_committed_csvs_is_in_houses(self):
-        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH):
+        for path in (export_live_lots.LOTS_PATH, export_live_lots.UPCOMING_PATH,
+                     export_online_sales.OUT_PATH):
+            if path == export_online_sales.OUT_PATH and not os.path.exists(path):
+                continue  # written by the workflow's first run with online sales
             rows = lib.read_rows(path)
             self.assertTrue(rows, path)
             bad = {(r.get("auction_house"), r.get("auction_house_code")) for r in rows
@@ -868,6 +874,10 @@ class ApexRule(unittest.TestCase):
         self.assertEqual([apex.highlight_count(n) for n in (4, 19, 20, 21, 30, 187)],
                          [0, 0, 2, 3, 3, 19])
 
+    def test_no_sale_has_more_than_25_highlights(self):
+        # Only an online month gets near it: Bring a Trailer sells 3,000-5,000 cars a month.
+        self.assertEqual([apex.highlight_count(n) for n in (240, 250, 251, 5349)], [24, 25, 25, 25])
+
     @unittest.skipIf(mai is None, "pandas not installed")
     def test_top_lots_of_each_sale_are_marked(self):
         import pandas as pd
@@ -890,6 +900,66 @@ def _sale(event, date, top, filler_price=1000, n=20):
     return rows
 
 
+def _bat(day, make, amount, sold=True, slug=None, model="Model"):
+    return {"auction_url": f"https://bringatrailer.com/listing/{slug or f'{make}-{day}-{amount}'}/",
+            "sale_date": day, "make": make, "model": model, "year": "1990",
+            "sale_amount": amount, "sale_type": "sold" if sold else "high bid"}
+
+
+class OnlineSales(unittest.TestCase):
+    """Bring a Trailer: each completed month is one sale, in the
+    auction_lots.csv schema, so its top 25 are scored like any sale's."""
+
+    TODAY = date(2026, 10, 11)
+
+    def _build(self, rows, fx=lambda c, d: {"EUR": 1.25}.get(c)):
+        return export_online_sales.build(rows, self.TODAY, fx)
+
+    def test_a_month_is_a_sale_with_bat_prices_and_unsold_high_bids(self):
+        rows, report = self._build([
+            _bat("8/14/2026", "Porsche", "USD $725,000", slug="1973-porsche-911-carrera-rs"),
+            _bat("8/20/26", "Mercedez-Benz", "USD $86,000", sold=False),
+            _bat("8/30/2026", "Ferrari", "EUR €400,000"),
+        ])
+        self.assertEqual(report["months"], ["2026-08"])
+        by_make = {r["manufacturer"]: r for r in rows}
+        rs = by_make["Porsche"]
+        self.assertEqual((rs["event"], rs["event_date"]), ("Bring a Trailer – August 2026", "2026-08-31"))
+        self.assertEqual((rs["auction_house"], rs["auction_house_code"]), ("Bring a Trailer", "BAT"))
+        self.assertEqual(rs["auction_house"], export_live_lots.HOUSES["BAT"])
+        self.assertEqual((rs["sold_price_usd"], rs["sold"]), ("725000", "true"))
+        self.assertEqual(rs["notes"], "bat:1973-porsche-911-carrera-rs")
+        self.assertEqual(rs["high_estimate_usd"], "")
+        unsold = by_make["Mercedes-Benz"]            # make corrected, high bid never a price
+        self.assertEqual((unsold["sold_price_usd"], unsold["sold"]), ("", "false"))
+        self.assertEqual(by_make["Ferrari"]["sold_price_usd"], "500000")
+        self.assertTrue(by_make["Ferrari"]["notes"].endswith("; EUR at 1.2500 USD"))
+
+    def test_only_completed_months_and_never_a_partial_scrape(self):
+        rows = [_bat(f"{m}/{d}/2026", "Ford", "USD $50,000") for m in (6, 7, 8) for d in range(1, 21)]
+        rows += [_bat(f"9/{d}/2026", "Ford", "USD $50,000") for d in range(1, 6)]     # a third of a month
+        rows += [_bat("10/2/2026", "Ford", "USD $50,000")]                           # still running
+        rows += [_bat("12/31/69", "Ford", "USD $50,000"), _bat("1/1/2027", "Ford", "USD $50,000")]
+        out, report = self._build(rows)
+        self.assertEqual(report["months"], ["2026-06", "2026-07", "2026-08"])
+        self.assertEqual(report["skipped_months"], {"2026-09": 5})
+        self.assertEqual(report["bad"], {"no date": 1, "future date": 1})
+        self.assertEqual(len(out), 60)
+
+    def test_a_currency_without_a_rate_is_skipped_and_counted(self):
+        out, report = self._build([_bat("8/1/2026", "Ford", "USD $1,000"), _bat("8/2/2026", "Ford", "CHF 5,000")])
+        self.assertEqual(len(out), 1)
+        self.assertEqual(report["no_rate"], {"CHF": 1})
+
+    def test_an_unreachable_bat_csv_leaves_the_file_alone(self):
+        out = os.path.join(tempfile.mkdtemp(), "online.csv")
+        with unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            code = export_online_sales.main(["--out", out], fetch=lambda: None, today=self.TODAY)
+        self.assertEqual(code, 0)
+        self.assertIn("::warning::", log.getvalue())
+        self.assertFalse(os.path.exists(out))
+
+
 @unittest.skipIf(mai is None, "pandas not installed")
 class MaiScores(unittest.TestCase):
     """MAI is a make's share of all highlight value: its share of each sale's
@@ -898,15 +968,18 @@ class MaiScores(unittest.TestCase):
     LOTS_HEADER = ("event,event_date,auction_house,lot_number,manufacturer,model,"
                    "year_of_car,low_estimate_usd,high_estimate_usd,sold_price_usd,sold,notes")
 
-    def _score(self, lot_rows, ratings):
+    def _score(self, lot_rows, ratings, online=None):
         d = tempfile.mkdtemp()
         paths = {k: os.path.join(d, f"{k}.csv") for k in ("lots", "ratings", "out")}
+        if online:
+            paths["online"] = online
         with open(paths["lots"], "w") as f:
             f.write("\n".join([self.LOTS_HEADER, *lot_rows]) + "\n")
         with open(paths["ratings"], "w") as f:
             f.write("event,event_date,auction_rating\n")
             f.writelines(f"{e},{day},{r}\n" for e, day, r in ratings)
         with unittest.mock.patch.object(mai, "LOTS_PATH", paths["lots"]), \
+             unittest.mock.patch.object(mai, "ONLINE_PATH", paths.get("online", os.path.join(d, "none.csv"))), \
              unittest.mock.patch.object(mai, "RATINGS_PATH", paths["ratings"]), \
              unittest.mock.patch.object(mai, "OUTPUT_PATH", paths["out"]), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()):
@@ -972,6 +1045,20 @@ class MaiScores(unittest.TestCase):
         self.assertAlmostEqual(float(rows["Ferrari"]["avg_Q"]), 1.1)
         self.assertEqual(rows["Ferrari"]["apex_from_sold_price"], "1")
 
+    def test_online_months_are_read_alongside_live_sales(self):
+        d = tempfile.mkdtemp()
+        online = os.path.join(d, "online.csv")
+        with open(online, "w") as f:
+            f.write("\n".join([self.LOTS_HEADER.replace("auction_house,", "auction_house,auction_house_code,"),
+                               *(f"Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,BAT,,"
+                                 f"{'Porsche' if i < 25 else 'Filler'},M,1990,,,{2000000 - i * 1000 if i < 25 else 1000},true,"
+                                 for i in range(300))]) + "\n")
+        rows = self._score(_sale("E1", "2026-08-14", ["Ferrari,250 GT,1960,,,3000000,true,"]),
+                           [("E1", "2026-08-14", 100), ("Bring a Trailer – August 2026", "2026-08-31", 25)],
+                           online=online)
+        self.assertEqual(rows["Porsche"]["total_apex_lots"], "25")   # capped, all from the BaT month
+        self.assertAlmostEqual(float(rows["Porsche"]["MAI_score"]), 25 * 1.0 / 125, places=6)
+
     def test_trailing_spaces_do_not_split_a_make(self):
         rows = self._score(
             _sale("E1", "2026-08-14", ["Ferrari ,250 GT,1960,,,3000000,true,",
@@ -991,6 +1078,7 @@ class AuctionRatings(unittest.TestCase):
         with open(lots, "w") as f:
             f.write(MaiScores.LOTS_HEADER + "\n" + "\n".join(lot_rows) + "\n")
         with unittest.mock.patch.object(auction_rating, "LOTS_PATH", lots), \
+             unittest.mock.patch.object(auction_rating, "ONLINE_PATH", os.path.join(d, "none.csv")), \
              unittest.mock.patch.object(auction_rating, "OUTPUT_PATH", out), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()):
             auction_rating.main()

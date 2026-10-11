@@ -2,8 +2,9 @@
 """
 Manufacturer Apex Index (MAI) — D-term proxy for the Networked Utility Dividend.
 
-Apex lots are the highlights of each sale: its top 10% of lots by apex value
-(see apex.py). Sales under 20 lots have none.
+Apex lots are the highlights of each sale: its top 10% of lots by apex value,
+at most 25 (see apex.py). Sales under 20 lots have none. Online platforms
+count one completed month as one sale (online_lots.csv).
 
 For each manufacturer × event:
   P (Presence)   = manufacturer's share of the sale's highlights
@@ -34,9 +35,10 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns
+from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns, read_lots
 
 LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
+ONLINE_PATH = os.path.join(os.path.dirname(__file__), "..", "online_lots.csv")
 RATINGS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_ratings.csv")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "mai_scores.csv")
 
@@ -48,7 +50,7 @@ EMPTY_COLS = [
 
 
 def main():
-    lots = pd.read_csv(LOTS_PATH)
+    lots = read_lots(LOTS_PATH, ONLINE_PATH)
     ratings = pd.read_csv(RATINGS_PATH)
 
     if lots.empty or ratings.empty:

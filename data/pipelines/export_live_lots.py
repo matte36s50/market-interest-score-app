@@ -109,6 +109,8 @@ HOUSES = {
     "BJA": "Barrett-Jackson",
     "ART": "Artcurial",
     "DOR": "Dorotheum",
+    "DPR": "duPont REGISTRY Live",
+    "BAT": "Bring a Trailer",   # online: one sale per month (export_online_sales.py)
 }
 
 # Spellings of a house name seen in the store, normalised by _house_key.
@@ -119,12 +121,14 @@ HOUSE_ALIASES = {
     "Gooding & Company": "GCH",
     "Broad Arrow Auctions": "BAA",
     "Bonhams Cars Online": "BCO",
+    "duPont Registry": "DPR",
 }
 
 # A sale name in the house field: its leading words name the house. Longest
 # prefix first, so "Bonhams|Cars Online ..." isn't read as Bonhams.
 HOUSE_PREFIXES = [
     ("Bonhams Cars Online", "BCO"),
+    ("duPont Registry Live", "DPR"),
     ("Broad Arrow", "BAA"),
     ("Gooding", "GCH"),
     ("Bonhams", "BON"),

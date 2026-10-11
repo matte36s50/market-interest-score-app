@@ -2,7 +2,10 @@
 The apex (highlight) rule shared by auction_rating.py and mai.py.
 
 An apex lot is one of the highlights of its sale: the top HIGHLIGHT_PERCENT
-of the sale's lots, ranked by apex value. A fixed dollar line can't do this:
+of the sale's lots, ranked by apex value, and never more than MAX_HIGHLIGHTS.
+The cap only reaches online platforms, whose monthly "sale" runs to
+thousands of lots (export_online_sales.py): 10% of a Bring a Trailer month
+is over 300 cars down to about $95K, its top 25 the true marquee results. A fixed dollar line can't do this:
 $500K is an ordinary lot at Monterey and the top of the sale at Hershey. How
 much a sale's highlights are worth is carried instead by the sale's weight in
 auction_rating.py (the apex value it takes to be a highlight there).
@@ -19,9 +22,11 @@ how many highlights came each way.
 """
 
 import math
+import os
 
 HIGHLIGHT_PERCENT = 10
 MIN_LOTS = 20
+MAX_HIGHLIGHTS = 25
 
 BASIS_ESTIMATE = "estimate"
 BASIS_SOLD_PRICE = "sold_price"
@@ -61,14 +66,22 @@ def apex_value(lot):
 
 
 def highlight_count(total_lots):
-    """How many of a sale's lots are its highlights: the top 10%, rounded up.
+    """How many of a sale's lots are its highlights: the top 10%, rounded up,
+    at most MAX_HIGHLIGHTS.
 
     0 for a sale under MIN_LOTS. Integer arithmetic, so 30 lots give 3, not
     ceil(3.0000000000000004) = 4.
     """
     if total_lots < MIN_LOTS:
         return 0
-    return -(-total_lots * HIGHLIGHT_PERCENT // 100)
+    return min(-(-total_lots * HIGHLIGHT_PERCENT // 100), MAX_HIGHLIGHTS)
+
+
+def read_lots(*paths):
+    """The lot files that exist, as one DataFrame (live sales and online months)."""
+    import pandas as pd
+    frames = [pd.read_csv(p) for p in paths if os.path.exists(p)]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
 def add_apex_columns(df, sale=("event", "event_date")):
