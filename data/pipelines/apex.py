@@ -23,6 +23,8 @@ how many highlights came each way.
 
 import math
 import os
+import re
+from collections import Counter
 
 HIGHLIGHT_PERCENT = 10
 MIN_LOTS = 20
@@ -77,11 +79,38 @@ def highlight_count(total_lots):
     return min(-(-total_lots * HIGHLIGHT_PERCENT // 100), MAX_HIGHLIGHTS)
 
 
+def make_key(name):
+    """'Mercedes Benz', 'Mercedes-Benz' and 'MERCEDES-BENZ' share a key;
+    'Mercedes' (the pre-1926 marque) does not."""
+    return re.sub(r"[^a-z0-9]", "", str(name or "").lower())
+
+
+def unify_makes(names):
+    """{spelling: canonical} for every spelling whose key another spelling
+    shares, choosing the most common spelling (ties: the one with hyphens,
+    then mixed case over all-caps or all-lower, then alphabetical). Sources
+    differ only in case, spaces and hyphens here, so this catches variants
+    no hand-kept list has seen yet."""
+    counts = Counter(str(n).strip() for n in names if str(n or "").strip())
+    by_key = {}
+    for name, n in counts.items():
+        flat_case = name.isupper() or name.islower()
+        by_key.setdefault(make_key(name), []).append((-n, -name.count("-"), flat_case, name))
+    return {entry[-1]: min(group)[-1] for group in by_key.values() if len(group) > 1 for entry in group}
+
+
 def read_lots(*paths):
-    """The lot files that exist, as one DataFrame (live sales and online months)."""
+    """The lot files that exist, as one DataFrame (live sales and online
+    months), with each make spelled one way across all of them."""
     import pandas as pd
     frames = [pd.read_csv(p) for p in paths if os.path.exists(p)]
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+    if not frames:
+        return pd.DataFrame()
+    lots = pd.concat(frames, ignore_index=True)
+    if "manufacturer" in lots:
+        names = lots["manufacturer"].dropna().astype(str).str.strip()
+        lots.loc[names.index, "manufacturer"] = names.replace(unify_makes(names))
+    return lots
 
 
 def add_apex_columns(df, sale=("event", "event_date")):

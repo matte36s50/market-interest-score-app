@@ -889,6 +889,14 @@ class ApexRule(unittest.TestCase):
         self.assertEqual([apex.highlight_count(n) for n in (4, 19, 20, 21, 30, 187)],
                          [0, 0, 2, 3, 3, 19])
 
+    def test_spellings_of_one_make_unify_but_distinct_makes_stay_apart(self):
+        names = ["Mercedes-Benz"] * 3 + ["Mercedes Benz", "MERCEDES-BENZ", "Mercedes", "Mercedes-AMG",
+                                         "Harley-Davidson", "Harley Davidson", "Harley Davidson", "Ford"]
+        self.assertEqual(apex.unify_makes(names), {
+            "Mercedes-Benz": "Mercedes-Benz", "Mercedes Benz": "Mercedes-Benz", "MERCEDES-BENZ": "Mercedes-Benz",
+            "Harley-Davidson": "Harley Davidson", "Harley Davidson": "Harley Davidson",
+        })
+
     def test_no_sale_has_more_than_25_highlights(self):
         # Only an online month gets near it: Bring a Trailer sells 3,000-5,000 cars a month.
         self.assertEqual([apex.highlight_count(n) for n in (240, 250, 251, 5349)], [24, 25, 25, 25])
@@ -953,9 +961,12 @@ class OnlineSales(unittest.TestCase):
 
     def test_the_make_is_not_repeated_in_the_model(self):
         rows, _ = self._build([_bat("8/1/2026", "Porsche", "USD $1", model="Porsche 918 Spyder"),
+                               _bat("8/4/2026", "Mercedes-Benz", "USD $1", model="190E"),
+                               _bat("8/5/2026", "Mercedes Benz", "USD $1", model="320 Cabriolet A"),
                                _bat("8/2/2026", "Mercedez-Benz", "USD $1", model="Mercedez-Benz 300SL"),
                                _bat("8/3/2026", "Ford", "USD $1", model="GT")])
-        self.assertEqual(sorted(r["model"] for r in rows), ["300SL", "918 Spyder", "GT"])
+        self.assertEqual(sorted(r["model"] for r in rows), ["190E", "300SL", "320 Cabriolet A", "918 Spyder", "GT"])
+        self.assertEqual({r["manufacturer"] for r in rows}, {"Porsche", "Mercedes-Benz", "Ford"})
 
     def test_only_completed_months_and_never_a_partial_scrape(self):
         rows = [_bat(f"{m}/{d}/2026", "Ford", "USD $50,000") for m in (6, 7, 8) for d in range(1, 21)]
@@ -1104,6 +1115,14 @@ class MaiScores(unittest.TestCase):
         e1 = [(r["rank"], r["manufacturer"], r["apex_value_usd"], r["apex_basis"], r["sold"]) for r in lots if r["event"] == "E1"]
         self.assertEqual(e1, [("1", "Ferrari", "3000000", "sold_price", "true"),
                               ("2", "Porsche", "2500000", "estimate", "false")])
+
+    def test_a_make_spelled_two_ways_across_sources_scores_once(self):
+        rows = self._score(
+            _sale("E1", "2026-08-14", ["Mercedes-Benz,300 SL,1955,,,3000000,true,",
+                                       "Mercedes Benz,320 Cabriolet A,1938,,,2000000,true,"]),
+            [("E1", "2026-08-14", 100)])
+        self.assertNotIn("Mercedes Benz", rows)
+        self.assertEqual(rows["Mercedes-Benz"]["total_apex_lots"], "2")
 
     def test_trailing_spaces_do_not_split_a_make(self):
         rows = self._score(
