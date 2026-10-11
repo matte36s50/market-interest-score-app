@@ -540,3 +540,13 @@ python data/pipelines/mai.py
 | apex_from_sold_price | Highlights ranked by sold price (no estimate) |
 
 Rows are sorted descending by `MAI_score`.
+
+### Drill-down outputs (read by `mai.html`)
+
+- `data/mai_detail.csv`: one row per make and sale, with the sale's rating,
+  the make's highlights out of the sale's (`apex_lots` of `sale_apex_lots`),
+  P, Q, R and `contribution` (rating × P / Σ rating). A make's
+  contributions sum to its `MAI_score`.
+- `data/apex_lots.csv`: every highlight lot, ranked within its sale, with its
+  apex value, how it was ranked (`estimate` or `sold_price`), outcome and
+  sold price.

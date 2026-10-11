@@ -41,6 +41,19 @@ LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
 ONLINE_PATH = os.path.join(os.path.dirname(__file__), "..", "online_lots.csv")
 RATINGS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_ratings.csv")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "mai_scores.csv")
+# For the drill-down on mai.html: each make's contribution from each sale
+# (they sum to its MAI_score), and the highlight lots themselves.
+DETAIL_PATH = os.path.join(os.path.dirname(__file__), "..", "mai_detail.csv")
+APEX_LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "apex_lots.csv")
+
+DETAIL_COLS = [
+    "manufacturer", "event", "event_date", "auction_house", "auction_rating",
+    "sale_apex_lots", "apex_lots", "P", "Q", "R", "contribution",
+]
+APEX_LOT_COLS = [
+    "event", "event_date", "auction_house", "rank", "manufacturer", "model", "year_of_car",
+    "apex_value_usd", "apex_basis", "sold", "sold_price_usd", "high_estimate_usd",
+]
 
 EMPTY_COLS = [
     "manufacturer", "events_present", "total_apex_lots",
@@ -80,6 +93,7 @@ def main():
         rating = ratings_lookup.get((event, event_date), 0.0)
         total_rating += rating
         total_apex_at_event = len(event_apex)
+        house = event_apex["auction_house"].iloc[0]
 
         for manufacturer, mfr_apex in event_apex.groupby("manufacturer"):
             mfr_sold = mfr_apex[mfr_apex["sold"]]
@@ -106,6 +120,8 @@ def main():
                 "Q_known": q_known,
                 "R": R,
                 "auction_rating": rating,
+                "auction_house": house,
+                "sale_apex_lots": total_apex_at_event,
             })
 
     if not records:
@@ -141,10 +157,31 @@ def main():
     )
     out.to_csv(OUTPUT_PATH, index=False)
     print(f"Wrote {len(out)} manufacturer scores to {os.path.abspath(OUTPUT_PATH)}")
+    write_drilldown(detail, apex, total_rating)
     print(f"Apex lots: {len(apex)} across {detail[['event', 'event_date']].drop_duplicates().shape[0]} "
           f"sales ({int(out['apex_from_estimate'].sum())} ranked by high estimate, "
           f"{int(out['apex_from_sold_price'].sum())} by sold price; R reads high where sold "
           "prices are used)")
+
+
+def write_drilldown(detail, apex, total_rating):
+    """mai_detail.csv and apex_lots.csv, read by mai.html's drill-down."""
+    d = detail.copy()
+    d["contribution"] = d["auction_rating"] * d["P"] / total_rating if total_rating > 0 else 0.0
+    d["Q"] = d["Q_known"]
+    d = d.sort_values(["manufacturer", "contribution"], ascending=[True, False])
+    d[DETAIL_COLS].to_csv(DETAIL_PATH, index=False, float_format="%.6g")
+
+    lots = apex.sort_values(["event_date", "event", "apex_value"], ascending=[True, True, False]).copy()
+    lots["rank"] = lots.groupby(["event", "event_date"]).cumcount() + 1
+    lots["apex_value_usd"] = lots["apex_value"].round(0)
+    lots["sold"] = lots["sold"].map({True: "true", False: "false"})
+    for col in APEX_LOT_COLS:
+        if col not in lots:
+            lots[col] = ""
+    lots[APEX_LOT_COLS].to_csv(APEX_LOTS_PATH, index=False, float_format="%.0f")
+    print(f"Wrote {len(d)} make-by-sale rows to {os.path.basename(DETAIL_PATH)} "
+          f"and {len(lots)} highlight lots to {os.path.basename(APEX_LOTS_PATH)}")
 
 
 if __name__ == "__main__":

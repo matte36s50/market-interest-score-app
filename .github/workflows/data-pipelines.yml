@@ -86,7 +86,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/auction_lots.csv data/upcoming_lots.csv data/online_lots.csv data/auction_ratings.csv data/mai_scores.csv
+          git add data/auction_lots.csv data/upcoming_lots.csv data/online_lots.csv data/auction_ratings.csv data/mai_scores.csv data/mai_detail.csv data/apex_lots.csv
           if git diff --cached --quiet; then
             echo "No changes in auction lots or derived CSVs — nothing to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"
