@@ -128,6 +128,10 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   `MAKES` ("Mercedez-Benz" → "Mercedes-Benz", "Mclaren" → "McLaren"). An
   unlisted make passes through unchanged; "Mercedes" (pre-1926 cars) and
   marque-engine pairs like "Lola-Ford" are deliberately kept apart.
+- Skips lots listed in `EXCLUDED_LOTS` (by store listing id, with a reason):
+  results that aren't market prices, such as one-off commissions. The store
+  keeps them and the run log names them; the daily export can't bring them
+  back. Currently: the 2026 Ferrari Luce Tailor Made at RM Monterey ($44M).
 - `event_date` is one date per sale (the view's earliest lot date), so a
   two-day sale stays one event in `auction_rating.py` and `mai.py`.
 - **Won't drop hand-entered events.** If a hand-entered event in the current

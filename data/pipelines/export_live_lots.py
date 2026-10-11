@@ -136,6 +136,15 @@ HOUSE_PREFIXES = [
     ("RM", "RMS"),
 ]
 
+# Lots kept out of MAI by hand, by store listing id, with the reason. For
+# results that aren't market prices: one-off commissions, charity lots. The
+# store keeps them; the export skips them (named in the run log), so the
+# daily run can't bring them back.
+EXCLUDED_LOTS = {
+    "rm-monterey-auction-2026-lot-345":
+        "one-off commission (2026 Ferrari Luce Tailor Made, $44M), not a market result",
+}
+
 # Sale names misspelt in the store.
 EVENT_NAMES = {
     "Bonhams Leguna Seca": "Bonhams Laguna Seca",
@@ -291,6 +300,8 @@ def to_csv_row(r, fx=None):
     production). Returns (row, None) or (None, reason) when the lot can't be
     exported.
     """
+    if r.get("source_listing_id") in EXCLUDED_LOTS:
+        return None, f"excluded: {EXCLUDED_LOTS[r['source_listing_id']]}"
     if r.get("status") != "ended":
         return None, "not ended"
     outcome = r.get("outcome")
@@ -319,6 +330,8 @@ def to_upcoming_row(r, fx=None, today=None):
     """
     if r.get("status") == "ended":
         return None, "ended"
+    if r.get("source_listing_id") in EXCLUDED_LOTS:
+        return None, f"excluded: {EXCLUDED_LOTS[r['source_listing_id']]}"
     if r.get("outcome") == "withdrawn":
         return None, "withdrawn"
     row, _, reason = _lot_fields(r, fx)
