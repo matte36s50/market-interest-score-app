@@ -1,79 +1,81 @@
 event,event_date,auction_house,auction_house_code,lot_number,manufacturer,model,year_of_car,low_estimate_usd,high_estimate_usd,notes
-Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,Superamerica,2006,495750,561850,store:cw-rm-s1026-r0010; needs review; GBP at 1.3220 USD
+Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,Superamerica,2006,496312.50,562487.50,store:cw-rm-s1026-r0010; needs review; GBP at 1.3235 USD
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Honda,Spree NQ50,1986,500,700,store:cw-rm-p226-a0025; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Ferrari,250 GT SWB 1:3 Scale Model,1961,10000,15000,store:cw-rm-p226-n2048; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulietta 750 Spider by Pinin Farina,1958,3000,5000,store:cw-rm-p226-r0001; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulietta Spider Veloce Project,1959,10000,15000,store:cw-rm-p226-r0002; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia GT Veloce GTAm Conversion,1967,5000,8000,store:cw-rm-p226-r0003; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulietta 750 Spider Spider by Pinin Farina,1958,3000,5000,store:cw-rm-p226-r0001; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulietta Spider Veloce Project Project,1959,10000,15000,store:cw-rm-p226-r0002; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia GT Veloce GTAm Conversion GTAm Conversion,1967,5000,8000,store:cw-rm-p226-r0003; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,GTA 1300 Junior,1968,25000,50000,store:cw-rm-p226-r0004; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Montreal by Bertone,1975,20000,30000,store:cw-rm-p226-r0006; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia GTA Junior Racecar,,15000,25000,store:cw-rm-p226-r0007; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia GTA Junior Racecar Racecar,,15000,25000,store:cw-rm-p226-r0007; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Alfetta GTV 2.0,1979,2000,3000,store:cw-rm-p226-r0008; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,GTV Racecar,,20000,30000,store:cw-rm-p226-r0009; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,GTV Racecar Racecar,,20000,30000,store:cw-rm-p226-r0009; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Jaguar,XJ12 Vanden Plas,1985,3000,5000,store:cw-rm-p226-r0010; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Jaguar,XJS V-12,1994,7000,10000,store:cw-rm-p226-r0012; needs review
 The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia TI,1965,1500,2000,store:cw-rm-p226-r0013; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia Sprint GTA 1300 Junior Project,1968,2000,4000,store:cw-rm-p226-r0014; needs review
-The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Gulia Super Project,1966,250,500,store:cw-rm-p226-r0015; needs review
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Clément,AC4R 12/16 HP Rear-Entrance Tonneau,1903,462700,594900,store:cw-rm-lf26-r0001; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Honda,NSX,1991,661000,1057600,store:cw-rm-lf26-r0002; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Invicta,4½-Litre S-Type ‘Low Chassis’ Sports by Vanden Plas,1931,594900,859300,store:cw-rm-lf26-r0003; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,250 GT/L Berlinetta Lusso by Scaglietti,1964,991500,1255900,store:cw-rm-lf26-r0004; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,300 SL Roadster,1963,1454200,1718600,store:cw-rm-lf26-r0005; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,550 Maranello,2002,304060,370160,store:cw-rm-lf26-r0006; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,B Special 'Blue Train' Recreation by Racing Green,1953,489140,568460,store:cw-rm-lf26-r0007; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F40,1988,2379600,3172800,store:cw-rm-lf26-r0008; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,190 SL,1955,105760,158640,store:cw-rm-lf26-r0009; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8,1993,1057600,1322000,store:cw-rm-lf26-r0010; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,XK 120 SE Drophead Coupé,1953,92540,105760,store:cw-rm-lf26-r0011; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,458 Speciale Aperta,2015,1586400,1983000,store:cw-rm-lf26-r0013; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,458 Speciale,2015,661000,925400,store:cw-rm-lf26-r0014; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,430 Scuderia,2008,528800,661000,store:cw-rm-lf26-r0015; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Aston Martin,Valkyrie Coupé,2023,2379600,3172800,store:cw-rm-lf26-r0016; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,XKSS Recreation,1967,237960,317280,store:cw-rm-lf26-r0017; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,BMW,M5,1989,59490,72710,store:cw-rm-lf26-r0018; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,R-Type Continental Fastback by H.J. Mulliner,1954,462700,555240,store:cw-rm-lf26-r0019; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Milwaukee,7 HP Steam Racer,1901,52880,79320,store:cw-rm-lf26-r0020; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F12berlinetta 70th Anniversary 'Tailor Made',2017,396600,462700,store:cw-rm-lf26-r0021; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Aventador S LP740-4 Roadster,2018,423040,502360,store:cw-rm-lf26-r0023; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,599 GTB Fiorano,2008,118980,145420,store:cw-rm-lf26-r0024; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Dino 246 GTS by Scaglietti,1973,429650,627950,store:cw-rm-lf26-r0025; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Murciélago Roadster,2005,594900,859300,store:cw-rm-lf26-r0026; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Superamerica,2007,627950,892350,store:cw-rm-lf26-r0027; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,365 GTB/4 Daytona Berlinetta by Scaglietti,1971,528800,661000,store:cw-rm-lf26-r0028; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Frisky,Family Three,1959,26440,39660,store:cw-rm-lf26-r0029; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lightburn,Zeta Sports,1964,33050,46270,store:cw-rm-lf26-r0030; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Scuderia Spider 16M,2009,819640,925400,store:cw-rm-lf26-r0031; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,3½-Litre Fixed Head Coupé by Vesters et Neirinck,1935,198300,330500,store:cw-rm-lf26-r0032; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,575M Maranello,2005,158640,185080,store:cw-rm-lf26-r0033; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Diablo SE30,1994,1586400,2115200,store:cw-rm-lf26-r0034; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,Silver Ghost Tilbury Saloon by Willoughby,1923,39660,79320,store:cw-rm-lf26-r0035; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F12tdf,2017,2247400,2644000,store:cw-rm-lf26-r0036; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,Carrera GT,2004,2644000,3305000,store:cw-rm-lf26-r0037; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Volkswagen,Golf R32,2003,39660,66100,store:cw-rm-lf26-r0038; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,McLaren,720S Spider,2019,237960,290840,store:cw-rm-lf26-r0039; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,360 Challenge Stradale,2004,661000,793200,store:cw-rm-lf26-r0040; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,308 GTB 'Vetroresina' by Scaglietti,1977,185080,237960,store:cw-rm-lf26-r0041; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,C-Type Recreation by Brazell Engineering,1953,237960,317280,store:cw-rm-lf26-r0042; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,275 GTS by Pininfarina,1965,1322000,1983000,store:cw-rm-lf26-r0043; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,275 GTB Alloy by Scaglietti,1965,2313500,2644000,store:cw-rm-lf26-r0044; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,S1 Continental Drophead Coupé by Park Ward,1956,925400,1322000,store:cw-rm-lf26-r0045; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,40/50 HP Silver Ghost London-to-Edinburgh Skiff in the style of Labourdette,1914,793200,1189800,store:cw-rm-lf26-r0046; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,3½-Litre All-Weather Tourer by Barker,1934,92540,132200,store:cw-rm-lf26-r0047; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Aston Martin,DB5 Convertible,1964,495750,760150,store:cw-rm-lf26-r0048; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,S2 Drophead Coupé Adaptation by H.J. Mulliner,1961,158640,211520,store:cw-rm-lf26-r0049; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,Silver Cloud III Drophead Coupé Adaptation by H.J. Mulliner,1964,198300,330500,store:cw-rm-lf26-r0050; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Fiat,508S 'Balilla' Coppa d’Oro,1934,79320,118980,store:cw-rm-lf26-r0051; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Fiat,508S 'Balilla' Coppa d’Oro,1935,79320,118980,store:cw-rm-lf26-r0052; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Scuderia Spider 16M,2009,859300,991500,store:cw-rm-lf26-r0053; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,SLR 'McLaren Edition' Roadster by McLaren Special Operations,2007,859300,991500,store:cw-rm-lf26-r0054; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Land Rover,Series II 'Art Car' by Sean Wotherspoon,1959,79320,105760,store:cw-rm-lf26-r0055; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,MMC,8 HP Rear-Entrance Tonneau,1904,66100,92540,store:cw-rm-lf26-r0056; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Leyland,Cub London Transport Interstation Bus,1936,66100,92540,store:cw-rm-lf26-r0057; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Leyland,Lioness Charabanc,1929,39660,52880,store:cw-rm-lf26-r0058; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Honda,Integra Type R,1998,26440,39660,store:cw-rm-lf26-r0059; needs review; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,911 GT3 RS 3.8,2011,594900,661000,store:cw-rm-lf26-r0060; GBP at 1.3220 USD
-The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Locomobile,Type 1 'Style 1' Spindle-Seat Runabout,1899,52880,66100,store:cw-rm-lf26-r0061; needs review; GBP at 1.3220 USD
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Giulia Sprint GTA 1300 Junior Project Project,1968,2000,4000,store:cw-rm-p226-r0014; needs review
+The Red Catalogue,2026-10-30,RM Sotheby's,RMS,,Alfa Romeo,Gulia Super Project Project,1966,250,500,store:cw-rm-p226-r0015; needs review
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Clément,AC4R 12/16 HP Rear-Entrance Tonneau,1903,463225,595575,store:cw-rm-lf26-r0001; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Honda,NSX,1991,661750,1058800,store:cw-rm-lf26-r0002; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Invicta,4½-Litre S-Type ‘Low Chassis’ Sports by Vanden Plas,1931,595575,860275,store:cw-rm-lf26-r0003; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,250 GT/L Berlinetta Lusso by Scaglietti,1964,992625,1257325,store:cw-rm-lf26-r0004; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,300 SL Roadster,1963,1455850,1720550,store:cw-rm-lf26-r0005; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,550 Maranello,2002,304405,370580,store:cw-rm-lf26-r0006; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,B Special 'Blue Train' Recreation by Racing Green by Racing Green,1953,489695,569105,store:cw-rm-lf26-r0007; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F40,1988,2382300,3176400,store:cw-rm-lf26-r0008; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,190 SL,1955,105880,158820,store:cw-rm-lf26-r0009; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8,1993,1058800,1323500,store:cw-rm-lf26-r0010; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,XK 120 SE Drophead Coupé,1953,92645,105880,store:cw-rm-lf26-r0011; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,458 Speciale Aperta,2015,1588200,1985250,store:cw-rm-lf26-r0013; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,458 Speciale,2015,661750,926450,store:cw-rm-lf26-r0014; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,430 Scuderia,2008,529400,661750,store:cw-rm-lf26-r0015; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Aston Martin,Valkyrie Coupé,2023,2382300,3176400,store:cw-rm-lf26-r0016; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,XKSS Recreation Recreation,1967,238230,317640,store:cw-rm-lf26-r0017; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,BMW,M5,1989,59557.50,72792.50,store:cw-rm-lf26-r0018; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,R-Type Continental Fastback by H.J. Mulliner,1954,463225,555870,store:cw-rm-lf26-r0019; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Milwaukee,7 HP Steam Racer,1901,52940,79410,store:cw-rm-lf26-r0020; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F12berlinetta 70th Anniversary 'Tailor Made',2017,397050,463225,store:cw-rm-lf26-r0021; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Aventador S LP740-4 Roadster,2018,423520,502930,store:cw-rm-lf26-r0023; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,599 GTB Fiorano,2008,119115,145585,store:cw-rm-lf26-r0024; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Dino 246 GTS by Scaglietti,1973,430137.50,628662.50,store:cw-rm-lf26-r0025; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Murciélago Roadster,2005,595575,860275,store:cw-rm-lf26-r0026; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Superamerica,2007,628662.50,893362.50,store:cw-rm-lf26-r0027; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,365 GTB/4 Daytona Berlinetta by Scaglietti,1971,529400,661750,store:cw-rm-lf26-r0028; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Frisky,Family Three,1959,26470,39705,store:cw-rm-lf26-r0029; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lightburn,Zeta Sports,1964,33087.50,46322.50,store:cw-rm-lf26-r0030; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Scuderia Spider 16M,2009,820570,926450,store:cw-rm-lf26-r0031; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,3½-Litre Fixed Head Coupé by Vesters et Neirinck,1935,198525,330875,store:cw-rm-lf26-r0032; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,575M Maranello,2005,158820,185290,store:cw-rm-lf26-r0033; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Lamborghini,Diablo SE30,1994,1588200,2117600,store:cw-rm-lf26-r0034; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,Silver Ghost Tilbury Saloon by Willoughby,1923,39705,79410,store:cw-rm-lf26-r0035; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,F12tdf,2017,2249950,2647000,store:cw-rm-lf26-r0036; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,Carrera GT,2004,2647000,3308750,store:cw-rm-lf26-r0037; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Volkswagen,Golf R32,2003,39705,66175,store:cw-rm-lf26-r0038; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,McLaren,720S Spider,2019,238230,291170,store:cw-rm-lf26-r0039; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,360 Challenge Stradale,2004,661750,794100,store:cw-rm-lf26-r0040; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,308 GTB 'Vetroresina' by Scaglietti,1977,185290,238230,store:cw-rm-lf26-r0041; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Jaguar,C-Type Recreation by Brazell Engineering by Brazell Engineering,1953,238230,317640,store:cw-rm-lf26-r0042; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,275 GTS by Pininfarina,1965,1323500,1985250,store:cw-rm-lf26-r0043; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,275 GTB Alloy by Scaglietti,1965,2316125,2647000,store:cw-rm-lf26-r0044; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,S1 Continental Drophead Coupé by Park Ward,1956,926450,1323500,store:cw-rm-lf26-r0045; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,40/50 HP Silver Ghost London-to-Edinburgh Skiff in the style of Labourdette,1914,794100,1191150,store:cw-rm-lf26-r0046; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,3½-Litre All-Weather Tourer by Barker,1934,92645,132350,store:cw-rm-lf26-r0047; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Aston Martin,DB5 Convertible,1964,496312.50,761012.50,store:cw-rm-lf26-r0048; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Bentley,S2 Drophead Coupé Adaptation by H.J. Mulliner,1961,158820,211760,store:cw-rm-lf26-r0049; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Rolls-Royce,Silver Cloud III Drophead Coupé Adaptation by H.J. Mulliner,1964,198525,330875,store:cw-rm-lf26-r0050; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Fiat,508S 'Balilla' Coppa d’Oro,1934,79410,119115,store:cw-rm-lf26-r0051; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Fiat,508S 'Balilla' Coppa d’Oro,1935,79410,119115,store:cw-rm-lf26-r0052; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Scuderia Spider 16M,2009,860275,992625,store:cw-rm-lf26-r0053; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Mercedes-Benz,SLR 'McLaren Edition' Roadster by McLaren Special Operations,2007,860275,992625,store:cw-rm-lf26-r0054; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Land Rover,Series II 'Art Car' by Sean Wotherspoon,1959,79410,105880,store:cw-rm-lf26-r0055; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,MMC,8 HP Rear-Entrance Tonneau,1904,66175,92645,store:cw-rm-lf26-r0056; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Leyland,Cub London Transport Interstation Bus,1936,66175,92645,store:cw-rm-lf26-r0057; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Leyland,Lioness Charabanc,1929,39705,52940,store:cw-rm-lf26-r0058; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Honda,Integra Type R,1998,26470,39705,store:cw-rm-lf26-r0059; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Porsche,911 GT3 RS 3.8,2011,595575,661750,store:cw-rm-lf26-r0060; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Locomobile,Type 1 'Style 1' Spindle-Seat Runabout,1899,52940,66175,store:cw-rm-lf26-r0061; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,550 Barchetta Pininfarina,2001,959537.50,1091887.50,store:cw-rm-lf26-r0062; needs review; GBP at 1.3235 USD
+The London Auction 2026,2026-10-31,RM Sotheby's,RMS,,Ferrari,Daytona SP3,2022,9926250,12573250,store:cw-rm-lf26-r0063; needs review; GBP at 1.3235 USD
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,F12 TDF,2016,,,store:cw-gooding-2016-ferrari-f12-tdf; needs review
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,812 Competizione Aperta,2023,,,store:cw-gooding-2023-ferrari-812-competizione-aperta; needs review
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,12 Cilindri Spider,2025,,,store:cw-gooding-2025-ferrari-12-cilindri-spider; needs review
@@ -221,22 +223,30 @@ Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,V Star 250,
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,650 Interceptor,2019,,,store:cw-gooding-2019-royal-enfield-650-interceptor; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,Super Cub,2021,,,store:cw-gooding-2021-honda-super-cub; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,Super Cub C125,2021,,,store:cw-gooding-2021-honda-super-cub-c125; needs review
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,635CSi Group A,1986,560300,784420,store:cw-rm-mu26-r0001; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo Coupé,2002,78442,134472,store:cw-rm-mu26-r0006; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo S Lightweight,1993,896480,1120600,store:cw-rm-mu26-r0007; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8,1993,1232660,1456780,store:cw-rm-mu26-r0008; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Abarth,695 Tributo Ferrari,2010,33618,44824,store:cw-rm-mu26-r0009; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Mercedes-AMG,C-Coupé DTM,2014,448240,672360,store:cw-rm-mu26-r0010; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Spirit 70,2026,179296,212914,store:cw-rm-mu26-r0013; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo S Cabriolet,2005,89648,145678,store:cw-rm-mu26-r0014; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 S/T,2024,336180,392210,store:cw-rm-mu26-r0015; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 S 2.4 Targa,1973,145678,168090,store:cw-rm-mu26-r0016; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Targa 4 GTS Edition 50 Years Porsche Design Edition 50 Years Porsche Design,2023,168090,201708,store:cw-rm-mu26-r0017; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Sport Classic,2023,313768,358592,store:cw-rm-mu26-r0018; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Mercedes-Benz,190 E 2.5-16 Evolution II,1990,336180,448240,store:cw-rm-mu26-r0019; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8 Clubsport,1995,168090,224120,store:cw-rm-mu26-r0022; needs review; EUR at 1.1206 USD
-The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo,1991,218517,274547,store:cw-rm-mu26-r0023; EUR at 1.1206 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,635CSi Group A,1986,559050,782670,store:cw-rm-mu26-r0001; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo Coupé,2002,78267,134172,store:cw-rm-mu26-r0006; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo S Lightweight,1992,894480,1118100,store:cw-rm-mu26-r0007; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8,1993,1229910,1453530,store:cw-rm-mu26-r0008; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Abarth,695 Tributo Ferrari,2010,33543,44724,store:cw-rm-mu26-r0009; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Mercedes-AMG,C-Coupé DTM,2014,447240,670860,store:cw-rm-mu26-r0010; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,M3,1986,89448,111810,store:cw-rm-mu26-r0011; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Spirit 70,2026,178896,212439,store:cw-rm-mu26-r0013; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo S Cabriolet,2005,89448,145353,store:cw-rm-mu26-r0014; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 S/T,2024,335430,391335,store:cw-rm-mu26-r0015; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 S 2.4 Targa,1973,145353,167715,store:cw-rm-mu26-r0016; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Targa 4 GTS Edition 50 Years Porsche Design Edition 50 Years Porsche Design,2023,167715,201258,store:cw-rm-mu26-r0017; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Sport Classic,2023,313068,357792,store:cw-rm-mu26-r0018; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Mercedes-Benz,190 E 2.5-16 Evolution II,1990,335430,447240,store:cw-rm-mu26-r0019; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Carrera RS 3.8 Clubsport Clubsport,1995,167715,223620,store:cw-rm-mu26-r0022; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo,1991,218029.50,273934.50,store:cw-rm-mu26-r0023; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo Coupé,1983,134172,167715,store:cw-rm-mu26-r0031; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Carrera 2.7 MFI,1975,134172,178896,store:cw-rm-mu26-r0032; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,328 Roadster,1939,614955,726765,store:cw-rm-mu26-r0033; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,M1 AHG Studie,1987,447240,559050,store:cw-rm-mu26-r0036; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,356 B Carrera 2 2000 GS Cabriolet by Reutter,1962,559050,782670,store:cw-rm-mu26-r0037; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,356 A 1600 Speedster by Reutter,1958,313068,424878,store:cw-rm-mu26-r0038; needs review; EUR at 1.1181 USD
+The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Toyota,GR Yaris,2023,39133.50,55905,store:cw-rm-mu26-r0048; needs review; EUR at 1.1181 USD
 The Abu Dhabi Auction 2026,2026-12-04,RM Sotheby's,RMS,,Ferrari,599 GTB Fiorano,2010,140000,200000,store:cw-rm-ad26-r0001; needs review
-The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Renault,5 Turbo 1,1981,156884,224120,store:cw-rm-pa27-r0001; needs review; EUR at 1.1206 USD
-The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Abarth,695 Tributo Ferrari,2010,44824,56030,store:cw-rm-pa27-r0002; needs review; EUR at 1.1206 USD
+The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Renault,5 Turbo 1,1981,156534,223620,store:cw-rm-pa27-r0001; needs review; EUR at 1.1181 USD
+The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Abarth,695 Tributo Ferrari,2010,44724,55905,store:cw-rm-pa27-r0002; needs review; EUR at 1.1181 USD
 Rétromobile Paris 2027,2027-02-04,Gooding Christie's,GCH,,Frazer Nash,High Speed Competition,1949,,,store:cw-gooding-1949-frazer-nash-high-speed-competition; needs review
