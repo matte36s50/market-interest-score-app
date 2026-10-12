@@ -1124,6 +1124,36 @@ class MaiScores(unittest.TestCase):
         self.assertNotIn("Mercedes Benz", rows)
         self.assertEqual(rows["Mercedes-Benz"]["total_apex_lots"], "2")
 
+    def test_modern_and_classic_split_the_same_highlights_by_age_at_sale(self):
+        d = tempfile.mkdtemp()
+        with unittest.mock.patch("tempfile.mkdtemp", return_value=d):
+            rows = self._score(
+                # E1 (2026): a 24-year-old car is modern, a 25-year-old classic.
+                _sale("E1", "2026-08-14", ["Ford,GT,2002,,,3000000,true,",
+                                           "Mercedes-Benz,SLR,2001,,,2500000,true,"])
+                # E2 (2026): two classics and a lot with no year.
+                + _sale("E2", "2026-09-05", ["Mercedes-Benz,300 SL,1955,,,900000,true,",
+                                             "Ferrari,250 GT,1960,,,800000,true,",
+                                             "Ferrari,Unknown,,,,850000,true,"], n=30),
+                [("E1", "2026-08-14", 100), ("E2", "2026-09-05", 30)])
+        self.assertEqual(float(rows["Ford"]["MAI_modern"]), 1.0)          # the only modern highlight
+        self.assertEqual(float(rows["Ford"]["MAI_classic"]), 0.0)
+        # Classic weights: SLR 100/2 = 50; E2's 300 SL and 250 GT 30/3 = 10 each.
+        self.assertAlmostEqual(float(rows["Mercedes-Benz"]["MAI_classic"]), 60 / 70, places=5)
+        self.assertAlmostEqual(float(rows["Ferrari"]["MAI_classic"]), 10 / 70, places=5)
+        self.assertEqual(rows["Ferrari"]["apex_lots_classic"], "1")          # the yearless lot isn't split
+        self.assertEqual(rows["Ferrari"]["total_apex_lots"], "2")
+        total = sum(float(r["MAI_classic"]) for r in rows.values())
+        self.assertAlmostEqual(total, 1.0, places=5)
+        with open(os.path.join(d, "detail.csv")) as f:
+            mb = [r for r in csv.DictReader(f) if r["manufacturer"] == "Mercedes-Benz"]
+        self.assertAlmostEqual(sum(float(r["contribution_classic"]) for r in mb), 60 / 70, places=5)
+        with open(os.path.join(d, "apex_lots.csv")) as f:
+            seg = {(r["model"], r["age_at_sale"], r["segment"]) for r in csv.DictReader(f)}
+        self.assertIn(("GT", "24", "modern"), seg)
+        self.assertIn(("SLR", "25", "classic"), seg)
+        self.assertIn(("Unknown", "", ""), seg)
+
     def test_trailing_spaces_do_not_split_a_make(self):
         rows = self._score(
             _sale("E1", "2026-08-14", ["Ferrari ,250 GT,1960,,,3000000,true,",

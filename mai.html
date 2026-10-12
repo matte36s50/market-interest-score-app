@@ -63,7 +63,14 @@
                     <h2 class="m-0 text-lg font-semibold">Ranking</h2>
                     <p id="rankingSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
                 </div>
-                <a href="#how-it-works" class="text-[13px] text-mute hover:text-amber-700">How the score works</a>
+                <div class="flex flex-wrap items-center gap-4">
+                    <div id="segmentToggle" role="radiogroup" aria-label="Which cars" class="inline-flex rounded-md border border-line overflow-hidden text-[13px]">
+                        <button type="button" role="radio" aria-checked="true" data-view="all" class="px-3 py-1.5" title="All highlights">All</button>
+                        <button type="button" role="radio" aria-checked="false" data-view="modern" class="px-3 py-1.5 border-l border-line" title="Cars under 25 years old when they sold">Modern <span class="text-faint">&lt;25 yrs</span></button>
+                        <button type="button" role="radio" aria-checked="false" data-view="classic" class="px-3 py-1.5 border-l border-line" title="Cars 25 years or older when they sold">Classic <span class="text-faint">25+</span></button>
+                    </div>
+                    <a href="#how-it-works" class="text-[13px] text-mute hover:text-amber-700">How the score works</a>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="data-table">
@@ -171,6 +178,7 @@
                     <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
                         <li>Scores across all makes add up to 1. Compare makes against each other.</li>
                         <li>Click a make in the ranking to see which sales its score comes from, and the cars behind it.</li>
+                        <li>Modern and Classic split the same highlights by the car's age when it sold: under 25 years is modern, 25 or more classic. Each view ranks makes by their share of that segment, so its scores add up to 1 too. Most modern highlights come from Bring a Trailer, most classic ones from the live houses.</li>
                         <li>Q is left blank for a make with no sold apex lot that had a high estimate.</li>
                         <li>A make with a handful of apex lots at one event can post a high R of 100%. Check the Events and Apex lots columns before reading much into it.</li>
                     </ul>
@@ -286,20 +294,37 @@
                 return '<li class="flex flex-wrap gap-x-3 gap-y-0.5">' +
                     '<span class="font-mono text-faint w-8">#' + esc(l.rank) + '</span>' +
                     '<span class="text-ink">' + esc(carName(l, withMake)) + '</span>' +
-                    '<span class="text-mute">' + carResult(l) + '</span></li>';
+                    '<span class="text-mute">' + carResult(l) + '</span>' +
+                    (withMake && l.segment ? '<span class="text-faint" title="Age when sold">' + esc(l.segment) + ' · ' + esc(l.age_at_sale) + ' yrs</span>' : '') +
+                    '</li>';
             }).join('') + '</ul>';
         }
 
-        function makeDetail(make, score, d) {
-            var sales = d.byMake[make] || [];
-            if (!sales.length) return '<p class="m-0 text-mute">No breakdown available for this make yet.</p>';
-            var total = sales.reduce(function (s, r) { return s + (num(r.contribution) || 0); }, 0) || 1;
-            var top3 = sales.slice(0, 3).reduce(function (s, r) { return s + (num(r.contribution) || 0); }, 0);
+        // All, modern (under 25 years at sale) or classic (25+): the same
+        // highlights, split by age. mai.py writes a score for each.
+        var VIEWS = {
+            all: { score: 'MAI_score', lots: 'total_apex_lots', contrib: 'contribution', count: 'apex_lots', label: '' },
+            modern: { score: 'MAI_modern', lots: 'apex_lots_modern', contrib: 'contribution_modern', count: 'apex_lots_modern', label: 'modern' },
+            classic: { score: 'MAI_classic', lots: 'apex_lots_classic', contrib: 'contribution_classic', count: 'apex_lots_classic', label: 'classic' }
+        };
+
+        function makeDetail(make, score, d, view) {
+            var v = VIEWS[view];
+            var sales = (d.byMake[make] || []).filter(function (r) { return (num(r[v.contrib]) || 0) > 0; })
+                .sort(function (a, b) { return (num(b[v.contrib]) || 0) - (num(a[v.contrib]) || 0); });
+            if (!sales.length) {
+                return '<p class="m-0 text-mute">' + esc(make) + ' has no ' + (v.label || '') + ' highlights' +
+                    (view === 'all' ? ' in the breakdown yet' : '') + '.</p>';
+            }
+            var total = sales.reduce(function (s, r) { return s + (num(r[v.contrib]) || 0); }, 0) || 1;
+            var top3 = sales.slice(0, 3).reduce(function (s, r) { return s + (num(r[v.contrib]) || 0); }, 0);
             var LIMIT = 8;
             var cards = sales.map(function (r, i) {
                 var key = saleKey(r.event, r.event_date);
-                var share = (num(r.contribution) || 0) / total;
-                var cars = (d.bySale[key] || []).filter(function (l) { return l.manufacturer === make; });
+                var share = (num(r[v.contrib]) || 0) / total;
+                var cars = (d.bySale[key] || []).filter(function (l) {
+                    return l.manufacturer === make && (view === 'all' || l.segment === view);
+                });
                 return '<div class="panel p-4' + (i >= LIMIT ? ' hidden" data-extra="1' : '') + '">' +
                     '<div class="flex flex-wrap justify-between items-start gap-x-6 gap-y-2">' +
                         '<div class="min-w-0">' +
@@ -308,16 +333,17 @@
                             ' · rating ' + Number(r.auction_rating).toFixed(1) + '</div>' +
                         '</div>' +
                         '<div class="flex items-center gap-3 w-full sm:w-auto sm:min-w-[260px]">' +
-                            '<span class="font-mono text-[13px] text-mute whitespace-nowrap" title="The make\'s highlights out of the sale\'s">' +
-                                esc(r.apex_lots) + ' of ' + esc(r.sale_apex_lots) + '</span>' +
+                            '<span class="font-mono text-[13px] text-mute whitespace-nowrap" title="The make\'s ' + (v.label ? v.label + ' ' : '') + 'highlights out of all the sale\'s highlights">' +
+                                esc(r[v.count]) + ' of ' + esc(r.sale_apex_lots) + '</span>' +
                             '<span class="score-bar"><span style="width:' + Math.max(2, share * 100).toFixed(0) + '%"></span></span>' +
-                            '<span class="font-mono text-[13px] w-12 text-right" title="Share of the make\'s MAI">' + Math.round(share * 100) + '%</span>' +
+                            '<span class="font-mono text-[13px] w-12 text-right" title="Share of the make\'s score">' + Math.round(share * 100) + '%</span>' +
                         '</div>' +
                     '</div>' + (cars.length ? carList(cars, false) : '') +
                 '</div>';
             }).join('');
             return '<p class="m-0 mb-3 text-sm text-mute">' +
                 '<span class="text-ink font-semibold">' + esc(make) + '</span> scores ' + Number(score).toFixed(3) +
+                (v.label ? ' among ' + v.label + ' cars' : '') +
                 ' from ' + sales.length + ' sale' + (sales.length === 1 ? '' : 's') + '.' +
                 (sales.length > 3 ? ' The top three give ' + Math.round(top3 / total * 100) + '% of it.' : '') +
                 ' Each sale\'s share is its rating times the make\'s share of its highlights.</p>' +
@@ -326,48 +352,90 @@
                     'Show all ' + sales.length + ' sales</button>' : '');
         }
 
-        function setHash(make) {
+        function readHash() {
+            var out = {};
+            location.hash.replace(/^#/, '').split('&').forEach(function (part) {
+                var kv = part.split('=');
+                if (kv[0]) out[kv[0]] = decodeURIComponent(kv.slice(1).join('='));
+            });
+            return out;
+        }
+
+        function setHash(view, make) {
+            var parts = [];
+            if (view && view !== 'all') parts.push('view=' + view);
+            if (make) parts.push('make=' + encodeURIComponent(make));
             try {
-                history.replaceState(null, '', make ? '#make=' + encodeURIComponent(make) : location.pathname + location.search);
+                history.replaceState(null, '', parts.length ? '#' + parts.join('&') : location.pathname + location.search);
             } catch (e) { /* file:// or sandboxed: the drill-down still works */ }
         }
 
         load('data/mai_scores.csv').then(function (rows) {
             var body = document.getElementById('maiRows');
             var subtitle = document.getElementById('rankingSubtitle');
-            var data = (rows || []).filter(function (r) {
-                return r.manufacturer && num(r.MAI_score) != null;
-            }).sort(function (a, b) { return b.MAI_score - a.MAI_score; });
+            var toggleBox = document.getElementById('segmentToggle');
+            var all = (rows || []).filter(function (r) { return r.manufacturer && num(r.MAI_score) != null; });
 
-            if (!data.length) {
+            if (!all.length) {
                 subtitle.textContent = 'No MAI scores yet';
                 body.innerHTML = '<tr><td colspan="8" class="px-6 py-10 text-center text-mute">' +
                     'No MAI data yet. Populate <code class="font-mono">data/auction_lots.csv</code>, then run ' +
                     '<code class="font-mono">auction_rating.py</code> and <code class="font-mono">mai.py</code>.</td></tr>';
                 return;
             }
+            var hasSegments = all.some(function (r) { return num(r.MAI_modern) != null; });
+            if (!hasSegments) toggleBox.classList.add('hidden');
 
-            subtitle.textContent = data.length + ' makes with at least one apex lot, ranked by MAI. Click a make to see where its score comes from.';
-            var max = data[0].MAI_score || 1;
+            var hash = readHash();
+            var view = hasSegments && VIEWS[hash.view] ? hash.view : 'all';
+            var openMake = null;
             var scores = {};
-            body.innerHTML = data.map(function (d, i) {
-                scores[d.manufacturer] = d.MAI_score;
-                var width = Math.max(2, (d.MAI_score / max) * 100).toFixed(0);
-                return '<tr class="is-clickable" data-make="' + esc(d.manufacturer) + '">' +
-                    '<td class="pl-6 font-mono text-[13px] text-faint">' + String(i + 1).padStart(2, '0') + '</td>' +
-                    '<td class="font-semibold"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
-                        '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + esc(d.manufacturer) + '</button></td>' +
-                    '<td class="w-64"><div class="flex items-center gap-3">' +
-                        '<span class="font-mono text-sm font-medium w-12 text-right">' + Number(d.MAI_score).toFixed(3) + '</span>' +
-                        '<span class="score-bar"><span style="width:' + width + '%"></span></span>' +
-                    '</div></td>' +
-                    '<td class="num">' + pct(d.avg_P) + '</td>' +
-                    '<td class="num">' + pct(d.avg_Q) + '</td>' +
-                    '<td class="num">' + pct(d.avg_R) + '</td>' +
-                    '<td class="num">' + (num(d.events_present) != null ? d.events_present : '—') + '</td>' +
-                    '<td class="num pr-6">' + (num(d.total_apex_lots) != null ? d.total_apex_lots : '—') + '</td>' +
-                '</tr>';
-            }).join('');
+
+            function render() {
+                var v = VIEWS[view];
+                var data = all.filter(function (r) { return view === 'all' || (num(r[v.score]) || 0) > 0; })
+                    .sort(function (a, b) { return b[v.score] - a[v.score]; });
+                toggleBox.querySelectorAll('button').forEach(function (b) {
+                    var on = b.getAttribute('data-view') === view;
+                    b.setAttribute('aria-checked', on ? 'true' : 'false');
+                    b.className = b.className.replace(/ ?(bg-ink text-white|text-mute hover:text-ink)/g, '') + (on ? ' bg-ink text-white' : ' text-mute hover:text-ink');
+                });
+                subtitle.textContent = view === 'all'
+                    ? data.length + ' makes with at least one apex lot, ranked by MAI. Click a make to see where its score comes from.'
+                    : data.length + ' makes with ' + v.label + ' highlights (' + (view === 'modern' ? 'under 25 years old' : '25 years or older') +
+                      ' when sold), ranked by their share of them. P, Q and R are for all of a make\'s highlights.';
+                var max = (data[0] && data[0][v.score]) || 1;
+                scores = {};
+                body.innerHTML = data.map(function (d, i) {
+                    scores[d.manufacturer] = d[v.score];
+                    var width = Math.max(2, (d[v.score] / max) * 100).toFixed(0);
+                    var events = view === 'all' ? d.events_present : null;
+                    return '<tr class="is-clickable" data-make="' + esc(d.manufacturer) + '">' +
+                        '<td class="pl-6 font-mono text-[13px] text-faint">' + String(i + 1).padStart(2, '0') + '</td>' +
+                        '<td class="font-semibold"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
+                            '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + esc(d.manufacturer) + '</button></td>' +
+                        '<td class="w-64"><div class="flex items-center gap-3">' +
+                            '<span class="font-mono text-sm font-medium w-12 text-right">' + Number(d[v.score]).toFixed(3) + '</span>' +
+                            '<span class="score-bar"><span style="width:' + width + '%"></span></span>' +
+                        '</div></td>' +
+                        '<td class="num">' + pct(d.avg_P) + '</td>' +
+                        '<td class="num">' + pct(d.avg_Q) + '</td>' +
+                        '<td class="num">' + pct(d.avg_R) + '</td>' +
+                        '<td class="num">' + (events != null ? events : '<span class="text-faint" title="See the breakdown">—</span>') + '</td>' +
+                        '<td class="num pr-6">' + (num(d[v.lots]) != null ? d[v.lots] : '—') + '</td>' +
+                    '</tr>';
+                }).join('');
+                if (openMake) {
+                    var tr = findRow(openMake);
+                    if (tr) toggle(tr, true); else { openMake = null; setHash(view, null); }
+                } else {
+                    setHash(view, null);
+                }
+            }
+
+            function findRow(make) {
+                return [].find.call(body.querySelectorAll('tr[data-make]'), function (r) { return r.getAttribute('data-make') === make; });
+            }
 
             function toggle(tr, open) {
                 var make = tr.getAttribute('data-make');
@@ -380,7 +448,8 @@
                     tr.classList.remove('is-selected');
                     btn.setAttribute('aria-expanded', 'false');
                     btn.querySelector('.chev').style.transform = '';
-                    setHash(null);
+                    if (openMake === make) openMake = null;
+                    setHash(view, openMake);
                     return;
                 }
                 if (isOpen) return;
@@ -391,12 +460,21 @@
                 tr.classList.add('is-selected');
                 btn.setAttribute('aria-expanded', 'true');
                 btn.querySelector('.chev').style.transform = 'rotate(90deg)';
-                setHash(make);
+                openMake = make;
+                setHash(view, make);
+                var forView = view;
                 drill.then(function (d) {
-                    row.querySelector('.drill-inner').innerHTML = d.ok ? makeDetail(make, scores[make], d)
+                    row.querySelector('.drill-inner').innerHTML = d.ok ? makeDetail(make, scores[make], d, forView)
                         : '<p class="m-0 text-mute">The breakdown files (mai_detail.csv, apex_lots.csv) are not published yet.</p>';
                 });
             }
+
+            toggleBox.addEventListener('click', function (e) {
+                var b = e.target.closest('button[data-view]');
+                if (!b || b.getAttribute('data-view') === view) return;
+                view = b.getAttribute('data-view');
+                render();
+            });
 
             body.addEventListener('click', function (e) {
                 var more = e.target.closest('button[data-more]');
@@ -412,14 +490,21 @@
                     return;
                 }
                 var tr = e.target.closest('tr[data-make]');
-                if (tr) toggle(tr);
+                if (tr) {
+                    // One make open at a time keeps the URL meaningful.
+                    if (openMake && openMake !== tr.getAttribute('data-make')) {
+                        var prev = findRow(openMake);
+                        if (prev) toggle(prev, false);
+                    }
+                    toggle(tr);
+                }
             });
 
-            var m = /^#make=(.+)$/.exec(location.hash);
-            if (m) {
-                var want = decodeURIComponent(m[1]);
-                var tr = [].find.call(body.querySelectorAll('tr[data-make]'), function (r) { return r.getAttribute('data-make') === want; });
-                if (tr) { toggle(tr, true); tr.scrollIntoView({ block: 'start' }); }
+            openMake = hash.make || null;
+            render();
+            if (openMake) {
+                var first = findRow(openMake);
+                if (first) first.scrollIntoView({ block: 'start' });
             }
         });
 

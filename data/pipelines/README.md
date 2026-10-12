@@ -542,8 +542,21 @@ python data/pipelines/mai.py
 | MAI_score | Rating-weighted share of all highlights (the headline score) |
 | apex_from_estimate | Highlights ranked by high estimate |
 | apex_from_sold_price | Highlights ranked by sold price (no estimate) |
+| MAI_modern / MAI_classic | The make's share of modern (under 25 years old when sold) / classic (25+) highlight weight; each column sums to 1 |
+| apex_lots_modern / apex_lots_classic | Its modern / classic highlights |
 
 Rows are sorted descending by `MAI_score`.
+
+### Modern and classic
+
+A highlight is **modern** if the car was under 25 years old when it sold
+(sale year − model year), **classic** from 25. Age at sale, not today's age,
+so past sales never change segment. The highlights are the same as for
+`MAI_score`, split, not re-ranked: each carries its sale's rating divided by
+the sale's highlight count, and a segment's score is a make's share of that
+segment's weight. A highlight with no model year counts in `MAI_score` only.
+Most modern highlights come from Bring a Trailer and most classic ones from
+the live houses, so the two views also lean toward those sources.
 
 ### Drill-down outputs (read by `mai.html`)
 
@@ -553,4 +566,6 @@ Rows are sorted descending by `MAI_score`.
   contributions sum to its `MAI_score`.
 - `data/apex_lots.csv`: every highlight lot, ranked within its sale, with its
   apex value, how it was ranked (`estimate` or `sold_price`), outcome and
-  sold price.
+  sold price. Also `age_at_sale` and `segment` (modern / classic).
+- `mai_detail.csv` also carries `apex_lots_modern` / `apex_lots_classic` and
+  `contribution_modern` / `contribution_classic`, which sum to the segment scores.
