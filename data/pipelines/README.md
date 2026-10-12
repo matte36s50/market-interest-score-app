@@ -126,8 +126,8 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   misspelt sale names ("Bonhams Leguna Seca" → "Bonhams Laguna Seca").
 - Trims manufacturer names and corrects misspellings and variants through
   `MAKES` ("Mercedez-Benz" → "Mercedes-Benz", "Mclaren" → "McLaren"). An
-  unlisted make passes through unchanged; "Mercedes" (pre-1926 cars) and
-  marque-engine pairs like "Lola-Ford" are deliberately kept apart.
+  unlisted make passes through unchanged. "Mercedes" (pre-1926 cars) counts
+  as Mercedes-Benz; marque-engine pairs like "Lola-Ford" are kept apart.
 - Skips lots listed in `EXCLUDED_LOTS` (by store listing id, with a reason):
   results that aren't market prices, such as one-off commissions. The store
   keeps them and the run log names them; the daily export can't bring them

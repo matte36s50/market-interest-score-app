@@ -152,10 +152,11 @@ EVENT_NAMES = {
 }
 
 # Manufacturer names misspelt or written several ways in the store. Keys are
-# the trimmed store value. Deliberately not merged: "Mercedes" (pre-1926 cars),
-# "Pierce" (pre-1909), and marque-engine pairs like "Lola-Ford".
+# the trimmed store value. Deliberately not merged: "Pierce" (pre-1909) and
+# marque-engine pairs like "Lola-Ford".
 MAKES = {
     "Mercedez-Benz": "Mercedes-Benz",
+    "Mercedes": "Mercedes-Benz",   # pre-1926 cars: the same lineage, counted as one make
     "Mclaren": "McLaren",
     "Rools Royce": "Rolls-Royce",
     "Rolls Royce": "Rolls-Royce",
