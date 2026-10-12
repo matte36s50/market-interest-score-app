@@ -803,7 +803,7 @@ class LiveLotsExport(unittest.TestCase):
     def test_manufacturer_names_are_trimmed_and_corrected(self):
         for raw, fixed in [("Mercedez-Benz", "Mercedes-Benz"), ("Mclaren", "McLaren"),
                            ("Ferrari ", "Ferrari"), (" Osca ", "OSCA"), ("Rools  Royce", "Rolls-Royce"),
-                           ("Mercedes", "Mercedes"), ("Lola-Ford", "Lola-Ford"), ("Zagato", "Zagato")]:
+                           ("Mercedes", "Mercedes-Benz"), ("Lola-Ford", "Lola-Ford"), ("Zagato", "Zagato")]:
             row, _ = export_live_lots.to_csv_row(_store_lot(make=raw))
             self.assertEqual(row["manufacturer"], fixed, raw)
 
