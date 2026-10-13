@@ -56,37 +56,21 @@ No credential is needed for Wikipedia or for the default Google Trends path.
 
 ## Why the schedule is daily
 
-Two collectors cannot cover the ~3,300-model universe in one run:
-
-- **YouTube** has *two* limits, and the tighter one is easy to miss. The API
-  allows 10,000 quota units/day — a `search.list` costs 100 and a `videos.list`
-  costs 1, so one model costs 101 and the units buy ~89 models. But a default
-  Google Cloud project **also caps `search.list` at 100 calls per day**
-  (`defaultSearchListPerDayPerProject`), and one model is one search. Either
-  way ~90–100 models/day is the ceiling — about 5 weeks for a full pass.
-
-  Exceeding the search cap returns **HTTP 429** with `"Quota exceeded ... per
-  day"`, not the 403 a units overrun returns, so a 429 is checked for a
-  daily-allowance message before it is treated as ordinary throttling; the run
-  then stops cleanly instead of retrying something that will be refused all
-  day. To lift it, request an increase for the *Search Queries per day* quota
-  on the project at
-  [Cloud console → Quotas](https://console.cloud.google.com/iam-admin/quotas),
-  then raise `--max-searches` to match.
-- **Google Trends** has no official API and rate-limits scraping aggressively.
-
-So every collector keeps a per-model state file (`data/*_state.csv`) recording
-when each model was last measured, spends a per-run `--budget` on the models
-measured least recently (never-measured models first, highest auction volume
-first within that), and **upserts** its results. A truncated run is never
-destructive, and daily runs converge on full coverage and then keep it fresh on
-a rolling basis. Models that legitimately have no data are held back for 30
-days so they do not consume the budget every run.
-
-Raise `--budget` if you get a YouTube quota increase, or dispatch the workflow
-manually with a larger budget to backfill faster.
-
----
+- **YouTube** reads every upload of the enthusiast channels in
+  `data/youtube_channels.csv` on each run — about 1,000 of the API's 10,000
+  daily quota units — and rewrites its output whole, so view counts stay
+  current and every model is measured every day. It makes no `search.list`
+  calls, so the separate per-project cap on searches per day (which held the
+  old per-model collector to a handful of models a day) does not apply.
+- **Google Trends** has no official API and rate-limits scraping aggressively,
+  so it cannot cover the ~3,300-model universe in one run. It keeps a
+  per-model state file (`data/google_trends_state.csv`) recording when each
+  model was last measured, spends a per-run `--budget` on the models measured
+  least recently (never-measured models first, highest auction volume first
+  within that), and **upserts** its results. Reddit works the same way. A
+  truncated run is never destructive, and daily runs converge on full coverage
+  and then keep it fresh on a rolling basis. Models that legitimately have no
+  data are held back for 30 days so they do not consume the budget every run.
 
 ---
 
@@ -298,36 +282,84 @@ SERPAPI_API_KEY=... python data/pipelines/google_trends.py --backend serpapi
 
 ## youtube_signals.py
 
-Collects video attention per model per month into `data/youtube_signals.csv`,
-in one pass that feeds two different things:
+Measures video attention per model per month on a curated list of enthusiast
+channels, into `data/youtube_signals.csv`, in one pass that feeds two
+different things:
 
-- `yt_views` → the MII's `youtube_total_views` input (weight 0.10)
-- `yt_videos` and engagement → sub-signals of the **social** composite
+- `yt_view_share` → the MII's `youtube_total_views` input (weight 0.10)
+- `yt_videos` → the **video** sub-signal of the social composite
 
-Those are deliberately different facets — new-video supply and interactions
-versus view totals — so the social score and the YouTube input never
-double-count each other.
+Those are deliberately different facets — attention versus the supply of new
+videos — so the social score and the YouTube input never double-count.
 
-### Method
+### Why channels, not search
 
-Per model: one search for the model's phrase over the trailing window ordered
-by view count, then one statistics lookup on the results. The videos are then
-bucketed by the month they were published, which gives a per-month series in
-two API calls instead of one call per month. Videos whose title and description
-mention neither the manufacturer nor a distinctive model token are dropped, so
-a quoted-phrase search that drifted does not pollute the count.
+The previous collector ran one `search.list` per model. Search costs 100 units
+and Google Cloud also caps searches per project per day; this project's key
+got about one search a day, so after two months it had measured 18 of ~3,200
+models. Reading channels needs no search: a channel's uploads playlist pages at
+1 unit per 50 videos and their statistics cost 1 unit per 50, so a full read
+of every channel costs about 1,000 units and measures the whole universe on
+every run. It is also the measure the Utility Dividend framework names for
+network size: view counts on top enthusiast channels.
 
-Because a search caps at 50 results, a model's monthly view sum is the sum over
-its **50 most-viewed** videos in the window. That is a ranking signal, not a
-census, which is all percentile-rank normalization needs.
+### Channels — `data/youtube_channels.csv`
+
+`handle, name, focus`. Auction houses and marketplaces are deliberately left
+out: their uploads promote listings rather than reflect independent attention.
+Each run looks every handle up (1 unit) and skips a channel whose title does
+not contain `name`, so a mistyped or reassigned handle is reported rather than
+counted. What it found — channel id, title, subscribers, videos in the window,
+videos that named a model — is written to `data/youtube_channels_state.csv`;
+check it after the first run and fix any `not_found` or `name_mismatch` rows.
+
+### Matching titles to models
+
+Titles only; descriptions are full of links and sponsor reads.
+
+- Every word of the model's name must appear, in any order. Hyphens and
+  spacing are forgiven (`MX-5`, `MX5` and `MX 5` are the same word).
+- `a/b/c` means any one of them (`E90/E92/E93 M3`); `x / y` and `x & y` are
+  alternative names, and a secondary name needs a real word (`GTV & Spider`
+  doesn't turn every Spider into a GTV).
+- A year range in the name (`F-Series 1973-1979`, `GMC Sierra (T1XX 2019+)`)
+  requires a year in that range in the title. Other words in brackets are
+  qualifiers and are ignored.
+- The make must appear too, unless the title has a word only this make uses
+  that is a code with a digit (`E46`, `R107`, `L405`) or a famous nameplate on
+  the `NAMEPLATES` list (`Corvette`, `Countach`). Plain numbers (`911`,
+  `2002`) and model names that are also ordinary words (`Legend`,
+  `Expedition`) never stand alone.
+- When a title fits several models of one make, the most specific wins
+  (`Corvette Z06` → CORVETTE Z06, `1967 Mustang` → Mustang 1967-1968).
+  Different cars in one title each count.
+- Curated phrases in `data/search_phrases.csv` replace the raw name, and
+  **`data/youtube_aliases.csv`** adds other names a model goes by on YouTube
+  (`560SL` for the R107 SL, `F-250` for each F-Series generation). Add a row
+  when `data/youtube_state.csv` shows a well-known model with no videos.
+
+Shorts (three minutes or less) are excluded: YouTube counts every replay of a
+Short as a view, which would swamp long-form views.
+
+### Why a share
+
+View counts keep growing after a video goes up, and the browser ranks every
+month's values together, so raw views would score older months higher just for
+being older. Videos published in the same month have had about the same time
+to collect views, so each model's views are divided by that month's total
+across all tracked uploads. The whole universe is read, so a model-month the
+MII scores with no videos on the tracked channels is written as a measured
+zero rather than left as a gap.
+
+A run that reads fewer than 75% of the reachable channels (or fewer than ten)
+writes no signals, so a partial read never replaces a full one.
 
 ### How to run
 
 ```bash
 export YOUTUBE_API_KEY=...
-python data/pipelines/youtube_signals.py                 # spend the daily budget
-python data/pipelines/youtube_signals.py --limit 3       # smoke test
-python data/pipelines/youtube_signals.py --budget 50000 --max-searches 500
+python data/pipelines/youtube_signals.py              # full run, ~1,000 units
+python data/pipelines/youtube_signals.py --limit 2    # smoke test; writes no signals
 ```
 
 ### Output — `data/youtube_signals.csv`
@@ -335,16 +367,15 @@ python data/pipelines/youtube_signals.py --budget 50000 --max-searches 500
 | Column | Description |
 |--------|-------------|
 | manufacturer, model, month | grain; month is the video's **publish** month |
-| yt_videos | videos about the model published that month |
-| yt_views | their combined view count |
+| yt_videos | videos naming the model published that month |
+| yt_views | their combined view count, as of `measured_at` |
+| yt_view_share | `yt_views` as a percent of all views on the tracked channels' videos published that month — the MII input |
 | yt_likes, yt_comments | their combined interactions |
 | yt_engagement_rate | (likes + comments) ÷ views |
 | measured_at | when this row was collected |
 
-View counts are cumulative to the moment of collection, so a month measured
-today has had longer to accumulate views than the same month measured next
-week. Percentile ranking across the field absorbs this; `measured_at` records
-it.
+`data/youtube_state.csv` lists every model with its video count in the window
+and its most-viewed matching title, for checking the matcher.
 
 ---
 

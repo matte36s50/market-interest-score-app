@@ -756,7 +756,7 @@ function renderTable(keys) {
         { label: 'Avg Bids / Listing', fmt: fmtNum, get: m => avgOf(m.rows, 'bids') },
         { label: 'Avg Comments / Listing', fmt: fmtNum, get: m => avgOf(m.rows, 'comments') },
         { label: 'Google Trends Interest', fmt: fmtNum, get: m => avgOf(m.rows, 'google_trends_interest') },
-        { label: 'YouTube Views', fmt: fmtNum, get: m => avgOf(m.rows, 'youtube_total_views') },
+        { label: 'YouTube Share of Views', fmt: v => v === null ? '—' : `${v.toFixed(2)}%`, get: m => avgOf(m.rows, 'youtube_total_views') },
         { label: 'Avg Model Year', fmt: v => v === null ? '—' : String(Math.round(v)), get: m => avgOf(m.rows, 'year'), noHighlight: true },
         { label: 'Months of Data', fmt: v => String(v), get: m => m.count },
     ];

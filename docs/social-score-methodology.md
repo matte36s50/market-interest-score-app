@@ -129,9 +129,11 @@ Still open:
    Its weight renormalizes away until then.
 2. **Instagram / TikTok.** Both now require business-tier API access for
    hashtag search; neither has a free path comparable to the others.
-3. **Coverage.** Reddit and YouTube fill in on a rolling budget (see
-   `data/pipelines/README.md`), so at any moment some models are scored on
-   Wikipedia alone. This is correct behaviour under the drop-and-renormalize
+3. **Coverage.** Reddit fills in on a rolling budget (see
+   `data/pipelines/README.md`), so at any moment some models are scored
+   without it. YouTube reads its tracked enthusiast channels in full on every
+   run, so its upload count is a measured value (zero included) for every
+   model-month the MII scores. This is correct behaviour under the drop-and-renormalize
    rule, not a gap to be papered over with a default.
 
 Raw sub-signal columns are persisted alongside the score in

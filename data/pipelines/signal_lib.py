@@ -120,13 +120,31 @@ def http_get_json(url, headers=None, **kw):
 # Model universe
 # --------------------------------------------------------------------------
 
-def load_universe(source=MII_CSV_URL, min_auctions=0):
+def period_months(period):
+    """Months a period label covers: '2025-05' → itself, '2025Q2' → its three.
+
+    Mirrors periodMonths in mii-normalize.js.
+    """
+    p = (period or "").strip()
+    if re.match(r"^\d{4}-\d{2}$", p):
+        return [p]
+    q = re.match(r"^(\d{4})Q([1-4])$", p)
+    if not q:
+        return []
+    first = (int(q.group(2)) - 1) * 3 + 1
+    return [f"{q.group(1)}-{first + k:02d}" for k in range(3)]
+
+
+def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None):
     """Distinct models from the MII results CSV.
 
     Returns a list of dicts sorted by descending auction_count, so a
     budget-limited run spends its allowance on the models that carry the most
     auction volume — the ones a user is most likely to look at — before the
     long tail.
+
+    Pass a dict as `periods` to also collect, from the same read, the months
+    each model has results for: {(manufacturer, model): {"YYYY-MM", ...}}.
     """
     if re.match(r"^https?://", source):
         text = http_get(source, timeout=120)
@@ -142,6 +160,9 @@ def load_universe(source=MII_CSV_URL, min_auctions=0):
             continue
         rec = agg.setdefault((man, mod), {"manufacturer": man, "model": mod,
                                           "auction_count": 0})
+        if periods is not None:
+            periods.setdefault((man, mod), set()).update(
+                period_months(row.get("quarter") or row.get("month") or ""))
         try:
             rec["auction_count"] += int(float(row.get("auction_count") or 0))
         except ValueError:

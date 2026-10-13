@@ -65,7 +65,8 @@
     //   Social        data/social_signals.csv   Wikipedia attention + share of
     //                                           voice + Reddit + YouTube uploads
     //   Google Trends data/google_trends.csv    anchor-normalized search interest
-    //   YouTube       data/youtube_signals.csv  views of videos about the model
+    //   YouTube       data/youtube_signals.csv  share of the month's views on
+    //                                           tracked enthusiast channels
     //
     // Each file is per manufacturer x model x MONTH. recompute() joins them
     // onto each row's raw column before ranking, so these axes carry real,
@@ -100,14 +101,16 @@
         {
             name: 'youtube',
             url: 'data/youtube_signals.csv',
-            column: 'yt_views',
+            // Percent of all views on the tracked channels' videos published
+            // that month: raw views keep growing after publication, so only a
+            // within-month share compares across months.
+            column: 'yt_view_share',
             target: 'youtube_total_views',
-            // A flow: a quarter's views are its three months added up.
+            // A quarter's share is its three months added up.
             agg: 'sum',
-            overrides: function (row) {
-                var src = String(row.youtube_source || '').trim().toLowerCase();
-                return src === '' || src === 'missing';
-            },
+            // Always: upstream's occasional raw view count is in different
+            // units and cannot be ranked alongside a share.
+            overrides: function () { return true; },
         },
     ];
 

@@ -9,13 +9,12 @@ name: Measured Signals (Trends, YouTube, Reddit, Social)
 # composite has to run last: it blends whatever Reddit and YouTube data landed
 # in the steps above it.
 #
-# Runs daily, not monthly, because two of the collectors cannot cover the
-# ~3,300-model universe in a single run. The YouTube Data API allows 10,000
-# quota units/day and one model costs 101, and Google rate-limits Trends
-# scraping hard. Each collector therefore spends a per-run budget on the models
-# it has measured least recently (tracked in data/*_state.csv) and upserts its
-# results, so daily runs converge on full coverage in a few weeks and then keep
-# it fresh on a rolling basis.
+# Runs daily. YouTube reads every upload of the enthusiast channels in
+# data/youtube_channels.csv on each run (about 1,000 of the 10,000 daily quota
+# units) and rewrites its output whole, so view counts stay current. Google
+# rate-limits Trends scraping hard, so Trends spends a per-run budget on the
+# models it has measured least recently (tracked in data/*_state.csv) and
+# upserts its results, converging on full coverage over a few weeks.
 #
 # Required repository secrets (Settings → Secrets and variables → Actions):
 #   YOUTUBE_API_KEY       YouTube Data API v3 key. Without it the YouTube step
@@ -35,7 +34,7 @@ on:
         description: 'Google Trends batches this run (4 models each)'
         default: '400'
       youtube_budget:
-        description: 'YouTube API units this run (daily quota is 10000)'
+        description: 'YouTube API units this run (daily quota is 10000; a full read is ~1000)'
         default: '9000'
       reddit_budget:
         description: 'Reddit requests this run'
@@ -122,6 +121,7 @@ jobs:
           for f in data/social_signals.csv data/wikipedia_slugs.csv \
                    data/google_trends.csv data/google_trends_state.csv \
                    data/youtube_signals.csv data/youtube_state.csv \
+                   data/youtube_channels_state.csv \
                    data/reddit_signals.csv data/reddit_state.csv; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
