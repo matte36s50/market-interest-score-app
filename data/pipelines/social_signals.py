@@ -331,6 +331,10 @@ def main():
                 continue
             row = rows_by_key.get(key)
             if row is None:
+                # YouTube now writes a zero for every model-month it read; a
+                # zero on its own is not enough to give a model a social score.
+                if not any(vals.values()):
+                    continue
                 row = {"manufacturer": key[0], "model": key[1], "month": key[2]}
                 rows_by_key[key] = row
             row.update(vals)

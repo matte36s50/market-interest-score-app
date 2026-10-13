@@ -394,29 +394,119 @@ class TrendsTiering(unittest.TestCase):
         self.assertEqual(self.state.select(universe, limit=10), [])
 
 
-class YouTubeShaping(unittest.TestCase):
+UNIVERSE = [{"manufacturer": m, "model": n} for m, n in [
+    ("BMW", "E46 M3"), ("BMW", "E36 M3"), ("BMW", "2002"),
+    ("Chevrolet", "CORVETTE"), ("Chevrolet", "CORVETTE Z06"), ("Chevrolet", "C/K"),
+    ("Ford", "MUSTANG"), ("Ford", "Mustang 1967-1968"), ("Ford", "Fox-Body Mustang"),
+    ("Ford", "A"), ("Ford", "T"), ("Ford", "F-Series 1973-1979"), ("Ford", "Expedition"),
+    ("Acura", "Legend"), ("Porsche", "986 Boxster"), ("Porsche", "996 911 Carrera"),
+    ("Porsche", "911 Carrera 3.2"), ("Alfa Romeo", "GTV & Spider (Type 916)"),
+    ("Fiat", "124 Spider"), ("Mazda", "Mazda NA MX-5 Miata"),
+    ("BMW", "E90/E92/E93 M3"), ("GMC", "GMC Sierra (T1XX 2019+)"),
+]]
+
+
+class YouTubeTitleMatching(unittest.TestCase):
+    """The rules in youtube_signals' docstring, one by one."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.m = youtube_signals.Matcher(
+            UNIVERSE,
+            aliases={("Ford", "T"): ["Model T"],
+                     ("Ford", "F-Series 1973-1979"): ["F-250"],
+                     ("Mazda", "Mazda NA MX-5 Miata"): ["NA Miata"]},
+            phrases={("Ford", "A"): "Ford Model A"})
+
+    def names(self, title):
+        return [model for _, model in self.m.match(title)]
+
+    def test_words_in_any_order_with_or_without_the_make(self):
+        self.assertEqual(self.names("The E46 M3 Is the Best M3"), ["E46 M3"])
+        self.assertEqual(self.names("BMW M3 CSL (E46) Review"), ["E46 M3"])
+
+    def test_hyphens_and_spacing_are_forgiven(self):
+        self.assertEqual(self.names("Fox Body Mustang GT"), ["Fox-Body Mustang"])
+        self.assertEqual(self.names("Foxbody Mustang drag race"), ["Fox-Body Mustang"])
+
+    def test_most_specific_model_of_a_make_wins(self):
+        self.assertEqual(self.names("The Corvette Z06 at the track"), ["CORVETTE Z06"])
+        self.assertEqual(self.names("1967 Mustang Restoration"), ["Mustang 1967-1968"])
+        self.assertEqual(self.names("1965 Mustang Restoration"), ["MUSTANG"])
+
+    def test_different_cars_in_one_title_each_count(self):
+        self.assertEqual(self.names("Porsche 986 Boxster vs 996 911 Carrera"),
+                         ["986 Boxster", "996 911 Carrera"])
+
+    def test_a_year_range_needs_a_year_in_the_title(self):
+        self.assertEqual(self.names("1977 Ford F-250 Highboy"), ["F-Series 1973-1979"])
+        self.assertEqual(self.names("Ford F-250 Highboy"), [])
+        self.assertEqual(self.names("2021 GMC Sierra AT4"), ["GMC Sierra (T1XX 2019+)"])
+        self.assertEqual(self.names("1985 GMC Sierra"), [])
+
+    def test_numbers_and_ordinary_words_need_the_make(self):
+        self.assertEqual(self.names("The 5.0 Legend"), [])
+        self.assertEqual(self.names("Acura Legend Coupe"), ["Legend"])
+        self.assertEqual(self.names("Defender 110 Expedition"), [])
+        self.assertEqual(self.names("Driving a 2002 to work"), [])
+        self.assertEqual(self.names("BMW 2002 tii"), ["2002"])
+
+    def test_a_famous_nameplate_or_a_code_stands_alone(self):
+        self.assertEqual(self.names("Corvette vs 911"), ["CORVETTE"])
+        self.assertEqual(self.names("E92 M3 V8 sound"), ["E90/E92/E93 M3"])
+
+    def test_single_letters_match_only_as_a_phrase(self):
+        self.assertEqual(self.names("I Bought a 1930 Ford Model A"), ["A"])
+        self.assertEqual(self.names("A Ford Model T Drive"), ["T"])
+        self.assertEqual(self.names("Ford T-Bird road trip"), [])
+
+    def test_a_shared_word_after_an_ampersand_names_nothing_alone(self):
+        self.assertEqual(self.names("The Alfa Romeo Spider Is Pure Joy"), [])
+        self.assertEqual(self.names("Alfa Romeo GTV review"), ["GTV & Spider (Type 916)"])
+
+    def test_aliases_follow_the_same_rules(self):
+        self.assertEqual(self.names("Mazda Miata NA review"), ["Mazda NA MX-5 Miata"])
+        self.assertEqual(self.names("Chevy C/K square body"), ["C/K"])
+
+    def test_unrelated_titles_match_nothing(self):
+        self.assertEqual(self.names("Spider-Man Car Reaction"), [])
+        self.assertEqual(self.names("Top 10 Cars of 2025"), [])
+
+
+class YouTubeChannelCollection(unittest.TestCase):
 
     def setUp(self):
         self.calls = []
-        self.search_payload = {
-            "items": [{"id": {"videoId": "v1"}, "snippet": {"title": "Porsche 911 review"}},
-                      {"id": {"videoId": "v2"}, "snippet": {"title": "Porsche 911 drive"}},
-                      {"id": {"videoId": "v3"}, "snippet": {"title": "Bread recipe"}}],
-            "pageInfo": {"totalResults": 4210},
+        self.pages = {
+            None: {"items": [
+                self._item("v1", "BMW E46 M3 review", "2026-03-04T10:00:00Z"),
+                self._item("v2", "Short: E46 M3 exhaust", "2026-03-02T10:00:00Z"),
+                self._item("vx", "Private video", None),
+            ], "nextPageToken": "p2"},
+            "p2": {"items": [
+                self._item("v3", "Corvette Z06 drive", "2026-02-10T10:00:00Z"),
+                self._item("v4", "An old upload", "2025-12-20T10:00:00Z"),
+            ], "nextPageToken": "p3"},
         }
-        self.videos_payload = {"items": [
-            {"snippet": {"title": "Porsche 911 review", "publishedAt": "2026-01-10T00:00:00Z"},
-             "statistics": {"viewCount": "1000", "likeCount": "100", "commentCount": "50"}},
-            {"snippet": {"title": "Porsche 911 drive", "publishedAt": "2026-01-20T00:00:00Z"},
-             "statistics": {"viewCount": "3000", "likeCount": "200", "commentCount": "10"}},
-            # Unrelated video the quoted search dragged in — must be dropped.
-            {"snippet": {"title": "Bread recipe", "publishedAt": "2026-01-05T00:00:00Z"},
-             "statistics": {"viewCount": "9999999", "likeCount": "1", "commentCount": "1"}},
-        ]}
+        self.details = {
+            "v1": {"id": "v1", "contentDetails": {"duration": "PT14M2S"},
+                   "statistics": {"viewCount": "9000", "likeCount": "300", "commentCount": "60"}},
+            "v2": {"id": "v2", "contentDetails": {"duration": "PT45S"},
+                   "statistics": {"viewCount": "5000000"}},
+            "v3": {"id": "v3", "contentDetails": {"duration": "PT1H2M"},
+                   "statistics": {"viewCount": "1000", "likeCount": "10"}},
+        }
 
         def fake_get(path, params, api_key):
             self.calls.append((path, params))
-            return self.search_payload if path == "search" else self.videos_payload
+            if path == "channels":
+                return {"items": [{"id": "UC1", "snippet": {"title": "Doug DeMuro"},
+                                   "contentDetails": {"relatedPlaylists": {"uploads": "UU1"}},
+                                   "statistics": {"subscriberCount": "4900000"}}]}
+            if path == "playlistItems":
+                return self.pages[params.get("pageToken")]
+            return {"items": [self.details[i] for i in params["id"].split(",")
+                              if i in self.details]}
 
         self._real = youtube_signals.yt_get
         youtube_signals.yt_get = fake_get
@@ -424,38 +514,100 @@ class YouTubeShaping(unittest.TestCase):
     def tearDown(self):
         youtube_signals.yt_get = self._real
 
-    def test_videos_bucket_into_their_publish_month(self):
-        quota = youtube_signals.Quota(1000)
-        rows, kept, total = youtube_signals.collect_model(
-            {"manufacturer": "Porsche", "model": "911"},
-            ["2025-12", "2026-01"], "2025-12-01T00:00:00Z", "KEY", quota)
+    @staticmethod
+    def _item(vid, title, published):
+        details = {"videoId": vid}
+        if published:
+            details["videoPublishedAt"] = published
+        return {"snippet": {"title": title}, "contentDetails": details}
 
-        self.assertEqual(len(rows), 1)
-        row = rows[0]
-        self.assertEqual(row["month"], "2026-01")
-        self.assertEqual(row["yt_videos"], 2)       # the bread video is gone
-        self.assertEqual(row["yt_views"], 4000)
-        self.assertEqual(row["yt_likes"], 300)
-        self.assertAlmostEqual(row["yt_engagement_rate"], 360 / 4000)
-        self.assertEqual(kept, 2)
-        self.assertEqual(total, 4210)
-
-    def test_one_model_costs_one_search_plus_one_lookup(self):
+    def test_paging_stops_once_it_reaches_back_past_the_window(self):
         quota = youtube_signals.Quota(1000)
-        youtube_signals.collect_model(
-            {"manufacturer": "Porsche", "model": "911"},
-            ["2026-01"], "2025-12-01T00:00:00Z", "KEY", quota)
-        self.assertEqual(quota.spent, youtube_signals.COST_PER_MODEL)
-        self.assertEqual([c[0] for c in self.calls], ["search", "videos"])
+        uploads, complete = youtube_signals.list_uploads("UU1", "2026-01-01", "K", quota)
+        self.assertTrue(complete)
+        self.assertEqual([u[0] for u in uploads], ["v1", "v2", "v3"])
+        self.assertNotIn("p3", [c[1].get("pageToken") for c in self.calls])
+        self.assertEqual(quota.spent, 2)       # one unit per page
 
-    def test_a_model_with_no_videos_costs_only_the_search(self):
-        self.search_payload = {"items": [], "pageInfo": {"totalResults": 0}}
+    def test_a_channel_read_drops_shorts_and_vanished_videos(self):
         quota = youtube_signals.Quota(1000)
-        rows, _, _ = youtube_signals.collect_model(
-            {"manufacturer": "Porsche", "model": "911"},
-            ["2026-01"], "2025-12-01T00:00:00Z", "KEY", quota)
-        self.assertEqual(rows, [])
-        self.assertEqual(quota.spent, youtube_signals.SEARCH_COST)
+        ch = {"handle": "@DougDeMuro", "name": "Doug DeMuro"}
+        videos, row = youtube_signals.read_channel(ch, "2026-01-01", "K", quota)
+        self.assertEqual(row["status"], "ok")
+        self.assertEqual([v["id"] for v in videos], ["v1", "v3"])
+        self.assertEqual(videos[0]["month"], "2026-03")
+        self.assertEqual(videos[1]["likes"], 10)
+        self.assertEqual(quota.spent, 1 + 2 + 1)   # handle, two pages, one stats call
+
+    def test_a_handle_that_names_another_channel_is_skipped(self):
+        quota = youtube_signals.Quota(1000)
+        ch = {"handle": "@DougDeMuro", "name": "Hagerty"}
+        videos, row = youtube_signals.read_channel(ch, "2026-01-01", "K", quota)
+        self.assertEqual(videos, [])
+        self.assertEqual(row["status"], "name_mismatch")
+        self.assertEqual([c[0] for c in self.calls], ["channels"])
+
+    def test_the_budget_stops_a_run_before_the_call_that_would_overrun_it(self):
+        quota = youtube_signals.Quota(2)
+        with self.assertRaises(youtube_signals.BudgetSpent):
+            youtube_signals.read_channel({"handle": "@DougDeMuro", "name": "Doug DeMuro"},
+                                         "2026-01-01", "K", quota)
+        self.assertEqual(quota.spent, 2)
+
+    def test_durations(self):
+        self.assertEqual(youtube_signals.duration_seconds("PT1H2M3S"), 3723)
+        self.assertEqual(youtube_signals.duration_seconds("PT45S"), 45)
+        self.assertEqual(youtube_signals.duration_seconds("P0D"), 0)
+        self.assertEqual(youtube_signals.duration_seconds(""), 0)
+
+
+class YouTubeShares(unittest.TestCase):
+
+    def test_share_of_the_months_views_and_zeros_for_the_rest(self):
+        videos = [
+            {"title": "x", "month": "2026-01", "views": 600, "likes": 30, "comments": 10,
+             "keys": [("BMW", "E46 M3")]},
+            {"title": "y", "month": "2026-01", "views": 400, "likes": 0, "comments": 0,
+             "keys": []},
+            {"title": "z", "month": "2026-02", "views": 50, "likes": 0, "comments": 0,
+             "keys": [("BMW", "E46 M3"), ("Chevrolet", "CORVETTE")]},
+        ]
+        per, totals, examples = youtube_signals.aggregate(videos, ["2026-01", "2026-02"])
+        self.assertEqual(totals, {"2026-01": 1000, "2026-02": 50})
+        periods = {("BMW", "E46 M3"): {"2026-01", "2026-02"},
+                   ("Porsche", "986 Boxster"): {"2026-02"},
+                   ("Ford", "MUSTANG"): {"2025-06"}}      # outside the window
+        rows = youtube_signals.build_rows(per, totals, periods, "T")
+        got = {(r["model"], r["month"]): r for r in rows}
+        self.assertEqual(got[("E46 M3", "2026-01")]["yt_view_share"], 60.0)
+        self.assertAlmostEqual(got[("E46 M3", "2026-01")]["yt_engagement_rate"], 40 / 600, places=6)
+        self.assertEqual(got[("CORVETTE", "2026-02")]["yt_view_share"], 100.0)
+        self.assertEqual(got[("986 Boxster", "2026-02")]["yt_videos"], 0)   # a measured zero
+        self.assertNotIn(("MUSTANG", "2025-06"), got)
+        self.assertEqual(examples[("BMW", "E46 M3")], (600, "x"))
+
+    def test_only_cars_are_scored(self):
+        universe = [{"manufacturer": "BMW", "model": "E46 M3", "vehicle_class": "car"},
+                    {"manufacturer": "Ducati", "model": "916", "vehicle_class": "motorcycle"},
+                    {"manufacturer": "Riva", "model": "Aquarama", "vehicle_class": "boat"},
+                    {"manufacturer": "Ford", "model": "A", "vehicle_class": ""}]
+        periods = {("BMW", "E46 M3"): {"2026-01"}, ("Ducati", "916"): {"2026-01"},
+                   ("Riva", "Aquarama"): {"2026-01"}, ("Ford", "A"): {"2026-01"}}
+        cars, car_periods = youtube_signals.cars_only(universe, periods)
+        self.assertEqual([r["model"] for r in cars], ["E46 M3", "A"])
+        self.assertEqual(set(car_periods), {("BMW", "E46 M3"), ("Ford", "A")})
+        rows = youtube_signals.build_rows({}, {"2026-01": 100}, car_periods, "T")
+        self.assertNotIn("916", {r["model"] for r in rows})   # no zero for a bike
+
+    def test_window_runs_from_the_first_mii_month_to_now(self):
+        months = youtube_signals.window_months({("a", "b"): {"2025-11", "2026-01"}},
+                                               today=date(2026, 2, 14))
+        self.assertEqual(months, ["2025-11", "2025-12", "2026-01", "2026-02"])
+
+    def test_period_months_expand_quarters(self):
+        self.assertEqual(lib.period_months("2025Q2"), ["2025-04", "2025-05", "2025-06"])
+        self.assertEqual(lib.period_months("2025-07"), ["2025-07"])
+        self.assertEqual(lib.period_months(""), [])
 
 
 class SocialComposite(unittest.TestCase):

@@ -51,7 +51,7 @@ The Market Interest Index is a weighted blend of eight inputs:
 - **View Count**: 15%
 - **Google Trends Interest**: 15%
 - **Comments**: 10%
-- **YouTube Views**: 10%
+- **YouTube Views** (share of views on leading enthusiast channels): 10%
 - **Social Engagement**: 5%
 - **Vehicle Age**: 5%
 
@@ -75,8 +75,12 @@ actually carries depends on how widely it is measured. On the live dataset:
 | Vehicle Age | 5% | 6.0% | 100% |
 
 The live index is **~78% a Bring a Trailer auction-behaviour measure**, not the
-65% the nominal formula suggests, and YouTube's 10% is a rounding error until
-that collector reaches more than seven models. `MII.effectiveWeights` recomputes
+65% the nominal formula suggests. The table predates the October 2026 rebuild of
+the YouTube collector, when YouTube reached 0.5% of rows: it now reads every
+upload of a curated list of enthusiast channels on each run, so every car
+model-month the MII scores gets a YouTube value (zero when the channels didn't
+cover it) and the input carries close to its nominal 10%. Motorcycles and other
+non-car classes are left out of it, since the channels don't cover them. `MII.effectiveWeights` recomputes
 this after every `recompute()`, and the **How This Score Is Built** panel on the
 Data Coverage tab of `analyze.html` renders it from live data — so the published
 description can never drift from what the dashboard is doing.
@@ -145,7 +149,7 @@ those three radar axes read flat.
 | Input | Pipeline | Output | Source |
 |-------|----------|--------|--------|
 | Google Trends (0.15) | `google_trends.py` | `data/google_trends.csv` | Google Trends, normalized against a chained anchor ladder |
-| YouTube (0.10) | `youtube_signals.py` | `data/youtube_signals.csv` | YouTube Data API v3 |
+| YouTube (0.10) | `youtube_signals.py` | `data/youtube_signals.csv` | YouTube Data API v3: every upload of the channels in `data/youtube_channels.csv` |
 | Social (0.05) | `social_signals.py` | `data/social_signals.csv` | Wikipedia + Reddit + YouTube uploads |
 | — (social sub-signal) | `reddit_signals.py` | `data/reddit_signals.csv` | Reddit search |
 

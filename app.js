@@ -1582,9 +1582,8 @@ function renderDrawer() {
 
     // Signal mix: the make's average percentile on each MII input. 50 is the
     // median car; inputs with no measurement for this make are listed as such.
-    // An input measured on only a sliver of the make's rows (YouTube reaches a
-    // handful of models) says little about the make, so it is flagged and
-    // sorted after the well-measured ones.
+    // An input measured on only a sliver of the make's rows says little about
+    // the make, so it is flagged and sorted after the well-measured ones.
     const signals = MII.COMPONENTS.map(c => {
         const rs = m.rows.filter(r => isFinite(parseFloat(r[c.raw])));
         const coverage = m.rows.length ? rs.length / m.rows.length : 0;

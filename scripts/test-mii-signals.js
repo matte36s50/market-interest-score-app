@@ -57,10 +57,10 @@ MII.setSignal('trends', [
     'BMW,M3,2026-04,12.25',
 ].join('\n'));
 MII.setSignal('youtube', [
-    'manufacturer,model,month,yt_views',
-    'Porsche,911,2026-04,1000',
-    'Porsche,911,2026-05,2000',
-    'BMW,M3,2026-04,300',
+    'manufacturer,model,month,yt_views,yt_view_share',
+    'Porsche,911,2026-04,1000,1.5',
+    'Porsche,911,2026-05,2000,2.25',
+    'BMW,M3,2026-04,300,0',
 ].join('\n'));
 
 // A row shaped like the live upstream CSV: trends and youtube empty, sources
@@ -78,7 +78,8 @@ let rows = [upstreamRow(), upstreamRow({ manufacturer: 'BMW', model: 'M3', price
 MII.recompute(rows);
 near('social filled from signal file', rows[0].social_score, 80);
 near('trends filled where source was "missing"', rows[0].google_trends_interest, 55.5);
-near('youtube filled where source was "missing"', rows[0].youtube_total_views, 1000);
+near('youtube filled where source was "missing"', rows[0].youtube_total_views, 1.5);
+near('a measured zero is kept as zero', rows[1].youtube_total_views, 0);
 
 // Upstream measurements must win; upstream placeholders must not.
 rows = [
@@ -88,13 +89,14 @@ rows = [
 MII.recompute(rows);
 near('upstream social composite is not overwritten', rows[0].social_score, 61);
 near('hand-set trends estimate IS overwritten', rows[0].google_trends_interest, 55.5);
-near('real upstream youtube measurement is kept', rows[1].youtube_total_views, 42);
+// Upstream's raw view count is in different units from the share.
+near('upstream raw youtube views are replaced by the share', rows[1].youtube_total_views, 1.5);
 
 // Quarterly rows: a score averages its months, a view count adds them.
 rows = [upstreamRow({ quarter: '2026Q2' })];
 MII.recompute(rows);
 near('score averages over the quarter', rows[0].social_score, 85);
-near('views sum over the quarter', rows[0].youtube_total_views, 3000);
+near('shares sum over the quarter', rows[0].youtube_total_views, 3.75);
 
 console.log('join is idempotent');
 rows = [upstreamRow(), upstreamRow({ manufacturer: 'BMW', model: 'M3', price: 50000 })];
