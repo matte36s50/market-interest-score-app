@@ -1,55 +1,47 @@
-/* Shared component styles for the light MII pages (index.html, mai.html).
-   Table rules sit under :where() so Tailwind utilities on a cell still win. */
-body { font-family: "Hanken Grotesk", system-ui, sans-serif; }
+/* Component classes the Tailwind-built pages (Apex Index, Model comparison,
+   Data analysis, Admin) still use, written against the site.css tokens so they
+   follow the same light and dark themes as the overview. Table rules sit under
+   :where() so Tailwind utilities on a cell still win. */
+body { font-family: var(--font); background: var(--page); color: var(--ink); }
 
-.panel { background: #fff; border: 1px solid #E4E4DF; border-radius: 10px; }
-
-.nav-link { color: #5E6168; padding: 21px 0 19px; border-bottom: 2px solid transparent; }
-.nav-link:hover { color: #16181D; }
-.nav-link.is-active { color: #16181D; font-weight: 600; border-bottom-color: #F59E0B; }
+.panel { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); box-shadow: var(--shadow); }
 
 .field {
-    font: inherit; font-size: 14px; height: 40px; padding: 0 12px;
-    border: 1px solid #D9D9D3; border-radius: 6px; background: #fff; color: #16181D;
+    font: inherit; font-size: 14px; height: 40px; padding: 0 14px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink);
 }
-.field:focus { outline: 2px solid #F59E0B; outline-offset: -1px; border-color: #F59E0B; }
-.field::placeholder { color: #6B6E75; }
-
-.btn {
-    display: inline-flex; align-items: center; height: 40px; padding: 0 16px;
-    border-radius: 6px; background: #16181D; color: #fff; font-size: 14px; font-weight: 500;
-}
-.btn:hover { background: #2C2F36; }
+.field:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field::placeholder { color: var(--muted); }
+select.field { appearance: none; -webkit-appearance: none; padding-right: 36px;
+    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center; }
 
 .data-table { width: 100%; border-collapse: collapse; }
-:where(.data-table) thead tr { background: #FAFAF8; border-top: 1px solid #E4E4DF; }
+:where(.data-table) thead tr { background: var(--surface-2); border-top: 1px solid var(--hair); }
 :where(.data-table) th {
-    font-weight: 500; font-size: 12px; color: #5E6168; text-align: left;
+    font-weight: 500; font-size: 12px; color: var(--muted); text-align: left;
     padding: 10px 12px; white-space: nowrap; letter-spacing: 0.02em;
 }
-:where(.data-table) td { padding: 12px; white-space: nowrap; border-top: 1px solid #ECECE7; font-size: 14px; }
-:where(.data-table) .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; text-align: right; }
+:where(.data-table) td { padding: 12px; white-space: nowrap; border-top: 1px solid var(--hair); font-size: 14px; }
+:where(.data-table) .num { font-family: var(--mono); font-size: 13px; text-align: right; }
 .data-table tbody tr.is-clickable { cursor: pointer; }
-.data-table tbody tr.is-clickable:hover { background: #FAFAF8; }
-.data-table tbody tr.is-selected, .data-table tbody tr.is-selected:hover { background: #FFF8EB; }
+.data-table tbody tr.is-clickable:hover { background: var(--surface-2); }
+.data-table tbody tr.is-selected, .data-table tbody tr.is-selected:hover { background: var(--accent-wash); }
 
-.sort-btn { font: inherit; color: inherit; letter-spacing: inherit; display: inline-flex; gap: 4px; align-items: center; }
-.sort-btn:hover { color: #16181D; }
-th[aria-sort] .sort-btn { color: #16181D; }
-
-.score-bar { flex-grow: 1; min-width: 48px; height: 6px; background: #EEEEE9; border-radius: 3px; overflow: hidden; }
-.score-bar > span { display: block; height: 100%; background: #F59E0B; border-radius: 3px; }
+.score-bar { flex-grow: 1; min-width: 48px; height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.score-bar > span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 
 .icon-btn {
-    width: 32px; height: 32px; border-radius: 6px; border: 1px solid #D9D9D3;
-    background: #fff; color: #5E6168; font-size: 15px; line-height: 1;
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--muted); font-size: 15px; line-height: 1;
 }
-.icon-btn:hover { border-color: #16181D; color: #16181D; }
-.icon-btn.is-on { background: #16181D; border-color: #16181D; color: #fff; }
-
-:focus-visible { outline: 2px solid #F59E0B; outline-offset: 2px; }
+.icon-btn:hover { border-color: var(--ink); color: var(--ink); }
+.icon-btn.is-on { background: var(--ink); border-color: var(--ink); color: var(--surface); }
 .icon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Segmented toggles built from plain buttons (Apex Index's All / Modern / Classic). */
+[role="radiogroup"] > button[aria-checked="true"] { background: var(--ink); color: var(--surface); }
+[role="radiogroup"] > button[aria-checked="true"] .text-faint { color: inherit; opacity: 0.7; }
+
 /* Anchor absolutely positioned children (sr-only labels in cells) inside the
    scroller, or they escape it and widen the page on phones. */
 .overflow-x-auto { position: relative; }
-@media (max-width: 767px) { .nav-link { padding: 10px 0 8px; } }

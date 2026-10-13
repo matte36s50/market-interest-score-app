@@ -251,7 +251,7 @@ sales. Treat any badge below High as a sample-size caveat, not a market signal.
 ## Technology Stack
 
 - **HTML5**: Semantic markup
-- **CSS**: hand-written design tokens with light and dark themes (`overview.css`); the other pages use Tailwind via CDN
+- **CSS**: one shared stylesheet, `site.css`, with design tokens for light and dark themes. The Tailwind-built pages (Apex Index, Model comparison, Data analysis, Admin) map their colours onto the same tokens through `mii-light-theme.js` / `.css`, so every page follows the same theme toggle
 - **Vanilla JavaScript**: Zero dependencies for core logic
 - **Chart.js**: Interactive, responsive charts
 - **No Build Process**: Works directly in browser

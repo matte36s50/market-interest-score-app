@@ -3,67 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0e10">
     <title>Model Comparison — Market Interest Index</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <style>
-    body{background:#F6F6F3;}
-    .scrollbar-thin::-webkit-scrollbar{width:6px;}.scrollbar-thin::-webkit-scrollbar-track{background:#F6F6F3;}.scrollbar-thin::-webkit-scrollbar-thumb{background:#9A9CA1;border-radius:3px;}.scrollbar-thin::-webkit-scrollbar-thumb:hover{background:#6B6E75;}
-    .card{background:#fff;border:1px solid #E4E4DF;border-radius: 10px;}
-    .chart-container{background:#fff;border:1px solid #E4E4DF;border-radius: 10px;padding:1.4rem 1.5rem;}
-    .input-field{background: #FFFFFF;border: 1px solid #D9D9D3;border-radius:8px;font-size:13px;color:#16181D;transition:border-color .15s,box-shadow .15s;}
-    .input-field:focus{outline:none;border-color: #F59E0B;box-shadow:0 0 0 3px rgba(245,158,11,0.2);}
-    .table-row:hover{background:#FAFAF8;}
+    body{background:var(--page);}
+    .scrollbar-thin::-webkit-scrollbar{width:6px;}.scrollbar-thin::-webkit-scrollbar-track{background:var(--page);}.scrollbar-thin::-webkit-scrollbar-thumb{background:var(--dot);border-radius:3px;}.scrollbar-thin::-webkit-scrollbar-thumb:hover{background:var(--muted);}
+    .card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--radius);box-shadow:var(--shadow);}
+    .chart-container{background:var(--surface);border:1px solid var(--hair);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.4rem 1.5rem;}
+    .input-field{background: var(--surface);border: 1px solid var(--line);border-radius:8px;font-size:13px;color:var(--ink);transition:border-color .15s,box-shadow .15s;}
+    .input-field:focus{outline:none;border-color: var(--accent);box-shadow:0 0 0 3px rgb(var(--accent-rgb) / 0.2);}
+    .table-row:hover{background:var(--surface-2);}
     .table-row td{transition:background .1s;}
-    select option{background:#fff;color:#16181D;}
+    select option{background:var(--surface);color:var(--ink);}
     </style>
     <script>
     window.addEventListener('error',function(e){if(e.message&&e.message.includes('ResizeObserver')){e.stopImmediatePropagation();return false;}});
     </script>
-    <script src="mii-light-theme.js"></script>
-    <link rel="stylesheet" href="mii-light-theme.css">
+    <script src="mii-light-theme.js?v=2"></script>
+    <link rel="stylesheet" href="site.css?v=2">
+    <link rel="stylesheet" href="mii-light-theme.css?v=2">
+    <script src="site.js?v=1"></script>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
-    <header class="bg-white border-b border-line md:sticky top-0 z-40">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
-            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
-                <a href="index.html" class="flex items-center gap-2.5">
-                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
-                    <span class="font-semibold text-[15px]">Market Interest Index</span>
-                </a>
-                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
-                    <a href="index.html" class="nav-link">Overview</a>
-                    <a href="mai.html" class="nav-link">Apex Index</a>
-                    <a href="analytics.html" class="nav-link is-active" aria-current="page">Model comparison</a>
-                    <a href="analyze.html" class="nav-link">Data analysis</a>
-                </nav>
-            </div>
-            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
-                <span id="lastUpdated"></span>
-                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+    <header class="site-header">
+        <div class="wrap" style="max-width:1600px;padding-left:24px;padding-right:24px">
+            <a href="index.html" class="brand" aria-label="Market Interest Index home">
+                <span class="brand-mark" aria-hidden="true">MII</span>
+                <span>Market Interest Index</span>
+            </a>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Overview</a>
+                <a href="mai.html">Apex Index</a>
+                <a href="analytics.html" aria-current="page">Model comparison</a>
+                <a href="analyze.html">Data analysis</a>
+            </nav>
+            <div class="header-actions">
+                <a href="admin.html" class="admin-link">Admin</a>
+                <button id="themeToggle" class="hbtn icon-only" aria-label="Switch colour theme" title="Switch colour theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button id="printBtn" class="hbtn" title="Save this page as a PDF">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+                    <span class="label">PDF</span>
+                </button>
+                <button id="shareBtn" class="hbtn is-primary" title="Copy a link to this page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+                    <span class="label">Share</span>
+                </button>
             </div>
         </div>
     </header>
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
-        <div class="flex flex-col gap-2">
-            <span class="text-[13px] text-mute">Profile benchmarking</span>
-            <h1 class="m-0 text-3xl font-semibold tracking-tight">Model comparison</h1>
+
+    <section class="hero page-hero" aria-labelledby="pageTitle">
+        <div class="wrap" style="max-width:1600px;padding-left:24px;padding-right:24px">
+            <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Profile benchmarking</span>
+            <h1 id="pageTitle">Model comparison</h1>
+            <p class="lede">Pick a model and benchmark it against the market or hand-picked peers: its MII profile, signal by signal, month by month.</p>
+            <div class="hero-meta"><span>Data loaded <span id="lastUpdated">…</span></span></div>
         </div>
-        
-    </div>
+    </section>
+
 
 <!-- Loading Indicator -->
 <div id="loadingIndicator" class="fixed inset-0 bg-white z-50 flex items-center justify-center" style="backdrop-filter:blur(4px);">
     <div class="text-center">
-        <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 mb-5" style="border-color:#2C2F36;border-top-color:#F59E0B"></div>
-        <div class="text-sm font-semibold text-[#16181D]">Loading MII Data</div>
-        <div class="text-xs text-[#6B6E75] mt-1">Fetching model data from S3</div>
+        <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 mb-5" style="border-color:var(--ink-2);border-top-color:var(--accent)"></div>
+        <div class="text-sm font-semibold text-ink">Loading MII Data</div>
+        <div class="text-xs text-faint mt-1">Fetching model data from S3</div>
     </div>
 </div>
 
@@ -72,11 +84,11 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
         <!-- Base model picker -->
         <div class="card p-5">
-            <h2 class="font-semibold text-[13px] text-[#16181D]">1. Pick a Base Model</h2>
-            <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">The model you want to benchmark against the market</p>
+            <h2 class="font-semibold text-[13px] text-ink">1. Pick a Base Model</h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4">The model you want to benchmark against the market</p>
             <div class="relative">
                 <input type="text" id="baseSearch" placeholder="Search make or model..." autocomplete="off"
-                    class="input-field w-full px-3.5 py-2 placeholder-[#6B6E75]" />
+                    class="input-field w-full px-3.5 py-2 placeholder-faint" />
                 <div id="baseResults" class="hidden absolute left-0 right-0 mt-1 max-h-64 overflow-y-auto scrollbar-thin card z-40"></div>
             </div>
             <div id="baseSelected" class="mt-4"></div>
@@ -84,20 +96,20 @@
 
         <!-- Suggested similar models -->
         <div class="card p-5">
-            <h2 class="font-semibold text-[13px] text-[#16181D]">2. Suggested Comparables</h2>
-            <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Closest MII profiles by weighted distance over normalized inputs</p>
+            <h2 class="font-semibold text-[13px] text-ink">2. Suggested Comparables</h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4">Closest MII profiles by weighted distance over normalized inputs</p>
             <div id="suggestionsList" class="space-y-2">
-                <p class="text-[12px] text-[#6B6E75]">Pick a base model to see suggestions</p>
+                <p class="text-[12px] text-faint">Pick a base model to see suggestions</p>
             </div>
         </div>
 
         <!-- Manual add + selection list -->
         <div class="card p-5">
-            <h2 class="font-semibold text-[13px] text-[#16181D]">3. Comparison Set <span id="selectionCount" class="text-[11px] font-normal text-[#6B6E75]"></span></h2>
-            <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Add up to 5 models of your own choosing</p>
+            <h2 class="font-semibold text-[13px] text-ink">3. Comparison Set <span id="selectionCount" class="text-[11px] font-normal text-faint"></span></h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4">Add up to 5 models of your own choosing</p>
             <div class="relative">
                 <input type="text" id="addSearch" placeholder="Add another model..." autocomplete="off"
-                    class="input-field w-full px-3.5 py-2 placeholder-[#6B6E75]" />
+                    class="input-field w-full px-3.5 py-2 placeholder-faint" />
                 <div id="addResults" class="hidden absolute left-0 right-0 mt-1 max-h-64 overflow-y-auto scrollbar-thin card z-40"></div>
             </div>
             <div id="selectionList" class="mt-4 space-y-2"></div>
@@ -108,15 +120,15 @@
     <div id="chartsSection" class="hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div class="chart-container">
-                <h2 class="font-semibold text-[13px] text-[#16181D]">MII Profile</h2>
-                <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Percentile rank per input (0–1), averaged across each model's months</p>
+                <h2 class="font-semibold text-[13px] text-ink">MII Profile</h2>
+                <p class="text-[11px] text-faint mt-0.5 mb-4">Percentile rank per input (0–1), averaged across each model's months</p>
                 <div style="height: 380px;">
                     <canvas id="radarChart"></canvas>
                 </div>
             </div>
             <div class="chart-container">
-                <h2 class="font-semibold text-[13px] text-[#16181D]">MII Trend</h2>
-                <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Monthly MII score over time</p>
+                <h2 class="font-semibold text-[13px] text-ink">MII Trend</h2>
+                <p class="text-[11px] text-faint mt-0.5 mb-4">Monthly MII score over time</p>
                 <div style="height: 380px;">
                     <canvas id="trendChart"></canvas>
                 </div>
@@ -125,8 +137,8 @@
 
         <!-- Component percentile jitter plot -->
         <div class="chart-container mb-5">
-            <h2 class="font-semibold text-[13px] text-[#16181D]">Component Percentiles</h2>
-            <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Where each selected model ranks on every MII input. The violin shows the distribution of all models with ≥2 months of data (wider = more models at that percentile); the light tick marks each component's median. Coloured lines are your selected models, with dashed manufacturer and market averages.</p>
+            <h2 class="font-semibold text-[13px] text-ink">Component Percentiles</h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4">Where each selected model ranks on every MII input. The violin shows the distribution of all models with ≥2 months of data (wider = more models at that percentile); the light tick marks each component's median. Coloured lines are your selected models, with dashed manufacturer and market averages.</p>
             <div style="height: 380px;">
                 <canvas id="jitterChart"></canvas>
             </div>
@@ -134,8 +146,8 @@
 
         <!-- Benchmark vs market & manufacturer -->
         <div class="chart-container mb-5">
-            <h2 class="font-semibold text-[13px] text-[#16181D]">MII vs Market &amp; Manufacturer</h2>
-            <p class="text-[11px] text-[#6B6E75] mt-0.5 mb-4">Monthly MII for each model (solid) against its manufacturer average (dashed) and the overall market average</p>
+            <h2 class="font-semibold text-[13px] text-ink">MII vs Market &amp; Manufacturer</h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4">Monthly MII for each model (solid) against its manufacturer average (dashed) and the overall market average</p>
             <div style="height: 360px;">
                 <canvas id="benchmarkChart"></canvas>
             </div>
@@ -143,9 +155,9 @@
 
         <!-- Head-to-head table -->
         <div class="card overflow-hidden">
-            <div class="px-5 py-3.5" style="border-bottom:1px solid #E4E4DF">
-                <h2 class="font-semibold text-[13px] text-[#16181D]">Head-to-Head</h2>
-                <p class="text-[11px] text-[#6B6E75] mt-0.5">Averages across each model's months of data; best value per row highlighted</p>
+            <div class="px-5 py-3.5" style="border-bottom:1px solid var(--hair)">
+                <h2 class="font-semibold text-[13px] text-ink">Head-to-Head</h2>
+                <p class="text-[11px] text-faint mt-0.5">Averages across each model's months of data; best value per row highlighted</p>
             </div>
             <div class="overflow-x-auto scrollbar-thin">
                 <table class="w-full text-left text-[12.5px]">
@@ -158,11 +170,11 @@
 
     <!-- Empty state -->
     <div id="emptyState" class="card p-12 text-center">
-        <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(245,158,11,0.1)">
-            <svg class="w-6 h-6 text-[#B45309]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgb(var(--accent-rgb) / 0.1)">
+            <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
-        <h3 class="font-semibold text-[14px] text-[#16181D]">Select a Base Model to Begin</h3>
-        <p class="text-[12px] text-[#6B6E75] mt-2 max-w-md mx-auto">
+        <h3 class="font-semibold text-[14px] text-ink">Select a Base Model to Begin</h3>
+        <p class="text-[12px] text-faint mt-2 max-w-md mx-auto">
             Search for any model above. We'll suggest the cars with the most similar market-interest
             profiles, and you can add up to five more to compare head-to-head.
         </p>
@@ -178,6 +190,6 @@
     </footer>
 
 <script src="mii-normalize.js?v=4"></script>
-<script src="analytics.js?v=4"></script>
+<script src="analytics.js?v=5"></script>
 </body>
 </html>

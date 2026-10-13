@@ -1,3 +1,6 @@
+// Theme colours resolve from site.css tokens at draw time (see mii-light-theme.js).
+const T = () => window.SITE_THEME;
+
 // Model Comparison — compare MII profiles across models.
 // Loads the same mii_results_latest.csv as the main dashboard, builds a per-model
 // profile from the normalized MII input columns, and lets the user benchmark a
@@ -32,7 +35,8 @@ function dimLabel(dim) {
 
 const MAX_COMPARISONS = 5;   // additional models beyond the base
 // Series palette: amber first, then colours that stay distinct on white.
-const SERIES_COLORS = ['#F59E0B', '#2563EB', '#1F7A45', '#7C3AED', '#B42318', '#B45309'];
+// Base model first, then the validated categorical order.
+const seriesColors = () => { const t = T(); return [t.series[1], t.series[0], t.series[2], t.series[3], t.series[4], t.series[5]]; };
 
 // modelKey ("Manufacturer|Model") -> { manufacturer, model, rows, profile, count }
 let models = {};
@@ -214,9 +218,9 @@ function setupSearch(inputId, resultsId, onPick) {
         }
         results.innerHTML = matches.map(k => {
             const m = models[k];
-            return `<button data-key="${escapeHtml(k)}" class="search-item table-row w-full text-left px-4 py-2.5 flex items-center justify-between gap-2" style="border-bottom:1px solid #16181D">
-                <span class="text-[12.5px]"><span class="text-[#6B6E75]">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-[#16181D]">${escapeHtml(m.model)}</span></span>
-                <span class="text-[11px] text-[#6B6E75] whitespace-nowrap">${m.count} mo · MII ${m.avgMII.toFixed(1)}</span>
+            return `<button data-key="${escapeHtml(k)}" class="search-item table-row w-full text-left px-4 py-2.5 flex items-center justify-between gap-2" style="border-bottom:1px solid var(--ink)">
+                <span class="text-[12.5px]"><span class="text-faint">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-ink">${escapeHtml(m.model)}</span></span>
+                <span class="text-[11px] text-faint whitespace-nowrap">${m.count} mo · MII ${m.avgMII.toFixed(1)}</span>
             </button>`;
         }).join('');
         results.classList.remove('hidden');
@@ -274,12 +278,12 @@ function renderSelection() {
     const baseEl = document.getElementById('baseSelected');
     if (baseKey) {
         const m = models[baseKey];
-        baseEl.innerHTML = `<div class="flex items-center justify-between rounded-lg px-4 py-3" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.5)">
+        baseEl.innerHTML = `<div class="flex items-center justify-between rounded-lg px-4 py-3" style="background:rgb(var(--accent-rgb) / 0.1);border:1px solid rgb(var(--accent-rgb) / 0.5)">
             <div class="min-w-0">
-                <div class="text-[11px] text-[#6B6E75]">${escapeHtml(m.manufacturer)}</div>
-                <div class="font-semibold text-[15px] text-[#B45309] truncate">${escapeHtml(m.model)}</div>
+                <div class="text-[11px] text-faint">${escapeHtml(m.manufacturer)}</div>
+                <div class="font-semibold text-[15px] text-amber-700 truncate">${escapeHtml(m.model)}</div>
             </div>
-            <div class="text-right text-[11px] text-[#6B6E75] leading-tight whitespace-nowrap ml-3">${m.count} months<br>avg MII ${m.avgMII.toFixed(1)}</div>
+            <div class="text-right text-[11px] text-faint leading-tight whitespace-nowrap ml-3">${m.count} months<br>avg MII ${m.avgMII.toFixed(1)}</div>
         </div>`;
     } else {
         baseEl.innerHTML = '';
@@ -289,16 +293,16 @@ function renderSelection() {
 
     const listEl = document.getElementById('selectionList');
     if (!comparisonKeys.length) {
-        listEl.innerHTML = '<p class="text-[12px] text-[#6B6E75]">No comparison models added yet</p>';
+        listEl.innerHTML = '<p class="text-[12px] text-faint">No comparison models added yet</p>';
     } else {
         listEl.innerHTML = comparisonKeys.map((k, i) => {
-            const color = SERIES_COLORS[(i + 1) % SERIES_COLORS.length];
-            return `<div class="flex items-center justify-between rounded-lg px-3 py-2" style="background:#FAFAF8;border:1px solid #ECECE7">
+            const color = seriesColors()[(i + 1) % seriesColors().length];
+            return `<div class="flex items-center justify-between rounded-lg px-3 py-2" style="background:var(--surface-2);border:1px solid var(--hair)">
                 <div class="flex items-center gap-2 min-w-0">
                     <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${color}"></span>
-                    <span class="text-[12.5px] text-[#16181D] truncate">${escapeHtml(modelLabel(k))}</span>
+                    <span class="text-[12.5px] text-ink truncate">${escapeHtml(modelLabel(k))}</span>
                 </div>
-                <button data-key="${escapeHtml(k)}" class="remove-btn text-[#6B6E75] text-lg leading-none px-1" title="Remove" aria-label="Remove">&times;</button>
+                <button data-key="${escapeHtml(k)}" class="remove-btn text-faint text-lg leading-none px-1" title="Remove" aria-label="Remove">&times;</button>
             </div>`;
         }).join('');
     }
@@ -307,12 +311,12 @@ function renderSelection() {
 function renderSuggestions() {
     const el = document.getElementById('suggestionsList');
     if (!baseKey) {
-        el.innerHTML = '<p class="text-[12px] text-[#6B6E75]">Pick a base model to see suggestions</p>';
+        el.innerHTML = '<p class="text-[12px] text-faint">Pick a base model to see suggestions</p>';
         return;
     }
     const suggestions = suggestSimilar(baseKey);
     if (!suggestions.length) {
-        el.innerHTML = '<p class="text-[12px] text-[#6B6E75]">No similar models found</p>';
+        el.innerHTML = '<p class="text-[12px] text-faint">No similar models found</p>';
         return;
     }
     const full = comparisonKeys.length >= MAX_COMPARISONS;
@@ -320,12 +324,12 @@ function renderSuggestions() {
         const m = models[s.key];
         const pct = similarityPct(s.distance);
         const addBtn = full
-            ? `<button data-key="${escapeHtml(s.key)}" disabled class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-not-allowed" style="background:#F59E0B;color:#16181D;opacity:.4">+ Add</button>`
-            : `<button data-key="${escapeHtml(s.key)}" class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold hover:opacity-90 transition-opacity" style="background:#F59E0B;color:#16181D">+ Add</button>`;
-        return `<div class="flex items-center justify-between rounded-lg px-3 py-2 gap-2 table-row" style="background:#FAFAF8;border:1px solid #ECECE7">
+            ? `<button data-key="${escapeHtml(s.key)}" disabled class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-not-allowed" style="background:var(--accent);color:var(--ink);opacity:.4">+ Add</button>`
+            : `<button data-key="${escapeHtml(s.key)}" class="suggest-add flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-semibold hover:opacity-90 transition-opacity" style="background:var(--accent);color:var(--ink)">+ Add</button>`;
+        return `<div class="flex items-center justify-between rounded-lg px-3 py-2 gap-2 table-row" style="background:var(--surface-2);border:1px solid var(--hair)">
             <div class="min-w-0">
-                <div class="text-[12.5px] truncate"><span class="text-[#6B6E75]">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-[#16181D]">${escapeHtml(m.model)}</span></div>
-                <div class="text-[11px] text-[#6B6E75]">${pct.toFixed(0)}% profile match · avg MII ${m.avgMII.toFixed(1)}</div>
+                <div class="text-[12.5px] truncate"><span class="text-faint">${escapeHtml(m.manufacturer)}</span> <span class="font-medium text-ink">${escapeHtml(m.model)}</span></div>
+                <div class="text-[11px] text-faint">${pct.toFixed(0)}% profile match · avg MII ${m.avgMII.toFixed(1)}</div>
             </div>
             ${addBtn}
         </div>`;
@@ -340,7 +344,7 @@ function renderRadar(keys) {
         data: {
             labels: PROFILE_DIMS.map(dimLabel),
             datasets: keys.map((k, i) => {
-                const color = SERIES_COLORS[i % SERIES_COLORS.length];
+                const color = seriesColors()[i % seriesColors().length];
                 return {
                     label: modelLabel(k),
                     data: models[k].profile,
@@ -360,13 +364,13 @@ function renderRadar(keys) {
                     min: 0,
                     max: 1,
                     ticks: { display: false },
-                    grid: { color: '#ECECE7' },
-                    angleLines: { color: '#ECECE7' },
-                    pointLabels: { color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    angleLines: { color: T().grid },
+                    pointLabels: { color: T().muted, font: { size: 11 } }
                 }
             },
             plugins: {
-                legend: { labels: { color: '#6B6E75', boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
+                legend: { labels: { color: T().muted, boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
             }
         }
     });
@@ -381,7 +385,7 @@ function renderTrend(keys) {
         data: {
             labels: quarters,
             datasets: keys.map((k, i) => {
-                const color = SERIES_COLORS[i % SERIES_COLORS.length];
+                const color = seriesColors()[i % seriesColors().length];
                 // Average MII per month (a model can have multiple rows per month
                 // if it appears under several data sources).
                 const byQuarter = {};
@@ -411,16 +415,16 @@ function renderTrend(keys) {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: '#6B6E75', font: { size: 10 } }
+                    ticks: { color: T().muted, font: { size: 10 } }
                 },
                 y: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75', font: { size: 11 } },
-                    title: { display: true, text: 'MII Score', color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted, font: { size: 11 } },
+                    title: { display: true, text: 'MII Score', color: T().muted, font: { size: 11 } }
                 }
             },
             plugins: {
-                legend: { labels: { color: '#6B6E75', boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
+                legend: { labels: { color: T().muted, boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
             }
         }
     });
@@ -515,7 +519,7 @@ function renderJitter(keys) {
     const datasets = [];
     const seenMfr = new Set();
     keys.forEach((k, ki) => {
-        const color = SERIES_COLORS[ki % SERIES_COLORS.length];
+        const color = seriesColors()[ki % seriesColors().length];
         // The model itself: solid line + large points across the columns.
         datasets.push({
             type: 'line',
@@ -524,7 +528,7 @@ function renderJitter(keys) {
             borderColor: color,
             backgroundColor: color,
             pointBackgroundColor: color,
-            pointBorderColor: '#16181D',
+            pointBorderColor: T().ink,
             pointBorderWidth: 1.5,
             pointRadius: 6,
             pointHoverRadius: 7,
@@ -559,8 +563,8 @@ function renderJitter(keys) {
     datasets.push({
         label: 'Market avg',
         data: PROFILE_DIMS.map((_, i) => avgProfileDim(fieldKeys, i)),
-        borderColor: '#9A9CA1',
-        backgroundColor: '#9A9CA1',
+        borderColor: T().neutral,
+        backgroundColor: T().neutral,
         borderDash: [2, 3],
         pointRadius: 0,
         borderWidth: 2,
@@ -582,19 +586,19 @@ function renderJitter(keys) {
             scales: {
                 x: {
                     offset: true,
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75', font: { size: 11 } },
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted, font: { size: 11 } },
                 },
                 y: {
                     min: 0,
                     max: 1,
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75', font: { size: 11 } },
-                    title: { display: true, text: 'Percentile (0 = lowest, 1 = highest)', color: '#6B6E75', font: { size: 11 } },
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted, font: { size: 11 } },
+                    title: { display: true, text: 'Percentile (0 = lowest, 1 = highest)', color: T().muted, font: { size: 11 } },
                 },
             },
             plugins: {
-                legend: { labels: { color: '#6B6E75', boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
+                legend: { labels: { color: T().muted, boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
                 tooltip: {
                     callbacks: {
                         label: (c) => `${c.dataset.label} · ${c.label}: ${Number(c.parsed.y).toFixed(2)}`,
@@ -616,7 +620,7 @@ function renderBenchmark(keys) {
     // de-duplicated so two models from the same make share one mfr line.
     const seenMfr = new Set();
     keys.forEach((k, i) => {
-        const color = SERIES_COLORS[i % SERIES_COLORS.length];
+        const color = seriesColors()[i % seriesColors().length];
         const m = models[k];
         const byQuarter = {};
         m.rows.forEach(r => {
@@ -662,8 +666,8 @@ function renderBenchmark(keys) {
     datasets.push({
         label: 'Market avg',
         data: quarters.map(q => marketMIIByQuarter[q] ?? null),
-        borderColor: '#9A9CA1',
-        backgroundColor: '#9A9CA1',
+        borderColor: T().neutral,
+        backgroundColor: T().neutral,
         borderDash: [2, 3],
         pointStyle: 'line',
         spanGaps: true,
@@ -681,18 +685,18 @@ function renderBenchmark(keys) {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: '#6B6E75', font: { size: 10 } }
+                    ticks: { color: T().muted, font: { size: 10 } }
                 },
                 y: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75', font: { size: 11 } },
-                    title: { display: true, text: 'MII Score', color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted, font: { size: 11 } },
+                    title: { display: true, text: 'MII Score', color: T().muted, font: { size: 11 } }
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: '#6B6E75',
+                        color: T().muted,
                         // Wider swatch + usePointStyle lets each dataset's pointStyle
                         // ('circle' for models, 'line' for the dashed/dotted averages)
                         // and borderDash render in the legend, so solid vs dashed vs
@@ -737,7 +741,7 @@ function renderTable(keys) {
     const thStyle = c => `color:${c} !important;text-transform:none !important;letter-spacing:0.01em !important;font-size:11.5px !important;font-weight:600 !important`;
     head.innerHTML = `<tr>
         <th class="px-5 py-3">Metric</th>
-        ${keys.map((k, i) => `<th class="px-5 py-3" style="${thStyle(SERIES_COLORS[i % SERIES_COLORS.length])}">${escapeHtml(modelLabel(k))}${i === 0 ? ' <span style="color:#6B6E75 !important;font-weight:400 !important">(base)</span>' : ''}</th>`).join('')}
+        ${keys.map((k, i) => `<th class="px-5 py-3" style="${thStyle(seriesColors()[i % seriesColors().length])}">${escapeHtml(modelLabel(k))}${i === 0 ? ' <span style="color:var(--muted) !important;font-weight:400 !important">(base)</span>' : ''}</th>`).join('')}
     </tr>`;
 
     const metrics = [
@@ -761,10 +765,10 @@ function renderTable(keys) {
         const vals = keys.map(k => metric.get(models[k]));
         const best = metric.noHighlight ? null : Math.max(...vals.filter(v => v !== null && !isNaN(v)));
         return `<tr>
-            <td class="px-5 py-3" style="color:#6B6E75 !important">${metric.label}</td>
+            <td class="px-5 py-3" style="color:var(--muted) !important">${metric.label}</td>
             ${vals.map(v => {
                 const isBest = best !== null && v !== null && v === best && keys.length > 1;
-                const style = isBest ? ' style="color:#B45309 !important;font-weight:600 !important"' : '';
+                const style = isBest ? ' style="color:var(--accent-ink) !important;font-weight:600 !important"' : '';
                 return `<td class="px-5 py-3"${style}>${metric.fmt(v)}</td>`;
             }).join('')}
         </tr>`;
@@ -819,11 +823,11 @@ async function init() {
     } catch (error) {
         const indicator = document.getElementById('loadingIndicator');
         indicator.innerHTML = `<div class="text-center max-w-md px-6">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(245,158,11,0.1)">
-                <svg class="w-6 h-6 text-[#B45309]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgb(var(--accent-rgb) / 0.1)">
+                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
             </div>
-            <div class="text-base font-semibold text-[#B45309] mb-1">Failed to Load Data</div>
-            <div class="text-xs text-[#6B6E75]">${escapeHtml(error.message)}</div>
+            <div class="text-base font-semibold text-amber-700 mb-1">Failed to Load Data</div>
+            <div class="text-xs text-faint">${escapeHtml(error.message)}</div>
         </div>`;
     }
 }
