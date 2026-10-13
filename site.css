@@ -135,11 +135,9 @@ input, select { font: inherit; color: inherit; }
 }
 .site-header .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; white-space: nowrap; }
-.brand-mark {
-    display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
-    background: linear-gradient(135deg, #f59a72, #eb6834 55%, #b5461b);
-    font-family: var(--mono); font-size: 11px; font-weight: 600; color: #160a04; letter-spacing: 0.02em;
-}
+.brand-logo { display: block; width: 32px; height: 32px; flex: none; transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+.brand:hover .brand-logo { transform: rotate(60deg); }
+@media (prefers-reduced-motion: reduce) { .brand:hover .brand-logo { transform: none; } }
 .main-nav { display: flex; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
 .main-nav::-webkit-scrollbar { display: none; }
 .main-nav a {
@@ -481,6 +479,7 @@ table.data tbody tr.is-ci td:first-child { box-shadow: inset 3px 0 0 var(--ci); 
 
 /* ---------- Loading / toast ---------- */
 .loading { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: #0d0e10; color: #f4f3ef; padding: 16px; }
+.loader-logo { display: block; margin: 0 auto 18px; }
 .loading .spinner { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(255,255,255,.12); border-top-color: #f07a48; animation: spin .9s linear infinite; margin: 0 auto 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading .l-title { font-size: 17px; font-weight: 600; text-align: center; }
