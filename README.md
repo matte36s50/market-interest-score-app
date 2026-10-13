@@ -77,9 +77,10 @@ actually carries depends on how widely it is measured. On the live dataset:
 The live index is **~78% a Bring a Trailer auction-behaviour measure**, not the
 65% the nominal formula suggests. The table predates the October 2026 rebuild of
 the YouTube collector, when YouTube reached 0.5% of rows: it now reads every
-upload of a curated list of enthusiast channels on each run, so every model-month
-the MII scores gets a YouTube value (zero when the channels didn't cover it) and
-the input carries close to its nominal 10%. `MII.effectiveWeights` recomputes
+upload of a curated list of enthusiast channels on each run, so every car
+model-month the MII scores gets a YouTube value (zero when the channels didn't
+cover it) and the input carries close to its nominal 10%. Motorcycles and other
+non-car classes are left out of it, since the channels don't cover them. `MII.effectiveWeights` recomputes
 this after every `recompute()`, and the **How This Score Is Built** panel on the
 Data Coverage tab of `analyze.html` renders it from live data — so the published
 description can never drift from what the dashboard is doing.

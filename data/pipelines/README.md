@@ -341,15 +341,20 @@ Titles only; descriptions are full of links and sponsor reads.
 Shorts (three minutes or less) are excluded: YouTube counts every replay of a
 Short as a view, which would swamp long-form views.
 
+**Cars only.** The channels cover cars, so only `vehicle_class = car` models
+are matched and scored. Motorcycles, boats, tractors, ATVs and RVs get no rows:
+a zero from channels that never cover them would mark them down, so for them
+the input stays missing and its weight renormalizes, as before.
+
 ### Why a share
 
 View counts keep growing after a video goes up, and the browser ranks every
 month's values together, so raw views would score older months higher just for
 being older. Videos published in the same month have had about the same time
 to collect views, so each model's views are divided by that month's total
-across all tracked uploads. The whole universe is read, so a model-month the
-MII scores with no videos on the tracked channels is written as a measured
-zero rather than left as a gap.
+across all tracked uploads. Every car is read, so a car model-month the MII
+scores with no videos on the tracked channels is written as a measured zero
+rather than left as a gap.
 
 A run that reads fewer than 75% of the reachable channels (or fewer than ten)
 writes no signals, so a partial read never replaces a full one.

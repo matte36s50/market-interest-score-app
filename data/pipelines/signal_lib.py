@@ -159,7 +159,9 @@ def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None):
         if not man or not mod or man.lower() == "unknown":
             continue
         rec = agg.setdefault((man, mod), {"manufacturer": man, "model": mod,
-                                          "auction_count": 0})
+                                          "auction_count": 0, "vehicle_class": ""})
+        if not rec["vehicle_class"]:
+            rec["vehicle_class"] = (row.get("vehicle_class") or "").strip().lower()
         if periods is not None:
             periods.setdefault((man, mod), set()).update(
                 period_months(row.get("quarter") or row.get("month") or ""))

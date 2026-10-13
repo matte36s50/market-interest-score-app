@@ -586,6 +586,19 @@ class YouTubeShares(unittest.TestCase):
         self.assertNotIn(("MUSTANG", "2025-06"), got)
         self.assertEqual(examples[("BMW", "E46 M3")], (600, "x"))
 
+    def test_only_cars_are_scored(self):
+        universe = [{"manufacturer": "BMW", "model": "E46 M3", "vehicle_class": "car"},
+                    {"manufacturer": "Ducati", "model": "916", "vehicle_class": "motorcycle"},
+                    {"manufacturer": "Riva", "model": "Aquarama", "vehicle_class": "boat"},
+                    {"manufacturer": "Ford", "model": "A", "vehicle_class": ""}]
+        periods = {("BMW", "E46 M3"): {"2026-01"}, ("Ducati", "916"): {"2026-01"},
+                   ("Riva", "Aquarama"): {"2026-01"}, ("Ford", "A"): {"2026-01"}}
+        cars, car_periods = youtube_signals.cars_only(universe, periods)
+        self.assertEqual([r["model"] for r in cars], ["E46 M3", "A"])
+        self.assertEqual(set(car_periods), {("BMW", "E46 M3"), ("Ford", "A")})
+        rows = youtube_signals.build_rows({}, {"2026-01": 100}, car_periods, "T")
+        self.assertNotIn("916", {r["model"] for r in rows})   # no zero for a bike
+
     def test_window_runs_from_the_first_mii_month_to_now(self):
         months = youtube_signals.window_months({("a", "b"): {"2025-11", "2026-01"}},
                                                today=date(2026, 2, 14))

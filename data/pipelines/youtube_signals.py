@@ -66,6 +66,11 @@ months comparable. yt_views stays in the file for reference.
 Shorts are excluded (three minutes or less): YouTube counts every replay of a
 Short as a view, which would swamp long-form views.
 
+CARS ONLY. The channels cover cars, so only models whose vehicle_class is
+'car' are matched and scored. Motorcycles, boats, tractors, ATVs and RVs get
+no rows at all: a zero from channels that never cover them would mark them
+down, so they keep the input missing and their weights renormalize.
+
 A run that cannot read at least 75% of the channels (and at least ten) writes
 nothing, so a partial read never replaces a full one: shares from a subset of
 the channels would not be comparable with the last full run. A handle that
@@ -541,6 +546,13 @@ class Matcher:
 # Aggregation
 # --------------------------------------------------------------------------
 
+def cars_only(universe, periods):
+    """The car models of the universe, and the months the MII scores them."""
+    cars = [r for r in universe if (r.get("vehicle_class") or "car") == "car"]
+    keys = {(r["manufacturer"], r["model"]) for r in cars}
+    return cars, {k: v for k, v in periods.items() if k in keys}
+
+
 def window_months(periods, today=None):
     """Every month from the earliest the MII covers through the current one."""
     today = today or date.today()
@@ -660,13 +672,14 @@ def main():
     periods = {}
     universe = lib.load_universe(args.csv, min_auctions=args.min_auctions,
                                  periods=periods)
+    universe, periods = cars_only(universe, periods)
     months = window_months(periods)
     since = months[0] + "-01"
     channels = load_channels()
     todo = channels[:args.limit] if args.limit else channels
     matcher = Matcher(universe, load_aliases())
     quota = Quota(args.budget)
-    print(f"Universe {len(universe)} models; {len(todo)} of {len(channels)} "
+    print(f"Universe {len(universe)} car models; {len(todo)} of {len(channels)} "
           f"channels; window {months[0]} to {months[-1]}; budget {args.budget} units")
 
     videos, channel_rows, read = [], [], 0
