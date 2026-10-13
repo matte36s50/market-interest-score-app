@@ -14,13 +14,25 @@ A comprehensive, interactive dashboard for tracking collector car market interes
 
 ## Features
 
-### 🎯 Core Functionality
-- **Real-time Market Overview**: Track key metrics across manufacturers
-- **Interactive Leaderboard**: Sort and filter manufacturers by various criteria
-- **Detailed Model Breakdowns**: Dive deep into individual manufacturer performance
-- **Trend Visualization**: View historical MII scores over 5 quarters
-- **Comparison Tool**: Compare up to 4 manufacturers side-by-side
-- **Advanced Filtering**: Search, filter by auction volume, and customize views
+### 🎯 Overview page (`index.html`)
+- **Headline and narrative**: market MII for the period, its change, and a
+  generated one-paragraph read of the month (or year to date)
+- **What stands out**: insight cards built from the data (leading make,
+  biggest real mover, most-watched model, interest outrunning price, most
+  bidding, BMW CI vs the market). Moves inside sampling noise are never reported.
+- **HAGI BMW Classic Index spotlight**: the 16 constituents (the committee's
+  launch list plus the E46 M3, added in 2026; defined in `bmw-ci.js`), their
+  MII, rank against every model, trend, and CI vs all BMW vs the market.
+  Constituents are also highlighted in the models table and the value map.
+- **Value map**: every ranked model's MII against its average price (log
+  scale), with the interest its price predicts, so cars drawing more attention
+  than their price explains stand out
+- **Manufacturers**: sortable leaderboard or make × month heatmap, with a
+  detail drawer (history vs market, what drives the score, models)
+- **Models, movers and eras**: most-watched models, biggest real movers, and
+  interest by decade of manufacture
+- **Sharing**: every view (period, vehicle class, open make) lives in the URL,
+  the Share button copies it, and PDF prints a clean report. Light and dark themes.
 
 ### 📊 Key Metrics
 - **MII Score**: Composite market interest index (0-100)
@@ -110,7 +122,7 @@ coloured arrow, with the reason in its tooltip.
 Each input is converted to a **percentile rank** across the whole dataset before
 weighting: 0 = lowest, 1 = highest, ~0.5 = the median car. This is done in the
 browser by `mii-normalize.js`, which every page calls right after loading the
-CSV, so the classic and HAGI pages always agree on a car's score.
+CSV, so every page agrees on a car's score.
 
 Inputs a row has no value for are dropped from its blend and the remaining
 weights renormalized, so a missing input never counts as "scored zero" and a
@@ -224,32 +236,22 @@ sales. Treat any badge below High as a sample-size caveat, not a market signal.
 
 ### Controls & Navigation
 
-#### Search & Filter
-- **Search Box**: Type to filter manufacturers by name
-- **Min Auctions**: Set minimum auction threshold (5, 10, 20, or 50)
-- **Sort By**: Choose metric to sort by (MII Score, Volume, Price, Trend, Sell-Through)
-- **Sort Order**: Toggle ascending/descending order
-
-#### Manufacturer Selection
-- **Click any row** in the leaderboard to view detailed breakdown
-- **Model Rankings**: See all tracked models sorted by MII score
-- **Trend Chart**: Visualize 5-quarter performance history
-
-#### Comparison Mode
-- **+ Button**: Add up to 4 manufacturers to comparison
-- **✓ Button**: Manufacturer is selected for comparison
-- **Clear All**: Remove all from comparison
-- **Chart**: View overlaid trend lines for selected manufacturers
-
-### View Modes
-1. **Leaderboard**: Main ranked list view (default)
-2. **Compare**: Focus on multi-manufacturer comparison
-3. **Trends**: Historical trend analysis
+- **Period**: any month, or the year to date. Select a point on the market
+  chart to jump to that month.
+- **Vehicle type**: All, Cars or Motorcycles. Scores are ranked against the
+  whole field either way, so a car's MII does not change between views.
+- **Manufacturers**: search, minimum auctions (5/10/20/50), sort by any column,
+  or switch to the heatmap to compare makes month by month. Select a make for
+  its drawer.
+- **Models**: search any model, or filter to BMW CI constituents. Select a
+  model (anywhere on the page) for its individual Bring a Trailer sales.
+- **Share / PDF**: the URL always reflects the current view
+  (`#period=2026-09&class=car&make=BMW`), so a copied link reopens it exactly.
 
 ## Technology Stack
 
 - **HTML5**: Semantic markup
-- **Tailwind CSS**: Modern, utility-first styling via CDN
+- **CSS**: hand-written design tokens with light and dark themes (`overview.css`); the other pages use Tailwind via CDN
 - **Vanilla JavaScript**: Zero dependencies for core logic
 - **Chart.js**: Interactive, responsive charts
 - **No Build Process**: Works directly in browser
