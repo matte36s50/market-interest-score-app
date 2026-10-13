@@ -1,3 +1,6 @@
+// Theme colours resolve from site.css tokens at draw time (see mii-light-theme.js).
+const T = () => window.SITE_THEME;
+
 // ============================================================
 // MII DATA ANALYSIS PAGE
 // Explores raw S3 auction data: component breakdown,
@@ -77,14 +80,14 @@ function injectAuctionCounts(rows, batCounts) {
 
 // MII component weights — the actual formula, kept in sync with mii-normalize.js.
 const COMPONENTS = [
-    { key: 'price_normalized',                  label: 'Sale Price',     weight: 0.20, color: '#f59e0b' },
-    { key: 'bids_normalized',                   label: 'Bid Activity',   weight: 0.20, color: '#3b82f6' },
-    { key: 'views_normalized',                  label: 'View Count',     weight: 0.15, color: '#10b981' },
-    { key: 'google_trends_interest_normalized', label: 'Google Trends',  weight: 0.15, color: '#ef4444' },
-    { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, color: '#8b5cf6' },
-    { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, color: '#14b8a6' },
-    { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, color: '#ec4899' },
-    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, color: '#6B6E75' },
+    { key: 'price_normalized',                  label: 'Sale Price',     weight: 0.20, get color() { return T().series[0]; } },
+    { key: 'bids_normalized',                   label: 'Bid Activity',   weight: 0.20, get color() { return T().series[1]; } },
+    { key: 'views_normalized',                  label: 'View Count',     weight: 0.15, get color() { return T().series[2]; } },
+    { key: 'google_trends_interest_normalized', label: 'Google Trends',  weight: 0.15, get color() { return T().series[3]; } },
+    { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, get color() { return T().series[4]; } },
+    { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, get color() { return T().series[5]; } },
+    { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, get color() { return T().series[6]; } },
+    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, get color() { return T().series[7]; } },
 ];
 
 const METRIC_LABELS = {
@@ -102,11 +105,8 @@ const METRIC_LABELS = {
 };
 
 // Manufacturer colour palette (deterministic based on name)
-const MFR_PALETTE = [
-    '#f59e0b','#3b82f6','#10b981','#8b5cf6','#ec4899','#ef4444',
-    '#14b8a6','#f97316','#06b6d4','#84cc16','#a855f7','#0ea5e9',
-    '#d946ef','#22c55e','#fb923c','#6366f1','#e11d48','#0891b2',
-];
+// The first eight makes take the validated categorical palette in order; the
+// rest fold into neutral grey rather than cycling hues that would collide.
 
 // ---- State ----
 let rawData = [];
@@ -242,8 +242,8 @@ function destroyChart(key) {
 
 function getMfrColor(name) {
     if (!mfrColorMap[name]) {
-        const idx = Object.keys(mfrColorMap).length % MFR_PALETTE.length;
-        mfrColorMap[name] = MFR_PALETTE[idx];
+        const idx = Object.keys(mfrColorMap).length;
+        mfrColorMap[name] = idx < T().series.length ? T().series[idx] : T().neutral;
     }
     return mfrColorMap[name];
 }
@@ -263,8 +263,8 @@ const CHART_DEFAULTS = {
         legend: { display: false },
     },
     scales: {
-        x: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
-        y: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
+        x: { grid: { color: T().grid }, ticks: { color: T().muted } },
+        y: { grid: { color: T().grid }, ticks: { color: T().muted } },
     },
 };
 
@@ -548,8 +548,8 @@ function renderModelRankings() {
                 }
             },
             scales: {
-                x: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
-                y: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168', font: { size: 11 } } },
+                x: { grid: { color: T().grid }, ticks: { color: T().muted } },
+                y: { grid: { color: T().grid }, ticks: { color: T().ink2, font: { size: 11 } } },
             }
         }
     });
@@ -562,7 +562,7 @@ function renderModelRankings() {
         const rankCls = i < 3 ? podiumColors[i] : 'text-faint';
         const hl = col => col === rankMetric ? 'text-amber-700 font-medium' : 'text-ink';
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-hair hover:bg-[#FAFAF8] transition-colors';
+        tr.className = 'border-b border-hair hover:bg-[color:var(--surface-2)] transition-colors';
         tr.innerHTML = `
             <td class="px-4 py-2.5 font-bold ${rankCls}">#${i + 1}</td>
             <td class="px-4 py-2.5 text-mute whitespace-nowrap">${r.manufacturer}</td>
@@ -738,19 +738,19 @@ function renderRadarChart(selected, market, mfrLabel) {
                 {
                     label: mfrLabel === '__all__' ? 'Market Average' : mfrLabel,
                     data: COMPONENTS.map(c => selected[c.key]),
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.15)',
+                    borderColor: T().accent,
+                    backgroundColor: T().alpha(T().accent, 0.15),
                     borderWidth: 2,
-                    pointBackgroundColor: '#f59e0b',
+                    pointBackgroundColor: T().accent,
                     pointRadius: 4,
                 },
                 ...(mfrLabel !== '__all__' ? [{
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
-                    borderColor: '#9A9CA1',
-                    backgroundColor: 'rgba(82,82,91,0.1)',
+                    borderColor: T().neutral,
+                    backgroundColor: T().alpha(T().neutral, 0.1),
                     borderWidth: 1.5,
-                    pointBackgroundColor: '#9A9CA1',
+                    pointBackgroundColor: T().neutral,
                     pointRadius: 3,
                     borderDash: [4, 4],
                 }] : []),
@@ -762,7 +762,7 @@ function renderRadarChart(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: true,
-                    labels: { color: '#5E6168', font: { size: 11 } },
+                    labels: { color: T().ink2, font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -774,17 +774,17 @@ function renderRadarChart(selected, market, mfrLabel) {
                 r: {
                     min: 0,
                     max: 1,
-                    grid: { color: '#ECECE7' },
-                    angleLines: { color: '#ECECE7' },
+                    grid: { color: T().grid },
+                    angleLines: { color: T().grid },
                     ticks: {
                         display: true,
-                        color: '#9A9CA1',
+                        color: T().neutral,
                         font: { size: 9 },
                         stepSize: 0.25,
                         backdropColor: 'transparent',
                     },
                     pointLabels: {
-                        color: '#5E6168',
+                        color: T().ink2,
                         font: { size: 11 },
                     },
                 }
@@ -817,8 +817,8 @@ function renderComponentBar(selected, market, mfrLabel) {
                 ...(mfrLabel !== '__all__' ? [{
                     label: 'Market Average',
                     data: COMPONENTS.map(c => market[c.key]),
-                    backgroundColor: 'rgba(82,82,91,0.3)',
-                    borderColor: '#9A9CA1',
+                    backgroundColor: T().alpha(T().neutral, 0.3),
+                    borderColor: T().neutral,
                     borderWidth: 1,
                     borderRadius: 4,
                 }] : []),
@@ -829,7 +829,7 @@ function renderComponentBar(selected, market, mfrLabel) {
             plugins: {
                 legend: {
                     display: mfrLabel !== '__all__',
-                    labels: { color: '#5E6168', font: { size: 11 } },
+                    labels: { color: T().ink2, font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -838,13 +838,13 @@ function renderComponentBar(selected, market, mfrLabel) {
                 }
             },
             scales: {
-                x: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168', font: { size: 11 } } },
+                x: { grid: { color: T().grid }, ticks: { color: T().ink2, font: { size: 11 } } },
                 y: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75' },
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted },
                     min: 0,
                     max: 1,
-                    title: { display: true, text: 'Normalized Score (0–1)', color: '#9A9CA1', font: { size: 10 } }
+                    title: { display: true, text: 'Normalized Score (0–1)', color: T().neutral, font: { size: 10 } }
                 },
             }
         }
@@ -890,7 +890,7 @@ function renderComponentStacked() {
                 legend: {
                     display: true,
                     position: 'bottom',
-                    labels: { color: '#5E6168', font: { size: 10 }, boxWidth: 12, padding: 12 },
+                    labels: { color: T().ink2, font: { size: 10 }, boxWidth: 12, padding: 12 },
                 },
                 tooltip: {
                     mode: 'index',
@@ -905,14 +905,14 @@ function renderComponentStacked() {
             scales: {
                 x: {
                     stacked: true,
-                    grid: { color: '#E4E4DF' },
-                    ticks: { color: '#5E6168', font: { size: 10 } },
+                    grid: { color: T().grid },
+                    ticks: { color: T().ink2, font: { size: 10 } },
                 },
                 y: {
                     stacked: true,
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75' },
-                    title: { display: true, text: 'Weighted Score Contribution', color: '#9A9CA1', font: { size: 10 } },
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted },
+                    title: { display: true, text: 'Weighted Score Contribution', color: T().neutral, font: { size: 10 } },
                 },
             },
         }
@@ -981,10 +981,10 @@ function renderTrends() {
                 {
                     label: primaryLabel,
                     data: primaryValues,
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.1)',
+                    borderColor: T().accent,
+                    backgroundColor: T().alpha(T().accent, 0.1),
                     borderWidth: 2.5,
-                    pointBackgroundColor: '#f59e0b',
+                    pointBackgroundColor: T().accent,
                     pointRadius: 5,
                     pointHoverRadius: 7,
                     tension: 0.3,
@@ -1011,7 +1011,7 @@ function renderTrends() {
             plugins: {
                 legend: {
                     display: compareValues != null,
-                    labels: { color: '#5E6168', font: { size: 11 } },
+                    labels: { color: T().ink2, font: { size: 11 } },
                 },
                 tooltip: {
                     callbacks: {
@@ -1020,11 +1020,11 @@ function renderTrends() {
                 }
             },
             scales: {
-                x: { grid: { color: '#ECECE7' }, ticks: { color: '#5E6168' } },
+                x: { grid: { color: T().grid }, ticks: { color: T().ink2 } },
                 y: {
-                    grid: { color: '#ECECE7' },
+                    grid: { color: T().grid },
                     ticks: {
-                        color: '#6B6E75',
+                        color: T().muted,
                         callback: v => formatTrendValue(v, metric),
                     },
                 },
@@ -1037,7 +1037,7 @@ function renderTrends() {
     legendEl.innerHTML = '';
     if (compareValues) {
         legendEl.innerHTML = `
-            <span style="color:#f59e0b">● ${primaryLabel}</span>
+            <span style="color:var(--accent)">● ${primaryLabel}</span>
             <span style="color:${getMfrColor(compare)}">● ${compare}</span>
         `;
     }
@@ -1096,10 +1096,10 @@ function renderMiniCharts(mfr) {
     document.getElementById('miniBidsValue').textContent = latestBids != null ? latestBids.toFixed(1) : '—';
     document.getElementById('miniVolValue').textContent = latestVol != null ? Math.round(latestVol).toLocaleString() : '—';
 
-    renderMiniChart('miniMIIChart', miiVals, '#f59e0b');
-    renderMiniChart('miniPriceChart', priceVals, '#10b981');
-    renderMiniChart('miniBidsChart', bidsVals, '#3b82f6');
-    renderMiniChart('miniVolChart', volVals, '#a855f7');
+    renderMiniChart('miniMIIChart', miiVals, T().accent);
+    renderMiniChart('miniPriceChart', priceVals, T().series[2]);
+    renderMiniChart('miniBidsChart', bidsVals, T().series[0]);
+    renderMiniChart('miniVolChart', volVals, T().series[6]);
 }
 
 // ============================================================
@@ -1194,8 +1194,8 @@ function renderOutlierDist(data, metric, label) {
             datasets: [{
                 label: label,
                 data: buckets.map(b => b.count),
-                backgroundColor: 'rgba(245,158,11,0.6)',
-                borderColor: '#f59e0b',
+                backgroundColor: T().alpha(T().accent, 0.6),
+                borderColor: T().accent,
                 borderWidth: 1,
                 borderRadius: 2,
             }]
@@ -1216,8 +1216,8 @@ function renderOutlierDist(data, metric, label) {
                 }
             },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#6B6E75', font: { size: 9 }, maxRotation: 45 } },
-                y: { grid: { color: '#ECECE7' }, ticks: { color: '#6B6E75' } },
+                x: { grid: { display: false }, ticks: { color: T().muted, font: { size: 9 }, maxRotation: 45 } },
+                y: { grid: { color: T().grid }, ticks: { color: T().muted } },
             }
         }
     });
@@ -1300,7 +1300,7 @@ function renderSpecialTable(rows, title, valueFn, colHeaders = []) {
 // SECTION 4: Correlation Explorer
 // ============================================================
 
-const QUARTER_COLORS = ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#ef4444'];
+const quarterColors = () => T().series.slice(0, 6);
 
 function renderCorrelations() {
     const xKey = document.getElementById('corrX').value;
@@ -1387,8 +1387,8 @@ function renderCorrelations() {
     const datasets = groupKeys.map((key, i) => {
         let color;
         if (colorBy === 'manufacturer') color = getMfrColor(key);
-        else if (colorBy === 'quarter') color = QUARTER_COLORS[quarters.indexOf(key) % QUARTER_COLORS.length];
-        else color = key === 'Sold' ? '#10b981' : '#ef4444';
+        else if (colorBy === 'quarter') color = quarterColors()[quarters.indexOf(key) % quarterColors().length];
+        else color = key === 'Sold' ? T().up : T().down;
 
         return {
             label: key,
@@ -1459,14 +1459,14 @@ function renderCorrelations() {
             },
             scales: {
                 x: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75' },
-                    title: { display: true, text: xLabel, color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted },
+                    title: { display: true, text: xLabel, color: T().muted, font: { size: 11 } }
                 },
                 y: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75' },
-                    title: { display: true, text: yLabel, color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted },
+                    title: { display: true, text: yLabel, color: T().muted, font: { size: 11 } }
                 },
             }
         }
@@ -1478,8 +1478,8 @@ function renderCorrelations() {
     groupKeys.slice(0, 30).forEach((key, i) => {
         let color;
         if (colorBy === 'manufacturer') color = getMfrColor(key);
-        else if (colorBy === 'quarter') color = QUARTER_COLORS[quarters.indexOf(key) % QUARTER_COLORS.length];
-        else color = key === 'Sold' ? '#10b981' : '#ef4444';
+        else if (colorBy === 'quarter') color = quarterColors()[quarters.indexOf(key) % quarterColors().length];
+        else color = key === 'Sold' ? T().up : T().down;
         const el = document.createElement('div');
         el.className = 'flex items-center gap-2';
         el.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${key}`;
@@ -1613,10 +1613,10 @@ function renderDataCoverage(rows) {
     // --- Monthly bar chart ---
     const labels   = sortedMonths.map(m => fmtPeriod(m));
     const bgColors = sortedMonths.map(m =>
-        monthCounts[m] < median * LOW_PCT ? 'rgba(239,68,68,0.75)' : 'rgba(245,158,11,0.75)'
+        monthCounts[m] < median * LOW_PCT ? T().alpha(T().down, 0.75) : T().alpha(T().accent, 0.75)
     );
     const borderColors = sortedMonths.map(m =>
-        monthCounts[m] < median * LOW_PCT ? 'rgb(239,68,68)' : 'rgb(245,158,11)'
+        monthCounts[m] < median * LOW_PCT ? T().down : T().accent
     );
 
     destroyChart('coverage');
@@ -1650,13 +1650,13 @@ function renderDataCoverage(rows) {
             },
             scales: {
                 x: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75', maxRotation: 45 }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted, maxRotation: 45 }
                 },
                 y: {
-                    grid: { color: '#ECECE7' },
-                    ticks: { color: '#6B6E75' },
-                    title: { display: true, text: 'Auction Records', color: '#6B6E75', font: { size: 11 } }
+                    grid: { color: T().grid },
+                    ticks: { color: T().muted },
+                    title: { display: true, text: 'Auction Records', color: T().muted, font: { size: 11 } }
                 }
             }
         }
@@ -1689,7 +1689,7 @@ function renderDataCoverage(rows) {
             <td class="px-4 py-2.5 text-right ${isLow ? 'text-down font-medium' : 'text-ink'}">${cnt.toLocaleString()}</td>
             <td class="px-4 py-2.5 text-right">
                 <div class="flex items-center justify-end gap-2">
-                    <div class="w-20 bg-[#F3F3EF] rounded-full h-1.5">
+                    <div class="w-20 bg-[color:var(--surface-3)] rounded-full h-1.5">
                         <div class="h-1.5 rounded-full ${isLow ? 'bg-red-500' : 'bg-amber-500'}" style="width:${Math.min(pct, 100)}%"></div>
                     </div>
                     <span class="${isLow ? 'text-down' : 'text-mute'} text-xs w-10 text-right">${pct}%</span>
@@ -1699,7 +1699,7 @@ function renderDataCoverage(rows) {
             <td class="px-4 py-2.5 text-center">
                 ${isLow
                     ? '<span class="px-2 py-0.5 rounded-full text-xs bg-red-50 text-down border border-red-200">Low</span>'
-                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-[#F3F3EF] text-mute">OK</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-xs bg-[color:var(--surface-3)] text-mute">OK</span>'
                 }
             </td>
         `;

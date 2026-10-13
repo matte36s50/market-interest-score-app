@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0e10">
+    <link rel="icon" href="mii-logo.svg" type="image/svg+xml">
     <title>MII Data Analysis - Underlying S3 Data Explorer</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,9 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <style>
         .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: #ECECE7; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #9A9CA1; border-radius: 3px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #6B6E75; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: var(--hair); }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--dot); border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
         .model-search-wrap {
             position: relative;
@@ -25,7 +27,7 @@
             position: absolute;
             right: 8px;
             cursor: pointer;
-            color: #6B6E75;
+            color: var(--muted);
             font-size: 16px;
             line-height: 1;
             display: none;
@@ -34,73 +36,88 @@
             padding: 0;
         }
         .model-clear-btn.visible { display: block; }
-        .model-clear-btn:hover { color: #16181D; }
+        .model-clear-btn:hover { color: var(--ink); }
 
         .tab-btn { white-space: nowrap; flex-shrink: 0; }
         .tab-btn.active {
-            background: #16181D;
-            color: white;
+            background: var(--ink);
+            color: var(--surface);
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .stat-card {
-            background: #FFFFFF;
-            border: 1px solid #E4E4DF;
-            border-radius: 10px;
+            box-shadow: var(--shadow);
+            background: var(--surface);
+            border: 1px solid var(--hair);
+            border-radius: var(--radius);
             padding: 1.25rem;
         }
 
-        select option { background: #FFFFFF; color: #16181D; }
+        select option { background: var(--surface); color: var(--ink); }
 
         .chart-container {
+            box-shadow: var(--shadow);
             position: relative;
-            background: #FFFFFF;
-            border: 1px solid #E4E4DF;
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--hair);
+            border-radius: var(--radius);
             padding: 1.25rem;
         }
 
-        .table-row:hover { background: #FAFAF8; }
+        .table-row:hover { background: var(--surface-2); }
         .sortable-header { cursor: pointer; user-select: none; }
-        .sortable-header:hover { color: #B45309; }
+        .sortable-header:hover { color: var(--accent-ink); }
     </style>
-    <script src="mii-light-theme.js"></script>
-    <link rel="stylesheet" href="mii-light-theme.css">
+    <script src="mii-light-theme.js?v=2"></script>
+    <link rel="stylesheet" href="site.css?v=3">
+    <link rel="stylesheet" href="mii-light-theme.css?v=2">
+    <script src="site.js?v=1"></script>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
-    <header class="bg-white border-b border-line md:sticky top-0 z-40">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
-            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
-                <a href="index.html" class="flex items-center gap-2.5">
-                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
-                    <span class="font-semibold text-[15px]">Market Interest Index</span>
-                </a>
-                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
-                    <a href="index.html" class="nav-link">Overview</a>
-                    <a href="mai.html" class="nav-link">Apex Index</a>
-                    <a href="analytics.html" class="nav-link">Model comparison</a>
-                    <a href="analyze.html" class="nav-link is-active" aria-current="page">Data analysis</a>
-                </nav>
-            </div>
-            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
-                <span id="lastUpdated"></span>
-                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+    <header class="site-header">
+        <div class="wrap" style="max-width:1600px;padding-left:24px;padding-right:24px">
+            <a href="index.html" class="brand" aria-label="Market Interest Index home">
+                <img class="brand-logo" src="mii-logo.svg" alt="" width="32" height="32">
+                <span>Market Interest Index</span>
+            </a>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Overview</a>
+                <a href="mai.html">Apex Index</a>
+                <a href="analytics.html">Model comparison</a>
+                <a href="analyze.html" aria-current="page">Data analysis</a>
+            </nav>
+            <div class="header-actions">
+                <a href="admin.html" class="admin-link">Admin</a>
+                <button id="themeToggle" class="hbtn icon-only" aria-label="Switch colour theme" title="Switch colour theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button id="printBtn" class="hbtn" title="Save this page as a PDF">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+                    <span class="label">PDF</span>
+                </button>
+                <button id="shareBtn" class="hbtn is-primary" title="Copy a link to this page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+                    <span class="label">Share</span>
+                </button>
             </div>
         </div>
     </header>
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 pt-8 flex flex-wrap items-end justify-between gap-4">
-        <div class="flex flex-col gap-2">
-            <span class="text-[13px] text-mute">Underlying S3 data</span>
-            <h1 class="m-0 text-3xl font-semibold tracking-tight">Data analysis</h1>
+
+    <section class="hero page-hero" aria-labelledby="pageTitle">
+        <div class="wrap" style="max-width:1600px;padding-left:24px;padding-right:24px">
+            <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Underlying S3 data</span>
+            <h1 id="pageTitle">Data analysis</h1>
+            <p class="lede">The raw MII rows behind every page: coverage, distributions, signal contributions and data quality, filterable down to a single model.</p>
+            <div class="hero-meta"><span>Data loaded <span id="lastUpdated">…</span></span></div>
         </div>
-        
-    </div>
+    </section>
+
 
     <!-- Loading Indicator -->
     <div id="loadingIndicator" class="fixed inset-0 bg-canvas/95 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="text-center">
-            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#D9D9D3] border-t-amber-500 mb-4"></div>
+            <img class="loader-logo" src="mii-logo-animated.svg" alt="" width="96" height="96">
             <div class="text-xl font-semibold text-ink">Loading MII Data...</div>
             <div class="text-sm text-faint mt-2">Fetching raw auction data from S3</div>
         </div>
@@ -111,7 +128,7 @@
         <div class="text-center max-w-md">
             <div class="text-xl font-semibold text-down mb-2">Failed to Load Data</div>
             <div id="errorMessage" class="text-sm text-mute mb-4"></div>
-            <button onclick="location.reload()" class="px-4 py-2 bg-ink text-white rounded-lg text-sm hover:bg-[#2C2F36] transition-colors">
+            <button onclick="location.reload()" class="px-4 py-2 bg-ink text-white rounded-lg text-sm hover:opacity-90 transition-colors">
                 Retry
             </button>
         </div>
@@ -179,7 +196,7 @@
             <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Manufacturer:</label>
-                    <select id="radarMfrSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <select id="radarMfrSelect" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">Market Average</option>
                     </select>
                 </div>
@@ -187,7 +204,7 @@
                     <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="radarModelSearch" list="radarModelList" placeholder="All models" autocomplete="off"
-                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-48" />
+                            class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-48" />
                         <datalist id="radarModelList"></datalist>
                         <button type="button" id="radarModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -226,7 +243,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <label class="text-xs text-faint">Quarter:</label>
-                        <select id="componentQuarterSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <select id="componentQuarterSelect" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         </select>
                     </div>
                 </div>
@@ -244,7 +261,7 @@
             <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Metric:</label>
-                    <select id="trendMetric" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="trendMetric" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score">MII Score</option>
                         <option value="price">Avg Sale Price ($)</option>
                         <option value="views">Avg Views</option>
@@ -257,13 +274,13 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Manufacturer:</label>
-                    <select id="trendMfrSelect" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <select id="trendMfrSelect" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">All (Market)</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Compare:</label>
-                    <select id="trendCompare" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <select id="trendCompare" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="none">None</option>
                     </select>
                 </div>
@@ -271,7 +288,7 @@
                     <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="trendModelSearch" list="trendModelList" placeholder="All models" autocomplete="off"
-                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                            class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
                         <datalist id="trendModelList"></datalist>
                         <button type="button" id="trendModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -328,7 +345,7 @@
                     <div class="space-y-4">
                         <div>
                             <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Metric</label>
-                            <select id="outlierMetric" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <select id="outlierMetric" class="w-full bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="mii_score">MII Score</option>
                                 <option value="price">Sale Price ($)</option>
                                 <option value="views">Views</option>
@@ -340,7 +357,7 @@
                         </div>
                         <div>
                             <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Quarter</label>
-                            <select id="outlierQuarter" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <select id="outlierQuarter" class="w-full bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="__all__">All Months</option>
                             </select>
                         </div>
@@ -348,14 +365,14 @@
                             <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Model</label>
                             <div class="model-search-wrap w-full">
                                 <input id="outlierModelSearch" list="outlierModelList" placeholder="All models" autocomplete="off"
-                                    class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50" />
+                                    class="w-full bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-2 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50" />
                                 <datalist id="outlierModelList"></datalist>
                                 <button type="button" id="outlierModelClear" class="model-clear-btn" title="Clear">×</button>
                             </div>
                         </div>
                         <div>
                             <label class="text-xs text-faint uppercase tracking-wider block mb-1.5">Top N Records</label>
-                            <select id="outlierN" class="w-full bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                            <select id="outlierN" class="w-full bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                                 <option value="10">Top 10</option>
                                 <option value="20" selected>Top 20</option>
                                 <option value="50">Top 50</option>
@@ -365,13 +382,13 @@
                         <div>
                             <label class="text-xs text-faint uppercase tracking-wider block mb-2">Special Analyses</label>
                             <div class="space-y-2">
-                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                <button id="btnHighViewsLowBids" class="w-full text-left px-3 py-2 bg-[color:var(--surface-3)] border border-line rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
                                     High Views, Low Bids <span class="text-faint">(watched but not bought)</span>
                                 </button>
-                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                <button id="btnHighPriceLowMII" class="w-full text-left px-3 py-2 bg-[color:var(--surface-3)] border border-line rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
                                     High Price, Low MII <span class="text-faint">(pricy but low interest)</span>
                                 </button>
-                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
+                                <button id="btnLowPriceHighMII" class="w-full text-left px-3 py-2 bg-[color:var(--surface-3)] border border-line rounded-lg text-xs hover:border-amber-500 hover:text-amber-700 transition-colors">
                                     Low Price, High MII <span class="text-faint">(high interest, low cost)</span>
                                 </button>
                             </div>
@@ -443,7 +460,7 @@
             <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">X Axis:</label>
-                    <select id="corrX" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="corrX" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="views">Views</option>
                         <option value="bids">Bids</option>
                         <option value="price">Sale Price</option>
@@ -456,7 +473,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Y Axis:</label>
-                    <select id="corrY" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="corrY" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score" selected>MII Score</option>
                         <option value="price">Sale Price</option>
                         <option value="views">Views</option>
@@ -468,13 +485,13 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Quarter:</label>
-                    <select id="corrQuarter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="corrQuarter" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="__all__">All</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Color by:</label>
-                    <select id="corrColorBy" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="corrColorBy" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="manufacturer">Manufacturer</option>
                         <option value="quarter">Quarter</option>
                         <option value="sold">Sold (yes/no)</option>
@@ -482,14 +499,14 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Data:</label>
-                    <select id="corrGranularity" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="corrGranularity" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="individual" selected>Individual auctions</option>
                         <option value="monthly">Monthly averages</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Filter Make:</label>
-                    <select id="corrMfrFilter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[140px]">
+                    <select id="corrMfrFilter" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[140px]">
                         <option value="__all__">All</option>
                     </select>
                 </div>
@@ -497,7 +514,7 @@
                     <label class="text-xs text-faint">Model:</label>
                     <div class="model-search-wrap">
                         <input id="corrModelSearch" list="corrModelList" placeholder="All models" autocomplete="off"
-                            class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
+                            class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 pr-7 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 w-44" />
                         <datalist id="corrModelList"></datalist>
                         <button type="button" id="corrModelClear" class="model-clear-btn" title="Clear">×</button>
                     </div>
@@ -582,19 +599,19 @@
             <div class="bg-white border border-line rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Manufacturer:</label>
-                    <select id="modelsRankMfr" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
+                    <select id="modelsRankMfr" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-w-[160px]">
                         <option value="__all__">All Manufacturers</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Quarter:</label>
-                    <select id="modelsRankQuarter" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="modelsRankQuarter" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="__all__">All Months</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Rank by:</label>
-                    <select id="modelsRankMetric" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="modelsRankMetric" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="mii_score">MII Score</option>
                         <option value="price">Avg Sale Price</option>
                         <option value="views">Avg Views</option>
@@ -605,7 +622,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-faint">Show top:</label>
-                    <select id="modelsRankN" class="bg-[#F3F3EF] border border-[#D9D9D3] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <select id="modelsRankN" class="bg-[color:var(--surface-3)] border border-line rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
                         <option value="10">10</option>
                         <option value="20" selected>20</option>
                         <option value="50">50</option>
@@ -694,7 +711,7 @@
                         <h2 class="font-semibold text-ink">Monthly Auction Record Count</h2>
                         <p class="text-xs text-faint mt-0.5">Records in bat.csv per month — red bars indicate months below 50% of median (likely scraper gaps)</p>
                     </div>
-                    <span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-xs bg-[#F3F3EF] text-mute">—</span>
+                    <span id="covFlaggedBadge" class="px-2 py-0.5 rounded-full text-xs bg-[color:var(--surface-3)] text-mute">—</span>
                 </div>
                 <div style="height: 320px;">
                     <canvas id="coverageChart"></canvas>
@@ -707,7 +724,7 @@
                     <h3 class="font-semibold text-ink">Month-by-Month Coverage Report</h3>
                     <p class="text-xs text-faint mt-0.5">
                         "Missing days" = calendar days with zero auction records in bat.csv.
-                        Run <code class="text-amber-700 bg-[#F3F3EF] px-1 rounded">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for any flagged month to get a pipeable list of missing dates.
+                        Run <code class="text-amber-700 bg-[color:var(--surface-3)] px-1 rounded">node scripts/backfill-checker.js YYYY-MM-01 YYYY-MM-31</code> for any flagged month to get a pipeable list of missing dates.
                     </p>
                 </div>
                 <div class="overflow-auto scrollbar-thin">
@@ -778,13 +795,13 @@
                     <p>If months are flagged above, use the CLI scripts to identify and backfill missing dates:</p>
                     <ol class="list-decimal list-inside space-y-1 ml-2 text-ink">
                         <li>Run the diagnostic to see all gaps across all months:
-                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/diagnose-data-gaps.js</code>
+                            <code class="block mt-1 bg-[color:var(--surface-3)] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/diagnose-data-gaps.js</code>
                         </li>
                         <li>Get a pipeable list of missing dates for a specific range:
-                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code>
+                            <code class="block mt-1 bg-[color:var(--surface-3)] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31</code>
                         </li>
                         <li>Pass the missing dates to your scraper's backfill command:
-                            <code class="block mt-1 bg-[#F3F3EF] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code>
+                            <code class="block mt-1 bg-[color:var(--surface-3)] text-amber-700 rounded px-3 py-1.5 font-mono text-xs">node scripts/backfill-checker.js 2025-01-01 2025-01-31 | xargs -I{} your-scraper --date {}</code>
                         </li>
                         <li>After re-running the scraper, regenerate <code class="text-amber-700">mii_results_latest.csv</code> and upload both CSVs to S3.</li>
                     </ol>
@@ -804,6 +821,6 @@
     </footer>
 
     <script src="mii-normalize.js?v=2"></script>
-    <script src="analyze.js?v=2"></script>
+    <script src="analyze.js?v=3"></script>
 </body>
 </html>

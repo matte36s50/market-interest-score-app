@@ -1,4 +1,4 @@
-/* Market Interest Index — overview page.
+/* Market Interest Index — shared site stylesheet (overview and every other page).
    Tokens first; everything below is written against roles, so light and dark
    swap in one place. Chart series colours are validated (dataviz validator,
    all-pairs, both modes): blue = BMW CI, orange = market, aqua = all BMW. */
@@ -35,6 +35,13 @@
     /* Sequential heat ramp (orange, light -> dark) for MII magnitude. */
     --heat-0: #fbf1ea; --heat-1: #f8dcca; --heat-2: #f4c0a3; --heat-3: #efa07a;
     --heat-4: #e98052; --heat-5: #d9622f; --heat-6: #b24c22; --heat-7: #873818;
+    --faint: #74777e;
+    /* RGB channels of the same tokens, for Tailwind colours with opacity on the
+       pages built with Tailwind (see mii-light-theme.js). */
+    --page-rgb: 244 244 239; --surface-rgb: 255 255 255; --surface-2-rgb: 249 249 246; --surface-3-rgb: 241 241 236;
+    --ink-rgb: 17 18 22; --ink-2-rgb: 71 74 82; --muted-rgb: 106 109 116; --faint-rgb: 116 119 126;
+    --hair-rgb: 230 229 223; --line-rgb: 214 213 206; --accent-rgb: 235 104 52; --accent-ink-rgb: 181 70 27;
+    --up-rgb: 21 122 60; --down-rgb: 192 48 48; --ci-ink-rgb: 28 92 171;
     --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -50,6 +57,11 @@
         --ci: #3987e5; --ci-ink: #8cbaf2; --ci-wash: rgba(57, 135, 229, 0.12); --ci-line: rgba(57, 135, 229, 0.45);
         --market: #d95926; --bmw: #199e70; --dot: #4a4d53;
         --up: #3cc46d; --down: #f07070;
+        --faint: #868990;
+        --page-rgb: 13 14 16; --surface-rgb: 22 23 26; --surface-2-rgb: 27 29 32; --surface-3-rgb: 33 35 39;
+        --ink-rgb: 241 240 236; --ink-2-rgb: 195 194 183; --muted-rgb: 146 148 155; --faint-rgb: 134 137 144;
+        --hair-rgb: 37 39 43; --line-rgb: 51 54 59; --accent-rgb: 240 122 72; --accent-ink-rgb: 245 154 114;
+        --up-rgb: 60 196 109; --down-rgb: 240 112 112; --ci-ink-rgb: 140 186 242;
         --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
         --heat-0: #2a1d17; --heat-1: #45261a; --heat-2: #63301c; --heat-3: #873b1d;
         --heat-4: #ad4a20; --heat-5: #d25d2b; --heat-6: #ec7d4f; --heat-7: #f7a684;
@@ -64,6 +76,11 @@
     --ci: #3987e5; --ci-ink: #8cbaf2; --ci-wash: rgba(57, 135, 229, 0.12); --ci-line: rgba(57, 135, 229, 0.45);
     --market: #d95926; --bmw: #199e70; --dot: #4a4d53;
     --up: #3cc46d; --down: #f07070;
+        --faint: #868990;
+        --page-rgb: 13 14 16; --surface-rgb: 22 23 26; --surface-2-rgb: 27 29 32; --surface-3-rgb: 33 35 39;
+        --ink-rgb: 241 240 236; --ink-2-rgb: 195 194 183; --muted-rgb: 146 148 155; --faint-rgb: 134 137 144;
+        --hair-rgb: 37 39 43; --line-rgb: 51 54 59; --accent-rgb: 240 122 72; --accent-ink-rgb: 245 154 114;
+        --up-rgb: 60 196 109; --down-rgb: 240 112 112; --ci-ink-rgb: 140 186 242;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
     --heat-0: #2a1d17; --heat-1: #45261a; --heat-2: #63301c; --heat-3: #873b1d;
     --heat-4: #ad4a20; --heat-5: #d25d2b; --heat-6: #ec7d4f; --heat-7: #f7a684;
@@ -79,6 +96,9 @@
     --accent: #f07a48; --accent-ink: #f59a72; --market: #f07a48;
     --ci: #3987e5; --ci-ink: #8cbaf2; --bmw: #199e70;
     --up: #45d07a; --down: #ff7b7b;
+    --faint: #9a9ca3;
+    --ink-rgb: 244 243 239; --ink-2-rgb: 201 200 190; --muted-rgb: 154 156 163; --faint-rgb: 154 156 163;
+    --surface-rgb: 22 23 26; --line-rgb: 64 66 70; --hair-rgb: 40 42 46; --accent-rgb: 240 122 72; --accent-ink-rgb: 245 154 114;
 }
 
 /* ---------- Base ---------- */
@@ -115,11 +135,9 @@ input, select { font: inherit; color: inherit; }
 }
 .site-header .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; white-space: nowrap; }
-.brand-mark {
-    display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
-    background: linear-gradient(135deg, #f59a72, #eb6834 55%, #b5461b);
-    font-family: var(--mono); font-size: 11px; font-weight: 600; color: #160a04; letter-spacing: 0.02em;
-}
+.brand-logo { display: block; width: 32px; height: 32px; flex: none; transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+.brand:hover .brand-logo { transform: rotate(60deg); }
+@media (prefers-reduced-motion: reduce) { .brand:hover .brand-logo { transform: none; } }
 .main-nav { display: flex; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
 .main-nav::-webkit-scrollbar { display: none; }
 .main-nav a {
@@ -461,6 +479,7 @@ table.data tbody tr.is-ci td:first-child { box-shadow: inset 3px 0 0 var(--ci); 
 
 /* ---------- Loading / toast ---------- */
 .loading { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: #0d0e10; color: #f4f3ef; padding: 16px; }
+.loader-logo { display: block; margin: 0 auto 18px; }
 .loading .spinner { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(255,255,255,.12); border-top-color: #f07a48; animation: spin .9s linear infinite; margin: 0 auto 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading .l-title { font-size: 17px; font-weight: 600; text-align: center; }
@@ -485,3 +504,19 @@ table.data tbody tr.is-ci td:first-child { box-shadow: inset 3px 0 0 var(--ci); 
     .wrap { max-width: none; }
 }
 @media (max-width: 520px) { .kpi svg { display: none; } .kpi .k-value { font-size: 24px; } }
+
+/* ---------- Page hero (Apex, Model comparison, Data analysis, Admin) ---------- */
+.page-hero { padding: 40px 0 44px; }
+.page-hero h1 { margin-top: 12px; font-size: clamp(30px, 4vw, 46px); }
+.page-hero .lede { max-width: 820px; }
+.page-hero .hero-meta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.page-hero .hero-meta a { color: var(--accent-ink); }
+.page-hero .hero-meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.admin-link { font-size: 13px; color: #a9abb1; padding: 0 6px; }
+.admin-link:hover { color: #fff; }
+@media (max-width: 760px) { .admin-link { display: none; } }
+/* Pages set their header and hero width inline to match their content; on
+   phones every page uses the same 16px gutter. */
+@media (max-width: 640px) {
+    .site-header .wrap, .page-hero .wrap { padding-left: 16px !important; padding-right: 16px !important; }
+}

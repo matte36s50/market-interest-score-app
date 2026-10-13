@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Market Interest Index">
+  <!-- The MII mark, static. Strokes are heavier than the animated loader's so
+       the hexagon still reads at header and favicon sizes. -->
+  <defs>
+    <linearGradient id="miiGold" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="35%" stop-color="#F59E0B"/>
+      <stop offset="65%" stop-color="#92400E"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="93" fill="#16181D" stroke="url(#miiGold)" stroke-width="7"/>
+  <g stroke="#F59E0B" stroke-width="5.5" stroke-linecap="round" opacity="0.9">
+    <path d="M100 40 152 70 152 130 100 160 48 130 48 70Z" fill="none" stroke-linejoin="round"/>
+    <path d="M100 40V100M152 70 100 100M152 130 100 100M100 160V100M48 130 100 100M48 70 100 100"/>
+  </g>
+  <g fill="url(#miiGold)">
+    <circle cx="100" cy="40" r="11"/>
+    <circle cx="152" cy="70" r="11"/>
+    <circle cx="152" cy="130" r="11"/>
+    <circle cx="100" cy="160" r="11"/>
+    <circle cx="48" cy="130" r="11"/>
+    <circle cx="48" cy="70" r="11"/>
+    <circle cx="100" cy="100" r="13"/>
+  </g>
+</svg>
