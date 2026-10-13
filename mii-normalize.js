@@ -17,7 +17,7 @@
 // because upstream ships those three inputs empty.
 //
 // Every page calls MII.recompute(rows) right after parsing the CSV, so the
-// classic and HAGI pages always agree on a car's score.
+// pages always agree on a car's score.
 
 (function (global) {
     'use strict';
