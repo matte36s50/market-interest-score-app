@@ -1,29 +1,32 @@
 handle,name,channel_id,title,subscribers,videos_in_window,videos_matched,status,note,measured_at
-@CarandDriver,Car and Driver,UCOqhTsqySBCBTy571GArcXg,Car and Driver,860000,50,17,ok,,2026-10-14T00:20:39Z
-@DougDeMuro,Doug DeMuro,UCsqjHFMB_JYTaEnf_vmTNqg,Doug DeMuro,5100000,277,112,ok,,2026-10-14T00:20:18Z
-@EverydayDriver,Everyday Driver,UCv-FM9e2vGXIEExo7L-ogOQ,EverydayDriver,488000,,,name_mismatch,"expected 'Everyday Driver', found 'EverydayDriver'",2026-10-14T00:20:28Z
-@Hagerty,Hagerty,UCLgEVx4mzk3T3mzgbKG54Eg,Hagerty,3870000,138,37,ok,,2026-10-14T00:19:55Z
-@HarrysGarage,Harry's garage,UCIB5XXHNAWWzTOw6guIMYCg,Harry's garage,891000,79,37,ok,,2026-10-14T00:19:59Z
-@HooviesGarage,Hoovie's Garage,UCdEczn3MVkx_4PnMZ10MVFA,Hoovies Garage,1660000,,,name_mismatch,"expected 'Hoovie's Garage', found 'Hoovies Garage'",2026-10-14T00:20:28Z
+@CarandDriver,Car and Driver,UCOqhTsqySBCBTy571GArcXg,Car and Driver,860000,82,35,ok,,2026-10-14T02:18:30Z
+@Donut,Donut,UCL6JmiMXKoXS6bpP1D3bk8g,Donut,9360000,194,7,ok,,2026-10-14T02:18:11Z
+@DougDeMuro,Doug DeMuro,UCsqjHFMB_JYTaEnf_vmTNqg,Doug DeMuro,5100000,465,175,ok,,2026-10-14T02:17:34Z
+@EverydayDriver,Everyday Driver,UCv-FM9e2vGXIEExo7L-ogOQ,EverydayDriver,488000,126,22,ok,,2026-10-14T02:17:55Z
+@Hagerty,Hagerty,UCLgEVx4mzk3T3mzgbKG54Eg,Hagerty,3870000,229,61,ok,,2026-10-14T02:16:48Z
+@HarrysGarage,Harry's garage,UCIB5XXHNAWWzTOw6guIMYCg,Harry's garage,891000,135,65,ok,,2026-10-14T02:16:54Z
+@HooviesGarage,Hoovie's Garage,UCdEczn3MVkx_4PnMZ10MVFA,Hoovies Garage,1660000,124,47,ok,,2026-10-14T02:17:58Z
 @MotorTrend,MotorTrend,,,,,,not_found,no channel has this handle,2026-10-14T00:20:39Z
-@MotorWeek,MotorWeek,UC66lTpcL4h5wqxCWioKQOrg,MotorWeek,549000,387,115,ok,,2026-10-14T00:20:11Z
-@MrJWW,Mr JWW,UCK_zuVq6ZpSRMjsZ5JRPx5g,Mr JWW,1020000,38,5,ok,,2026-10-14T00:20:30Z
-@Petrolicious,Petrolicious,UCgyJPixJl95X1ut3E9K99KA,Petrolicious,933000,75,23,ok,,2026-10-14T00:19:57Z
-@Ratarossa,Ratarossa,UCA0ZY1x5r2lyKQfoUYvHvqQ,Ratarossa,289000,40,8,ok,,2026-10-14T00:20:31Z
-@RegularCars,Regular Car Reviews,UCo1pShh6dtg-T_ZZkgi_JDQ,Regular Car Reviews,966000,168,52,ok,,2026-10-14T00:20:07Z
-@Tavarish,Tavarish,UCvAhDxNNUDhi78tMXVGBUaQ,Tavarish,3140000,10,2,ok,,2026-10-14T00:20:28Z
-@TheGrandTour,The Grand Tour,UCZ1Sc5xjWpUnp_o_lUTkvgQ,The Grand Tour,2710000,59,2,ok,,2026-10-14T00:20:37Z
-@TheSmokingTire,The Smoking Tire,UCgeGealT0QYcrnoYRMltDZg,TheSmokingTire,1100000,,,name_mismatch,"expected 'The Smoking Tire', found 'TheSmokingTire'",2026-10-14T00:20:23Z
-@TheStraightPipes,TheStraightPipes,UC86SBFIAgnYL3ll2ZDgmsuA,TheStraightPipes,1810000,131,58,ok,,2026-10-14T00:20:26Z
-@ThrottleHouse,Throttle House,UCyXiDU5qjfOPxgOPeFWGwKw,Throttle House,3460000,37,21,ok,,2026-10-14T00:20:25Z
-@TopGear,Top Gear,UCjOl2AUblVmg2rA_cRgZkFg,Top Gear,9550000,142,38,ok,,2026-10-14T00:20:35Z
-@VINwiki,VINwiki,UCefl-5pmhZmljwZTE2KrcdA,VINwiki,2180000,352,15,ok,,2026-10-14T00:20:00Z
-@VehicleVirgins,Vehicle Virgins,UCtS0JcoBgAIEjmifiip8IJg,Vehicle Virgins,2510000,112,35,ok,,2026-10-14T00:20:31Z
-@autocar,Autocar,UCIMzhx509wEXMuGkTK-kD9Q,Autocar,814000,64,12,ok,,2026-10-14T00:20:43Z
-@carthrottle,Car Throttle,UCNBbCOuAN1NZAuj0vPe_MkA,Car Throttle,3010000,11,2,ok,,2026-10-14T00:20:35Z
+@MotorWeek,MotorWeek,UC66lTpcL4h5wqxCWioKQOrg,MotorWeek,549000,647,209,ok,,2026-10-14T02:17:17Z
+@MrJWW,Mr JWW,UCK_zuVq6ZpSRMjsZ5JRPx5g,Mr JWW,1020000,97,12,ok,,2026-10-14T02:18:04Z
+@Petrolicious,Petrolicious,UCgyJPixJl95X1ut3E9K99KA,Petrolicious,933000,101,26,ok,,2026-10-14T02:16:51Z
+@Ratarossa,Ratarossa,UCA0ZY1x5r2lyKQfoUYvHvqQ,Ratarossa,289000,61,11,ok,,2026-10-14T02:18:05Z
+@RegularCars,Regular Car Reviews,UCo1pShh6dtg-T_ZZkgi_JDQ,Regular Car Reviews,966000,239,80,ok,,2026-10-14T02:17:09Z
+@Tavarish,Tavarish,UCvAhDxNNUDhi78tMXVGBUaQ,Tavarish,3140000,18,6,ok,,2026-10-14T02:18:00Z
+@TheGrandTour,The Grand Tour,UCZ1Sc5xjWpUnp_o_lUTkvgQ,The Grand Tour,2710000,111,6,ok,,2026-10-14T02:18:20Z
+@TheSmokingTire,The Smoking Tire,UCgeGealT0QYcrnoYRMltDZg,TheSmokingTire,1100000,77,17,ok,,2026-10-14T02:17:46Z
+@TheStraightPipes,TheStraightPipes,UC86SBFIAgnYL3ll2ZDgmsuA,TheStraightPipes,1810000,222,104,ok,,2026-10-14T02:17:52Z
+@ThrottleHouse,Throttle House,UCyXiDU5qjfOPxgOPeFWGwKw,Throttle House,3460000,75,44,ok,,2026-10-14T02:17:51Z
+@TopGear,Top Gear,UCjOl2AUblVmg2rA_cRgZkFg,Top Gear,9550000,264,67,ok,,2026-10-14T02:18:16Z
+@VINwiki,VINwiki,UCefl-5pmhZmljwZTE2KrcdA,VINwiki,2180000,600,21,ok,,2026-10-14T02:16:56Z
+@VehicleVirgins,Vehicle Virgins,UCtS0JcoBgAIEjmifiip8IJg,Vehicle Virgins,2510000,182,56,ok,,2026-10-14T02:18:07Z
+@autocar,Autocar,UCIMzhx509wEXMuGkTK-kD9Q,Autocar,814000,117,32,ok,,2026-10-14T02:18:39Z
+@carthrottle,Car Throttle,UCNBbCOuAN1NZAuj0vPe_MkA,Car Throttle,3010000,44,11,ok,,2026-10-14T02:18:14Z
 @donutmedia,Donut,,,,,,not_found,no channel has this handle,2026-10-14T00:20:34Z
 @hemmings,Hemmings,,,,,,not_found,no channel has this handle,2026-10-14T00:20:17Z
-@jaylenosgarage,Jay Leno's Garage,UCQMELFlXQL38KPm8kM-4Adg,Jay Leno's Garage,4000000,86,23,ok,,2026-10-14T00:19:53Z
-@roadandtrack,Road & Track,UCiNh73nU9grIPMhzxl38dwQ,RoadandTrack,118000,,,name_mismatch,"expected 'Road & Track', found 'RoadandTrack'",2026-10-14T00:20:42Z
-@savagegeese,savagegeese,UCgUvk6jVaf-1uKOqG8XNcaQ,savagegeese,876000,149,75,ok,,2026-10-14T00:20:24Z
-@shmee150,Shmee150,UCIRgR4iANHI2taJdz8hjwLw,Shmee150,2880000,43,7,ok,,2026-10-14T00:20:29Z
+@hemmingsmotornews,Hemmings,UC1R1BcMAdWUtaqIXYymFVVA,Hemmings,69800,99,41,ok,,2026-10-14T02:17:30Z
+@jaylenosgarage,Jay Leno's Garage,UCQMELFlXQL38KPm8kM-4Adg,Jay Leno's Garage,4000000,145,43,ok,,2026-10-14T02:16:43Z
+@motortrendwatch,MotorTrend,UCsAegdhiYLEoaFGuJFVrqFQ,MotorTrend Channel,7000000,320,86,ok,,2026-10-14T02:18:23Z
+@roadandtrack,Road & Track,UCiNh73nU9grIPMhzxl38dwQ,RoadandTrack,118000,10,6,ok,,2026-10-14T02:18:35Z
+@savagegeese,savagegeese,UCgUvk6jVaf-1uKOqG8XNcaQ,savagegeese,876000,249,120,ok,,2026-10-14T02:17:47Z
+@shmee150,Shmee150,UCIRgR4iANHI2taJdz8hjwLw,Shmee150,2880000,131,29,ok,,2026-10-14T02:18:01Z
