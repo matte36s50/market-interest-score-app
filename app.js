@@ -326,7 +326,9 @@ function applyTrends(target, fromP, toP) {
 }
 
 function buildDataset(rows) {
-    const valid = rows.filter(r => r.quarter && r.quarter !== 'IAF' && r.manufacturer && r.model && isFinite(parseFloat(r.mii_score)));
+    // Only well-formed periods: some upstream rows carry a model name (R60, K100)
+    // in the quarter column, which would otherwise become a bogus month.
+    const valid = rows.filter(r => /^\d{4}(-\d{2}|Q[1-4])$/.test(String(r.quarter || '').trim()) && r.manufacturer && r.model && isFinite(parseFloat(r.mii_score)));
     const rawMonths = [...new Set(valid.map(r => r.quarter))].sort();
     if (!rawMonths.length) return null;
 
