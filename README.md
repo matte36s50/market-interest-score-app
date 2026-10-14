@@ -31,6 +31,10 @@ A comprehensive, interactive dashboard for tracking collector car market interes
   detail drawer (history vs market, what drives the score, models)
 - **Models, movers and eras**: most-watched models, biggest real movers, and
   interest by decade of manufacture
+- **Explainer video**: a two-minute walkthrough of MII and Apex
+  (`media/mii-explainer.mp4`) opens from the hero's Watch button and the footer;
+  the Apex page's "Watch how Apex works" starts it at Part 2. `explainer.js`
+  plays it in a dialog and downloads nothing until it is opened.
 - **Sharing**: every view (period, vehicle class, open make) lives in the URL,
   the Share button copies it, and PDF prints a clean report. Light and dark themes.
 
