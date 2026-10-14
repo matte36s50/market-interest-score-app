@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# Weekly ledger ingest: raw Sheets pulls and local credentials
+data/ledger/.cache/
+.env
+*service-account*.json
