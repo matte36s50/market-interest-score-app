@@ -193,6 +193,21 @@ input, select { font: inherit; color: inherit; }
 .lede strong { color: var(--ink); font-weight: 600; }
 .lede .ci-word { color: var(--ci-ink); font-weight: 600; }
 
+/* The explainer video: a watch button in the hero, played in a dialog (explainer.js). */
+.watch-btn { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 6px 16px 6px 6px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04); color: var(--ink); font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color .15s, background .15s; }
+.watch-btn:hover { border-color: var(--accent); background: rgba(var(--accent-rgb) / 0.10); }
+.watch-btn .watch-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; }
+.watch-btn .watch-icon svg { width: 12px; height: 12px; margin-left: 2px; }
+.watch-btn .watch-len { color: var(--muted); font-variant-numeric: tabular-nums; }
+.explainer { width: min(1120px, 94vw); padding: 0; border: 0; border-radius: var(--radius); background: #000; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); overflow: visible; }
+.explainer::backdrop { background: rgba(8, 9, 11, 0.78); backdrop-filter: blur(4px); }
+.explainer video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); background: #000; }
+.explainer-close { position: absolute; top: -44px; right: 0; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.12); color: #fff; cursor: pointer; }
+.explainer-close:hover { background: rgba(255, 255, 255, 0.22); }
+.explainer-close svg { width: 18px; height: 18px; }
+@media (max-width: 640px) { .explainer-close { top: 8px; right: 8px; z-index: 1; background: rgba(0, 0, 0, 0.55); } }
+@media print { .watch-btn { display: none; } }
+
 .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .seg {
     display: inline-flex; padding: 3px; border-radius: 999px; gap: 2px;

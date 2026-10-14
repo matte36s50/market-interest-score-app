@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="site.css?v=3">
+    <link rel="stylesheet" href="site.css?v=4">
     <script>
         // Apply a saved theme before first paint so the page never flashes.
         try { var t = localStorage.getItem('mii-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
@@ -68,7 +68,8 @@
             <div class="hero-top">
                 <div>
                     <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span><span id="eyebrowText">Bring a Trailer · refreshed twice daily</span></span>
-                    <h1 id="heroTitle">Collector car interest <span class="period" id="periodTitle"></span></h1>
+                    <h1 id="heroTitle">Market Interest Index <span class="period" id="periodTitle"></span></h1>
+                    <a class="watch-btn" href="media/mii-explainer.mp4" data-explainer><span class="watch-icon"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L10.4 6z" fill="currentColor"/></svg></span>Watch: the index in 2 minutes <span class="watch-len">1:56</span></a>
                 </div>
                 <div class="controls" role="group" aria-label="View options">
                     <label class="sr-only" for="periodSelect">Period</label>
@@ -289,7 +290,7 @@
             <div class="foot-grid">
                 <div>
                     <h3>How MII is built</h3>
-                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile of the field. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed.</p>
+                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile of the field. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed. <a href="media/mii-explainer.mp4" data-explainer>Watch the 2-minute explainer</a>.</p>
                 </div>
                 <div>
                     <h3>Confidence and noise</h3>
@@ -354,5 +355,6 @@
     <script src="mii-normalize.js?v=6"></script>
     <script src="bmw-ci.js?v=1"></script>
     <script src="app.js?v=5"></script>
+    <script src="explainer.js?v=1"></script>
 </body>
 </html>
