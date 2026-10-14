@@ -179,10 +179,16 @@ def load_channels(path=CHANNELS_PATH):
     return out
 
 
+def _squash(text):
+    return re.sub(r"[^a-z0-9]", "", normalize(text).replace("&", "and"))
+
+
 def name_matches(expected, title):
-    """The channel's title contains every word of the name we expect."""
-    want = lib.tokens(expected)
-    return bool(want) and want <= lib.tokens(title)
+    """The channel's title contains the name we expect, ignoring spacing and
+    punctuation: "The Smoking Tire" is the channel titled "TheSmokingTire",
+    "Road & Track" the one titled "RoadandTrack"."""
+    want = _squash(expected)
+    return bool(want) and want in _squash(title)
 
 
 def resolve_channel(handle, api_key, quota):
@@ -432,6 +438,30 @@ def _names_something(spec_groups):
                for g in spec_groups for t in g)
 
 
+def _is_code(word):
+    """A generation or chassis code: letters and digits ('gmt800', '300sl'),
+    or numbers joined by a slash ('750/101')."""
+    if "/" in word:
+        return all(len(a) > 1 for a in word.split("/") if a)
+    return bool(re.search(r"\d", word)) and bool(re.search(r"[a-z]", word))
+
+
+def _share_codes(names):
+    """A code at the end of the last name, or the start of the first, belongs
+    to every name: "Escalade & EXT GMT800" is the GMT800 Escalade and
+    Escalade EXT, and "750/101 Series Giulietta & Giulia" a 750/101 Giulia,
+    not today's Giulia."""
+    first, last = _WORD.findall(names[0]), _WORD.findall(names[-1])
+    out = list(names)
+    if len(last) >= 2 and _is_code(last[-1]):
+        out = [n if i == len(out) - 1 or last[-1] in _WORD.findall(n) else f"{n} {last[-1]}"
+               for i, n in enumerate(out)]
+    if len(first) >= 2 and _is_code(first[0]):
+        out = [n if i == 0 or first[0] in _WORD.findall(n) else f"{n} {first[0]}"
+               for i, n in enumerate(out)]
+    return out
+
+
 def model_specs(manufacturer, model, aliases=(), phrase=None):
     """Specs for a model: its own name (and alternatives), plus any aliases.
 
@@ -451,6 +481,8 @@ def model_specs(manufacturer, model, aliases=(), phrase=None):
             y = int(m.group(1))
             years, text = (y, y), text.strip()[:m.start()]
     names = [p for p in re.split(r"\s+/\s+|&", text) if p.strip()]
+    if len(names) > 1:
+        names = _share_codes(names)
     if phrase:
         names = [normalize(phrase)]
     specs = []

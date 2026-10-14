@@ -460,6 +460,21 @@ class YouTubeTitleMatching(unittest.TestCase):
         self.assertEqual(self.names("A Ford Model T Drive"), ["T"])
         self.assertEqual(self.names("Ford T-Bird road trip"), [])
 
+    def test_a_code_on_one_side_of_an_ampersand_applies_to_both(self):
+        m = youtube_signals.Matcher(
+            [{"manufacturer": "Cadillac", "model": "Cadillac Escalade & EXT GMT800"},
+             {"manufacturer": "Alfa Romeo", "model": "750/101 Series Giulietta & Giulia"},
+             {"manufacturer": "Mercedes-Benz", "model": "300SL Gullwing & Roadster"},
+             {"manufacturer": "Cadillac", "model": "Cadillac CT5 & CT5-V"}],
+            aliases={}, phrases={})
+        self.assertEqual(m.match("The 2025 Cadillac Escalade IQ"), [])
+        self.assertEqual(m.match("Cadillac Escalade GMT800 buyer's guide"),
+                         [("Cadillac", "Cadillac Escalade & EXT GMT800")])
+        self.assertEqual(m.match("I Bought an Alfa Romeo Giulia Quadrifoglio"), [])
+        self.assertEqual(m.match("Mercedes 300SL Roadster at Pebble Beach"),
+                         [("Mercedes-Benz", "300SL Gullwing & Roadster")])
+        self.assertEqual(m.match("Cadillac CT5 commute"), [("Cadillac", "Cadillac CT5 & CT5-V")])
+
     def test_a_shared_word_after_an_ampersand_names_nothing_alone(self):
         self.assertEqual(self.names("The Alfa Romeo Spider Is Pure Joy"), [])
         self.assertEqual(self.names("Alfa Romeo GTV review"), ["GTV & Spider (Type 916)"])
@@ -538,6 +553,13 @@ class YouTubeChannelCollection(unittest.TestCase):
         self.assertEqual(videos[0]["month"], "2026-03")
         self.assertEqual(videos[1]["likes"], 10)
         self.assertEqual(quota.spent, 1 + 2 + 1)   # handle, two pages, one stats call
+
+    def test_channel_names_ignore_spacing_and_punctuation(self):
+        self.assertTrue(youtube_signals.name_matches("The Smoking Tire", "TheSmokingTire"))
+        self.assertTrue(youtube_signals.name_matches("Hoovie's Garage", "Hoovies Garage"))
+        self.assertTrue(youtube_signals.name_matches("Road & Track", "RoadandTrack"))
+        self.assertTrue(youtube_signals.name_matches("MotorTrend", "MotorTrend Channel"))
+        self.assertFalse(youtube_signals.name_matches("Hagerty", "Doug DeMuro"))
 
     def test_a_handle_that_names_another_channel_is_skipped(self):
         quota = youtube_signals.Quota(1000)
