@@ -1,12 +1,12 @@
 // The two-minute MII and Apex explainer video. Any [data-explainer] element
 // opens it in a dialog; data-start (seconds) jumps to a chapter, e.g. 70 for
-// Part 2, the Apex Index. Nothing is downloaded until someone asks for it, and
-// each link's href points at the file itself, so it still works without
-// scripts.
+// Part 2, the Apex Index. It starts muted (the volume control turns the music
+// on), nothing is downloaded until someone asks for it, and each link's href
+// points at the file itself, so it still works without scripts.
 (function () {
     'use strict';
 
-    var SRC = 'media/mii-explainer.mp4';
+    var SRC = 'media/mii-explainer.mp4?v=2';
     var POSTER = 'media/mii-explainer-poster.jpg';
     var dialog, video;
 
@@ -18,10 +18,14 @@
             '<button type="button" class="explainer-close" aria-label="Close video">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>' +
             '</button>' +
-            '<video controls playsinline preload="none" poster="' + POSTER + '">' +
+            '<video controls playsinline muted preload="none" poster="' + POSTER + '">' +
             '<source src="' + SRC + '" type="video/mp4"></video>';
         document.body.appendChild(dialog);
         video = dialog.querySelector('video');
+        // Muted by default; a viewer who turns the sound on keeps it on for
+        // the rest of the visit.
+        video.muted = true;
+        video.defaultMuted = true;
         dialog.querySelector('.explainer-close').addEventListener('click', function () { dialog.close(); });
         // A click on the backdrop lands on the dialog itself.
         dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
@@ -37,7 +41,6 @@
         } else if (video.ended) {
             video.currentTime = 0;
         }
-        // Called inside the click, so the browser lets it play with sound.
         var playing = video.play();
         if (playing && playing.catch) playing.catch(function () {});
     }
