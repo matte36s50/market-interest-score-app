@@ -18,7 +18,7 @@ import tempfile
 import unittest
 import unittest.mock
 import urllib.error
-from datetime import date
+from datetime import date, datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,6 +27,7 @@ import apex
 import google_trends
 import youtube_signals
 import social_signals
+import check_coverage
 import export_live_lots
 import export_online_sales
 
@@ -658,6 +659,105 @@ class YouTubeShares(unittest.TestCase):
         self.assertEqual(lib.period_months("2025Q2"), ["2025-04", "2025-05", "2025-06"])
         self.assertEqual(lib.period_months("2025-07"), ["2025-07"])
         self.assertEqual(lib.period_months(""), [])
+
+
+class YouTubeChannelState(unittest.TestCase):
+
+    def test_a_handle_taken_off_the_list_drops_out_of_the_state_file(self):
+        path = os.path.join(tempfile.mkdtemp(), "channels_state.csv")
+        lib.write_rows(path, youtube_signals.CHANNEL_FIELDS, [
+            {"handle": "@hemmings", "status": "not_found"},
+            {"handle": "@Hagerty", "status": "ok", "measured_at": "2026-10-01T00:00:00Z"},
+        ])
+        youtube_signals.save_channel_state(
+            [{"handle": "@hemmingsmotornews", "status": "ok"}],
+            [{"handle": "@Hagerty"}, {"handle": "@hemmingsmotornews"}], path)
+        rows = {r["handle"]: r for r in lib.read_rows(path)}
+        self.assertEqual(set(rows), {"@Hagerty", "@hemmingsmotornews"})
+        self.assertEqual(rows["@Hagerty"]["measured_at"], "2026-10-01T00:00:00Z")
+
+
+class SignalCoverage(unittest.TestCase):
+    """check_coverage.py: an unset secret warns; configured-but-empty or
+    stale fails; zero rows are not coverage."""
+
+    NOW = datetime(2026, 10, 14, 12, tzinfo=timezone.utc)
+    SIGNALS = [
+        {"name": "YouTube", "file": "yt.csv", "value": "yt_view_share",
+         "env": ("YOUTUBE_API_KEY",), "min_models": 2, "max_age_days": 3},
+        {"name": "Reddit", "file": "reddit.csv", "value": "reddit_posts",
+         "env": ("REDDIT_CLIENT_ID", "REDDIT_CLIENT_SECRET"), "min_models": 1,
+         "max_age_days": 7},
+        {"name": "Social composite", "file": "social.csv", "value": "social_score",
+         "env": (), "min_models": 1, "max_age_months": 2},
+    ]
+    YT_ENV = {"HAVE_YOUTUBE_API_KEY": "true"}
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.yt([("A", "1", "2026-10", "0.5"), ("B", "2", "2026-10", "0.1")])
+        self.write("social.csv", ["manufacturer", "model", "month", "social_score"],
+                   [("A", "1", "2026-09", "70")])
+        self.write("reddit.csv", ["manufacturer", "model", "month", "reddit_posts",
+                                  "measured_at"], [])
+        self.write("youtube_channels.csv", ["handle", "name", "focus"],
+                   [("@Hagerty", "Hagerty", ""), ("@hemmings", "Hemmings", "")])
+        self.write("youtube_channels_state.csv", youtube_signals.CHANNEL_FIELDS, [
+            {"handle": "@Hagerty", "status": "ok"},
+            {"handle": "@hemmings", "status": "not_found", "note": "no channel has this handle"},
+            {"handle": "@donutmedia", "status": "not_found"},
+        ])
+
+    def write(self, name, fields, rows):
+        rows = [r if isinstance(r, dict) else dict(zip(fields, r)) for r in rows]
+        lib.write_rows(os.path.join(self.dir, name), fields, rows)
+
+    def yt(self, rows, measured_at="2026-10-14T06:30:00Z"):
+        self.write("yt.csv", ["manufacturer", "model", "month", "yt_view_share", "measured_at"],
+                   [r + (measured_at,) for r in rows])
+
+    def run_check(self, env):
+        return check_coverage.check(self.dir, env, self.NOW, self.SIGNALS)
+
+    def levels(self, results, name):
+        return [level for level, msg in results if msg.startswith(name)]
+
+    def test_healthy_data_passes_and_unset_reddit_only_warns(self):
+        results = self.run_check(self.YT_ENV)
+        self.assertEqual(self.levels(results, "YouTube:"), ["ok"])
+        self.assertEqual(self.levels(results, "Social composite"), ["ok"])
+        [(level, msg)] = [r for r in results if r[1].startswith("Reddit")]
+        self.assertEqual(level, "warning")
+        self.assertIn("REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET", msg)
+
+    def test_configured_but_empty_fails(self):
+        env = dict(self.YT_ENV, REDDIT_CLIENT_ID="id", REDDIT_CLIENT_SECRET="secret")
+        self.assertEqual(self.levels(self.run_check(env), "Reddit"), ["error"])
+
+    def test_zero_rows_are_not_coverage(self):
+        self.yt([("A", "1", "2026-10", "0.0"), ("B", "2", "2026-10", "0.0"),
+                 ("C", "3", "2026-10", "0.2")])
+        self.assertEqual(self.levels(self.run_check(self.YT_ENV), "YouTube:"), ["error"])
+
+    def test_a_collector_that_stopped_writing_fails(self):
+        self.yt([("A", "1", "2026-10", "0.5"), ("B", "2", "2026-10", "0.1")],
+                measured_at="2026-10-09T06:30:00Z")
+        self.assertEqual(self.levels(self.run_check(self.YT_ENV), "YouTube:"), ["error"])
+        self.write("social.csv", ["manufacturer", "model", "month", "social_score"],
+                   [("A", "1", "2026-06", "70")])
+        self.assertEqual(self.levels(self.run_check(self.YT_ENV), "Social composite"),
+                         ["error"])
+
+    def test_listed_channels_that_fail_warn_and_unlisted_ones_are_ignored(self):
+        msgs = [m for level, m in self.run_check(self.YT_ENV)
+                if m.startswith("YouTube channel")]
+        self.assertEqual(len(msgs), 1)
+        self.assertIn("@hemmings", msgs[0])
+        self.assertIn("youtube_channels.csv", msgs[0])
+
+    def test_unset_youtube_key_warns_and_skips_the_channel_check(self):
+        results = self.run_check({})
+        self.assertEqual(self.levels(results, "YouTube"), ["warning"])
 
 
 class SocialComposite(unittest.TestCase):
