@@ -7,7 +7,7 @@ Feeds two different things from one pass:
 
   yt_view_share   the MII's YouTube input (weight 0.10): the model's share, in
                   percent, of every view on the tracked channels' videos
-                  published that month
+                  published in the 12 months ending that month
   yt_videos       a sub-signal of the *social* composite: the count of new
                   videos about the model (docs/social-score-methodology.md)
 
@@ -57,11 +57,19 @@ are full of links and sponsor reads, so they are not used):
   - data/youtube_aliases.csv adds other names a model goes by on YouTube
     ("560SL" for the R107 SL), matched by the same rules.
 
-WHY A SHARE. View counts keep growing after a video is published, and the
-browser ranks every month's values together, so raw views would score older
-months higher just for being older. Videos published in the same month have
-had about the same time to collect views; dividing by that month's total makes
-months comparable. yt_views stays in the file for reference.
+WHY A TRAILING SHARE. View counts keep growing after a video is published, and
+the browser ranks every month's values together, so raw views would score
+older months higher just for being older. Dividing by the total views of every
+tracked video in the same window makes months comparable: each window's videos
+have the same mix of ages for every model in it.
+
+The window is the 12 months ending at each month, not the month alone. The
+first live run found videos for only ~5% of car model-months in any single
+month, which made the input an on/off switch: a car gained ~5 MII points the
+month a video went up and lost them the next. Over 12 months a featured car
+keeps its credit while the attention lasts, and the input moves smoothly.
+yt_videos and yt_views stay monthly (new videos that month, and their views):
+the social composite counts new supply, not accumulated attention.
 
 Shorts are excluded (three minutes or less): YouTube counts every replay of a
 Short as a view, which would swamp long-form views.
@@ -106,7 +114,7 @@ ALIASES_PATH = os.path.join(lib.DATA_DIR, "youtube_aliases.csv")
 
 FIELDS = [
     "manufacturer", "model", "month",
-    "yt_videos", "yt_views", "yt_view_share",
+    "yt_videos", "yt_views", "yt_views_12m", "yt_view_share",
     "yt_likes", "yt_comments", "yt_engagement_rate", "measured_at",
 ]
 CHANNEL_FIELDS = [
@@ -119,6 +127,7 @@ SHORTS_MAX_SECONDS = 180   # Shorts run up to three minutes
 MIN_CHANNEL_SHARE = 0.75   # of the reachable channels, read in full, before writing
 MIN_CHANNELS = 10          # and never fewer than this
 MAX_PAGES = 80             # per channel per run (4,000 uploads): a runaway guard
+TRAILING_MONTHS = 12       # the MII input's window, ending at each month
 
 
 class BudgetSpent(Exception):
@@ -600,6 +609,28 @@ def window_months(periods, today=None):
     return out
 
 
+def shift_month(month, k):
+    """'2026-01' moved k months (k may be negative)."""
+    y, m = (int(p) for p in month.split("-"))
+    i = y * 12 + (m - 1) + k
+    return f"{i // 12}-{i % 12 + 1:02d}"
+
+
+def trailing(month):
+    """The TRAILING_MONTHS months ending at `month`, newest first."""
+    return [shift_month(month, -k) for k in range(TRAILING_MONTHS)]
+
+
+def fetch_months(months):
+    """The output months plus the ones before the first that its trailing
+    window reaches back to, oldest first."""
+    out, m = [], shift_month(months[0], -(TRAILING_MONTHS - 1))
+    while m <= months[-1]:
+        out.append(m)
+        m = shift_month(m, 1)
+    return out
+
+
 def aggregate(videos, months):
     """Per (manufacturer, model, month) totals, per-month view totals, examples.
 
@@ -624,22 +655,38 @@ def aggregate(videos, months):
     return per, totals, examples
 
 
-def build_rows(per, totals, periods, now):
-    """One row per model-month with videos, plus a zero for every model-month
-    the MII has results for: the whole universe was read, so no videos on the
-    tracked channels is a measurement, not a gap."""
-    keys = set(per)
-    for (man, mod), months in periods.items():
-        keys.update((man, mod, m) for m in months if m in totals)
+def build_rows(per, totals, periods, months, now):
+    """Rows for the output `months`: every model-month with videos in its
+    trailing window, plus a zero for every model-month the MII has results
+    for — every car was read, so no videos on the tracked channels is a
+    measurement, not a gap.
+
+    `per` and `totals` cover fetch_months(months), so each output month's
+    trailing window is complete.
+    """
+    monthly = {}
+    for (man, mod, month), b in per.items():
+        monthly.setdefault((man, mod), {})[month] = b
+    window_total = {m: sum(totals.get(w, 0) for w in trailing(m)) for m in months}
+    keys = set()
+    for key, by_month in monthly.items():
+        for m in months:
+            if any(w in by_month for w in trailing(m)):
+                keys.add(key + (m,))
+    month_set = set(months)
+    for key, ms in periods.items():
+        keys.update(key + (m,) for m in ms if m in month_set)
     rows = []
     zero = {"videos": 0, "views": 0, "likes": 0, "comments": 0}
     for man, mod, month in sorted(keys):
-        b = per.get((man, mod, month), zero)
-        total = totals.get(month, 0)
+        by_month = monthly.get((man, mod), {})
+        b = by_month.get(month, zero)
+        views_12m = sum(by_month[w]["views"] for w in trailing(month) if w in by_month)
+        total = window_total[month]
         rows.append({
             "manufacturer": man, "model": mod, "month": month,
-            "yt_videos": b["videos"], "yt_views": b["views"],
-            "yt_view_share": round(100 * b["views"] / total, 6) if total else 0.0,
+            "yt_videos": b["videos"], "yt_views": b["views"], "yt_views_12m": views_12m,
+            "yt_view_share": round(100 * views_12m / total, 6) if total else 0.0,
             "yt_likes": b["likes"], "yt_comments": b["comments"],
             "yt_engagement_rate": round((b["likes"] + b["comments"]) / b["views"], 6)
             if b["views"] else 0.0,
@@ -706,13 +753,15 @@ def main():
                                  periods=periods)
     universe, periods = cars_only(universe, periods)
     months = window_months(periods)
-    since = months[0] + "-01"
+    fetched = fetch_months(months)
+    since = fetched[0] + "-01"
     channels = load_channels()
     todo = channels[:args.limit] if args.limit else channels
     matcher = Matcher(universe, load_aliases())
     quota = Quota(args.budget)
     print(f"Universe {len(universe)} car models; {len(todo)} of {len(channels)} "
-          f"channels; window {months[0]} to {months[-1]}; budget {args.budget} units")
+          f"channels; months {months[0]} to {months[-1]} (videos from {fetched[0]}); "
+          f"budget {args.budget} units")
 
     videos, channel_rows, read = [], [], 0
     for ch in todo:
@@ -741,7 +790,7 @@ def main():
 
     for v in videos:
         v["keys"] = matcher.match(v["title"])
-    per, totals, examples = aggregate(videos, months)
+    per, totals, examples = aggregate(videos, fetched)
     matched_by_channel = {}
     for v in videos:
         if v["keys"]:
@@ -764,7 +813,7 @@ def main():
         return 0
 
     now = lib.utcnow_iso()
-    rows = build_rows(per, totals, periods, now)
+    rows = build_rows(per, totals, periods, months, now)
     lib.write_rows(OUTPUT_PATH, FIELDS, rows)
 
     counts = {}

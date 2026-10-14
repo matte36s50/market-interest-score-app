@@ -286,7 +286,8 @@ Measures video attention per model per month on a curated list of enthusiast
 channels, into `data/youtube_signals.csv`, in one pass that feeds two
 different things:
 
-- `yt_view_share` → the MII's `youtube_total_views` input (weight 0.10)
+- `yt_view_share` → the MII's `youtube_total_views` input (weight 0.10), over
+  the 12 months ending at each month
 - `yt_videos` → the **video** sub-signal of the social composite
 
 Those are deliberately different facets — attention versus the supply of new
@@ -346,13 +347,21 @@ are matched and scored. Motorcycles, boats, tractors, ATVs and RVs get no rows:
 a zero from channels that never cover them would mark them down, so for them
 the input stays missing and its weight renormalizes, as before.
 
-### Why a share
+### Why a trailing 12-month share
 
 View counts keep growing after a video goes up, and the browser ranks every
 month's values together, so raw views would score older months higher just for
-being older. Videos published in the same month have had about the same time
-to collect views, so each model's views are divided by that month's total
-across all tracked uploads. Every car is read, so a car model-month the MII
+being older. Each model's views are therefore divided by the total views of
+every tracked upload in the same window, whose mix of video ages is the same
+for every model.
+
+The window is the 12 months ending at each month. The first live run found
+videos for only ~5% of car model-months in any single month, which turned the
+input into an on/off switch worth ~5 MII points for the month a video went up.
+Over a trailing year a featured car keeps its credit while the attention lasts,
+and the input moves smoothly. Each run therefore reads uploads from 11 months
+before the first month the MII covers. `yt_videos` and `yt_views` stay
+monthly: the social composite counts new videos, not accumulated attention. Every car is read, so a car model-month the MII
 scores with no videos on the tracked channels is written as a measured zero
 rather than left as a gap.
 
@@ -374,7 +383,8 @@ python data/pipelines/youtube_signals.py --limit 2    # smoke test; writes no si
 | manufacturer, model, month | grain; month is the video's **publish** month |
 | yt_videos | videos naming the model published that month |
 | yt_views | their combined view count, as of `measured_at` |
-| yt_view_share | `yt_views` as a percent of all views on the tracked channels' videos published that month — the MII input |
+| yt_views_12m | views of videos naming the model published in the 12 months ending that month |
+| yt_view_share | `yt_views_12m` as a percent of all views on the tracked channels' videos published in those 12 months — the MII input |
 | yt_likes, yt_comments | their combined interactions |
 | yt_engagement_rate | (likes + comments) ÷ views |
 | measured_at | when this row was collected |

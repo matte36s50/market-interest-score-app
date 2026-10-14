@@ -585,28 +585,56 @@ class YouTubeChannelCollection(unittest.TestCase):
 
 class YouTubeShares(unittest.TestCase):
 
-    def test_share_of_the_months_views_and_zeros_for_the_rest(self):
+    def test_share_of_the_trailing_twelve_months_and_zeros_for_the_rest(self):
         videos = [
             {"title": "x", "month": "2026-01", "views": 600, "likes": 30, "comments": 10,
              "keys": [("BMW", "E46 M3")]},
             {"title": "y", "month": "2026-01", "views": 400, "likes": 0, "comments": 0,
              "keys": []},
-            {"title": "z", "month": "2026-02", "views": 50, "likes": 0, "comments": 0,
+            {"title": "z", "month": "2026-02", "views": 1000, "likes": 0, "comments": 0,
              "keys": [("BMW", "E46 M3"), ("Chevrolet", "CORVETTE")]},
         ]
-        per, totals, examples = youtube_signals.aggregate(videos, ["2026-01", "2026-02"])
-        self.assertEqual(totals, {"2026-01": 1000, "2026-02": 50})
+        months = ["2026-01", "2026-02"]
+        per, totals, examples = youtube_signals.aggregate(
+            videos, youtube_signals.fetch_months(months))
+        self.assertEqual(totals["2026-01"], 1000)
         periods = {("BMW", "E46 M3"): {"2026-01", "2026-02"},
                    ("Porsche", "986 Boxster"): {"2026-02"},
-                   ("Ford", "MUSTANG"): {"2025-06"}}      # outside the window
-        rows = youtube_signals.build_rows(per, totals, periods, "T")
+                   ("Ford", "MUSTANG"): {"2025-06"}}      # outside the output months
+        rows = youtube_signals.build_rows(per, totals, periods, months, "T")
         got = {(r["model"], r["month"]): r for r in rows}
-        self.assertEqual(got[("E46 M3", "2026-01")]["yt_view_share"], 60.0)
-        self.assertAlmostEqual(got[("E46 M3", "2026-01")]["yt_engagement_rate"], 40 / 600, places=6)
-        self.assertEqual(got[("CORVETTE", "2026-02")]["yt_view_share"], 100.0)
-        self.assertEqual(got[("986 Boxster", "2026-02")]["yt_videos"], 0)   # a measured zero
+        jan, feb = got[("E46 M3", "2026-01")], got[("E46 M3", "2026-02")]
+        self.assertEqual(jan["yt_view_share"], 60.0)
+        # February's window holds both months: (600 + 1000) of 2,000 views.
+        self.assertEqual(feb["yt_views_12m"], 1600)
+        self.assertEqual(feb["yt_view_share"], 80.0)
+        # The monthly columns stay monthly.
+        self.assertEqual((feb["yt_videos"], feb["yt_views"]), (1, 1000))
+        self.assertAlmostEqual(jan["yt_engagement_rate"], 40 / 600, places=6)
+        self.assertEqual(got[("CORVETTE", "2026-02")]["yt_view_share"], 50.0)
+        self.assertNotIn(("CORVETTE", "2026-01"), got)          # nothing before its video
+        self.assertEqual(got[("986 Boxster", "2026-02")]["yt_view_share"], 0.0)   # a measured zero
         self.assertNotIn(("MUSTANG", "2025-06"), got)
-        self.assertEqual(examples[("BMW", "E46 M3")], (600, "x"))
+        self.assertEqual(examples[("BMW", "E46 M3")], (1000, "z"))
+
+    def test_a_video_counts_for_twelve_months_and_then_stops(self):
+        videos = [{"title": "x", "month": "2025-03", "views": 100, "likes": 0, "comments": 0,
+                   "keys": [("BMW", "E46 M3")]},
+                  {"title": "y", "month": "2025-03", "views": 100, "likes": 0, "comments": 0,
+                   "keys": []},
+                  {"title": "w", "month": "2026-03", "views": 100, "likes": 0, "comments": 0,
+                   "keys": []}]
+        months = ["2026-02", "2026-03"]
+        per, totals, _ = youtube_signals.aggregate(videos, youtube_signals.fetch_months(months))
+        rows = youtube_signals.build_rows(per, totals, {}, months, "T")
+        got = {r["month"]: r["yt_view_share"] for r in rows if r["model"] == "E46 M3"}
+        self.assertEqual(got, {"2026-02": 50.0})                 # 2025-03 is still in Feb's window
+
+    def test_fetch_reaches_back_eleven_months(self):
+        self.assertEqual(youtube_signals.fetch_months(["2026-01", "2026-02"])[0], "2025-02")
+        self.assertEqual(youtube_signals.shift_month("2026-01", -1), "2025-12")
+        self.assertEqual(youtube_signals.shift_month("2025-12", 1), "2026-01")
+        self.assertEqual(len(youtube_signals.trailing("2026-03")), 12)
 
     def test_only_cars_are_scored(self):
         universe = [{"manufacturer": "BMW", "model": "E46 M3", "vehicle_class": "car"},
@@ -618,7 +646,7 @@ class YouTubeShares(unittest.TestCase):
         cars, car_periods = youtube_signals.cars_only(universe, periods)
         self.assertEqual([r["model"] for r in cars], ["E46 M3", "A"])
         self.assertEqual(set(car_periods), {("BMW", "E46 M3"), ("Ford", "A")})
-        rows = youtube_signals.build_rows({}, {"2026-01": 100}, car_periods, "T")
+        rows = youtube_signals.build_rows({}, {"2026-01": 100}, car_periods, ["2026-01"], "T")
         self.assertNotIn("916", {r["model"] for r in rows})   # no zero for a bike
 
     def test_window_runs_from_the_first_mii_month_to_now(self):
