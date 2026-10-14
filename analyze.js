@@ -98,7 +98,7 @@ const METRIC_LABELS = {
     comments:               'Comments',
     social_score:           'Social Score',
     google_trends_interest: 'Google Trends Interest',
-    youtube_total_views:    'YouTube Share of Views (%)',
+    youtube_total_views:    'YouTube Share of Views, 12 mo (%)',
     age:                    'Vehicle Age (yrs)',
     sold_rate:              'Sell-Through Rate (%)',
     volume:                 'Auction Volume',

@@ -6,7 +6,7 @@ handle,name,focus
 @VINwiki,VINwiki,collector
 @RegularCars,Regular Car Reviews,collector
 @MotorWeek,MotorWeek,collector
-@hemmings,Hemmings,collector
+@hemmingsmotornews,Hemmings,collector
 @DougDeMuro,Doug DeMuro,enthusiast
 @TheSmokingTire,The Smoking Tire,enthusiast
 @savagegeese,savagegeese,enthusiast
@@ -19,11 +19,11 @@ handle,name,focus
 @MrJWW,Mr JWW,enthusiast
 @Ratarossa,Ratarossa,enthusiast
 @VehicleVirgins,Vehicle Virgins,enthusiast
-@donutmedia,Donut,enthusiast
+@Donut,Donut,enthusiast
 @carthrottle,Car Throttle,enthusiast
 @TopGear,Top Gear,media
 @TheGrandTour,The Grand Tour,media
-@MotorTrend,MotorTrend,media
+@motortrendwatch,MotorTrend,media
 @CarandDriver,Car and Driver,media
 @roadandtrack,Road & Track,media
 @autocar,Autocar,media
