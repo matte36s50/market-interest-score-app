@@ -733,6 +733,17 @@ def read_channel(ch, since, api_key, quota):
     return videos, row
 
 
+def save_channel_state(rows, channels, path=CHANNEL_STATE_PATH):
+    """Upsert this run's channel rows. A handle taken out of
+    youtube_channels.csv drops out of the state file too, rather than showing
+    its last status forever."""
+    listed = {ch["handle"] for ch in channels}
+    merged = lib.upsert(path, CHANNEL_FIELDS, rows, key=("handle",))
+    kept = [r for r in merged if r.get("handle") in listed]
+    if len(kept) < len(merged):
+        lib.write_rows(path, CHANNEL_FIELDS, kept)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -798,7 +809,7 @@ def main():
     for row in channel_rows:
         if row.get("status") in ("ok", "truncated"):
             row["videos_matched"] = matched_by_channel.get(row["handle"], 0)
-    lib.upsert(CHANNEL_STATE_PATH, CHANNEL_FIELDS, channel_rows, key=("handle",))
+    save_channel_state(channel_rows, channels)
 
     misconfigured = sum(1 for r in channel_rows if r.get("status") in ("not_found", "name_mismatch"))
     needed = max(MIN_CHANNELS, math.ceil(MIN_CHANNEL_SHARE * (len(todo) - misconfigured)))
