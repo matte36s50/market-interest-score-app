@@ -3,54 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0e10">
+    <link rel="icon" href="mii-logo.svg" type="image/svg+xml">
     <title>Apex Ledger - Market Interest Index</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="mii-light-theme.js"></script>
-    <link rel="stylesheet" href="mii-light-theme.css">
+    <script src="mii-light-theme.js?v=2"></script>
+    <link rel="stylesheet" href="site.css?v=4">
+    <link rel="stylesheet" href="mii-light-theme.css?v=2">
+    <script src="site.js?v=1"></script>
     <style>
-        .seg-btn { height: 32px; padding: 0 12px; border-radius: 6px; font-size: 13px; color: #5E6168; border: 1px solid transparent; }
-        .seg-btn:hover { color: #16181D; }
-        .seg-btn[aria-pressed="true"] { background: #fff; color: #16181D; font-weight: 600; border-color: #E4E4DF; }
+        .seg-btn { height: 32px; padding: 0 12px; border-radius: 6px; font-size: 13px; color: var(--ink-2); border: 1px solid transparent; }
+        .seg-btn:hover { color: var(--ink); }
+        .seg-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 600; border-color: var(--hair); }
     </style>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
-    <header class="bg-white border-b border-line md:sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-2 min-h-[64px]">
-            <div class="flex flex-wrap items-center gap-x-10 gap-y-2">
-                <a href="index.html" class="flex items-center gap-2.5">
-                    <span class="font-mono text-[13px] font-medium bg-ink text-white px-[7px] py-1 rounded">MII</span>
-                    <span class="font-semibold text-[15px]">Market Interest Index</span>
-                </a>
-                <nav aria-label="Main" class="flex flex-wrap gap-x-7 text-sm">
-                    <a href="index.html" class="nav-link">Overview</a>
-                    <a href="mai.html" class="nav-link">Apex Index</a>
-                    <a href="mai-ledger.html" class="nav-link is-active" aria-current="page">Apex Ledger</a>
-                    <a href="analytics.html" class="nav-link">Model comparison</a>
-                    <a href="dashboard.html" class="nav-link">Terminal</a>
-                    <a href="analyze.html" class="nav-link">Data analysis</a>
-                    <a href="index-hagi.html" class="nav-link">HAGI</a>
-                </nav>
-            </div>
-            <div class="flex items-center gap-5 text-[13px] text-mute py-2">
-                <a href="admin.html" class="text-mute hover:text-amber-700">Admin</a>
+    <header class="site-header">
+        <div class="wrap" style="max-width:1280px;padding-left:32px;padding-right:32px">
+            <a href="index.html" class="brand" aria-label="Market Interest Index home">
+                <img class="brand-logo" src="mii-logo.svg" alt="" width="32" height="32">
+                <span>Market Interest Index</span>
+            </a>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Overview</a>
+                <a href="mai.html" aria-current="page">Apex Index</a>
+                <a href="analytics.html">Model comparison</a>
+                <a href="analyze.html">Data analysis</a>
+            </nav>
+            <div class="header-actions">
+                <a href="admin.html" class="admin-link">Admin</a>
+                <button id="themeToggle" class="hbtn icon-only" aria-label="Switch colour theme" title="Switch colour theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button id="printBtn" class="hbtn" title="Save this page as a PDF">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+                    <span class="label">PDF</span>
+                </button>
+                <button id="shareBtn" class="hbtn is-primary" title="Copy a link to this page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+                    <span class="label">Share</span>
+                </button>
             </div>
         </div>
     </header>
 
+    <section class="hero page-hero" aria-labelledby="pageTitle">
+        <div class="wrap" style="max-width:1280px;padding-left:32px;padding-right:32px">
+            <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span><span id="asOf">Weekly Auction Results Ledgers · apex = high estimate of $500K or more</span></span>
+            <h1 id="pageTitle">Apex Ledger</h1>
+            <p class="lede">The Manufacturer Apex Index rebuilt from the weekly results ledgers. Each lot counts once, at its latest restatement. Lots without a published high estimate can't be classed as apex or non-apex, so they are counted separately and never treated as non-apex.</p>
+            <div class="hero-meta"><a href="mai.html">Back to the Apex Index</a><span>Built from the weekly Auction Results Ledgers, separately from the store-fed index.</span></div>
+        </div>
+    </section>
+
+
     <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
-        <!-- Title -->
-        <section class="flex flex-col gap-3 max-w-3xl">
-            <span id="asOf" class="text-[13px] text-mute">Weekly Auction Results Ledgers · apex = high estimate of $500K or more</span>
-            <h1 class="m-0 text-4xl font-semibold tracking-tight">Apex Ledger</h1>
-            <p class="m-0 text-lg text-mute leading-relaxed">
-                The Manufacturer Apex Index rebuilt from the weekly results ledgers. Each lot counts once, at its
-                latest restatement. Lots without a published high estimate can't be classed as apex or non-apex,
-                so they are counted separately and never treated as non-apex.
-            </p>
-        </section>
 
         <!-- Basis: always visible above the numbers -->
         <section aria-label="What these figures are built on" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
