@@ -6,7 +6,7 @@
 (function () {
     'use strict';
 
-    var SRC = 'media/mii-explainer.mp4?v=2';
+    var SRC = 'media/mii-explainer.mp4?v=3';
     var POSTER = 'media/mii-explainer-poster.jpg';
     var dialog, video;
 
