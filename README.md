@@ -127,6 +127,33 @@ median), `weak` (median to 90th percentile) or `signal` (above). The dashboard
 draws a within-noise trend greyed with a dotted underline instead of a confident
 coloured arrow, with the reason in its tooltip.
 
+### Our model list (`data/models.csv`) and variants (`data/variants.csv`)
+
+The upstream file names models the way its sources did, which is not one name
+per car: case and brand prefix ("Volkswagen Tiguan", "VOLKSWAGEN TIGUAN",
+"TIGUAN"), Bring a Trailer's listing counters carried into untagged titles
+("MUSTANG 903"), word order ("AMG G63", "G63 AMG"), and groups Bring a Trailer
+renamed mid-stream ("996 Turbo", "996 911 Turbo"). Each duplicate was its own
+row every month and was credited with the same lots.
+
+`data/pipelines/model_list.py` (run first in the daily signals workflow) maps
+every source name to one model in `data/models.csv`, with the rule that joined
+them and a flag where a name is not a single car (`replica`, or `catch-all` for
+a bare nameplate such as "MUSTANG" that mixes generations). Judgment calls go in
+`data/model_overrides.csv`, which wins over the rules. The browser merges a
+month's duplicate rows before scoring (lots add up, per-lot averages are
+weighted by lots), every join to Bring a Trailer lots goes through the same
+names, and the collectors measure each model once.
+
+Index constituents are named one level finer, in the levels CLASSIC.COM uses
+(make → model → generation → variant): the 911 Carrera RS 2.7 Lightweight, not
+just the 1973 Carrera RS. `data/variants.csv` lists every constituent of the
+HAGI Top, F (Ferrari), P (Porsche), MBCI and BMW CI indexes with the years it
+was built and how to recognise it in a Bring a Trailer title; replicas,
+recreations, continuations and conversions never count.
+`python3 data/pipelines/variants.py` reports what each variant finds and flags
+sales far below the variant's median for a look.
+
 ### Normalization (percentile rank)
 
 Each input is converted to a **percentile rank** among the cars of the same

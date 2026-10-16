@@ -191,5 +191,46 @@ near('a thin month is ranked against the whole field',
 near('a full month is still ranked within itself',
     rows[0].views_normalized, MII.percentileRanker(sep.map(r => +r.views))(100), 1e-6);
 
+console.log('model list');
+// The same key as model_key in model_list.py, on the cases that matter.
+check('case and brand prefix fold together',
+    MII.modelKey('Volkswagen', 'VOLKSWAGEN TIGUAN'), MII.modelKey('volkswagen', 'Tiguan'));
+check('a year range suffix is dropped',
+    MII.modelKey('Ford', 'Ford F-Series (1967-1972)'), 'ford|f-series');
+check('Datsun files under Nissan', MII.modelKey('Datsun', 'Datsun 240Z'), 'nissan|240z');
+MII.setModels([
+    'manufacturer,source_model,model,rule,flag,auctions',
+    'Volkswagen,Volkswagen Tiguan,Volkswagen Tiguan,same,,5',
+    'Volkswagen,TIGUAN,Volkswagen Tiguan,case or prefix,,9',
+    'Porsche,996 Turbo,996 911 Turbo,override,,40',
+    'Porsche,996 911 Turbo,996 911 Turbo,same,,77',
+    'Ford,MUSTANG,MUSTANG,same,catch-all,40',
+].join('\n'));
+check('a duplicate name maps to ours', MII.canonicalModel('Porsche', '996 Turbo'), '996 911 Turbo');
+check('a Bring a Trailer spelling maps too', MII.canonicalModel('Volkswagen', 'VOLKSWAGEN TIGUAN'), 'Volkswagen Tiguan');
+check('an unknown name passes through', MII.canonicalModel('Porsche', '959'), '959');
+check('flags are carried', MII.modelFlag('Ford', 'MUSTANG'), 'catch-all');
+rows = [
+    { manufacturer: 'Volkswagen', model: 'Volkswagen Tiguan', quarter: '2026-09', auction_count: '1', sold: '1', price: '20000', views: '3000', bids: '10' },
+    { manufacturer: 'Volkswagen', model: 'TIGUAN', quarter: '2026-09', auction_count: '3', sold: '2', price: '24000', views: '5000', bids: '14' },
+    { manufacturer: 'Volkswagen', model: 'TIGUAN', quarter: '2026-10', auction_count: '2', sold: '2', price: '22000', views: '4000', bids: '12' },
+];
+MII.canonicalize(rows);
+check('a month\'s duplicates become one row', rows.map(r => `${r.model}|${r.quarter}`),
+    ['Volkswagen Tiguan|2026-09', 'Volkswagen Tiguan|2026-10']);
+check('lots and sales add up', [rows[0].auction_count, rows[0].sold], [4, 3]);
+near('averages are weighted by lots', rows[0].price, (20000 * 1 + 24000 * 3) / 4);
+check('the source name is kept', rows[1].source_model, 'TIGUAN');
+const again = rows.map(r => ({ ...r }));
+MII.canonicalize(again);
+check('merging twice changes nothing', again, rows);
+// A signal written under a duplicate's name still reaches the row.
+MII.setSignal('trends', 'manufacturer,model,month,trends_interest\nPorsche,996 Turbo,2026-09,40\nPorsche,996 911 Turbo,2026-09,60');
+rows = [{ manufacturer: 'Porsche', model: '996 Turbo', quarter: '2026-09', price: '90000', views: '9000', bids: '30', comments: '50', age: '25' }];
+MII.recompute(rows);
+check('the row is renamed before the join', rows[0].model, '996 911 Turbo');
+near('both names\' values are averaged', rows[0].google_trends_interest, 50);
+MII.setModels(null);
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);

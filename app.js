@@ -57,6 +57,9 @@ function normalizeModelKey(make, rawModel) {
 // while their lots sat in a differently-cased bucket. Display names always
 // come from the row itself, never from this key.
 function modelJoinKey(make, model) {
+    // Through our model list when it is loaded, so a Bring a Trailer lot filed
+    // under a duplicate name ("996 Turbo", "TIGUAN") joins the model it is.
+    if (window.MII && MII.modelKey) return MII.modelKey(make, MII.canonicalModel(make, model));
     return `${canonicalMake(make).toLowerCase()}|${normalizeModelKey(make, model).toLowerCase()}`;
 }
 
@@ -105,6 +108,8 @@ async function loadBatAuctionCounts() {
         clearTimeout(timeoutId);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
+        // The join keys go through our model list, which loads with the signals.
+        if (window.MII) await MII.ready;
 
         return new Promise(resolve => {
             Papa.parse(text, {
@@ -1975,6 +1980,9 @@ async function initializeApp() {
         Chart.defaults.animation.duration = 450;
 
         const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts(), MII.ready]);
+        // One row per model per month before the lot counts go on: a duplicate
+        // name would otherwise be credited with the same lots twice.
+        MII.canonicalize(rawData);
         injectAuctionCounts(rawData, batCounts);
         // Percentile ranks are taken once, over every car of each month in
         // every class, so a car's score does not change when the view is

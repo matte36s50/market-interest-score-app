@@ -28,6 +28,8 @@ import google_trends
 import youtube_signals
 import social_signals
 import check_coverage
+import model_list
+import variants
 import export_live_lots
 import export_online_sales
 
@@ -675,6 +677,112 @@ class YouTubeChannelState(unittest.TestCase):
         rows = {r["handle"]: r for r in lib.read_rows(path)}
         self.assertEqual(set(rows), {"@Hagerty", "@hemmingsmotornews"})
         self.assertEqual(rows["@Hagerty"]["measured_at"], "2026-10-01T00:00:00Z")
+
+
+class ModelList(unittest.TestCase):
+    """model_list.py: one name per car, and nothing renamed that is not a
+    duplicate."""
+
+    def build(self, names, overrides=None):
+        uni = [{"manufacturer": m, "model": n, "auction_count": a} for m, n, a in names]
+        return {(r["manufacturer"], r["source_model"]): r for r in model_list.build(uni, overrides)}
+
+    def test_case_and_brand_prefix_are_one_model_named_by_its_group(self):
+        rows = self.build([("Volkswagen", "Volkswagen Tiguan", 5), ("Volkswagen", "TIGUAN", 9),
+                           ("Volkswagen", "VOLKSWAGEN TIGUAN", 2)])
+        self.assertEqual({r["model"] for r in rows.values()}, {"Volkswagen Tiguan"})
+        self.assertEqual(rows[("Volkswagen", "TIGUAN")]["rule"], "case or prefix")
+
+    def test_a_listing_counter_is_dropped_only_from_a_title_onto_a_known_model(self):
+        rows = self.build([("Ford", "MUSTANG", 40), ("Ford", "MUSTANG 903", 1),
+                           ("Ford", "MUSTANG GT500CR 900S 5", 1),
+                           ("Porsche", "991 911 Carrera", 30), ("Porsche", "991 911 Carrera 4", 9),
+                           ("BMW", "2002", 3)])
+        self.assertEqual(rows[("Ford", "MUSTANG 903")]["model"], "MUSTANG")
+        self.assertEqual(rows[("Ford", "MUSTANG 903")]["rule"], "listing counter")
+        # Nothing to fall back to: the number stays.
+        self.assertEqual(rows[("Ford", "MUSTANG GT500CR 900S 5")]["model"], "MUSTANG GT500CR 900S 5")
+        # A Bring a Trailer group's own number is a trim, never a counter.
+        self.assertEqual(rows[("Porsche", "991 911 Carrera 4")]["model"], "991 911 Carrera 4")
+        self.assertEqual(rows[("BMW", "2002")]["model"], "2002")
+
+    def test_word_order_and_overrides(self):
+        rows = self.build([("Mercedes-Benz", "AMG G63", 18), ("Mercedes-Benz", "G63 AMG", 25),
+                           ("Porsche", "996 Turbo", 40), ("Porsche", "996 911 Turbo", 77)],
+                          {model_list.model_key("Porsche", "996 Turbo"): {"model": "996 911 Turbo", "flag": ""}})
+        self.assertEqual(rows[("Mercedes-Benz", "AMG G63")]["model"], "G63 AMG")
+        self.assertEqual(rows[("Porsche", "996 Turbo")]["model"], "996 911 Turbo")
+        self.assertEqual(rows[("Porsche", "996 Turbo")]["rule"], "override")
+
+    def test_short_codes_are_group_names_not_titles(self):
+        self.assertFalse(model_list.is_upper("R8"))
+        self.assertFalse(model_list.is_upper("300E"))
+        self.assertTrue(model_list.is_upper("SL55 AMG"))
+        self.assertTrue(model_list.is_upper("MUSTANG 903"))
+
+    def test_flags(self):
+        rows = self.build([("Ford", "MUSTANG", 40), ("Ford", "Mustang 1964.5-1966", 50),
+                           ("Ford", "Fox-Body Mustang", 60), ("Shelby", "Shelby Cobra Replica", 9),
+                           ("Audi", "R8", 20), ("Audi", "R8 V10", 5)])
+        self.assertEqual(rows[("Ford", "MUSTANG")]["flag"], "catch-all")
+        self.assertEqual(rows[("Shelby", "Shelby Cobra Replica")]["flag"], "replica")
+        self.assertEqual(rows[("Audi", "R8")]["flag"], "")
+
+    def test_load_universe_measures_each_model_once(self):
+        d = tempfile.mkdtemp()
+        mii = os.path.join(d, "mii.csv")
+        lib.write_rows(mii, ["manufacturer", "model", "quarter", "auction_count"], [
+            {"manufacturer": "Volkswagen", "model": "Volkswagen Tiguan", "quarter": "2026-01", "auction_count": "2"},
+            {"manufacturer": "Volkswagen", "model": "TIGUAN", "quarter": "2026-02", "auction_count": "3"},
+        ])
+        models = os.path.join(d, "models.csv")
+        lib.write_rows(models, model_list.FIELDS, model_list.build(lib.load_universe(mii, raw=True)))
+        with unittest.mock.patch.object(lib, "MODELS_PATH", models):
+            periods = {}
+            uni = lib.load_universe(mii, periods=periods)
+        self.assertEqual([(r["model"], r["auction_count"]) for r in uni], [("Volkswagen Tiguan", 5)])
+        self.assertEqual(periods[("Volkswagen", "Volkswagen Tiguan")], {"2026-01", "2026-02"})
+
+
+class Variants(unittest.TestCase):
+    """variants.py: an index constituent recognised from a listing title."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.v = {v["id"]: v for v in variants.load_variants()}
+
+    def hit(self, vid, make, url):
+        t = variants.title_of(url)
+        return variants.matches(self.v[vid], make, t, variants.year_of(t))
+
+    def test_title_and_year_come_from_the_url(self):
+        t = variants.title_of("https://bringatrailer.com/listing/1973-porsche-911-carrera-rs-2-7-lightweight/")
+        self.assertEqual(t, "1973 porsche 911 carrera rs 2 7 lightweight")
+        self.assertEqual(variants.year_of(t), 1973)
+
+    def test_the_finer_variant_wins_its_own_row(self):
+        url = "https://bringatrailer.com/listing/1973-porsche-911-carrera-rs-2-7-lightweight/"
+        self.assertTrue(self.hit("porsche-911-rs-lightweight", "Porsche", url))
+        self.assertFalse(self.hit("porsche-911-rs-touring", "Porsche", url))
+        self.assertTrue(self.hit("porsche-911-rs-touring", "Porsche",
+                                 "https://bringatrailer.com/listing/1973-porsche-911-carrera-rs-2-7-2/"))
+
+    def test_years_bound_a_name_reused_later(self):
+        self.assertTrue(self.hit("mb-280sl", "Mercedes-Benz", "https://bringatrailer.com/listing/1970-mercedes-benz-280sl-150/"))
+        self.assertFalse(self.hit("mb-280sl", "Mercedes-Benz", "https://bringatrailer.com/listing/1982-mercedes-benz-280sl/"))
+
+    def test_replicas_and_conversions_are_not_the_car(self):
+        self.assertFalse(self.hit("porsche-550", "Porsche", "https://bringatrailer.com/listing/1955-beck-550-spyder-8/"))
+        self.assertFalse(self.hit("ford-gt40", "Ford", "https://bringatrailer.com/listing/1968-ford-mustang-gt-40/"))
+        self.assertFalse(self.hit("ferrari-365-daytona-spider", "Ferrari",
+                                  "https://bringatrailer.com/listing/1969-ferrari-365-gts-4-spider-conversion/"))
+        self.assertTrue(self.hit("ferrari-365-daytona", "Ferrari",
+                                 "https://bringatrailer.com/listing/1973-ferrari-365-gtb-4-daytona-3/"))
+
+    def test_every_row_compiles_and_names_an_index(self):
+        for v in self.v.values():
+            self.assertTrue(v["index_list"], v["id"])
+            self.assertTrue(v["from"] and v["to"] and v["from"] <= v["to"], v["id"])
 
 
 class SignalCoverage(unittest.TestCase):

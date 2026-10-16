@@ -171,12 +171,12 @@
     // existing value only when the signal's `overrides` test says upstream's
     // value is a placeholder rather than a measurement. Idempotent.
     function joinSignal(rows, signal) {
-        var table = signalTables[signal.name];
+        var table = canonicalSignal(signal.name);
         if (!table) return;
         rows.forEach(function (r) {
             var existing = parseFloat(r[signal.target]);
             if (!isNaN(existing) && !signal.overrides(r)) return;
-            var byMonth = table[(r.manufacturer || '').trim() + '|' + (r.model || '').trim()];
+            var byMonth = table[modelKey(r.manufacturer, r.model)];
             if (!byMonth) return;
             var sum = 0, n = 0;
             periodMonths(String(r.quarter || '').trim()).forEach(function (mo) {
@@ -189,6 +189,127 @@
 
     function joinSignals(rows) {
         SIGNALS.forEach(function (signal) { joinSignal(rows, signal); });
+    }
+
+    // ---- Our model list ------------------------------------------------------
+    // data/models.csv (data/pipelines/model_list.py) maps every name the
+    // upstream file uses to one name per car: "TIGUAN", "VOLKSWAGEN TIGUAN" and
+    // "Volkswagen Tiguan" are one model, "MUSTANG 903" (a listing counter) is
+    // "MUSTANG", "996 Turbo" is "996 911 Turbo". Without it each duplicate is
+    // its own row every month and credits itself with the same lots.
+    var MAKE_ALIASES = { datsun: 'nissan' };
+    // The comparison key for a make/model pair: case-folded, any leading brand
+    // word and trailing "(1969-1973)" removed, spaces collapsed. Mirrors
+    // model_key in model_list.py; every join on a model name goes through it.
+    function modelKey(make, model) {
+        var mk = String(make == null ? '' : make).trim().toLowerCase();
+        mk = MAKE_ALIASES[mk] || mk;
+        var prefixes = [mk].concat(Object.keys(MAKE_ALIASES).filter(function (a) { return MAKE_ALIASES[a] === mk; }));
+        var m = String(model == null ? '' : model).trim().replace(/\s+/g, ' ');
+        for (var i = 0; i < prefixes.length; i++) {
+            if (m.toLowerCase().indexOf(prefixes[i] + ' ') === 0) { m = m.slice(prefixes[i].length + 1); break; }
+        }
+        return mk + '|' + m.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim().toLowerCase();
+    }
+
+    var modelTable = null;   // modelKey -> { model, flag }
+    function indexModels(text) {
+        var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
+        if (lines.length < 2) return null;
+        var hdr = parseCsvLine(lines[0]);
+        var iMan = hdr.indexOf('manufacturer'), iSrc = hdr.indexOf('source_model'),
+            iMod = hdr.indexOf('model'), iFlag = hdr.indexOf('flag');
+        if (iMan < 0 || iSrc < 0 || iMod < 0) return null;
+        var out = {};
+        for (var i = 1; i < lines.length; i++) {
+            var c = parseCsvLine(lines[i]);
+            var model = (c[iMod] || '').trim();
+            if (!model) continue;
+            out[modelKey(c[iMan], c[iSrc])] = { model: model, flag: iFlag < 0 ? '' : (c[iFlag] || '').trim() };
+        }
+        return out;
+    }
+    // Our name for an upstream (or Bring a Trailer) model name; a name the
+    // list has not seen yet passes through unchanged.
+    function canonicalModel(make, model) {
+        var e = modelTable && modelTable[modelKey(make, model)];
+        return e ? e.model : model;
+    }
+    function modelFlag(make, model) {
+        var e = modelTable && modelTable[modelKey(make, model)];
+        return e ? e.flag : '';
+    }
+
+    // Rename every row to our model name and merge a month's duplicates into
+    // one row: lots and sales add up, the per-lot averages (price, views,
+    // bids, comments, year, age) are weighted by each row's lots. Works in
+    // place and is idempotent, so a page may call it before injecting
+    // Bring a Trailer lot counts and recompute() calls it again harmlessly.
+    var MERGE_MEANS = ['price', 'views', 'bids', 'comments', 'year', 'age'];
+    var MERGE_SUMS = ['auction_count', 'sold'];
+    function canonicalize(rows) {
+        if (!Array.isArray(rows) || !modelTable) return rows;
+        var out = [], at = {};
+        rows.forEach(function (r) {
+            if (!r._canonical) {
+                var name = canonicalModel(r.manufacturer, r.model);
+                if (name !== r.model) { r.source_model = r.model; r.model = name; }
+                r.model_flag = modelFlag(r.manufacturer, r.model);
+                r._canonical = true;
+            }
+            var k = modelKey(r.manufacturer, r.model) + '|' + String(r.quarter == null ? '' : r.quarter).trim();
+            if (at[k] == null) { at[k] = out.length; out.push(r); return; }
+            var a = out[at[k]];
+            var wa = parseFloat(a.auction_count) || 1, wb = parseFloat(r.auction_count) || 1;
+            MERGE_MEANS.forEach(function (col) {
+                var x = parseFloat(a[col]), y = parseFloat(r[col]);
+                if (isNaN(y)) return;
+                a[col] = isNaN(x) ? y : (x * wa + y * wb) / (wa + wb);
+            });
+            MERGE_SUMS.forEach(function (col) {
+                var x = parseFloat(a[col]), y = parseFloat(r[col]);
+                if (!isNaN(y)) a[col] = (isNaN(x) ? 0 : x) + y;
+            });
+            // Anything else (a measured signal, the class) fills a gap only.
+            Object.keys(r).forEach(function (col) {
+                if ((a[col] == null || a[col] === '') && r[col] != null && r[col] !== '') a[col] = r[col];
+            });
+        });
+        if (out.length !== rows.length) {
+            rows.length = 0;
+            for (var i = 0; i < out.length; i++) rows.push(out[i]);
+        }
+        return rows;
+    }
+
+    // A signal table re-keyed on our model names. The collectors write our
+    // names from now on, but older rows (and any written under a duplicate's
+    // name) are folded in: where two names hold the same month, the values
+    // are averaged.
+    var canonicalCache = {};
+    function canonicalSignal(name) {
+        var table = signalTables[name];
+        if (!table) return null;
+        var cached = canonicalCache[name];
+        if (cached && cached.table === table && cached.models === modelTable) return cached.out;
+        var acc = {};
+        Object.keys(table).forEach(function (raw) {
+            var cut = raw.indexOf('|');
+            var make = raw.slice(0, cut), model = raw.slice(cut + 1);
+            var key = modelKey(make, canonicalModel(make, model));
+            var dst = acc[key] = acc[key] || {};
+            Object.keys(table[raw]).forEach(function (mo) {
+                var cell = dst[mo] = dst[mo] || [0, 0];
+                cell[0] += table[raw][mo]; cell[1]++;
+            });
+        });
+        var out = {};
+        Object.keys(acc).forEach(function (key) {
+            out[key] = {};
+            Object.keys(acc[key]).forEach(function (mo) { out[key][mo] = acc[key][mo][0] / acc[key][mo][1]; });
+        });
+        canonicalCache[name] = { table: table, models: modelTable, out: out };
+        return out;
     }
 
     // Kick off the signal fetches at script load; pages should `await MII.ready`
@@ -204,6 +325,10 @@
         Object.keys(configured).forEach(function (k) { overrides[k] = configured[k]; });
         // Legacy single-file override, kept working for pages that set it.
         if (global.MII_SOCIAL_SIGNALS_URL) overrides.social = global.MII_SOCIAL_SIGNALS_URL;
+        var models = fetch(global.MII_MODELS_URL || 'data/models.csv')
+            .then(function (r) { return r.ok ? r.text() : null; })
+            .then(function (t) { if (t) modelTable = indexModels(t); })
+            .catch(function () {});
         Promise.all(SIGNALS.map(function (signal) {
             return fetch(overrides[signal.name] || signal.url)
                 .then(function (r) { return r.ok ? r.text() : null; })
@@ -211,7 +336,7 @@
                     if (t) signalTables[signal.name] = indexSignal(t, signal.column);
                 })
                 .catch(function () {});
-        })).then(function () { clearTimeout(guard); readyResolve(); });
+        }).concat([models])).then(function () { clearTimeout(guard); readyResolve(); });
     } else {
         readyResolve();
     }
@@ -259,6 +384,7 @@
     function recompute(rows) {
         if (!Array.isArray(rows) || !rows.length) return rows;
 
+        canonicalize(rows);
         joinSignals(rows);
 
         dataQuality = {};
@@ -472,6 +598,13 @@
         confidenceFor: confidenceFor,
         recompute: recompute,
         percentileRanker: percentileRanker,
+        // Our model list (data/models.csv): the join key every page uses, our
+        // name and flag for a source name, and the duplicate merge.
+        modelKey: modelKey,
+        canonicalModel: canonicalModel,
+        modelFlag: modelFlag,
+        canonicalize: canonicalize,
+        setModels: function (text) { modelTable = text ? indexModels(text) : null; },
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
         // three months). Shared by pages that join monthly bat.csv data onto
         // MII rows of either grain.
