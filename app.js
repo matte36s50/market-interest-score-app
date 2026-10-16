@@ -291,7 +291,7 @@ function summarizePeriod(rows, grain) {
                 avgComments: mean(rs.map(r => num(r.comments))),
                 decade: num(rs.find(r => num(r.decade) != null)?.decade),
                 confidence: MII.confidenceFor(mAuctions, grain),
-                ci: window.BMW_CI ? BMW_CI.constituentFor(make, model) : null,
+                ci: window.HAGI_INDEXES ? HAGI_INDEXES.constituentFor(make, model) : null,
                 trend: null, trendPoints: null, trendAuctions: null
             };
         }).sort((a, b) => b.mii - a.mii);
@@ -439,6 +439,7 @@ const STATE = {
     makeSearch: '',
     modelSearch: '',
     ciOnly: false,
+    ciIndex: 'bmw-ci',
     makeView: 'table',
     mapMode: 'ci',
     showAllMakes: false,
@@ -688,15 +689,25 @@ function priceFit(models) {
     return { a, b, predict: price => a + b * Math.log10(price) };
 }
 
-// --- BMW CI ---------------------------------------------------------------
+// --- HAGI indexes ---------------------------------------------------------
+
+// The index the spotlight shows (BMW CI, MBCI or MBCI Emerging Classics).
+function activeIndex() {
+    return HAGI_INDEXES.byId(STATE.ciIndex) || HAGI_INDEXES.INDEXES[0];
+}
+
+// The badge naming the index a model's constituent belongs to, or ''.
+function ciBadge(m) {
+    return m?.ci ? `<span class="ci-badge" title="${esc(m.ci.index.name)} constituent">${esc(m.ci.index.short)}</span>` : '';
+}
 
 // One constituent's figures for a period: its matched model groups combined,
 // MII weighted by auctions so a one-sale variant cannot swamp the main one.
 function ciConstituentStats(c, key) {
-    const bmw = period(key)?.makeMap.get('BMW');
-    if (!bmw || !c.models.length) return null;
+    const make = period(key)?.makeMap.get(c.index.make);
+    if (!make || !c.models.length) return null;
     const wanted = new Set(c.models.map(m => m.toLowerCase()));
-    const models = bmw.models.filter(m => wanted.has(m.model.toLowerCase()));
+    const models = make.models.filter(m => wanted.has(m.model.toLowerCase()));
     if (!models.length) return null;
     const auctions = models.reduce((s, m) => s + m.auctions, 0);
     const weights = models.map(m => (auctions > 0 ? m.auctions : 1));
@@ -718,22 +729,28 @@ function ciConstituentStats(c, key) {
 function ciAttention(c, key) {
     if (!window.MII?.attentionFor) return null;
     const months = key === 'YTD' ? (DS.ytdMonths || []) : [key];
-    return mean(c.models.flatMap(m => months.map(k => MII.attentionFor('BMW', m, k))));
+    return mean(c.models.flatMap(m => months.map(k => MII.attentionFor(c.index.make, m, k))));
 }
 
-function ciPeriod(key) {
-    const cacheKey = `ci|${key}`;
+// An index's figures for a period. The basket averages the cards, so a model
+// group that stands for several of the index's cars counts once; the counts
+// of cars traded and measured are of the index's own list.
+function ciPeriod(key, idx = activeIndex()) {
+    const cacheKey = `ci|${idx.id}|${key}`;
     if (DS.cache[cacheKey]) return DS.cache[cacheKey];
-    const items = BMW_CI.CONSTITUENTS.map(c => ({ c, s: ciConstituentStats(c, key), a: ciAttention(c, key) }));
+    const items = idx.constituents.map(c => ({ c, s: ciConstituentStats(c, key), a: ciAttention(c, key) }));
     const present = items.filter(i => i.s);
     const attended = items.filter(i => i.a != null);
+    const cars = list => list.reduce((s, i) => s + i.c.count, 0);
     const out = {
+        idx,
         items,
-        present: present.length,
+        present: cars(present),
+        total: idx.size,
         basket: present.length ? mean(present.map(i => i.s.mii)) : null,
         // The same constituents every month, traded or not.
         attention: attended.length ? mean(attended.map(i => i.a)) : null,
-        attended: attended.length,
+        attended: cars(attended),
         auctions: present.reduce((s, i) => s + i.s.auctions, 0)
     };
     DS.cache[cacheKey] = out;
@@ -957,7 +974,7 @@ function renderLede(ms, diff) {
         const ci = ciPeriod(key);
         if (ci.basket != null && ms.mii != null) {
             const gap = ci.basket - ms.mii;
-            parts.push(`The <span class="ci-word">BMW CI</span> cars are running ${Math.abs(gap).toFixed(1)} points ${gap >= 0 ? 'above' : 'below'} the market.`);
+            parts.push(`The <span class="ci-word">${esc(ci.idx.short)}</span> cars are running ${Math.abs(gap).toFixed(1)} points ${gap >= 0 ? 'above' : 'below'} the market.`);
         }
     }
     lede.innerHTML = parts.join(' ');
@@ -1132,7 +1149,7 @@ function buildInsights() {
     const hottest = models[0];
     if (hottest) {
         cards.push({
-            kicker: 'Most-watched model', icon: 'flame', ci: !!hottest.ci,
+            kicker: 'Most-watched model', icon: 'flame', ci: hottest.ci?.index.short,
             subject: `${esc(md(hottest.model))} <span class="make">${esc(mk(hottest.make))}</span>`,
             body: `The highest MII of any model with ${MIN_MODEL_AUCTIONS}+ auctions: ${fmtInt(hottest.auctions)} sold through ${hottest.sellThrough}% at an average ${formatPrice(hottest.avgPrice)}.`,
             stat: fmt1(hottest.mii), foot: 'MII', action: { type: 'lots', make: hottest.make, models: [hottest.model], title: fullName(hottest.make, hottest.model) }
@@ -1143,7 +1160,7 @@ function buildInsights() {
     const value = fit ? models.filter(m => m.residual != null).sort((a, b) => b.residual - a.residual)[0] : null;
     if (value) {
         cards.push({
-            kicker: 'Interest outruns price', icon: 'tag', ci: !!value.ci,
+            kicker: 'Interest outruns price', icon: 'tag', ci: value.ci?.index.short,
             subject: `${esc(md(value.model))} <span class="make">${esc(mk(value.make))}</span>`,
             body: `Draws ${value.residual.toFixed(1)} points more attention than a car at ${formatPrice(value.avgPrice)} usually gets. The strongest interest for the money in this period.`,
             stat: `+${value.residual.toFixed(1)}`, foot: 'pts above price line', action: { type: 'lots', make: value.make, models: [value.model], title: fullName(value.make, value.model) }
@@ -1153,7 +1170,7 @@ function buildInsights() {
     const contested = models.filter(m => m.avgBids != null).sort((a, b) => b.avgBids - a.avgBids)[0];
     if (contested) {
         cards.push({
-            kicker: 'Most fought-over', icon: 'gavel', ci: !!contested.ci,
+            kicker: 'Most fought-over', icon: 'gavel', ci: contested.ci?.index.short,
             subject: `${esc(md(contested.model))} <span class="make">${esc(mk(contested.make))}</span>`,
             body: `Averages ${Math.round(contested.avgBids)} bids${contested.avgComments != null ? ` and ${Math.round(contested.avgComments)} comments` : ''} a listing across ${fmtInt(contested.auctions)} auctions, the most bidding of any ranked model.`,
             stat: Math.round(contested.avgBids), foot: 'bids per auction', action: { type: 'lots', make: contested.make, models: [contested.model], title: fullName(contested.make, contested.model) }
@@ -1165,9 +1182,9 @@ function buildInsights() {
         if (ci.basket != null && ms?.mii != null) {
             const gap = ci.basket - ms.mii;
             cards.push({
-                kicker: 'BMW Classic Index', icon: 'target', ci: true,
-                subject: `BMW CI ${gap >= 0 ? 'outdraws' : 'trails'} the market`,
-                body: `${ci.present} of ${BMW_CI.CONSTITUENTS.length} constituents traded, averaging MII ${fmt1(ci.basket)} against ${fmt1(ms.mii)} for the market.`,
+                kicker: ci.idx.name, icon: 'target', ci: ci.idx.short, isIndex: true,
+                subject: `${esc(ci.idx.short)} ${gap >= 0 ? 'outdraws' : 'trails'} the market`,
+                body: `${ci.present} of ${ci.total} constituents had sales, averaging MII ${fmt1(ci.basket)} against ${fmt1(ms.mii)} for the market.`,
                 stat: `${signed(gap)}`, foot: 'points vs market', action: { type: 'scroll', target: 'ciTitle' }
             });
         }
@@ -1183,7 +1200,7 @@ function renderInsights() {
     el.innerHTML = cards.map((c, i) => {
         const tag = c.action ? 'button' : 'div';
         return `<${tag} class="card insight ${c.ci ? 'is-ci' : ''}" data-i="${i}">
-            <span class="i-kicker"><span class="i-icon">${icon(c.icon)}</span>${esc(c.kicker)}${c.ci && c.kicker !== 'BMW Classic Index' ? ' <span class="ci-badge">BMW CI</span>' : ''}</span>
+            <span class="i-kicker"><span class="i-icon">${icon(c.icon)}</span>${esc(c.kicker)}${c.ci && !c.isIndex ? ` <span class="ci-badge">${esc(c.ci)}</span>` : ''}</span>
             <span class="i-subject">${c.subject}</span>
             <span class="i-body">${c.body}</span>
             <span class="i-foot"><span class="i-stat">${c.stat}</span><span>${esc(c.foot)}</span></span>
@@ -1210,9 +1227,15 @@ function renderCI() {
     const key = STATE.period;
     const grid = document.getElementById('ciGrid');
     const stats = document.getElementById('ciStats');
+    const idx = activeIndex();
+    const makeName = mk(idx.make);
+    document.getElementById('ciTitle').textContent = idx.name;
+    document.getElementById('ciSub').textContent = `How much attention the ${idx.size} cars in the ${idx.short} draw on Bring a Trailer, against every ${makeName} and the whole market.`;
+    document.querySelectorAll('#ciSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.index === idx.id)));
+    document.getElementById('ciChart').setAttribute('aria-label', `${idx.short}, all ${makeName} and market MII by month`);
 
     if (STATE.vclass === 'motorcycle') {
-        stats.innerHTML = `<div class="ci-stat"><span class="s-label">The BMW CI is an index of cars. Switch the view to All or Cars to see it.</span></div>`;
+        stats.innerHTML = `<div class="ci-stat"><span class="s-label">The ${esc(idx.short)} is an index of cars. Switch the view to All or Cars to see it.</span></div>`;
         grid.innerHTML = '';
         document.getElementById('ciFootnote').textContent = '';
         if (charts.ciChart) { charts.ciChart.destroy(); delete charts.ciChart; }
@@ -1223,18 +1246,18 @@ function renderCI() {
 
     const ci = ciPeriod(key);
     const ms = marketStats(key);
-    const bmw = period(key)?.makeMap.get('BMW');
+    const makeRow = period(key)?.makeMap.get(idx.make);
     const priced = ci.items.filter(i => i.s && i.s.avgPrice > 0);
     const gapMarket = ci.basket != null && ms?.mii != null ? ci.basket - ms.mii : null;
-    const gapBMW = ci.basket != null && bmw ? ci.basket - bmw.miiScore : null;
+    const gapMake = ci.basket != null && makeRow ? ci.basket - makeRow.miiScore : null;
     const gapCls = g => (g == null ? 'muted' : g >= 0 ? 'up' : 'down');
 
     stats.innerHTML = `
-        <div class="ci-stat"><div><div class="s-label">BMW CI interest</div><div class="s-note" style="text-align:left">average MII of traded constituents</div></div><span class="s-value big">${fmt1(ci.basket)}</span></div>
+        <div class="ci-stat"><div><div class="s-label">${esc(idx.short)} interest</div><div class="s-note" style="text-align:left">average MII of traded constituents</div></div><span class="s-value big">${fmt1(ci.basket)}</span></div>
         <div class="ci-stat"><span class="s-label">vs the market</span><span class="s-value ${gapCls(gapMarket)}">${gapMarket == null ? '—' : signed(gapMarket)}</span></div>
-        <div class="ci-stat"><span class="s-label">vs all BMW</span><span class="s-value ${gapCls(gapBMW)}">${gapBMW == null ? '—' : signed(gapBMW)}</span></div>
-        <div class="ci-stat"><div><div class="s-label">BMW CI attention</div><div class="s-note" style="text-align:left">search, YouTube, social · ${ci.attended} of ${BMW_CI.CONSTITUENTS.length}, traded or not</div></div><span class="s-value">${ci.attention == null ? '—' : fmt1(ci.attention)}</span></div>
-        <div class="ci-stat"><span class="s-label">Constituents traded</span><span class="s-value">${ci.present}<span class="muted" style="font-size:15px;font-weight:500"> / ${BMW_CI.CONSTITUENTS.length}</span></span></div>
+        <div class="ci-stat"><span class="s-label">vs all ${esc(makeName)}</span><span class="s-value ${gapCls(gapMake)}">${gapMake == null ? '—' : signed(gapMake)}</span></div>
+        <div class="ci-stat"><div><div class="s-label">${esc(idx.short)} attention</div><div class="s-note" style="text-align:left">search, YouTube, social · ${ci.attended} of ${ci.total}, traded or not</div></div><span class="s-value">${ci.attention == null ? '—' : fmt1(ci.attention)}</span></div>
+        <div class="ci-stat"><div><div class="s-label">Constituents with sales</div>${idx.constituents.some(c => c.count > 1) ? '<div class="s-note" style="text-align:left">a group shared by several cars counts for each</div>' : ''}</div><span class="s-value">${ci.present}<span class="muted" style="font-size:15px;font-weight:500"> / ${ci.total}</span></span></div>
         <div class="ci-stat"><span class="s-label">Auctions</span><span class="s-value">${fmtInt(ci.auctions)}</span></div>
         <div class="ci-stat"><span class="s-label">Median constituent price</span><span class="s-value">${formatPrice(median(priced.map(i => i.s.avgPrice)))}</span></div>`;
 
@@ -1249,7 +1272,7 @@ function renderCI() {
             c.approx ? `<span class="tag" title="${esc(c.approx)}">≈ group match</span>` : ''
         ].join('');
         if (!s) {
-            const lotsAvailable = c.models.some(m => (batLots[modelJoinKey('BMW', m)] || []).length);
+            const lotsAvailable = c.models.some(m => (batLots[modelJoinKey(idx.make, m)] || []).length);
             const tagName = lotsAvailable ? 'button' : 'div';
             return `<${tagName} class="card ci-card is-empty" data-ci="${esc(c.id)}">
                 <div class="c-head"><div><div class="c-name">${esc(c.name)}</div><div class="c-years">${esc(c.years)}</div></div></div>
@@ -1280,13 +1303,13 @@ function renderCI() {
     }).join('');
     grid.querySelectorAll('button[data-ci]').forEach(btn => {
         btn.addEventListener('click', () => {
-            const c = BMW_CI.CONSTITUENTS.find(x => x.id === btn.dataset.ci);
-            showLots('BMW', c.models, `BMW ${c.name}`, btn, 'BMW CI constituent');
+            const c = idx.constituents.find(x => x.id === btn.dataset.ci);
+            showLots(idx.make, c.models, `${makeName} ${c.name}`, btn, `${idx.short} constituent`);
         });
     });
 
     document.getElementById('ciFootnote').textContent =
-        `Constituents per the HAGI BMW CI committee list (launch list, plus the E46 M3 added in 2026). Bring a Trailer groups some trims with their chassis family; those are marked "≈ group match". ` +
+        `${idx.source} Bring a Trailer groups some trims with their chassis family. A constituent is matched to a wider group, marked "≈ group match", only when at least a third of that group's listings are the constituent; below that it is not measured separately. ` +
         `Rank chips compare each car with every model sold in the period. Changes are ${baselinePhrase(key) || 'not available for the first month'}.`;
 
     renderCIChart();
@@ -1295,15 +1318,16 @@ function renderCI() {
 function renderCIChart() {
     const p = palette();
     const months = DS.months;
+    const idx = activeIndex();
     const basket = months.map(k => ciPeriod(k).basket);
     const attention = months.map(k => ciPeriod(k).attention);
-    const bmw = makeSeries('BMW', months);
+    const makeLine = makeSeries(idx.make, months);
     const market = months.map(k => marketStats(k)?.mii ?? null);
     const selIdx = STATE.period === 'YTD' ? -1 : months.indexOf(STATE.period);
     const series = [
-        { label: 'BMW CI', data: basket, color: p.ci, width: 2.75 },
-        ...(attention.some(v => v != null) ? [{ label: 'CI attention', data: attention, color: p.ci, width: 2, dash: [5, 4] }] : []),
-        { label: 'All BMW', data: bmw, color: p.bmw, width: 2 },
+        { label: idx.short, data: basket, color: p.ci, width: 2.75 },
+        ...(attention.some(v => v != null) ? [{ label: 'Attention', data: attention, color: p.ci, width: 2, dash: [5, 4] }] : []),
+        { label: `All ${mk(idx.make)}`, data: makeLine, color: p.bmw, width: 2 },
         { label: 'Market', data: market, color: p.market, width: 2 }
     ];
     document.getElementById('ciLegend').innerHTML = series.map(s => `<span><i${s.dash ? ' class="dash"' : ''} style="color:${s.color}"></i>${s.label}</span>`).join('');
@@ -1322,7 +1346,8 @@ function renderCIChart() {
         options: {
             responsive: true, maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
-            layout: { padding: { right: 78, top: 8 } },
+            // Room for the longest end label ("All Mercedes-Benz").
+            layout: { padding: { right: Math.max(78, 16 + 6.6 * Math.max(...series.map(s => s.label.length))), top: 8 } },
             plugins: {
                 legend: { display: false },
                 crosshair: { color: p.axis },
@@ -1334,7 +1359,7 @@ function renderCIChart() {
                         label: ctx => ` ${ctx.dataset.label}  ${fmt1(ctx.parsed.y)}`,
                         footer: items => {
                             const ci = ciPeriod(months[items[0].dataIndex]);
-                            return `${ci.present} constituents traded` + (ci.attention != null ? ` · attention covers ${ci.attended}` : '');
+                            return `${ci.present} of ${ci.total} constituents had sales` + (ci.attention != null ? ` · attention covers ${ci.attended}` : '');
                         }
                     }
                 }
@@ -1357,17 +1382,20 @@ function renderMap() {
     const models = rankedModels().filter(m => m.avgPrice > 0);
     const fit = priceFit(models);
     const ciMode = STATE.mapMode === 'ci' && STATE.vclass !== 'motorcycle';
+    const idx = activeIndex();
+    const inIndex = m => m.ci?.index === idx;
+    document.querySelector('#mapSeg [data-map="ci"]').textContent = `Highlight ${idx.short}`;
     const maxAuc = Math.max(1, ...models.map(m => m.auctions));
     const radius = m => 3 + 9 * Math.sqrt(m.auctions / maxAuc);
     const top = models.filter(m => m.residual != null).sort((a, b) => b.residual - a.residual);
     const labelled = new Set(top.slice(0, 5));
     const toPoint = m => ({
         x: m.avgPrice, y: m.mii, m, r: radius(m),
-        label: ciMode ? (m.ci ? m.model : null) : (labelled.has(m) ? m.model : null)
+        label: ciMode ? (inIndex(m) ? m.model : null) : (labelled.has(m) ? m.model : null)
     });
 
-    const ci = models.filter(m => m.ci);
-    const rest = ciMode ? models.filter(m => !m.ci) : models;
+    const ci = models.filter(inIndex);
+    const rest = ciMode ? models.filter(m => !inIndex(m)) : models;
     const datasets = [];
     if (fit) {
         const xs = models.map(m => m.avgPrice);
@@ -1384,7 +1412,7 @@ function renderMap() {
     });
     if (ciMode) {
         datasets.push({
-            label: 'BMW CI', data: ci.map(toPoint), backgroundColor: p.ci, borderColor: p.surface, borderWidth: 2,
+            label: idx.short, data: ci.map(toPoint), backgroundColor: p.ci, borderColor: p.surface, borderWidth: 2,
             pointRadius: c => Math.max(5, c.raw?.r || 5), pointHoverRadius: c => Math.max(5, c.raw?.r || 5) + 2, order: 1
         });
     }
@@ -1410,7 +1438,7 @@ function renderMap() {
                     ...tooltipStyle(),
                     filter: item => item.dataset.type !== 'line',
                     callbacks: {
-                        title: items => { const m = items[0].raw.m; return `${fullName(m.make, m.model)}${m.ci ? '  ·  BMW CI' : ''}`; },
+                        title: items => { const m = items[0].raw.m; return `${fullName(m.make, m.model)}${m.ci ? `  ·  ${m.ci.index.short}` : ''}`; },
                         label: item => { const m = item.raw.m; return [`MII ${fmt1(m.mii)}   ·   ${formatPrice(m.avgPrice)} average`, `${fmtInt(m.auctions)} auctions, ${m.sellThrough}% sold`]; },
                         footer: items => { const r = items[0].raw.m.residual; return r == null ? '' : `${signed(r)} points vs what its price predicts`; }
                     }
@@ -1436,7 +1464,7 @@ function renderMap() {
     list.innerHTML = top.slice(0, 7).map((m, i) => `
         <li><button data-i="${i}">
             <span style="min-width:0">
-                <span class="rl-name" style="display:block">${esc(md(m.model))} ${m.ci ? '<span class="ci-badge">CI</span>' : ''}</span>
+                <span class="rl-name" style="display:block">${esc(md(m.model))} ${ciBadge(m)}</span>
                 <span class="rl-sub">${esc(mk(m.make))} · ${formatPrice(m.avgPrice)}</span>
             </span>
             <span class="rl-val up">+${m.residual.toFixed(1)}</span>
@@ -1591,13 +1619,13 @@ function renderModels() {
     let list;
     if (STATE.ciOnly) {
         list = allModels().filter(m => m.ci && (!q || m.model.toLowerCase().includes(q))).sort((a, b) => b.mii - a.mii);
-        sub.textContent = `Every BMW CI constituent that traded in ${longPeriod(STATE.period)}, with no minimum auction count.`;
+        sub.textContent = `Every HAGI index constituent (BMW CI, MBCI, MBCI Emerging) that traded in ${longPeriod(STATE.period)}, with no minimum auction count.`;
     } else if (q) {
         list = allModels().filter(m => m.model.toLowerCase().includes(q) || m.make.toLowerCase().includes(q)).sort((a, b) => b.mii - a.mii).slice(0, 60);
         sub.textContent = `${list.length} model${list.length === 1 ? '' : 's'} matching "${STATE.modelSearch.trim()}".`;
     } else {
         list = rankedModels().sort((a, b) => b.mii - a.mii).slice(0, 25);
-        sub.textContent = `Top 25 models with ${MIN_MODEL_AUCTIONS}+ auctions in ${longPeriod(STATE.period)}. BMW CI constituents are marked in blue.`;
+        sub.textContent = `Top 25 models with ${MIN_MODEL_AUCTIONS}+ auctions in ${longPeriod(STATE.period)}. HAGI index constituents are marked in blue.`;
     }
     const body = document.getElementById('modelRows');
     if (!list.length) {
@@ -1608,7 +1636,7 @@ function renderModels() {
     body.innerHTML = list.map((m, i) => `
         <tr class="clickable ${m.ci ? 'is-ci' : ''}" data-i="${i}" tabindex="0">
             <td class="rank">${String(i + 1).padStart(2, '0')}</td>
-            <td><span class="make-name">${esc(md(m.model))}</span> <span class="muted">${esc(mk(m.make))}</span> ${m.ci ? '<span class="ci-badge" title="HAGI BMW Classic Index constituent">BMW CI</span>' : ''}</td>
+            <td><span class="make-name">${esc(md(m.model))}</span> <span class="muted">${esc(mk(m.make))}</span> ${ciBadge(m)}</td>
             <td><div class="mii-cell"><span class="v">${fmt1(m.mii)}</span><span class="bar ${m.ci ? 'ci' : ''}"><span style="width:${Math.max(2, (m.mii / max) * 100).toFixed(0)}%"></span></span></div></td>
             <td class="r">${deltaHTML(m.trendPoints, m.trendAuctions)}</td>
             <td class="r">${fmtInt(m.auctions)}</td>
@@ -1618,7 +1646,7 @@ function renderModels() {
         </tr>`).join('');
     body.querySelectorAll('tr[data-i]').forEach(tr => {
         const m = list[+tr.dataset.i];
-        const open = () => showLots(m.make, [m.model], fullName(m.make, m.model), tr, m.ci ? 'BMW CI constituent' : undefined);
+        const open = () => showLots(m.make, [m.model], fullName(m.make, m.model), tr, m.ci ? `${m.ci.index.short} constituent` : undefined);
         tr.addEventListener('click', open);
         tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
     });
@@ -1638,7 +1666,7 @@ function renderMovers() {
     const down = real.filter(m => m.trendPoints < 0).sort((a, b) => a.trendPoints - b.trendPoints).slice(0, 5);
     const col = (title, list, dir) => `<div><h3><span class="${dir}" aria-hidden="true">${dir === 'up' ? '▲' : '▼'}</span>${title}</h3>
         ${list.length ? list.map(m => `<button class="mover" data-make="${esc(m.make)}" data-model="${esc(m.model)}">
-            <span class="m-name" title="${esc(md(m.model))}">${esc(md(m.model))} ${m.ci ? '<span class="ci-badge">CI</span>' : ''}</span>
+            <span class="m-name" title="${esc(md(m.model))}">${esc(md(m.model))} ${ciBadge(m)}</span>
             <span class="m-val ${dir}">${signed(m.trendPoints)}</span>
             <span class="m-sub">${esc(mk(m.make))} · MII ${fmt1(m.mii)}</span>
         </button>`).join('') : `<p class="empty-note">Nothing beyond normal noise.</p>`}</div>`;
@@ -1741,10 +1769,10 @@ function renderDrawer() {
             </div>
         </div>
         <div>
-            <div class="block-title">Models <span class="muted">${m.models.length}${ciCount ? ` · ${ciCount} BMW CI model groups` : ''} · select for sales</span></div>
+            <div class="block-title">Models <span class="muted">${m.models.length}${ciCount ? ` · ${ciCount} HAGI index model group${ciCount === 1 ? '' : 's'}` : ''} · select for sales</span></div>
             <ul class="model-list">${m.models.map((x, i) => `
                 <li><button data-i="${i}">
-                    <span style="min-width:0"><span class="ml-name">${esc(md(x.model))}</span> ${x.ci ? '<span class="ci-badge">BMW CI</span>' : ''}
+                    <span style="min-width:0"><span class="ml-name">${esc(md(x.model))}</span> ${ciBadge(x)}
                         <span class="ml-sub" style="display:block">${x.auctions === 1 ? '1 auction' : `${fmtInt(x.auctions)} auctions`} · ${formatPrice(x.avgPrice)} · ${x.sellThrough}% sold</span></span>
                     <span class="ml-right"><span class="ml-mii">${fmt1(x.mii)}</span><span class="ml-d">${deltaHTML(x.trendPoints, x.trendAuctions)}</span></span>
                 </button></li>`).join('')}
@@ -1752,7 +1780,7 @@ function renderDrawer() {
         </div>`;
     body.querySelectorAll('.model-list button').forEach(b => {
         const x = m.models[+b.dataset.i];
-        b.addEventListener('click', () => showLots(make, [x.model], fullName(make, x.model), b, x.ci ? 'BMW CI constituent' : undefined));
+        b.addEventListener('click', () => showLots(make, [x.model], fullName(make, x.model), b, x.ci ? `${x.ci.index.short} constituent` : undefined));
     });
 
     const p = palette();
@@ -1893,6 +1921,7 @@ function syncURL() {
     if (STATE.vclass !== 'all') params.set('class', STATE.vclass);
     if (STATE.minAuctions !== 10) params.set('min', STATE.minAuctions);
     if (STATE.make) params.set('make', STATE.make);
+    if (STATE.ciIndex !== 'bmw-ci') params.set('index', STATE.ciIndex);
     const hash = params.toString();
     history.replaceState(null, '', hash ? `#${hash}` : location.pathname + location.search);
 }
@@ -1903,6 +1932,7 @@ function readURL() {
     if (['all', 'car', 'motorcycle'].includes(cls)) STATE.vclass = cls;
     const min = parseInt(params.get('min'), 10);
     if ([5, 10, 20, 50].includes(min)) STATE.minAuctions = min;
+    if (HAGI_INDEXES.byId(params.get('index'))) STATE.ciIndex = params.get('index');
     return { period: params.get('period'), make: params.get('make') };
 }
 
@@ -2009,6 +2039,14 @@ function bindControls() {
         e.currentTarget.setAttribute('aria-pressed', String(STATE.ciOnly));
         renderModels();
     });
+    document.querySelectorAll('#ciSeg button').forEach(b => b.addEventListener('click', () => {
+        STATE.ciIndex = b.dataset.index;
+        syncURL();
+        renderHero();
+        renderInsights();
+        renderCI();
+        renderMap();
+    }));
     document.querySelectorAll('#makeViewSeg button').forEach(b => b.addEventListener('click', () => {
         STATE.makeView = b.dataset.view;
         document.querySelectorAll('#makeViewSeg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
