@@ -148,8 +148,10 @@ async function loadBatAuctionCounts() {
                             url: (row.auction_url || '').trim(),
                             year: parseBatNumber(row.year),
                             views: parseBatNumber(row.views),
+                            watchers: parseBatNumber(row.watchers),
                             bids: parseBatNumber(row.bids),
-                            comments: parseBatNumber(row.comments)
+                            comments: parseBatNumber(row.comments),
+                            category: (row.category || '').trim()
                         });
                     });
                     // Sort each model's lots chronologically for the scatter/table.
@@ -260,21 +262,6 @@ function median(values) {
     return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
 }
 
-// Median of [value, weight] pairs: the value at which half the weight lies
-// on either side. Rows are model-month averages, so weighting each by its lot
-// count gives the typical lot rather than the typical model.
-function weightedMedian(pairs) {
-    const v = pairs.filter(([x, w]) => x != null && isFinite(x) && w > 0).sort((a, b) => a[0] - b[0]);
-    const total = v.reduce((s, [, w]) => s + w, 0);
-    if (!total) return null;
-    let acc = 0;
-    for (const [x, w] of v) {
-        acc += w;
-        if (acc >= total / 2) return x;
-    }
-    return v[v.length - 1][0];
-}
-
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : null; };
 
 // Makes and models for one period's rows. Trends are applied afterwards,
@@ -346,7 +333,51 @@ function applyTrends(target, fromP, toP) {
     });
 }
 
-function buildDataset(rows) {
+// The class a lot belongs to: its model's, from the MII rows, or for a model
+// that never sold (so has no row), Bring a Trailer's own category.
+let KEY_CLASS = null;
+function lotClass(key, lot) {
+    if (!KEY_CLASS) {
+        KEY_CLASS = new Map();
+        RAW_ROWS.forEach(r => {
+            const c = (r.vehicle_class || '').trim();
+            if (c) KEY_CLASS.set(modelJoinKey(r.manufacturer, r.model), c);
+        });
+    }
+    return KEY_CLASS.get(key) || (lot.category === 'Motorcycles' ? 'motorcycle' : 'car');
+}
+
+// The market's level for each month and the year to date (see
+// MII.marketLevel): every vehicle listing in the class, sold or not, against
+// the base month. Keyed like the dataset's months; the base is the first
+// complete month when June 2025 is not in the data.
+function marketLevels(ds, vclass, rawMonths, keyOf) {
+    const out = { levels: {}, base: null };
+    if (!window.MII?.marketLevel) return out;
+    const byMonth = new Map(rawMonths.map(m => [m, []]));
+    Object.entries(batLots).forEach(([key, lots]) => lots.forEach(l => {
+        const bucket = byMonth.get(l.period);
+        if (bucket && (vclass === 'all' || lotClass(key, l) === vclass)) bucket.push(l);
+    }));
+    const latest = rawMonths[rawMonths.length - 1];
+    const solid = m => m !== latest && !ds.thin.has(keyOf(m)) && byMonth.get(m).length > 0;
+    const base = solid(MII.MARKET_BASE) ? MII.MARKET_BASE : rawMonths.find(solid);
+    if (!base) return out;
+    const baseMedians = MII.marketMedians(byMonth.get(base));
+    const levelOf = lots => {
+        const med = MII.marketMedians(lots);
+        return { ...med, level: lots.length ? MII.marketLevel(med, baseMedians) : null };
+    };
+    rawMonths.forEach(m => { out.levels[keyOf(m)] = levelOf(byMonth.get(m)); });
+    if (ds.ytdMonths) {
+        const ytd = rawMonths.filter(m => ds.ytdMonths.includes(keyOf(m)));
+        out.levels.YTD = levelOf(ytd.flatMap(m => byMonth.get(m)));
+    }
+    out.base = base;
+    return out;
+}
+
+function buildDataset(rows, vclass = 'all') {
     // Only well-formed periods: some upstream rows carry a model name (R60, K100)
     // in the quarter column, which would otherwise become a bogus month.
     const valid = rows.filter(r => /^\d{4}(-\d{2}|Q[1-4])$/.test(String(r.quarter || '').trim()) && r.manufacturer && r.model && isFinite(parseFloat(r.mii_score)));
@@ -389,6 +420,9 @@ function buildDataset(rows) {
         }
     }
     ds.periods = ds.quarterData.YTD ? [...ds.months, 'YTD'] : [...ds.months];
+    const market = marketLevels(ds, vclass, rawMonths, keyOf);
+    ds.levels = market.levels;
+    ds.levelBase = market.base;
     return ds;
 }
 
@@ -426,7 +460,7 @@ const PRICE_TICKS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6, 2e6, 5e6];
 function datasetFor(vclass) {
     if (!DATASETS[vclass]) {
         const rows = vclass === 'all' ? RAW_ROWS : RAW_ROWS.filter(r => (r.vehicle_class || '').trim() === vclass);
-        DATASETS[vclass] = buildDataset(rows);
+        DATASETS[vclass] = buildDataset(rows, vclass);
     }
     return DATASETS[vclass];
 }
@@ -596,15 +630,16 @@ function marketStats(key) {
         const sold = q.reduce((s, m) => s + m.sold, 0);
         // The market's level. MII ranks each car against its own month, so
         // the market's average MII sits near 50 by design and cannot show
-        // whether the market as a whole is drawing more attention. Views per
-        // listing can: the typical (lot-weighted median) listing across every
-        // make in view, qualifying or not.
-        const viewed = p.manufacturers.flatMap(m => m.models).filter(m => m.auctions > 0 && m.avgViews > 0);
+        // whether the market as a whole is drawing more attention. The level
+        // can: the typical listing's views, watchers, comments and bids,
+        // across every make in view, qualifying or not (see marketLevels).
+        const typical = DS.levels?.[key] || null;
         out = {
             makes: q.length,
             allMakes: p.manufacturers.length,
             mii: q.length ? mean(q.map(m => m.miiScore)) : null,
-            views: weightedMedian(viewed.map(m => [m.avgViews, m.auctions])),
+            level: typical?.level ?? null,
+            typical,
             auctions,
             sellThrough: auctions > 0 ? (sold / auctions) * 100 : null,
             medianPrice: median(models.map(m => m.avgPrice).filter(v => v > 0)),
@@ -861,7 +896,8 @@ function renderHero() {
     const thin = DS.thin?.has(key);
 
     document.getElementById('periodTitle').textContent = isYTD ? `· ${longPeriod(key)}` : `· ${longPeriod(key)}`;
-    document.getElementById('marketLevel').textContent = ms?.views != null ? fmtInt(ms.views) : '–';
+    document.getElementById('marketLevel').textContent = ms?.level != null ? fmt1(ms.level) : '–';
+    document.getElementById('marketLabel').textContent = DS.levelBase ? `Market Interest Index, ${longPeriod(DS.levelBase)} = 100` : 'Market Interest Index';
 
     // Headline change, in percent. Month view: vs the month before (skipping
     // an incomplete one). YTD: the year's first complete month to its last,
@@ -869,11 +905,11 @@ function renderHero() {
     const deltaEl = document.getElementById('marketDelta');
     let diff = null;
     if (isYTD && DS.ytdFrom) {
-        const a = marketStats(DS.ytdFrom)?.views, b = marketStats(DS.ytdTo)?.views;
+        const a = marketStats(DS.ytdFrom)?.level, b = marketStats(DS.ytdTo)?.level;
         if (a && b != null) diff = (b / a - 1) * 100;
     } else if (base && !thin) {
-        const a = marketStats(base)?.views;
-        if (a && ms?.views != null) diff = (ms.views / a - 1) * 100;
+        const a = marketStats(base)?.level;
+        if (a && ms?.level != null) diff = (ms.level / a - 1) * 100;
     }
     if (thin) {
         deltaEl.style.display = '';
@@ -900,17 +936,20 @@ function renderLede(ms, diff) {
     }
     const p = period(key);
     const leader = p.manufacturers.filter(m => m.auctions >= STATE.minAuctions && isNamedMake(m.make))[0];
-    // `diff` is the percent change in views per listing (see renderHero).
+    // `diff` is the percent change in the market's level (see renderHero).
     const parts = [];
-    const views = ms.views != null ? `<strong>${fmtInt(ms.views)}</strong> views` : 'an unknown number of views';
+    const t = ms.typical;
+    const drew = t?.views != null
+        ? `<strong>${fmtInt(t.views)}</strong> views, <strong>${fmtInt(t.watchers)}</strong> watchers and <strong>${fmtInt(t.comments)}</strong> comments`
+        : 'an unknown amount of attention';
     if (key === 'YTD') {
-        parts.push(`So far this year the typical listing has drawn ${views}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
-        if (diff != null) parts[0] += `, ${Math.abs(diff) < 0.5 ? 'flat' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}%`} from ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
+        parts.push(`So far this year the typical listing has drawn ${drew}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
+        if (diff != null) parts[0] += `, with attention ${Math.abs(diff) < 0.5 ? 'flat' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}%`} from ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
     } else {
-        parts.push(`The typical listing ${key.endsWith('-MTD') ? 'is drawing' : 'drew'} ${views}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
+        parts.push(`The typical listing ${key.endsWith('-MTD') ? 'is drawing' : 'drew'} ${drew}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
         const b = solidBaseline(key);
         if (DS.thin?.has(key)) parts[0] += ', in a month the source data only partly captured';
-        else if (diff != null && b) parts[0] += `, ${Math.abs(diff) < 0.5 ? 'flat on' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}% on`} ${monthName(b)}`;
+        else if (diff != null && b) parts[0] += `, with attention ${Math.abs(diff) < 0.5 ? 'flat on' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}% on`} ${monthName(b)}`;
     }
     parts[0] += '.';
     if (leader) parts.push(`<strong>${esc(mk(leader.make))}</strong> leads ${ms.makes} qualifying makes.`);
@@ -948,7 +987,7 @@ function renderMarketChart() {
     const hero = document.querySelector('.hero');
     const p = palette(hero);
     const months = DS.months;
-    const values = months.map(k => marketStats(k)?.views ?? null);
+    const values = months.map(k => marketStats(k)?.level ?? null);
     const selIdx = STATE.period === 'YTD' ? -1 : months.indexOf(STATE.period);
     const last = months.length - 1;
     const partial = months[last]?.endsWith('-MTD');
@@ -982,6 +1021,15 @@ function renderMarketChart() {
                 // Dashed into the month in progress, and on either side of an
                 // incomplete month so a capture gap does not read as a move.
                 segment: { borderDash: c => ((partial && c.p1DataIndex === last) || DS.thin?.has(months[c.p0DataIndex]) || DS.thin?.has(months[c.p1DataIndex]) ? [5, 5] : undefined) }
+            }, {
+                // The base month's level, for reference.
+                data: months.map(() => 100),
+                borderColor: 'rgba(255,255,255,.22)',
+                borderWidth: 1,
+                borderDash: [2, 4],
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                fill: false
             }]
         },
         options: {
@@ -998,20 +1046,23 @@ function renderMarketChart() {
                 crosshair: { color: 'rgba(255,255,255,.25)' },
                 tooltip: {
                     ...tooltipStyle(),
+                    filter: item => item.datasetIndex === 0,
                     callbacks: {
                         title: items => longPeriod(months[items[0].dataIndex]),
-                        label: ctx => `${fmtInt(ctx.parsed.y)} views per listing`,
+                        label: ctx => `Index ${fmt1(ctx.parsed.y)}`,
                         footer: items => {
                             const k = months[items[0].dataIndex], s = marketStats(k);
                             if (!s) return '';
-                            return `${fmtInt(s.auctions)} auctions · ${s.makes} makes` + (DS.thin?.has(k) ? '\nIncomplete month: most auctions were not captured' : '');
+                            const t = s.typical;
+                            const typical = t?.views != null ? `Typical listing: ${fmtInt(t.views)} views · ${fmtInt(t.watchers)} watchers\n${fmtInt(t.comments)} comments · ${fmtInt(t.bids)} bids\n` : '';
+                            return typical + `${fmtInt(s.auctions)} auctions · ${s.makes} makes` + (DS.thin?.has(k) ? '\nIncomplete month: most auctions were not captured' : '');
                         }
                     }
                 }
             },
             scales: {
                 x: axis(p, { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 9 } }),
-                y: axis(p, { grace: '12%', ticks: { maxTicksLimit: 4, callback: v => `${(Number(v) / 1000).toFixed(1)}k` } })
+                y: axis(p, { grace: '12%', ticks: { maxTicksLimit: 4, callback: v => Math.round(Number(v)) } })
             }
         },
         plugins: [crosshairPlugin]

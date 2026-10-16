@@ -691,6 +691,47 @@
         return true;
     }
 
+    // The market's level: how much attention the typical listing draws in a
+    // month, as an index with June 2025 = 100.
+    //
+    // A car's MII ranks it against the other cars of its own month, so the
+    // market's average MII sits near 50 every month by design and cannot show
+    // the market as a whole drawing more or less attention. This can. It takes
+    // the median listing's views, watchers, comments and bids for the month
+    // (vehicle listings only, sold or not), compares each with the base month
+    // and averages the four ratios geometrically, equally weighted, so a 10%
+    // rise in any one moves the level the same amount. Price is left out: it
+    // is a measure of value, not attention, and has its own figure.
+    //
+    // June 2025 is the base because capture began on 16 May 2025, so it is the
+    // first full month. The base never moves, so a published level stays put.
+    var MARKET_INPUTS = ['views', 'watchers', 'comments', 'bids'];
+    var MARKET_BASE = '2025-06';
+    function middle(values) {
+        var v = values.filter(function (x) { return typeof x === 'number' && isFinite(x) && x >= 0; })
+            .sort(function (a, b) { return a - b; });
+        if (!v.length) return null;
+        var mid = Math.floor(v.length / 2);
+        return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
+    }
+    // The typical listing of a set of lots: { lots, views, watchers, ... }.
+    function marketMedians(lots) {
+        var out = { lots: lots.length };
+        MARKET_INPUTS.forEach(function (f) {
+            out[f] = middle(lots.map(function (l) { return l[f]; }));
+        });
+        return out;
+    }
+    // The level of `medians` against the base month's. Null when no input was
+    // measured at both ends.
+    function marketLevel(medians, baseMedians) {
+        if (!medians || !baseMedians) return null;
+        var logs = MARKET_INPUTS.filter(function (f) { return medians[f] > 0 && baseMedians[f] > 0; })
+            .map(function (f) { return Math.log(medians[f] / baseMedians[f]); });
+        if (!logs.length) return null;
+        return 100 * Math.exp(logs.reduce(function (s, x) { return s + x; }, 0) / logs.length);
+    }
+
     global.MII = {
         COMPONENTS: COMPONENTS,
         VERSION: VERSION,
@@ -715,6 +756,11 @@
         // Attention: search, YouTube and social for every model every month.
         attentionFor: attentionFor,
         ATTENTION_INPUTS: ATTENTION_INPUTS,
+        // The market's level: the typical listing against June 2025 = 100.
+        MARKET_INPUTS: MARKET_INPUTS,
+        MARKET_BASE: MARKET_BASE,
+        marketMedians: marketMedians,
+        marketLevel: marketLevel,
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
         // three months). Shared by pages that join monthly bat.csv data onto
         // MII rows of either grain.
