@@ -87,16 +87,11 @@ function injectAuctionCounts(rows, batCounts) {
 }
 
 // MII component weights — the actual formula, kept in sync with mii-normalize.js.
-const COMPONENTS = [
-    { key: 'price_normalized',                  label: 'Sale Price',     weight: 0.20, get color() { return T().series[0]; } },
-    { key: 'bids_normalized',                   label: 'Bid Activity',   weight: 0.20, get color() { return T().series[1]; } },
-    { key: 'views_normalized',                  label: 'View Count',     weight: 0.15, get color() { return T().series[2]; } },
-    { key: 'google_trends_interest_normalized', label: 'Google Trends',  weight: 0.15, get color() { return T().series[3]; } },
-    { key: 'comments_normalized',               label: 'Comments',       weight: 0.10, get color() { return T().series[4]; } },
-    { key: 'youtube_total_views_normalized',    label: 'YouTube',        weight: 0.10, get color() { return T().series[5]; } },
-    { key: 'social_score_normalized',           label: 'Social',         weight: 0.05, get color() { return T().series[6]; } },
-    { key: 'age_normalized',                    label: 'Vehicle Age',    weight: 0.05, get color() { return T().series[7]; } },
-];
+// The MII inputs and weights, from mii-normalize.js (the one definition),
+// heaviest first, each with a series colour.
+const COMPONENTS = MII.COMPONENTS.slice().sort((a, b) => b.weight - a.weight).map((c, i) => ({
+    key: c.norm, label: c.label, weight: c.weight, get color() { return T().series[i]; }
+}));
 
 const METRIC_LABELS = {
     mii_score:              'MII Score',

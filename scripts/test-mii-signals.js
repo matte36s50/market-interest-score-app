@@ -243,6 +243,11 @@ check('the row is renamed before the join', rows[0].model, '996 911 Turbo');
 near('both names\' values are averaged', rows[0].google_trends_interest, 50);
 MII.setModels(null);
 
+console.log('one definition of the inputs');
+near('the weights sum to 1', MII.COMPONENTS.reduce((s, c) => s + c.weight, 0), 1, 1e-9);
+check('attention keeps the proportions its inputs carry in MII',
+    MII.ATTENTION_INPUTS.map(a => a.weight), [0.10, 0.15, 0.05]);
+
 console.log('attention');
 // 40 models, two months. Model i ranks i-th on every input, except that
 // model 0 has no YouTube row (a measured zero) and August has search

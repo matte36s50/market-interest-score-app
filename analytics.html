@@ -136,6 +136,15 @@
             </div>
         </div>
 
+        <!-- Absolute interest: the car's own level beside the market's -->
+        <div class="chart-container mb-5">
+            <h2 class="font-semibold text-[13px] text-ink">Absolute Interest: Views per Sale</h2>
+            <p class="text-[11px] text-faint mt-0.5 mb-4" style="max-width:760px">MII ranks each car against the other cars of its month, so it shows a car gaining or losing ground. This is the raw level behind it: the average views on each car's sales that month, with the market's typical sale dashed. On this log scale equal slopes mean equal growth, so a car climbing more steeply than the market is gaining ground, and both rising together is growth the MII does not show.</p>
+            <div style="height: 340px;">
+                <canvas id="absoluteChart" role="img" aria-label="Views per sale by month, against the market"></canvas>
+            </div>
+        </div>
+
         <!-- Component percentile jitter plot -->
         <div class="chart-container mb-5">
             <h2 class="font-semibold text-[13px] text-ink">Component Percentiles</h2>
@@ -190,7 +199,7 @@
         </div>
     </footer>
 
-<script src="mii-normalize.js?v=9"></script>
-<script src="analytics.js?v=7"></script>
+<script src="mii-normalize.js?v=10"></script>
+<script src="analytics.js?v=8"></script>
 </body>
 </html>
