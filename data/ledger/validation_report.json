@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "as_of": null,
+  "files": [],
+  "ignored_files": [],
+  "errors": [
+    "ledger-reader@mii-ledger.iam.gserviceaccount.com can see no spreadsheets in Drive folder 1UXQTkUXMd6yJR-AlmSQGRr2ss1cqbE5y. Share the folder with ledger-reader@mii-ledger.iam.gserviceaccount.com as Viewer (LEDGER_README.md, section 1)."
+  ],
+  "warnings": [],
+  "schema_gaps": [
+    "Outlier status (charity lots, one-off coachbuilt commissions, works competition cars, specification-premium cars) exists only as free text in `notes`. It is not machine-readable; review_queue.csv lists candidate rows for a human to triage. A structured column is needed."
+  ]
+}
