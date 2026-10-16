@@ -85,14 +85,14 @@
 
             <div class="hero-grid">
                 <div class="hero-figure">
-                    <span class="label" id="marketLabel">Market Interest Index</span>
+                    <span class="label" id="marketLabel">Market MII, the typical listing</span>
                     <span class="value" id="marketLevel">–</span>
                     <span class="delta" id="marketDelta"></span>
-                    <p class="scale-note">The attention the typical listing draws: its views, watchers, comments and bids. Each car's own MII, 0 to 100, ranks it against the other cars of its month, so 50 is the median car every month; the market's own rise and fall shows here.</p>
+                    <p class="scale-note" id="marketNote"></p>
                 </div>
                 <div>
-                    <div class="hero-chart"><canvas id="marketChart" aria-label="Market Interest Index by month" role="img"></canvas></div>
-                    <div class="hero-chart-caption"><span>Market Interest Index by month</span><span id="marketChartNote"></span></div>
+                    <div class="hero-chart"><canvas id="marketChart" aria-label="Market MII by month" role="img"></canvas></div>
+                    <div class="hero-chart-caption"><span>Market MII by month</span><span id="marketChartNote"></span></div>
                 </div>
             </div>
 
@@ -295,7 +295,7 @@
             <div class="foot-grid">
                 <div>
                     <h3>How MII is built</h3>
-                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile among that month's cars. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed. The headline index is the market's level: the typical listing's views, watchers, comments and bids, each against June 2025 and averaged with equal weight, so June 2025 = 100. <a href="media/mii-explainer.mp4" data-explainer>Watch the 2-minute explainer</a>.</p>
+                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile among that month's cars. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed. The headline Market MII is the market's level on the same 0 to 100 scale: the typical listing's views, watchers, comments and bids, each as a percentile among every listing from June 2025 to May 2026 and averaged with equal weight, so 50 is the typical listing of that year. <a href="media/mii-explainer.mp4" data-explainer>Watch the 2-minute explainer</a>.</p>
                 </div>
                 <div>
                     <h3>Confidence and noise</h3>
@@ -357,9 +357,9 @@
     <div class="tip" id="tip" role="tooltip"></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="mii-normalize.js?v=11"></script>
+    <script src="mii-normalize.js?v=12"></script>
     <script src="hagi-indexes.js?v=1"></script>
-    <script src="app.js?v=10"></script>
+    <script src="app.js?v=11"></script>
     <script src="explainer.js?v=3"></script>
 </body>
 </html>

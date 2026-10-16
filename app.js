@@ -347,33 +347,32 @@ function lotClass(key, lot) {
     return KEY_CLASS.get(key) || (lot.category === 'Motorcycles' ? 'motorcycle' : 'car');
 }
 
-// The market's level for each month and the year to date (see
-// MII.marketLevel): every vehicle listing in the class, sold or not, against
-// the base month. Keyed like the dataset's months; the base is the first
-// complete month when June 2025 is not in the data.
+// The Market MII for each month and the year to date (see MII.marketScore):
+// every vehicle listing in the class, sold or not, ranked against every
+// listing of the reference year. Keyed like the dataset's months. When the
+// data does not reach back to most of the reference year, the first twelve
+// complete months stand in for it.
 function marketLevels(ds, vclass, rawMonths, keyOf) {
-    const out = { levels: {}, base: null };
-    if (!window.MII?.marketLevel) return out;
+    const out = { levels: {}, ref: null };
+    if (!window.MII?.marketScore) return out;
     const byMonth = new Map(rawMonths.map(m => [m, []]));
     Object.entries(batLots).forEach(([key, lots]) => lots.forEach(l => {
         const bucket = byMonth.get(l.period);
         if (bucket && (vclass === 'all' || lotClass(key, l) === vclass)) bucket.push(l);
     }));
     const latest = rawMonths[rawMonths.length - 1];
-    const solid = m => m !== latest && !ds.thin.has(keyOf(m)) && byMonth.get(m).length > 0;
-    const base = solid(MII.MARKET_BASE) ? MII.MARKET_BASE : rawMonths.find(solid);
-    if (!base) return out;
-    const baseMedians = MII.marketMedians(byMonth.get(base));
-    const levelOf = lots => {
-        const med = MII.marketMedians(lots);
-        return { ...med, level: lots.length ? MII.marketLevel(med, baseMedians) : null };
-    };
-    rawMonths.forEach(m => { out.levels[keyOf(m)] = levelOf(byMonth.get(m)); });
+    const { from, to } = MII.MARKET_REFERENCE;
+    let refMonths = rawMonths.filter(m => m >= from && m <= to && m !== latest);
+    if (refMonths.length < 6) refMonths = rawMonths.filter(m => m !== latest).slice(0, 12);
+    const refLots = refMonths.flatMap(m => byMonth.get(m));
+    if (!refLots.length) return out;
+    const ref = MII.marketReference(refLots);
+    rawMonths.forEach(m => { out.levels[keyOf(m)] = MII.marketScore(byMonth.get(m), ref); });
     if (ds.ytdMonths) {
         const ytd = rawMonths.filter(m => ds.ytdMonths.includes(keyOf(m)));
-        out.levels.YTD = levelOf(ytd.flatMap(m => byMonth.get(m)));
+        out.levels.YTD = MII.marketScore(ytd.flatMap(m => byMonth.get(m)), ref);
     }
-    out.base = base;
+    out.ref = { from: refMonths[0], to: refMonths[refMonths.length - 1] };
     return out;
 }
 
@@ -422,7 +421,7 @@ function buildDataset(rows, vclass = 'all') {
     ds.periods = ds.quarterData.YTD ? [...ds.months, 'YTD'] : [...ds.months];
     const market = marketLevels(ds, vclass, rawMonths, keyOf);
     ds.levels = market.levels;
-    ds.levelBase = market.base;
+    ds.levelRef = market.ref;
     return ds;
 }
 
@@ -629,17 +628,18 @@ function marketStats(key) {
         const tradedModels = p.manufacturers.reduce((s, m) => s + m.models.filter(x => x.auctions > 0).length, 0);
         const auctions = q.reduce((s, m) => s + m.auctions, 0);
         const sold = q.reduce((s, m) => s + m.sold, 0);
-        // The market's level. MII ranks each car against its own month, so
-        // the market's average MII sits near 50 by design and cannot show
-        // whether the market as a whole is drawing more attention. The level
+        // The Market MII. A car's MII ranks it against its own month, so the
+        // market's average MII sits near 50 by design and cannot show whether
+        // the market as a whole is drawing more attention. The Market MII
         // can: the typical listing's views, watchers, comments and bids,
-        // across every make in view, qualifying or not (see marketLevels).
+        // ranked against a fixed reference year, across every make in view,
+        // qualifying or not (see marketLevels).
         const typical = DS.levels?.[key] || null;
         out = {
             makes: q.length,
             allMakes: p.manufacturers.length,
             mii: q.length ? mean(q.map(m => m.miiScore)) : null,
-            level: typical?.level ?? null,
+            level: typical?.score ?? null,
             typical,
             auctions,
             sellThrough: auctions > 0 ? (sold / auctions) * 100 : null,
@@ -914,19 +914,22 @@ function renderHero() {
 
     document.getElementById('periodTitle').textContent = isYTD ? `· ${longPeriod(key)}` : `· ${longPeriod(key)}`;
     document.getElementById('marketLevel').textContent = ms?.level != null ? fmt1(ms.level) : '–';
-    document.getElementById('marketLabel').textContent = DS.levelBase ? `Market Interest Index, ${longPeriod(DS.levelBase)} = 100` : 'Market Interest Index';
+    const ref = DS.levelRef;
+    document.getElementById('marketNote').textContent = ref
+        ? `0 to 100: where the typical listing ranks on its views, watchers, comments and bids among every listing from ${longPeriod(ref.from)} to ${longPeriod(ref.to)}. 50 is as much attention as the typical listing of that year.`
+        : '';
 
-    // Headline change, in percent. Month view: vs the month before (skipping
+    // Headline change, in points. Month view: vs the month before (skipping
     // an incomplete one). YTD: the year's first complete month to its last,
     // on monthly figures so both ends are like for like.
     const deltaEl = document.getElementById('marketDelta');
     let diff = null;
     if (isYTD && DS.ytdFrom) {
         const a = marketStats(DS.ytdFrom)?.level, b = marketStats(DS.ytdTo)?.level;
-        if (a && b != null) diff = (b / a - 1) * 100;
+        if (a != null && b != null) diff = b - a;
     } else if (base && !thin) {
         const a = marketStats(base)?.level;
-        if (a && ms?.level != null) diff = (ms.level / a - 1) * 100;
+        if (a != null && ms?.level != null) diff = ms.level - a;
     }
     if (thin) {
         deltaEl.style.display = '';
@@ -936,7 +939,7 @@ function renderHero() {
     } else {
         deltaEl.style.display = '';
         const cls = Math.abs(diff) < 0.5 ? 'muted' : diff > 0 ? 'up' : 'down';
-        deltaEl.innerHTML = `<span class="${cls}">${diff > 0 ? '▲' : diff < 0 ? '▼' : ''} ${signed(diff)}%</span><span class="muted">${esc(isYTD ? baselinePhrase(key) : `vs ${shortPeriod(base)}`)}</span>`;
+        deltaEl.innerHTML = `<span class="${cls}">${diff > 0 ? '▲' : diff < 0 ? '▼' : ''} ${signed(diff)} pts</span><span class="muted">${esc(isYTD ? baselinePhrase(key) : `vs ${shortPeriod(base)}`)}</span>`;
     }
 
     renderLede(ms, diff);
@@ -953,20 +956,21 @@ function renderLede(ms, diff) {
     }
     const p = period(key);
     const leader = p.manufacturers.filter(m => m.auctions >= STATE.minAuctions && isNamedMake(m.make))[0];
-    // `diff` is the percent change in the market's level (see renderHero).
+    // `diff` is the change in the Market MII, in points (see renderHero).
     const parts = [];
     const t = ms.typical;
     const drew = t?.views != null
         ? `<strong>${fmtInt(t.views)}</strong> views, <strong>${fmtInt(t.watchers)}</strong> watchers and <strong>${fmtInt(t.comments)}</strong> comments`
         : 'an unknown amount of attention';
+    const move = (d, on) => (Math.abs(d) < 0.5 ? `flat ${on}` : `${d > 0 ? 'up' : 'down'} ${Math.abs(d).toFixed(1)} points ${on}`);
     if (key === 'YTD') {
         parts.push(`So far this year the typical listing has drawn ${drew}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
-        if (diff != null) parts[0] += `, with attention ${Math.abs(diff) < 0.5 ? 'flat' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}%`} from ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
+        if (diff != null) parts[0] += `, with the Market MII ${move(diff, 'from')} ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
     } else {
         parts.push(`The typical listing ${key.endsWith('-MTD') ? 'is drawing' : 'drew'} ${drew}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
         const b = solidBaseline(key);
         if (DS.thin?.has(key)) parts[0] += ', in a month the source data only partly captured';
-        else if (diff != null && b) parts[0] += `, with attention ${Math.abs(diff) < 0.5 ? 'flat on' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}% on`} ${monthName(b)}`;
+        else if (diff != null && b) parts[0] += `, with the Market MII ${move(diff, 'on')} ${monthName(b)}`;
     }
     parts[0] += '.';
     if (leader) parts.push(`<strong>${esc(mk(leader.make))}</strong> leads ${ms.makes} qualifying makes.`);
@@ -1009,7 +1013,7 @@ function renderMarketChart() {
     const last = months.length - 1;
     const partial = months[last]?.endsWith('-MTD');
     const anyThin = months.some(k => DS.thin?.has(k));
-    document.getElementById('marketChartNote').textContent = `${partial ? 'Dashed: month in progress. ' : ''}${anyThin ? 'Hollow: month only partly captured. ' : ''}Select a month to open it`;
+    document.getElementById('marketChartNote').textContent = `Dotted: 50. ${partial ? 'Dashed: month in progress. ' : ''}${anyThin ? 'Hollow: month only partly captured. ' : ''}Select a month to open it`;
 
     const chart = makeChart('marketChart', {
         type: 'line',
@@ -1039,8 +1043,8 @@ function renderMarketChart() {
                 // incomplete month so a capture gap does not read as a move.
                 segment: { borderDash: c => ((partial && c.p1DataIndex === last) || DS.thin?.has(months[c.p0DataIndex]) || DS.thin?.has(months[c.p1DataIndex]) ? [5, 5] : undefined) }
             }, {
-                // The base month's level, for reference.
-                data: months.map(() => 100),
+                // 50: the typical listing of the reference year.
+                data: months.map(() => 50),
                 borderColor: 'rgba(255,255,255,.22)',
                 borderWidth: 1,
                 borderDash: [2, 4],
@@ -1066,7 +1070,7 @@ function renderMarketChart() {
                     filter: item => item.datasetIndex === 0,
                     callbacks: {
                         title: items => longPeriod(months[items[0].dataIndex]),
-                        label: ctx => `Index ${fmt1(ctx.parsed.y)}`,
+                        label: ctx => `Market MII ${fmt1(ctx.parsed.y)}`,
                         footer: items => {
                             const k = months[items[0].dataIndex], s = marketStats(k);
                             if (!s) return '';

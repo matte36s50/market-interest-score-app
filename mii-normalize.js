@@ -691,25 +691,29 @@
         return true;
     }
 
-    // The market's level: how much attention the typical listing draws in a
-    // month, as an index with June 2025 = 100.
+    // The Market MII: how much attention the typical listing draws in a
+    // month, on the MII's own 0 to 100 scale.
     //
     // A car's MII ranks it against the other cars of its own month, so the
     // market's average MII sits near 50 every month by design and cannot show
-    // the market as a whole drawing more or less attention. This can. It takes
-    // the median listing's views, watchers, comments and bids for the month
-    // (vehicle listings only, sold or not), compares each with the base month
-    // and averages the four ratios geometrically, equally weighted, so a 10%
-    // rise in any one moves the level the same amount. Price is left out: it
-    // is a measure of value, not attention, and has its own figure.
+    // the market as a whole drawing more or less attention. The Market MII
+    // ranks against a fixed year instead. Each listing (vehicles only, sold or
+    // not) gets the percentile of its views, watchers, comments and bids among
+    // every listing of the reference year, June 2025 to May 2026, averaged
+    // with equal weight; a month's Market MII is its typical (median)
+    // listing's score. So 50 is as much attention as the typical listing of
+    // the reference year, and like any MII it can never pass 100. Price is
+    // left out: it is a measure of value, not attention, and has its own
+    // figure.
     //
-    // June 2025 is the base because capture began on 16 May 2025, so it is the
-    // first full month. The base never moves, so a published level stays put.
+    // The reference year starts in June 2025 because capture began on 16 May
+    // 2025, so June is the first full month. It never moves, so a published
+    // month's score stays put as new months arrive.
     var MARKET_INPUTS = ['views', 'watchers', 'comments', 'bids'];
-    var MARKET_BASE = '2025-06';
+    var MARKET_REFERENCE = { from: '2025-06', to: '2026-05' };
+    function measured(x) { return typeof x === 'number' && isFinite(x) && x >= 0; }
     function middle(values) {
-        var v = values.filter(function (x) { return typeof x === 'number' && isFinite(x) && x >= 0; })
-            .sort(function (a, b) { return a - b; });
+        var v = values.filter(measured).sort(function (a, b) { return a - b; });
         if (!v.length) return null;
         var mid = Math.floor(v.length / 2);
         return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
@@ -722,14 +726,36 @@
         });
         return out;
     }
-    // The level of `medians` against the base month's. Null when no input was
-    // measured at both ends.
-    function marketLevel(medians, baseMedians) {
-        if (!medians || !baseMedians) return null;
-        var logs = MARKET_INPUTS.filter(function (f) { return medians[f] > 0 && baseMedians[f] > 0; })
-            .map(function (f) { return Math.log(medians[f] / baseMedians[f]); });
-        if (!logs.length) return null;
-        return 100 * Math.exp(logs.reduce(function (s, x) { return s + x; }, 0) / logs.length);
+    // Each input's values over the reference year's lots, sorted, for ranking.
+    function marketReference(lots) {
+        var ref = {};
+        MARKET_INPUTS.forEach(function (f) {
+            ref[f] = lots.map(function (l) { return l[f]; }).filter(measured).sort(function (a, b) { return a - b; });
+        });
+        return ref;
+    }
+    // Share of `sorted` below x, ties counted half (a mid-rank percentile).
+    function rankIn(sorted, x) {
+        var lo = 0, hi = sorted.length;
+        while (lo < hi) { var m = (lo + hi) >> 1; if (sorted[m] < x) lo = m + 1; else hi = m; }
+        var below = lo;
+        hi = sorted.length;
+        while (lo < hi) { var n = (lo + hi) >> 1; if (sorted[n] <= x) lo = n + 1; else hi = n; }
+        return (below + lo) / 2 / sorted.length;
+    }
+    // One listing's score, 0 to 100, against the reference; null when none of
+    // its inputs was measured.
+    function listingScore(lot, ref) {
+        var ps = MARKET_INPUTS.filter(function (f) { return measured(lot[f]) && ref[f] && ref[f].length; })
+            .map(function (f) { return rankIn(ref[f], lot[f]); });
+        return ps.length ? 100 * ps.reduce(function (s, p) { return s + p; }, 0) / ps.length : null;
+    }
+    // A set of lots' Market MII (its median listing's score) and typical
+    // listing: { score, lots, views, watchers, comments, bids }.
+    function marketScore(lots, ref) {
+        var out = marketMedians(lots);
+        out.score = lots.length ? middle(lots.map(function (l) { return listingScore(l, ref); })) : null;
+        return out;
     }
 
     global.MII = {
@@ -756,11 +782,13 @@
         // Attention: search, YouTube and social for every model every month.
         attentionFor: attentionFor,
         ATTENTION_INPUTS: ATTENTION_INPUTS,
-        // The market's level: the typical listing against June 2025 = 100.
+        // The Market MII: the typical listing, 0 to 100, against a fixed year.
         MARKET_INPUTS: MARKET_INPUTS,
-        MARKET_BASE: MARKET_BASE,
+        MARKET_REFERENCE: MARKET_REFERENCE,
         marketMedians: marketMedians,
-        marketLevel: marketLevel,
+        marketReference: marketReference,
+        listingScore: listingScore,
+        marketScore: marketScore,
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
         // three months). Shared by pages that join monthly bat.csv data onto
         // MII rows of either grain.
