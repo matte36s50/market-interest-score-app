@@ -657,10 +657,32 @@
     // A feed with no `category` column filters nothing, which keeps older
     // exports working rather than silently emptying the dataset.
     var NON_VEHICLE_CATEGORIES = { 'parts': 1, 'wheels': 1 };
+    //
+    // The category misses a few. Bring a Trailer files memorabilia under the
+    // make "Parts and Automobilia" (signs, gas pumps, scale models, go-karts),
+    // sometimes with a vehicle category; and a loose engine, a set of seats or
+    // a sign can sit under a real model with no category at all ("engine 355"
+    // under the E30 M3, "seats 198" under the 911SC). Those are caught by the
+    // listing title, but only when it carries no model year: a real car's
+    // title starts with one, and one that does not ("427-powered 1965 Pontiac
+    // Tempest LeMans hardtop") is ruled out only by words that never describe
+    // a car, or by a title that is nothing but a component and a counter.
+    var NON_VEHICLE_MAKE = /^parts and automobilia\b/i;
+    var NOT_A_CAR_WORDS = /\b(signs?|neon|gas pumps?|oil tanks?|parts|wheels|tires|seats|literature|memorabilia|automobilia|pinball|scale models?|pedal cars?)\b/;
+    var BARE_COMPONENT = /^(engine|motor|transmission|gearbox|hardtop|seats?|tires?|wheels?|parts)( \d+)*$/;
+    function listingTitle(row) {
+        var slug = String(row.auction_url == null ? '' : row.auction_url).replace(/\/+$/, '').split('/').pop();
+        return slug.replace(/-/g, ' ').toLowerCase();
+    }
     function isVehicleLot(row) {
         if (!row) return false;
         var cat = String(row.category == null ? '' : row.category).trim().toLowerCase();
-        return !NON_VEHICLE_CATEGORIES[cat];
+        if (NON_VEHICLE_CATEGORIES[cat]) return false;
+        if (NON_VEHICLE_MAKE.test(String(row.make == null ? '' : row.make).trim())) return false;
+        var title = listingTitle(row);
+        if (title && !/^(19|20)\d{2}\b/.test(title)
+            && (NOT_A_CAR_WORDS.test(title) || BARE_COMPONENT.test(title))) return false;
+        return true;
     }
 
     global.MII = {

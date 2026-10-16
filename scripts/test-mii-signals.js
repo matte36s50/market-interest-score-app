@@ -132,6 +132,17 @@ check('category match ignores case and padding',
 check('a replica with no year in its slug is still a vehicle',
     MII.isVehicleLot({ category: '', auction_url: 'https://bringatrailer.com/listing/superformance-mkiii-50/' }), true);
 check('a null row is not a vehicle', MII.isVehicleLot(null), false);
+const lot = (slug, extra) => ({ category: '', make: 'Porsche', auction_url: `https://bringatrailer.com/listing/${slug}/`, ...extra });
+check('memorabilia under Parts and Automobilia is not a vehicle, whatever its category',
+    MII.isVehicleLot(lot('gmc-trucks-double-sided-porcelain-sign', { make: 'Parts and Automobilia', category: 'Truck & 4x4' })), false);
+check('a loose engine filed under a model is not a vehicle', MII.isVehicleLot(lot('engine-355')), false);
+check('nor a set of seats', MII.isVehicleLot(lot('seats-198')), false);
+check('nor a sign with a model in its name', MII.isVehicleLot(lot('chevrolet-tailgate-neon-sign')), false);
+check('nor wheels for a car', MII.isVehicleLot(lot('18x8-5-and-18x10-5-bbs-wheels-for-ferrari-550-maranello-2')), false);
+check('a hardtop body style with no leading year is still a car',
+    MII.isVehicleLot(lot('427-powered-1965-pontiac-tempest-lemans-hardtop')), true);
+check('a dated title is a car even if it names a part',
+    MII.isVehicleLot(lot('1971-porsche-911t-with-spare-engine')), true);
 
 console.log('methodology version + effective weights');
 check('a version is published', typeof MII.VERSION === 'string' && /^\d{4}\.\d{2}$/.test(MII.VERSION), true);
