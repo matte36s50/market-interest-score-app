@@ -18,6 +18,7 @@
   },
   "manufacturer_groups": {
     "Maybach": "Mercedes-Benz",
+    "Mercedes": "Mercedes-Benz",
     "Mercedes-AMG": "Mercedes-Benz",
     "Mercedes-Maybach": "Mercedes-Benz"
   },
@@ -70,32 +71,6 @@
           }
         },
         {
-          "manufacturer": "Mercedes",
-          "mai": 0.498462,
-          "avg_P": 1.0,
-          "avg_Q": 0.498462,
-          "avg_R": 1.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "q_basis": {
-            "native": 1
-          },
-          "makes": {
-            "Mercedes": 1
-          },
-          "events": 1,
-          "lots": 1,
-          "apex": 1,
-          "non_apex": 0,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 1,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          }
-        },
-        {
           "manufacturer": "Lamborghini",
           "mai": 0.280089,
           "avg_P": 0.321429,
@@ -118,6 +93,36 @@
             "sold_with_price": 3,
             "sold_without_price": 0,
             "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.238855,
+          "avg_P": 0.464286,
+          "avg_Q": 0.685438,
+          "avg_R": 0.666667,
+          "events_scored": 3,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 2
+          },
+          "makes": {
+            "Maybach": 2,
+            "Mercedes": 1,
+            "Mercedes-AMG": 2,
+            "Mercedes-Benz": 22,
+            "Mercedes-Maybach": 1
+          },
+          "events": 9,
+          "lots": 28,
+          "apex": 3,
+          "non_apex": 8,
+          "apex_unknown": 17,
+          "apex_by_result": {
+            "sold_with_price": 2,
+            "sold_without_price": 0,
+            "not_sold": 1,
             "withdrawn": 0
           }
         },
@@ -168,35 +173,6 @@
           "apex_unknown": 3,
           "apex_by_result": {
             "sold_with_price": 2,
-            "sold_without_price": 0,
-            "not_sold": 1,
-            "withdrawn": 0
-          }
-        },
-        {
-          "manufacturer": "Mercedes-Benz",
-          "mai": 0.109052,
-          "avg_P": 0.196429,
-          "avg_Q": 0.872414,
-          "avg_R": 0.5,
-          "events_scored": 2,
-          "events_unscored": 0,
-          "q_basis": {
-            "native": 1
-          },
-          "makes": {
-            "Maybach": 2,
-            "Mercedes-AMG": 2,
-            "Mercedes-Benz": 22,
-            "Mercedes-Maybach": 1
-          },
-          "events": 9,
-          "lots": 27,
-          "apex": 2,
-          "non_apex": 8,
-          "apex_unknown": 17,
-          "apex_by_result": {
-            "sold_with_price": 1,
             "sold_without_price": 0,
             "not_sold": 1,
             "withdrawn": 0
@@ -452,26 +428,28 @@
           }
         },
         {
-          "manufacturer": "Mercedes",
-          "mai": 0.498462,
-          "avg_P": 1.0,
-          "avg_Q": 0.498462,
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.358282,
+          "avg_P": 0.625,
+          "avg_Q": 0.685438,
           "avg_R": 1.0,
-          "events_scored": 1,
+          "events_scored": 2,
           "events_unscored": 0,
           "q_basis": {
-            "native": 1
+            "native": 2
           },
           "makes": {
-            "Mercedes": 1
+            "Mercedes": 1,
+            "Mercedes-AMG": 1,
+            "Mercedes-Benz": 9
           },
-          "events": 1,
-          "lots": 1,
-          "apex": 1,
-          "non_apex": 0,
-          "apex_unknown": 0,
+          "events": 6,
+          "lots": 11,
+          "apex": 2,
+          "non_apex": 5,
+          "apex_unknown": 4,
           "apex_by_result": {
-            "sold_with_price": 1,
+            "sold_with_price": 2,
             "sold_without_price": 0,
             "not_sold": 0,
             "withdrawn": 0
@@ -524,33 +502,6 @@
           "apex_unknown": 0,
           "apex_by_result": {
             "sold_with_price": 3,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          }
-        },
-        {
-          "manufacturer": "Mercedes-Benz",
-          "mai": 0.218103,
-          "avg_P": 0.25,
-          "avg_Q": 0.872414,
-          "avg_R": 1.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "q_basis": {
-            "native": 1
-          },
-          "makes": {
-            "Mercedes-AMG": 1,
-            "Mercedes-Benz": 9
-          },
-          "events": 6,
-          "lots": 10,
-          "apex": 1,
-          "non_apex": 5,
-          "apex_unknown": 4,
-          "apex_by_result": {
-            "sold_with_price": 1,
             "sold_without_price": 0,
             "not_sold": 0,
             "withdrawn": 0
