@@ -67,6 +67,11 @@ CURRENT_HEADER = [
 # Columns the two pre-record_id ledgers lack.
 LEGACY_MISSING = {"record_id", "supersedes", "high_estimate_usd"}
 
+# Columns a ledger may carry; blank where it does not (ledgers before 19 Oct
+# 2026). hagi_index names the HAGI index(es) a car belongs to, '; '-separated.
+OPTIONAL_COLUMNS = ["hagi_index"]
+HAGI_INDEXES = {"HAGI Top", "HAGI F", "HAGI P", "BMW CI", "MBCI", "MBCI Emerging"}
+
 OUTCOMES = {"sold", "not_sold", "withdrawn"}
 PREMIUM_VALUES = {"yes", "no", "unknown"}
 STATUSES = {"CONFIRMED", "REPORTED", "UNVERIFIED"}
@@ -81,7 +86,7 @@ DATASET_COLUMNS = [
     "outcome", "result_state",
     "price", "currency", "premium_included", "price_usd", "fx_rate", "fx_date",
     "estimate_low", "estimate_high", "estimate_currency", "high_estimate_usd",
-    "status", "source_url", "first_reported", "notes",
+    "status", "source_url", "first_reported", "notes", "hagi_index",
     "source_file_title", "source_file_id",
 ]
 
@@ -218,14 +223,15 @@ def read_ledger(ledger_file, ledger_date, values, report):
     if missing:
         report.error(f"{label}: missing column(s) {missing}.")
         return []
-    extra = [h for h in header if h and h not in CURRENT_HEADER]
+    extra = [h for h in header if h and h not in CURRENT_HEADER and h not in OPTIONAL_COLUMNS]
     if extra:
         report.warn(f"{label}: ignoring unknown column(s) {extra}.")
 
     index = {h: i for i, h in enumerate(header) if h}
     rows = []
     for n, raw in enumerate(values[1:], start=2):
-        cells = {c: _cell(raw[index[c]]) if index[c] < len(raw) else "" for c in CURRENT_HEADER}
+        cells = {c: _cell(raw[index[c]]) if c in index and index[c] < len(raw) else ""
+                 for c in CURRENT_HEADER + OPTIONAL_COLUMNS}
         if not any(cells.values()):
             continue
         cells["_file"] = ledger_file
@@ -295,7 +301,11 @@ def normalize_row(cells, report):
         report.warn(f"{where} ({cells['record_id']}): price without price_usd; left blank, not converted.")
 
     ledger_iso = cells["_ledger_date"].isoformat()
-    out = {c: cells[c] for c in CURRENT_HEADER}
+    out = {c: cells[c] for c in CURRENT_HEADER + OPTIONAL_COLUMNS}
+    unknown = [t for t in (t.strip() for t in cells["hagi_index"].split(";")) if t and t not in HAGI_INDEXES]
+    if unknown:
+        report.warn(f"{where} ({cells['record_id']}): hagi_index {unknown} is not one of "
+                    f"{sorted(HAGI_INDEXES)}; kept as recorded.")
     for col in NUMERIC_COLUMNS:
         out[col] = fmt_number(nums[col])
     out.update({

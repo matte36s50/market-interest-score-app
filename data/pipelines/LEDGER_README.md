@@ -133,6 +133,7 @@ reformatting.
 | `outcome` | `sold` / `not_sold` / `withdrawn` |
 | `result_state` | Derived: `sold_with_price` / `sold_without_price` / `not_sold` / `withdrawn`. A sale is not assumed to have a price |
 | `price`, `currency` | As published by the house: the source of truth |
+| `hagi_index` | The HAGI index(es) the car belongs to (`HAGI Top`, `HAGI F`, `HAGI P`, `BMW CI`, `MBCI`, `MBCI Emerging`), `; `-separated. Optional: ledgers before 19 Oct 2026 lack it, and it is blank there. A name outside the six is kept, with a warning |
 | `premium_included` | `yes` / `no` / `unknown`. Hammer-only and premium-inclusive prices aren't comparable; MAI output is segmented by this |
 | `price_usd`, `fx_rate` | As recorded. Never re-converted |
 | `fx_date` | Derived: the ledger date, i.e. the week whose rate `fx_rate` is. Blank when `fx_rate` is blank. Makes future re-basing possible |
