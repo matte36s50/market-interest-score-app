@@ -20,11 +20,18 @@ A comprehensive, interactive dashboard for tracking collector car market interes
   generated one-paragraph read of the month (or year to date)
 - **What stands out**: insight cards built from the data (leading make,
   biggest real mover, most-watched model, interest outrunning price, most
-  bidding, BMW CI vs the market). Moves inside sampling noise are never reported.
-- **HAGI BMW Classic Index spotlight**: the 16 constituents (the committee's
-  launch list plus the E46 M3, added in 2026; defined in `bmw-ci.js`), their
-  MII, rank against every model, trend, and CI vs all BMW vs the market.
-  Constituents are also highlighted in the models table and the value map.
+  bidding, the selected HAGI index vs the market). Moves inside sampling noise
+  are never reported.
+- **HAGI index spotlight**: switch between the BMW Classic Index (16 cars: the
+  committee's launch list plus the E46 M3, added in 2026), the MBCI (23
+  collectors' Mercedes-Benz) and the MBCI Emerging Classics (6), all defined in
+  `hagi-indexes.js`. Each shows its constituents' MII, rank against every
+  model, trend and attention, and the index vs all of its make vs the market.
+  Bring a Trailer files some constituents inside a wider group; one is matched
+  to that group ("≈ group match") only when at least a third of the group's
+  listings are the constituent, and otherwise shown as not measured
+  separately. Constituents of every index are badged in the models table, and
+  the value map highlights the selected index.
 - **Value map**: every ranked model's MII against its average price (log
   scale), with the interest its price predicts, so cars drawing more attention
   than their price explains stand out
@@ -139,7 +146,7 @@ models that month. 50 is the median model. A month is scored only when all
 three inputs were broadly measured (at least half as many models as that
 input's best month), so the month in progress and the months before Google
 Trends collection began are left blank rather than scored on a different
-mix. `MII.attentionFor(make, model, month)` returns it; the BMW CI section
+mix. `MII.attentionFor(make, model, month)` returns it; the HAGI index section
 shows the basket's attention (all constituents, traded or not), each
 constituent's attention, and the attention line on its chart.
 
@@ -324,10 +331,10 @@ sales. Treat any badge below High as a sample-size caveat, not a market signal.
 - **Manufacturers**: search, minimum auctions (5/10/20/50), sort by any column,
   or switch to the heatmap to compare makes month by month. Select a make for
   its drawer.
-- **Models**: search any model, or filter to BMW CI constituents. Select a
+- **Models**: search any model, or filter to HAGI index constituents. Select a
   model (anywhere on the page) for its individual Bring a Trailer sales.
 - **Share / PDF**: the URL always reflects the current view
-  (`#period=2026-09&class=car&make=BMW`), so a copied link reopens it exactly.
+  (`#period=2026-09&class=car&make=BMW&index=mbci`), so a copied link reopens it exactly.
 
 ## Technology Stack
 

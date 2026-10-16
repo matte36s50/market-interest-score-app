@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Interest Index</title>
-    <meta name="description" content="Live market interest in collector cars, scored from Bring a Trailer auctions, search and social signals. With a spotlight on the HAGI BMW Classic Index.">
+    <meta name="description" content="Live market interest in collector cars, scored from Bring a Trailer auctions, search and social signals. With a spotlight on the HAGI BMW and Mercedes-Benz classic indexes.">
     <meta name="theme-color" content="#0d0e10">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Market Interest Index: collector car market interest">
-    <meta property="og:description" content="Which collector cars buyers are watching, bidding on and talking about, from Bring a Trailer auction data, with the HAGI BMW Classic Index highlighted.">
+    <meta property="og:description" content="Which collector cars buyers are watching, bidding on and talking about, from Bring a Trailer auction data, with the HAGI BMW and Mercedes-Benz indexes highlighted.">
     <meta property="og:url" content="https://matte36s50.github.io/market-interest-score-app/">
     <meta property="og:image" content="https://matte36s50.github.io/market-interest-score-app/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -113,14 +113,19 @@
             <div class="insights" id="insights"></div>
         </section>
 
-        <!-- BMW CI spotlight -->
+        <!-- HAGI index spotlight -->
         <section class="ci-band" aria-labelledby="ciTitle">
             <div class="wrap">
                 <div class="section-head">
                     <div>
-                        <span class="kicker">Index spotlight</span>
+                        <span class="kicker">HAGI index spotlight</span>
                         <h2 id="ciTitle">HAGI BMW Classic Index</h2>
                         <p id="ciSub">How much attention the 16 cars in the BMW CI draw on Bring a Trailer, against every BMW and the whole market.</p>
+                    </div>
+                    <div class="seg" id="ciSeg" role="group" aria-label="HAGI index">
+                        <button data-index="bmw-ci" aria-pressed="true">BMW CI</button>
+                        <button data-index="mbci" aria-pressed="false">MBCI</button>
+                        <button data-index="mbci-emerging" aria-pressed="false">MBCI Emerging</button>
                     </div>
                 </div>
                 <div class="ci-top">
@@ -230,7 +235,7 @@
                 <div class="toolbar">
                     <label class="sr-only" for="modelSearch">Search models</label>
                     <input type="search" id="modelSearch" class="input" placeholder="Search any model">
-                    <button class="chip-btn" id="ciOnly" aria-pressed="false">BMW CI only</button>
+                    <button class="chip-btn" id="ciOnly" aria-pressed="false">HAGI index cars only</button>
                     <span class="spacer"></span>
                     <span class="muted" style="font-size:13px">Select a model for its individual sales</span>
                 </div>
@@ -298,7 +303,7 @@
                 </div>
                 <div>
                     <h3>Data</h3>
-                    <p>Bring a Trailer auction results, refreshed twice daily. Cars &amp; Bids is not included. BMW CI constituents follow the HAGI index committee list, with the E46 M3 added in 2026.</p>
+                    <p>Bring a Trailer auction results, refreshed twice daily. Cars &amp; Bids is not included. HAGI index constituents follow HAGI's published lists: the BMW CI (with the E46 M3 added in 2026), the MBCI and the MBCI Emerging Classics.</p>
                 </div>
             </div>
             <div class="foot-bottom">
@@ -353,8 +358,8 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="mii-normalize.js?v=11"></script>
-    <script src="bmw-ci.js?v=1"></script>
-    <script src="app.js?v=9"></script>
+    <script src="hagi-indexes.js?v=1"></script>
+    <script src="app.js?v=10"></script>
     <script src="explainer.js?v=3"></script>
 </body>
 </html>
