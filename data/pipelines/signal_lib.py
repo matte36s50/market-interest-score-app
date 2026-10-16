@@ -135,7 +135,23 @@ def period_months(period):
     return [f"{q.group(1)}-{first + k:02d}" for k in range(3)]
 
 
-def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None):
+MODELS_PATH = os.path.join(DATA_DIR, "models.csv")
+
+
+def load_model_map(path=MODELS_PATH):
+    """Our name for each upstream model name, from data/models.csv
+    (model_list.py): {(manufacturer, source_model): (model, flag)}. Empty
+    when the file is absent, which leaves every name as upstream sent it."""
+    out = {}
+    for r in read_rows(path):
+        man = (r.get("manufacturer") or "").strip()
+        src = (r.get("source_model") or "").strip()
+        if man and src:
+            out[(man, src)] = ((r.get("model") or src).strip(), (r.get("flag") or "").strip())
+    return out
+
+
+def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None, raw=False):
     """Distinct models from the MII results CSV.
 
     Returns a list of dicts sorted by descending auction_count, so a
@@ -143,9 +159,15 @@ def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None):
     auction volume — the ones a user is most likely to look at — before the
     long tail.
 
+    Upstream names are mapped to ours (data/models.csv), so duplicates of one
+    car ("Volkswagen Tiguan", "TIGUAN") are one model, measured once, and each
+    record carries its `flag`. Pass raw=True for the names exactly as
+    upstream sent them.
+
     Pass a dict as `periods` to also collect, from the same read, the months
     each model has results for: {(manufacturer, model): {"YYYY-MM", ...}}.
     """
+    model_map = {} if raw else load_model_map()
     if re.match(r"^https?://", source):
         text = http_get(source, timeout=120)
         reader = csv.DictReader(io.StringIO(text))
@@ -158,7 +180,8 @@ def load_universe(source=MII_CSV_URL, min_auctions=0, periods=None):
         mod = (row.get("model") or "").strip()
         if not man or not mod or man.lower() == "unknown":
             continue
-        rec = agg.setdefault((man, mod), {"manufacturer": man, "model": mod,
+        mod, flag = model_map.get((man, mod), (mod, ""))
+        rec = agg.setdefault((man, mod), {"manufacturer": man, "model": mod, "flag": flag,
                                           "auction_count": 0, "vehicle_class": ""})
         if not rec["vehicle_class"]:
             rec["vehicle_class"] = (row.get("vehicle_class") or "").strip().lower()

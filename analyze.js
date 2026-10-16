@@ -18,6 +18,8 @@ async function loadBatAuctionCounts() {
         clearTimeout(timeoutId);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
+        // The join keys go through our model list, which loads with the signals.
+        if (window.MII) await MII.ready;
 
         return new Promise(resolve => {
             Papa.parse(text, {
@@ -41,11 +43,7 @@ async function loadBatAuctionCounts() {
                         const year = yearPart.length === 2 ? '20' + yearPart : yearPart;
                         const period = `${year}-${month}`;
 
-                        let model = rawModel;
-                        if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
-                        model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
-
-                        const key = `${make}|${model}|${period}`;
+                        const key = `${batModelKey(make, rawModel)}|${period}`;
                         counts[key] = (counts[key] || 0) + 1;
                     });
                     resolve({ counts, rows: results.data });
@@ -64,9 +62,19 @@ async function loadBatAuctionCounts() {
 // monthly ('2025-05') and quarterly ('2025Q2') MII files. When bat.csv has no
 // match, keep the pipeline's own auction_count instead of zeroing the row
 // (a key-format mismatch here once blanked the whole leaderboard).
+// The make/model half of a join key: through our model list when it is
+// loaded (case, brand prefix and duplicate names resolve to one model), else
+// the brand prefix and year range stripped as before.
+function batModelKey(make, model) {
+    if (window.MII && MII.modelKey) return MII.modelKey(make, MII.canonicalModel(make, model));
+    let m = model;
+    if (m.startsWith(make + ' ')) m = m.slice(make.length + 1);
+    return `${make}|${m.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim()}`;
+}
+
 function injectAuctionCounts(rows, batCounts) {
     rows.forEach(row => {
-        const prefix = `${row.manufacturer}|${row.model}|`;
+        const prefix = `${batModelKey(row.manufacturer, row.model)}|`;
         const period = String(row.quarter || '').trim();
         const months = (window.MII && MII.periodMonths) ? MII.periodMonths(period) : [period];
         let sum = 0, found = false;
@@ -209,6 +217,11 @@ function getLotCorrelationRecords() {
         let model = rawModel;
         if (model.startsWith(make + ' ')) model = model.slice(make.length + 1);
         model = model.replace(/\s*\(\d{4}-\d{4}\)$/, '').trim();
+        // Our model name, so a lot lines up with the model-month it belongs to.
+        if (window.MII && MII.canonicalModel) {
+            const named = MII.canonicalModel(make, rawModel);
+            if (named !== rawModel) model = named;
+        }
 
         // Price: USD only — mixed currencies would distort the price axis.
         const amtRaw = (row.sale_amount || '').trim();
@@ -304,6 +317,9 @@ async function init() {
         ]);
         rawData = loadedData;
         batRawRows = batResult.rows;
+        // One row per model per month before the lot counts go on: a
+        // duplicate name would otherwise be credited with the same lots twice.
+        if (window.MII) MII.canonicalize(rawData);
         injectAuctionCounts(rawData, batResult.counts);
 
         // Replace upstream min-max normalization with percentile ranks and

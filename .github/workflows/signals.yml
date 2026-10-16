@@ -71,6 +71,14 @@ jobs:
       - name: Unit tests
         run: python data/pipelines/test_pipelines.py
 
+      # Our names for upstream's models (data/models.csv): one name per car,
+      # duplicates merged. Runs first so every collector below measures each
+      # model once, under that name. If it fails, the last committed list is
+      # used.
+      - name: Model list
+        continue-on-error: true
+        run: python data/pipelines/model_list.py
+
       # Each collector is continue-on-error: a rate limit, an exhausted quota
       # or a missing secret must not stop the others or lose the rows already
       # collected. Every one of them checkpoints its output as it goes.
@@ -118,7 +126,7 @@ jobs:
           # A collector that was skipped (no secret) or that has never run
           # leaves its file absent, and a bare `git add` on a missing path is
           # a fatal error — so stage only what exists.
-          for f in data/social_signals.csv data/wikipedia_slugs.csv \
+          for f in data/models.csv data/social_signals.csv data/wikipedia_slugs.csv \
                    data/google_trends.csv data/google_trends_state.csv \
                    data/youtube_signals.csv data/youtube_state.csv \
                    data/youtube_channels_state.csv \
