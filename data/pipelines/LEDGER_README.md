@@ -154,7 +154,7 @@ reformatting.
 | `ignored_files` | Files skipped and why (replaced by rev, not a ledger title) |
 | `counts.rows_read` / `rows_after_dedupe` / `rows_superseded` | |
 | `counts.rows_by_house`, `rows_by_status`, `rows_by_premium_included`, `rows_by_result_state` | Over the deduplicated rows |
-| `counts.rows_missing_high_estimate_usd` | Lots that can't be classed apex or non-apex |
+| `counts.rows_missing_high_estimate_usd` | Lots with no USD high estimate. `ledger_mai.py` ranks those that sold with a price by their price; the rest can't be classed |
 | `counts.rows_missing_published_estimate` | Blank `estimate_high` |
 | `counts.rows_missing_price` (+ `_by_outcome`) | Blank price, split into not-sold and sold-but-withheld |
 | `counts.rows_with_estimate_currency_unlike_price_currency` | |
@@ -191,9 +191,12 @@ lasting fix is a structured column in the ledger.
   their own manufacturer. To add a group, add a row; a make listed twice is an error. The mapping is explicit,
   not a name pattern, because a pattern would fold "Frazer Nash-BMW" (licence-built, not a BMW) into BMW.
   It works on the make only, so a pre-war Maybach would also land under Mercedes-Benz.
-- **Apex rule:** `high_estimate_usd ≥ 500,000`. A blank `high_estimate_usd` is
-  **`apex_unknown`**, counted separately and shown next to every manufacturer figure.
-  It never counts as non-apex.
+- **Apex rule:** apex value ≥ 500,000, where the apex value is `high_estimate_usd`, or, when that is
+  blank, `price_usd` of a lot sold with a price: the fallback the store-fed index uses (`apex.py`), so
+  Mecum, Barrett-Jackson and duPont REGISTRY Live results, which carry no estimates, are ranked. A lot with
+  neither (unsold, or sold with the price withheld) is **`apex_unknown`**, counted separately and shown
+  next to every manufacturer figure. It never counts as non-apex. `apex_from_sold_price` counts the apex
+  lots ranked by price.
 - **Coverage per manufacturer and per event**, for `all` and each `premium_included`
   segment: apex / non-apex / apex_unknown, with apex lots split into sold-with-price,
   sold-without-price, not sold and withdrawn.
@@ -204,7 +207,7 @@ nothing is imputed. Per manufacturer × event, over that event's apex lots:
 | Term | Definition |
 |---|---|
 | P | Manufacturer's apex lots ÷ all apex lots at the event. apex_unknown lots are in neither count |
-| Q | Mean of price ÷ high estimate over apex lots **sold with a price**. Uses the house's currency (`price / estimate_high`) when price and estimate share a currency, so no FX enters; otherwise `price_usd / high_estimate_usd` as recorded. `q_basis` counts which was used |
+| Q | Mean of price ÷ high estimate over apex lots **sold with a price**. Uses the house's currency (`price / estimate_high`) when price and estimate share a currency, so no FX enters; otherwise `price_usd / high_estimate_usd` as recorded. `q_basis` counts which was used. A lot ranked by its sold price has no estimate, so it is left out of Q |
 | R | Sold (with or without a published price) ÷ (sold + not sold) |
 
 ```
@@ -213,7 +216,10 @@ MAI = mean over events of (P × Q × R)        # events unweighted
 
 - **Withdrawn** lots are left out of P and R, matching `export_live_lots.py`.
 - **Nothing sold** → R = 0 → the term is 0. That's the product's real value, not a filled-in Q.
-- **Sold but no usable price** (for example, the GT2 Clubsport) → Q unknown → the term is unknown. It
+- **All of a make's apex lots at the event ranked by sold price** → no Q → the term is P × R, counted in
+  `events_without_q`. Q is left out, not filled in. Such a term reads high beside a full P × Q × R: Q is
+  usually under 1, and only sold lots can be ranked by price, so R is 1.
+- **Sold but no usable price, and nothing ranked by price** (for example, the GT2 Clubsport) → Q unknown → the term is unknown. It
   is left out of the mean and counted in `events_unscored`; it is never counted as 0.
 - **No known term** → `mai` is null, shown as "n/a".
 - **Unweighted events.** v1 weights events by an auction rating built on each sale's total lot count,
@@ -221,4 +227,5 @@ MAI = mean over events of (P × Q × R)        # events unweighted
 - Scores are computed separately for each `premium_included` segment and for `all`.
 
 Each manufacturer row in `mai_ledger.json` carries `mai`, `avg_P`, `avg_Q`, `avg_R`, `events_scored`,
-`events_unscored`, `q_basis`, the makes grouped into it, and the apex / non_apex / apex_unknown counts.
+`events_unscored`, `events_without_q`, `q_basis`, the makes grouped into it, and the apex / non_apex /
+apex_unknown / apex_from_sold_price counts.

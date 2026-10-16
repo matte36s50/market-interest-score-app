@@ -387,12 +387,25 @@ class LedgerMai(unittest.TestCase):
         self.rows = current
         self.out = ledger_mai.build(current)
 
-    def test_blank_high_estimate_is_apex_unknown_not_non_apex(self):
-        mecum = by_lot(self.rows)["20260926-MEC-S261"]
-        self.assertEqual(ledger_mai.apex_class(mecum), "apex_unknown")
+    def test_blank_high_estimate_falls_back_to_the_sold_price(self):
+        lots = by_lot(self.rows)
+        # Mecum publishes no estimates: sold at $4.05M, so apex by its price.
+        self.assertEqual(ledger_mai.apex_basis(lots["20260926-MEC-S261"]), "sold_price")
+        self.assertEqual(ledger_mai.apex_class(lots["20260926-MEC-S261"]), "apex")
+        # Goodwood lot 3 has no estimate and sold for about $335K: non-apex by its price.
+        self.assertEqual(ledger_mai.apex_class(lots["20260919-BON-GWR03"]), "non_apex")
         ferrari = next(m for m in self.out["segments"]["all"]["manufacturers"] if m["manufacturer"] == "Ferrari")
-        # F40, Daytona, Dino are apex; Mecum 812 and Goodwood 365 GT are unknown.
-        self.assertEqual((ferrari["apex"], ferrari["apex_unknown"], ferrari["non_apex"]), (2, 2, 1))
+        # Apex: Zurich F40 and Daytona by estimate, the Mecum car by price.
+        self.assertEqual((ferrari["apex"], ferrari["apex_unknown"], ferrari["non_apex"]), (3, 0, 2))
+        self.assertEqual(ferrari["apex_from_sold_price"], 1)
+
+    def test_no_estimate_and_no_sold_price_is_apex_unknown_not_non_apex(self):
+        for state in ("not_sold", "sold_without_price", "withdrawn"):
+            row = lot("A", state, high_estimate_usd="")
+            self.assertEqual(ledger_mai.apex_class(row), "apex_unknown", state)
+        # Sold, but no USD figure to rank by.
+        self.assertEqual(ledger_mai.apex_class(lot("A", "sold_with_price", "900000", high_estimate_usd="")),
+                         "apex_unknown")
 
     def test_default_status_filter_excludes_unverified_and_says_so(self):
         sf = self.out["status_filter"]
@@ -436,15 +449,18 @@ class LedgerMai(unittest.TestCase):
             os.remove(fh.name)
 
     def test_fixture_mai_by_hand(self):
-        """Zurich is the only event with apex lots (CONFIRMED + REPORTED):
-        Ferrari F40 and Daytona sold, the Mercedes-AMG ONE did not.
+        """Two events have apex lots (CONFIRMED + REPORTED).
+        Zurich: Ferrari F40 and Daytona sold, the Mercedes-AMG ONE did not.
           Ferrari  P = 2/3, R = 1,
                    Q = mean(3,323,750 / 3,500,000 CHF native,
                             822,610 / 855,225 USD, since CHF price vs EUR estimate)
-          Mercedes-Benz  P = 1/3, R = 0 -> term 0 (a real zero, not a filled-in Q)"""
+          Mercedes-Benz  P = 1/3, R = 0 -> term 0 (a real zero, not a filled-in Q)
+        Mecum Nashville: the Ferrari, apex by its sold price, is the only apex
+        lot. No estimate, so no Q: the term is P x R = 1."""
         makers = {m["manufacturer"]: m for m in self.out["segments"]["all"]["manufacturers"]}
         q = (3323750 / 3500000 + 822610 / 855225) / 2
-        self.assertAlmostEqual(makers["Ferrari"]["mai"], 2 / 3 * q * 1, places=6)
+        self.assertAlmostEqual(makers["Ferrari"]["mai"], (2 / 3 * q * 1 + 1) / 2, places=6)
+        self.assertEqual((makers["Ferrari"]["events_scored"], makers["Ferrari"]["events_without_q"]), (2, 1))
         self.assertEqual(makers["Ferrari"]["q_basis"], {"native": 1, "usd": 1})
         self.assertEqual(makers["Mercedes-Benz"]["mai"], 0.0)
         self.assertIsNone(makers["Mercedes-Benz"]["avg_Q"])
@@ -507,6 +523,31 @@ class MaiFormula(unittest.TestCase):
         a = ledger_mai.compute_mai(rows, rows)["A"]
         self.assertAlmostEqual(a["avg_Q"], 0.9)
         self.assertEqual(a["q_basis"], {"native": 1})
+
+    def test_lot_ranked_by_sold_price_counts_in_p_and_r_but_not_q(self):
+        rows = [lot("A", "sold_with_price", "900000", estimate_high="1000000"),
+                lot("B", "sold_with_price", "2000000", price_usd="2000000", high_estimate_usd="")]
+        out = ledger_mai.compute_mai(rows, rows)
+        self.assertEqual((out["A"]["avg_P"], out["B"]["avg_P"]), (0.5, 0.5))
+        self.assertIsNone(out["B"]["avg_Q"])
+        self.assertEqual(out["B"]["q_basis"], {})
+
+    def test_make_ranked_only_by_sold_price_scores_p_times_r(self):
+        rows = [lot("A", "sold_with_price", "900000", estimate_high="1000000"),
+                lot("B", "sold_with_price", "2000000", price_usd="2000000", high_estimate_usd="")]
+        out = ledger_mai.compute_mai(rows, rows)
+        self.assertAlmostEqual(out["A"]["mai"], 0.5 * 0.9)
+        self.assertAlmostEqual(out["B"]["mai"], 0.5)
+        self.assertEqual((out["B"]["events_scored"], out["B"]["events_without_q"], out["B"]["events_unscored"]),
+                         (1, 1, 0))
+        self.assertEqual(out["A"]["events_without_q"], 0)
+
+    def test_q_from_estimated_lots_only_when_a_make_has_both(self):
+        rows = [lot("A", "sold_with_price", "900000", estimate_high="1000000"),
+                lot("A", "sold_with_price", "3000000", price_usd="3000000", high_estimate_usd="")]
+        a = ledger_mai.compute_mai(rows, rows)["A"]
+        self.assertEqual((a["avg_Q"], a["events_without_q"]), (0.9, 0))
+        self.assertAlmostEqual(a["mai"], 0.9)
 
     def test_q_falls_back_to_recorded_usd_across_currencies(self):
         rows = [lot("A", "sold_with_price", "900000", currency="CHF", estimate_high="800000",
