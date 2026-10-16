@@ -449,8 +449,9 @@ def report_json(report, current, all_rows, queue):
     }
     if current is not None:
         out["counts"] = counts(current, all_rows)
+        # The count only: the report is published with the site, and the
+        # rows (with their notes) stay in review_queue.csv, which is not.
         out["review_queue_count"] = len(queue)
-        out["review_queue"] = queue
     return out
 
 

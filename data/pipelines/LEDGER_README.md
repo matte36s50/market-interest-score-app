@@ -18,12 +18,18 @@ Outputs, all in `data/ledger/`:
 
 | File | What |
 |---|---|
-| `ledger_results.csv` | The dataset: one row per lot key, at its latest ledger |
-| `ledger_rows_all.csv` | Every row read, with `is_current`. Use it to trace a figure's history |
-| `review_queue.csv` | Rows whose notes read like an outlier caveat, for a human to triage |
-| `validation_report.json` | Counts, errors and warnings. Written on every run, including failed ones |
-| `mai_ledger.json` | What the Apex Ledger tab renders |
+| `ledger_results.csv` | The dataset: one row per lot key, at its latest ledger. **Local only** |
+| `ledger_rows_all.csv` | Every row read, with `is_current`. Use it to trace a figure's history. **Local only** |
+| `review_queue.csv` | Rows whose notes read like an outlier caveat, for a human to triage. **Local only** |
+| `validation_report.json` | Counts, errors and warnings (the review queue as a count). Written on every run, including failed ones. **Published** |
+| `mai_ledger.json` | Scores and coverage counts per make and per sale: what the Apex Ledger tab renders. **Published** |
 | `.cache/` | Raw pulls (gitignored) |
+
+**Only scores are published.** The repository and the site are public, and the ledger is the
+basis of a client product, so the three CSVs are gitignored (`data/ledger/*.csv`) and the weekly
+workflow commits only `mai_ledger.json` and `validation_report.json`. Neither holds a lot's
+record, price or notes; `test_published_files_hold_no_lot_rows` checks that. Run the ingest
+locally to get the lot-level files.
 
 ---
 
