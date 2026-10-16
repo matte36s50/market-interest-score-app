@@ -1,1 +1,71 @@
 variant_id,variant,event,event_date,auction_house,manufacturer,model,year_of_car,sold,sold_price_usd,high_estimate_usd,apex_value_usd,highlight,share,suspect
+ac-ace-bristol,Ace Bristol,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,AC,Ace Bristol,1958,false,,,,false,0,false
+ac-ace-bristol,Ace Bristol,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,AC,Ace & Aceca,1958,false,,,,false,0,false
+alfa-6c-1750,6C 1750 S/GS Zagato,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Alfa Romeo,6C 1750 Series V Gran Sport,1932,true,1775000,,1775000,true,0.00209532,false
+aston-db5-coupe,DB5 Coupé,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,Aston Martin,DB5,1965,true,1276000,,1276000,true,0.0006705,false
+aston-db5-coupe,DB5 Coupé,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,Aston Martin,DB5,1964,true,1350000,,1350000,true,0.000686595,false
+aston-db5-coupe,DB5 Coupé,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,Aston Martin,DB5,1964,false,,,,false,0,false
+bentley-r-continental,R-Type Continental,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Bentley,R-Type Continental Fastback,1953,false,,,,false,0,false
+bentley-r-continental,R-Type Continental,Gooding Monterey 2026,2026-08-15,Gooding Christie's,Bentley,R-Type Continental Fastback,1954,true,1100000,,1100000,false,0,false
+bmw-507,507,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,BMW,507,1957,false,,,,false,0,false
+bmw-507,507,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,BMW,507 Series II Roadster,1958,false,,,,false,0,false
+bmw-m1,M1,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,BMW,M1,1981,true,522500,,522500,false,0,false
+bmw-m1,M1,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,BMW,M1,1980,true,425000,,425000,false,0,false
+bmw-m1,M1,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,BMW,M1,1979,true,542500,,542500,true,0.000665809,false
+cord-812-sc-phaeton,810/812 Supercharged Phaeton,The Hershey Auction 2026,2026-10-07,RM Sotheby's,Cord,810 Supercharged Phaeton,1936,true,123200,175000,175000,false,0,false
+cord-812-sc-phaeton,810/812 Supercharged Phaeton,The Hershey Auction 2026,2026-10-07,RM Sotheby's,Cord,812 Supercharged Phaeton,1937,true,78400,100000,100000,false,0,false
+duesenberg-model-j,Model J,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,Duesenberg,Supercharged Model J LaGrande Dual-Cowl Phaeton,1935,true,1655000,,1655000,true,0.00286489,false
+duesenberg-model-j,Model J,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Duesenberg,Model J Tourster,1931,true,2546500,,2546500,false,0,false
+duesenberg-model-j,Model J,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,Duesenberg,MODEL J LIMOUSINE BY WILLOUGHBY,1930,false,,,,false,0,false
+duesenberg-model-j,Model J,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,Duesenberg,J,1929,false,,,,false,0,false
+duesenberg-model-j,Model J,The Hershey Auction 2026,2026-10-07,RM Sotheby's,Duesenberg,Model J Convertible Berline by Murphy,1934,true,1022500,1200000,1200000,true,0.000394412,false
+jaguar-xj220,XJ220,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,Jaguar,XJ220,1993,true,573001,,573001,true,0.000549809,false
+jaguar-xj220,XJ220,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,Jaguar,XJ220,1992,true,504270,616330,616330,false,0,false
+lamborghini-miura-sv,Miura SV,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,Lamborghini,Miura P400 SV,1971,true,3380000,,3380000,true,0.0125999,false
+lancia-aurelia-b24,B24 Spider,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,Lancia,Aurelia B24 S Spider,1955,true,769500,,769500,false,0,false
+lancia-aurelia-b24,B24 Spider,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,Lancia,Aurelia B24 S Spider America,1955,true,399000,,399000,false,0,false
+maserati-3500-vignale-spider,3500 GT Vignale Spider,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,Maserati,3500 GT Vignale Spyder,1960,true,791000,,791000,false,0,false
+maserati-3500-vignale-spider,3500 GT Vignale Spider,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,Maserati,3500 GT,1961,true,167000,,167000,false,0,false
+maserati-ghibli-spider,Ghibli Spider,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,Maserati,Ghibli 4.7 Spyder,1971,false,,,,false,0,false
+mb-300sl-gullwing,300SL Gullwing,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1955,true,1800000,,1800000,true,0.000537747,false
+mb-300sl-gullwing,300SL Gullwing,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1955,true,1750000,,1750000,true,0.000545344,false
+mb-300sl-gullwing,300SL Gullwing,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1955,true,325000,,325000,false,0,true
+mb-300sl-gullwing,300SL Gullwing,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,Mercedes-Benz,300 SL Gullwing Coupe,1954,true,1462500,,1462500,true,0.00286489,false
+mb-300sl-gullwing,300SL Gullwing,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Mercedes-Benz,300 SL Gullwing,1957,true,1254000,,1254000,true,0.00209532,false
+mb-300sl-gullwing,300SL Gullwing,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1956,false,,,,false,0,false
+mb-300sl-gullwing,300SL Gullwing,The Monaco Auction,2026-04-24,RM Sotheby's,Mercedes-Benz,300 SL Gullwing,1956,false,,2108160,2108160,false,0,false
+mb-300sl-gullwing,300SL Gullwing,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,Mercedes-Benz,300 SL Gullwing Coupe,1957,true,1900000,,1900000,true,0.0050671,false
+mb-300sl-gullwing,300SL Gullwing,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1956,true,1550000,,1550000,true,0.0006705,false
+mb-300sl-gullwing,300SL Gullwing,Gooding Monterey 2026,2026-08-15,Gooding Christie's,Mercedes-Benz,300 SL Gullwing,1955,true,2700000,3000000,3000000,true,0.00433855,false
+mb-300sl-gullwing,300SL Gullwing,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,300 SL Gullwing,1955,true,2002000,,2002000,false,0,false
+mb-300sl-gullwing,300SL Gullwing,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,300 SL Gullwing,1955,true,1808400,,1808400,false,0,false
+mb-300sl-gullwing,300SL Gullwing,The Audrain Auction 2026,2026-10-02,Broad Arrow,Mercedes-Benz,300 SL Gullwing Coupe,1956,false,,1800000,1800000,true,0.00239464,false
+mb-300sl-gullwing,300SL Gullwing,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,Mercedes-Benz,300 SL Gullwing Coupe,1955,false,,2241200,2241200,true,0.00542653,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1961,false,,,,false,0,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1957,true,1650000,,1650000,true,0.000566577,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1962,false,,,,false,0,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1960,true,1200000,,1200000,true,0.000502879,false
+mb-300sl-roadster,300SL Roadster,RM Retromobile 2026,2026-01-28,RM Sotheby's,Mercedes-Benz,300 SL Roadster,1962,true,1355000,,1355000,false,0,false
+mb-300sl-roadster,300SL Roadster,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,Mercedes-Benz,300 SL Roadster,1960,true,1022500,,1022500,true,0.00286489,false
+mb-300sl-roadster,300SL Roadster,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Mercedes-Benz,300 SL Roadster,1959,true,925000,,925000,true,0.00209532,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1960,false,,,,false,0,false
+mb-300sl-roadster,300SL Roadster,The Monaco Auction,2026-04-24,RM Sotheby's,Mercedes-Benz,300 SL Roadster,1963,false,,1991040,1991040,false,0,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1959,true,1451000,,1451000,true,0.0006705,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1957,false,,,,false,0,false
+mb-300sl-roadster,300SL Roadster,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,Mercedes-Benz,300SL Gullwing & Roadster,1962,true,1511000,,1511000,true,0.000686595,false
+mb-300sl-roadster,300SL Roadster,Gooding Monterey 2026,2026-08-15,Gooding Christie's,Mercedes-Benz,300 SL Roadster,1961,true,1800000,1800000,1800000,false,0,false
+mb-300sl-roadster,300SL Roadster,Gooding Monterey 2026,2026-08-15,Gooding Christie's,Mercedes-Benz,300 SL Roadster,1958,true,1300000,1400000,1400000,false,0,false
+mb-300sl-roadster,300SL Roadster,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,300 SL Roadster,1963,true,1276000,,1276000,false,0,false
+mb-300sl-roadster,300SL Roadster,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,300 SL Roadster,1957,false,,,,false,0,false
+mb-300sl-roadster,300SL Roadster,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,300 SL Roadster,1957,true,1760000,,1760000,false,0,false
+mb-300sl-roadster,300SL Roadster,The Audrain Auction 2026,2026-10-02,Broad Arrow,Mercedes-Benz,300 SL Roadster,1957,false,,1350000,1350000,true,0.00239464,false
+mb-300sl-roadster,300SL Roadster,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,Mercedes-Benz,300 SL Roadster,1957,true,1030952,1456780,1456780,true,0.00542653,false
+mclaren-f1,F1,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,McLaren,F1 GTR,1996,true,38120500,,38120500,true,0.0083363,false
+shelby-cobra-289,Cobra 289,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,Shelby,289 Cobra,1964,false,,,,false,0,false
+shelby-cobra-289,Cobra 289,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Shelby,289 Cobra,1965,true,875000,,875000,true,0.00209532,false
+shelby-cobra-289,Cobra 289,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,Shelby,"Cobra Mk I, II, & III",1964,true,791000,,791000,true,0.000972229,false
+shelby-gt350-1965,GT350 (1965),Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,Ford,Mustang 1964.5-1966,1965,false,,,,false,0,false
+shelby-gt350-1965,GT350 (1965),Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,Ford,MUSTANG GT350 LACARRERAPANAMERICANA,1965,true,82037,,82037,false,0,true
+shelby-gt350-1965,GT350 (1965),Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,Ford,SHELBY MUSTANG GT350,1965,true,625000,,625000,true,0.000771079,false
+shelby-gt350-1965,GT350 (1965),Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,Ford,SHELBY MUSTANG GT350,1965,true,239000,,239000,false,0,false
+toyota-2000gt,2000GT,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,Toyota,2000GT,1967,true,995000,,995000,true,0.000478741,false
