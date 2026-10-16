@@ -54,6 +54,8 @@ OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "mai_scores.csv")
 # (they sum to its MAI_score), and the highlight lots themselves.
 DETAIL_PATH = os.path.join(os.path.dirname(__file__), "..", "mai_detail.csv")
 APEX_LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "apex_lots.csv")
+# The HAGI Top breakout on mai.html (hagi_top.py).
+HAGI_TOP_PATH = hagi_top.OUTPUT_PATH
 
 CLASSIC_AGE = 25
 SEGMENTS = ("modern", "classic")
@@ -173,7 +175,7 @@ def main():
     out.to_csv(OUTPUT_PATH, index=False)
     print(f"Wrote {len(out)} manufacturer scores to {os.path.abspath(OUTPUT_PATH)}")
     write_drilldown(detail, apex, total_rating)
-    hagi_top.write(lots, ratings_lookup, total_rating)
+    hagi_top.write(lots, ratings_lookup, total_rating, path=HAGI_TOP_PATH)
     print(f"Apex lots: {len(apex)} across {detail[['event', 'event_date']].drop_duplicates().shape[0]} "
           f"sales ({int(out['apex_from_estimate'].sum())} ranked by high estimate, "
           f"{int(out['apex_from_sold_price'].sum())} by sold price; R reads high where sold "

@@ -1477,6 +1477,7 @@ class MaiScores(unittest.TestCase):
              unittest.mock.patch.object(mai, "OUTPUT_PATH", paths["out"]), \
              unittest.mock.patch.object(mai, "DETAIL_PATH", os.path.join(d, "detail.csv")), \
              unittest.mock.patch.object(mai, "APEX_LOTS_PATH", os.path.join(d, "apex_lots.csv")), \
+             unittest.mock.patch.object(mai, "HAGI_TOP_PATH", os.path.join(d, "hagi_top_lots.csv")), \
              unittest.mock.patch("sys.stdout", new=io.StringIO()):
             mai.main()
         with open(paths["out"]) as f:
