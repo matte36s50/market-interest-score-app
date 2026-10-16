@@ -73,6 +73,8 @@ class SheetsLedgerSource:
                 "pip install -r data/pipelines/requirements-ledger.txt"
             ) from e
         creds = service_account.Credentials.from_service_account_file(credentials_path, scopes=SCOPES)
+        # Named in the error when the folder is not shared with it.
+        self.account = getattr(creds, "service_account_email", None) or "the service account"
         self._drive = build("drive", "v3", credentials=creds, cache_discovery=False)
         self._sheets = build("sheets", "v4", credentials=creds, cache_discovery=False)
         self.folder_id = folder_id
@@ -92,7 +94,16 @@ class SheetsLedgerSource:
             files += [LedgerFile(f["id"], f["name"], f["modifiedTime"]) for f in resp.get("files", [])]
             token = resp.get("nextPageToken")
             if not token:
-                return files
+                break
+        # The folder holds a ledger every week, so seeing no sheet at all
+        # means the folder is not shared with this account: Drive answers
+        # with an empty list, not an error.
+        if not files:
+            raise LedgerSourceError(
+                f"{self.account} can see no spreadsheets in Drive folder {self.folder_id}. "
+                f"Share the folder with {self.account} as Viewer (LEDGER_README.md, section 1)."
+            )
+        return files
 
     def read_values(self, ledger_file):
         meta = self._sheets.spreadsheets().get(
