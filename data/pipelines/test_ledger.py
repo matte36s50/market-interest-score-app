@@ -257,6 +257,36 @@ class HardErrors(unittest.TestCase):
         self.assertFails("high_estimate_usd is 0", high_estimate_usd="0")
 
 
+class HagiIndexColumn(unittest.TestCase):
+    """hagi_index: optional, from the 19 Oct 2026 ledger on."""
+    TITLE = T + "October 05, 2026 (rev record_id)"
+
+    def build_with(self, values):
+        with FixtureDir() as fx:
+            header, rows = fx.rows(self.TITLE)
+            for row, value in zip(rows, values):
+                row["hagi_index"] = value
+            fx.write(self.TITLE, header + ["hagi_index"], rows)
+            return fx.build()
+
+    def test_ledgers_without_it_still_load_with_it_blank(self):
+        report, current, _, _ = build_fixtures()
+        self.assertFalse(report.errors)
+        self.assertTrue(all(r["hagi_index"] == "" for r in current))
+        self.assertIn("hagi_index", ingest.DATASET_COLUMNS)
+
+    def test_it_is_carried_and_not_reported_as_unknown(self):
+        report, current, _, _ = self.build_with(["MBCI; HAGI Top"])
+        self.assertFalse(report.errors)
+        self.assertFalse([w for w in report.warnings if "unknown column" in w], report.warnings)
+        self.assertIn("MBCI; HAGI Top", {r["hagi_index"] for r in current})
+
+    def test_a_name_outside_the_six_indexes_is_kept_with_a_warning(self):
+        report, current, _, _ = self.build_with(["HAGI Ferrari"])
+        self.assertIsNotNone(current)
+        self.assertTrue(any("HAGI Ferrari" in w for w in report.warnings), report.warnings)
+
+
 class Cache(unittest.TestCase):
     def test_offline_build_from_cache_is_identical(self):
         cache = tempfile.mkdtemp()
