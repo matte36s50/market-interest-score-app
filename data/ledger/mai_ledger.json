@@ -1,0 +1,944 @@
+{
+  "as_of": "2026-10-12",
+  "apex_rule": "high_estimate_usd >= 500000",
+  "status_filter": {
+    "included": [
+      "CONFIRMED",
+      "REPORTED"
+    ],
+    "excluded": [
+      "UNVERIFIED"
+    ],
+    "rows_in_dataset": 73,
+    "rows_included": 72,
+    "rows_excluded": 1,
+    "rows_excluded_by_status": {
+      "UNVERIFIED": 1
+    }
+  },
+  "manufacturer_groups": {
+    "Maybach": "Mercedes-Benz",
+    "Mercedes-AMG": "Mercedes-Benz",
+    "Mercedes-Maybach": "Mercedes-Benz"
+  },
+  "premium_mix": {
+    "no": 6,
+    "unknown": 15,
+    "yes": 51
+  },
+  "mai_formula": "MAI = mean over events of P x Q x R. P = share of the event's apex lots; Q = mean price / high estimate over apex lots sold with a price (house currency where price and estimate match, else recorded USD); R = sold / (sold + not sold). Withdrawn lots excluded; apex_unknown lots excluded and counted; an event where something sold but no price is usable is unscored, never 0.",
+  "segments": {
+    "all": {
+      "totals": {
+        "lots": 72,
+        "apex": 19,
+        "non_apex": 21,
+        "apex_unknown": 32,
+        "apex_by_result": {
+          "sold_with_price": 17,
+          "sold_without_price": 0,
+          "not_sold": 2,
+          "withdrawn": 0
+        }
+      },
+      "manufacturers": [
+        {
+          "manufacturer": "Ferrari",
+          "mai": 0.666778,
+          "avg_P": 0.746032,
+          "avg_Q": 0.908075,
+          "avg_R": 1.0,
+          "events_scored": 3,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 6,
+            "usd": 3
+          },
+          "makes": {
+            "Ferrari": 26
+          },
+          "events": 7,
+          "lots": 26,
+          "apex": 9,
+          "non_apex": 5,
+          "apex_unknown": 12,
+          "apex_by_result": {
+            "sold_with_price": 9,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Mercedes",
+          "mai": 0.498462,
+          "avg_P": 1.0,
+          "avg_Q": 0.498462,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Mercedes": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Lamborghini",
+          "mai": 0.280089,
+          "avg_P": 0.321429,
+          "avg_Q": 0.8825,
+          "avg_R": 1.0,
+          "events_scored": 2,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Lamborghini": 5
+          },
+          "events": 3,
+          "lots": 5,
+          "apex": 3,
+          "non_apex": 2,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 3,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "BMW",
+          "mai": 0.198636,
+          "avg_P": 0.25,
+          "avg_Q": 0.794545,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "BMW": 4
+          },
+          "events": 3,
+          "lots": 4,
+          "apex": 1,
+          "non_apex": 3,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Porsche",
+          "mai": 0.158996,
+          "avg_P": 0.238095,
+          "avg_Q": 0.953977,
+          "avg_R": 0.5,
+          "events_scored": 2,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 2
+          },
+          "makes": {
+            "Porsche": 8
+          },
+          "events": 5,
+          "lots": 8,
+          "apex": 3,
+          "non_apex": 2,
+          "apex_unknown": 3,
+          "apex_by_result": {
+            "sold_with_price": 2,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.109052,
+          "avg_P": 0.196429,
+          "avg_Q": 0.872414,
+          "avg_R": 0.5,
+          "events_scored": 2,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Maybach": 2,
+            "Mercedes-AMG": 2,
+            "Mercedes-Benz": 22,
+            "Mercedes-Maybach": 1
+          },
+          "events": 9,
+          "lots": 27,
+          "apex": 2,
+          "non_apex": 8,
+          "apex_unknown": 17,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Frazer Nash-BMW",
+          "mai": null,
+          "avg_P": null,
+          "avg_Q": null,
+          "avg_R": null,
+          "events_scored": 0,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Frazer Nash-BMW": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 0,
+          "non_apex": 1,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": "dR LIVE weekly online sale, week of 5-11 October 2026",
+          "event_date": "2026-10-11",
+          "auction_house": "duPont REGISTRY Live",
+          "lots": 5,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 5,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zoute Sale 2026",
+          "event_date": "2026-10-11",
+          "auction_house": "Bonhams",
+          "lots": 7,
+          "apex": 4,
+          "non_apex": 2,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 4,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zoute Concours Auction 2026",
+          "event_date": "2026-10-09",
+          "auction_house": "Broad Arrow",
+          "lots": 12,
+          "apex": 6,
+          "non_apex": 3,
+          "apex_unknown": 3,
+          "apex_by_result": {
+            "sold_with_price": 6,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Hershey Auction 2026",
+          "event_date": "2026-10-08",
+          "auction_house": "RM Sotheby's",
+          "lots": 3,
+          "apex": 1,
+          "non_apex": 1,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Audrain Auction 2026",
+          "event_date": "2026-10-02",
+          "auction_house": "Broad Arrow",
+          "lots": 5,
+          "apex": 1,
+          "non_apex": 1,
+          "apex_unknown": 3,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Market by Bonhams (online)",
+          "event_date": "2026-10-01",
+          "auction_house": "Bonhams|Cars Online",
+          "lots": 2,
+          "apex": 0,
+          "non_apex": 1,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zurich Auction 2026",
+          "event_date": "2026-09-26",
+          "auction_house": "RM Sotheby's",
+          "lots": 15,
+          "apex": 7,
+          "non_apex": 7,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 5,
+            "sold_without_price": 0,
+            "not_sold": 2,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Mecum Nashville 2026",
+          "event_date": "2026-09-26",
+          "auction_house": "Mecum",
+          "lots": 2,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Goodwood Revival: Collectors' Motor Cars and Automobilia",
+          "event_date": "2026-09-19",
+          "auction_house": "Bonhams",
+          "lots": 6,
+          "apex": 0,
+          "non_apex": 4,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Willy Michiels Collection (online)",
+          "event_date": "2026-09-15",
+          "auction_house": "RM Sotheby's",
+          "lots": 10,
+          "apex": 0,
+          "non_apex": 2,
+          "apex_unknown": 8,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Las Vegas 2026",
+          "event_date": "2026-09-12",
+          "auction_house": "Barrett-Jackson",
+          "lots": 1,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Cars, machinery and classic cars, Voesendorf",
+          "event_date": "2026-09-09",
+          "auction_house": "Dorotheum",
+          "lots": 4,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 4,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ]
+    },
+    "premium_yes": {
+      "totals": {
+        "lots": 51,
+        "apex": 17,
+        "non_apex": 18,
+        "apex_unknown": 16,
+        "apex_by_result": {
+          "sold_with_price": 17,
+          "sold_without_price": 0,
+          "not_sold": 0,
+          "withdrawn": 0
+        }
+      },
+      "manufacturers": [
+        {
+          "manufacturer": "Ferrari",
+          "mai": 0.740354,
+          "avg_P": 0.822222,
+          "avg_Q": 0.908075,
+          "avg_R": 1.0,
+          "events_scored": 3,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 6,
+            "usd": 3
+          },
+          "makes": {
+            "Ferrari": 24
+          },
+          "events": 6,
+          "lots": 24,
+          "apex": 9,
+          "non_apex": 5,
+          "apex_unknown": 10,
+          "apex_by_result": {
+            "sold_with_price": 9,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Mercedes",
+          "mai": 0.498462,
+          "avg_P": 1.0,
+          "avg_Q": 0.498462,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Mercedes": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Porsche",
+          "mai": 0.317992,
+          "avg_P": 0.333333,
+          "avg_Q": 0.953977,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 2
+          },
+          "makes": {
+            "Porsche": 6
+          },
+          "events": 4,
+          "lots": 6,
+          "apex": 2,
+          "non_apex": 2,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 2,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Lamborghini",
+          "mai": 0.305875,
+          "avg_P": 0.35,
+          "avg_Q": 0.8825,
+          "avg_R": 1.0,
+          "events_scored": 2,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Lamborghini": 5
+          },
+          "events": 3,
+          "lots": 5,
+          "apex": 3,
+          "non_apex": 2,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 3,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.218103,
+          "avg_P": 0.25,
+          "avg_Q": 0.872414,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Mercedes-AMG": 1,
+            "Mercedes-Benz": 9
+          },
+          "events": 6,
+          "lots": 10,
+          "apex": 1,
+          "non_apex": 5,
+          "apex_unknown": 4,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "BMW",
+          "mai": 0.198636,
+          "avg_P": 0.25,
+          "avg_Q": 0.794545,
+          "avg_R": 1.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "BMW": 4
+          },
+          "events": 3,
+          "lots": 4,
+          "apex": 1,
+          "non_apex": 3,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Frazer Nash-BMW",
+          "mai": null,
+          "avg_P": null,
+          "avg_Q": null,
+          "avg_R": null,
+          "events_scored": 0,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Frazer Nash-BMW": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 0,
+          "non_apex": 1,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": "dR LIVE weekly online sale, week of 5-11 October 2026",
+          "event_date": "2026-10-11",
+          "auction_house": "duPont REGISTRY Live",
+          "lots": 5,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 5,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zoute Sale 2026",
+          "event_date": "2026-10-11",
+          "auction_house": "Bonhams",
+          "lots": 7,
+          "apex": 4,
+          "non_apex": 2,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 4,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zoute Concours Auction 2026",
+          "event_date": "2026-10-09",
+          "auction_house": "Broad Arrow",
+          "lots": 12,
+          "apex": 6,
+          "non_apex": 3,
+          "apex_unknown": 3,
+          "apex_by_result": {
+            "sold_with_price": 6,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Hershey Auction 2026",
+          "event_date": "2026-10-08",
+          "auction_house": "RM Sotheby's",
+          "lots": 3,
+          "apex": 1,
+          "non_apex": 1,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Audrain Auction 2026",
+          "event_date": "2026-10-02",
+          "auction_house": "Broad Arrow",
+          "lots": 5,
+          "apex": 1,
+          "non_apex": 1,
+          "apex_unknown": 3,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Zurich Auction 2026",
+          "event_date": "2026-09-26",
+          "auction_house": "RM Sotheby's",
+          "lots": 13,
+          "apex": 5,
+          "non_apex": 7,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 5,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Goodwood Revival: Collectors' Motor Cars and Automobilia",
+          "event_date": "2026-09-19",
+          "auction_house": "Bonhams",
+          "lots": 6,
+          "apex": 0,
+          "non_apex": 4,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ]
+    },
+    "premium_no": {
+      "totals": {
+        "lots": 6,
+        "apex": 0,
+        "non_apex": 1,
+        "apex_unknown": 5,
+        "apex_by_result": {
+          "sold_with_price": 0,
+          "sold_without_price": 0,
+          "not_sold": 0,
+          "withdrawn": 0
+        }
+      },
+      "manufacturers": [
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": null,
+          "avg_P": null,
+          "avg_Q": null,
+          "avg_R": null,
+          "events_scored": 0,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Mercedes-Benz": 6
+          },
+          "events": 2,
+          "lots": 6,
+          "apex": 0,
+          "non_apex": 1,
+          "apex_unknown": 5,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": "The Market by Bonhams (online)",
+          "event_date": "2026-10-01",
+          "auction_house": "Bonhams|Cars Online",
+          "lots": 2,
+          "apex": 0,
+          "non_apex": 1,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Cars, machinery and classic cars, Voesendorf",
+          "event_date": "2026-09-09",
+          "auction_house": "Dorotheum",
+          "lots": 4,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 4,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ]
+    },
+    "premium_unknown": {
+      "totals": {
+        "lots": 15,
+        "apex": 2,
+        "non_apex": 2,
+        "apex_unknown": 11,
+        "apex_by_result": {
+          "sold_with_price": 0,
+          "sold_without_price": 0,
+          "not_sold": 2,
+          "withdrawn": 0
+        }
+      },
+      "manufacturers": [
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.0,
+          "avg_P": 0.5,
+          "avg_Q": null,
+          "avg_R": 0.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Maybach": 2,
+            "Mercedes-AMG": 1,
+            "Mercedes-Benz": 7,
+            "Mercedes-Maybach": 1
+          },
+          "events": 2,
+          "lots": 11,
+          "apex": 1,
+          "non_apex": 2,
+          "apex_unknown": 8,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Porsche",
+          "mai": 0.0,
+          "avg_P": 0.5,
+          "avg_Q": null,
+          "avg_R": 0.0,
+          "events_scored": 1,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Porsche": 2
+          },
+          "events": 2,
+          "lots": 2,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          }
+        },
+        {
+          "manufacturer": "Ferrari",
+          "mai": null,
+          "avg_P": null,
+          "avg_Q": null,
+          "avg_R": null,
+          "events_scored": 0,
+          "events_unscored": 0,
+          "q_basis": {},
+          "makes": {
+            "Ferrari": 2
+          },
+          "events": 1,
+          "lots": 2,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": "The Zurich Auction 2026",
+          "event_date": "2026-09-26",
+          "auction_house": "RM Sotheby's",
+          "lots": 2,
+          "apex": 2,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 2,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Mecum Nashville 2026",
+          "event_date": "2026-09-26",
+          "auction_house": "Mecum",
+          "lots": 2,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 2,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "The Willy Michiels Collection (online)",
+          "event_date": "2026-09-15",
+          "auction_house": "RM Sotheby's",
+          "lots": 10,
+          "apex": 0,
+          "non_apex": 2,
+          "apex_unknown": 8,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        },
+        {
+          "event": "Las Vegas 2026",
+          "event_date": "2026-09-12",
+          "auction_house": "Barrett-Jackson",
+          "lots": 1,
+          "apex": 0,
+          "non_apex": 0,
+          "apex_unknown": 1,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          }
+        }
+      ]
+    }
+  }
+}
