@@ -30,6 +30,7 @@ import social_signals
 import check_coverage
 import model_list
 import variants
+import hagi_top
 import export_live_lots
 import export_online_sales
 
@@ -783,6 +784,55 @@ class Variants(unittest.TestCase):
         for v in self.v.values():
             self.assertTrue(v["index_list"], v["id"])
             self.assertTrue(v["from"] and v["to"] and v["from"] <= v["to"], v["id"])
+
+
+class HagiTop(unittest.TestCase):
+    """hagi_top.py: the HAGI Top cars among the Apex lots."""
+
+    def lot(self, **kw):
+        base = {"event": "Sale", "event_date": "2026-08-15", "auction_house": "House",
+                "sold": True, "sold_price_usd": None, "high_estimate_usd": None,
+                "is_apex": False, "apex_value": None, "notes": ""}
+        base.update(kw)
+        return base
+
+    def test_a_bring_a_trailer_lot_is_read_from_its_slug(self):
+        lot = self.lot(manufacturer="Mercedes-Benz", model="300SL Gullwing & Roadster", year_of_car=None,
+                       notes="bat:1960-mercedes-benz-300sl-roadster-8")
+        self.assertEqual(hagi_top.lot_title(lot), "1960 mercedes benz 300sl roadster 8")
+        self.assertEqual([v["id"] for v, _ in hagi_top.match([lot])], ["mb-300sl-roadster"])
+
+    def test_a_live_lot_is_read_from_year_make_and_model(self):
+        lot = self.lot(manufacturer="Lamborghini", model="Miura P400 SV", year_of_car=1971.0)
+        self.assertEqual(hagi_top.lot_title(lot), "1971 lamborghini miura p400 sv")
+        self.assertEqual([v["id"] for v, _ in hagi_top.match([lot])], ["lamborghini-miura-sv"])
+
+    def test_other_cars_and_replicas_do_not_match(self):
+        lots = [self.lot(manufacturer="Lamborghini", model="Miura P400 S", year_of_car=1969),
+                self.lot(manufacturer="Porsche", model="911 Carrera RS 2.7", year_of_car=1973),
+                self.lot(manufacturer="Ford", model="GT40 Replica by Superformance", year_of_car=1966)]
+        self.assertEqual(hagi_top.match(lots), [])
+
+    def test_a_price_far_below_the_cars_others_is_set_aside(self):
+        lots = [self.lot(manufacturer="Mercedes-Benz", model="300 SL Gullwing", year_of_car=1955, sold_price_usd=p)
+                for p in (1_800_000, 1_900_000, 2_000_000, 325_000)]
+        rows = hagi_top.rows(hagi_top.match(lots), {}, {}, 0)
+        self.assertEqual([r["suspect"] for r in rows].count("true"), 1)
+        self.assertEqual([r["sold_price_usd"] for r in rows if r["suspect"] == "true"], [325000])
+
+    def test_shares_are_the_mai_weight_of_each_highlight(self):
+        # Sale A (rating 30, 3 highlights) and sale B (rating 10, 2): a HAGI
+        # Top highlight at each weighs 30/3 and 10/2 of the 40 total.
+        a = self.lot(event="A", manufacturer="Toyota", model="2000GT", year_of_car=1967, is_apex=True, apex_value=1e6)
+        b = self.lot(event="B", manufacturer="Jaguar", model="XJ220", year_of_car=1993, is_apex=True, apex_value=5e5)
+        c = self.lot(event="B", manufacturer="BMW", model="M1", year_of_car=1980, is_apex=False)
+        ratings = {("A", "2026-08-15"): 30.0, ("B", "2026-08-15"): 10.0}
+        counts = {("A", "2026-08-15"): 3, ("B", "2026-08-15"): 2}
+        rows = {r["variant_id"]: r for r in hagi_top.rows(hagi_top.match([a, b, c]), ratings, counts, 40.0)}
+        self.assertAlmostEqual(float(rows["toyota-2000gt"]["share"]), 0.25)
+        self.assertAlmostEqual(float(rows["jaguar-xj220"]["share"]), 0.125)
+        self.assertEqual(rows["bmw-m1"]["share"], "0")
+        self.assertEqual(rows["bmw-m1"]["highlight"], "false")
 
 
 class SignalCoverage(unittest.TestCase):
