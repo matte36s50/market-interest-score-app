@@ -3,5 +3,8 @@ __pycache__/
 
 # Weekly ledger ingest: raw Sheets pulls and local credentials
 data/ledger/.cache/
+# Lot-level ledger data stays local: only the scores (mai_ledger.json) and
+# the validation summary are published.
+data/ledger/*.csv
 .env
 *service-account*.json

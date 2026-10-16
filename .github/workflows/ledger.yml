@@ -2,8 +2,10 @@ name: Apex Ledger (weekly Auction Results Ledgers)
 
 # Reads the weekly Auction Results Ledger Google Sheets from the ledger Drive
 # folder, rebuilds data/ledger/ (ledger_ingest.py, then ledger_mai.py), commits
-# it and re-triggers the Pages deploy, so mai-ledger.html shows the latest
-# ledger. See data/pipelines/LEDGER_README.md.
+# the scores and the validation summary and re-triggers the Pages deploy, so
+# mai-ledger.html shows the latest ledger. The lot-level files are built on the
+# runner and discarded: they are never committed or published. See
+# data/pipelines/LEDGER_README.md.
 #
 # A ledger lands on Monday, usually between 13:00 and 15:00 UTC. This runs at
 # 16:17 UTC on Mondays, and again on Tuesdays in case one is late (an unchanged
@@ -89,7 +91,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ledger
+          # Scores and the validation summary only. The lot-level CSVs are
+          # gitignored and must never be published.
+          git add data/ledger/mai_ledger.json data/ledger/validation_report.json
           if git diff --cached --quiet; then
             echo "No change in data/ledger — nothing to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"

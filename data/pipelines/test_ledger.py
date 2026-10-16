@@ -13,6 +13,7 @@ Run: python3 data/pipelines/test_ledger.py
 import csv
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -293,6 +294,29 @@ class Cache(unittest.TestCase):
         report = json.loads(outs[0]["validation_report.json"])
         self.assertEqual(report["counts"]["rows_after_dedupe"], 11)
         self.assertEqual(report["counts"]["rows_superseded"], 5)
+
+    def test_published_files_hold_no_lot_rows(self):
+        # validation_report.json and mai_ledger.json are published with the
+        # site; the lot-level CSVs are not. Neither JSON may carry a lot's
+        # record, price or notes.
+        out = tempfile.mkdtemp()
+        try:
+            self.assertEqual(ingest.main(["--source-dir", FIXTURES, "--out-dir", out]), 0)
+            report = open(os.path.join(out, "validation_report.json"), encoding="utf-8").read()
+            current = list(csv.DictReader(open(os.path.join(out, "ledger_results.csv"), encoding="utf-8")))
+            self.assertEqual(ledger_mai.main(["--dataset", os.path.join(out, "ledger_results.csv"),
+                                      "--output", os.path.join(out, "mai_ledger.json")]), 0)
+            scores = open(os.path.join(out, "mai_ledger.json"), encoding="utf-8").read()
+        finally:
+            shutil.rmtree(out)
+        self.assertIn("review_queue_count", json.loads(report))
+        self.assertNotIn('"review_queue"', report)
+        for published in (report, scores):
+            for row in current:
+                self.assertNotIn(row["notes"][:40], published)
+                self.assertNotIn(row["record_id"], published)
+                if row["price"]:
+                    self.assertNotRegex(published, r"(?<![\d.])" + re.escape(row["price"]) + r"(?![\d.])")
 
 
 class LedgerMai(unittest.TestCase):
