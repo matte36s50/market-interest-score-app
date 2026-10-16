@@ -303,6 +303,7 @@ button.insight:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .legend i { width: 14px; height: 3px; border-radius: 2px; background: currentColor; display: inline-block; }
+.legend i.dash { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 7px); }
 .ci-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
 @media (max-width: 1080px) { .ci-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .ci-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

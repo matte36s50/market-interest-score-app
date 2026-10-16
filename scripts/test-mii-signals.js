@@ -232,5 +232,24 @@ check('the row is renamed before the join', rows[0].model, '996 911 Turbo');
 near('both names\' values are averaged', rows[0].google_trends_interest, 50);
 MII.setModels(null);
 
+console.log('attention');
+// 40 models, two months. Model i ranks i-th on every input, except that
+// model 0 has no YouTube row (a measured zero) and August has search
+// interest for only 10 models (under half its best month), so August is not
+// scored at all.
+const header = { trends: 'trends_interest', youtube: 'yt_view_share', social: 'social_score' };
+const signalCsv = (name, rowsFor) => [`manufacturer,model,month,${header[name]}`, ...rowsFor].join('\n');
+const ids = Array.from({ length: 40 }, (_, i) => i);
+MII.setSignal('trends', signalCsv('trends', [
+    ...ids.map(i => `Make,M${i},2026-09,${i + 1}`),
+    ...ids.slice(0, 10).map(i => `Make,M${i},2026-08,${i + 1}`)]));
+MII.setSignal('youtube', signalCsv('youtube', ids.filter(i => i > 0).flatMap(i => [`Make,M${i},2026-09,${i}`, `Make,M${i},2026-08,${i}`])));
+MII.setSignal('social', signalCsv('social', ids.flatMap(i => [`Make,M${i},2026-09,${i + 1}`, `Make,M${i},2026-08,${i + 1}`])));
+near('the top model on every input scores near 100', MII.attentionFor('Make', 'M39', '2026-09'), 100 * (1 - 0.5 / 40), 0.02);
+near('a missing YouTube row is a measured zero', MII.attentionFor('Make', 'M0', '2026-09'), 100 * (0.5 / 40), 0.02);
+check('a month with an input half-collected is not scored', MII.attentionFor('Make', 'M39', '2026-08'), null);
+check('the month in progress suffix is ignored', MII.attentionFor('Make', 'M39', '2026-09-MTD'), MII.attentionFor('Make', 'M39', '2026-09'));
+check('an unmeasured model has no reading', MII.attentionFor('Make', 'Nope', '2026-09'), null);
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);
