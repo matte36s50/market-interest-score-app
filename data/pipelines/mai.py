@@ -44,6 +44,7 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from apex import BASIS_ESTIMATE, BASIS_SOLD_PRICE, add_apex_columns, read_lots
+import hagi_top  # noqa: E402
 
 LOTS_PATH = os.path.join(os.path.dirname(__file__), "..", "auction_lots.csv")
 ONLINE_PATH = os.path.join(os.path.dirname(__file__), "..", "online_lots.csv")
@@ -172,6 +173,7 @@ def main():
     out.to_csv(OUTPUT_PATH, index=False)
     print(f"Wrote {len(out)} manufacturer scores to {os.path.abspath(OUTPUT_PATH)}")
     write_drilldown(detail, apex, total_rating)
+    hagi_top.write(lots, ratings_lookup, total_rating)
     print(f"Apex lots: {len(apex)} across {detail[['event', 'event_date']].drop_duplicates().shape[0]} "
           f"sales ({int(out['apex_from_estimate'].sum())} ranked by high estimate, "
           f"{int(out['apex_from_sold_price'].sum())} by sold price; R reads high where sold "

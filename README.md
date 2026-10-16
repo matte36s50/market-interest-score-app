@@ -474,6 +474,18 @@ lots as unsold would sink every make consigned to the sale. Once results are ent
 `auction_lots.csv` and the ranking the next morning. A lot whose sale date
 has passed without results appears in neither file until it's updated.
 
+**HAGI Top Index at the summit** (`mai.html#hagi-top`) breaks out the 24
+cars of HAGI's Top Index (2010, Porsche and Ferrari excluded; the
+`data/variants.csv` rows tagged `hagi-top`). `data/pipelines/hagi_top.py`, run
+by `mai.py`, matches every lot of every sale to the car it is, from the Bring
+a Trailer listing slug where there is one and "year make model" otherwise,
+replicas and recreations excluded, and writes `data/hagi_top_lots.csv`. Each
+highlight carries the weight `mai.py` gives it (its sale's rating over the
+sale's highlight count, over all sales' ratings), so the cars' shares add up
+to the Apex score the index would have as one make, and the panel shows where
+that would rank. A sold price under 40% of the car's median (with three or
+more results) is set aside as most likely not the car.
+
 MAI's apex lots are the **top 10% of each sale** (20 lots or more), ranked
 by high estimate, or by sold price for a lot with no estimate. Lots entered
 from results pages only (and Mecum and Barrett-Jackson, which generally don't

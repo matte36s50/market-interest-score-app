@@ -21,6 +21,18 @@
         @media (max-width: 767px) {
             .drill-inner { position: sticky; left: 24px; width: calc(100vw - 82px); }
         }
+        .hagi-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--hair); }
+        .hagi-stats > div { padding: 16px 24px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .hagi-stats > div:first-child { border-left: 0; }
+        .hagi-stats .h-l { font-size: 12.5px; color: var(--muted); }
+        .hagi-stats .h-v { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+        .hagi-stats .h-s { font-size: 12.5px; color: var(--muted); }
+        @media (max-width: 767px) {
+            .hagi-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .hagi-stats > div:nth-child(3) { border-left: 0; }
+            .hagi-stats > div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+        }
+        .hl-tag { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); background: var(--accent-wash); border-radius: 999px; padding: 1px 8px; }
     </style>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
@@ -58,7 +70,7 @@
             <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Apex auctions · the top 10% of lots at each sale, and Bring a Trailer by month</span>
             <h1 id="pageTitle">Manufacturer Apex Index</h1>
             <p class="lede">How deep each manufacturer's network runs, read from how strongly its cars show up at the very top of the collector market and how well they do when they cross the block. MII measures how much attention each individual car is getting. MAI looks only at the highlights of the major live auctions and Bring a Trailer's best results each month, and counts a highlight at Monterey for more than one at a smaller sale. Click a make or a sale to see what is behind its numbers.</p>
-            <div class="hero-meta"><a href="#how-it-works">How the score works</a><a href="media/mii-explainer.mp4#t=70" data-explainer data-start="70">Watch how Apex works</a><a href="mai-ledger.html">Weekly ledger view</a><span>Scores are each make’s share of all highlight value, so they add up to 1 across all makes.</span></div>
+            <div class="hero-meta"><a href="#how-it-works">How the score works</a><a href="media/mii-explainer.mp4#t=70" data-explainer data-start="70">Watch how Apex works</a><a href="#hagi-top">HAGI Top Index</a><a href="mai-ledger.html">Weekly ledger view</a><span>Scores are each make’s share of all highlight value, so they add up to 1 across all makes.</span></div>
         </div>
     </section>
 
@@ -100,6 +112,34 @@
                     </tbody>
                 </table>
             </div>
+        </section>
+
+        <!-- HAGI Top -->
+        <section class="panel scroll-mt-24" id="hagi-top" aria-labelledby="hagiTitle">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 id="hagiTitle" class="m-0 text-lg font-semibold">HAGI Top Index at the summit</h2>
+                <p id="hagiSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="hagi-stats" id="hagiStats"></div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Car</th>
+                            <th>Apex share</th>
+                            <th class="text-right" title="Lots offered at any sale in the index, live or Bring a Trailer">Offered</th>
+                            <th class="text-right">Sold</th>
+                            <th class="text-right" title="Lots among their sale's top 10%">Highlights</th>
+                            <th class="text-right" title="Highest sold price">Best result</th>
+                            <th class="pr-6">Last offered</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hagiRows">
+                        <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading the HAGI Top cars…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p id="hagiNote" class="m-0 px-6 py-4 text-[13px] text-mute border-t border-hair"></p>
         </section>
 
         <!-- Upcoming -->
@@ -515,6 +555,135 @@
                 var first = findRow(openMake);
                 if (first) first.scrollIntoView({ block: 'start' });
             }
+        });
+
+        // HAGI Top at the summit (data/pipelines/hagi_top.py): the 24 cars of
+        // HAGI's Top Index in the same sales and highlights as the ranking.
+        // Its score is the cars' combined share of highlight weight, the
+        // measure a make's MAI is, so it ranks against the makes. A result far
+        // below the car's others is set aside as most likely not the car.
+        function ordinal(n) {
+            var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+            return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        }
+        function hagiName(c) {
+            var make = String(c.makes || '').split(';')[0], name = String(c.variant);
+            return name.indexOf(make) === 0 ? name : make + ' ' + name;
+        }
+        function hagiYears(c) {
+            var y = String(c.years || '').split('-');
+            return y[0] === y[1] ? y[0] : y.join('–');
+        }
+        function hagiLot(l) {
+            var sold = isTrue(l.sold), price = num(l.sold_price_usd), est = num(l.high_estimate_usd);
+            var outcome = sold ? 'sold ' + usd(price) : '<span class="text-amber-700">not sold</span>' + (est ? ' · est. ' + usd(est) : '');
+            return '<li class="flex flex-wrap gap-x-3 gap-y-0.5">' +
+                '<span class="font-mono text-faint">' + esc(String(l.event_date).slice(0, 10)) + '</span>' +
+                '<a href="#" class="text-ink hover:text-amber-700" data-sale="' + esc(saleKey(l.event, l.event_date)) + '">' + esc(l.event) + '</a>' +
+                '<span class="text-mute">' + esc(carName(l, true)) + '</span>' +
+                '<span class="text-mute">' + outcome + '</span>' +
+                (isTrue(l.highlight) ? '<span class="hl-tag" title="Among its sale\'s top 10% of lots">highlight</span>' : '') +
+                '</li>';
+        }
+        Promise.all([load('data/hagi_top_lots.csv'), load('data/variants.csv'), load('data/mai_scores.csv')]).then(function (res) {
+            var body = document.getElementById('hagiRows');
+            var subtitle = document.getElementById('hagiSubtitle');
+            var cars = (res[1] || []).filter(function (r) { return r.id && /(^|;)hagi-top(;|$)/.test(r.indexes || ''); });
+            if (res[0] === null || !cars.length) {
+                subtitle.textContent = 'The HAGI Top breakout (hagi_top_lots.csv) is not published yet.';
+                body.innerHTML = '';
+                return;
+            }
+            var all = (res[0] || []).filter(function (r) { return r.variant_id; });
+            var kept = all.filter(function (l) { return !isTrue(l.suspect); });
+            var aside = all.filter(function (l) { return isTrue(l.suspect); });
+            var makes = (res[2] || []).filter(function (r) { return r.manufacturer && num(r.MAI_score) != null; });
+            var byCar = {};
+            kept.forEach(function (l) { (byCar[l.variant_id] = byCar[l.variant_id] || []).push(l); });
+            var sum = function (ls, f) { return ls.reduce(function (s, l) { return s + (f(l) || 0); }, 0); };
+            var rows = cars.map(function (c) {
+                var ls = (byCar[c.id] || []).sort(function (a, b) { return String(b.event_date).localeCompare(String(a.event_date)); });
+                var sold = ls.filter(function (l) { return isTrue(l.sold); });
+                return {
+                    c: c, lots: ls, sold: sold.length,
+                    highlights: ls.filter(function (l) { return isTrue(l.highlight); }).length,
+                    share: sum(ls, function (l) { return num(l.share); }),
+                    best: Math.max.apply(null, [0].concat(sold.map(function (l) { return num(l.sold_price_usd) || 0; })))
+                };
+            }).sort(function (a, b) { return b.share - a.share || b.lots.length - a.lots.length || hagiName(a.c).localeCompare(hagiName(b.c)); });
+
+            var score = sum(kept, function (l) { return num(l.share); });
+            var rank = 1 + makes.filter(function (m) { return num(m.MAI_score) > score; }).length;
+            var seen = rows.filter(function (r) { return r.lots.length; }).length;
+            var soldAll = kept.filter(function (l) { return isTrue(l.sold); }).length;
+            var hlAll = kept.filter(function (l) { return isTrue(l.highlight); }).length;
+
+            subtitle.textContent = 'The ' + cars.length + ' cars of HAGI\'s Top Index (2010, Porsche and Ferrari excluded: they have their own indexes) in the same sales and highlights as the ranking. Click a car for its lots.';
+            document.getElementById('hagiStats').innerHTML =
+                '<div><span class="h-l">Apex score, as one make</span><span class="h-v font-mono">' + score.toFixed(3) + '</span><span class="h-s">would rank ' + ordinal(rank) + ' of ' + (makes.length + 1) + '</span></div>' +
+                '<div><span class="h-l">Cars offered</span><span class="h-v">' + seen + '<span class="text-mute" style="font-size:15px;font-weight:500"> / ' + cars.length + '</span></span><span class="h-s">at any sale in the index</span></div>' +
+                '<div><span class="h-l">Highlights</span><span class="h-v">' + hlAll + '</span><span class="h-s">of ' + kept.length + ' lots offered</span></div>' +
+                '<div><span class="h-l">Sell-through</span><span class="h-v">' + (kept.length ? Math.round(soldAll / kept.length * 100) + '%' : '—') + '</span><span class="h-s">' + soldAll + ' of ' + kept.length + ' lots sold</span></div>';
+
+            var max = (rows[0] && rows[0].share) || 1;
+            body.innerHTML = rows.map(function (r) {
+                var last = r.lots[0];
+                if (!r.lots.length) {
+                    return '<tr><td class="pl-6 text-faint">' + esc(hagiName(r.c)) + ' <span class="text-faint">' + esc(hagiYears(r.c)) + '</span></td>' +
+                        '<td colspan="6" class="pr-6 text-faint">Not offered at any sale in the index</td></tr>';
+                }
+                return '<tr class="is-clickable" data-car="' + esc(r.c.id) + '">' +
+                    '<td class="pl-6 font-semibold"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
+                        '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + esc(hagiName(r.c)) +
+                        ' <span class="text-faint" style="font-weight:400">' + esc(hagiYears(r.c)) + '</span></button></td>' +
+                    '<td class="w-64"><div class="flex items-center gap-3">' +
+                        '<span class="font-mono text-sm font-medium w-12 text-right">' + (r.share >= 0.0005 ? r.share.toFixed(3) : r.share > 0 ? '<0.001' : '<span class="text-faint">—</span>') + '</span>' +
+                        '<span class="score-bar"><span style="width:' + (r.share > 0 ? Math.max(2, r.share / max * 100).toFixed(0) : 0) + '%"></span></span>' +
+                    '</div></td>' +
+                    '<td class="num">' + r.lots.length + '</td>' +
+                    '<td class="num">' + r.sold + '</td>' +
+                    '<td class="num">' + (r.highlights || '<span class="text-faint">0</span>') + '</td>' +
+                    '<td class="num">' + usd(r.best) + '</td>' +
+                    '<td class="pr-6 text-mute">' + esc(last.event) + '</td>' +
+                '</tr>';
+            }).join('');
+
+            document.getElementById('hagiNote').innerHTML =
+                'Lots are matched to the index\'s cars by their titles (<code class="font-mono">data/variants.csv</code>), replicas and recreations excluded. ' +
+                'The score counts the cars across makes, so a 300SL highlight counts here and for Mercedes-Benz in the ranking.' +
+                (aside.length ? ' Set aside as most likely not the car, priced under 40% of its other results: ' + aside.map(function (l) {
+                    return esc(carName(l, true)) + ' (' + esc(l.event) + ', ' + usd(num(l.sold_price_usd)) + ')';
+                }).join('; ') + '.' : '');
+
+            body.addEventListener('click', function (e) {
+                var link = e.target.closest('a[data-sale]');
+                if (link) {
+                    e.preventDefault();
+                    window.openSale && window.openSale(link.getAttribute('data-sale'));
+                    return;
+                }
+                var tr = e.target.closest('tr[data-car]');
+                if (!tr) return;
+                var btn = tr.querySelector('button[aria-expanded]');
+                var next = tr.nextElementSibling;
+                if (next && next.classList.contains('drill-row')) {
+                    next.remove();
+                    tr.classList.remove('is-selected');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('.chev').style.transform = '';
+                    return;
+                }
+                var r = rows.find(function (x) { return x.c.id === tr.getAttribute('data-car'); });
+                var row = document.createElement('tr');
+                row.className = 'drill-row';
+                row.innerHTML = '<td colspan="7" class="px-6 py-5 bg-canvas" style="white-space:normal"><div class="drill-inner">' +
+                    (r.c.note ? '<p class="m-0 text-[13px] text-mute">' + esc(r.c.note) + '</p>' : '') +
+                    '<ul class="m-0 mt-2 p-0 list-none grid gap-1 text-[13px]">' + r.lots.map(hagiLot).join('') + '</ul></div></td>';
+                tr.after(row);
+                tr.classList.add('is-selected');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.querySelector('.chev').style.transform = 'rotate(90deg)';
+            });
         });
 
         function usd(v) {
