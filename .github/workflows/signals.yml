@@ -61,7 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
+      # The tip of main, not the commit that triggered the run: a run queued
+      # behind another (see concurrency) must start from the signal files that run
+      # just committed, or its own commit conflicts with them on rebase.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
