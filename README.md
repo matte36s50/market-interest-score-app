@@ -143,6 +143,17 @@ mix. `MII.attentionFor(make, model, month)` returns it; the BMW CI section
 shows the basket's attention (all constituents, traded or not), each
 constituent's attention, and the attention line on its chart.
 
+### Seeing interest rise in absolute terms
+
+Because MII ranks each car within its month, a car's MII shows whether it is
+gaining on other cars, not whether interest in it is growing. A car's absolute
+interest is its relative position times the market's level: if the market is up
+10% and a car's MII is flat, interest in the car is up about 10% too. The
+overview's headline shows the market's level (views per listing); the Model
+comparison page's **Absolute Interest** chart shows each selected car's views
+per sale beside the market's typical sale, on a log scale where equal slopes
+mean equal growth.
+
 ### Our model list (`data/models.csv`) and variants (`data/variants.csv`)
 
 The upstream file names models the way its sources did, which is not one name

@@ -25,7 +25,8 @@
 
     // Canonical MII formula: raw source column, the normalized column it writes,
     // the weight in the composite, and a display label. Weights sum to 1.0, so
-    // mii_score = 100 * Σ(weight × percentileRank) lands in [0, 100].
+    // mii_score = 100 * Σ(weight × percentileRank) lands in [0, 100]. This is
+    // the one definition: every page reads its inputs and weights from here.
     var COMPONENTS = [
         { raw: 'price',                  norm: 'price_normalized',                  weight: 0.20, label: 'Sale Price' },
         { raw: 'bids',                   norm: 'bids_normalized',                   weight: 0.20, label: 'Bid Activity' },
@@ -198,12 +199,15 @@
     // carry inside MII (15 : 10 : 5), each ranked among all models that month.
     // So a car that did not trade still has a reading, and a basket of cars
     // (an index's constituents) is the same cars every month.
+    function miiWeight(raw) {
+        return COMPONENTS.filter(function (c) { return c.raw === raw; })[0].weight;
+    }
     var ATTENTION_INPUTS = [
         // A car the YouTube collector read but found no video for in a month's
         // trailing window has no row: that is a measured zero, not a gap.
-        { signal: 'youtube', weight: 0.10, absentIsZero: true },
-        { signal: 'trends', weight: 0.15 },
-        { signal: 'social', weight: 0.05 },
+        { signal: 'youtube', weight: miiWeight('youtube_total_views'), absentIsZero: true },
+        { signal: 'trends', weight: miiWeight('google_trends_interest') },
+        { signal: 'social', weight: miiWeight('social_score') },
     ];
     // A month is scored only when every input was broadly measured in it:
     // at least half as many models as that input's best month. A month with
@@ -438,6 +442,47 @@
     // so; scoring already drops the input per-row via weight renormalization.
     var SPARSE_COVERAGE_THRESHOLD = 0.25;
 
+    // Rank one raw column into its normalized column, each row against the
+    // other cars of its own period. A period with too few measurements of
+    // the column to rank within falls back to the whole field rather than
+    // ranking a handful of cars against each other. Records the column's
+    // data quality when given a label.
+    function rankColumn(rows, raw, norm, label) {
+        var vals = [], byPeriod = {}, distinct = {}, distinctCount = 0;
+        for (var i = 0; i < rows.length; i++) {
+            var v = parseFloat(rows[i][raw]);
+            if (!isNaN(v)) {
+                vals.push(v);
+                (byPeriod[periodKey(rows[i])] = byPeriod[periodKey(rows[i])] || []).push(v);
+                if (!distinct[v]) { distinct[v] = 1; distinctCount++; }
+            }
+        }
+        if (label) {
+            dataQuality[raw] = {
+                label: label,
+                coverage: vals.length / rows.length,
+                distinct: distinctCount,
+                status: !vals.length ? 'empty'
+                    : distinctCount < STATIC_DISTINCT_THRESHOLD ? 'static'
+                    : (vals.length / rows.length) < SPARSE_COVERAGE_THRESHOLD ? 'sparse'
+                    : 'ok',
+            };
+        }
+        if (!vals.length) {
+            rows.forEach(function (r) { r[norm] = 0; });
+            return;
+        }
+        var pooled = percentileRanker(vals);
+        var rankers = {};
+        Object.keys(byPeriod).forEach(function (p) {
+            rankers[p] = byPeriod[p].length >= MIN_PERIOD_SAMPLE ? percentileRanker(byPeriod[p]) : pooled;
+        });
+        rows.forEach(function (r) {
+            var v = parseFloat(r[raw]);
+            r[norm] = isNaN(v) ? 0 : +rankers[periodKey(r)](v).toFixed(6);
+        });
+    }
+
     // Scores rank each car against the other cars of the SAME period (month,
     // or quarter for quarterly rows), not against the whole file. Ranking the
     // whole file at once let three things leak into a car's score that have
@@ -468,46 +513,7 @@
 
         dataQuality = {};
 
-        COMPONENTS.forEach(function (c) {
-            var vals = [];
-            var byPeriod = {};
-            var distinct = {};
-            var distinctCount = 0;
-            for (var i = 0; i < rows.length; i++) {
-                var v = parseFloat(rows[i][c.raw]);
-                if (!isNaN(v)) {
-                    vals.push(v);
-                    (byPeriod[periodKey(rows[i])] = byPeriod[periodKey(rows[i])] || []).push(v);
-                    if (!distinct[v]) { distinct[v] = 1; distinctCount++; }
-                }
-            }
-            dataQuality[c.raw] = {
-                label: c.label,
-                coverage: vals.length / rows.length,
-                distinct: distinctCount,
-                status: !vals.length ? 'empty'
-                    : distinctCount < STATIC_DISTINCT_THRESHOLD ? 'static'
-                    : (vals.length / rows.length) < SPARSE_COVERAGE_THRESHOLD ? 'sparse'
-                    : 'ok',
-            };
-            if (!vals.length) {
-                rows.forEach(function (r) { r[c.norm] = 0; });
-                return;
-            }
-            // Each row is ranked against the other cars of its own period. A
-            // period with too few measurements of this input to rank within
-            // falls back to the whole field rather than ranking a handful of
-            // cars against each other.
-            var pooled = percentileRanker(vals);
-            var rankers = {};
-            Object.keys(byPeriod).forEach(function (p) {
-                rankers[p] = byPeriod[p].length >= MIN_PERIOD_SAMPLE ? percentileRanker(byPeriod[p]) : pooled;
-            });
-            rows.forEach(function (r) {
-                var v = parseFloat(r[c.raw]);
-                r[c.norm] = isNaN(v) ? 0 : +rankers[periodKey(r)](v).toFixed(6);
-            });
-        });
+        COMPONENTS.forEach(function (c) { rankColumn(rows, c.raw, c.norm, c.label); });
 
         rows.forEach(function (r) {
             var s = 0, w = 0;

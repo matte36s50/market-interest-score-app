@@ -11,20 +11,11 @@ const T = () => window.SITE_THEME;
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
 
-// The dimensions of a model's MII profile. Weights are the actual MII formula
-// (kept in sync with mii-normalize.js): price 20%, bids 20%, views 15%,
-// comments 10%, Google Trends 15%, YouTube 10%, social 5%, age 5%. All eight
-// inputs carry real weight, so each contributes to the similarity distance.
-const PROFILE_DIMS = [
-    { key: 'price_normalized', label: 'Price', weight: 0.20 },
-    { key: 'bids_normalized', label: 'Bids', weight: 0.20 },
-    { key: 'views_normalized', label: 'Views', weight: 0.15 },
-    { key: 'comments_normalized', label: 'Comments', weight: 0.10 },
-    { key: 'social_score_normalized', label: 'Social', weight: 0.05 },
-    { key: 'age_normalized', label: 'Age', weight: 0.05 },
-    { key: 'google_trends_interest_normalized', label: 'Google Trends', weight: 0.15 },
-    { key: 'youtube_total_views_normalized', label: 'YouTube', weight: 0.10 },
-];
+// The dimensions of a model's MII profile: the MII inputs and their weights,
+// from mii-normalize.js (the one definition), so the similarity distance
+// always weighs the inputs as the score does.
+const SHORT_LABELS = { 'Sale Price': 'Price', 'Bid Activity': 'Bids', 'View Count': 'Views', 'Enduring Interest': 'Enduring' };
+const PROFILE_DIMS = MII.COMPONENTS.map(c => ({ key: c.norm, label: SHORT_LABELS[c.label] || c.label, weight: c.weight }));
 
 // Axis label with a data-quality flag from MII.dataQuality, so a dead or
 // static input reads as such instead of silently charting as zero.
@@ -55,6 +46,8 @@ let radarChart = null;
 let trendChart = null;
 let benchmarkChart = null;
 let jitterChart = null;
+let absoluteChart = null;
+let marketViewsByQuarter = {};    // month -> typical views per sale (lot-weighted median)
 
 // ---- Data loading ----
 
@@ -151,6 +144,21 @@ function buildModels(rawData) {
         mfrSums[mfr][q].sum += mii;
         mfrSums[mfr][q].n += 1;
     });
+    // The market's level for the Absolute Interest chart: the typical sale's
+    // views that month, weighting each model-month by its lots.
+    const viewPairs = {};
+    valid.forEach(row => {
+        const v = parseFloat(row.views), w = parseFloat(row.auction_count) || 1;
+        if (!isNaN(v)) (viewPairs[String(row.quarter).trim()] = viewPairs[String(row.quarter).trim()] || []).push([v, w]);
+    });
+    marketViewsByQuarter = {};
+    Object.entries(viewPairs).forEach(([q, pairs]) => {
+        pairs.sort((a, b) => a[0] - b[0]);
+        const total = pairs.reduce((s, [, w]) => s + w, 0);
+        let acc = 0;
+        marketViewsByQuarter[q] = pairs.find(([, w]) => (acc += w) >= total / 2)?.[0] ?? null;
+    });
+
     marketMIIByQuarter = {};
     Object.entries(marketSums).forEach(([q, { sum, n }]) => {
         marketMIIByQuarter[q] = n ? sum / n : null;
@@ -425,6 +433,62 @@ function renderTrend(keys) {
             },
             plugins: {
                 legend: { labels: { color: T().muted, boxWidth: 12, usePointStyle: true, font: { size: 11 } } }
+            }
+        }
+    });
+}
+
+// The car's own level against the market's, by month: the average views on
+// its sales that month, beside the market's typical sale. Log scale, so equal
+// slopes mean equal growth.
+function renderAbsolute(keys) {
+    const ctx = document.getElementById('absoluteChart').getContext('2d');
+    if (absoluteChart) absoluteChart.destroy();
+    const viewsIn = (m, q) => {
+        const vs = m.rows.filter(r => String(r.quarter).trim() === q).map(r => parseFloat(r.views)).filter(v => v > 0);
+        return vs.length ? vs.reduce((s, v) => s + v, 0) / vs.length : null;
+    };
+    absoluteChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: quarters,
+            datasets: keys.map((k, i) => {
+                const color = seriesColors()[i % seriesColors().length];
+                return {
+                    label: modelLabel(k), data: quarters.map(q => viewsIn(models[k], q)),
+                    borderColor: color, backgroundColor: color, pointBackgroundColor: color,
+                    spanGaps: true, tension: 0.3, pointRadius: 3, borderWidth: 2,
+                };
+            }).concat([{
+                label: 'Market (typical sale)', data: quarters.map(q => marketViewsByQuarter[q] ?? null),
+                borderColor: T().muted, backgroundColor: T().muted, borderDash: [5, 4],
+                spanGaps: true, tension: 0.3, pointRadius: 0, borderWidth: 2,
+            }])
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: T().muted, font: { size: 10 } } },
+                y: {
+                    type: 'logarithmic',
+                    grid: { color: T().grid },
+                    ticks: {
+                        color: T().muted, font: { size: 11 },
+                        // Label only the 1-2-5 steps, so the log axis stays legible.
+                        callback: v => {
+                            const lead = v / Math.pow(10, Math.floor(Math.log10(v)));
+                            if (![1, 2, 5].some(d => Math.abs(lead - d) < 1e-6)) return '';
+                            return v >= 1000 ? `${v / 1000}k` : v;
+                        }
+                    },
+                    title: { display: true, text: 'Views per sale (log scale)', color: T().muted, font: { size: 11 } }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: T().muted, boxWidth: 12, usePointStyle: true, font: { size: 11 } } },
+                tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y == null ? '—' : Math.round(c.parsed.y).toLocaleString()} views` } }
             }
         }
     });
@@ -791,6 +855,7 @@ function renderAll() {
     empty.classList.add('hidden');
     renderRadar(keys);
     renderTrend(keys);
+    renderAbsolute(keys);
     renderJitter(keys);
     renderBenchmark(keys);
     renderTable(keys);
