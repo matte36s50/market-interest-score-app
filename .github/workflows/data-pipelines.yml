@@ -51,7 +51,12 @@ jobs:
   recompute:
     runs-on: ubuntu-latest
     steps:
+      # The tip of main, not the commit that triggered the run: a run queued
+      # behind another (see concurrency) must start from the derived CSVs that run
+      # just committed, or its own commit conflicts with them on rebase.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
