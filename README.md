@@ -127,6 +127,22 @@ median), `weak` (median to 90th percentile) or `signal` (above). The dashboard
 draws a within-noise trend greyed with a dotted underline instead of a confident
 coloured arrow, with the reason in its tooltip.
 
+### Attention: every model, every month
+
+MII exists only in a month a car sells on Bring a Trailer, so a car that
+trades twice a year has two readings, and a basket of cars (an index's
+constituents) changes with whatever happened to sell. **Attention** fills
+that gap: the three inputs measured for every model every month (Google
+Trends, YouTube share of the tracked channels' views, and social), in the
+same 15 : 10 : 5 proportions they carry inside MII, each ranked among all
+models that month. 50 is the median model. A month is scored only when all
+three inputs were broadly measured (at least half as many models as that
+input's best month), so the month in progress and the months before Google
+Trends collection began are left blank rather than scored on a different
+mix. `MII.attentionFor(make, model, month)` returns it; the BMW CI section
+shows the basket's attention (all constituents, traded or not), each
+constituent's attention, and the attention line on its chart.
+
 ### Our model list (`data/models.csv`) and variants (`data/variants.csv`)
 
 The upstream file names models the way its sources did, which is not one name

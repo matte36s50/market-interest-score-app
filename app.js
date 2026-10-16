@@ -677,15 +677,28 @@ function ciConstituentStats(c, key) {
     };
 }
 
+// A constituent's attention (search, YouTube and social; see MII.attentionFor)
+// for a period: the mean over its model groups and, for the year to date, the
+// months measured so far. Null where none was measured.
+function ciAttention(c, key) {
+    if (!window.MII?.attentionFor) return null;
+    const months = key === 'YTD' ? (DS.ytdMonths || []) : [key];
+    return mean(c.models.flatMap(m => months.map(k => MII.attentionFor('BMW', m, k))));
+}
+
 function ciPeriod(key) {
     const cacheKey = `ci|${key}`;
     if (DS.cache[cacheKey]) return DS.cache[cacheKey];
-    const items = BMW_CI.CONSTITUENTS.map(c => ({ c, s: ciConstituentStats(c, key) }));
+    const items = BMW_CI.CONSTITUENTS.map(c => ({ c, s: ciConstituentStats(c, key), a: ciAttention(c, key) }));
     const present = items.filter(i => i.s);
+    const attended = items.filter(i => i.a != null);
     const out = {
         items,
         present: present.length,
         basket: present.length ? mean(present.map(i => i.s.mii)) : null,
+        // The same constituents every month, traded or not.
+        attention: attended.length ? mean(attended.map(i => i.a)) : null,
+        attended: attended.length,
         auctions: present.reduce((s, i) => s + i.s.auctions, 0)
     };
     DS.cache[cacheKey] = out;
@@ -1169,6 +1182,7 @@ function renderCI() {
         <div class="ci-stat"><div><div class="s-label">BMW CI interest</div><div class="s-note" style="text-align:left">average MII of traded constituents</div></div><span class="s-value big">${fmt1(ci.basket)}</span></div>
         <div class="ci-stat"><span class="s-label">vs the market</span><span class="s-value ${gapCls(gapMarket)}">${gapMarket == null ? '—' : signed(gapMarket)}</span></div>
         <div class="ci-stat"><span class="s-label">vs all BMW</span><span class="s-value ${gapCls(gapBMW)}">${gapBMW == null ? '—' : signed(gapBMW)}</span></div>
+        <div class="ci-stat"><div><div class="s-label">BMW CI attention</div><div class="s-note" style="text-align:left">search, YouTube, social · ${ci.attended} of ${BMW_CI.CONSTITUENTS.length}, traded or not</div></div><span class="s-value">${ci.attention == null ? '—' : fmt1(ci.attention)}</span></div>
         <div class="ci-stat"><span class="s-label">Constituents traded</span><span class="s-value">${ci.present}<span class="muted" style="font-size:15px;font-weight:500"> / ${BMW_CI.CONSTITUENTS.length}</span></span></div>
         <div class="ci-stat"><span class="s-label">Auctions</span><span class="s-value">${fmtInt(ci.auctions)}</span></div>
         <div class="ci-stat"><span class="s-label">Median constituent price</span><span class="s-value">${formatPrice(median(priced.map(i => i.s.avgPrice)))}</span></div>`;
@@ -1176,8 +1190,9 @@ function renderCI() {
     // Constituent cards, strongest first; ones with no sales this period last.
     const base = baselineKey(key);
     const baseTo = key === 'YTD' ? DS.ytdTo : key;
-    const items = ci.items.slice().sort((a, b) => (b.s?.mii ?? -1) - (a.s?.mii ?? -1));
-    grid.innerHTML = items.map(({ c, s }) => {
+    const items = ci.items.slice().sort((a, b) => (b.s?.mii ?? -1) - (a.s?.mii ?? -1) || (b.a ?? -1) - (a.a ?? -1));
+    grid.innerHTML = items.map(({ c, s, a }) => {
+        const att = a != null ? `<span title="Search, YouTube and social, ranked among all models that month">Attention ${fmt1(a)}</span>` : '';
         const tags = [
             c.added ? `<span class="tag new">Added ${esc(c.added)}</span>` : '',
             c.approx ? `<span class="tag" title="${esc(c.approx)}">≈ group match</span>` : ''
@@ -1189,7 +1204,7 @@ function renderCI() {
                 <div class="c-head"><div><div class="c-name">${esc(c.name)}</div><div class="c-years">${esc(c.years)}</div></div></div>
                 <div class="c-mii">${esc(c.note || 'No Bring a Trailer sales this period')}</div>
                 <div class="c-tags">${tags}</div>
-                <div class="c-foot"><span>${lotsAvailable ? 'See its listings' : 'Not scored'}</span></div>
+                <div class="c-foot"><span>${lotsAvailable ? 'See its listings' : 'No MII this period'}</span>${att}</div>
             </${tagName}>`;
         }
         let dPts = null, dAuc = null;
@@ -1209,7 +1224,7 @@ function renderCI() {
                 ${sparkline(series, { w: 92, h: 32, stroke: 'var(--ci-line)', dot: 'var(--ci)' })}
             </div>
             ${tags ? `<div class="c-tags">${tags}</div>` : ''}
-            <div class="c-foot"><span>${fmtInt(s.auctions)} auction${s.auctions === 1 ? '' : 's'}</span><span>${formatPrice(s.avgPrice)}</span></div>
+            <div class="c-foot"><span>${fmtInt(s.auctions)} auction${s.auctions === 1 ? '' : 's'} · ${formatPrice(s.avgPrice)}</span>${att}</div>
         </button>`;
     }).join('');
     grid.querySelectorAll('button[data-ci]').forEach(btn => {
@@ -1230,15 +1245,17 @@ function renderCIChart() {
     const p = palette();
     const months = DS.months;
     const basket = months.map(k => ciPeriod(k).basket);
+    const attention = months.map(k => ciPeriod(k).attention);
     const bmw = makeSeries('BMW', months);
     const market = months.map(k => marketStats(k)?.mii ?? null);
     const selIdx = STATE.period === 'YTD' ? -1 : months.indexOf(STATE.period);
     const series = [
         { label: 'BMW CI', data: basket, color: p.ci, width: 2.75 },
+        ...(attention.some(v => v != null) ? [{ label: 'CI attention', data: attention, color: p.ci, width: 2, dash: [5, 4] }] : []),
         { label: 'All BMW', data: bmw, color: p.bmw, width: 2 },
         { label: 'Market', data: market, color: p.market, width: 2 }
     ];
-    document.getElementById('ciLegend').innerHTML = series.map(s => `<span><i style="color:${s.color}"></i>${s.label}</span>`).join('');
+    document.getElementById('ciLegend').innerHTML = series.map(s => `<span><i${s.dash ? ' class="dash"' : ''} style="color:${s.color}"></i>${s.label}</span>`).join('');
 
     makeChart('ciChart', {
         type: 'line',
@@ -1246,7 +1263,7 @@ function renderCIChart() {
             labels: months.map(axisMonth),
             datasets: series.map(s => ({
                 label: s.label, endLabel: s.label, data: s.data, borderColor: s.color, backgroundColor: s.color,
-                borderWidth: s.width, tension: 0.35, spanGaps: true,
+                borderWidth: s.width, borderDash: s.dash, tension: 0.35, spanGaps: true,
                 pointRadius: months.map((_, i) => (i === selIdx ? 4.5 : 0)), pointHoverRadius: 4.5,
                 pointBorderColor: p.surface, pointBorderWidth: 2
             }))
@@ -1264,7 +1281,10 @@ function renderCIChart() {
                     callbacks: {
                         title: items => longPeriod(months[items[0].dataIndex]),
                         label: ctx => ` ${ctx.dataset.label}  ${fmt1(ctx.parsed.y)}`,
-                        footer: items => `${ciPeriod(months[items[0].dataIndex]).present} constituents traded`
+                        footer: items => {
+                            const ci = ciPeriod(months[items[0].dataIndex]);
+                            return `${ci.present} constituents traded` + (ci.attention != null ? ` · attention covers ${ci.attended}` : '');
+                        }
                     }
                 }
             },

@@ -191,6 +191,85 @@
         SIGNALS.forEach(function (signal) { joinSignal(rows, signal); });
     }
 
+    // ---- Attention: every model, every month -----------------------------------
+    // MII exists only in a month a car sells on Bring a Trailer. Attention does
+    // not wait for a sale: it blends the three inputs measured for every model
+    // every month — search, YouTube and social — in the same proportions they
+    // carry inside MII (15 : 10 : 5), each ranked among all models that month.
+    // So a car that did not trade still has a reading, and a basket of cars
+    // (an index's constituents) is the same cars every month.
+    var ATTENTION_INPUTS = [
+        // A car the YouTube collector read but found no video for in a month's
+        // trailing window has no row: that is a measured zero, not a gap.
+        { signal: 'youtube', weight: 0.10, absentIsZero: true },
+        { signal: 'trends', weight: 0.15 },
+        { signal: 'social', weight: 0.05 },
+    ];
+    // A month is scored only when every input was broadly measured in it:
+    // at least half as many models as that input's best month. A month with
+    // one input missing or half-collected (the month in progress has YouTube
+    // alone; Google Trends started part-way through August 2025) would score
+    // on a different mix of inputs from its neighbours and jump for no reason.
+    var ATTENTION_MIN_COVERAGE = 0.5;
+    var attentionCache = null;
+    function attentionTable() {
+        var tables = ATTENTION_INPUTS.map(function (a) { return canonicalSignal(a.signal); });
+        if (attentionCache && attentionCache.models === modelTable
+            && attentionCache.tables.every(function (t, i) { return t === tables[i]; })) return attentionCache.out;
+        // Models measured per month, per input. An input that records a zero
+        // by omission (YouTube) counts as measured in any month it has rows.
+        var monthsOf = tables.map(function (t, i) {
+            var n = {};
+            if (t) Object.keys(t).forEach(function (k) { Object.keys(t[k]).forEach(function (m) { n[m] = (n[m] || 0) + 1; }); });
+            var best = Object.keys(n).reduce(function (b, m) { return Math.max(b, n[m]); }, 0);
+            var set = {};
+            Object.keys(n).forEach(function (m) {
+                if (ATTENTION_INPUTS[i].absentIsZero || n[m] >= ATTENTION_MIN_COVERAGE * best) set[m] = 1;
+            });
+            return set;
+        });
+        var allMonths = {};
+        monthsOf.forEach(function (s) { Object.keys(s).forEach(function (m) { allMonths[m] = (allMonths[m] || 0) + 1; }); });
+        var out = {};   // modelKey -> month -> 0..100
+        Object.keys(allMonths).sort().forEach(function (month) {
+            if (allMonths[month] < ATTENTION_INPUTS.length) return;
+            var ranks = ATTENTION_INPUTS.map(function (a, i) {
+                var t = tables[i];
+                if (!t || !monthsOf[i][month]) return null;
+                var vals = {};
+                Object.keys(t).forEach(function (k) {
+                    var v = t[k][month];
+                    if (v != null) vals[k] = v;
+                    else if (a.absentIsZero) vals[k] = 0;
+                });
+                var list = Object.keys(vals).map(function (k) { return vals[k]; });
+                if (list.length < MIN_PERIOD_SAMPLE) return null;
+                var rank = percentileRanker(list);
+                var r = {};
+                Object.keys(vals).forEach(function (k) { r[k] = rank(vals[k]); });
+                return r;
+            });
+            var keys = {};
+            ranks.forEach(function (r) { if (r) Object.keys(r).forEach(function (k) { keys[k] = 1; }); });
+            Object.keys(keys).forEach(function (k) {
+                var s = 0, w = 0;
+                ranks.forEach(function (r, i) {
+                    if (r && r[k] != null) { s += ATTENTION_INPUTS[i].weight * r[k]; w += ATTENTION_INPUTS[i].weight; }
+                });
+                if (w) (out[k] = out[k] || {})[month] = +(100 * s / w).toFixed(2);
+            });
+        });
+        attentionCache = { models: modelTable, tables: tables, out: out };
+        return out;
+    }
+    // A model's attention in a month ("2026-09"; a "-MTD" suffix is ignored),
+    // or null where it was not measured.
+    function attentionFor(make, model, month) {
+        var byMonth = attentionTable()[modelKey(make, canonicalModel(make, model))];
+        var m = String(month == null ? '' : month).replace(/-MTD$/, '');
+        return byMonth && byMonth[m] != null ? byMonth[m] : null;
+    }
+
     // ---- Our model list ------------------------------------------------------
     // data/models.csv (data/pipelines/model_list.py) maps every name the
     // upstream file uses to one name per car: "TIGUAN", "VOLKSWAGEN TIGUAN" and
@@ -605,6 +684,9 @@
         modelFlag: modelFlag,
         canonicalize: canonicalize,
         setModels: function (text) { modelTable = text ? indexModels(text) : null; },
+        // Attention: search, YouTube and social for every model every month.
+        attentionFor: attentionFor,
+        ATTENTION_INPUTS: ATTENTION_INPUTS,
         // Months covered by a period label ('2025-05' → itself, '2025Q2' → its
         // three months). Shared by pages that join monthly bat.csv data onto
         // MII rows of either grain.
