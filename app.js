@@ -229,7 +229,8 @@ async function loadCSVData() {
 // ---------------------------------------------------------------------------
 // Dataset: MII rows aggregated per month (and year to date) into makes and
 // models. One dataset is built per vehicle class, from rows already scored
-// against the whole field, so a car's MII is the same in every view.
+// against every car of their month (all classes), so a car's MII is the same
+// in every view.
 // ---------------------------------------------------------------------------
 
 function groupBy(list, keyFn) {
@@ -252,6 +253,21 @@ function median(values) {
     if (!v.length) return null;
     const mid = Math.floor(v.length / 2);
     return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
+}
+
+// Median of [value, weight] pairs: the value at which half the weight lies
+// on either side. Rows are model-month averages, so weighting each by its lot
+// count gives the typical lot rather than the typical model.
+function weightedMedian(pairs) {
+    const v = pairs.filter(([x, w]) => x != null && isFinite(x) && w > 0).sort((a, b) => a[0] - b[0]);
+    const total = v.reduce((s, [, w]) => s + w, 0);
+    if (!total) return null;
+    let acc = 0;
+    for (const [x, w] of v) {
+        acc += w;
+        if (acc >= total / 2) return x;
+    }
+    return v[v.length - 1][0];
 }
 
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : null; };
@@ -338,6 +354,14 @@ function buildDataset(rows) {
     const byMonth = groupBy(valid, r => r.quarter);
 
     const ds = { months: rawMonths.map(keyOf), quarterData: {}, cache: {} };
+
+    // Months the upstream capture largely missed: under half the typical
+    // month's lots (January 2026 has about a third). Each car's MII still
+    // ranks fairly within such a month, but the market-level figures rest on
+    // a fraction of the market, so none is ever used as a comparison point.
+    const lots = rawMonths.map(m => byMonth.get(m).reduce((s, r) => s + (num(r.auction_count) || 0), 0));
+    const typical = median(lots.filter((_, i) => rawMonths[i] !== latest));
+    ds.thin = new Set(rawMonths.filter((m, i) => m !== latest && typical > 0 && lots[i] < typical / 2).map(keyOf));
     rawMonths.forEach((m, i) => {
         const key = keyOf(m);
         ds.quarterData[key] = summarizePeriod(byMonth.get(m), 'monthly');
@@ -345,13 +369,14 @@ function buildDataset(rows) {
     });
 
     // Year to date: every month of the latest year, with change measured from
-    // January to the last complete month (the partial month would make it noise).
+    // January to the last complete month (the partial month would make it
+    // noise), skipping an incomplete month at either end.
     const year = latest.slice(0, 4);
     const ytdRaw = rawMonths.filter(m => m.startsWith(year));
     if (ytdRaw.length) {
         ds.quarterData.YTD = summarizePeriod(ytdRaw.flatMap(m => byMonth.get(m)), 'quarterly');
         ds.ytdMonths = ytdRaw.map(keyOf);
-        const full = ds.ytdMonths.filter(k => !k.endsWith('-MTD'));
+        const full = ds.ytdMonths.filter(k => !k.endsWith('-MTD') && !ds.thin.has(k));
         if (full.length >= 2) {
             ds.ytdFrom = full[0];
             ds.ytdTo = full[full.length - 1];
@@ -482,6 +507,13 @@ function baselineKey(key) {
     const i = DS.months.indexOf(key);
     return i > 0 ? DS.months[i - 1] : null;
 }
+// The month a market-level figure compares against: the previous month, or
+// the one before it when that month's capture was incomplete.
+function solidBaseline(key) {
+    let b = baselineKey(key);
+    while (b && key !== 'YTD' && DS.thin?.has(b)) b = baselineKey(b);
+    return b;
+}
 function baselinePhrase(key) {
     if (key === 'YTD') return DS.ytdFrom ? `${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}` : '';
     const b = baselineKey(key);
@@ -557,10 +589,17 @@ function marketStats(key) {
         const tradedModels = p.manufacturers.reduce((s, m) => s + m.models.filter(x => x.auctions > 0).length, 0);
         const auctions = q.reduce((s, m) => s + m.auctions, 0);
         const sold = q.reduce((s, m) => s + m.sold, 0);
+        // The market's level. MII ranks each car against its own month, so
+        // the market's average MII sits near 50 by design and cannot show
+        // whether the market as a whole is drawing more attention. Views per
+        // listing can: the typical (lot-weighted median) listing across every
+        // make in view, qualifying or not.
+        const viewed = p.manufacturers.flatMap(m => m.models).filter(m => m.auctions > 0 && m.avgViews > 0);
         out = {
             makes: q.length,
             allMakes: p.manufacturers.length,
             mii: q.length ? mean(q.map(m => m.miiScore)) : null,
+            views: weightedMedian(viewed.map(m => [m.avgViews, m.auctions])),
             auctions,
             sellThrough: auctions > 0 ? (sold / auctions) * 100 : null,
             medianPrice: median(models.map(m => m.avgPrice).filter(v => v > 0)),
@@ -799,29 +838,34 @@ function makeChart(id, config) {
 function renderHero() {
     const key = STATE.period;
     const ms = marketStats(key);
-    const base = baselineKey(key);
+    const base = solidBaseline(key);
     const isYTD = key === 'YTD';
+    const thin = DS.thin?.has(key);
 
     document.getElementById('periodTitle').textContent = isYTD ? `· ${longPeriod(key)}` : `· ${longPeriod(key)}`;
-    document.getElementById('marketMII').textContent = fmt1(ms?.mii);
+    document.getElementById('marketLevel').textContent = ms?.views != null ? fmtInt(ms.views) : '–';
 
-    // Headline change. Month view: vs the month before. YTD: January to the
-    // last full month, on monthly figures so both ends are like for like.
+    // Headline change, in percent. Month view: vs the month before (skipping
+    // an incomplete one). YTD: the year's first complete month to its last,
+    // on monthly figures so both ends are like for like.
     const deltaEl = document.getElementById('marketDelta');
     let diff = null;
     if (isYTD && DS.ytdFrom) {
-        const a = marketStats(DS.ytdFrom)?.mii, b = marketStats(DS.ytdTo)?.mii;
-        if (a != null && b != null) diff = b - a;
-    } else if (base) {
-        const a = marketStats(base)?.mii;
-        if (a != null && ms?.mii != null) diff = ms.mii - a;
+        const a = marketStats(DS.ytdFrom)?.views, b = marketStats(DS.ytdTo)?.views;
+        if (a && b != null) diff = (b / a - 1) * 100;
+    } else if (base && !thin) {
+        const a = marketStats(base)?.views;
+        if (a && ms?.views != null) diff = (ms.views / a - 1) * 100;
     }
-    if (diff == null) {
+    if (thin) {
+        deltaEl.style.display = '';
+        deltaEl.innerHTML = `<span class="muted">Incomplete month: only ${fmtInt(ms?.auctions)} auctions captured</span>`;
+    } else if (diff == null) {
         deltaEl.style.display = 'none';
     } else {
         deltaEl.style.display = '';
-        const cls = Math.abs(diff) < 0.05 ? 'muted' : diff > 0 ? 'up' : 'down';
-        deltaEl.innerHTML = `<span class="${cls}">${diff > 0 ? '▲' : diff < 0 ? '▼' : ''} ${signed(diff)} pts</span><span class="muted">${esc(baselinePhrase(key))}</span>`;
+        const cls = Math.abs(diff) < 0.5 ? 'muted' : diff > 0 ? 'up' : 'down';
+        deltaEl.innerHTML = `<span class="${cls}">${diff > 0 ? '▲' : diff < 0 ? '▼' : ''} ${signed(diff)}%</span><span class="muted">${esc(isYTD ? baselinePhrase(key) : `vs ${shortPeriod(base)}`)}</span>`;
     }
 
     renderLede(ms, diff);
@@ -838,14 +882,17 @@ function renderLede(ms, diff) {
     }
     const p = period(key);
     const leader = p.manufacturers.filter(m => m.auctions >= STATE.minAuctions && isNamedMake(m.make))[0];
+    // `diff` is the percent change in views per listing (see renderHero).
     const parts = [];
+    const views = ms.views != null ? `<strong>${fmtInt(ms.views)}</strong> views` : 'an unknown number of views';
     if (key === 'YTD') {
-        parts.push(`So far this year, market interest averages <strong>${fmt1(ms.mii)}</strong> across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
-        if (diff != null) parts[0] += `, ${Math.abs(diff) < 0.05 ? 'flat' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(1)} points`} from ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
+        parts.push(`So far this year the typical listing has drawn ${views}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
+        if (diff != null) parts[0] += `, ${Math.abs(diff) < 0.5 ? 'flat' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}%`} from ${monthName(DS.ytdFrom)} to ${monthName(DS.ytdTo)}`;
     } else {
-        parts.push(`Market interest ${key.endsWith('-MTD') ? 'is running at' : 'came in at'} <strong>${fmt1(ms.mii)}</strong> across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
-        const b = baselineKey(key);
-        if (diff != null && b) parts[0] += `, ${Math.abs(diff) < 0.05 ? 'flat on' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(1)} points on`} ${monthName(b)}`;
+        parts.push(`The typical listing ${key.endsWith('-MTD') ? 'is drawing' : 'drew'} ${views}, across <strong>${fmtInt(ms.auctions)}</strong> auctions`);
+        const b = solidBaseline(key);
+        if (DS.thin?.has(key)) parts[0] += ', in a month the source data only partly captured';
+        else if (diff != null && b) parts[0] += `, ${Math.abs(diff) < 0.5 ? 'flat on' : `${diff > 0 ? 'up' : 'down'} ${Math.abs(diff).toFixed(0)}% on`} ${monthName(b)}`;
     }
     parts[0] += '.';
     if (leader) parts.push(`<strong>${esc(mk(leader.make))}</strong> leads ${ms.makes} qualifying makes.`);
@@ -883,11 +930,12 @@ function renderMarketChart() {
     const hero = document.querySelector('.hero');
     const p = palette(hero);
     const months = DS.months;
-    const values = months.map(k => marketStats(k)?.mii ?? null);
+    const values = months.map(k => marketStats(k)?.views ?? null);
     const selIdx = STATE.period === 'YTD' ? -1 : months.indexOf(STATE.period);
     const last = months.length - 1;
     const partial = months[last]?.endsWith('-MTD');
-    document.getElementById('marketChartNote').textContent = `${partial ? 'Dashed: month in progress. ' : ''}Select a month to open it`;
+    const anyThin = months.some(k => DS.thin?.has(k));
+    document.getElementById('marketChartNote').textContent = `${partial ? 'Dashed: month in progress. ' : ''}${anyThin ? 'Hollow: month only partly captured. ' : ''}Select a month to open it`;
 
     const chart = makeChart('marketChart', {
         type: 'line',
@@ -907,13 +955,15 @@ function renderMarketChart() {
                     g.addColorStop(1, withAlpha(p.market, 0));
                     return g;
                 },
-                pointRadius: months.map((_, i) => (i === selIdx ? 5.5 : 0)),
+                pointRadius: months.map((k, i) => (i === selIdx ? 5.5 : DS.thin?.has(k) ? 3.5 : 0)),
                 pointHoverRadius: 5.5,
-                pointBackgroundColor: p.market,
-                pointBorderColor: '#0d0e10',
+                pointBackgroundColor: months.map(k => (DS.thin?.has(k) ? '#0d0e10' : p.market)),
+                pointBorderColor: months.map(k => (DS.thin?.has(k) ? p.market : '#0d0e10')),
                 pointBorderWidth: 2,
                 spanGaps: true,
-                segment: { borderDash: c => (partial && c.p1DataIndex === last ? [5, 5] : undefined) }
+                // Dashed into the month in progress, and on either side of an
+                // incomplete month so a capture gap does not read as a move.
+                segment: { borderDash: c => ((partial && c.p1DataIndex === last) || DS.thin?.has(months[c.p0DataIndex]) || DS.thin?.has(months[c.p1DataIndex]) ? [5, 5] : undefined) }
             }]
         },
         options: {
@@ -932,17 +982,18 @@ function renderMarketChart() {
                     ...tooltipStyle(),
                     callbacks: {
                         title: items => longPeriod(months[items[0].dataIndex]),
-                        label: ctx => `Market MII ${fmt1(ctx.parsed.y)}`,
+                        label: ctx => `${fmtInt(ctx.parsed.y)} views per listing`,
                         footer: items => {
-                            const s = marketStats(months[items[0].dataIndex]);
-                            return s ? `${fmtInt(s.auctions)} auctions · ${s.makes} makes` : '';
+                            const k = months[items[0].dataIndex], s = marketStats(k);
+                            if (!s) return '';
+                            return `${fmtInt(s.auctions)} auctions · ${s.makes} makes` + (DS.thin?.has(k) ? '\nIncomplete month: most auctions were not captured' : '');
                         }
                     }
                 }
             },
             scales: {
                 x: axis(p, { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 9 } }),
-                y: axis(p, { grace: '12%', ticks: { maxTicksLimit: 4, callback: v => Number(v).toFixed(0) } })
+                y: axis(p, { grace: '12%', ticks: { maxTicksLimit: 4, callback: v => `${(Number(v) / 1000).toFixed(1)}k` } })
             }
         },
         plugins: [crosshairPlugin]
@@ -1925,8 +1976,9 @@ async function initializeApp() {
 
         const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts(), MII.ready]);
         injectAuctionCounts(rawData, batCounts);
-        // Percentile ranks are taken over the whole field once, so a car's
-        // score does not change when the view is narrowed to one class.
+        // Percentile ranks are taken once, over every car of each month in
+        // every class, so a car's score does not change when the view is
+        // narrowed to one class.
         MII.recompute(rawData);
         RAW_ROWS = rawData;
 

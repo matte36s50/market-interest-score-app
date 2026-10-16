@@ -160,5 +160,36 @@ check('sign is ignored — a fall is judged like a rise',
     MII.moveStrength(-12, 21), MII.moveStrength(12, 21));
 check('a move between median and p90 reads as weak', MII.moveStrength(6, 21), 'weak');
 
+console.log('ranked within the month');
+// Two months of 40 cars each. October's market is busier (every car drew ten
+// times the views), but each car holds the same place in its own month, so it
+// must get the same views rank in both.
+function monthRows(month, scale) {
+    return Array.from({ length: 40 }, (_, i) => ({
+        manufacturer: 'Make', model: `Model ${i}`, quarter: month,
+        price: String(10000 + i * 1000), views: String((i + 1) * 100 * scale),
+        bids: '10', comments: '5', age: '30',
+    }));
+}
+rows = [...monthRows('2026-09', 1), ...monthRows('2026-10', 10)];
+MII.recompute(rows);
+const sep = rows.filter(r => r.quarter === '2026-09'), oct = rows.filter(r => r.quarter === '2026-10');
+check('the same place in a busier month gets the same rank',
+    sep.map(r => r.views_normalized), oct.map(r => r.views_normalized));
+near('the median car of each month ranks about 0.5',
+    sep.reduce((s, r) => s + r.views_normalized, 0) / sep.length, 0.5, 1e-9);
+check('a busier month does not lift its scores',
+    sep.map(r => r.mii_score), oct.map(r => r.mii_score));
+// A month with too few measurements of an input falls back to the whole field
+// rather than ranking a handful of cars against each other.
+rows = [...monthRows('2026-09', 1), { manufacturer: 'Make', model: 'Lone', quarter: '2026-10',
+    price: '10000', views: '100', bids: '10', comments: '5', age: '30' }];
+MII.recompute(rows);
+const field = MII.percentileRanker(rows.map(r => +r.views));
+near('a thin month is ranked against the whole field',
+    rows[rows.length - 1].views_normalized, field(100), 1e-6);
+near('a full month is still ranked within itself',
+    rows[0].views_normalized, MII.percentileRanker(sep.map(r => +r.views))(100), 1e-6);
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);
