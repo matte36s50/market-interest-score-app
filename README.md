@@ -15,9 +15,9 @@ A comprehensive, interactive dashboard for tracking collector car market interes
 ## Features
 
 ### 🎯 Overview page (`index.html`)
-- **Headline and narrative**: views per listing for the period (the market's
-  level; see Normalization), its change, and a generated one-paragraph read of
-  the month (or year to date)
+- **Headline and narrative**: the Market Interest Index for the period (the
+  market's level, June 2025 = 100; see Normalization), its change, and a
+  generated one-paragraph read of the month (or year to date)
 - **What stands out**: insight cards built from the data (leading make,
   biggest real mover, most-watched model, interest outrunning price, most
   bidding, BMW CI vs the market). Moves inside sampling noise are never reported.
@@ -149,7 +149,7 @@ Because MII ranks each car within its month, a car's MII shows whether it is
 gaining on other cars, not whether interest in it is growing. A car's absolute
 interest is its relative position times the market's level: if the market is up
 10% and a car's MII is flat, interest in the car is up about 10% too. The
-overview's headline shows the market's level (views per listing); the Model
+overview's headline shows the market's level (the Market Interest Index); the Model
 comparison page's **Absolute Interest** chart shows each selected car's views
 per sale beside the market's typical sale, on a log scale where equal slopes
 mean equal growth.
@@ -194,8 +194,14 @@ the whole field for that month instead.
 
 Because every month is ranked on its own, the market's average MII sits near 50
 by design. The overview's headline therefore shows the market's level a
-different way: **views per listing**, the lot-weighted median of the month's
-auctions, which rises and falls with the whole market. This is done in the
+different way: the **Market Interest Index**, the attention the typical listing
+draws. It takes the month's median views, watchers, comments and bids over every
+vehicle listing, sold or not, divides each by its June 2025 value and averages
+the four ratios geometrically with equal weight, so June 2025 = 100 and a 10%
+rise in any one input moves the index the same amount (`MII.marketLevel`). June
+2025 is the base because capture began on 16 May 2025; the base never moves, so
+a published level stays put. Price is left out: it measures value, not
+attention, and has its own figure. Ranking is done in the
 browser by `mii-normalize.js`, which every page calls right after loading the
 CSV, so every page agrees on a car's score.
 

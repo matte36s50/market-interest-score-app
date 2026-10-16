@@ -267,5 +267,19 @@ check('a month with an input half-collected is not scored', MII.attentionFor('Ma
 check('the month in progress suffix is ignored', MII.attentionFor('Make', 'M39', '2026-09-MTD'), MII.attentionFor('Make', 'M39', '2026-09'));
 check('an unmeasured model has no reading', MII.attentionFor('Make', 'Nope', '2026-09'), null);
 
+console.log('market level');
+const listing = (views, watchers, comments, bids) => ({ views, watchers, comments, bids });
+const june = MII.marketMedians([listing(100, 10, 4, 20), listing(300, 30, 8, 30), listing(200, 20, 6, 25)]);
+check('the typical listing is the median of each input', june, { lots: 3, views: 200, watchers: 20, comments: 6, bids: 25 });
+check('the base month is 100', MII.marketLevel(june, june), 100);
+near('every input up 10% lifts the level 10%',
+    MII.marketLevel({ views: 220, watchers: 22, comments: 6.6, bids: 27.5 }, june), 110);
+near('the inputs count equally: views doubling alone lifts it by 2^(1/4)',
+    MII.marketLevel({ views: 400, watchers: 20, comments: 6, bids: 25 }, june), 100 * Math.pow(2, 0.25));
+near('an input missing at one end is left out, not read as zero',
+    MII.marketLevel({ views: 220, watchers: null, comments: 6.6, bids: 27.5 }, june), 110);
+check('nothing measured has no level', MII.marketLevel({ views: null }, june), null);
+check('the base is the first full month', MII.MARKET_BASE, '2025-06');
+
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);
