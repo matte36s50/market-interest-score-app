@@ -1,0 +1,113 @@
+name: Apex Ledger (weekly Auction Results Ledgers)
+
+# Reads the weekly Auction Results Ledger Google Sheets from the ledger Drive
+# folder, rebuilds data/ledger/ (ledger_ingest.py, then ledger_mai.py), commits
+# it and re-triggers the Pages deploy, so mai-ledger.html shows the latest
+# ledger. See data/pipelines/LEDGER_README.md.
+#
+# A ledger lands on Monday, usually between 13:00 and 15:00 UTC. This runs at
+# 16:17 UTC on Mondays, and again on Tuesdays in case one is late (an unchanged
+# folder rebuilds byte-identical files, so the second run commits nothing).
+#
+# Repository secret (Settings → Secrets and variables → Actions):
+#   LEDGER_SERVICE_ACCOUNT_JSON  the JSON key of a Google service account that
+#                                the ledger folder is shared with as Viewer
+#                                (LEDGER_README.md, section 1).
+# Without it the run stops with a warning and changes nothing.
+
+on:
+  schedule:
+    - cron: '17 16 * * 1'   # Mondays, after the week's ledger lands
+    - cron: '17 16 * * 2'   # Tuesdays, for a late ledger
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'data/pipelines/ledger_*.py'
+      - 'data/pipelines/ledger_manufacturer_groups.csv'
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: ledger
+  cancel-in-progress: false
+
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    steps:
+      # The tip of main, not the commit that triggered the run (see the note
+      # in signals.yml).
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Tests (offline, over fixtures)
+        run: python data/pipelines/test_ledger.py
+
+      - name: Credentials
+        id: creds
+        env:
+          KEY: ${{ secrets.LEDGER_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::warning::LEDGER_SERVICE_ACCOUNT_JSON is not set, so the ledgers cannot be read. Add a service-account key (data/pipelines/LEDGER_README.md, section 1). Nothing was changed."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s' "$KEY" > "$RUNNER_TEMP/ledger-service-account.json"
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install the Sheets client
+        if: steps.creds.outputs.ok == 'true'
+        run: pip install -r data/pipelines/requirements-ledger.txt
+
+      # Exits 1 on a hard error (a sheet without record_id, a bad number).
+      # The dataset is then left as it was and validation_report.json says
+      # why; that report is still committed so the page can show it.
+      - name: Ingest the ledgers
+        id: ingest
+        if: steps.creds.outputs.ok == 'true'
+        continue-on-error: true
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/ledger-service-account.json
+        run: python data/pipelines/ledger_ingest.py
+
+      - name: Score
+        if: steps.ingest.outcome == 'success'
+        run: python data/pipelines/ledger_mai.py
+
+      - name: Commit
+        id: commit
+        if: steps.creds.outputs.ok == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ledger
+          if git diff --cached --quiet; then
+            echo "No change in data/ledger — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: rebuild the Apex Ledger from the weekly Auction Results Ledgers"
+            git pull --rebase origin main
+            git push origin main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
+
+      - name: Fail on a rejected ledger
+        if: steps.ingest.outcome == 'failure'
+        run: |
+          echo "::error::The ledger ingest rejected the folder; see data/ledger/validation_report.json."
+          exit 1
