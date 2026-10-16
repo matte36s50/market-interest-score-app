@@ -9,10 +9,13 @@ What is implemented:
 
   * Status filter. Default includes CONFIRMED and REPORTED and excludes
     UNVERIFIED; the excluded count is written next to every figure.
-  * Apex classification, using the one rule given for this dataset:
-        apex          high_estimate_usd >= 500,000
-        non_apex      high_estimate_usd <  500,000
-        apex_unknown  high_estimate_usd blank — unclassifiable, never non-apex
+  * Apex classification by apex value: high_estimate_usd, or, where no
+    estimate was published, price_usd if the lot sold with a price (the
+    fallback the store-fed index uses, apex.py):
+        apex          apex value >= 500,000
+        non_apex      apex value <  500,000
+        apex_unknown  no estimate and no sold price (unsold, or the price
+                      withheld) — unclassifiable, never non-apex
   * Manufacturer grouping: the ledger's `make` is kept as recorded, and
     ledger_manufacturer_groups.csv maps sub-brands onto their manufacturer
     (Mercedes-AMG, Mercedes-Maybach, Maybach -> Mercedes-Benz). Makes not in
@@ -70,13 +73,26 @@ def load_groups(path=DEFAULT_GROUPS):
     return groups
 
 
+def apex_basis(row):
+    """'estimate', 'sold_price' or 'none': where the lot's apex value comes
+    from. A lot with no estimate falls back to its sold price, as in apex.py;
+    an unsold lot or a withheld price has nothing to fall back to."""
+    if row["high_estimate_usd"] != "":
+        return "estimate"
+    if row["result_state"] == "sold_with_price" and row["price_usd"] != "":
+        return "sold_price"
+    return "none"
+
+
 def apex_class(row):
-    """'apex', 'non_apex' or 'apex_unknown'. A blank high_estimate_usd is
-    unknown — it is never read as 0 and never as non-apex."""
-    raw = row["high_estimate_usd"]
-    if raw == "":
+    """'apex', 'non_apex' or 'apex_unknown'. A lot with neither a
+    high_estimate_usd nor a sold price is unknown — never read as 0 and never
+    as non-apex."""
+    basis = apex_basis(row)
+    if basis == "none":
         return "apex_unknown"
-    return "apex" if Decimal(raw) >= APEX_THRESHOLD_USD else "non_apex"
+    value = Decimal(row["high_estimate_usd"] if basis == "estimate" else row["price_usd"])
+    return "apex" if value >= APEX_THRESHOLD_USD else "non_apex"
 
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -94,8 +110,9 @@ def apex_class(row):
 #                      (price / estimate_high) when price and estimate share a
 #                      currency, so no FX enters; otherwise price_usd /
 #                      high_estimate_usd as recorded. A lot sold with the
-#                      price withheld is left out of Q. No priced sale: Q is
-#                      unknown, never 0.
+#                      price withheld is left out of Q, and so is a lot made
+#                      apex by its sold price: it has no estimate to measure
+#                      against, and its price is never compared with itself.
 #    R  sell-through = sold (with or without a published price) /
 #                      (sold + not sold).
 #
@@ -104,9 +121,15 @@ def apex_class(row):
 #  no-sale.
 #
 #  term = P x Q x R. Where nothing sold, R = 0 and the term is 0 whatever Q
-#  is: that is the product's value, not a filled-in Q. Where something sold
-#  but no sale has a usable price, Q is unknown and so is the term; it is
-#  left out and counted in events_unscored.
+#  is: that is the product's value, not a filled-in Q. Where none of the
+#  manufacturer's apex lots gives a ratio but one of them was made apex by
+#  its sold price (a house that publishes no estimates, such as Mecum or
+#  Barrett-Jackson), the term is P x R: Q is left out, not filled in, and
+#  the term is counted in events_without_q. Such a term reads high beside a
+#  full P x Q x R, since Q is usually under 1 and only sold lots can be
+#  ranked by price. Where something sold but no sale has a usable price and
+#  no lot was ranked by price, Q is unknown and so is the term; it is left
+#  out and counted in events_unscored.
 #
 #  MAI = the plain mean of a manufacturer's known terms across events. v1
 #  weights events by an auction rating built on each sale's total lot count,
@@ -115,12 +138,14 @@ def apex_class(row):
 
 APEX_STATES_SCORED = ("sold_with_price", "sold_without_price", "not_sold")
 NO_APEX_SCORE = {"mai": None, "avg_P": None, "avg_Q": None, "avg_R": None,
-                 "events_scored": 0, "events_unscored": 0, "q_basis": {}}
+                 "events_scored": 0, "events_unscored": 0, "events_without_q": 0, "q_basis": {}}
 MAI_FORMULA = ("MAI = mean over events of P x Q x R. P = share of the event's apex lots; "
                "Q = mean price / high estimate over apex lots sold with a price (house currency where "
-               "price and estimate match, else recorded USD); R = sold / (sold + not sold). Withdrawn "
-               "lots excluded; apex_unknown lots excluded and counted; an event where something sold "
-               "but no price is usable is unscored, never 0.")
+               "price and estimate match, else recorded USD); R = sold / (sold + not sold). A lot with "
+               "no estimate is ranked by its sold price and left out of Q; where all of a make's apex "
+               "lots at an event were ranked that way, its term there is P x R (events_without_q). "
+               "Withdrawn lots excluded; apex_unknown lots excluded and counted; an event where something "
+               "sold but no price is usable is unscored, never 0.")
 
 
 def lot_ratio(row):
@@ -152,7 +177,7 @@ def compute_mai(apex_rows, segment_rows):
     by_event = group_coverage(scored_rows, lambda r: (r["event"], r["event_date"]))
 
     per_maker = defaultdict(lambda: {"terms": [], "P": [], "Q": [], "R": [], "unscored": 0,
-                                     "q_basis": Counter()})
+                                     "without_q": 0, "q_basis": Counter()})
     for _, event_rows in sorted(by_event.items()):
         event_apex = len(event_rows)
         for manufacturer, mrows in group_coverage(event_rows, lambda r: r["manufacturer"]).items():
@@ -173,6 +198,9 @@ def compute_mai(apex_rows, segment_rows):
                 acc["Q"].append(Q)
             if R == 0:
                 acc["terms"].append(Decimal(0))
+            elif Q is None and any(apex_basis(r) == "sold_price" for r in mrows):
+                acc["terms"].append(P * R)
+                acc["without_q"] += 1
             elif Q is None:
                 acc["unscored"] += 1
             else:
@@ -189,6 +217,7 @@ def compute_mai(apex_rows, segment_rows):
             "avg_R": rnd(_mean(acc["R"])),
             "events_scored": len(acc["terms"]),
             "events_unscored": acc["unscored"],
+            "events_without_q": acc["without_q"],
             "q_basis": dict(sorted(acc["q_basis"].items())),
         }
         for manufacturer, acc in per_maker.items()
@@ -200,8 +229,10 @@ def compute_mai(apex_rows, segment_rows):
 def coverage(rows):
     c = Counter(apex_class(r) for r in rows)
     out = {"lots": len(rows), "apex": c["apex"], "non_apex": c["non_apex"], "apex_unknown": c["apex_unknown"]}
-    apex_states = Counter(r["result_state"] for r in rows if apex_class(r) == "apex")
+    apex_rows = [r for r in rows if apex_class(r) == "apex"]
+    apex_states = Counter(r["result_state"] for r in apex_rows)
     out["apex_by_result"] = {s: apex_states[s] for s in RESULT_STATES}
+    out["apex_from_sold_price"] = sum(1 for r in apex_rows if apex_basis(r) == "sold_price")
     return out
 
 
@@ -243,7 +274,8 @@ def build(rows, statuses=DEFAULT_STATUSES, groups=None):
 
     return {
         "as_of": max((r["ledger_date"] for r in rows), default=None),
-        "apex_rule": f"high_estimate_usd >= {int(APEX_THRESHOLD_USD)}",
+        "apex_rule": (f"high_estimate_usd >= {int(APEX_THRESHOLD_USD)}; "
+                      f"where blank, price_usd of a lot sold with a price"),
         "status_filter": {
             "included": list(statuses),
             "excluded": sorted(set(ALL_STATUSES) - set(statuses)),
@@ -293,14 +325,16 @@ def main(argv=None):
     print(f"Ledger MAI — as of {out['as_of']}")
     print(f"  status filter {sf['included']}: {sf['rows_included']} rows in, "
           f"{sf['rows_excluded']} excluded {sf['rows_excluded_by_status']}")
-    print(f"  apex {t['apex']}, non-apex {t['non_apex']}, apex_unknown {t['apex_unknown']} (blank high_estimate_usd)")
+    print(f"  apex {t['apex']} ({t['apex_from_sold_price']} by sold price), non-apex {t['non_apex']}, "
+          f"apex_unknown {t['apex_unknown']} (no estimate, no sold price)")
     print(f"  premium_included mix {out['premium_mix']}")
     if out["manufacturer_groups"]:
         print(f"  makes grouped {out['manufacturer_groups']}")
     for m in out["segments"]["all"]["manufacturers"]:
         if m["mai"] is not None or m["events_unscored"]:
             print(f"  {m['manufacturer']:<16} MAI {m['mai']}  (scored {m['events_scored']}, "
-                  f"unscored {m['events_unscored']}, apex {m['apex']}, apex_unknown {m['apex_unknown']})")
+                  f"{m['events_without_q']} without Q, unscored {m['events_unscored']}, "
+                  f"apex {m['apex']}, apex_unknown {m['apex_unknown']})")
     print(f"Wrote {os.path.abspath(args.output)}")
     return 0
 
