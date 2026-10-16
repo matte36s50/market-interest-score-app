@@ -319,6 +319,38 @@ class Cache(unittest.TestCase):
                     self.assertNotRegex(published, r"(?<![\d.])" + re.escape(row["price"]) + r"(?![\d.])")
 
 
+class SheetsSource(unittest.TestCase):
+    """The live Drive source, with the Drive client stubbed out."""
+
+    def source(self, files):
+        class Call:
+            def __init__(self, resp): self.resp = resp
+            def execute(self): return self.resp
+        class Files:
+            def list(self, **kw): return Call({"files": files})
+        class Drive:
+            def files(self): return Files()
+        src = object.__new__(ledger_source.SheetsLedgerSource)
+        src._drive, src.folder_id, src.account = Drive(), "FOLDER", "reader@p.iam.gserviceaccount.com"
+        return src
+
+    def test_an_unshared_folder_names_the_account_to_share_with(self):
+        with self.assertRaises(ledger_source.LedgerSourceError) as e:
+            self.source([]).list_files()
+        self.assertIn("reader@p.iam.gserviceaccount.com", str(e.exception))
+        self.assertIn("Share the folder", str(e.exception))
+
+    def test_the_ingest_reports_it_as_the_error(self):
+        report, current, _, _ = ingest.build(self.source([]), ingest.Report())
+        self.assertIsNone(current)
+        self.assertEqual(len(report.errors), 1)
+        self.assertIn("reader@p.iam.gserviceaccount.com", report.errors[0])
+
+    def test_a_shared_folder_lists_its_sheets(self):
+        files = self.source([{"id": "1", "name": T + "October 12, 2026", "modifiedTime": "t"}]).list_files()
+        self.assertEqual([f.title for f in files], [T + "October 12, 2026"])
+
+
 class LedgerMai(unittest.TestCase):
     def setUp(self):
         _, current, _, _ = build_fixtures()

@@ -93,7 +93,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Scores and the validation summary only. The lot-level CSVs are
           # gitignored and must never be published.
-          git add data/ledger/mai_ledger.json data/ledger/validation_report.json
+          # After a failed ingest only the report exists.
+          for f in data/ledger/mai_ledger.json data/ledger/validation_report.json; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then
             echo "No change in data/ledger — nothing to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"
