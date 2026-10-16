@@ -393,6 +393,7 @@ class LedgerMai(unittest.TestCase):
         groups = ledger_mai.load_groups()
         self.assertEqual(groups["Maybach"], "Mercedes-Benz")
         self.assertEqual(groups["Mercedes-Maybach"], "Mercedes-Benz")
+        self.assertEqual(groups["Mercedes"], "Mercedes-Benz")  # pre-1926 Daimler Mercedes
         self.assertNotIn("Frazer Nash-BMW", groups)  # licence-built, not a BMW
 
     def test_make_listed_twice_in_groups_is_an_error(self):
