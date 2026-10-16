@@ -735,6 +735,13 @@ function ciAttention(c, key) {
 // An index's figures for a period. The basket averages the cards, so a model
 // group that stands for several of the index's cars counts once; the counts
 // of cars traded and measured are of the index's own list.
+//
+// A basket of fewer than CI_MIN_CARS cars is thin: one sale can move it ten
+// points or more (two baskets of different cars once landed on the same
+// 60.2). It is shown greyed with its car count, hollow on the chart, and
+// never made an insight. MBCI Emerging is always thin: only three of its six
+// cars can be measured on Bring a Trailer.
+const CI_MIN_CARS = 4;
 function ciPeriod(key, idx = activeIndex()) {
     const cacheKey = `ci|${idx.id}|${key}`;
     if (DS.cache[cacheKey]) return DS.cache[cacheKey];
@@ -748,6 +755,8 @@ function ciPeriod(key, idx = activeIndex()) {
         present: cars(present),
         total: idx.size,
         basket: present.length ? mean(present.map(i => i.s.mii)) : null,
+        cars: present.length,
+        thin: present.length > 0 && present.length < CI_MIN_CARS,
         // The same constituents every month, traded or not.
         attention: attended.length ? mean(attended.map(i => i.a)) : null,
         attended: cars(attended),
@@ -978,7 +987,7 @@ function renderLede(ms, diff) {
         const ci = ciPeriod(key);
         if (ci.basket != null && ms.mii != null) {
             const gap = ci.basket - ms.mii;
-            parts.push(`The <span class="ci-word">${esc(ci.idx.short)}</span> cars are running ${Math.abs(gap).toFixed(1)} points ${gap >= 0 ? 'above' : 'below'} the market.`);
+            parts.push(`The <span class="ci-word">${esc(ci.idx.short)}</span> cars${ci.thin ? ` (only ${ci.cars} sold)` : ''} are running ${Math.abs(gap).toFixed(1)} points ${gap >= 0 ? 'above' : 'below'} the market.`);
         }
     }
     lede.innerHTML = parts.join(' ');
@@ -1183,7 +1192,7 @@ function buildInsights() {
 
     if (STATE.vclass !== 'motorcycle') {
         const ci = ciPeriod(key);
-        if (ci.basket != null && ms?.mii != null) {
+        if (ci.basket != null && !ci.thin && ms?.mii != null) {
             const gap = ci.basket - ms.mii;
             cards.push({
                 kicker: ci.idx.name, icon: 'target', ci: ci.idx.short, isIndex: true,
@@ -1257,7 +1266,9 @@ function renderCI() {
     const gapCls = g => (g == null ? 'muted' : g >= 0 ? 'up' : 'down');
 
     stats.innerHTML = `
-        <div class="ci-stat"><div><div class="s-label">${esc(idx.short)} interest</div><div class="s-note" style="text-align:left">average MII of traded constituents</div></div><span class="s-value big">${fmt1(ci.basket)}</span></div>
+        <div class="ci-stat"><div><div class="s-label">${esc(idx.short)} interest</div><div class="s-note" style="text-align:left">${ci.thin
+            ? `<span class="thin-note">Thin: only ${ci.cars} of its cars sold, so one sale moves this a lot</span>`
+            : 'average MII of traded constituents'}</div></div><span class="s-value big${ci.thin ? ' is-thin' : ''}" ${ci.thin ? 'title="Fewer than 4 of the index\'s cars sold: indicative only"' : ''}>${fmt1(ci.basket)}</span></div>
         <div class="ci-stat"><span class="s-label">vs the market</span><span class="s-value ${gapCls(gapMarket)}">${gapMarket == null ? '—' : signed(gapMarket)}</span></div>
         <div class="ci-stat"><span class="s-label">vs all ${esc(makeName)}</span><span class="s-value ${gapCls(gapMake)}">${gapMake == null ? '—' : signed(gapMake)}</span></div>
         <div class="ci-stat"><div><div class="s-label">${esc(idx.short)} attention</div><div class="s-note" style="text-align:left">search, YouTube, social · ${ci.attended} of ${ci.total}, traded or not</div></div><span class="s-value">${ci.attention == null ? '—' : fmt1(ci.attention)}</span></div>
@@ -1314,6 +1325,7 @@ function renderCI() {
 
     document.getElementById('ciFootnote').textContent =
         `${idx.source} Bring a Trailer groups some trims with their chassis family. A constituent is matched to a wider group, marked "≈ group match", only when at least a third of that group's listings are the constituent; below that it is not measured separately. ` +
+        `A period in which fewer than ${CI_MIN_CARS} of the index's cars sold is thin: its score is greyed, hollow on the chart and never reported as an insight. ` +
         `Rank chips compare each car with every model sold in the period. Changes are ${baselinePhrase(key) || 'not available for the first month'}.`;
 
     renderCIChart();
@@ -1324,12 +1336,13 @@ function renderCIChart() {
     const months = DS.months;
     const idx = activeIndex();
     const basket = months.map(k => ciPeriod(k).basket);
+    const thin = months.map(k => ciPeriod(k).thin);
     const attention = months.map(k => ciPeriod(k).attention);
     const makeLine = makeSeries(idx.make, months);
     const market = months.map(k => marketStats(k)?.mii ?? null);
     const selIdx = STATE.period === 'YTD' ? -1 : months.indexOf(STATE.period);
     const series = [
-        { label: idx.short, data: basket, color: p.ci, width: 2.75 },
+        { label: idx.short, data: basket, color: p.ci, width: 2.75, thin },
         ...(attention.some(v => v != null) ? [{ label: 'Attention', data: attention, color: p.ci, width: 2, dash: [5, 4] }] : []),
         { label: `All ${mk(idx.make)}`, data: makeLine, color: p.bmw, width: 2 },
         { label: 'Market', data: market, color: p.market, width: 2 }
@@ -1343,8 +1356,10 @@ function renderCIChart() {
             datasets: series.map(s => ({
                 label: s.label, endLabel: s.label, data: s.data, borderColor: s.color, backgroundColor: s.color,
                 borderWidth: s.width, borderDash: s.dash, tension: 0.35, spanGaps: true,
-                pointRadius: months.map((_, i) => (i === selIdx ? 4.5 : 0)), pointHoverRadius: 4.5,
-                pointBorderColor: p.surface, pointBorderWidth: 2
+                // Thin months hollow on the index's own line.
+                pointRadius: months.map((_, i) => (i === selIdx ? 4.5 : s.thin?.[i] ? 3.5 : 0)), pointHoverRadius: 4.5,
+                pointBackgroundColor: months.map((_, i) => (s.thin?.[i] ? p.surface : s.color)),
+                pointBorderColor: months.map((_, i) => (s.thin?.[i] ? s.color : p.surface)), pointBorderWidth: 2
             }))
         },
         options: {
@@ -1363,7 +1378,8 @@ function renderCIChart() {
                         label: ctx => ` ${ctx.dataset.label}  ${fmt1(ctx.parsed.y)}`,
                         footer: items => {
                             const ci = ciPeriod(months[items[0].dataIndex]);
-                            return `${ci.present} of ${ci.total} constituents had sales` + (ci.attention != null ? ` · attention covers ${ci.attended}` : '');
+                            return `${ci.present} of ${ci.total} constituents had sales` + (ci.attention != null ? ` · attention covers ${ci.attended}` : '') +
+                                (ci.thin ? `\nThin: only ${ci.cars} of the index's cars sold` : '');
                         }
                     }
                 }

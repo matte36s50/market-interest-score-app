@@ -296,9 +296,11 @@ button.insight:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .ci-stat { padding: 16px 22px; border-top: 1px solid var(--hair); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .ci-stat:first-child { border-top: 0; padding-top: 22px; }
 .ci-stat .s-label { font-size: 13.5px; color: var(--muted); }
-.ci-stat .s-value { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.ci-stat .s-value { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
 .ci-stat .s-value.big { font-size: 44px; letter-spacing: -0.04em; color: var(--ci-ink); }
 .ci-stat .s-note { font-size: 12.5px; color: var(--muted); text-align: right; }
+.ci-stat .s-value.big.is-thin { color: var(--muted); text-decoration: underline dotted; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.ci-stat .thin-note { color: var(--accent-ink); }
 .ci-chart { height: 340px; position: relative; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
