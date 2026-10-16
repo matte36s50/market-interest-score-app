@@ -84,9 +84,18 @@ Exit status is **1** on any hard error. The dataset files are then left as they 
   file**. A record_id is never guessed.
 - Each spreadsheet must have exactly one tab.
 
-> **Current state of the folder (5 Oct 2026):** both ledgers there (28 Sep, 5 Oct) predate
-> `record_id`, and neither has a `(rev record_id)` replacement. A live run therefore fails
-> today, by design, until those two replacement sheets exist.
+> **Current state of the folder (16 Oct 2026):** the 28 Sep and 5 Oct ledgers now have
+> `(rev record_id)` replacements, and the 12 Oct ledger carries `record_id` itself, so a live
+> run reads three ledgers. The plain 28 Sep and 5 Oct sheets are listed under `ignored_files`.
+
+## 3a. Weekly run
+
+`.github/workflows/ledger.yml` runs the ingest and the scoring at 16:17 UTC on Mondays (after
+the week's ledger lands) and again on Tuesdays for a late one, commits `data/ledger/` and
+redeploys the site. It needs the repository secret `LEDGER_SERVICE_ACCOUNT_JSON`: the whole
+JSON key from step 1, pasted as the secret's value. Without it the run stops with a warning
+and changes nothing. Run it by hand from the Actions tab (*Apex Ledger → Run workflow*) after
+adding the secret, rather than waiting for Monday.
 
 ## 4. Dedupe
 

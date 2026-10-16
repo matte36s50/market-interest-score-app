@@ -316,7 +316,7 @@
         function renderEmpty(rep) {
             var msg = rep && !rep.ok
                 ? 'The last ingest failed validation, so there is no ledger dataset to show. See the errors below.'
-                : 'No ledger dataset has been published yet. Run ledger_ingest.py and ledger_mai.py.';
+                : 'No ledger has been published yet. The weekly ledger job reads the Auction Results Ledgers from Google Drive and needs its Google key before its first run.';
             ['tileStatus', 'tileUnknown', 'tilePremium', 'tileMai'].forEach(function (id) { text(id, '—'); });
             text('makerSubtitle', msg);
             text('eventsSubtitle', msg);
