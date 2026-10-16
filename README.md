@@ -15,8 +15,9 @@ A comprehensive, interactive dashboard for tracking collector car market interes
 ## Features
 
 ### 🎯 Overview page (`index.html`)
-- **Headline and narrative**: market MII for the period, its change, and a
-  generated one-paragraph read of the month (or year to date)
+- **Headline and narrative**: views per listing for the period (the market's
+  level; see Normalization), its change, and a generated one-paragraph read of
+  the month (or year to date)
 - **What stands out**: insight cards built from the data (leading make,
   biggest real mover, most-watched model, interest outrunning price, most
   bidding, BMW CI vs the market). Moves inside sampling noise are never reported.
@@ -91,10 +92,11 @@ description can never drift from what the dashboard is doing.
 
 ### Methodology version
 
-`MII.VERSION` (currently **2026.09**) stamps the scoring rules in force. Scoring
+`MII.VERSION` (currently **2026.10**) stamps the scoring rules in force. Scoring
 has changed materially over this index's life — min-max scaling gave way to
-percentile rank, weight renormalization was added, and the model and
-manufacturer confidence scales were unified — so a score is only reproducible
+percentile rank, weight renormalization was added, the model and manufacturer
+confidence scales were unified, and 2026.10 moved ranking from the whole file to
+each month — so a score is only reproducible
 against a stated version. Cite it with any figure taken from the dashboard, and
 bump it whenever a change moves published scores.
 
@@ -127,8 +129,19 @@ coloured arrow, with the reason in its tooltip.
 
 ### Normalization (percentile rank)
 
-Each input is converted to a **percentile rank** across the whole dataset before
-weighting: 0 = lowest, 1 = highest, ~0.5 = the median car. This is done in the
+Each input is converted to a **percentile rank** among the cars of the same
+month before weighting: 0 = lowest, 1 = highest, ~0.5 = that month's median car.
+Ranking within the month (since methodology 2026.10; before, the whole file was
+ranked at once) keeps three things out of a car's score that have nothing to do
+with the car: new months re-ranking old ones, Bring a Trailer's traffic growth
+lifting later months, and the rolling window shifting every score as old months
+drop out. An input measured on fewer than 30 cars in a month is ranked against
+the whole field for that month instead.
+
+Because every month is ranked on its own, the market's average MII sits near 50
+by design. The overview's headline therefore shows the market's level a
+different way: **views per listing**, the lot-weighted median of the month's
+auctions, which rises and falls with the whole market. This is done in the
 browser by `mii-normalize.js`, which every page calls right after loading the
 CSV, so every page agrees on a car's score.
 
@@ -200,7 +213,7 @@ Auction prices, views, and comments are extremely right-skewed — a handful of
 seven-figure cars and a long tail of affordable ones — so min-max scaling pushed
 the typical car's normalized value toward zero and crushed nearly every score
 into the 20s–30s. Percentile rank spreads models across the full 0–100 range and
-makes the score answer "how does this car rank versus the field" rather than
+makes the score answer "how does this car rank against that month's field" rather than
 "what fraction of the single priciest car's value did it reach".
 
 ## Confidence Levels
@@ -246,8 +259,8 @@ sales. Treat any badge below High as a sample-size caveat, not a market signal.
 
 - **Period**: any month, or the year to date. Select a point on the market
   chart to jump to that month.
-- **Vehicle type**: All, Cars or Motorcycles. Scores are ranked against the
-  whole field either way, so a car's MII does not change between views.
+- **Vehicle type**: All, Cars or Motorcycles. Scores are ranked against every
+  car of the month either way, so a car's MII does not change between views.
 - **Manufacturers**: search, minimum auctions (5/10/20/50), sort by any column,
   or switch to the heatmap to compare makes month by month. Select a make for
   its drawer.

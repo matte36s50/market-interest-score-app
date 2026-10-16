@@ -85,14 +85,14 @@
 
             <div class="hero-grid">
                 <div class="hero-figure">
-                    <span class="label">Market MII, average of qualifying makes</span>
-                    <span class="value" id="marketMII">–</span>
+                    <span class="label">Views per listing, typical auction</span>
+                    <span class="value" id="marketLevel">–</span>
                     <span class="delta" id="marketDelta"></span>
-                    <p class="scale-note">0 to 100. 50 means a car draws the attention of the median auction; each point is a percentile of the field.</p>
+                    <p class="scale-note">The market's overall level. Each car's MII ranks it against the other cars of the same month, so 50 is the median car every month; the market's own rise and fall shows here.</p>
                 </div>
                 <div>
-                    <div class="hero-chart"><canvas id="marketChart" aria-label="Market MII by month" role="img"></canvas></div>
-                    <div class="hero-chart-caption"><span>Market MII by month</span><span id="marketChartNote"></span></div>
+                    <div class="hero-chart"><canvas id="marketChart" aria-label="Views per listing by month" role="img"></canvas></div>
+                    <div class="hero-chart-caption"><span>Views per listing by month</span><span id="marketChartNote"></span></div>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:12px">
                             <div>
                                 <div class="card-title">Interest over time</div>
-                                <div class="card-sub">Average MII by month, same scale for all three</div>
+                                <div class="card-sub">Average MII by month. The market sits near 50 by design, so the gap is what moves</div>
                             </div>
                             <div class="legend" id="ciLegend"></div>
                         </div>
@@ -290,7 +290,7 @@
             <div class="foot-grid">
                 <div>
                     <h3>How MII is built</h3>
-                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile of the field. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed. <a href="media/mii-explainer.mp4" data-explainer>Watch the 2-minute explainer</a>.</p>
+                    <p>A weighted blend of sale price (20%), bid activity (20%), views (15%), Google Trends (15%), comments (10%), YouTube views on leading enthusiast channels (10%), social engagement (5%) and vehicle age (5%), each as a percentile among that month's cars. Inputs a row has no value for are dropped and the remaining weights renormalized, never imputed. <a href="media/mii-explainer.mp4" data-explainer>Watch the 2-minute explainer</a>.</p>
                 </div>
                 <div>
                     <h3>Confidence and noise</h3>
@@ -352,9 +352,9 @@
     <div class="tip" id="tip" role="tooltip"></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="mii-normalize.js?v=6"></script>
+    <script src="mii-normalize.js?v=7"></script>
     <script src="bmw-ci.js?v=1"></script>
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=7"></script>
     <script src="explainer.js?v=3"></script>
 </body>
 </html>

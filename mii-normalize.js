@@ -8,9 +8,10 @@
 //
 // This module replaces that with PERCENTILE-RANK normalization, computed in the
 // browser from the raw columns. A car's value on each input becomes its rank
-// within the whole dataset (0 = lowest, 1 = highest, ~0.5 = median), so models
-// spread across the full 0-100 range and the score answers "how does this car
-// rank versus the field" rather than "what fraction of the single priciest car".
+// among the cars of the same month (0 = lowest, 1 = highest, ~0.5 = median),
+// so models spread across the full 0-100 range and the score answers "how does
+// this car rank against that month's field" rather than "what fraction of the
+// single priciest car".
 //
 // It also joins the measured signal files collected by data/pipelines/ —
 // social, Google Trends and YouTube — onto the raw columns before ranking,
@@ -233,6 +234,19 @@
     // so; scoring already drops the input per-row via weight renormalization.
     var SPARSE_COVERAGE_THRESHOLD = 0.25;
 
+    // Scores rank each car against the other cars of the SAME period (month,
+    // or quarter for quarterly rows), not against the whole file. Ranking the
+    // whole file at once let three things leak into a car's score that have
+    // nothing to do with the car: every new month re-ranked all the old ones,
+    // so history kept revising; Bring a Trailer's traffic growth pushed later
+    // months' views and bids up the ranks; and the rolling window shifted
+    // every score again as old months dropped out. Within a period, the
+    // median car scores about 50 every month.
+    function periodKey(row) { return String(row.quarter == null ? '' : row.quarter).trim(); }
+    // Below this many measured values in a period, an input is ranked against
+    // the whole field instead (a brand-new signal, or a near-empty month).
+    var MIN_PERIOD_SAMPLE = 30;
+
     // Overwrite each *_normalized column with a percentile rank and recompute
     // mii_score. Reads only the raw columns, so it is safe to call more than once
     // on the same rows. Mutates rows in place and returns them.
@@ -251,12 +265,14 @@
 
         COMPONENTS.forEach(function (c) {
             var vals = [];
+            var byPeriod = {};
             var distinct = {};
             var distinctCount = 0;
             for (var i = 0; i < rows.length; i++) {
                 var v = parseFloat(rows[i][c.raw]);
                 if (!isNaN(v)) {
                     vals.push(v);
+                    (byPeriod[periodKey(rows[i])] = byPeriod[periodKey(rows[i])] || []).push(v);
                     if (!distinct[v]) { distinct[v] = 1; distinctCount++; }
                 }
             }
@@ -273,10 +289,18 @@
                 rows.forEach(function (r) { r[c.norm] = 0; });
                 return;
             }
-            var rank = percentileRanker(vals);
+            // Each row is ranked against the other cars of its own period. A
+            // period with too few measurements of this input to rank within
+            // falls back to the whole field rather than ranking a handful of
+            // cars against each other.
+            var pooled = percentileRanker(vals);
+            var rankers = {};
+            Object.keys(byPeriod).forEach(function (p) {
+                rankers[p] = byPeriod[p].length >= MIN_PERIOD_SAMPLE ? percentileRanker(byPeriod[p]) : pooled;
+            });
             rows.forEach(function (r) {
                 var v = parseFloat(r[c.raw]);
-                r[c.norm] = isNaN(v) ? 0 : +rank(v).toFixed(6);
+                r[c.norm] = isNaN(v) ? 0 : +rankers[periodKey(r)](v).toFixed(6);
             });
         });
 
@@ -300,11 +324,12 @@
 
     // Methodology version. Scoring has changed materially over this index's life
     // (min-max scaling -> percentile rank; weight renormalization added;
-    // model and manufacturer confidence scales unified), and a score is only
+    // model and manufacturer confidence scales unified; 2026.10 ranks each car
+    // within its own month instead of the whole file), and a score is only
     // reproducible if the reader knows which rules produced it. Bump this
     // whenever a change moves published scores, and cite it alongside any
     // figure taken from the dashboard.
-    var VERSION = '2026.09';
+    var VERSION = '2026.10';
 
     // Mean EFFECTIVE weight of each input over the rows last scored.
     //
