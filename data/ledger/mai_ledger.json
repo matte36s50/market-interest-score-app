@@ -27,7 +27,7 @@
     "unknown": 15,
     "yes": 51
   },
-  "mai_formula": "MAI = mean over events of P x Q x R. P = share of the event's apex lots; Q = mean price / high estimate over apex lots sold with a price (house currency where price and estimate match, else recorded USD); R = sold / (sold + not sold). A lot with no estimate is ranked by its sold price and left out of Q; where all of a make's apex lots at an event were ranked that way, its term there is P x R (events_without_q). Withdrawn lots excluded; apex_unknown lots excluded and counted; an event where something sold but no price is usable is unscored, never 0.",
+  "mai_formula": "MAI = sum of P / number of events with apex lots: the mean of P over every event with apex lots, 0 where the make had none, so MAIs add up to 1. P = share of the event's apex lots. Events count equally. Q (mean price / high estimate over apex lots sold with a price and an estimate) and R (sold / (sold + not sold)) are reported beside the score, not multiplied in. Withdrawn lots excluded; apex_unknown lots excluded and counted.",
   "segments": {
     "all": {
       "totals": {
@@ -41,18 +41,18 @@
           "not_sold": 2,
           "withdrawn": 0
         },
-        "apex_from_sold_price": 12
+        "apex_from_sold_price": 12,
+        "events_with_apex": 8
       },
       "manufacturers": [
         {
           "manufacturer": "Ferrari",
-          "mai": 0.641165,
+          "mai": 0.509623,
           "avg_P": 0.679497,
           "avg_Q": 0.908075,
           "avg_R": 1.0,
-          "events_scored": 6,
-          "events_unscored": 0,
-          "events_without_q": 3,
+          "apex_events": 6,
+          "q_events": 3,
           "q_basis": {
             "native": 6,
             "usd": 3
@@ -75,13 +75,12 @@
         },
         {
           "manufacturer": "Mercedes-Benz",
-          "mai": 0.356811,
+          "mai": 0.306746,
           "avg_P": 0.490794,
           "avg_Q": 0.685438,
           "avg_R": 0.8,
-          "events_scored": 5,
-          "events_unscored": 0,
-          "events_without_q": 2,
+          "apex_events": 5,
+          "q_events": 2,
           "q_basis": {
             "native": 2
           },
@@ -106,42 +105,13 @@
           "apex_from_sold_price": 3
         },
         {
-          "manufacturer": "Lamborghini",
-          "mai": 0.236964,
-          "avg_P": 0.271429,
-          "avg_Q": 0.8825,
-          "avg_R": 1.0,
-          "events_scored": 2,
-          "events_unscored": 0,
-          "events_without_q": 0,
-          "q_basis": {
-            "native": 3
-          },
-          "makes": {
-            "Lamborghini": 5
-          },
-          "events": 3,
-          "lots": 5,
-          "apex": 3,
-          "non_apex": 2,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 3,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          },
-          "apex_from_sold_price": 0
-        },
-        {
           "manufacturer": "Porsche",
-          "mai": 0.189331,
+          "mai": 0.090774,
           "avg_P": 0.242063,
           "avg_Q": 0.953977,
           "avg_R": 0.666667,
-          "events_scored": 3,
-          "events_unscored": 0,
-          "events_without_q": 1,
+          "apex_events": 3,
+          "q_events": 1,
           "q_basis": {
             "native": 2
           },
@@ -162,14 +132,40 @@
           "apex_from_sold_price": 2
         },
         {
+          "manufacturer": "Lamborghini",
+          "mai": 0.067857,
+          "avg_P": 0.271429,
+          "avg_Q": 0.8825,
+          "avg_R": 1.0,
+          "apex_events": 2,
+          "q_events": 2,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Lamborghini": 5
+          },
+          "events": 3,
+          "lots": 5,
+          "apex": 3,
+          "non_apex": 2,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 3,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
           "manufacturer": "BMW",
-          "mai": 0.158909,
+          "mai": 0.025,
           "avg_P": 0.2,
           "avg_Q": 0.794545,
           "avg_R": 1.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 1,
+          "q_events": 1,
           "q_basis": {
             "native": 1
           },
@@ -195,9 +191,8 @@
           "avg_P": null,
           "avg_Q": null,
           "avg_R": null,
-          "events_scored": 0,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 0,
+          "q_events": 0,
           "q_basis": {},
           "makes": {
             "Frazer Nash-BMW": 1
@@ -423,18 +418,18 @@
           "not_sold": 0,
           "withdrawn": 0
         },
-        "apex_from_sold_price": 8
+        "apex_from_sold_price": 8,
+        "events_with_apex": 6
       },
       "manufacturers": [
         {
           "manufacturer": "Ferrari",
-          "mai": 0.613544,
+          "mai": 0.550926,
           "avg_P": 0.661111,
           "avg_Q": 0.908075,
           "avg_R": 1.0,
-          "events_scored": 5,
-          "events_unscored": 0,
-          "events_without_q": 2,
+          "apex_events": 5,
+          "q_events": 3,
           "q_basis": {
             "native": 6,
             "usd": 3
@@ -456,70 +451,13 @@
           "apex_from_sold_price": 5
         },
         {
-          "manufacturer": "Porsche",
-          "mai": 0.283996,
-          "avg_P": 0.291667,
-          "avg_Q": 0.953977,
-          "avg_R": 1.0,
-          "events_scored": 2,
-          "events_unscored": 0,
-          "events_without_q": 1,
-          "q_basis": {
-            "native": 2
-          },
-          "makes": {
-            "Porsche": 6
-          },
-          "events": 4,
-          "lots": 6,
-          "apex": 4,
-          "non_apex": 2,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 4,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          },
-          "apex_from_sold_price": 2
-        },
-        {
-          "manufacturer": "Lamborghini",
-          "mai": 0.26275,
-          "avg_P": 0.3,
-          "avg_Q": 0.8825,
-          "avg_R": 1.0,
-          "events_scored": 2,
-          "events_unscored": 0,
-          "events_without_q": 0,
-          "q_basis": {
-            "native": 3
-          },
-          "makes": {
-            "Lamborghini": 5
-          },
-          "events": 3,
-          "lots": 5,
-          "apex": 3,
-          "non_apex": 2,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 3,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          },
-          "apex_from_sold_price": 0
-        },
-        {
           "manufacturer": "Mercedes-Benz",
-          "mai": 0.261352,
+          "mai": 0.218519,
           "avg_P": 0.437037,
           "avg_Q": 0.685438,
           "avg_R": 1.0,
-          "events_scored": 3,
-          "events_unscored": 0,
-          "events_without_q": 1,
+          "apex_events": 3,
+          "q_events": 2,
           "q_basis": {
             "native": 2
           },
@@ -542,14 +480,67 @@
           "apex_from_sold_price": 1
         },
         {
+          "manufacturer": "Lamborghini",
+          "mai": 0.1,
+          "avg_P": 0.3,
+          "avg_Q": 0.8825,
+          "avg_R": 1.0,
+          "apex_events": 2,
+          "q_events": 2,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Lamborghini": 5
+          },
+          "events": 3,
+          "lots": 5,
+          "apex": 3,
+          "non_apex": 2,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 3,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
+          "manufacturer": "Porsche",
+          "mai": 0.097222,
+          "avg_P": 0.291667,
+          "avg_Q": 0.953977,
+          "avg_R": 1.0,
+          "apex_events": 2,
+          "q_events": 1,
+          "q_basis": {
+            "native": 2
+          },
+          "makes": {
+            "Porsche": 6
+          },
+          "events": 4,
+          "lots": 6,
+          "apex": 4,
+          "non_apex": 2,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 4,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 2
+        },
+        {
           "manufacturer": "BMW",
-          "mai": 0.158909,
+          "mai": 0.033333,
           "avg_P": 0.2,
           "avg_Q": 0.794545,
           "avg_R": 1.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 1,
+          "q_events": 1,
           "q_basis": {
             "native": 1
           },
@@ -575,9 +566,8 @@
           "avg_P": null,
           "avg_Q": null,
           "avg_R": null,
-          "events_scored": 0,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 0,
+          "q_events": 0,
           "q_basis": {},
           "makes": {
             "Frazer Nash-BMW": 1
@@ -723,7 +713,8 @@
           "not_sold": 0,
           "withdrawn": 0
         },
-        "apex_from_sold_price": 0
+        "apex_from_sold_price": 0,
+        "events_with_apex": 0
       },
       "manufacturers": [
         {
@@ -732,9 +723,8 @@
           "avg_P": null,
           "avg_Q": null,
           "avg_R": null,
-          "events_scored": 0,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 0,
+          "q_events": 0,
           "q_basis": {},
           "makes": {
             "Mercedes-Benz": 6
@@ -800,44 +790,18 @@
           "not_sold": 2,
           "withdrawn": 0
         },
-        "apex_from_sold_price": 4
+        "apex_from_sold_price": 4,
+        "events_with_apex": 3
       },
       "manufacturers": [
-        {
-          "manufacturer": "Ferrari",
-          "mai": 1.0,
-          "avg_P": 1.0,
-          "avg_Q": null,
-          "avg_R": 1.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "events_without_q": 1,
-          "q_basis": {},
-          "makes": {
-            "Ferrari": 2
-          },
-          "events": 1,
-          "lots": 2,
-          "apex": 2,
-          "non_apex": 0,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 2,
-            "sold_without_price": 0,
-            "not_sold": 0,
-            "withdrawn": 0
-          },
-          "apex_from_sold_price": 2
-        },
         {
           "manufacturer": "Mercedes-Benz",
           "mai": 0.5,
           "avg_P": 0.75,
           "avg_Q": null,
           "avg_R": 0.5,
-          "events_scored": 2,
-          "events_unscored": 0,
-          "events_without_q": 1,
+          "apex_events": 2,
+          "q_events": 0,
           "q_basis": {},
           "makes": {
             "Maybach": 2,
@@ -859,14 +823,38 @@
           "apex_from_sold_price": 2
         },
         {
+          "manufacturer": "Ferrari",
+          "mai": 0.333333,
+          "avg_P": 1.0,
+          "avg_Q": null,
+          "avg_R": 1.0,
+          "apex_events": 1,
+          "q_events": 0,
+          "q_basis": {},
+          "makes": {
+            "Ferrari": 2
+          },
+          "events": 1,
+          "lots": 2,
+          "apex": 2,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 2,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 2
+        },
+        {
           "manufacturer": "Porsche",
-          "mai": 0.0,
+          "mai": 0.166667,
           "avg_P": 0.5,
           "avg_Q": null,
           "avg_R": 0.0,
-          "events_scored": 1,
-          "events_unscored": 0,
-          "events_without_q": 0,
+          "apex_events": 1,
+          "q_events": 0,
           "q_basis": {},
           "makes": {
             "Porsche": 2
