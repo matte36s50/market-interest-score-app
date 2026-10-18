@@ -201,31 +201,39 @@ lasting fix is a structured column in the ledger.
   segment: apex / non-apex / apex_unknown, with apex lots split into sold-with-price,
   sold-without-price, not sold and withdrawn.
 
-**Formula** (`compute_mai()` in `ledger_mai.py`): the P × Q × R core of the repo's MAI v1, adapted so
-nothing is imputed. Per manufacturer × event, over that event's apex lots:
+**Formula** (`compute_mai()` in `ledger_mai.py`): the presence score of the repo's MAI v1, with events
+unweighted. Per manufacturer × event, over that event's apex lots:
 
 | Term | Definition |
 |---|---|
 | P | Manufacturer's apex lots ÷ all apex lots at the event. apex_unknown lots are in neither count |
-| Q | Mean of price ÷ high estimate over apex lots **sold with a price**. Uses the house's currency (`price / estimate_high`) when price and estimate share a currency, so no FX enters; otherwise `price_usd / high_estimate_usd` as recorded. `q_basis` counts which was used. A lot ranked by its sold price has no estimate, so it is left out of Q |
+
+```
+MAI = sum of P ÷ number of events with apex lots     # events unweighted
+```
+
+That is the mean of P over **every** event with apex lots, 0 where the manufacturer had none. Each MAI is
+the manufacturer's share of all apex lots, the MAIs add up to 1, and a make that topped one small sale
+can't outrank one that is among the apex lots everywhere. v1 weights events by an auction rating built on
+each sale's total lot count, which a curated weekly ledger doesn't have.
+
+**Q and R are reported beside the score, not multiplied in**, as in v1:
+
+| Term | Definition |
+|---|---|
+| Q | Mean of price ÷ high estimate over apex lots **sold with a price and an estimate**. Uses the house's currency (`price / estimate_high`) when price and estimate share a currency, so no FX enters; otherwise `price_usd / high_estimate_usd` as recorded. `q_basis` counts which was used; `q_events` counts the events where Q is known. Unknown (null), never 0, where no lot gives a ratio |
 | R | Sold (with or without a published price) ÷ (sold + not sold) |
 
-```
-MAI = mean over events of (P × Q × R)        # events unweighted
-```
+Multiplying them in would score sales on different bases. A sale that publishes no estimates (Mecum,
+Barrett-Jackson, duPont REGISTRY Live) has no Q, and only its sold lots can be ranked by price, so its R is
+1 by construction (duPont REGISTRY Live also guarantees a sale). Until 18 Oct 2026 the score was the mean
+of P × Q × R over a make's own events.
 
 - **Withdrawn** lots are left out of P and R, matching `export_live_lots.py`.
-- **Nothing sold** → R = 0 → the term is 0. That's the product's real value, not a filled-in Q.
-- **All of a make's apex lots at the event ranked by sold price** → no Q → the term is P × R, counted in
-  `events_without_q`. Q is left out, not filled in. Such a term reads high beside a full P × Q × R: Q is
-  usually under 1, and only sold lots can be ranked by price, so R is 1.
-- **Sold but no usable price, and nothing ranked by price** (for example, the GT2 Clubsport) → Q unknown → the term is unknown. It
-  is left out of the mean and counted in `events_unscored`; it is never counted as 0.
-- **No known term** → `mai` is null, shown as "n/a".
-- **Unweighted events.** v1 weights events by an auction rating built on each sale's total lot count,
-  which a curated weekly ledger doesn't have. Weighting by apex sold USD would hit withheld prices.
+- **No apex lot** → `mai` is null, shown as "n/a".
 - Scores are computed separately for each `premium_included` segment and for `all`.
 
-Each manufacturer row in `mai_ledger.json` carries `mai`, `avg_P`, `avg_Q`, `avg_R`, `events_scored`,
-`events_unscored`, `events_without_q`, `q_basis`, the makes grouped into it, and the apex / non_apex /
-apex_unknown / apex_from_sold_price counts.
+Each manufacturer row in `mai_ledger.json` carries `mai`, `avg_P` (its mean share at the events where it
+had an apex lot), `avg_Q`, `avg_R`, `apex_events`, `q_events`, `q_basis`, the makes grouped into it, and
+the apex / non_apex / apex_unknown / apex_from_sold_price counts. Each segment's `totals` carries
+`events_with_apex`, the denominator.
