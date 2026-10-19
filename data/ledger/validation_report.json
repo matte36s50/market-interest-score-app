@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "as_of": "2026-10-12",
+  "as_of": "2026-10-19",
   "files": [
     {
       "title": "Auction Results Ledger – September 28, 2026 (rev record_id)",
@@ -25,6 +25,14 @@
       "ledger_date": "2026-10-12",
       "rev_replacement": false,
       "rows_read": 33
+    },
+    {
+      "title": "Auction Results Ledger – October 19, 2026",
+      "file_id": "1ukatntxeR_1bMDw5zDb5i9ghPXwUT4Mjg7r2_YMFtCs",
+      "modified_time": "2026-10-19T13:35:08.523Z",
+      "ledger_date": "2026-10-19",
+      "rev_replacement": false,
+      "rows_read": 28
     }
   ],
   "ignored_files": [
@@ -45,42 +53,44 @@
     "Outlier status (charity lots, one-off coachbuilt commissions, works competition cars, specification-premium cars) exists only as free text in `notes`. It is not machine-readable; review_queue.csv lists candidate rows for a human to triage. A structured column is needed."
   ],
   "counts": {
-    "rows_read": 90,
-    "rows_after_dedupe": 73,
-    "rows_superseded": 17,
+    "rows_read": 118,
+    "rows_after_dedupe": 99,
+    "rows_superseded": 19,
     "rows_by_house": {
       "Barrett-Jackson": 1,
-      "Bonhams": 13,
-      "Bonhams|Cars Online": 3,
-      "Broad Arrow": 17,
+      "Bonhams": 16,
+      "Bonhams|Cars Online": 7,
+      "Broad Arrow": 28,
       "Dorotheum": 4,
       "Mecum": 2,
       "RM Sotheby's": 28,
-      "duPont REGISTRY Live": 5
+      "duPont REGISTRY Live": 13
     },
-    "rows_missing_high_estimate_usd": 32,
-    "rows_missing_published_estimate": 32,
-    "rows_missing_price": 3,
+    "rows_missing_high_estimate_usd": 51,
+    "rows_missing_published_estimate": 51,
+    "rows_missing_price": 8,
     "rows_missing_price_by_outcome": {
-      "not_sold": 2,
-      "sold": 1
+      "not_sold": 6,
+      "sold": 1,
+      "withdrawn": 1
     },
     "rows_by_status": {
-      "CONFIRMED": 56,
-      "REPORTED": 16,
+      "CONFIRMED": 73,
+      "REPORTED": 25,
       "UNVERIFIED": 1
     },
     "rows_by_premium_included": {
-      "no": 6,
-      "unknown": 16,
-      "yes": 51
+      "no": 10,
+      "unknown": 21,
+      "yes": 68
     },
     "rows_by_result_state": {
-      "not_sold": 2,
-      "sold_with_price": 70,
-      "sold_without_price": 1
+      "not_sold": 6,
+      "sold_with_price": 91,
+      "sold_without_price": 1,
+      "withdrawn": 1
     },
     "rows_with_estimate_currency_unlike_price_currency": 8
   },
-  "review_queue_count": 12
+  "review_queue_count": 18
 }
