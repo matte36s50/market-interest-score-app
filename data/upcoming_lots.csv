@@ -5,6 +5,7 @@ Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,488 Pista 'Piloti Ferrari',2
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,550 Barchetta Pininfarina,2001,2000000,2500000,store:cw-rm-s1026-r0008; needs review
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,812 Competizione,2023,3000000,3500000,store:cw-rm-s1026-r0009
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,Superamerica,2006,499912.50,566567.50,store:cw-rm-s1026-r0010; needs review; GBP at 1.3331 USD
+Sealed October,2026-10-28,RM Sotheby's,RMS,,Porsche,356 A 1600 Speedster by Reutter,1957,505125,617375,store:cw-rm-s1026-r0012; needs review; EUR at 1.1225 USD
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Porsche,911 GT2 RS 'Weissach',2018,1000000,,store:cw-rm-s1026-r0013; needs review
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,Purosangue 'Tailor Made',2025,449000,673500,store:cw-rm-s1026-r0018; needs review; EUR at 1.1225 USD
 Sealed October,2026-10-28,RM Sotheby's,RMS,,Ferrari,SF90 Spider 'Tailor Made',2024,364812.50,477062.50,store:cw-rm-s1026-r0019; needs review; EUR at 1.1225 USD
@@ -105,160 +106,219 @@ Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,SF90 XX Spider,20
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,296 Speciale,2026,,,store:cw-gooding-2026-ferrari-296-speciale; needs review
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,296 Speciale A,2026,,,store:cw-gooding-2026-ferrari-296-speciale-a; needs review
 Geneva Auction 2026,2026-11-08,Gooding Christie's,GCH,,Ferrari,296 Speciale Piloti,2026,,,store:cw-gooding-2026-ferrari-296-speciale-piloti; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Miller,122 Front Drive Race Car,1925,,,store:cw-gooding-1925-miller-122-front-drive-race-car; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Miller,122 Front Drive Race Car,1925,400000,600000,store:cw-gooding-1925-miller-122-front-drive-race-car; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Miller,122 Front Drive Racecar,1925,,,store:cw-gooding-1925-miller-122-front-drive-racecar; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Alfa Romeo,6C 1750 Series III Super Sport Spider,1930,,,store:cw-gooding-1930-alfa-romeo-6c-1750-series-iii-super-sport-spider; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Welch-Ford,Indy Car,1935,,,store:cw-gooding-1935-welch-ford-indy-car; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bentley,6 1/2 Litre 'Le Mans Coupe' Special,1927,750000,1000000,store:cw-gooding-1927-bentley-6-1-2-litre-le-mans-coupe-special; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Alfa Romeo,6C 1750 Series III Super Sport Spider,1930,900000,1200000,store:cw-gooding-1930-alfa-romeo-6c-1750-series-iii-super-sport-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bugatti,Type 55 Cabriolet,1932,3500000,4000000,store:cw-gooding-1932-bugatti-type-55-cabriolet-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Welch-Ford,Indy Car,1935,125000,150000,store:cw-gooding-1935-welch-ford-indy-car; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Welch-Ford,Indianapolis Two-Seater,1935,,,store:cw-gooding-1935-welch-ford-special-two-man-indianapolis-racing-car; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rolls-Royce,Phantom III Sedanca de Ville,1937,,,store:cw-gooding-1937-rolls-royce-phantom-iii-sedanca-de-ville-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rolls-Royce,Phantom III Special Henley Coupe,1937,,,store:cw-gooding-1937-rolls-royce-phantom-iii-special-henley-coupe-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Talbot-Lago,T15 Cabriolet,1938,,,store:cw-gooding-1938-talbot-lago-t15-cabriolet; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ford,V8 Phaeton,1936,35000,45000,store:cw-gooding-1936-ford-v8-phaeton; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rolls-Royce,Phantom III Sedanca de Ville,1937,450000,650000,store:cw-gooding-1937-rolls-royce-phantom-iii-sedanca-de-ville-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rolls-Royce,Phantom III Special Henley Coupe,1937,450000,650000,store:cw-gooding-1937-rolls-royce-phantom-iii-special-henley-coupe-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,SS 100 3 1/2 Litre,1938,400000,475000,store:cw-gooding-1938-jaguar-ss-100-3-1-2-litre; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Talbot-Lago,T15 Cabriolet,1938,90000,120000,store:cw-gooding-1938-talbot-lago-t15-cabriolet; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Delage,D6-3L Grand Prix,1939,,,store:cw-gooding-1939-delage-d6-3l-grand-prix; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Delage,D6 3 L Reconstruction,1939,,,store:cw-gooding-1939-delage-d6-3-l-reconstruction; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chevrolet,3/4-Ton Truck,1941,,,store:cw-gooding-1941-chevrolet-3-4-ton-truck; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lancia,Aprilia Barchetta Corsa,1946,,,store:cw-gooding-1946-lancia-aprilia-barchetta-corsa; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Snowberger-Offenhauser,'Auto Shippers' Special Indy Car,1948,,,store:cw-gooding-1948-snowberger-offenhauser-auto-shippers-special-indy-car; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Delage,D6 3 L Reconstruction,1939,200000,300000,store:cw-gooding-1939-delage-d6-3-l-reconstruction; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chevrolet,3/4-Ton Truck,1941,20000,25000,store:cw-gooding-1941-chevrolet-3-4-ton-truck; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lancia,Aprilia Barchetta Corsa,1946,300000,400000,store:cw-gooding-1946-lancia-aprilia-barchetta-corsa; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Snowberger-Offenhauser,'Auto Shippers' Special Indy Car,1948,175000,250000,store:cw-gooding-1948-snowberger-offenhauser-auto-shippers-special-indy-car; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Snowberger-Offenhauser,'Auto Shippers' Special Indy Roadster,1948,,,store:cw-gooding-1948-snowberger-offenhauser-auto-shippers-special-indy-roadster; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Indian,Scout Model 249,1949,,,store:cw-gooding-1949-indian-scout-model-249; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Indian,Scout Model 249,1949,10000,12000,store:cw-gooding-1949-indian-scout-model-249; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Indian,Super Scout,1949,,,store:cw-gooding-1949-indian-super-scout; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Nymans,Moped,1949,,,store:cw-gooding-1949-nymans-moped; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rounds,Rocket Indy Car,1949,,,store:cw-gooding-1949-rounds-rocket-indy-car; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Nymans,Moped,1949,1500,3000,store:cw-gooding-1949-nymans-moped; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rounds,Rocket Indy Car,1949,250000,300000,store:cw-gooding-1949-rounds-rocket-indy-car; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rounds,Rocket Single Seater,1949,,,store:cw-gooding-1949-rounds-rocket-single-seater; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,XK120 Roadster,1950,100000,130000,store:cw-gooding-1950-jaguar-xk120-roadster-rn26; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Indian,Chief,1953,,,store:cw-gooding-1953-indian-chief; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Siata,208 CS Berlinetta,1953,,,store:cw-gooding-1953-siata-208-cs-berlinetta-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,XK120 SE Roadster,1954,,,store:cw-gooding-1954-jaguar-xk120-se-roadster-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,NSU,Max,1954,,,store:cw-gooding-1954-nsu-max; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Siata,208 CS Berlinetta,1953,1500000,2000000,store:cw-gooding-1953-siata-208-cs-berlinetta-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chevrolet,Corvette,1954,60000,80000,store:cw-gooding-1954-chevrolet-corvette-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,XK120 SE Roadster,1954,80000,100000,store:cw-gooding-1954-jaguar-xk120-se-roadster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,NSU,Max,1954,2000,4000,store:cw-gooding-1954-nsu-max; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lancia,Aurelia B24S Spider America,1955,750000,900000,store:cw-gooding-1955-lancia-aurelia-b24s-spider-america-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,300 SL Alloy Gullwing,1955,4000000,6000000,store:cw-gooding-1955-mercedes-benz-300-sl-alloy-gullwing-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,MV Agusta,175 CSS 'Disco Volante',1955,18000,24000,store:cw-gooding-1955-mv-agusta-175-css-disco-volante; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,MV Agusta,175CSS 'Disco Volante' 'Disco Volante',1955,,,store:cw-gooding-1955-mv-agusta-175css-disco-volante; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kuzma-Offenhauser,Indianapolis Roadster,1956,,,store:cw-gooding-1956-kuzma-offenhauser-indianapolis-roadster; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,D-Type,1956,6000000,7000000,store:cw-gooding-1956-jaguar-d-type; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kuzma-Offenhauser,Indianapolis Roadster,1956,150000,225000,store:cw-gooding-1956-kuzma-offenhauser-indianapolis-roadster; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kuzma-Offenhauser,Indianapolis Single Seater,1956,,,store:cw-gooding-1956-kuzma-offenhauser-indianapolis-single-seater; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,507 Series I Roadster,1957,,,store:cw-gooding-1957-bmw-507-series-i; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,Mk II,1962,,,store:cw-gooding-1962-jaguar-mk-ii; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,356 A Speedster,1956,400000,475000,store:cw-gooding-1956-porsche-356-a-speedster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,AC,Ace,1957,200000,300000,store:cw-gooding-1957-ac-ace; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,507 Series I Roadster,1957,1600000,1800000,store:cw-gooding-1957-bmw-507-series-i; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Cadillac,Eldorado Biarritz,1957,175000,225000,store:cw-gooding-1957-cadillac-eldorado-biarritz-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chevrolet,Corvette Roadster,1957,90000,120000,store:cw-gooding-1957-chevrolet-corvette-roadster
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,300 Sc Coupe,1957,300000,375000,store:cw-gooding-1957-mercedes-benz-300-sc-coupe-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,300 SL Gullwing,1957,1700000,2000000,store:cw-gooding-1957-mercedes-benz-300-sl-gullwing-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,356 A 1500 GS/GT Carrera Speedster,1957,650000,750000,store:cw-gooding-1957-porsche-356-a-1500-gs-gt-carrera-speedster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chrysler,300D Convertible,1958,90000,120000,store:cw-gooding-1958-chrysler-300d-convertible; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Austin-Healey,100/6 BN6,1959,60000,80000,store:cw-gooding-1959-austin-healey-100-6-bn6; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,190 SL,1959,140000,180000,store:cw-gooding-1959-mercedes-benz-190-sl-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,E-Type Series I 3.8-Litre Roadster,1961,100000,130000,store:cw-gooding-1961-jaguar-e-type-series-i-38-litre-roadster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Maserati,3500 GT,1961,100000,130000,store:cw-gooding-1961-maserati-3500-gt-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,Mk II,1962,20000,30000,store:cw-gooding-1962-jaguar-mk-ii; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,Mk II 3.8,1962,,,store:cw-gooding-1962-jaguar-mk-ii-38; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,300 SL Roadster,1962,,,store:cw-gooding-1962-mercedes-benz-300-sl-roadster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,300 SL Roadster,1962,1800000,2200000,store:cw-gooding-1962-mercedes-benz-300-sl-roadster-rn26; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Atlas/Commando,1962,,,store:cw-gooding-1962-norton-atlas-commando; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Atlas Custom Cafe Racer,1962,,,store:cw-gooding-1962-norton-atlas-custom-cafe-racer; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,250 GT Lusso,1963,,,store:cw-gooding-1963-ferrari-250-gt-lusso-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTB,1965,,,store:cw-gooding-1965-ferrari-275-gtb-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTS,1965,,,store:cw-gooding-1965-ferrari-275-gts-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,911,1965,,,store:cw-gooding-1965-porsche-911-rn26
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Puch,250 SGS,1965,,,store:cw-gooding-1965-puch-250-sgs; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB77 Super Hawk,1966,,,store:cw-gooding-1966-honda-cb77-super-hawk; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bizzarrini,5300 GT Strada,1967,,,store:cw-gooding-1967-bizzarrini-5300-gt-strada; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BSA,A50 Royal Star,1967,,,store:cw-gooding-1967-bsa-a50-royal-star; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,De Tomaso,Vallelunga,1967,,,store:cw-gooding-1967-de-tomaso-vallelunga-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTB/4*S NART Spider,1967,,,store:cw-gooding-1967-ferrari-275-gtb-4s-nart-spider; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Fiat-Abarth,OT 1000 Spider,1967,,,store:cw-gooding-1967-fiat-abarth-ot-1000-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Atlas Custom Cafe Racer,1962,6000,8000,store:cw-gooding-1962-norton-atlas-custom-cafe-racer; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Chevrolet,Corvette Split-Window Coupe,1963,200000,300000,store:cw-gooding-1963-chevrolet-corvette-split-window-coupe-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,250 GT Lusso,1963,1400000,1600000,store:cw-gooding-1963-ferrari-250-gt-lusso-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,356 B Super 90 Coupe,1963,120000,140000,store:cw-gooding-1963-porsche-356-b-super-90-coupe; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,356 C Cabriolet,1964,170000,200000,store:cw-gooding-1964-porsche-356-c-cabriolet-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTB,1965,2250000,2500000,store:cw-gooding-1965-ferrari-275-gtb-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTS,1965,1000000,1200000,store:cw-gooding-1965-ferrari-275-gts-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,911,1965,170000,200000,store:cw-gooding-1965-porsche-911-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Puch,250 SGS,1965,4000,6000,store:cw-gooding-1965-puch-250-sgs; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,1600-2,1966,50000,70000,store:cw-gooding-1966-bmw-1600-2; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB77 Super Hawk,1966,4000,6000,store:cw-gooding-1966-honda-cb77-super-hawk; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bizzarrini,5300 GT Strada,1967,500000,800000,store:cw-gooding-1967-bizzarrini-5300-gt-strada; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BSA,A50 Royal Star,1967,5000,7000,store:cw-gooding-1967-bsa-a50-royal-star; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,De Tomaso,Vallelunga,1967,350000,500000,store:cw-gooding-1967-de-tomaso-vallelunga-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,275 GTB/4*S NART Spider,1967,15000000,20000000,store:cw-gooding-1967-ferrari-275-gtb-4s-nart-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Fiat-Abarth,OT 1000 Spider,1967,60000,80000,store:cw-gooding-1967-fiat-abarth-ot-1000-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,911,1967,125000,175000,store:cw-gooding-1967-porsche-911-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,912,1967,90000,120000,store:cw-gooding-1967-porsche-912-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Rolls-Royce,Silver Shadow Two-Door Saloon,1967,80000,110000,store:cw-gooding-1967-rolls-royce-silver-shadow-two-door-saloon; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,YM2C Big Bear,1967,,,store:cw-gooding-1967-yamaha-ym2c-big-bear; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,YM2C Big Bear Scrambler,1967,,,store:cw-gooding-1967-yamaha-ym2c-big-bear-scrambler; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,E-Type Series II 4.2-Litre Fixed Head Coupe 2+2,1968,,,store:cw-gooding-1968-jaguar-e-type-series-ii-42-litre-fixed-head-coupe-22; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V750 Ambassador,1969,,,store:cw-gooding-1969-moto-guzzi-v750-ambassador; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,280 SE 3.5 Cabriolet,1970,,,store:cw-gooding-1970-mercedes-benz-280-se-35-cabriolet-rn26
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB450,1971,,,store:cw-gooding-1971-honda-cb450-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,365 GTS/4 Daytona Spider,1972,,,store:cw-gooding-1972-ferrari-365-gts-4-daytona-spider; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,Dino 246 GT,1972,,,store:cw-gooding-1972-ferrari-dino-246-gt-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB500 Four,1972,,,store:cw-gooding-1972-honda-cb500-four; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,YM2C Big Bear Scrambler,1967,3000,5000,store:cw-gooding-1967-yamaha-ym2c-big-bear-scrambler; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,E-Type Series II 4.2-Litre Fixed Head Coupe 2+2,1968,25000,35000,store:cw-gooding-1968-jaguar-e-type-series-ii-42-litre-fixed-head-coupe-22; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ford,Mustang Boss 302,1969,60000,80000,store:cw-gooding-1969-ford-mustang-boss-302
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V750 Ambassador,1969,1000,2000,store:cw-gooding-1969-moto-guzzi-v750-ambassador; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,280 SE 3.5 Cabriolet,1970,250000,350000,store:cw-gooding-1970-mercedes-benz-280-se-35-cabriolet-rn26
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Meyers,Manx Resorter,1970,50000,70000,store:cw-gooding-1970-meyers-manx-resorter; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB450,1971,3000,5000,store:cw-gooding-1971-honda-cb450-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,365 GTS/4 Daytona Spider,1972,1750000,2250000,store:cw-gooding-1972-ferrari-365-gts-4-daytona-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,Dino 246 GT,1972,400000,500000,store:cw-gooding-1972-ferrari-dino-246-gt-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB500 Four,1972,3000,5000,store:cw-gooding-1972-honda-cb500-four; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,CB500K1,1972,,,store:cw-gooding-1972-honda-cb500k1; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mazda,Cosmo Sport Series II,1972,80000,100000,store:cw-gooding-1972-mazda-cosmo-sport-series-ii; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,Eldorado,1972,,,store:cw-gooding-1972-moto-guzzi-eldorado; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V850 Eldorado,1972,,,store:cw-gooding-1972-moto-guzzi-v850-eldorado; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R60/5,1973,,,store:cw-gooding-1973-bmw-r60-5; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,750 Sport,1975,,,store:cw-gooding-1975-ducati-750-sport-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL-1000 Gold Wing,1975,,,store:cw-gooding-1975-honda-gl-1000-gold-wing; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V850 Eldorado,1972,3000,5000,store:cw-gooding-1972-moto-guzzi-v850-eldorado; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R60/5,1973,4000,7000,store:cw-gooding-1973-bmw-r60-5; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,365 GTB/4 Daytona,1973,550000,650000,store:cw-gooding-1973-ferrari-365-gtb-4-daytona-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Maserati,Bora 4.9,1973,125000,175000,store:cw-gooding-1973-maserati-bora-49-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Volkswagen,Thing,1973,35000,45000,store:cw-gooding-1973-volkswagen-thing-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,750 Super Sport,1974,250000,325000,store:cw-gooding-1974-ducati-750-super-sport-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,750 Sport,1975,25000,35000,store:cw-gooding-1975-ducati-750-sport-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL-1000 Gold Wing,1975,4000,7000,store:cw-gooding-1975-honda-gl-1000-gold-wing; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL1000 Gold Wing,1975,,,store:cw-gooding-1975-honda-gl1000-gold-wing; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lamborghini,Espada Series III,1975,,,store:cw-gooding-1975-lamborghini-espada-series-iii; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lamborghini,Espada Series III,1975,120000,140000,store:cw-gooding-1975-lamborghini-espada-series-iii; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850T,1975,,,store:cw-gooding-1975-moto-guzzi-850t; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850T Custom,1975,,,store:cw-gooding-1975-moto-guzzi-850t-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850T Custom,1975,3000,5000,store:cw-gooding-1975-moto-guzzi-850t-custom; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Commando 850 Mk3,1975,,,store:cw-gooding-1975-norton-commando-850-mk3; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Commando 850 Mk III,1975,,,store:cw-gooding-1975-norton-commando-850-mk-iii; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Norton,Commando 850 Mk III,1975,8000,10000,store:cw-gooding-1975-norton-commando-850-mk-iii; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650,1975,,,store:cw-gooding-1975-yamaha-xs650; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650 Bobber by Mike Woolaway,1975,,,store:cw-gooding-1975-yamaha-xs650-bobber-by-mike-woolaway; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650 Custom,1975,,,store:cw-gooding-1975-yamaha-xs650-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650 Bobber by Mike Woolaway,1975,4000,6000,store:cw-gooding-1975-yamaha-xs650-bobber-by-mike-woolaway; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650 Custom,1975,3000,5000,store:cw-gooding-1975-yamaha-xs650-custom; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,XS650,1975,,,store:cw-gooding-1975-yamaha-xs650-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R100RS,1977,,,store:cw-gooding-1977-bmw-r100rs; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R100RS,1977,5000,8000,store:cw-gooding-1977-bmw-r100rs; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLCR,1977,,,store:cw-gooding-1977-harley-davidson-xlcr; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLCR-1000 Cafe Racer,1977,,,store:cw-gooding-1977-harley-davidson-xlcr-1000-cafe-racer; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850 Le Mans,1977,,,store:cw-gooding-1977-moto-guzzi-850-le-mans; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLCR-1000 Cafe Racer,1977,9000,12000,store:cw-gooding-1977-harley-davidson-xlcr-1000-cafe-racer; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850 Le Mans,1977,9000,12000,store:cw-gooding-1977-moto-guzzi-850-le-mans; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,Le Mans 1,1977,,,store:cw-gooding-1977-moto-guzzi-le-mans-1; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Super Sport,1978,,,store:cw-gooding-1978-ducati-900-super-sport; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Super Sport,1978,,,store:cw-gooding-1978-ducati-900-super-sport-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Super Sport,1978,25000,35000,store:cw-gooding-1978-ducati-900-super-sport; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Super Sport,1978,25000,35000,store:cw-gooding-1978-ducati-900-super-sport-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,280 S Sedan,1978,50000,70000,store:cw-gooding-1978-mercedes-benz-280-s-sedan; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T140 'Madison Square Garden' Custom,1978,10000,15000,store:cw-gooding-1978-triumph-bonneville-t140-madison-square-garden-custom; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T140 'Madison Square Garden' Custom,1978,,,store:cw-gooding-1978-triumph-t140-bonneville; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R65,1979,,,store:cw-gooding-1979-bmw-r65; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T140,1979,,,store:cw-gooding-1979-triumph-bonneville-t140; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R65,1979,3000,5000,store:cw-gooding-1979-bmw-r65; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T140,1979,4000,6000,store:cw-gooding-1979-triumph-bonneville-t140; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,T140 Bonneville,1979,,,store:cw-gooding-1979-triumph-t140-bonneville; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Volkswagen,Super Beetle 'Epilogue Edition' Convertible,1979,80000,100000,store:cw-gooding-1979-volkswagen-super-beetle-convertible-epilogue-edition; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,SR500,1979,,,store:cw-gooding-1979-yamaha-sr500; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,SR500 Custom Cafe Racer,1979,,,store:cw-gooding-1979-yamaha-sr500-custom-cafe-racer; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Morini,500,1980,,,store:cw-gooding-1980-moto-morini-500; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,SR500 Custom Cafe Racer,1979,3000,6000,store:cw-gooding-1979-yamaha-sr500-custom-cafe-racer; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Morini,500,1980,3000,5000,store:cw-gooding-1980-moto-morini-500; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,G5,1981,,,store:cw-gooding-1981-moto-guzzi-g5; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V1000 G5 Custom,1981,,,store:cw-gooding-1981-moto-guzzi-v1000-g5-custom; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V35 II,1981,,,store:cw-gooding-1981-moto-guzzi-v35-ii; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Darmah SD,1982,,,store:cw-gooding-1982-ducati-900-darmah-sd; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V1000 G5 Custom,1981,3000,5000,store:cw-gooding-1981-moto-guzzi-v1000-g5-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V35 II,1981,2000,4000,store:cw-gooding-1981-moto-guzzi-v35-ii; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Darmah SD,1982,6000,8000,store:cw-gooding-1982-ducati-900-darmah-sd; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Mike Hailwood Replica,1982,,,store:cw-gooding-1982-ducati-900-mike-hailwood-replica; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLH1000,1982,,,store:cw-gooding-1982-harley-davidson-xlh1000; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLH 1000 Sportster,1982,4000,7000,store:cw-gooding-1982-harley-davidson-xlh-1000-sportster; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XLH1000 Sportster,1982,,,store:cw-gooding-1982-harley-davidson-xlh1000-sportster; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V35 Imola,1982,,,store:cw-gooding-1982-moto-guzzi-v35-imola; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V50 Monza,1982,,,store:cw-gooding-1982-moto-guzzi-v50-monza; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V35 Imola,1982,2000,4000,store:cw-gooding-1982-moto-guzzi-v35-imola; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V50 Monza,1982,4000,6000,store:cw-gooding-1982-moto-guzzi-v50-monza; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Suzuki,GS1000 Katana,1982,,,store:cw-gooding-1982-suzuki-gs1000-katana; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Suzuki,GS1000S Katana,1982,,,store:cw-gooding-1982-suzuki-gs1000s-katana; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Suzuki,GS1000S Katana,1982,8000,10000,store:cw-gooding-1982-suzuki-gs1000s-katana; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Virago 750,1982,,,store:cw-gooding-1982-yamaha-virago-750; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Virago 'Vinago' Custom by Greg Hageman,1982,,,store:cw-gooding-1982-yamaha-virago-vinago-custom-by-greg-hageman; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R80ST,1983,,,store:cw-gooding-1983-bmw-r80st; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Mike Hailwood Replica,1983,,,store:cw-gooding-1983-ducati-900-mike-hailwood-replica; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Virago 'Vinago' Custom by Greg Hageman,1982,3000,5000,store:cw-gooding-1982-yamaha-virago-vinago-custom-by-greg-hageman; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R80ST,1983,5000,8000,store:cw-gooding-1983-bmw-r80st; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ducati,900 Mike Hailwood Replica,1983,15000,25000,store:cw-gooding-1983-ducati-900-mike-hailwood-replica; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL650 Silverwing,1983,,,store:cw-gooding-1983-honda-gl650-silverwing; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL650 Silverwing Interstate,1983,,,store:cw-gooding-1983-honda-gl650-silverwing-interstate; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,GL650 Silverwing Interstate,1983,4000,6000,store:cw-gooding-1983-honda-gl650-silverwing-interstate; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,850 Le Mans III,1983,3000,5000,store:cw-gooding-1983-moto-guzzi-850-le-mans-iii; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,Le Mans III,1983,,,store:cw-gooding-1983-moto-guzzi-le-mans-iii; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,March,84C,1984,,,store:cw-gooding-1984-march-cosworth-84c; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,March,84C,1984,100000,150000,store:cw-gooding-1984-march-cosworth-84c; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,March,Cosworth 84C Indianapolis Racecar,1984,,,store:cw-gooding-1984-march-cosworth-84c-indianapolis-racecar; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,Mondial 3.2 Quattrovalvole Cabriolet,1986,,,store:cw-gooding-1986-ferrari-mondial-32-quattrovalvole-cabriolet; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Aston Martin,V8 Vantage 'X-Pack' Volante,1989,,,store:cw-gooding-1989-aston-martin-v8-vantage-volante-x-pack; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Schwinn,Whizzer Reproduction,1990,,,store:cw-gooding-1990-schwinn-whizzer-reproduction; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,1000S,1993,,,store:cw-gooding-1993-moto-guzzi-1000s; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,280 SL,1984,90000,120000,store:cw-gooding-1984-mercedes-benz-280-sl-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Fiat,Panda 4x4,1985,30000,40000,store:cw-gooding-1985-fiat-panda-4x4; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,Mondial 3.2 Quattrovalvole Cabriolet,1986,125000,150000,store:cw-gooding-1986-ferrari-mondial-32-quattrovalvole-cabriolet; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,Testarossa,1988,275000,350000,store:cw-gooding-1988-ferrari-testarossa-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Aston Martin,V8 Vantage 'X-Pack' Volante,1989,200000,300000,store:cw-gooding-1989-aston-martin-v8-vantage-volante-x-pack; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,250 GD Wolf,1990,100000,130000,store:cw-gooding-1990-mercedes-benz-250-gd-wolf; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Schwinn,Whizzer Reproduction,1990,1000,2000,store:cw-gooding-1990-schwinn-whizzer-reproduction; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,M3 Cabriolet,1992,140000,180000,store:cw-gooding-1992-bmw-m3-cabriolet; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Benz,500E,1992,120000,150000,store:cw-gooding-1992-mercedes-benz-500e-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Jaguar,XJ220,1993,400000,500000,store:cw-gooding-1993-jaguar-xj220-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,1000S,1993,14000,18000,store:cw-gooding-1993-moto-guzzi-1000s; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R100 Mystic,1994,,,store:cw-gooding-1994-bmw-r100-mystic; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R100R Mystic,1994,,,store:cw-gooding-1994-bmw-r100r-mystic; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,F355 Spider,1995,,,store:cw-gooding-1995-ferrari-f355-spider; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,RUF,Project Dragon,1998,,,store:cw-gooding-1998-ruf-project-dragon; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,VT1100C3 Shadow Aero,1999,,,store:cw-gooding-1999-honda-vt1100c3-shadow-aero; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,BMW,R100R Mystic,1994,3000,5000,store:cw-gooding-1994-bmw-r100r-mystic; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,F355 Spider,1995,200000,250000,store:cw-gooding-1995-ferrari-f355-spider; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,993 Carrera Cabriolet,1995,160000,180000,store:cw-gooding-1995-porsche-993-carrera-cabriolet; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Land Rover,Defender 90 NAS,1997,125000,175000,store:cw-gooding-1997-land-rover-defender-90-nas; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,RUF,Project Dragon,1998,6000000,8000000,store:cw-gooding-1998-ruf-project-dragon; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,VT1100C3 Shadow Aero,1999,2000,4000,store:cw-gooding-1999-honda-vt1100c3-shadow-aero; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,VT1100 Shadow Aero,1999,,,store:cw-gooding-1999-honda-vt1100-shadow-aero; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 by Deus Ex Machina,1999,,,store:cw-gooding-1999-kawasaki-w650-by-deus-ex-machina; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 Custom by Deus Ex Machina,1999,,,store:cw-gooding-1999-kawasaki-w650-custom-by-deus-ex-machina; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 Custom by Deus Ex Machina,1999,7000,9000,store:cw-gooding-1999-kawasaki-w650-custom-by-deus-ex-machina; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,550 Maranello,2001,450000,550000,store:cw-gooding-2001-ferrari-550-maranello-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,575M,2002,600000,700000,store:cw-gooding-2002-ferrari-575m-rn26; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XL1200R,2004,,,store:cw-gooding-2004-harley-davidson-xl1200r; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XL 1200R Sportster Roadster,2004,,,store:cw-gooding-2004-harley-davidson-xl-1200r-sportster-roadster; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100 with DMC Sidecar,2004,,,store:cw-gooding-2004-triumph-bonneville-t100-with-dmc-sidecar; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XL 1200R Sportster Roadster Roadster,2004,5000,7000,store:cw-gooding-2004-harley-davidson-xl-1200r-sportster-roadster; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100 with DMC Sidecar with DMC Sidecar,2004,2000,3000,store:cw-gooding-2004-triumph-bonneville-t100-with-dmc-sidecar; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,T100 Bonneville,2004,,,store:cw-gooding-2004-triumph-t100-bonneville; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,883 Sportster,2005,,,store:cw-gooding-2005-harley-davidson-883-sportster; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,883 Sportster,2005,,,store:cw-gooding-2005-harley-davidson-xl-883l-sportster-883-low; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,XL 883L Sportster 883 Low,2005,6000,8000,store:cw-gooding-2005-harley-davidson-xl-883l-sportster-883-low; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Bullet 500 Cafe,2005,,,store:cw-gooding-2005-royal-enfield-bullet-500-cafe; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Bullet 500 Cafe Racer,2005,,,store:cw-gooding-2005-royal-enfield-bullet-500-cafe-racer; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Thruxton,2005,,,store:cw-gooding-2005-triumph-thruxton; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,FLHRI Road King with Liberty Sidecar,2006,,,store:cw-gooding-2006-harley-davidson-flhri-road-king-with-liberty-sidecar; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Bullet 500 Cafe Racer,2005,3000,5000,store:cw-gooding-2005-royal-enfield-bullet-500-cafe-racer; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Thruxton,2005,4000,6000,store:cw-gooding-2005-triumph-thruxton; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,FLHRI Road King with Liberty Sidecar,2006,7000,10000,store:cw-gooding-2006-harley-davidson-flhri-road-king-with-liberty-sidecar; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,Road King with Liberty Sidecar,2006,,,store:cw-gooding-2006-harley-davidson-road-king-with-liberty-sidecar; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Orange County Choppers,Bobber,2006,,,store:cw-gooding-2006-orange-county-choppers-bobber; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Orange County Choppers,Bobber,2006,8000,10000,store:cw-gooding-2006-orange-county-choppers-bobber; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Orange County Choppers,Custom Bobber,2006,,,store:cw-gooding-2006-orange-county-choppers-custom-bobber; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Orange County Choppers,Indian Chief Bobber,2006,,,store:cw-gooding-2006-orange-county-choppers-indian-chief-bobber; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bentley,Azure,2007,,,store:cw-gooding-2007-bentley-azure-rn26; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100,2007,,,store:cw-gooding-2007-triumph-bonneville-t100; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Bentley,Azure,2007,140000,180000,store:cw-gooding-2007-bentley-azure-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,F430,2007,900000,1100000,store:cw-gooding-2007-ferrari-f430; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Ferrari,F430 Spider,2007,500000,600000,store:cw-gooding-2007-ferrari-f430-spider-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100,2007,3000,5000,store:cw-gooding-2007-triumph-bonneville-t100; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,T100 Bonneville,2007,,,store:cw-gooding-2007-triumph-t100-bonneville; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Harley-Davidson,EL Knuckehead,2008,,,store:cw-gooding-2008-harley-davidson-el-knuckehead; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lighthouse Harley-Davidson,'EL Knucklehead' Custom,2008,,,store:cw-gooding-2008-lighthouse-harley-davidson-el-knucklehead-custom; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100 Custom,2008,,,store:cw-gooding-2008-triumph-bonneville-t100-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Lighthouse Harley-Davidson,'EL Knucklehead' Custom,2008,5000,7000,store:cw-gooding-2008-lighthouse-harley-davidson-el-knucklehead-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,Bonneville T100 Custom,2008,5000,7000,store:cw-gooding-2008-triumph-bonneville-t100-custom; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Triumph,T100 Bonneville,2008,,,store:cw-gooding-2008-triumph-t100-bonneville; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Genuine,Stella 150 with Sidecar,2009,,,store:cw-gooding-2009-genuine-stella-150-with-sidecar; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Fiat,500 Abarth Assetto Corse,2009,30000,50000,store:cw-gooding-2009-fiat-500-abarth-assetto-corse; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Genuine,Stella 150 with Sidecar with Sidecar,2009,2000,4000,store:cw-gooding-2009-genuine-stella-150-with-sidecar; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Genuine,Stella with Sidecar,2009,,,store:cw-gooding-2009-genuine-stella-with-sidecar; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 Bobber,2009,,,store:cw-gooding-2009-kawasaki-w650-bobber; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 Bobber Custom by Mike Woolaway,2009,,,store:cw-gooding-2009-kawasaki-w650-bobber-custom-by-mike-woolaway; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kawasaki,W650 Bobber Custom by Mike Woolaway,2009,6000,8000,store:cw-gooding-2009-kawasaki-w650-bobber-custom-by-mike-woolaway; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,997 Turbo Cabriolet,2009,110000,130000,store:cw-gooding-2009-porsche-997-turbo-cabriolet; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Blt 500 Mil (Scrambler),2009,,,store:cw-gooding-2009-royal-enfield-blt-500-mil-scrambler; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Bullet 500 Scrambler,2009,,,store:cw-gooding-2009-royal-enfield-bullet-500-scrambler; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,Bullet 500 Scrambler,2009,3000,5000,store:cw-gooding-2009-royal-enfield-bullet-500-scrambler; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Thunderdome,1949 Panhead,2009,,,store:cw-gooding-2009-thunderdome-1949-panhead; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Thunderdome,Panhead-Style Custom,2009,,,store:cw-gooding-2009-thunderdome-panhead-style-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Thunderdome,Panhead-Style Custom,2009,5000,7000,store:cw-gooding-2009-thunderdome-panhead-style-custom; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V7 Cafe,2010,,,store:cw-gooding-2010-moto-guzzi-v7-cafe; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V7 Cafe Classic,2010,,,store:cw-gooding-2010-moto-guzzi-v7-cafe-classic; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kiwi Indian,Chieftain,2011,,,store:cw-gooding-2011-kiwi-indian-chieftain; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Moto Guzzi,V7 Cafe Classic,2010,2000,4000,store:cw-gooding-2010-moto-guzzi-v7-cafe-classic; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Kiwi Indian,Chieftain,2011,7000,10000,store:cw-gooding-2011-kiwi-indian-chieftain; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Bolt,2014,,,store:cw-gooding-2014-yamaha-bolt; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Bolt Custom,2014,,,store:cw-gooding-2014-yamaha-bolt-custom; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,SR400,2015,,,store:cw-gooding-2015-yamaha-sr400; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,TW200,2018,,,store:cw-gooding-2018-yamaha-tw200; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,V Star 250,2018,,,store:cw-gooding-2018-yamaha-v-star-250; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,650 Interceptor,2019,,,store:cw-gooding-2019-royal-enfield-650-interceptor; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,Bolt Custom,2014,3000,5000,store:cw-gooding-2014-yamaha-bolt-custom; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,SR400,2015,2000,4000,store:cw-gooding-2015-yamaha-sr400; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,TW200,2018,2000,4000,store:cw-gooding-2018-yamaha-tw200; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Yamaha,V Star 250,2018,2000,4000,store:cw-gooding-2018-yamaha-v-star-250; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Porsche,991 Speedster,2019,475000,550000,store:cw-gooding-2019-porsche-991-speedster-rn26; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Royal Enfield,650 Interceptor,2019,3000,5000,store:cw-gooding-2019-royal-enfield-650-interceptor; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Acura,NSX,2021,140000,180000,store:cw-gooding-2021-acura-nsx; needs review
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,Super Cub,2021,,,store:cw-gooding-2021-honda-super-cub; needs review
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,Super Cub C125,2021,,,store:cw-gooding-2021-honda-super-cub-c125; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Honda,Super Cub C125,2021,2000,4000,store:cw-gooding-2021-honda-super-cub-c125; needs review
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,GCH,,Mercedes-Maybach,S 680,2027,425000,550000,store:cw-gooding-2027-mercedes-maybach-s-680; needs review
 The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,BMW,635CSi Group A,1986,561250,785750,store:cw-rm-mu26-r0001; needs review; EUR at 1.1225 USD
 The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo Coupé,2002,78575,134700,store:cw-rm-mu26-r0006; EUR at 1.1225 USD
 The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Porsche,911 Turbo S Lightweight,1992,898000,1122500,store:cw-rm-mu26-r0007; needs review; EUR at 1.1225 USD
@@ -315,7 +375,12 @@ The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Ferrari,Testarossa,1990,202
 The Munich Auction 2026,2026-11-20,RM Sotheby's,RMS,,Mercedes-Benz,CL 600,2008,39287.50,72962.50,store:cw-rm-mu26-r0078; needs review; EUR at 1.1225 USD
 Sealed December,2026-12-02,RM Sotheby's,RMS,,Ferrari,SF90 XX Spider,2024,1403125,1964375,store:cw-rm-s1226-r0006; needs review; EUR at 1.1225 USD
 The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Ferrari,599 GTB Fiorano,2010,140000,200000,store:cw-rm-ad26-r0001; needs review
+The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Ferrari,612 Scaglietti,2006,80000,120000,store:cw-rm-ad26-r0002; needs review
 The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Porsche,911 SC Coupé,1979,70000,100000,store:cw-rm-ad26-r0003; needs review
+The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Lancia,Delta HF Integrale Evoluzione 'Martini 5',1991,120000,150000,store:cw-rm-ad26-r0004; needs review
+The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Lotus,Evora,2020,70000,100000,store:cw-rm-ad26-r0005; needs review
+The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Ferrari,360 Challenge Stradale,2004,450000,550000,store:cw-rm-ad26-r0006; needs review
+The Abu Dhabi Auction 2026,2026-12-09,RM Sotheby's,RMS,,Lamborghini,Murciélago,2004,400000,500000,store:cw-rm-ad26-r0009; needs review
 The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Renault,5 Turbo 1,1981,157150,224500,store:cw-rm-pa27-r0001; needs review; EUR at 1.1225 USD
 The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Abarth,695 Tributo Ferrari,2010,44900,56125,store:cw-rm-pa27-r0002; needs review; EUR at 1.1225 USD
 The Paris Auction 2027,2027-02-03,RM Sotheby's,RMS,,Mercedes-Benz,540 K Cabriolet A by Sindelfingen,1938,2132750,2469500,store:cw-rm-pa27-r0005; needs review; EUR at 1.1225 USD
