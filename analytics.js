@@ -37,7 +37,7 @@ let quarters = [];    // all distinct months, sorted
 // Benchmarks computed across every valid row in the dataset, per month so they
 // can be drawn as trend lines alongside each model.
 let marketMIIByQuarter = {};        // quarter -> average MII across all rows
-let manufacturerMIIByQuarter = {};  // manufacturer -> { quarter -> average MII }
+let manufacturerMIIByQuarter = {};  // manufacturer -> { quarter -> make MII (MII.makeScore) }
 
 let baseKey = null;
 let comparisonKeys = [];
@@ -127,11 +127,11 @@ function buildModels(rawData) {
 
     modelKeys = Object.keys(models).sort((a, b) => a.localeCompare(b));
 
-    // Market and per-manufacturer benchmarks, averaged per month so they can be
-    // plotted as trend lines. Each month is the mean MII of every row in that
-    // month (market) or every row of that manufacturer in that month.
+    // Market and per-manufacturer benchmarks per month, plotted as trend lines.
+    // The market is the mean MII of every row in that month; a manufacturer is
+    // scored as on the overview, its models weighted by lots (MII.makeScore).
     const marketSums = {};                 // quarter -> { sum, n }
-    const mfrSums = {};                     // manufacturer -> quarter -> { sum, n }
+    const mfrRows = {};                     // manufacturer -> quarter -> rows
     valid.forEach(row => {
         const mii = parseFloat(row.mii_score);
         const q = String(row.quarter).trim();
@@ -139,10 +139,8 @@ function buildModels(rawData) {
         (marketSums[q] = marketSums[q] || { sum: 0, n: 0 });
         marketSums[q].sum += mii;
         marketSums[q].n += 1;
-        (mfrSums[mfr] = mfrSums[mfr] || {});
-        (mfrSums[mfr][q] = mfrSums[mfr][q] || { sum: 0, n: 0 });
-        mfrSums[mfr][q].sum += mii;
-        mfrSums[mfr][q].n += 1;
+        (mfrRows[mfr] = mfrRows[mfr] || {});
+        (mfrRows[mfr][q] = mfrRows[mfr][q] || []).push(row);
     });
     // The market's level for the Absolute Interest chart: the typical sale's
     // views that month, weighting each model-month by its lots.
@@ -164,10 +162,12 @@ function buildModels(rawData) {
         marketMIIByQuarter[q] = n ? sum / n : null;
     });
     manufacturerMIIByQuarter = {};
-    Object.entries(mfrSums).forEach(([mfr, byQ]) => {
+    Object.entries(mfrRows).forEach(([mfr, byQ]) => {
         manufacturerMIIByQuarter[mfr] = {};
-        Object.entries(byQ).forEach(([q, { sum, n }]) => {
-            manufacturerMIIByQuarter[mfr][q] = n ? sum / n : null;
+        Object.entries(byQ).forEach(([q, rows]) => {
+            manufacturerMIIByQuarter[mfr][q] = window.MII
+                ? MII.makeScore(rows)
+                : rows.reduce((s, r) => s + parseFloat(r.mii_score), 0) / rows.length;
         });
     });
 }
@@ -680,7 +680,7 @@ function renderBenchmark(keys) {
     const datasets = [];
 
     // One solid line per selected model (matching its series colour), plus a
-    // dashed line for that model's manufacturer average. Manufacturers are
+    // dashed line for that model's manufacturer MII. Manufacturers are
     // de-duplicated so two models from the same make share one mfr line.
     const seenMfr = new Set();
     keys.forEach((k, i) => {
@@ -712,7 +712,7 @@ function renderBenchmark(keys) {
             seenMfr.add(mfr);
             const byQ = manufacturerMIIByQuarter[mfr] || {};
             datasets.push({
-                label: `${mfr} (mfr avg)`,
+                label: `${mfr} (make MII)`,
                 data: quarters.map(q => byQ[q] ?? null),
                 borderColor: color,
                 backgroundColor: color,

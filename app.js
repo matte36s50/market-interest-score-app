@@ -300,7 +300,9 @@ function summarizePeriod(rows, grain) {
             make,
             auctions,
             sold,
-            miiScore: mean(mRows.map(r => num(r.mii_score))) || 0,
+            // Models weighted by the square root of their lots, so a one-off
+            // sale cannot count as much as a staple (see MII.makeScore).
+            miiScore: MII.makeScore(mRows) || 0,
             avgPrice: mean(prices) || 0,
             sellThrough: auctions > 0 ? Math.round((sold / auctions) * 100) : 0,
             confidence: MII.confidenceFor(auctions, grain),

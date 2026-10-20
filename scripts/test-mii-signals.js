@@ -145,7 +145,7 @@ check('a dated title is a car even if it names a part',
     MII.isVehicleLot(lot('1971-porsche-911t-with-spare-engine')), true);
 
 console.log('methodology version + effective weights');
-check('a version is published', typeof MII.VERSION === 'string' && /^\d{4}\.\d{2}$/.test(MII.VERSION), true);
+check('a version is published', typeof MII.VERSION === 'string' && /^\d{4}\.\d{2}(\.\d+)?$/.test(MII.VERSION), true);
 rows = [upstreamRow(), upstreamRow({ manufacturer: 'BMW', model: 'M3', price: 50000 })];
 MII.recompute(rows);
 const ew = MII.effectiveWeights;
@@ -282,6 +282,15 @@ near('an input not measured is left out, not read as zero', MII.listingScore(lis
 check('nothing measured has no score', MII.listingScore(listing(null, null, null, null), ref), null);
 near('a month scores its median listing', MII.marketScore([listing(0, 0, 0, 0), listing(250, 25, 7, 27.5), listing(1e6, 1e6, 1e6, 1e6)], ref).score, 50);
 check('the reference year starts with the first full month', MII.MARKET_REFERENCE, { from: '2025-06', to: '2026-05' });
+
+console.log('makeScore');
+const staple = { mii_score: '80', auction_count: '16' };
+const oneOff = { mii_score: '40', auction_count: '1' };
+near('models weigh by the square root of their lots', MII.makeScore([staple, oneOff]), (4 * 80 + 40) / 5);
+near('a row with no lot count weighs as one lot',
+    MII.makeScore([{ mii_score: '60', auction_count: '' }, { mii_score: '20', auction_count: '1' }]), 40);
+near('a row with no score is skipped', MII.makeScore([staple, { mii_score: '', auction_count: '9' }]), 80);
+check('no rows has no score', MII.makeScore([]), null);
 
 console.log(failures ? `\n${failures} test(s) failed` : '\nAll tests passed');
 process.exit(failures ? 1 : 0);
