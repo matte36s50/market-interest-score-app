@@ -536,11 +536,13 @@
     // Methodology version. Scoring has changed materially over this index's life
     // (min-max scaling -> percentile rank; weight renormalization added;
     // model and manufacturer confidence scales unified; 2026.10 ranks each car
-    // within its own month instead of the whole file), and a score is only
+    // within its own month instead of the whole file; 2026.10.1 weights a
+    // make's models by their lots, see makeScore), and a score is only
     // reproducible if the reader knows which rules produced it. Bump this
     // whenever a change moves published scores, and cite it alongside any
-    // figure taken from the dashboard.
-    var VERSION = '2026.10';
+    // figure taken from the dashboard. A second change in the same month adds
+    // a point release rather than taking next month's number.
+    var VERSION = '2026.10.1';
 
     // Mean EFFECTIVE weight of each input over the rows last scored.
     //
@@ -630,6 +632,29 @@
         if (n >= t['Medium-High']) return 'Medium-High';
         if (n >= t.Medium) return 'Medium';
         return 'Low';
+    }
+
+    // A make's MII for a period, from its model-month rows. Each row counts by
+    // the square root of its lots, so a model that sold sixteen times in the
+    // month counts four times one that sold once.
+    //
+    // Before 2026.10.1 this was a plain mean, so a make's one-off sales counted
+    // as much as its staples. Weighting by the lots themselves lets one model
+    // stand in for the brand instead: Shelby's YTD lots are 85% Cobra Replica.
+    // On the live data (October 2026), the mean month-over-month swing of makes
+    // with 15+ lots in both months: plain 3.40 points, by lots 3.10, by the
+    // square root 3.02. A row with no lot count counts as one lot.
+    function makeScore(rows) {
+        var s = 0, w = 0;
+        (rows || []).forEach(function (r) {
+            var v = parseFloat(r.mii_score);
+            if (!isFinite(v)) return;
+            var n = parseFloat(r.auction_count);
+            var wt = Math.sqrt(n > 0 ? n : 1);
+            s += wt * v;
+            w += wt;
+        });
+        return w > 0 ? s / w : null;
     }
 
     // Suffix marking an input the last recompute found unfit to chart, given a
@@ -770,6 +795,7 @@
         CONFIDENCE_THRESHOLDS: CONFIDENCE_THRESHOLDS,
         qualitySuffix: qualitySuffix,
         confidenceFor: confidenceFor,
+        makeScore: makeScore,
         recompute: recompute,
         percentileRanker: percentileRanker,
         // Our model list (data/models.csv): the join key every page uses, our

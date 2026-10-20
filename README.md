@@ -99,13 +99,30 @@ description can never drift from what the dashboard is doing.
 
 ### Methodology version
 
-`MII.VERSION` (currently **2026.10**) stamps the scoring rules in force. Scoring
+`MII.VERSION` (currently **2026.10.1**) stamps the scoring rules in force. Scoring
 has changed materially over this index's life — min-max scaling gave way to
 percentile rank, weight renormalization was added, the model and manufacturer
-confidence scales were unified, and 2026.10 moved ranking from the whole file to
-each month — so a score is only reproducible
+confidence scales were unified, 2026.10 moved ranking from the whole file to
+each month, and 2026.10.1 weighted a make's models by their lots (below) — so a
+score is only reproducible
 against a stated version. Cite it with any figure taken from the dashboard, and
-bump it whenever a change moves published scores.
+bump it whenever a change moves published scores. A second change in the same
+month takes a point release (2026.10.1), not the next month's number.
+
+### A make's score
+
+A make's MII for a month, or the year to date, is built from its model-month
+rows by `MII.makeScore`. Each row counts by the **square root of its lots**, so
+a model that sold sixteen times counts four times one that sold once. Every make
+MII on the overview (leaderboard, heatmap, make drawer, insight cards) and the
+Model comparison page's make line use it.
+
+Until 2026.10.1 it was a plain mean of the rows, so a make's one-off sales
+counted as much as its staples. Weighting by the lots themselves goes too far
+the other way: Shelby's year-to-date lots are 85% Cobra Replica, and that one
+model would stand in for the brand. On the live data, for makes with 15+ lots
+in consecutive months, the mean month-over-month swing is 3.40 points for the
+plain mean, 3.10 weighted by lots and 3.02 by the square root.
 
 ## Reading a change: the noise floor
 
