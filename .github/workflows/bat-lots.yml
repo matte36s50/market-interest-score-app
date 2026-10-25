@@ -1,0 +1,81 @@
+name: Bring a Trailer lots (public list + Market MII)
+
+# Builds what the dashboard publishes from Bring a Trailer's results with
+# scripts/build-bat-lots.js: data/bat_lots.csv (each lot's link, date, amount
+# and outcome) and data/market_mii.json (the Market MII, computed from every
+# listing's views, watchers, comments and bids). bat.csv itself stays private
+# in the bucket. Commits the two files and re-triggers the Pages deploy, which
+# a push made with GITHUB_TOKEN never does on its own.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   AWS_ACCESS_KEY_ID      a key allowed s3:GetObject on
+#   AWS_SECRET_ACCESS_KEY  arn:aws:s3:::my-mii-reports/bat.csv
+# Without them bat.csv is read from its public URL, which fails (and fails the
+# run) once the object is private.
+
+on:
+  schedule:
+    # After car-scrapers' 06:00 and 18:00 UTC runs (allowed up to 4 hours).
+    - cron: '23 10,22 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build-bat-lots.js'
+      - 'mii-normalize.js'
+      - 'data/models.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: bat-lots
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # The tip of main, so a queued run commits on top of the last one.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Unit tests (MII scoring)
+        run: node scripts/test-mii-signals.js
+
+      - name: Fetch bat.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: bash scripts/fetch-bat-csv.sh
+
+      - name: Build bat_lots.csv and market_mii.json
+        run: node scripts/build-bat-lots.js
+
+      - name: Commit
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/bat_lots.csv data/market_mii.json
+          if git diff --cached --quiet; then
+            echo "No change in the lot list or the Market MII — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "data: refresh Bring a Trailer lot list and Market MII"
+            git pull --rebase origin main
+            git push origin main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

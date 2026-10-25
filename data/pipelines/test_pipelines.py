@@ -1452,6 +1452,16 @@ class OnlineSales(unittest.TestCase):
         self.assertIn("::warning::", log.getvalue())
         self.assertFalse(os.path.exists(out))
 
+    def test_bat_csv_is_read_from_the_downloaded_copy(self):
+        src = os.path.join(tempfile.mkdtemp(), "bat.csv")
+        with open(src, "w", encoding="utf-8") as f:
+            f.write("auction_url,make\nhttps://bringatrailer.com/listing/x/,Ford\n")
+        with unittest.mock.patch.dict(os.environ, {"BAT_CSV": src}), \
+                unittest.mock.patch.object(export_online_sales.lib, "http_get") as get:
+            text = export_online_sales.read_bat_csv()
+        self.assertIn("listing/x/,Ford", text)
+        get.assert_not_called()
+
 
 @unittest.skipIf(mai is None, "pandas not installed")
 class MaiScores(unittest.TestCase):

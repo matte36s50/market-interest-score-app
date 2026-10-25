@@ -1,10 +1,16 @@
-// S3 CSV URLs
+// S3 CSV URL
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
-const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
+// Published by scripts/build-bat-lots.js from the private bat.csv: the lot
+// list (link, date, amount and outcome only) and the Market MII built from
+// every listing's views, watchers, comments and bids.
+const BAT_LOTS_URL = "data/bat_lots.csv";
+const MARKET_MII_URL = "data/market_mii.json";
 
-// Lot-level index from bat.csv: "make|normalizedModel" -> array of individual auction records.
+// Lot-level index from bat_lots.csv: "make|normalizedModel" -> array of individual auction records.
 // Lets the dashboard drill down from a monthly model average to the individual sales behind it.
 let batLots = {};
+// data/market_mii.json: { classes: { all|car|motorcycle: { ref, ytd_year, levels } } }.
+let MARKET_MII = null;
 
 // Some manufacturers appear under more than one brand name across the two data
 // sources: MII files Datsun-era cars under "Nissan" (keeping "Datsun" in the
@@ -97,14 +103,14 @@ function parseSaleDate(saleDate) {
     return { year: String(year), month, day, period: `${year}-${month}`, dayKey: `${year}-${month}-${day}` };
 }
 
-// Build the auction-count map AND the lot-level index from bat.csv in a single pass.
+// Build the auction-count map AND the lot-level index from bat_lots.csv in a single pass.
 // Returns the counts map ("make|normalizedModel|YYYY-MM" -> count); the lot index is
 // stored on the module-global `batLots`.
 async function loadBatAuctionCounts() {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000);
-        const response = await fetch(BAT_CSV_URL, { mode: 'cors', signal: controller.signal, headers: { 'Accept': 'text/csv' } });
+        const response = await fetch(BAT_LOTS_URL, { signal: controller.signal, headers: { 'Accept': 'text/csv' } });
         clearTimeout(timeoutId);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
@@ -147,10 +153,6 @@ async function loadBatAuctionCounts() {
                             saleType: (row.sale_type || '').trim() || 'unknown',
                             url: (row.auction_url || '').trim(),
                             year: parseBatNumber(row.year),
-                            views: parseBatNumber(row.views),
-                            watchers: parseBatNumber(row.watchers),
-                            bids: parseBatNumber(row.bids),
-                            comments: parseBatNumber(row.comments),
                             category: (row.category || '').trim()
                         });
                     });
@@ -163,8 +165,20 @@ async function loadBatAuctionCounts() {
             });
         });
     } catch (e) {
-        console.warn('Could not load bat.csv auction counts:', e.message);
+        console.warn('Could not load bat_lots.csv auction counts:', e.message);
         return {};
+    }
+}
+
+// The Market MII published alongside the lot list (see MARKET_MII_URL). Null
+// when it can't be read; the headline then shows no level.
+async function loadMarketMii() {
+    try {
+        const response = await fetch(MARKET_MII_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        MARKET_MII = await response.json();
+    } catch (e) {
+        console.warn('Could not load market_mii.json:', e.message);
     }
 }
 
@@ -333,46 +347,20 @@ function applyTrends(target, fromP, toP) {
     });
 }
 
-// The class a lot belongs to: its model's, from the MII rows, or for a model
-// that never sold (so has no row), Bring a Trailer's own category.
-let KEY_CLASS = null;
-function lotClass(key, lot) {
-    if (!KEY_CLASS) {
-        KEY_CLASS = new Map();
-        RAW_ROWS.forEach(r => {
-            const c = (r.vehicle_class || '').trim();
-            if (c) KEY_CLASS.set(modelJoinKey(r.manufacturer, r.model), c);
-        });
-    }
-    return KEY_CLASS.get(key) || (lot.category === 'Motorcycles' ? 'motorcycle' : 'car');
-}
-
 // The Market MII for each month and the year to date (see MII.marketScore):
 // every vehicle listing in the class, sold or not, ranked against every
-// listing of the reference year. Keyed like the dataset's months. When the
-// data does not reach back to most of the reference year, the first twelve
-// complete months stand in for it.
+// listing of the reference year. It needs each listing's views, watchers,
+// comments and bids, which the published lot list leaves out, so
+// scripts/build-bat-lots.js computes it and this keys it like the dataset's
+// months. A month the file doesn't have yet shows no level.
 function marketLevels(ds, vclass, rawMonths, keyOf) {
     const out = { levels: {}, ref: null };
-    if (!window.MII?.marketScore) return out;
-    const byMonth = new Map(rawMonths.map(m => [m, []]));
-    Object.entries(batLots).forEach(([key, lots]) => lots.forEach(l => {
-        const bucket = byMonth.get(l.period);
-        if (bucket && (vclass === 'all' || lotClass(key, l) === vclass)) bucket.push(l);
-    }));
-    const latest = rawMonths[rawMonths.length - 1];
-    const { from, to } = MII.MARKET_REFERENCE;
-    let refMonths = rawMonths.filter(m => m >= from && m <= to && m !== latest);
-    if (refMonths.length < 6) refMonths = rawMonths.filter(m => m !== latest).slice(0, 12);
-    const refLots = refMonths.flatMap(m => byMonth.get(m));
-    if (!refLots.length) return out;
-    const ref = MII.marketReference(refLots);
-    rawMonths.forEach(m => { out.levels[keyOf(m)] = MII.marketScore(byMonth.get(m), ref); });
-    if (ds.ytdMonths) {
-        const ytd = rawMonths.filter(m => ds.ytdMonths.includes(keyOf(m)));
-        out.levels.YTD = MII.marketScore(ytd.flatMap(m => byMonth.get(m)), ref);
-    }
-    out.ref = { from: refMonths[0], to: refMonths[refMonths.length - 1] };
+    const pre = MARKET_MII?.classes?.[vclass];
+    if (!pre?.ref) return out;
+    rawMonths.forEach(m => { if (pre.levels[m]) out.levels[keyOf(m)] = pre.levels[m]; });
+    const latestYear = rawMonths[rawMonths.length - 1].slice(0, 4);
+    if (ds.ytdMonths && pre.levels.YTD && pre.ytd_year === latestYear) out.levels.YTD = pre.levels.YTD;
+    out.ref = pre.ref;
     return out;
 }
 
@@ -1866,10 +1854,8 @@ function showLots(make, models, title, opener, kicker) {
             <td class="r">${l.year ? Math.round(l.year) : '—'}</td>
             <td class="r" style="font-weight:600">${formatCurrency(l.amount, l.currency)}</td>
             <td class="${l.sold ? 'status-sold' : 'muted'}">${l.sold ? 'Sold' : esc(l.saleType || 'Unsold')}</td>
-            <td class="r">${l.bids ?? '—'}</td>
-            <td class="r">${l.comments ?? '—'}</td>
             <td>${l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="link-btn">View</a>` : '—'}</td>
-        </tr>`).join('') : `<tr><td colspan="8" class="muted" style="text-align:center;padding:28px">No individual auction records found for this model.</td></tr>`;
+        </tr>`).join('') : `<tr><td colspan="6" class="muted" style="text-align:center;padding:28px">No individual auction records found for this model.</td></tr>`;
 
     const modal = document.getElementById('lotModal');
     modal.classList.add('open');
@@ -2108,7 +2094,7 @@ async function initializeApp() {
         Chart.defaults.font.family = '"Hanken Grotesk", system-ui, sans-serif';
         Chart.defaults.animation.duration = 450;
 
-        const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts(), MII.ready]);
+        const [rawData, batCounts] = await Promise.all([loadCSVData(), loadBatAuctionCounts(), MII.ready, loadMarketMii()]);
         // One row per model per month before the lot counts go on: a duplicate
         // name would otherwise be credited with the same lots twice.
         MII.canonicalize(rawData);

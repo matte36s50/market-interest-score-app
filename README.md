@@ -405,11 +405,34 @@ click any model row in a manufacturer's **Model Rankings** panel. A modal opens
 with:
 
 - A scatter plot of every individual sale price over time (sold vs. unsold).
-- A table of each lot: sale date, model year, price, status, bid/comment activity,
-  and a link to the original Bring a Trailer listing.
+- A table of each lot: sale date, model year, price, status, and a link to the
+  original Bring a Trailer listing.
 
 This makes outlier sales (e.g. a $56K E46 M3 in a month that averaged $28K) visible
 and traceable. Non-USD sales are listed in the table but omitted from the price axis.
+
+### What is published from bat.csv
+
+The scraped `bat.csv` stays private in the S3 bucket. The pages read two files
+that `scripts/build-bat-lots.js` builds from it and the **Bring a Trailer lots**
+workflow (`.github/workflows/bat-lots.yml`) commits twice a day:
+
+- `data/bat_lots.csv`: one row per lot with its link, make, model, year,
+  category, sale date, amount and outcome. That is all the lot table, the
+  scatter, the auction counts and the analysis page's per-lot charts use. No
+  views, watchers, comments, bids, location or seller.
+- `data/market_mii.json`: the Market MII for each class and month and the year
+  to date. It ranks every listing's views, watchers, comments and bids, so it is
+  computed there, with the same `mii-normalize.js` functions the page used to
+  run on bat.csv itself.
+
+Views, bids and comments therefore exist only per model-month on the pages: the
+analysis page's Correlation Explorer plots them as monthly averages.
+
+The workflow, and `data-pipelines.yml` for `online_lots.csv`, read `bat.csv`
+with the `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` repository secrets (a key
+allowed `s3:GetObject` on `my-mii-reports/bat.csv`, downloaded by
+`scripts/fetch-bat-csv.sh`).
 
 ### Parts and memorabilia are excluded
 
@@ -422,7 +445,8 @@ the Mercedes 190E 16V**. Removing them *raises* the E30 M3's median sale from
 $60,005 to $69,000.
 
 `MII.isVehicleLot(row)` drops any lot whose bat.csv `category` is `Parts` or
-`Wheels`, and every page applies it when it reads bat.csv, so auction counts,
+`Wheels`, and every page applies it when it reads the lots (as does
+`scripts/build-bat-lots.js` for the Market MII), so auction counts,
 confidence badges, price averages, the drill-down scatter and the lot-level
 correlations all see cars only.
 
@@ -501,8 +525,9 @@ page kept in the browser, and offers any unsaved lots as a CSV download.
 
 ## Data Maintenance Scripts
 
-Run from the repo root (`node scripts/<name>.js`). All three read `bat.csv` from
-S3 by default, or a local copy via `--csv /path/to/bat.csv`.
+Run from the repo root (`node scripts/<name>.js`). `bat.csv` is private, so
+download it first (`aws s3 cp s3://my-mii-reports/bat.csv /tmp/bat.csv`) and pass
+the copy with `--csv /tmp/bat.csv`.
 
 - `scripts/diagnose-data-gaps.js` — month/day coverage report; flags months with
   suspiciously low auction counts (< 50% of median).

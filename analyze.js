@@ -8,13 +8,15 @@ const T = () => window.SITE_THEME;
 // ============================================================
 
 const CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/mii_results_latest.csv";
-const BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv";
+// The published lot list (scripts/build-bat-lots.js): link, date, amount and
+// outcome of each lot, without its views, watchers, comments or bids.
+const BAT_LOTS_URL = "data/bat_lots.csv";
 
 async function loadBatAuctionCounts() {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000);
-        const response = await fetch(BAT_CSV_URL, { mode: 'cors', signal: controller.signal, headers: { 'Accept': 'text/csv' } });
+        const response = await fetch(BAT_LOTS_URL, { signal: controller.signal, headers: { 'Accept': 'text/csv' } });
         clearTimeout(timeoutId);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
@@ -52,7 +54,7 @@ async function loadBatAuctionCounts() {
             });
         });
     } catch (e) {
-        console.warn('Could not load bat.csv auction counts:', e.message);
+        console.warn('Could not load bat_lots.csv auction counts:', e.message);
         return { counts: {}, rows: [] };
     }
 }
@@ -176,8 +178,9 @@ function getRowValue(row, metric) {
 // ---- Lot-level (individual auction) records for the Correlation Explorer ----
 // Metrics that only exist at the aggregated model-month (MII) level and cannot
 // be plotted per individual auction. When either axis uses one of these, the
-// Correlation Explorer falls back to monthly averages.
-const MII_ONLY_METRICS = new Set(['mii_score', 'social_score', 'google_trends_interest', 'youtube_total_views']);
+// Correlation Explorer falls back to monthly averages. Views, bids and
+// comments are among them: the published lot list leaves them out.
+const MONTHLY_ONLY_METRICS = new Set(['mii_score', 'social_score', 'google_trends_interest', 'youtube_total_views', 'views', 'bids', 'comments']);
 
 let _lotCorrCache = null;
 // Convert raw bat.csv rows into records shaped like the monthly rows used by
@@ -228,9 +231,6 @@ function getLotCorrelationRecords() {
             manufacturer: make,
             model,
             quarter: period,
-            views: parseNum(row.views),
-            bids: parseNum(row.bids),
-            comments: parseNum(row.comments),
             price: (price && price > 0) ? price : null,
             age: vehYear ? (nowYear - vehYear) : null,
             sold: (row.sale_type || '').trim().toLowerCase() === 'sold' ? 1 : 0,
@@ -1321,12 +1321,13 @@ function renderCorrelations() {
     const mfrFilter = document.getElementById('corrMfrFilter').value;
     const model = getModelFilter('corrModelSearch');
 
-    // Granularity: "individual" plots one point per auction lot (from bat.csv);
+    // Granularity: "individual" plots one point per auction lot (from bat_lots.csv);
     // "monthly" plots one point per model-month (from the MII aggregates).
-    // MII-only axes (MII Score, Social Score, Trends, YouTube) force monthly.
+    // Monthly-only axes (MII Score, Social Score, Trends, YouTube, views,
+    // bids, comments) force monthly.
     const granEl = document.getElementById('corrGranularity');
     const granularity = granEl ? granEl.value : 'individual';
-    const forcedMonthly = MII_ONLY_METRICS.has(xKey) || MII_ONLY_METRICS.has(yKey);
+    const forcedMonthly = MONTHLY_ONLY_METRICS.has(xKey) || MONTHLY_ONLY_METRICS.has(yKey);
     const useIndividual = granularity === 'individual' && !forcedMonthly;
 
     let data = useIndividual ? getLotCorrelationRecords() : filterByQuarter(rawData, quarter);
@@ -1346,7 +1347,7 @@ function renderCorrelations() {
         if (useIndividual) {
             subtitleEl.textContent = `Each point is one auction — ${data.length.toLocaleString()} individual lots`;
         } else if (forcedMonthly && granularity === 'individual') {
-            const miiKey = MII_ONLY_METRICS.has(xKey) ? xKey : yKey;
+            const miiKey = MONTHLY_ONLY_METRICS.has(xKey) ? xKey : yKey;
             subtitleEl.textContent = `${METRIC_LABELS[miiKey] || miiKey} only exists per model-month — showing monthly averages`;
         } else {
             subtitleEl.textContent = 'Each point is one model-month (monthly average)';

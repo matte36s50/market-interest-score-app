@@ -139,7 +139,7 @@ def report(rows, variants, index=None):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--bat", default=BAT_CSV_URL, help="bat.csv (URL or path)")
+    ap.add_argument("--bat", default=os.environ.get("BAT_CSV") or BAT_CSV_URL, help="bat.csv (URL or path; default $BAT_CSV, then the bucket)")
     ap.add_argument("--index", help="only this index (hagi-top, hagi-f, hagi-p, mbci, mbci-emerging, bmw-ci)")
     args = ap.parse_args()
     csv.field_size_limit(10 ** 9)
