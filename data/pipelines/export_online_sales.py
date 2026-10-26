@@ -9,8 +9,10 @@ it like any live sale: its top 10% of lots (at most 25, see apex.py) are its
 highlights, and the sale is weighted by what it took to be one of them.
 
 Source: Bring a Trailer results from the car-scrapers pipeline (bat.csv in
-the public my-mii-reports bucket, refreshed daily). The rows use the
-auction_lots.csv schema, so the two files are read together.
+the my-mii-reports bucket, refreshed daily). The workflow downloads it with
+its AWS key and names the copy in $BAT_CSV; without one the bucket URL is
+tried. The rows use the auction_lots.csv schema, so the two files are read
+together.
 
 - Only completed months: a month still running would move its own line.
 - A month with far fewer listings than usual is left out (scraper outages:
@@ -184,6 +186,16 @@ def build(bat_rows, today, fx):
     return out, report
 
 
+def read_bat_csv():
+    """bat.csv's text: the copy named in $BAT_CSV (a path or URL), else the
+    bucket URL. None when the URL answers 404."""
+    src = os.environ.get("BAT_CSV") or BAT_CSV_URL
+    if re.match(r"^https?://", src):
+        return lib.http_get(src, timeout=180)
+    with open(src, encoding="utf-8") as f:
+        return f.read()
+
+
 def main(argv=None, fetch=None, fx=None, today=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", default=OUT_PATH)
@@ -191,7 +203,7 @@ def main(argv=None, fetch=None, fx=None, today=None):
     args = ap.parse_args(argv)
 
     try:
-        text = (fetch or (lambda: lib.http_get(BAT_CSV_URL, timeout=180)))()
+        text = (fetch or read_bat_csv)()
     except Exception as exc:  # noqa: BLE001 — any fetch failure keeps the last file
         text, err = None, exc
     else:

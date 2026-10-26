@@ -15,7 +15,9 @@ name: Data Pipelines (Auction Ratings + MAI)
 #   CANONICAL_SUPABASE_URL       URL of the Supabase project holding the store
 #   CANONICAL_SUPABASE_ANON_KEY  that project's anon key; the export reads the
 #                                anon-readable public.auction_live_lots view
-# Without them the export step is skipped and the existing CSV is used.
+#   AWS_ACCESS_KEY_ID            a key allowed s3:GetObject on
+#   AWS_SECRET_ACCESS_KEY        arn:aws:s3:::my-mii-reports/bat.csv
+# Without them the export steps are skipped and the existing CSVs are used.
 
 on:
   schedule:
@@ -80,8 +82,15 @@ jobs:
           python data/pipelines/export_live_lots.py \
             ${{ github.event.inputs.allow_drop_events == 'true' && '--allow-drop-events' || '' }}
 
-      # Public data, no secrets. Leaves online_lots.csv untouched (with a
+      # bat.csv is private: downloaded with the AWS key, or read from its
+      # public URL without one. Leaves online_lots.csv untouched (with a
       # warning) if bat.csv or the exchange rates can't be read.
+      - name: Fetch bat.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: bash scripts/fetch-bat-csv.sh
+
       - name: Export online auction results (Bring a Trailer)
         run: python data/pipelines/export_online_sales.py
 

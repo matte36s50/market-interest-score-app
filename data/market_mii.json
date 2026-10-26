@@ -1,0 +1,465 @@
+{
+ "about": "Market MII by vehicle class and month: the typical listing's views, watchers, comments and bids, ranked against the reference year (MII.marketScore). Built by scripts/build-bat-lots.js.",
+ "version": "2026.10",
+ "classes": {
+  "all": {
+   "ref": {
+    "from": "2025-06",
+    "to": "2026-05"
+   },
+   "ytd_year": "2026",
+   "levels": {
+    "2025-06": {
+     "lots": 3985,
+     "views": 6365,
+     "watchers": 610,
+     "comments": 35,
+     "bids": 26,
+     "score": 50.0836
+    },
+    "2025-07": {
+     "lots": 4222,
+     "views": 6886,
+     "watchers": 624.5,
+     "comments": 35,
+     "bids": 26,
+     "score": 51.8417
+    },
+    "2025-08": {
+     "lots": 3669,
+     "views": 6278,
+     "watchers": 606,
+     "comments": 34,
+     "bids": 26,
+     "score": 48.8848
+    },
+    "2025-09": {
+     "lots": 1411,
+     "views": 5836,
+     "watchers": 586,
+     "comments": 31,
+     "bids": 26,
+     "score": 45.5321
+    },
+    "2025-10": {
+     "lots": 2627,
+     "views": 5301,
+     "watchers": 556,
+     "comments": 30,
+     "bids": 26,
+     "score": 43.3399
+    },
+    "2025-11": {
+     "lots": 3881,
+     "views": 6133,
+     "watchers": 607,
+     "comments": 33,
+     "bids": 27,
+     "score": 48.5305
+    },
+    "2025-12": {
+     "lots": 3031,
+     "views": 6844,
+     "watchers": 678,
+     "comments": 36,
+     "bids": 27,
+     "score": 53.7718
+    },
+    "2026-01": {
+     "lots": 1348,
+     "views": 8171,
+     "watchers": 697,
+     "comments": 39,
+     "bids": 28,
+     "score": 58.7782
+    },
+    "2026-02": {
+     "lots": 2907,
+     "views": 6906,
+     "watchers": 723,
+     "comments": 37,
+     "bids": 28,
+     "score": 56.3682
+    },
+    "2026-03": {
+     "lots": 3744,
+     "views": 6159,
+     "watchers": 678,
+     "comments": 33,
+     "bids": 28,
+     "score": 51.2834
+    },
+    "2026-04": {
+     "lots": 4228,
+     "views": 5519.5,
+     "watchers": 654,
+     "comments": 32,
+     "bids": 27,
+     "score": 47.5019
+    },
+    "2026-05": {
+     "lots": 4560,
+     "views": 5277,
+     "watchers": 642,
+     "comments": 31,
+     "bids": 28,
+     "score": 46.1277
+    },
+    "2026-06": {
+     "lots": 4514,
+     "views": 5068,
+     "watchers": 622,
+     "comments": 30,
+     "bids": 26,
+     "score": 43.6129
+    },
+    "2026-07": {
+     "lots": 4710,
+     "views": 5209.5,
+     "watchers": 638,
+     "comments": 32,
+     "bids": 27,
+     "score": 45.9235
+    },
+    "2026-08": {
+     "lots": 5039,
+     "views": 5222,
+     "watchers": 634,
+     "comments": 32,
+     "bids": 27,
+     "score": 45.6261
+    },
+    "2026-09": {
+     "lots": 4914,
+     "views": 5220,
+     "watchers": 641,
+     "comments": 31,
+     "bids": 27,
+     "score": 46.0307
+    },
+    "2026-10": {
+     "lots": 4125,
+     "views": 4991,
+     "watchers": 603,
+     "comments": 30,
+     "bids": 27,
+     "score": 43.4232
+    },
+    "YTD": {
+     "lots": 40089,
+     "views": 5471,
+     "watchers": 646,
+     "comments": 32,
+     "bids": 27,
+     "score": 47.3617
+    }
+   }
+  },
+  "car": {
+   "ref": {
+    "from": "2025-06",
+    "to": "2026-05"
+   },
+   "ytd_year": "2026",
+   "levels": {
+    "2025-06": {
+     "lots": 3725,
+     "views": 6593,
+     "watchers": 632,
+     "comments": 36,
+     "bids": 27,
+     "score": 50.2656
+    },
+    "2025-07": {
+     "lots": 3920,
+     "views": 7139,
+     "watchers": 650,
+     "comments": 36,
+     "bids": 27,
+     "score": 51.9577
+    },
+    "2025-08": {
+     "lots": 3406,
+     "views": 6514.5,
+     "watchers": 625,
+     "comments": 35,
+     "bids": 27,
+     "score": 49.2139
+    },
+    "2025-09": {
+     "lots": 1329,
+     "views": 6019,
+     "watchers": 600,
+     "comments": 32,
+     "bids": 27,
+     "score": 45.6322
+    },
+    "2025-10": {
+     "lots": 2478,
+     "views": 5477.5,
+     "watchers": 569,
+     "comments": 31,
+     "bids": 27,
+     "score": 42.6436
+    },
+    "2025-11": {
+     "lots": 3704,
+     "views": 6268.5,
+     "watchers": 624,
+     "comments": 34,
+     "bids": 27,
+     "score": 48.0336
+    },
+    "2025-12": {
+     "lots": 2905,
+     "views": 7028,
+     "watchers": 688,
+     "comments": 36,
+     "bids": 28,
+     "score": 52.9246
+    },
+    "2026-01": {
+     "lots": 1295,
+     "views": 8294,
+     "watchers": 711,
+     "comments": 39,
+     "bids": 28,
+     "score": 58.2125
+    },
+    "2026-02": {
+     "lots": 2773,
+     "views": 7090,
+     "watchers": 742,
+     "comments": 38,
+     "bids": 28,
+     "score": 55.7414
+    },
+    "2026-03": {
+     "lots": 3545,
+     "views": 6299,
+     "watchers": 697,
+     "comments": 34,
+     "bids": 29,
+     "score": 50.8092
+    },
+    "2026-04": {
+     "lots": 3973,
+     "views": 5659,
+     "watchers": 676,
+     "comments": 33,
+     "bids": 28,
+     "score": 47.3189
+    },
+    "2026-05": {
+     "lots": 4268,
+     "views": 5457.5,
+     "watchers": 664.5,
+     "comments": 32,
+     "bids": 28,
+     "score": 46.4784
+    },
+    "2026-06": {
+     "lots": 4220,
+     "views": 5233,
+     "watchers": 642,
+     "comments": 31,
+     "bids": 27,
+     "score": 43.6318
+    },
+    "2026-07": {
+     "lots": 4432,
+     "views": 5333,
+     "watchers": 658,
+     "comments": 33,
+     "bids": 27,
+     "score": 45.6126
+    },
+    "2026-08": {
+     "lots": 4750,
+     "views": 5387.5,
+     "watchers": 653,
+     "comments": 33,
+     "bids": 28,
+     "score": 45.7353
+    },
+    "2026-09": {
+     "lots": 4631,
+     "views": 5355,
+     "watchers": 660,
+     "comments": 32,
+     "bids": 28,
+     "score": 46.0223
+    },
+    "2026-10": {
+     "lots": 3886,
+     "views": 5110,
+     "watchers": 623.5,
+     "comments": 31,
+     "bids": 28,
+     "score": 43.0543
+    },
+    "YTD": {
+     "lots": 37773,
+     "views": 5638,
+     "watchers": 665,
+     "comments": 33,
+     "bids": 28,
+     "score": 47.2532
+    }
+   }
+  },
+  "motorcycle": {
+   "ref": {
+    "from": "2025-06",
+    "to": "2026-05"
+   },
+   "ytd_year": "2026",
+   "levels": {
+    "2025-06": {
+     "lots": 245,
+     "views": 3964,
+     "watchers": 405,
+     "comments": 23,
+     "bids": 16,
+     "score": 50.6878
+    },
+    "2025-07": {
+     "lots": 278,
+     "views": 3987,
+     "watchers": 404.5,
+     "comments": 25,
+     "bids": 16,
+     "score": 51.6447
+    },
+    "2025-08": {
+     "lots": 242,
+     "views": 3557,
+     "watchers": 383,
+     "comments": 23.5,
+     "bids": 16,
+     "score": 47.2398
+    },
+    "2025-09": {
+     "lots": 74,
+     "views": 3462,
+     "watchers": 379.5,
+     "comments": 23,
+     "bids": 13,
+     "score": 42.5807
+    },
+    "2025-10": {
+     "lots": 136,
+     "views": 3332.5,
+     "watchers": 369.5,
+     "comments": 23,
+     "bids": 17,
+     "score": 45.1974
+    },
+    "2025-11": {
+     "lots": 158,
+     "views": 3602,
+     "watchers": 382,
+     "comments": 24.5,
+     "bids": 15,
+     "score": 49.689
+    },
+    "2025-12": {
+     "lots": 113,
+     "views": 4072,
+     "watchers": 430,
+     "comments": 25,
+     "bids": 18,
+     "score": 56.8122
+    },
+    "2026-01": {
+     "lots": 49,
+     "views": 4620,
+     "watchers": 421,
+     "comments": 26,
+     "bids": 17,
+     "score": 60
+    },
+    "2026-02": {
+     "lots": 121,
+     "views": 4239,
+     "watchers": 443,
+     "comments": 24,
+     "bids": 17,
+     "score": 59.2225
+    },
+    "2026-03": {
+     "lots": 174,
+     "views": 3850.5,
+     "watchers": 452,
+     "comments": 24,
+     "bids": 17,
+     "score": 52.6824
+    },
+    "2026-04": {
+     "lots": 234,
+     "views": 3522.5,
+     "watchers": 450,
+     "comments": 22,
+     "bids": 17,
+     "score": 50.5801
+    },
+    "2026-05": {
+     "lots": 266,
+     "views": 3160.5,
+     "watchers": 409.5,
+     "comments": 20,
+     "bids": 16,
+     "score": 44.4258
+    },
+    "2026-06": {
+     "lots": 275,
+     "views": 3051,
+     "watchers": 391,
+     "comments": 21,
+     "bids": 15,
+     "score": 38.3373
+    },
+    "2026-07": {
+     "lots": 256,
+     "views": 3204,
+     "watchers": 402.5,
+     "comments": 20,
+     "bids": 16,
+     "score": 44.4498
+    },
+    "2026-08": {
+     "lots": 264,
+     "views": 3072.5,
+     "watchers": 386,
+     "comments": 22,
+     "bids": 16,
+     "score": 43.0891
+    },
+    "2026-09": {
+     "lots": 254,
+     "views": 3098,
+     "watchers": 401,
+     "comments": 22.5,
+     "bids": 16,
+     "score": 43.2117
+    },
+    "2026-10": {
+     "lots": 214,
+     "views": 3013.5,
+     "watchers": 375.5,
+     "comments": 21.5,
+     "bids": 17,
+     "score": 40.3678
+    },
+    "YTD": {
+     "lots": 2107,
+     "views": 3294,
+     "watchers": 409,
+     "comments": 22,
+     "bids": 16,
+     "score": 45.7057
+    }
+   }
+  }
+ }
+}
