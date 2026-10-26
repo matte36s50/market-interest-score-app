@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-19",
+  "as_of": "2026-10-26",
   "apex_rule": "high_estimate_usd >= 500000; where blank, price_usd of a lot sold with a price",
   "status_filter": {
     "included": [
@@ -9,8 +9,8 @@
     "excluded": [
       "UNVERIFIED"
     ],
-    "rows_in_dataset": 99,
-    "rows_included": 98,
+    "rows_in_dataset": 116,
+    "rows_included": 115,
     "rows_excluded": 1,
     "rows_excluded_by_status": {
       "UNVERIFIED": 1
@@ -23,81 +23,50 @@
     "Mercedes-Maybach": "Mercedes-Benz"
   },
   "premium_mix": {
-    "no": 10,
-    "unknown": 20,
-    "yes": 68
+    "no": 19,
+    "unknown": 21,
+    "yes": 75
   },
   "mai_formula": "MAI = sum of P / number of events with apex lots: the mean of P over every event with apex lots, 0 where the make had none, so MAIs add up to 1. P = share of the event's apex lots. Events count equally. Q (mean price / high estimate over apex lots sold with a price and an estimate) and R (sold / (sold + not sold)) are reported beside the score, not multiplied in. Withdrawn lots excluded; apex_unknown lots excluded and counted.",
   "segments": {
     "all": {
       "totals": {
-        "lots": 98,
-        "apex": 46,
-        "non_apex": 52,
+        "lots": 115,
+        "apex": 52,
+        "non_apex": 63,
         "apex_unknown": 0,
         "apex_by_result": {
-          "sold_with_price": 39,
+          "sold_with_price": 44,
           "sold_without_price": 0,
-          "not_sold": 6,
+          "not_sold": 7,
           "withdrawn": 1
         },
         "apex_from_sold_price": 21,
-        "events_with_apex": 9
+        "events_with_apex": 10
       },
       "manufacturers": [
         {
-          "manufacturer": "Mercedes-Benz",
-          "mai": 0.35291,
-          "avg_P": 0.453741,
-          "avg_Q": 0.685438,
-          "avg_R": 0.642857,
-          "apex_events": 7,
-          "q_events": 2,
-          "q_basis": {
-            "native": 2
-          },
-          "makes": {
-            "Maybach": 2,
-            "Mercedes": 1,
-            "Mercedes-AMG": 2,
-            "Mercedes-Benz": 29,
-            "Mercedes-Maybach": 1
-          },
-          "events": 12,
-          "lots": 35,
-          "apex": 11,
-          "non_apex": 24,
-          "apex_unknown": 0,
-          "apex_by_result": {
-            "sold_with_price": 6,
-            "sold_without_price": 0,
-            "not_sold": 4,
-            "withdrawn": 1
-          },
-          "apex_from_sold_price": 4
-        },
-        {
           "manufacturer": "Ferrari",
-          "mai": 0.335714,
-          "avg_P": 0.503571,
-          "avg_Q": 0.937193,
+          "mai": 0.352143,
+          "avg_P": 0.503061,
+          "avg_Q": 0.911857,
           "avg_R": 1.0,
-          "apex_events": 6,
-          "q_events": 4,
+          "apex_events": 7,
+          "q_events": 5,
           "q_basis": {
-            "native": 7,
+            "native": 10,
             "usd": 3
           },
           "makes": {
-            "Ferrari": 28
+            "Ferrari": 38
           },
-          "events": 8,
-          "lots": 28,
-          "apex": 16,
-          "non_apex": 12,
+          "events": 10,
+          "lots": 38,
+          "apex": 19,
+          "non_apex": 19,
           "apex_unknown": 0,
           "apex_by_result": {
-            "sold_with_price": 16,
+            "sold_with_price": 19,
             "sold_without_price": 0,
             "not_sold": 0,
             "withdrawn": 0
@@ -105,8 +74,39 @@
           "apex_from_sold_price": 6
         },
         {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.334286,
+          "avg_P": 0.417857,
+          "avg_Q": 0.763625,
+          "avg_R": 0.6875,
+          "apex_events": 8,
+          "q_events": 3,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Maybach": 2,
+            "Mercedes": 1,
+            "Mercedes-AMG": 2,
+            "Mercedes-Benz": 32,
+            "Mercedes-Maybach": 1
+          },
+          "events": 13,
+          "lots": 38,
+          "apex": 12,
+          "non_apex": 26,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 7,
+            "sold_without_price": 0,
+            "not_sold": 4,
+            "withdrawn": 1
+          },
+          "apex_from_sold_price": 4
+        },
+        {
           "manufacturer": "Lamborghini",
-          "mai": 0.126984,
+          "mai": 0.114286,
           "avg_P": 0.380952,
           "avg_Q": 0.8825,
           "avg_R": 1.0,
@@ -133,25 +133,25 @@
         },
         {
           "manufacturer": "Porsche",
-          "mai": 0.065873,
-          "avg_P": 0.197619,
-          "avg_Q": 0.953977,
-          "avg_R": 0.666667,
-          "apex_events": 3,
-          "q_events": 1,
+          "mai": 0.075952,
+          "avg_P": 0.189881,
+          "avg_Q": 0.926989,
+          "avg_R": 0.75,
+          "apex_events": 4,
+          "q_events": 2,
           "q_basis": {
-            "native": 2
+            "native": 3
           },
           "makes": {
-            "Porsche": 9
+            "Porsche": 11
           },
-          "events": 6,
-          "lots": 9,
-          "apex": 5,
-          "non_apex": 4,
+          "events": 7,
+          "lots": 11,
+          "apex": 6,
+          "non_apex": 5,
           "apex_unknown": 0,
           "apex_by_result": {
-            "sold_with_price": 4,
+            "sold_with_price": 5,
             "sold_without_price": 0,
             "not_sold": 1,
             "withdrawn": 0
@@ -160,7 +160,7 @@
         },
         {
           "manufacturer": "McLaren",
-          "mai": 0.02963,
+          "mai": 0.026667,
           "avg_P": 0.133333,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -185,7 +185,7 @@
         },
         {
           "manufacturer": "Stutz",
-          "mai": 0.022222,
+          "mai": 0.02,
           "avg_P": 0.2,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -210,7 +210,7 @@
         },
         {
           "manufacturer": "AC",
-          "mai": 0.018519,
+          "mai": 0.016667,
           "avg_P": 0.166667,
           "avg_Q": null,
           "avg_R": 0.0,
@@ -235,7 +235,7 @@
         },
         {
           "manufacturer": "BMW",
-          "mai": 0.018519,
+          "mai": 0.016667,
           "avg_P": 0.166667,
           "avg_Q": 0.794545,
           "avg_R": 1.0,
@@ -245,12 +245,12 @@
             "native": 1
           },
           "makes": {
-            "BMW": 8
+            "BMW": 9
           },
-          "events": 6,
-          "lots": 8,
+          "events": 7,
+          "lots": 9,
           "apex": 1,
-          "non_apex": 7,
+          "non_apex": 8,
           "apex_unknown": 0,
           "apex_by_result": {
             "sold_with_price": 1,
@@ -261,8 +261,33 @@
           "apex_from_sold_price": 0
         },
         {
+          "manufacturer": "Bugatti",
+          "mai": 0.016667,
+          "avg_P": 0.166667,
+          "avg_Q": null,
+          "avg_R": 0.0,
+          "apex_events": 1,
+          "q_events": 0,
+          "q_basis": {},
+          "makes": {
+            "Bugatti": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
           "manufacturer": "Aston Martin",
-          "mai": 0.007407,
+          "mai": 0.006667,
           "avg_P": 0.066667,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -287,7 +312,7 @@
         },
         {
           "manufacturer": "Jaguar",
-          "mai": 0.007407,
+          "mai": 0.006667,
           "avg_P": 0.066667,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -312,7 +337,7 @@
         },
         {
           "manufacturer": "Lancia",
-          "mai": 0.007407,
+          "mai": 0.006667,
           "avg_P": 0.066667,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -337,7 +362,7 @@
         },
         {
           "manufacturer": "Monte Carlo Automobile",
-          "mai": 0.007407,
+          "mai": 0.006667,
           "avg_P": 0.066667,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -387,6 +412,38 @@
         }
       ],
       "events": [
+        {
+          "event": "dR LIVE weekly online sale, week closing 25 October 2026",
+          "event_date": "2026-10-25",
+          "auction_house": "duPont REGISTRY Live",
+          "lots": 7,
+          "apex": 0,
+          "non_apex": 7,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
+          "event": "Automobiles sur les Champs, sale 6709",
+          "event_date": "2026-10-25",
+          "auction_house": "Artcurial",
+          "lots": 10,
+          "apex": 6,
+          "non_apex": 4,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 5,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
         {
           "event": "dR LIVE weekly online sale, week of 12-17 October 2026",
           "event_date": "2026-10-17",
@@ -631,9 +688,9 @@
     },
     "premium_yes": {
       "totals": {
-        "lots": 68,
+        "lots": 75,
         "apex": 35,
-        "non_apex": 33,
+        "non_apex": 40,
         "apex_unknown": 0,
         "apex_by_result": {
           "sold_with_price": 35,
@@ -658,12 +715,12 @@
             "usd": 3
           },
           "makes": {
-            "Ferrari": 26
+            "Ferrari": 32
           },
-          "events": 7,
-          "lots": 26,
+          "events": 8,
+          "lots": 32,
           "apex": 14,
-          "non_apex": 12,
+          "non_apex": 18,
           "apex_unknown": 0,
           "apex_by_result": {
             "sold_with_price": 14,
@@ -818,12 +875,12 @@
             "native": 1
           },
           "makes": {
-            "BMW": 6
+            "BMW": 7
           },
-          "events": 4,
-          "lots": 6,
+          "events": 5,
+          "lots": 7,
           "apex": 1,
-          "non_apex": 5,
+          "non_apex": 6,
           "apex_unknown": 0,
           "apex_by_result": {
             "sold_with_price": 1,
@@ -961,6 +1018,22 @@
       ],
       "events": [
         {
+          "event": "dR LIVE weekly online sale, week closing 25 October 2026",
+          "event_date": "2026-10-25",
+          "auction_house": "duPont REGISTRY Live",
+          "lots": 7,
+          "apex": 0,
+          "non_apex": 7,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
           "event": "dR LIVE weekly online sale, week of 12-17 October 2026",
           "event_date": "2026-10-17",
           "auction_house": "duPont REGISTRY Live",
@@ -1092,20 +1165,101 @@
     },
     "premium_no": {
       "totals": {
-        "lots": 10,
-        "apex": 0,
-        "non_apex": 10,
+        "lots": 19,
+        "apex": 5,
+        "non_apex": 14,
         "apex_unknown": 0,
         "apex_by_result": {
-          "sold_with_price": 0,
+          "sold_with_price": 5,
           "sold_without_price": 0,
           "not_sold": 0,
           "withdrawn": 0
         },
         "apex_from_sold_price": 0,
-        "events_with_apex": 0
+        "events_with_apex": 1
       },
       "manufacturers": [
+        {
+          "manufacturer": "Ferrari",
+          "mai": 0.6,
+          "avg_P": 0.6,
+          "avg_Q": 0.810513,
+          "avg_R": 1.0,
+          "apex_events": 1,
+          "q_events": 1,
+          "q_basis": {
+            "native": 3
+          },
+          "makes": {
+            "Ferrari": 4
+          },
+          "events": 1,
+          "lots": 4,
+          "apex": 3,
+          "non_apex": 1,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 3,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
+          "manufacturer": "Mercedes-Benz",
+          "mai": 0.2,
+          "avg_P": 0.2,
+          "avg_Q": 0.92,
+          "avg_R": 1.0,
+          "apex_events": 1,
+          "q_events": 1,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Mercedes-Benz": 11
+          },
+          "events": 5,
+          "lots": 11,
+          "apex": 1,
+          "non_apex": 10,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
+          "manufacturer": "Porsche",
+          "mai": 0.2,
+          "avg_P": 0.2,
+          "avg_Q": 0.9,
+          "avg_R": 1.0,
+          "apex_events": 1,
+          "q_events": 1,
+          "q_basis": {
+            "native": 1
+          },
+          "makes": {
+            "Porsche": 2
+          },
+          "events": 1,
+          "lots": 2,
+          "apex": 1,
+          "non_apex": 1,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 1,
+            "sold_without_price": 0,
+            "not_sold": 0,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
         {
           "manufacturer": "BMW",
           "mai": null,
@@ -1130,34 +1284,25 @@
             "withdrawn": 0
           },
           "apex_from_sold_price": 0
-        },
+        }
+      ],
+      "events": [
         {
-          "manufacturer": "Mercedes-Benz",
-          "mai": null,
-          "avg_P": null,
-          "avg_Q": null,
-          "avg_R": null,
-          "apex_events": 0,
-          "q_events": 0,
-          "q_basis": {},
-          "makes": {
-            "Mercedes-Benz": 8
-          },
-          "events": 4,
-          "lots": 8,
-          "apex": 0,
-          "non_apex": 8,
+          "event": "Automobiles sur les Champs, sale 6709",
+          "event_date": "2026-10-25",
+          "auction_house": "Artcurial",
+          "lots": 9,
+          "apex": 5,
+          "non_apex": 4,
           "apex_unknown": 0,
           "apex_by_result": {
-            "sold_with_price": 0,
+            "sold_with_price": 5,
             "sold_without_price": 0,
             "not_sold": 0,
             "withdrawn": 0
           },
           "apex_from_sold_price": 0
-        }
-      ],
-      "events": [
+        },
         {
           "event": "The Market by Bonhams (online)",
           "event_date": "2026-10-15",
@@ -1226,23 +1371,23 @@
     },
     "premium_unknown": {
       "totals": {
-        "lots": 20,
-        "apex": 11,
+        "lots": 21,
+        "apex": 12,
         "non_apex": 9,
         "apex_unknown": 0,
         "apex_by_result": {
           "sold_with_price": 4,
           "sold_without_price": 0,
-          "not_sold": 6,
+          "not_sold": 7,
           "withdrawn": 1
         },
         "apex_from_sold_price": 4,
-        "events_with_apex": 6
+        "events_with_apex": 7
       },
       "manufacturers": [
         {
           "manufacturer": "Mercedes-Benz",
-          "mai": 0.583333,
+          "mai": 0.5,
           "avg_P": 0.875,
           "avg_Q": null,
           "avg_R": 0.25,
@@ -1270,7 +1415,7 @@
         },
         {
           "manufacturer": "Ferrari",
-          "mai": 0.166667,
+          "mai": 0.142857,
           "avg_P": 1.0,
           "avg_Q": null,
           "avg_R": 1.0,
@@ -1295,7 +1440,7 @@
         },
         {
           "manufacturer": "AC",
-          "mai": 0.166667,
+          "mai": 0.142857,
           "avg_P": 1.0,
           "avg_Q": null,
           "avg_R": 0.0,
@@ -1319,8 +1464,33 @@
           "apex_from_sold_price": 0
         },
         {
+          "manufacturer": "Bugatti",
+          "mai": 0.142857,
+          "avg_P": 1.0,
+          "avg_Q": null,
+          "avg_R": 0.0,
+          "apex_events": 1,
+          "q_events": 0,
+          "q_basis": {},
+          "makes": {
+            "Bugatti": 1
+          },
+          "events": 1,
+          "lots": 1,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
+        {
           "manufacturer": "Porsche",
-          "mai": 0.083333,
+          "mai": 0.071429,
           "avg_P": 0.5,
           "avg_Q": null,
           "avg_R": 0.0,
@@ -1345,6 +1515,22 @@
         }
       ],
       "events": [
+        {
+          "event": "Automobiles sur les Champs, sale 6709",
+          "event_date": "2026-10-25",
+          "auction_house": "Artcurial",
+          "lots": 1,
+          "apex": 1,
+          "non_apex": 0,
+          "apex_unknown": 0,
+          "apex_by_result": {
+            "sold_with_price": 0,
+            "sold_without_price": 0,
+            "not_sold": 1,
+            "withdrawn": 0
+          },
+          "apex_from_sold_price": 0
+        },
         {
           "event": "The Zoute Sale 2026",
           "event_date": "2026-10-11",

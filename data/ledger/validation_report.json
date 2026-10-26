@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "as_of": "2026-10-19",
+  "as_of": "2026-10-26",
   "files": [
     {
       "title": "Auction Results Ledger – September 28, 2026 (rev record_id)",
@@ -33,6 +33,14 @@
       "ledger_date": "2026-10-19",
       "rev_replacement": false,
       "rows_read": 28
+    },
+    {
+      "title": "Auction Results Ledger – October 26, 2026",
+      "file_id": "1kwqFyEp95uBCq6ZRGNh9hFZlvEQ7vmHbIBOWE7PXZaw",
+      "modified_time": "2026-10-26T14:07:26.161Z",
+      "ledger_date": "2026-10-26",
+      "rev_replacement": false,
+      "rows_read": 17
     }
   ],
   "ignored_files": [
@@ -53,10 +61,11 @@
     "Outlier status (charity lots, one-off coachbuilt commissions, works competition cars, specification-premium cars) exists only as free text in `notes`. It is not machine-readable; review_queue.csv lists candidate rows for a human to triage. A structured column is needed."
   ],
   "counts": {
-    "rows_read": 118,
-    "rows_after_dedupe": 99,
+    "rows_read": 135,
+    "rows_after_dedupe": 116,
     "rows_superseded": 19,
     "rows_by_house": {
+      "Artcurial": 10,
       "Barrett-Jackson": 1,
       "Bonhams": 16,
       "Bonhams|Cars Online": 7,
@@ -64,33 +73,33 @@
       "Dorotheum": 4,
       "Mecum": 2,
       "RM Sotheby's": 28,
-      "duPont REGISTRY Live": 13
+      "duPont REGISTRY Live": 20
     },
-    "rows_missing_high_estimate_usd": 51,
-    "rows_missing_published_estimate": 51,
-    "rows_missing_price": 8,
+    "rows_missing_high_estimate_usd": 58,
+    "rows_missing_published_estimate": 58,
+    "rows_missing_price": 9,
     "rows_missing_price_by_outcome": {
-      "not_sold": 6,
+      "not_sold": 7,
       "sold": 1,
       "withdrawn": 1
     },
     "rows_by_status": {
-      "CONFIRMED": 73,
-      "REPORTED": 25,
+      "CONFIRMED": 80,
+      "REPORTED": 35,
       "UNVERIFIED": 1
     },
     "rows_by_premium_included": {
-      "no": 10,
-      "unknown": 21,
-      "yes": 68
+      "no": 19,
+      "unknown": 22,
+      "yes": 75
     },
     "rows_by_result_state": {
-      "not_sold": 6,
-      "sold_with_price": 91,
+      "not_sold": 7,
+      "sold_with_price": 107,
       "sold_without_price": 1,
       "withdrawn": 1
     },
     "rows_with_estimate_currency_unlike_price_currency": 8
   },
-  "review_queue_count": 18
+  "review_queue_count": 35
 }
