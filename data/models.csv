@@ -6,7 +6,7 @@ Acura,Integra,Integra,same,,34
 Acura,Integra Type R,Integra Type R,same,,26
 Acura,Legend,Legend,same,,16
 Acura,MDX,MDX,same,,1
-Acura,NSX NA1,NSX NA1,same,,83
+Acura,NSX NA1,NSX NA1,same,,84
 Acura,NSX NA2,NSX NA2,same,,47
 Acura,NSX NC1,NSX NC1,same,,22
 Acura,RL,RL,same,,5
@@ -33,7 +33,7 @@ Alfa Romeo,1750 SPIDER VELOCE,1750 SPIDER VELOCE,same,,1
 Alfa Romeo,1900,1900,same,,1
 Alfa Romeo,4C,4C,same,,28
 Alfa Romeo,75/Milano,75/Milano,same,,7
-Alfa Romeo,750/101 Series Giulietta & Giulia,750/101 Series Giulietta & Giulia,same,,38
+Alfa Romeo,750/101 Series Giulietta & Giulia,750/101 Series Giulietta & Giulia,same,,39
 Alfa Romeo,8C,8C,same,,3
 Alfa Romeo,952 Series Giulia,952 Series Giulia,same,,18
 Alfa Romeo,ALFA ROMEO,ALFA ROMEO,same,,1
@@ -115,10 +115,10 @@ Aston Martin,Rapide,Rapide,same,,20
 Aston Martin,V12 Vantage,V12 Vantage,same,,22
 Aston Martin,V12 Vantage S,V12 Vantage S,same,,5
 Aston Martin,V8,V8,same,,8
-Aston Martin,V8 Vantage,V8 Vantage,same,,41
+Aston Martin,V8 Vantage,V8 Vantage,same,,42
 Aston Martin,V8 Vantage (2006+),V8 Vantage (2006+),same,,58
 Aston Martin,V8 Vantage (2019+),V8 Vantage (2019+),same,,7
-Aston Martin,Vanquish,Vanquish,same,,28
+Aston Martin,Vanquish,Vanquish,same,,29
 Aston Martin,Vanquish (2025+),Vanquish (2025+),same,,1
 Aston Martin,Vanquish S,Vanquish S,same,,6
 Aston Martin,Virage (2012),Virage (2012),same,,4
@@ -138,11 +138,11 @@ Audi,B3 80 & 90,B3 80 & 90,same,,1
 Audi,B4 Cabriolet,B4 Cabriolet,same,,2
 Audi,B5 A4,B5 A4,same,,2
 Audi,B5 RS4,B5 RS4,same,,8
-Audi,B5 S4,B5 S4,same,,10
+Audi,B5 S4,B5 S4,same,,11
 Audi,B6 A4,B6 A4,same,,7
 Audi,B6 S4,B6 S4,same,,16
 Audi,B7 A4,B7 A4,same,,24
-Audi,B7 RS4,B7 RS4,same,,32
+Audi,B7 RS4,B7 RS4,same,,33
 Audi,B7 S4,B7 S4,same,,17
 Audi,B8 A4,B8 A4,same,,20
 Audi,B8 Allroad,B8 Allroad,same,,15
@@ -169,7 +169,7 @@ Audi,Coupe,Coupe,same,,2
 Audi,e-tron,e-tron,same,,2
 Audi,Q3,Q3,same,,2
 Audi,Q5,Q5,same,,56
-Audi,Q7,Q7,same,,103
+Audi,Q7,Q7,same,,104
 Audi,Q8,Q8,same,,1
 Audi,R8,R8,same,,9
 Audi,R8 (Type 4S),R8 (Type 4S),same,,22
@@ -195,8 +195,8 @@ Austin,AUSTIN AMERICA,AUSTIN AMERICA,same,,2
 Austin,AUSTIN FX3,AUSTIN FX3,same,,1
 Austin,AUSTIN PRINCESS,AUSTIN PRINCESS,same,,1
 Austin-Healey,Austin-Healey 100,Austin-Healey 100,same,,20
-Austin-Healey,Austin-Healey 100-6,Austin-Healey 100-6,same,,10
-Austin-Healey,Austin-Healey 3000,Austin-Healey 3000,same,,73
+Austin-Healey,Austin-Healey 100-6,Austin-Healey 100-6,same,,11
+Austin-Healey,Austin-Healey 3000,Austin-Healey 3000,same,,74
 Austin-Healey,Austin-Healey Bugeye Sprite,Austin-Healey Bugeye Sprite,same,,35
 Austin-Healey,Austin-Healey Replica,Austin-Healey Replica,same,replica,2
 Austin-Healey,"Austin-Healey Sprite Mk II, III, & IV","Austin-Healey Sprite Mk II, III, & IV",same,,10
@@ -247,7 +247,7 @@ BMW,1600 GT,1600 GT,same,,1
 BMW,1M,1M,same,,2
 BMW,2-Series,2-Series,same,,12
 BMW,2000C & 2000CS,2000C & 2000CS,same,,3
-BMW,2002,2002,same,,78
+BMW,2002,2002,same,,79
 BMW,2002 Turbo,2002 Turbo,same,,2
 BMW,2002ti,2002ti,same,,1
 BMW,2002tii,2002tii,same,,30
@@ -272,12 +272,12 @@ BMW,E31 8-Series,E31 8-Series,same,,61
 BMW,E32 7-Series,E32 7-Series,same,,10
 BMW,E34 5-Series,E34 5-Series,same,,30
 BMW,E34 M5,E34 M5,same,,18
-BMW,E36 3-Series,E36 3-Series,same,,38
+BMW,E36 3-Series,E36 3-Series,same,,39
 BMW,E36 M3,E36 M3,same,,122
 BMW,E36/5 ti Compact,E36/5 ti Compact,same,,8
 BMW,E38 7-Series,E38 7-Series,same,,54
 BMW,E39 5-Series,E39 5-Series,same,,102
-BMW,E39 M5,E39 M5,same,,74
+BMW,E39 M5,E39 M5,same,,75
 BMW,E46 3-Series Convertible,E46 3-Series Convertible,same,,93
 BMW,E46 3-Series Coupe,E46 3-Series Coupe,same,,22
 BMW,E46 3-Series Sedan,E46 3-Series Sedan,same,,26
@@ -294,10 +294,10 @@ BMW,E82 1M,E82 1M,same,,11
 BMW,E82/E88 1-Series,E82/E88 1-Series,same,,75
 BMW,E89 Z4 Roadster,E89 Z4 Roadster,same,,42
 BMW,E9 Coupe,E9 Coupe,same,,29
-BMW,E90 3-Series Sedan,E90 3-Series Sedan,same,,45
-BMW,E90/E92/E93 M3,E90/E92/E93 M3,same,,145
+BMW,E90 3-Series Sedan,E90 3-Series Sedan,same,,46
+BMW,E90/E92/E93 M3,E90/E92/E93 M3,same,,146
 BMW,E91 3-Series Touring,E91 3-Series Touring,same,,40
-BMW,E92/E93 3-Series Coupe & Convertible,E92/E93 3-Series Coupe & Convertible,same,,106
+BMW,E92/E93 3-Series Coupe & Convertible,E92/E93 3-Series Coupe & Convertible,same,,107
 BMW,F01/F02 7-Series,F01/F02 7-Series,same,,25
 BMW,F06/F12/F13 6-Series,F06/F12/F13 6-Series,same,,53
 BMW,F06/F12/F13 M6,F06/F12/F13 M6,same,,25
@@ -306,7 +306,7 @@ BMW,F10 5-Series,F10 5-Series,same,,35
 BMW,F10 M5,F10 M5,same,,28
 BMW,F30 3-Series Sedan,F30 3-Series Sedan,same,,19
 BMW,F31 3-Series Touring,F31 3-Series Touring,same,,31
-BMW,F32/F33/F36 4-Series,F32/F33/F36 4-Series,same,,19
+BMW,F32/F33/F36 4-Series,F32/F33/F36 4-Series,same,,20
 BMW,F34 3-Series Gran Turismo,F34 3-Series Gran Turismo,same,,5
 BMW,"F650GS, F750GS, F800GS, & F850GS","F650GS, F750GS, F800GS, & F850GS",same,,9
 BMW,F80 M3,F80 M3,same,,26
@@ -353,12 +353,12 @@ BMW,R26 & R27,R26 & R27,same,,5
 BMW,"R50, R60, & /2","R50, R60, & /2",same,,24
 BMW,"R51, R61, R66, & R71","R51, R61, R66, & R71",same,,3
 BMW,R65,R65,same,,4
-BMW,"R69, R69S, & R50S","R69, R69S, & R50S",same,,17
+BMW,"R69, R69S, & R50S","R69, R69S, & R50S",same,,18
 BMW,R80,R80,same,,6
 BMW,R80 G/S,R80 G/S,same,,5
 BMW,R90S,R90S,same,,19
 BMW,S1000 Series,S1000 Series,same,,7
-BMW,X1,X1,same,,4
+BMW,X1,X1,same,,5
 BMW,X1 SDRIVE28I,X1 SDRIVE28I,same,,1
 BMW,X1 XDRIVE28I,X1 XDRIVE28I,same,,1
 BMW,X1 XDRIVE35I,X1 XDRIVE35I,same,,1
@@ -374,7 +374,7 @@ BMW,X7M50I,X7M50I,same,,1
 BMW,Z1,Z1,same,,1
 BMW,Z3,Z3,same,,86
 BMW,Z3 M Coupe,Z3 M Coupe,same,,23
-BMW,Z3 M Roadster,Z3 M Roadster,same,,70
+BMW,Z3 M Roadster,Z3 M Roadster,same,,71
 BMW,Z4 Coupe E86,Z4 Coupe E86,same,,7
 BMW,Z4 M Coupe,Z4 M Coupe,same,,19
 BMW,Z4 M Roadster,Z4 M Roadster,same,,20
@@ -509,15 +509,15 @@ Chevrolet,BERETTA,BERETTA,same,,2
 Chevrolet,Biscayne,Biscayne,same,,3
 Chevrolet,Blazer 1995-2004,Blazer 1995-2004,same,,6
 Chevrolet,Blazer GMT415,Blazer GMT415,same,,8
-Chevrolet,C/K,C/K,same,,367
-Chevrolet,C/K GMT400,C/K GMT400,same,,178
+Chevrolet,C/K,C/K,same,,368
+Chevrolet,C/K GMT400,C/K GMT400,same,,179
 Chevrolet,C8 CORVETTE,C8 CORVETTE,same,,1
-Chevrolet,Camaro (1st Generation – 1967-1969),Camaro (1st Generation – 1967-1969),same,,183
+Chevrolet,Camaro (1st Generation – 1967-1969),Camaro (1st Generation – 1967-1969),same,,184
 Chevrolet,Camaro (2nd Generation – 1970-1981),Camaro (2nd Generation – 1970-1981),same,,47
 Chevrolet,Camaro (3rd Generation – 1982-1992),Camaro (3rd Generation – 1982-1992),same,,46
-Chevrolet,Camaro (4th Generation – 1993-2002),Camaro (4th Generation – 1993-2002),same,,42
+Chevrolet,Camaro (4th Generation – 1993-2002),Camaro (4th Generation – 1993-2002),same,,43
 Chevrolet,Camaro (5th Generation – 2010-2015),Camaro (5th Generation – 2010-2015),same,,48
-Chevrolet,Camaro (6th Generation – 2016-2024),Camaro (6th Generation – 2016-2024),same,,54
+Chevrolet,Camaro (6th Generation – 2016-2024),Camaro (6th Generation – 2016-2024),same,,55
 Chevrolet,Camaro 1st Generation 1967-1969,Camaro 1st Generation 1967-1969,same,,66
 Chevrolet,Camaro 2nd Generation 1970-1981,Camaro 2nd Generation 1970-1981,same,,21
 Chevrolet,Camaro 3rd Generation 1982-1992,Camaro 3rd Generation 1982-1992,same,,16
@@ -532,12 +532,12 @@ Chevrolet,CHEETAH COUPE,CHEETAH COUPE,same,,1
 Chevrolet,Chevelle,Chevelle,same,,183
 Chevrolet,CHEVETTE,CHEVETTE,same,,3
 Chevrolet,CITATION,CITATION,same,,1
-Chevrolet,COBALT SS,COBALT SS,same,,1
+Chevrolet,COBALT SS,COBALT SS,same,,2
 Chevrolet,Colorado,Colorado,same,,10
-Chevrolet,Corvair,Corvair,same,,54
+Chevrolet,Corvair,Corvair,same,,55
 Chevrolet,Corvair Greenbrier and Corvan,Corvair Greenbrier and Corvan,same,,1
 Chevrolet,Corvair Rampside and Loadside Pickup,Corvair Rampside and Loadside Pickup,same,,6
-Chevrolet,CORVETTE,CORVETTE,same,catch-all,222
+Chevrolet,CORVETTE,CORVETTE,same,catch-all,227
 Chevrolet,CORVETTE 115,CORVETTE,listing counter,catch-all,1
 Chevrolet,CORVETTE 131,CORVETTE,listing counter,catch-all,1
 Chevrolet,CORVETTE 136,CORVETTE,listing counter,catch-all,1
@@ -719,10 +719,10 @@ Chrysler,CHRYSLER CD 8,CHRYSLER CD 8,same,,3
 Chrysler,CHRYSLER CM6 ROADSTER,CHRYSLER CM6 ROADSTER,same,,1
 Chrysler,Chrysler Conquest & Mitsubishi Starion,Chrysler Conquest & Mitsubishi Starion,same,,14
 Chrysler,Chrysler Cordoba,Chrysler Cordoba,same,,4
-Chrysler,Chrysler Crossfire,Chrysler Crossfire,same,,33
+Chrysler,Chrysler Crossfire,Chrysler Crossfire,same,,34
 Chrysler,CHRYSLER E CLASS,CHRYSLER E CLASS,same,,1
 Chrysler,Chrysler Fifth Avenue,Chrysler Fifth Avenue,same,,2
-Chrysler,Chrysler Imperial,Chrysler Imperial,same,,14
+Chrysler,Chrysler Imperial,Chrysler Imperial,same,,15
 Chrysler,Chrysler K-Car,Chrysler K-Car,same,,13
 Chrysler,Chrysler LeBaron,Chrysler LeBaron,same,,8
 Chrysler,CHRYSLER LHS,CHRYSLER LHS,same,,1
@@ -819,7 +819,7 @@ Divco,DIVCO 300D,DIVCO 300D,same,,1
 Dkw,DKW 3,DKW 3,same,,1
 Dkw,DKW Tin Banana,DKW Tin Banana,same,,1
 Dodge,& Plymouth Neon,& Plymouth Neon,same,,13
-Dodge,"330, 440, & 880","330, 440, & 880",same,,4
+Dodge,"330, 440, & 880","330, 440, & 880",same,,5
 Dodge,A100 Pickup,A100 Pickup,same,,1
 Dodge,ASPEN,ASPEN,same,,1
 Dodge,B-Series,B-Series,same,,6
@@ -860,7 +860,7 @@ Dodge,Power Wagon,Power Wagon,same,,34
 Dodge,Ram,Ram,same,,73
 Dodge,Ram 1500,Ram 1500,same,,42
 Dodge,Ram 1500 (2019+),Ram 1500 (2019+),same,,2
-Dodge,Ram HD,Ram HD,same,,136
+Dodge,Ram HD,Ram HD,same,,137
 Dodge,Ram HD (2019+),Ram HD (2019+),same,,11
 Dodge,Ram SRT-10 Pickup,Ram SRT-10 Pickup,same,,30
 Dodge,Ram TRX,Ram TRX,same,,26
@@ -868,13 +868,13 @@ Dodge,Ram Van,Ram Van,same,,13
 Dodge,Ramcharger / Plymouth Trail Duster,Ramcharger / Plymouth Trail Duster,same,,20
 Dodge,Royal,Royal,same,,2
 Dodge,SEDAN,SEDAN,same,,1
-Dodge,Shelby,Shelby,same,,11
+Dodge,Shelby,Shelby,same,,12
 Dodge,Stealth,Stealth,same,,11
 Dodge,STRATUS,STRATUS,same,,1
 Dodge,Super Bee,Super Bee,same,,5
 Dodge,T/V/W-Series,T/V/W-Series,same,,4
 Dodge,Tradesman & Sportsman Vans,Tradesman & Sportsman Vans,same,,8
-Dodge,Viper,Viper,same,,33
+Dodge,Viper,Viper,same,,34
 Dodge,Viper SR I,Viper SR I,same,,44
 Dodge,Viper SR II,Viper SR II,same,,67
 Dodge,Viper ZB I,Viper ZB I,same,,28
@@ -987,12 +987,12 @@ Ferrari,"599 GTB, GTO, & SA Aperta","599 GTB, GTO, & SA Aperta",same,,18
 Ferrari,612 Scaglietti,612 Scaglietti,same,,17
 Ferrari,812,812,same,,37
 Ferrari,Berlinetta Boxer,Berlinetta Boxer,same,,6
-Ferrari,California,California,same,,44
+Ferrari,California,California,same,,45
 Ferrari,Daytona,Daytona,same,,6
 Ferrari,Dino,Dino,same,,11
 Ferrari,F12berlinetta,F12berlinetta,same,,15
-Ferrari,F355,F355,same,,59
-Ferrari,F430,F430,same,,94
+Ferrari,F355,F355,same,,60
+Ferrari,F430,F430,same,,95
 Ferrari,F8,F8,same,,20
 Ferrari,FF,FF,same,,20
 Ferrari,GTC4Lusso,GTC4Lusso,same,,13
@@ -1001,7 +1001,7 @@ Ferrari,Mondial,Mondial,same,,23
 Ferrari,Portofino,Portofino,same,,6
 Ferrari,Purosangue,Purosangue,same,,2
 Ferrari,Roma,Roma,same,,12
-Ferrari,SF90,SF90,same,,15
+Ferrari,SF90,SF90,same,,16
 Ferrari,Testarossa,Testarossa,same,,46
 Fiat,FIAT,FIAT,same,,1
 Fiat,Fiat 1100,Fiat 1100,same,,2
@@ -1042,6 +1042,7 @@ Ford,B,B,same,,4
 Ford,Bronco 2nd Generation 1978-1979,Bronco 2nd Generation 1978-1979,same,,56
 Ford,Bronco 3rd Generation,Bronco 3rd Generation,same,,1
 Ford,Bronco 3rd Generation 1980-1986,Bronco 3rd Generation 1980-1986,same,,18
+Ford,Bronco 4th-5th Generations,Bronco 4th-5th Generations,same,,1
 Ford,Bronco 4th-5th Generations 1987-1996,Bronco 4th-5th Generations 1987-1996,same,,104
 Ford,Bronco II,Bronco II,same,,10
 Ford,Bronco U13/U14/U15,Bronco U13/U14/U15,same,,4
@@ -1075,7 +1076,7 @@ Ford,F-150,F-150,same,,121
 Ford,F-150 (2021+),F-150 (2021+),same,,20
 Ford,F-150 Raptor,F-150 Raptor,same,,61
 Ford,F-150 SVT Lightning,F-150 SVT Lightning,same,,28
-Ford,F-Series,F-Series,same,,17
+Ford,F-Series,F-Series,same,,20
 Ford,F-Series 1948-1952,F-Series 1948-1952,same,,37
 Ford,F-Series 1953-1956,F-Series 1953-1956,same,,38
 Ford,F-Series 1957-1960,F-Series 1957-1960,same,,14
@@ -1086,7 +1087,7 @@ Ford,F-Series 1980-1986,F-Series 1980-1986,same,,41
 Ford,F-Series 1987-1991,F-Series 1987-1991,same,,59
 Ford,F-Series 1992-1997,F-Series 1992-1997,same,,363
 Ford,Fairlane,Fairlane,same,,43
-Ford,Falcon,Falcon,same,,29
+Ford,Falcon,Falcon,same,,30
 Ford,Fiesta,Fiesta,same,,6
 Ford,FIRE TRUCK,FIRE TRUCK,same,,2
 Ford,FLEX,FLEX,same,,3
@@ -1111,7 +1112,7 @@ Ford,LTD,LTD,same,,19
 Ford,LYNCOACH,LYNCOACH,same,,1
 Ford,Maverick,Maverick,same,,1
 Ford,Military,Military,same,,9
-Ford,MUSTANG,MUSTANG,same,catch-all,317
+Ford,MUSTANG,MUSTANG,same,catch-all,318
 Ford,MUSTANG 214,MUSTANG,listing counter,catch-all,1
 Ford,MUSTANG 399,MUSTANG,listing counter,catch-all,2
 Ford,MUSTANG 59,MUSTANG,listing counter,catch-all,1
@@ -1168,7 +1169,7 @@ Ford,MUSTANG SHELBY GT CONVERTIBLE,MUSTANG SHELBY GT CONVERTIBLE,same,,2
 Ford,MUSTANG SHELBY GT COUPE,MUSTANG SHELBY GT COUPE,same,,1
 Ford,MUSTANG SHELBY GT H,MUSTANG SHELBY GT H,same,,1
 Ford,MUSTANG SHELBY GT H CONVERTIBLE,MUSTANG SHELBY GT H CONVERTIBLE,same,,1
-Ford,MUSTANG SHELBY GT350,MUSTANG SHELBY GT350,same,,13
+Ford,MUSTANG SHELBY GT350,MUSTANG SHELBY GT350,same,,14
 Ford,MUSTANG SHELBY GT350 75,MUSTANG SHELBY GT350,listing counter,,1
 Ford,MUSTANG SHELBY GT350 78,MUSTANG SHELBY GT350,listing counter,,1
 Ford,SHELBY MUSTANG GT350,MUSTANG SHELBY GT350,word order,,11
@@ -1186,11 +1187,11 @@ Ford,MUSTANG SHELBY GT500 SUPER SNAKE,MUSTANG SHELBY GT500 SUPER SNAKE,same,,1
 Ford,MUSTANG SHELBY GT500KR,MUSTANG SHELBY GT500KR,same,,11
 Ford,MUSTANG SHELBY GT500KR 24,MUSTANG SHELBY GT500KR,listing counter,,1
 Ford,SHELBY MUSTANG GT500KR,MUSTANG SHELBY GT500KR,word order,,4
-Ford,MUSTANG SHELBY SUPER SNAKE,MUSTANG SHELBY SUPER SNAKE,same,,4
+Ford,MUSTANG SHELBY SUPER SNAKE,MUSTANG SHELBY SUPER SNAKE,same,,5
 Ford,Mustang SN95 1994-2004,Mustang SN95 1994-2004,same,,25
 Ford,MUSTANG SVT COBRA CONVERTIBLE,MUSTANG SVT COBRA CONVERTIBLE,same,,26
 Ford,MUSTANG SVT COBRA CONVERTIBLE 29,MUSTANG SVT COBRA CONVERTIBLE,listing counter,,1
-Ford,MUSTANG SVT COBRA COUPE,MUSTANG SVT COBRA COUPE,same,,35
+Ford,MUSTANG SVT COBRA COUPE,MUSTANG SVT COBRA COUPE,same,,36
 Ford,MUSTANG SVT COBRA COUPE 11,MUSTANG SVT COBRA COUPE,listing counter,,1
 Ford,MUSTANG SVT COBRA COUPE 23,MUSTANG SVT COBRA COUPE,listing counter,,1
 Ford,MUSTANG SVT COBRA COUPE 34 2,MUSTANG SVT COBRA COUPE,listing counter,,1
@@ -1209,6 +1210,7 @@ Ford,Probe,Probe,same,,3
 Ford,RANCH WAGON,Ranch Wagon,case or prefix,,1
 Ford,Ranch Wagon,Ranch Wagon,same,,1
 Ford,Ranchero,Ranchero,same,,34
+Ford,Ranger,Ranger,same,,1
 Ford,Ranger 1983-1992,Ranger 1983-1992,same,,11
 Ford,Ranger 1993-1997,Ranger 1993-1997,same,,11
 Ford,Ranger 1998-2011,Ranger 1998-2011,same,,60
@@ -1228,7 +1230,7 @@ Ford,SHELBY SUPER SNAKE,SHELBY SUPER SNAKE,same,,1
 Ford,Shoebox,Shoebox,same,,10
 Ford,SIX WHEELED CUSTOM 2019 ECOSPORT TITANIUM,SIX WHEELED CUSTOM 2019 ECOSPORT TITANIUM,same,,1
 Ford,"Standard, Deluxe, & Super Deluxe","Standard, Deluxe, & Super Deluxe",same,,47
-Ford,Super Duty,Super Duty,same,,4
+Ford,Super Duty,Super Duty,same,,5
 Ford,Super Duty 1999-2007,Super Duty 1999-2007,same,,178
 Ford,Super Duty 2008-2010,Super Duty 2008-2010,same,,37
 Ford,Super Duty 2011-2016,Super Duty 2011-2016,same,,28
@@ -1237,7 +1239,7 @@ Ford,T,T,same,,39
 Ford,T Pickup & TT,T Pickup & TT,same,,3
 Ford,Taurus Race Car,Taurus Race Car,same,,1
 Ford,Taurus Sedan & Wagon,Taurus Sedan & Wagon,same,,10
-Ford,Taurus SHO,Taurus SHO,same,,18
+Ford,Taurus SHO,Taurus SHO,same,,19
 Ford,TEMPO,TEMPO,same,,1
 Ford,Thunderbird,Thunderbird,same,,314
 Ford,Torino,Torino,same,,27
@@ -1326,9 +1328,9 @@ Harley-Davidson,HARLEY DAVIDSON TOPPER AH,HARLEY DAVIDSON TOPPER AH,same,,2
 Harley-Davidson,HARLEY DAVIDSON X 90,HARLEY DAVIDSON X 90,same,,2
 Harley-Davidson,HARLEY DAVIDSON XR750,HARLEY DAVIDSON XR750,same,,1
 Harley-Davidson,Harley-Davidson 45 Flathead,Harley-Davidson 45 Flathead,same,,7
-Harley-Davidson,Harley-Davidson Aermacchi,Harley-Davidson Aermacchi,same,,6
+Harley-Davidson,Harley-Davidson Aermacchi,Harley-Davidson Aermacchi,same,,7
 Harley-Davidson,Harley-Davidson Big-Twin Flathead,Harley-Davidson Big-Twin Flathead,same,,3
-Harley-Davidson,Harley-Davidson CVO,Harley-Davidson CVO,same,,17
+Harley-Davidson,Harley-Davidson CVO,Harley-Davidson CVO,same,,18
 Harley-Davidson,Harley-Davidson CVO Road Glide RR,Harley-Davidson CVO Road Glide RR,same,,1
 Harley-Davidson,Harley-Davidson Dyna,Harley-Davidson Dyna,same,,30
 Harley-Davidson,Harley-Davidson FXR,Harley-Davidson FXR,same,,3
@@ -1336,8 +1338,8 @@ Harley-Davidson,Harley-Davidson Knucklehead,Harley-Davidson Knucklehead,same,,3
 Harley-Davidson,Harley-Davidson Panhead,Harley-Davidson Panhead,same,,3
 Harley-Davidson,Harley-Davidson Servi-Car,Harley-Davidson Servi-Car,same,,1
 Harley-Davidson,Harley-Davidson Shovelhead,Harley-Davidson Shovelhead,same,,7
-Harley-Davidson,Harley-Davidson Softail,Harley-Davidson Softail,same,,106
-Harley-Davidson,Harley-Davidson Sportster,Harley-Davidson Sportster,same,,38
+Harley-Davidson,Harley-Davidson Softail,Harley-Davidson Softail,same,,107
+Harley-Davidson,Harley-Davidson Sportster,Harley-Davidson Sportster,same,,39
 Harley-Davidson,Harley-Davidson Sprint,Harley-Davidson Sprint,same,,6
 Harley-Davidson,Harley-Davidson Touring,Harley-Davidson Touring,same,,95
 Harley-Davidson,Harley-Davidson V-Rod,Harley-Davidson V-Rod,same,,35
@@ -1353,9 +1355,9 @@ Hodaka,HODAKA DIRT SQUIRT 100,HODAKA DIRT SQUIRT 100,same,,1
 Hodaka,HODAKA ROAD TOAD,HODAKA ROAD TOAD,same,,1
 Hodaka,HODAKA SUPER RAT,HODAKA SUPER RAT,same,,1
 Honda,Accord,Accord,same,,59
-Honda,Acty,Acty,same,,62
+Honda,Acty,Acty,same,,63
 Honda,Africa Twin,Africa Twin,same,,3
-Honda,AP1 S2000,AP1 S2000,same,,96
+Honda,AP1 S2000,AP1 S2000,same,,97
 Honda,AP2 S2000,AP2 S2000,same,,111
 Honda,AP2 S2000 CR,AP2 S2000 CR,same,,7
 Honda,Ascot,Ascot,same,,3
@@ -1382,7 +1384,7 @@ Honda,CBX,CBX,same,,24
 Honda,Civic,Civic,same,,61
 Honda,Civic (2022+),Civic (2022+),same,,4
 Honda,Civic Del Sol,Civic Del Sol,same,,19
-Honda,Civic Si,Civic Si,same,,15
+Honda,Civic Si,Civic Si,same,,16
 Honda,Civic Type R,Civic Type R,same,,9
 Honda,CL70 & CL90,CL70 & CL90,same,,1
 Honda,"CL72, CB72, CA72, & C72","CL72, CB72, CA72, & C72",same,,1
@@ -1401,7 +1403,7 @@ Honda,EZ90 Cub,EZ90 Cub,same,,1
 Honda,Fat Cat,Fat Cat,same,,2
 Honda,FIT,Fit,case or prefix,,4
 Honda,Fit,Fit,same,,1
-Honda,GB500 Tourist Trophy,GB500 Tourist Trophy,same,,10
+Honda,GB500 Tourist Trophy,GB500 Tourist Trophy,same,,11
 Honda,Gold Wing,Gold Wing,same,,22
 Honda,Grom,Grom,same,,2
 Honda,Insight,Insight,same,,4
@@ -1411,7 +1413,7 @@ Honda,Magna,Magna,same,,3
 Honda,Mopeds,Mopeds,same,,2
 Honda,Motocompo & Motocompacto,Motocompo & Motocompacto,same,,5
 Honda,N360 & N600,N360 & N600,same,,5
-Honda,Nighthawk,Nighthawk,same,,14
+Honda,Nighthawk,Nighthawk,same,,15
 Honda,"NSR, NSF, & Dream CB50R","NSR, NSF, & Dream CB50R",same,,17
 Honda,NT Series,NT Series,same,,1
 Honda,NX Series,NX Series,same,,4
@@ -1445,7 +1447,7 @@ Honda,VAMOS,VAMOS,same,,3
 Honda,VF & VFR,VF & VFR,same,,17
 Honda,"VT, VTR, & VTX","VT, VTR, & VTX",same,,1
 Honda,XL & XR,XL & XR,same,,40
-Honda,Z50,Z50,same,,107
+Honda,Z50,Z50,same,,108
 Honda,Z600,Z600,same,,9
 Honda,ZB50,ZB50,same,,2
 Hudson,HUDSON COMMODORE,HUDSON COMMODORE,same,,1
@@ -1503,7 +1505,7 @@ International Harvester,INTERNATIONAL HARVESTER K SERIES,INTERNATIONAL HARVESTER
 International Harvester,International Harvester Loadstar,International Harvester Loadstar,same,,4
 International Harvester,INTERNATIONAL HARVESTER ORIGINAL DELAVAN FIRETRUCK,INTERNATIONAL HARVESTER ORIGINAL DELAVAN FIRETRUCK,same,,1
 International Harvester,International Harvester Pickup,International Harvester Pickup,same,,34
-International Harvester,International Harvester Scout 80,International Harvester Scout 80,same,,16
+International Harvester,International Harvester Scout 80,International Harvester Scout 80,same,,17
 International Harvester,International Harvester Scout 800,International Harvester Scout 800,same,,23
 International Harvester,International Harvester Scout 800A,International Harvester Scout 800A,same,,11
 International Harvester,International Harvester Scout 800B,International Harvester Scout 800B,same,,6
@@ -1515,7 +1517,7 @@ International Harvester,International Harvester Travelall,International Harveste
 International Harvester,International Harvester XT,International Harvester XT,same,,3
 Iso,ISO RIVOLTA IR 300,ISO RIVOLTA IR 300,same,,1
 Iso,Iso Rivolta IR 300 & IR 340,Iso Rivolta IR 300 & IR 340,same,,2
-Isuzu,Isuzu Elf,Isuzu Elf,same,,5
+Isuzu,Isuzu Elf,Isuzu Elf,same,,6
 Isuzu,ISUZU HOMBRE,ISUZU HOMBRE,same,,1
 Isuzu,ISUZU IMPULSE,ISUZU IMPULSE,same,,1
 Isuzu,ISUZU PICKUP,ISUZU PICKUP,same,,2
@@ -1538,13 +1540,13 @@ Jaguar,Mk IV,Mk IV,same,,3
 Jaguar,Mk V,Mk V,same,,2
 Jaguar,"Mk VII, VIII, & IX","Mk VII, VIII, & IX",same,,9
 Jaguar,Replica,Replica,same,replica,3
-Jaguar,S-Type,S-Type,same,,12
+Jaguar,S-Type,S-Type,same,,13
 Jaguar,X-Type,X-Type,same,,5
 Jaguar,X300 XJ,X300 XJ,same,,16
 Jaguar,X306 XJR,X306 XJR,same,,6
 Jaguar,X308 XJ,X308 XJ,same,,22
 Jaguar,X308 XJR,X308 XJR,same,,17
-Jaguar,X350/X356/X358 XJ,X350/X356/X358 XJ,same,,38
+Jaguar,X350/X356/X358 XJ,X350/X356/X358 XJ,same,,39
 Jaguar,X350/X356/X358 XJR,X350/X356/X358 XJR,same,,13
 Jaguar,X351 XJ,X351 XJ,same,,25
 Jaguar,XE,XE,same,,3
@@ -1554,23 +1556,23 @@ Jaguar,XJ Series 1,XJ Series 1,same,,3
 Jaguar,XJ Series 2,XJ Series 2,same,,4
 Jaguar,XJ Series 3,XJ Series 3,same,,24
 Jaguar,XJ220,XJ220,same,,2
-Jaguar,XJ40 XJ,XJ40 XJ,same,,7
+Jaguar,XJ40 XJ,XJ40 XJ,same,,8
 Jaguar,XJS,XJS,same,,123
 Jaguar,XK,XK,same,,47
 Jaguar,XK120,XK120,same,,31
 Jaguar,XK140,XK140,same,,26
-Jaguar,XK150,XK150,same,,10
+Jaguar,XK150,XK150,same,,11
 Jaguar,XK8,XK8,same,,82
 Jaguar,XKE Series I,XKE Series I,same,,72
 Jaguar,XKE Series II,XKE Series II,same,,75
-Jaguar,XKE Series III,XKE Series III,same,,30
-Jaguar,XKR,XKR,same,,79
+Jaguar,XKE Series III,XKE Series III,same,,31
+Jaguar,XKR,XKR,same,,80
 Jawa,JAWA,JAWA,same,,1
-Jeep,Jeep CJ-5,Jeep CJ-5,same,,68
+Jeep,Jeep CJ-5,Jeep CJ-5,same,,69
 Jeep,Jeep CJ-6,Jeep CJ-6,same,,2
 Jeep,Jeep CJ-7,Jeep CJ-7,same,,96
 Jeep,Jeep CJ-8,Jeep CJ-8,same,,15
-Jeep,Jeep Comanche,Jeep Comanche,same,,10
+Jeep,Jeep Comanche,Jeep Comanche,same,,11
 Jeep,JEEP COMMANDER,JEEP COMMANDER,same,,3
 Jeep,JEEP COMMANDER 7,JEEP COMMANDER,listing counter,,1
 Jeep,Jeep Forward Control,Jeep Forward Control,same,,2
@@ -1593,12 +1595,12 @@ Jeep,Jeep WJ Grand Cherokee,Jeep WJ Grand Cherokee,same,,19
 Jeep,Jeep WK Grand Cherokee,Jeep WK Grand Cherokee,same,,12
 Jeep,Jeep WK2 Grand Cherokee,Jeep WK2 Grand Cherokee,same,,38
 Jeep,Jeep WL Grand Cherokee,Jeep WL Grand Cherokee,same,,1
-Jeep,Jeep Wrangler JK,Jeep Wrangler JK,same,,167
+Jeep,Jeep Wrangler JK,Jeep Wrangler JK,same,,168
 Jeep,Jeep Wrangler JL (2018+),Jeep Wrangler JL (2018+),same,,55
-Jeep,Jeep Wrangler TJ,Jeep Wrangler TJ,same,,250
+Jeep,Jeep Wrangler TJ,Jeep Wrangler TJ,same,,251
 Jeep,Jeep Wrangler YJ,Jeep Wrangler YJ,same,,48
 Jeep,Jeep WS Grand Wagoneer,Jeep WS Grand Wagoneer,same,,1
-Jeep,Jeep XJ Cherokee,Jeep XJ Cherokee,same,,116
+Jeep,Jeep XJ Cherokee,Jeep XJ Cherokee,same,,117
 Jeep,Jeep XJ Wagoneer,Jeep XJ Wagoneer,same,,2
 Jeep,Jeep ZJ Grand Cherokee,Jeep ZJ Grand Cherokee,same,,18
 Jensen,JENSEN CV 8,JENSEN CV 8,same,,1
@@ -1714,13 +1716,13 @@ Lambretta,LAMBRETTA SX200,LAMBRETTA SX200,same,,1
 Lancia,LANCIA,LANCIA,same,,1
 Lancia,Lancia Aurelia,Lancia Aurelia,same,,3
 Lancia,Lancia Beta,Lancia Beta,same,,5
-Lancia,Lancia Delta,Lancia Delta,same,,11
+Lancia,Lancia Delta,Lancia Delta,same,,12
 Lancia,Lancia Flaminia,Lancia Flaminia,same,,2
 Lancia,Lancia Flavia,Lancia Flavia,same,,1
 Lancia,Lancia Fulvia,Lancia Fulvia,same,,13
 Lancia,Lancia Scorpion / Montecarlo,Lancia Scorpion / Montecarlo,same,,3
 Lancia,Lancia Stratos,Lancia Stratos,same,,1
-Land Rover,110 / Defender 110 (Euro Spec),110 / Defender 110 (Euro Spec),same,,129
+Land Rover,110 / Defender 110 (Euro Spec),110 / Defender 110 (Euro Spec),same,,130
 Land Rover,127 / Defender 130,127 / Defender 130,same,,14
 Land Rover,90 / Defender 90 (Euro Spec),90 / Defender 90 (Euro Spec),same,,59
 Land Rover,Defender 110 NAS,Defender 110 NAS,same,,3
@@ -1773,7 +1775,7 @@ Lexus,LFA,LFA,same,,4
 Lexus,LS Sedan,LS Sedan,same,,92
 Lexus,LX (J310),LX (J310),same,,1
 Lexus,LX450,LX450,same,,35
-Lexus,LX470,LX470,same,,113
+Lexus,LX470,LX470,same,,114
 Lexus,LX570,LX570,same,,27
 Lexus,RC,RC,same,,2
 Lexus,RX,RX,same,,28
@@ -1795,7 +1797,7 @@ Lincoln,LINCOLN AVIATOR 2,LINCOLN AVIATOR,listing counter,,1
 Lincoln,Lincoln Blackwood & Mark LT,Lincoln Blackwood & Mark LT,same,,14
 Lincoln,Lincoln Capri,Lincoln Capri,same,,6
 Lincoln,LINCOLN CLUB COUPE,LINCOLN CLUB COUPE,same,,1
-Lincoln,Lincoln Continental,Lincoln Continental,same,,117
+Lincoln,Lincoln Continental,Lincoln Continental,same,,118
 Lincoln,Lincoln Continental Mark II,Lincoln Continental Mark II,same,,14
 Lincoln,Lincoln Continental Mark III,Lincoln Continental Mark III,same,,7
 Lincoln,Lincoln Continental Mark IV,Lincoln Continental Mark IV,same,,15
@@ -1843,7 +1845,7 @@ Lotus,Esprit X180,Esprit X180,same,,2
 Lotus,Europa,Europa,same,,13
 Lotus,Evora,Evora,same,,22
 Lotus,EXCEL,EXCEL,same,,1
-Lotus,Exige,Exige,same,,5
+Lotus,Exige,Exige,same,,6
 Lotus,Open-Wheel,Open-Wheel,same,,1
 Lotus,Other Seven Replicas,Other Seven Replicas,same,replica,10
 Lotus,Seven & Super Seven,Seven & Super Seven,same,,6
@@ -1908,10 +1910,10 @@ Mazda,Mazda Formula Mazda,Mazda Formula Mazda,same,,1
 Mazda,MAZDA MS,MAZDA MS,same,,1
 Mazda,MAZDA MX,MAZDA MX,same,catch-all,1
 Mazda,MAZDA MX6,MAZDA MX6,same,,1
-Mazda,Mazda NA MX-5 Miata,Mazda NA MX-5 Miata,same,,128
+Mazda,Mazda NA MX-5 Miata,Mazda NA MX-5 Miata,same,,129
 Mazda,Mazda NB MX-5 Miata,Mazda NB MX-5 Miata,same,,91
-Mazda,Mazda NC MX-5 Miata,Mazda NC MX-5 Miata,same,,67
-Mazda,Mazda ND MX-5 Miata,Mazda ND MX-5 Miata,same,,29
+Mazda,Mazda NC MX-5 Miata,Mazda NC MX-5 Miata,same,,68
+Mazda,Mazda ND MX-5 Miata,Mazda ND MX-5 Miata,same,,30
 Mazda,Mazda Pickup,Mazda Pickup,same,,19
 Mazda,Mazda RX-7 FB,Mazda RX-7 FB,same,,38
 Mazda,Mazda RX-7 FC,Mazda RX-7 FC,same,,22
@@ -2018,11 +2020,11 @@ Mercedes-Benz,AMG SLS AMG FINAL EDITION,AMG SLS AMG FINAL EDITION,same,,1
 Mercedes-Benz,Benz AMG,Benz AMG,same,,13
 Mercedes-Benz,Brabus,Brabus,same,,2
 Mercedes-Benz,C107 SLC,C107 SLC,same,,23
-Mercedes-Benz,C124 300CE Coupe,C124 300CE Coupe,same,,2
+Mercedes-Benz,C124 300CE Coupe,C124 300CE Coupe,same,,3
 Mercedes-Benz,C124 E320 Coupe,C124 E320 Coupe,same,,2
 Mercedes-Benz,C126,C126,same,,41
 Mercedes-Benz,C140,C140,same,,16
-Mercedes-Benz,C207 E-Class Coupe/Cabriolet,C207 E-Class Coupe/Cabriolet,same,,87
+Mercedes-Benz,C207 E-Class Coupe/Cabriolet,C207 E-Class Coupe/Cabriolet,same,,88
 Mercedes-Benz,C208/A208 CLK-Class (Non-AMG),C208/A208 CLK-Class (Non-AMG),same,,26
 Mercedes-Benz,C208/A208 CLK55 AMG,C208/A208 CLK55 AMG,same,,1
 Mercedes-Benz,C209/A209 CLK-Class (Non-AMG),C209/A209 CLK-Class (Non-AMG),same,,34
@@ -2094,7 +2096,7 @@ Mercedes-Benz,AMG G63 26,G63 AMG,word order,,1
 Mercedes-Benz,G63 AMG,G63 AMG,same,,25
 Mercedes-Benz,G63 AMG 9,G63 AMG,listing counter,,1
 Mercedes-Benz,G65,G65,same,,3
-Mercedes-Benz,GL & GLS-Class,GL & GLS-Class,same,,185
+Mercedes-Benz,GL & GLS-Class,GL & GLS-Class,same,,186
 Mercedes-Benz,GL63 AMG,GL63 AMG,same,,9
 Mercedes-Benz,GLA250,GLA250,same,,1
 Mercedes-Benz,GLA45 AMG,GLA45 AMG,same,,3
@@ -2105,7 +2107,7 @@ Mercedes-Benz,AMG GLS63,GLS63 AMG,word order,,2
 Mercedes-Benz,GLS63 AMG,GLS63 AMG,same,,5
 Mercedes-Benz,GT63,GT63,same,,1
 Mercedes-Benz,GT63 S E PERFORMANCE AMG FOUR DOOR,GT63 S E PERFORMANCE AMG FOUR DOOR,same,,1
-Mercedes-Benz,M-Class & GLE-Class,M-Class & GLE-Class,same,,92
+Mercedes-Benz,M-Class & GLE-Class,M-Class & GLE-Class,same,,93
 Mercedes-Benz,Metris,Metris,same,,9
 Mercedes-Benz,ML55 AMG,ML55 AMG,same,,1
 Mercedes-Benz,ML63 AMG,ML63 AMG,same,,14
@@ -2116,11 +2118,11 @@ Mercedes-Benz,R107 280SL,R107 280SL,same,,1
 Mercedes-Benz,R107 380SL,R107 380SL,same,,7
 Mercedes-Benz,R107 450SL,R107 450SL,same,,12
 Mercedes-Benz,R107 500SL,R107 500SL,same,,1
-Mercedes-Benz,R107 560SL,R107 560SL,same,,21
+Mercedes-Benz,R107 560SL,R107 560SL,same,,22
 Mercedes-Benz,R107 SL,R107 SL,same,,388
-Mercedes-Benz,R129 SL,R129 SL,same,,280
+Mercedes-Benz,R129 SL,R129 SL,same,,281
 Mercedes-Benz,R230 SL,R230 SL,same,,278
-Mercedes-Benz,R231 SL,R231 SL,same,,38
+Mercedes-Benz,R231 SL,R231 SL,same,,39
 Mercedes-Benz,R232 SL,R232 SL,same,,1
 Mercedes-Benz,R63 AMG,R63 AMG,same,,2
 Mercedes-Benz,"S124 300TE, 320TE, & E320 Station Wagon","S124 300TE, 320TE, & E320 Station Wagon",same,,2
@@ -2142,7 +2144,7 @@ Mercedes-Benz,S65 AMG 30,S65 AMG,listing counter,,1
 Mercedes-Benz,AMG S65 COUPE,S65 AMG COUPE,word order,,2
 Mercedes-Benz,S65 AMG COUPE,S65 AMG COUPE,same,,3
 Mercedes-Benz,AMG S65 SEDAN,S65 AMG SEDAN,word order,,1
-Mercedes-Benz,S65 AMG SEDAN,S65 AMG SEDAN,same,,5
+Mercedes-Benz,S65 AMG SEDAN,S65 AMG SEDAN,same,,6
 Mercedes-Benz,AMG SL55,SL55 AMG,word order,,1
 Mercedes-Benz,AMG SL55 12,SL55 AMG,word order,,1
 Mercedes-Benz,SL55 AMG,SL55 AMG,same,,47
@@ -2178,12 +2180,12 @@ Mercedes-Benz,SLS AMG GT,SLS AMG GT,same,,3
 Mercedes-Benz,SLS AMG GT FINAL EDITION,SLS AMG GT FINAL EDITION,same,,1
 Mercedes-Benz,SLS AMG GT FINAL EDITION ROADSTER,SLS AMG GT FINAL EDITION ROADSTER,same,,2
 Mercedes-Benz,SLS AMG GT ROADSTER,SLS AMG GT ROADSTER,same,,2
-Mercedes-Benz,SLS AMG ROADSTER,SLS AMG ROADSTER,same,,11
+Mercedes-Benz,SLS AMG ROADSTER,SLS AMG ROADSTER,same,,12
 Mercedes-Benz,Sprinter,Sprinter,same,,176
 Mercedes-Benz,Unimog,Unimog,same,,25
 Mercedes-Benz,VIANO 3 2 FUN,VIANO 3 2 FUN,same,,1
 Mercedes-Benz,W108 & W109,W108 & W109,same,,39
-Mercedes-Benz,W110,W110,same,,4
+Mercedes-Benz,W110,W110,same,,5
 Mercedes-Benz,W111 Coupe & Cabriolet,W111 Coupe & Cabriolet,same,,44
 Mercedes-Benz,W111 Sedan,W111 Sedan,same,,3
 Mercedes-Benz,W112,W112,same,,4
@@ -2193,6 +2195,7 @@ Mercedes-Benz,W116 S-Class,W116 S-Class,same,,23
 Mercedes-Benz,W123,W123,same,,107
 Mercedes-Benz,W124 200E & E200 Sedan,W124 200E & E200 Sedan,same,,1
 Mercedes-Benz,W124 260E & 300E 2.6 Sedan,W124 260E & 300E 2.6 Sedan,same,,1
+Mercedes-Benz,W124 300D & 300D Turbo Sedan,W124 300D & 300D Turbo Sedan,same,,1
 Mercedes-Benz,W124 300D 2.5 Turbo Sedan,W124 300D 2.5 Turbo Sedan,same,,1
 Mercedes-Benz,W124 300E & E320 Sedan,W124 300E & E320 Sedan,same,,6
 Mercedes-Benz,"W124 400E, E400, & E420 Sedan","W124 400E, E400, & E420 Sedan",same,,2
@@ -2206,8 +2209,8 @@ Mercedes-Benz,W201 190,W201 190,same,,24
 Mercedes-Benz,W202 C-Class,W202 C-Class,same,,20
 Mercedes-Benz,W202 C36 & C43 AMG,W202 C36 & C43 AMG,same,,1
 Mercedes-Benz,W203 C-Class,W203 C-Class,same,,43
-Mercedes-Benz,W204 C-Class,W204 C-Class,same,,38
-Mercedes-Benz,W204 C63 AMG,W204 C63 AMG,same,,4
+Mercedes-Benz,W204 C-Class,W204 C-Class,same,,39
+Mercedes-Benz,W204 C63 AMG,W204 C63 AMG,same,,5
 Mercedes-Benz,W205 C-Class,W205 C-Class,same,,6
 Mercedes-Benz,W210 E-Class,W210 E-Class,same,,50
 Mercedes-Benz,W211 E-Class,W211 E-Class,same,,116
@@ -2223,7 +2226,7 @@ Mercedes-Benz,W223 S-Class,W223 S-Class,same,,9
 Mercedes-Benz,W251 R-Class,W251 R-Class,same,,22
 Mercedes-Benz,W460 Geländewagen,W460 Geländewagen,same,,24
 Mercedes-Benz,W461 G-Class,W461 G-Class,same,,18
-Mercedes-Benz,W463 G-Class,W463 G-Class,same,,117
+Mercedes-Benz,W463 G-Class,W463 G-Class,same,,118
 Mercedes-Benz,W463 G-Class (2019+),W463 G-Class (2019+),same,,11
 Mercedes-Benz,W463 G-Class AMG,W463 G-Class AMG,same,,5
 Mercedes-Benz,W463 G-Class AMG (2019+),W463 G-Class AMG (2019+),same,,2
@@ -2232,7 +2235,7 @@ Mercedes-Benz,X253 & C253 GLC-Class,X253 & C253 GLC-Class,same,,3
 Mercedes-Benz,X290 AMG GT Four-Door,X290 AMG GT Four-Door,same,,2
 Mercury,Mercury Capri,Mercury Capri,same,,9
 Mercury,Mercury Colony Park,Mercury Colony Park,same,,1
-Mercury,Mercury Comet,Mercury Comet,same,,9
+Mercury,Mercury Comet,Mercury Comet,same,,10
 Mercury,MERCURY COMMUTER,MERCURY COMMUTER,same,,1
 Mercury,Mercury Cougar,Mercury Cougar,same,,27
 Mercury,MERCURY CUSTOM SPORT COUPE,MERCURY CUSTOM SPORT COUPE,same,,1
@@ -2262,7 +2265,7 @@ MG,MG F,MG F,same,,1
 MG,MG J2,MG J2,same,,1
 MG,MG Magnette,MG Magnette,same,,4
 MG,MG MGA,MG MGA,same,,62
-MG,MG MGB,MG MGB,same,,150
+MG,MG MGB,MG MGB,same,,151
 MG,MG MGC,MG MGC,same,,4
 MG,MG Midget,MG Midget,same,,33
 MG,MG RV8,MG RV8,same,,1
@@ -2291,11 +2294,11 @@ Mini,"Mini R56 Cooper, Cooper S, and John Cooper Works","Mini R56 Cooper, Cooper
 Mini,Mini R56 JCW GP,Mini R56 JCW GP,same,,9
 Mini,Mini R57 Convertible,Mini R57 Convertible,same,,28
 Mini,Mini R58 & R59 Coupe & Roadster,Mini R58 & R59 Coupe & Roadster,same,,27
-Mini,Mini R60 Countryman,Mini R60 Countryman,same,,11
+Mini,Mini R60 Countryman,Mini R60 Countryman,same,,12
 Mini,Mini R61 Paceman,Mini R61 Paceman,same,,3
 Minneapolis Moline,MINNEAPOLIS MOLINE ZTU,MINNEAPOLIS MOLINE ZTU,same,,1
 Minneapolis-Moline,MINNEAPOLIS MOLINE R ROW CROP TRACTOR,MINNEAPOLIS MOLINE R ROW CROP TRACTOR,same,,1
-Mitsubishi,Mitsubishi 3000GT,Mitsubishi 3000GT,same,,35
+Mitsubishi,Mitsubishi 3000GT,Mitsubishi 3000GT,same,,36
 Mitsubishi,Mitsubishi Canter,Mitsubishi Canter,same,,2
 Mitsubishi,Mitsubishi Delica,Mitsubishi Delica,same,,16
 Mitsubishi,"Mitsubishi Eclipse, Eagle Talon, & Plymouth Laser","Mitsubishi Eclipse, Eagle Talon, & Plymouth Laser",same,,24
@@ -2385,12 +2388,12 @@ Nissan,DATSUN 200SX,DATSUN 200SX,same,,1
 Nissan,DATSUN 200SX 2,DATSUN 200SX,listing counter,,1
 Nissan,DATSUN 200SX SL,DATSUN 200SX SL,same,,1
 Nissan,DATSUN 210,DATSUN 210,same,,1
-Nissan,Datsun 240Z,Datsun 240Z,same,,81
+Nissan,Datsun 240Z,Datsun 240Z,same,,82
 Nissan,Datsun 260Z,Datsun 260Z,same,,6
 Nissan,Datsun 280Z,Datsun 280Z,same,,39
 Nissan,Datsun 280ZX,Datsun 280ZX,same,,33
 Nissan,DATSUN 411 SSS WAGON,DATSUN 411 SSS WAGON,same,,1
-Nissan,Datsun 510,Datsun 510,same,,10
+Nissan,Datsun 510,Datsun 510,same,,11
 Nissan,DATSUN F 10 SPORTWAGON,DATSUN F 10 SPORTWAGON,same,,1
 Nissan,Datsun Roadster,Datsun Roadster,same,,22
 Nissan,EL GRAND,EL GRAND,same,,1
@@ -2407,7 +2410,7 @@ Nissan,Pao,Pao,same,,4
 Nissan,Pathfinder,Pathfinder,same,,10
 Nissan,Patrol,Patrol,same,,15
 Nissan,Datsun Pickup,Pickup,case or prefix,,8
-Nissan,Pickup,Pickup,same,,29
+Nissan,Pickup,Pickup,same,,30
 Nissan,PRESIDENT,President,case or prefix,,1
 Nissan,President,President,same,,1
 Nissan,PRIMERA,PRIMERA,same,,1
@@ -2425,11 +2428,11 @@ Nissan,Silvia,Silvia,same,,3
 Nissan,Skyline (S50-Series),Skyline (S50-Series),same,,1
 Nissan,Stagea,Stagea,same,,2
 Nissan,Xterra,Xterra,same,,8
-Nissan,Z31 300ZX,Z31 300ZX,same,,29
+Nissan,Z31 300ZX,Z31 300ZX,same,,30
 Nissan,Z32 300ZX,Z32 300ZX,same,,63
 Noble,Noble M12,Noble M12,same,,3
 Norton,Norton Atlas,Norton Atlas,same,,3
-Norton,Norton Commando,Norton Commando,same,,30
+Norton,Norton Commando,Norton Commando,same,,31
 Norton,Norton Dominator,Norton Dominator,same,,3
 Norton,NORTON MODEL,NORTON MODEL,same,,1
 Norton,NORTON NAVIGATOR,NORTON NAVIGATOR,same,,1
@@ -2447,7 +2450,7 @@ Oldsmobile,OLDSMOBILE BRAVADA,OLDSMOBILE BRAVADA,same,,2
 Oldsmobile,OLDSMOBILE CALAIS SUPREME,OLDSMOBILE CALAIS SUPREME,same,,1
 Oldsmobile,OLDSMOBILE CIERA SL,OLDSMOBILE CIERA SL,same,,1
 Oldsmobile,Oldsmobile Custom Cruiser,Oldsmobile Custom Cruiser,same,,3
-Oldsmobile,Oldsmobile Cutlass,Oldsmobile Cutlass,same,,59
+Oldsmobile,Oldsmobile Cutlass,Oldsmobile Cutlass,same,,60
 Oldsmobile,Oldsmobile F-85 & Jetfire,Oldsmobile F-85 & Jetfire,same,,2
 Oldsmobile,OLDSMOBILE FIRENZA WAGON,OLDSMOBILE FIRENZA WAGON,same,,1
 Oldsmobile,OLDSMOBILE HENNEY HEARSE,OLDSMOBILE HENNEY HEARSE,same,,1
@@ -2497,7 +2500,7 @@ Peugeot,PEUGEOT 404,Peugeot 404,case or prefix,,1
 Peugeot,Peugeot 404,Peugeot 404,same,,2
 Peugeot,PEUGEOT 405 MI 16,PEUGEOT 405 MI 16,same,,1
 Peugeot,Peugeot 504,Peugeot 504,same,,4
-Peugeot,PEUGEOT 505,PEUGEOT 505,same,,1
+Peugeot,PEUGEOT 505,PEUGEOT 505,same,,2
 Piaggio,VESPA VL1,VESPA VL1,same,,1
 Pierce-Arrow,PIERCE ARROW 42 CONVERTIBLE COUPE,PIERCE ARROW 42 CONVERTIBLE COUPE,same,,1
 Pierce-Arrow,PIERCE ARROW MODEL 81 RUMBLE SEAT COUPE,PIERCE ARROW MODEL 81 RUMBLE SEAT COUPE,same,,1
@@ -2543,10 +2546,10 @@ Pontiac,PONTIAC AZTEK,PONTIAC AZTEK,same,,1
 Pontiac,Pontiac Bonneville,Pontiac Bonneville,same,,17
 Pontiac,Pontiac Catalina,Pontiac Catalina,same,,16
 Pontiac,Pontiac Chieftain,Pontiac Chieftain,same,,5
-Pontiac,Pontiac Fiero,Pontiac Fiero,same,,27
+Pontiac,Pontiac Fiero,Pontiac Fiero,same,,28
 Pontiac,Pontiac Firebird,Pontiac Firebird,same,,79
-Pontiac,Pontiac Firebird (1st Generation – 1967-1969),Pontiac Firebird (1st Generation – 1967-1969),same,,38
-Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),Pontiac Firebird (2nd Generation – 1970-1981),same,,89
+Pontiac,Pontiac Firebird (1st Generation – 1967-1969),Pontiac Firebird (1st Generation – 1967-1969),same,,39
+Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),Pontiac Firebird (2nd Generation – 1970-1981),same,,90
 Pontiac,Pontiac Firebird (3rd Generation – 1982-1992),Pontiac Firebird (3rd Generation – 1982-1992),same,,31
 Pontiac,Pontiac Firebird (4th Generation – 1993-2002),Pontiac Firebird (4th Generation – 1993-2002),same,,74
 Pontiac,PONTIAC G6,PONTIAC G6,same,,1
@@ -2575,10 +2578,10 @@ Porsche,356 Replica,356 Replica,same,replica,37
 Porsche,356 Speedster,356 Speedster,same,,8
 Porsche,356A,356A,same,,25
 Porsche,356B,356B,same,,49
-Porsche,356C,356C,same,,47
+Porsche,356C,356C,same,,48
 Porsche,550 Spyder Replica,550 Spyder Replica,same,replica,10
 Porsche,911 1974-1977,911 1974-1977,same,,75
-Porsche,911 Carrera 3.2,911 Carrera 3.2,same,,209
+Porsche,911 Carrera 3.2,911 Carrera 3.2,same,,210
 Porsche,911 Carrera RS (1973),911 Carrera RS (1973),same,,3
 Porsche,911 RS America,911 RS America,same,,4
 Porsche,911 Safari,911 Safari,same,,6
@@ -2589,8 +2592,8 @@ Porsche,912,912,same,,73
 Porsche,912E,912E,same,,14
 Porsche,914 1.7/1.8/2.0,914 1.7/1.8/2.0,same,,103
 Porsche,914/6,914/6,same,,16
-Porsche,924,924,same,,19
-Porsche,928,928,same,,116
+Porsche,924,924,same,,20
+Porsche,928,928,same,,117
 Porsche,930 Turbo,930 Turbo,same,,99
 Porsche,934 & 935,934 & 935,same,,1
 Porsche,944,944,same,,85
@@ -2617,7 +2620,7 @@ Porsche,981 Cayman,981 Cayman,same,,47
 Porsche,982 718 Boxster,982 718 Boxster,same,,46
 Porsche,982 718 Cayman,982 718 Cayman,same,,30
 Porsche,986 Boxster,986 Boxster,same,,223
-Porsche,987 Boxster,987 Boxster,same,,115
+Porsche,987 Boxster,987 Boxster,same,,116
 Porsche,987 Cayman,987 Cayman,same,,127
 Porsche,991 911 (Non-Turbo/GT2/GT3),991 911 (Non-Turbo/GT2/GT3),same,,69
 Porsche,991 911 50th Anniversary Edition,991 911 50th Anniversary Edition,same,,10
@@ -2632,7 +2635,7 @@ Porsche,991 911 Carrera S Endurance Racing Edition,991 911 Carrera S Endurance R
 Porsche,991 911 Carrera T,991 911 Carrera T,same,,4
 Porsche,991 911 GT2,991 911 GT2,same,,22
 Porsche,991 GT2,991 911 GT2,override,,6
-Porsche,991 911 GT3,991 911 GT3,same,,60
+Porsche,991 911 GT3,991 911 GT3,same,,61
 Porsche,991 GT3,991 911 GT3,override,,28
 Porsche,991 911 R,991 911 R,same,,5
 Porsche,991 911 Speedster,991 911 Speedster,same,,6
@@ -2664,7 +2667,7 @@ Porsche,992 911 Targa 4S Heritage Design Edition,992 911 Targa 4S Heritage Desig
 Porsche,992 911 Turbo,992 911 Turbo,same,,46
 Porsche,992 Turbo,992 911 Turbo,override,,19
 Porsche,993 911 (Non-Turbo/GT2),993 911 (Non-Turbo/GT2),same,,98
-Porsche,993 911 Carrera,993 911 Carrera,same,,79
+Porsche,993 911 Carrera,993 911 Carrera,same,,81
 Porsche,993 911 Carrera 4,993 911 Carrera 4,same,,11
 Porsche,993 911 Carrera 4S,993 911 Carrera 4S,same,,20
 Porsche,993 911 Carrera S,993 911 Carrera S,same,,19
@@ -2690,13 +2693,13 @@ Porsche,996 911 Turbo,996 911 Turbo,same,,85
 Porsche,996 Turbo,996 911 Turbo,override,,40
 Porsche,996 911 Turbo S,996 911 Turbo S,same,,2
 Porsche,997 911 (Non-Turbo/GT2/GT3),997 911 (Non-Turbo/GT2/GT3),same,,118
-Porsche,997 911 Carrera,997 911 Carrera,same,,45
+Porsche,997 911 Carrera,997 911 Carrera,same,,46
 Porsche,997 911 Carrera 4,997 911 Carrera 4,same,,5
 Porsche,997 911 Carrera 4 GTS,997 911 Carrera 4 GTS,same,,2
-Porsche,997 911 Carrera 4S,997 911 Carrera 4S,same,,45
+Porsche,997 911 Carrera 4S,997 911 Carrera 4S,same,,46
 Porsche,997 911 Carrera Black Edition,997 911 Carrera Black Edition,same,,4
 Porsche,997 911 Carrera GTS,997 911 Carrera GTS,same,,9
-Porsche,997 911 Carrera S,997 911 Carrera S,same,,85
+Porsche,997 911 Carrera S,997 911 Carrera S,same,,86
 Porsche,997 911 GT2,997 911 GT2,same,,3
 Porsche,997 GT2,997 911 GT2,override,,4
 Porsche,997 911 GT3,997 911 GT3,same,,20
@@ -2704,13 +2707,13 @@ Porsche,997 GT3,997 911 GT3,override,,5
 Porsche,997 911 Speedster,997 911 Speedster,same,,1
 Porsche,997 911 Targa 4,997 911 Targa 4,same,,2
 Porsche,997 911 Targa 4S,997 911 Targa 4S,same,,10
-Porsche,997 911 Turbo,997 911 Turbo,same,,98
+Porsche,997 911 Turbo,997 911 Turbo,same,,99
 Porsche,997 Turbo,997 911 Turbo,override,,34
 Porsche,997 911 Turbo S,997 911 Turbo S,same,,3
 Porsche,9Y0/9Y3 Cayenne (2019+),9Y0/9Y3 Cayenne (2019+),same,,17
 Porsche,9Y0/9Y3 Cayenne (2019-),9Y0/9Y3 Cayenne (2019-),same,,25
 Porsche,Carrera GT,Carrera GT,same,,1
-Porsche,Cayenne 3.0 (9Y0),Cayenne 3.0 (9Y0),same,,9
+Porsche,Cayenne 3.0 (9Y0),Cayenne 3.0 (9Y0),same,,10
 Porsche,Cayenne 3.0 Coupe (9Y3),Cayenne 3.0 Coupe (9Y3),same,,1
 Porsche,Cayenne 3.0 Platinum Edition (9Y0),Cayenne 3.0 Platinum Edition (9Y0),same,,1
 Porsche,Cayenne Diesel (958),Cayenne Diesel (958),same,,39
@@ -2718,8 +2721,8 @@ Porsche,Cayenne Diesel Platinum Edition (958),Cayenne Diesel Platinum Edition (9
 Porsche,Cayenne GTS (957),Cayenne GTS (957),same,,8
 Porsche,Cayenne GTS (958),Cayenne GTS (958),same,,24
 Porsche,Cayenne GTS Coupe (9Y3),Cayenne GTS Coupe (9Y3),same,,1
-Porsche,Cayenne S (955/957),Cayenne S (955/957),same,,19
-Porsche,Cayenne S (958),Cayenne S (958),same,,10
+Porsche,Cayenne S (955/957),Cayenne S (955/957),same,,20
+Porsche,Cayenne S (958),Cayenne S (958),same,,11
 Porsche,Cayenne S (9Y0),Cayenne S (9Y0),same,,1
 Porsche,Cayenne S Coupe (9Y3),Cayenne S Coupe (9Y3),same,,1
 Porsche,Cayenne S E-Hybrid & S Hybrid (958),Cayenne S E-Hybrid & S Hybrid (958),same,,2
@@ -2736,7 +2739,7 @@ Porsche,Cayenne Turbo S E-Hybrid (9Y0),Cayenne Turbo S E-Hybrid (9Y0),same,,1
 Porsche,Cayenne V6 (955/957),Cayenne V6 (955/957),same,,6
 Porsche,Cayenne V6 (958),Cayenne V6 (958),same,,6
 Porsche,Cayenne V6 Platinum Edition (958),Cayenne V6 Platinum Edition (958),same,,4
-Porsche,Cayman GT4,Cayman GT4,same,,82
+Porsche,Cayman GT4,Cayman GT4,same,,83
 Porsche,Emory Outlaw,Emory Outlaw,same,,1
 Porsche,LWB 911E,LWB 911E,same,,17
 Porsche,LWB 911S,LWB 911S,same,,10
@@ -2792,9 +2795,9 @@ Rolls-Royce,Corniche,Corniche,same,,17
 Rolls-Royce,Cullinan,Cullinan,same,,8
 Rolls-Royce,Dawn,Dawn,same,,8
 Rolls-Royce,Ghost,Ghost,same,,6
-Rolls-Royce,Phantom Coupe & Drophead Coupe,Phantom Coupe & Drophead Coupe,same,,15
+Rolls-Royce,Phantom Coupe & Drophead Coupe,Phantom Coupe & Drophead Coupe,same,,16
 Rolls-Royce,"Phantom I, II, & III","Phantom I, II, & III",same,,4
-Rolls-Royce,Phantom VII & VIII,Phantom VII & VIII,same,,14
+Rolls-Royce,Phantom VII & VIII,Phantom VII & VIII,same,,15
 Rolls-Royce,ROLLS ROYCE 20 HP DROP HEAD CABRIOLET BY SEEGERS ET SOHN,ROLLS ROYCE 20 HP DROP HEAD CABRIOLET BY SEEGERS ET SOHN,same,,1
 Rolls-Royce,ROLLS ROYCE SILVER DAWN,ROLLS ROYCE SILVER DAWN,same,,3
 Rolls-Royce,ROLLS ROYCE SILVER WRAITH,ROLLS ROYCE SILVER WRAITH,same,,3
@@ -2846,7 +2849,7 @@ Scion,SCION XA,SCION XA,same,,1
 Scion,SCION XB,Scion xB,case or prefix,,2
 Scion,Scion xB,Scion xB,same,,1
 Shelby,"Shelby Cobra Mk I, II, & III","Shelby Cobra Mk I, II, & III",same,,2
-Shelby,Shelby Cobra Replica,Shelby Cobra Replica,same,replica,47
+Shelby,Shelby Cobra Replica,Shelby Cobra Replica,same,replica,48
 Shelby,Shelby CSX Cobra Continuation,Shelby CSX Cobra Continuation,same,,4
 Shelby,Shelby Daytona Coupe Replica,Shelby Daytona Coupe Replica,same,replica,7
 Shelby,Shelby Mustang GT350 & GT500,Shelby Mustang GT350 & GT500,same,,11
@@ -2927,7 +2930,7 @@ Suzuki,Suzuki RG,Suzuki RG,same,,1
 Suzuki,Suzuki Samurai,Suzuki Samurai,same,,27
 Suzuki,SUZUKI SX4,SUZUKI SX4,same,,1
 Suzuki,Suzuki T Motorcycle,Suzuki T Motorcycle,same,,8
-Suzuki,Suzuki TM & RM,Suzuki TM & RM,same,,12
+Suzuki,Suzuki TM & RM,Suzuki TM & RM,same,,13
 Suzuki,Suzuki TS & TC,Suzuki TS & TC,same,,14
 Suzuki,Suzuki X-90,Suzuki X-90,same,,6
 Swift,SWIFT DB4,SWIFT DB4,same,,1
@@ -2944,9 +2947,9 @@ Toyota,4RUNNER,4RUNNER,same,catch-all,1
 Toyota,4Runner (N120),4Runner (N120),same,,38
 Toyota,4Runner (N180),4Runner (N180),same,,152
 Toyota,4Runner (N210),4Runner (N210),same,,33
-Toyota,4Runner (N280),4Runner (N280),same,,27
+Toyota,4Runner (N280),4Runner (N280),same,,28
 Toyota,4Runner (N60),4Runner (N60),same,,29
-Toyota,AE86,AE86,same,,7
+Toyota,AE86,AE86,same,,8
 Toyota,ARISTO,ARISTO,same,,1
 Toyota,AVALON,Avalon,case or prefix,,1
 Toyota,Avalon,Avalon,same,,10
@@ -2957,7 +2960,7 @@ Toyota,Camry,Camry,same,,35
 Toyota,Camry Solara,Camry Solara,same,,13
 Toyota,Celica,Celica,same,,36
 Toyota,Celica Supra A40/A50,Celica Supra A40/A50,same,,4
-Toyota,Celica Supra A60,Celica Supra A60,same,,16
+Toyota,Celica Supra A60,Celica Supra A60,same,,17
 Toyota,CELSIOR,Celsior,case or prefix,,1
 Toyota,Celsior,Celsior,same,,1
 Toyota,Century,Century,same,,6
@@ -2971,7 +2974,7 @@ Toyota,DELIBOY,DELIBOY,same,,1
 Toyota,Dyna,Dyna,same,,6
 Toyota,DYNA TRI CAB,DYNA TRI CAB,same,,1
 Toyota,EPIC S22,EPIC S22,same,,1
-Toyota,FJ Cruiser,FJ Cruiser,same,,108
+Toyota,FJ Cruiser,FJ Cruiser,same,,109
 Toyota,HiAce,HiAce,same,,14
 Toyota,HIGHLANDER,HIGHLANDER,same,,3
 Toyota,Hilux (N140/N150/N160/N170 1997-2005),Hilux (N140/N150/N160/N170 1997-2005),same,,2
@@ -2989,11 +2992,11 @@ Toyota,Land Cruiser FJ55,Land Cruiser FJ55,same,,9
 Toyota,Land Cruiser J250,Land Cruiser J250,same,,1
 Toyota,Land Cruiser Prado 70-Series,Land Cruiser Prado 70-Series,same,,13
 Toyota,Land Cruiser Prado 90-Series,Land Cruiser Prado 90-Series,same,,13
-Toyota,LiteAce & TownAce,LiteAce & TownAce,same,,11
+Toyota,LiteAce & TownAce,LiteAce & TownAce,same,,12
 Toyota,Mega Cruiser,Mega Cruiser,same,,1
 Toyota,Pickup (N30/N40 1978-1983),Pickup (N30/N40 1978-1983),same,,25
 Toyota,Pickup (N50/N60/N70 1984-1988),Pickup (N50/N60/N70 1984-1988),same,,64
-Toyota,Pickup (N80/90/100/110 1989-1997),Pickup (N80/90/100/110 1989-1997),same,,94
+Toyota,Pickup (N80/90/100/110 1989-1997),Pickup (N80/90/100/110 1989-1997),same,,95
 Toyota,Previa & Estima,Previa & Estima,same,,5
 Toyota,PRIUS,PRIUS,same,,2
 Toyota,RAV4,RAV4,same,,29
@@ -3010,7 +3013,7 @@ Toyota,SOARER,Soarer,case or prefix,,1
 Toyota,SOARER 2,Soarer,listing counter,,1
 Toyota,Soarer,Soarer,same,,1
 Toyota,Stout,Stout,same,,1
-Toyota,Supra A70,Supra A70,same,,24
+Toyota,Supra A70,Supra A70,same,,25
 Toyota,Supra A80,Supra A80,same,,42
 Toyota,Supra J29/DB (2020-),Supra J29/DB (2020-),same,,13
 Toyota,SW20 MR2,SW20 MR2,same,,28
@@ -3111,7 +3114,7 @@ Volkswagen,SANTANA,SANTANA,same,,1
 Volkswagen,SANTANA CLASSIC,SANTANA CLASSIC,same,,1
 Volkswagen,Volkswagen A5 Beetle,Volkswagen A5 Beetle,same,,19
 Volkswagen,VOLKSWAGEN ATLAS,VOLKSWAGEN ATLAS,same,,2
-Volkswagen,Volkswagen Bay-Window Bus,Volkswagen Bay-Window Bus,same,,20
+Volkswagen,Volkswagen Bay-Window Bus,Volkswagen Bay-Window Bus,same,,21
 Volkswagen,Volkswagen Bay-Window Camper,Volkswagen Bay-Window Camper,same,,24
 Volkswagen,Volkswagen Bay-Window Pickup,Volkswagen Bay-Window Pickup,same,,3
 Volkswagen,Volkswagen Beetle,Volkswagen Beetle,same,,172
@@ -3126,7 +3129,7 @@ Volkswagen,Volkswagen EuroVan,Volkswagen EuroVan,same,,29
 Volkswagen,VOLKSWAGEN FOX GL WAGON,VOLKSWAGEN FOX GL WAGON,same,,1
 Volkswagen,Volkswagen Golf & Rabbit,Volkswagen Golf & Rabbit,same,,14
 Volkswagen,Volkswagen Golf & Rabbit (Non-GTI),Volkswagen Golf & Rabbit (Non-GTI),same,,17
-Volkswagen,Volkswagen Golf R,Volkswagen Golf R,same,,21
+Volkswagen,Volkswagen Golf R,Volkswagen Golf R,same,,22
 Volkswagen,Volkswagen Golf/Rabbit Cabriolet Mk1,Volkswagen Golf/Rabbit Cabriolet Mk1,same,,18
 Volkswagen,Volkswagen GTI Mk1,Volkswagen GTI Mk1,same,,6
 Volkswagen,Volkswagen GTI Mk2,Volkswagen GTI Mk2,same,,14
@@ -3155,7 +3158,7 @@ Volkswagen,TIGUAN,Volkswagen Tiguan,case or prefix,,2
 Volkswagen,VOLKSWAGEN TIGUAN,Volkswagen Tiguan,case or prefix,,6
 Volkswagen,Volkswagen Tiguan,Volkswagen Tiguan,same,,3
 Volkswagen,Volkswagen Touareg,Volkswagen Touareg,same,,64
-Volkswagen,Volkswagen Type 3,Volkswagen Type 3,same,,14
+Volkswagen,Volkswagen Type 3,Volkswagen Type 3,same,,15
 Volkswagen,Volkswagen Vanagon,Volkswagen Vanagon,same,,59
 Volvo,Volvo 140,Volvo 140,same,,6
 Volvo,VOLVO 164,VOLVO 164,same,,1
@@ -3185,7 +3188,7 @@ Volvo,Volvo V60,Volvo V60,same,,17
 Volvo,VOLVO V60 CROSS COUNTRY,VOLVO V60 CROSS COUNTRY,same,,1
 Volvo,VOLVO V60 POLESTAR,VOLVO V60 POLESTAR,same,,1
 Volvo,Volvo V70,Volvo V70,same,,17
-Volvo,Volvo V70R,Volvo V70R,same,,43
+Volvo,Volvo V70R,Volvo V70R,same,,44
 Volvo,VOLVO V90 CROSS COUNTRY,VOLVO V90 CROSS COUNTRY,same,,1
 Volvo,VOLVO XC60,Volvo XC60,case or prefix,,1
 Volvo,Volvo XC60,Volvo XC60,same,,16
@@ -3211,6 +3214,7 @@ Winnebago,WINNEBAGO ASPECT 30J,WINNEBAGO ASPECT 30J,same,,1
 Winnebago,WINNEBAGO BRAVE D20,WINNEBAGO BRAVE D20,same,,1
 Winnebago,WINNEBAGO VISTA,WINNEBAGO VISTA,same,,1
 Wolf Racing Cars,WOLF GB08,WOLF GB08,same,,1
+Wolf Racing Cars,WOLF GB08 2,WOLF GB08,listing counter,,1
 Wolf Racing Cars,WOLF RACING CARS GB08 SM K24,WOLF RACING CARS GB08 SM K24,same,,1
 Woodill,WOODILL WILDFIRE,WOODILL WILDFIRE,same,,1
 Yamaha,MZ SKORPION,MZ SKORPION,same,,1
