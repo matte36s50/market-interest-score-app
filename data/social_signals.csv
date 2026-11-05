@@ -92,7 +92,7 @@ Acura,Integra,2026-04,Honda_Integra,24334,0.148175,,,1.0,83.3
 Acura,Integra,2026-05,Honda_Integra,26116,0.14039,,,0.0,72.81
 Acura,Integra,2026-06,Honda_Integra,23439,0.16149,,,0.0,71.53
 Acura,Integra,2026-07,Honda_Integra,20566,0.150839,,,0.0,69.14
-Acura,Integra,2026-08,Honda_Integra,20043,0.150101,,,1.0,80.15
+Acura,Integra,2026-08,Honda_Integra,20043,0.150101,,,1.0,80.14
 Acura,Integra,2026-09,Honda_Integra,18457,0.145156,,,0.0,67.3
 Acura,Integra,2026-10,Honda_Integra,17858,0.136045,,,1.0,77.93
 Acura,Integra Type R,2024-11,Honda_Integra,26293,0.157219,,,,80.9
@@ -306,11 +306,11 @@ Acura,TL,2026-02,Acura_TL,13064,0.082118,,,1.0,70.47
 Acura,TL,2026-03,Acura_TL,12919,0.079003,,,0.0,58.56
 Acura,TL,2026-04,Acura_TL,15173,0.092392,,,1.0,73.54
 Acura,TL,2026-05,Acura_TL,11497,0.061804,,,0.0,55.13
-Acura,TL,2026-06,Acura_TL,9810,0.067589,,,0.0,53.44
+Acura,TL,2026-06,Acura_TL,9810,0.067589,,,0.0,53.43
 Acura,TL,2026-07,Acura_TL,10050,0.073711,,,0.0,54.3
 Acura,TL,2026-08,Acura_TL,9992,0.07483,,,0.0,54.36
 Acura,TL,2026-09,Acura_TL,9033,0.07104,,,0.0,52.66
-Acura,TL,2026-10,Acura_TL,8805,0.067078,,,0.0,52.05
+Acura,TL,2026-10,Acura_TL,8805,0.067078,,,0.0,52.04
 Acura,TSX,2024-11,Acura_TSX,12017,0.071856,,,,59.54
 Acura,TSX,2024-12,Acura_TSX,11823,0.068692,,,,58.94
 Acura,TSX,2025-01,Acura_TSX,12870,0.073395,,,,61.11
@@ -640,7 +640,7 @@ Alfa Romeo,750/101 Series Giulietta & Giulia,2025-12,Alfa_Romeo_Giulietta_(2010)
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-01,Alfa_Romeo_Giulietta_(2010),4920,0.039499,,,0.0,42.16
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-02,Alfa_Romeo_Giulietta_(2010),4813,0.043479,,,0.0,42.43
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-03,Alfa_Romeo_Giulietta_(2010),4768,0.040357,,,0.0,42.0
-Alfa Romeo,750/101 Series Giulietta & Giulia,2026-04,Alfa_Romeo_Giulietta_(2010),4397,0.038175,,,0.0,40.97
+Alfa Romeo,750/101 Series Giulietta & Giulia,2026-04,Alfa_Romeo_Giulietta_(2010),4397,0.038175,,,0.0,40.96
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-05,Alfa_Romeo_Giulietta_(2010),4570,0.034916,,,,38.76
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-06,Alfa_Romeo_Giulietta_(2010),4684,0.040186,,,0.0,41.82
 Alfa Romeo,750/101 Series Giulietta & Giulia,2026-07,Alfa_Romeo_Giulietta_(2010),5248,0.043026,,,0.0,43.08
@@ -2529,7 +2529,7 @@ Aston Martin,V8 Vantage (2006+),2025-11,Aston_Martin_Vantage_(2005),12774,0.0267
 Aston Martin,V8 Vantage (2006+),2025-12,Aston_Martin_Vantage_(2005),12348,0.034428,,,0.0,52.99
 Aston Martin,V8 Vantage (2006+),2026-01,Aston_Martin_Vantage_(2005),10995,0.031685,,,0.0,50.63
 Aston Martin,V8 Vantage (2006+),2026-02,Aston_Martin_Vantage_(2005),9962,0.030995,,,0.0,49.07
-Aston Martin,V8 Vantage (2006+),2026-03,Aston_Martin_Vantage_(2005),10317,0.03479,,,0.0,50.27
+Aston Martin,V8 Vantage (2006+),2026-03,Aston_Martin_Vantage_(2005),10317,0.03479,,,0.0,50.26
 Aston Martin,V8 Vantage (2006+),2026-04,Aston_Martin_Vantage_(2005),11503,0.038747,,,0.0,52.63
 Aston Martin,V8 Vantage (2006+),2026-05,Aston_Martin_Vantage_(2005),11316,0.0353,,,0.0,51.79
 Aston Martin,V8 Vantage (2006+),2026-06,Aston_Martin_Vantage_(2005),10939,0.034757,,,,52.25
@@ -2585,8 +2585,8 @@ Aston Martin,Vanquish,2026-07,Aston_Martin_Vanquish,18346,0.056815,,,0.0,62.71
 Aston Martin,Vanquish,2026-08,Aston_Martin_Vanquish,18046,0.062832,,,0.0,63.18
 Aston Martin,Vanquish,2026-09,Aston_Martin_Vanquish,15461,0.058687,,,0.0,59.74
 Aston Martin,Vanquish,2026-10,Aston_Martin_Vanquish,15468,0.058664,,,0.0,59.74
-Aston Martin,Vanquish (2025+),2025-08,,,,,,1.0,97.15
-Aston Martin,Vanquish (2025+),2025-12,,,,,,1.0,97.15
+Aston Martin,Vanquish (2025+),2025-08,,,,,,1.0,97.14
+Aston Martin,Vanquish (2025+),2025-12,,,,,,1.0,97.14
 Aston Martin,Vanquish S,2024-11,Aston_Martin_Vanquish,21313,0.064722,,,,71.67
 Aston Martin,Vanquish S,2024-12,Aston_Martin_Vanquish,20658,0.062408,,,,70.62
 Aston Martin,Vanquish S,2025-01,Aston_Martin_Vanquish,22470,0.069801,,,,73.35
@@ -2649,7 +2649,7 @@ Aston Martin,"Virage, V8, & Vantage",2025-09,Aston_Martin_V8_Vantage_(1977),6437
 Aston Martin,"Virage, V8, & Vantage",2025-10,Aston_Martin_V8_Vantage_(1977),7532,0.022041,,,0.0,43.14
 Aston Martin,"Virage, V8, & Vantage",2025-11,Aston_Martin_V8_Vantage_(1977),7626,0.015954,,,0.0,40.98
 Aston Martin,"Virage, V8, & Vantage",2025-12,Aston_Martin_V8_Vantage_(1977),6872,0.01916,,,0.0,41.01
-Aston Martin,"Virage, V8, & Vantage",2026-01,Aston_Martin_V8_Vantage_(1977),7452,0.021475,,,0.0,42.83
+Aston Martin,"Virage, V8, & Vantage",2026-01,Aston_Martin_V8_Vantage_(1977),7452,0.021475,,,0.0,42.82
 Aston Martin,"Virage, V8, & Vantage",2026-02,Aston_Martin_V8_Vantage_(1977),5944,0.018494,,,0.0,38.82
 Aston Martin,"Virage, V8, & Vantage",2026-03,Aston_Martin_V8_Vantage_(1977),5708,0.019248,,,0.0,38.61
 Aston Martin,"Virage, V8, & Vantage",2026-04,Aston_Martin_V8_Vantage_(1977),6218,0.020945,,,0.0,40.21
@@ -2788,7 +2788,7 @@ Audi,A5,2026-06,Audi_A5,28814,0.024589,,,0.0,64.54
 Audi,A5,2026-07,Audi_A5,27203,0.02426,,,0.0,63.69
 Audi,A5,2026-08,Audi_A5,27321,0.024873,,,0.0,63.9
 Audi,A5,2026-09,Audi_A5,25053,0.023789,,,0.0,62.44
-Audi,A5,2026-10,Audi_A5,28952,0.027805,,,0.0,65.76
+Audi,A5,2026-10,Audi_A5,28952,0.027805,,,0.0,65.75
 Audi,A7,2024-11,Audi_A7,19356,0.01308,,,,55.83
 Audi,A7,2024-12,Audi_A7,19483,0.012983,,,,55.89
 Audi,A7,2025-01,Audi_A7,20229,0.01262,,,,56.49
@@ -3045,7 +3045,7 @@ Audi,B6 S4,2025-11,Audi_S4,18559,0.012409,,,0.0,52.94
 Audi,B6 S4,2025-12,Audi_S4,17698,0.012376,,,0.0,52.04
 Audi,B6 S4,2026-01,Audi_S4,18913,0.012523,,,0.0,53.33
 Audi,B6 S4,2026-02,Audi_S4,16679,0.0121,,,,51.77
-Audi,B6 S4,2026-03,Audi_S4,15843,0.011615,,,0.0,49.61
+Audi,B6 S4,2026-03,Audi_S4,15843,0.011615,,,0.0,49.6
 Audi,B6 S4,2026-04,Audi_S4,15273,0.012067,,,,49.62
 Audi,B6 S4,2026-05,Audi_S4,14842,0.011577,,,,48.51
 Audi,B6 S4,2026-06,Audi_S4,12498,0.010665,,,0.0,45.04
@@ -3262,7 +3262,7 @@ Audi,"C2 100, 200, & 5000",2025-12,Audi_100,17464,0.012212,,,,53.01
 Audi,"C2 100, 200, & 5000",2026-01,Audi_100,16966,0.011233,,,,51.72
 Audi,"C2 100, 200, & 5000",2026-02,Audi_100,14021,0.010172,,,,46.22
 Audi,"C2 100, 200, & 5000",2026-03,Audi_100,14995,0.010993,,,,48.42
-Audi,"C2 100, 200, & 5000",2026-04,Audi_100,14656,0.011579,,,0.0,48.05
+Audi,"C2 100, 200, & 5000",2026-04,Audi_100,14656,0.011579,,,0.0,48.04
 Audi,"C2 100, 200, & 5000",2026-05,Audi_100,14903,0.011624,,,,48.67
 Audi,"C2 100, 200, & 5000",2026-06,Audi_100,13678,0.011672,,,,46.72
 Audi,"C2 100, 200, & 5000",2026-07,Audi_100,21103,0.01882,,,,61.23
@@ -3286,7 +3286,7 @@ Audi,"C3 100, 200, & 5000",2025-12,Audi_100,17464,0.012212,,,0.0,51.75
 Audi,"C3 100, 200, & 5000",2026-01,Audi_100,16966,0.011233,,,0.0,50.76
 Audi,"C3 100, 200, & 5000",2026-02,Audi_100,14021,0.010172,,,,46.22
 Audi,"C3 100, 200, & 5000",2026-03,Audi_100,14995,0.010993,,,,48.42
-Audi,"C3 100, 200, & 5000",2026-04,Audi_100,14656,0.011579,,,0.0,48.05
+Audi,"C3 100, 200, & 5000",2026-04,Audi_100,14656,0.011579,,,0.0,48.04
 Audi,"C3 100, 200, & 5000",2026-05,Audi_100,14903,0.011624,,,,48.67
 Audi,"C3 100, 200, & 5000",2026-06,Audi_100,13678,0.011672,,,0.0,46.91
 Audi,"C3 100, 200, & 5000",2026-07,Audi_100,21103,0.01882,,,,61.23
@@ -3787,7 +3787,7 @@ Audi,R8 (Type 4S),2025-09,Audi_R8_(Type_4S),11873,0.007893,,,1.0,53.44
 Audi,R8 (Type 4S),2025-10,Audi_R8_(Type_4S),11975,0.007759,,,0.0,42.03
 Audi,R8 (Type 4S),2025-11,Audi_R8_(Type_4S),10571,0.007068,,,0.0,39.53
 Audi,R8 (Type 4S),2025-12,Audi_R8_(Type_4S),10976,0.007675,,,0.0,40.62
-Audi,R8 (Type 4S),2026-01,Audi_R8_(Type_4S),10628,0.007037,,,0.0,39.58
+Audi,R8 (Type 4S),2026-01,Audi_R8_(Type_4S),10628,0.007037,,,0.0,39.57
 Audi,R8 (Type 4S),2026-02,Audi_R8_(Type_4S),9550,0.006928,,,0.0,37.99
 Audi,R8 (Type 4S),2026-03,Audi_R8_(Type_4S),10741,0.007875,,,0.0,40.44
 Audi,R8 (Type 4S),2026-04,Audi_R8_(Type_4S),10716,0.008466,,,0.0,40.91
@@ -3940,7 +3940,7 @@ Audi,RS5,2026-06,Audi_A5,28814,0.024589,,,0.0,64.54
 Audi,RS5,2026-07,Audi_A5,27203,0.02426,,,0.0,63.69
 Audi,RS5,2026-08,Audi_A5,27321,0.024873,,,0.0,63.9
 Audi,RS5,2026-09,Audi_A5,25053,0.023789,,,1.0,73.89
-Audi,RS5,2026-10,Audi_A5,28952,0.027805,,,0.0,65.76
+Audi,RS5,2026-10,Audi_A5,28952,0.027805,,,0.0,65.75
 Audi,RS7,2024-11,Audi_A7,19356,0.01308,,,,55.83
 Audi,RS7,2024-12,Audi_A7,19483,0.012983,,,,55.89
 Audi,RS7,2025-01,Audi_A7,20229,0.01262,,,,56.49
@@ -4028,7 +4028,7 @@ Audi,S5,2025-10,Audi_S5,12990,0.008417,,,0.0,43.81
 Audi,S5,2025-11,Audi_S5,13707,0.009165,,,0.0,45.36
 Audi,S5,2025-12,Audi_S5,12347,0.008634,,,0.0,43.25
 Audi,S5,2026-01,Audi_S5,12701,0.00841,,,0.0,43.48
-Audi,S5,2026-02,Audi_S5,11981,0.008692,,,0.0,42.82
+Audi,S5,2026-02,Audi_S5,11981,0.008692,,,0.0,42.81
 Audi,S5,2026-03,Audi_S5,11675,0.008559,,,0.0,42.35
 Audi,S5,2026-04,Audi_S5,11146,0.008806,,,1.0,53.27
 Audi,S5,2026-05,Audi_S5,10714,0.008357,,,0.0,40.81
@@ -4727,7 +4727,7 @@ BMW,1M,2026-01,BMW_1_Series_(E87),24605,0.007529,,,0.0,54.1
 BMW,1M,2026-02,BMW_1_Series_(E87),21962,0.00745,,,0.0,52.23
 BMW,1M,2026-03,BMW_1_Series_(E87),22968,0.007623,,,0.0,53.2
 BMW,1M,2026-04,BMW_1_Series_(E87),21641,0.007581,,,0.0,52.1
-BMW,1M,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.5
+BMW,1M,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.49
 BMW,1M,2026-06,BMW_1_Series_(E87),20192,0.007952,,,0.0,51.19
 BMW,1M,2026-07,BMW_1_Series_(E87),18947,0.007839,,,0.0,50.15
 BMW,1M,2026-08,BMW_1_Series_(E87),18818,0.007639,,,0.0,49.89
@@ -4944,7 +4944,7 @@ BMW,700,2026-02,BMW_700,3154,0.00107,,,0.0,19.19
 BMW,700,2026-03,BMW_700,3205,0.001064,,,0.0,19.27
 BMW,700,2026-04,BMW_700,3253,0.00114,,,0.0,19.46
 BMW,700,2026-05,BMW_700,3594,0.001237,,,0.0,20.22
-BMW,700,2026-06,BMW_700,3184,0.001254,,,0.0,19.44
+BMW,700,2026-06,BMW_700,3184,0.001254,,,0.0,19.43
 BMW,700,2026-07,BMW_700,2951,0.001221,,,0.0,18.93
 BMW,700,2026-08,BMW_700,3502,0.001422,,,0.0,20.32
 BMW,700,2026-09,BMW_700,3334,0.001436,,,0.0,20.02
@@ -4965,7 +4965,7 @@ BMW,Alpina,2025-11,Alpina,15761,0.004681,,,1.0,54.78
 BMW,Alpina,2025-12,Alpina,15644,0.004742,,,0.0,43.26
 BMW,Alpina,2026-01,Alpina,31938,0.009772,,,0.0,59.79
 BMW,Alpina,2026-02,Alpina,20744,0.007037,,,0.0,50.93
-BMW,Alpina,2026-03,Alpina,20064,0.006659,,,0.0,50.06
+BMW,Alpina,2026-03,Alpina,20064,0.006659,,,0.0,50.05
 BMW,Alpina,2026-04,Alpina,18718,0.006557,,,0.0,48.87
 BMW,Alpina,2026-05,Alpina,31020,0.010681,,,0.0,59.99
 BMW,Alpina,2026-06,Alpina,20432,0.008046,,,0.0,51.54
@@ -5152,7 +5152,7 @@ BMW,E3,2025-06,BMW_New_Six,5519,0.001327,,,,16.91
 BMW,E3,2025-07,BMW_New_Six,5976,0.001841,,,,19.25
 BMW,E3,2025-08,BMW_New_Six,5859,0.001524,,,,18.2
 BMW,E3,2025-09,BMW_New_Six,5111,0.001425,,,,16.21
-BMW,E3,2025-10,BMW_New_Six,4341,0.001217,,,0.0,21.75
+BMW,E3,2025-10,BMW_New_Six,4341,0.001217,,,0.0,21.74
 BMW,E3,2025-11,BMW_New_Six,4666,0.001386,,,0.0,22.6
 BMW,E3,2025-12,BMW_New_Six,5025,0.001523,,,,16.23
 BMW,E3,2026-01,BMW_New_Six,4990,0.001527,,,,16.17
@@ -5324,7 +5324,7 @@ BMW,E32 7-Series,2025-10,BMW_7_Series_(E32),10497,0.002943,,,,30.37
 BMW,E32 7-Series,2025-11,BMW_7_Series_(E32),9927,0.002948,,,0.0,33.58
 BMW,E32 7-Series,2025-12,BMW_7_Series_(E32),10596,0.003212,,,,31.02
 BMW,E32 7-Series,2026-01,BMW_7_Series_(E32),9780,0.002992,,,0.0,33.44
-BMW,E32 7-Series,2026-02,BMW_7_Series_(E32),8493,0.002881,,,0.0,31.61
+BMW,E32 7-Series,2026-02,BMW_7_Series_(E32),8493,0.002881,,,0.0,31.6
 BMW,E32 7-Series,2026-03,BMW_7_Series_(E32),8791,0.002918,,,,27.35
 BMW,E32 7-Series,2026-04,BMW_7_Series_(E32),8237,0.002886,,,,26.32
 BMW,E32 7-Series,2026-05,BMW_7_Series_(E32),8217,0.002829,,,,26.17
@@ -5807,7 +5807,7 @@ BMW,E65/E66 7-Series,2026-01,BMW_7_Series_(E65),13610,0.004164,,,0.0,39.91
 BMW,E65/E66 7-Series,2026-02,BMW_7_Series_(E65),12163,0.004126,,,0.0,38.13
 BMW,E65/E66 7-Series,2026-03,BMW_7_Series_(E65),12667,0.004204,,,0.0,38.88
 BMW,E65/E66 7-Series,2026-04,BMW_7_Series_(E65),11630,0.004074,,,0.0,37.44
-BMW,E65/E66 7-Series,2026-05,BMW_7_Series_(E65),11585,0.003989,,,0.0,37.27
+BMW,E65/E66 7-Series,2026-05,BMW_7_Series_(E65),11585,0.003989,,,0.0,37.26
 BMW,E65/E66 7-Series,2026-06,BMW_7_Series_(E65),10899,0.004292,,,0.0,36.65
 BMW,E65/E66 7-Series,2026-07,BMW_7_Series_(E65),10137,0.004194,,,0.0,35.46
 BMW,E65/E66 7-Series,2026-08,BMW_7_Series_(E65),10834,0.004398,,,,33.47
@@ -5831,7 +5831,7 @@ BMW,E82 1M,2026-01,BMW_1_Series_(E87),24605,0.007529,,,,56.07
 BMW,E82 1M,2026-02,BMW_1_Series_(E87),21962,0.00745,,,0.0,52.23
 BMW,E82 1M,2026-03,BMW_1_Series_(E87),22968,0.007623,,,,54.9
 BMW,E82 1M,2026-04,BMW_1_Series_(E87),21641,0.007581,,,0.0,52.1
-BMW,E82 1M,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.5
+BMW,E82 1M,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.49
 BMW,E82 1M,2026-06,BMW_1_Series_(E87),20192,0.007952,,,0.0,51.19
 BMW,E82 1M,2026-07,BMW_1_Series_(E87),18947,0.007839,,,0.0,50.15
 BMW,E82 1M,2026-08,BMW_1_Series_(E87),18818,0.007639,,,0.0,49.89
@@ -5855,7 +5855,7 @@ BMW,E82/E88 1-Series,2026-01,BMW_1_Series_(E87),24605,0.007529,,,0.0,54.1
 BMW,E82/E88 1-Series,2026-02,BMW_1_Series_(E87),21962,0.00745,,,0.0,52.23
 BMW,E82/E88 1-Series,2026-03,BMW_1_Series_(E87),22968,0.007623,,,0.0,53.2
 BMW,E82/E88 1-Series,2026-04,BMW_1_Series_(E87),21641,0.007581,,,0.0,52.1
-BMW,E82/E88 1-Series,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.5
+BMW,E82/E88 1-Series,2026-05,BMW_1_Series_(E87),21182,0.007293,,,0.0,51.49
 BMW,E82/E88 1-Series,2026-06,BMW_1_Series_(E87),20192,0.007952,,,0.0,51.19
 BMW,E82/E88 1-Series,2026-07,BMW_1_Series_(E87),18947,0.007839,,,0.0,50.15
 BMW,E82/E88 1-Series,2026-08,BMW_1_Series_(E87),18818,0.007639,,,0.0,49.89
@@ -6437,7 +6437,7 @@ BMW,G29 Z4,2025-12,BMW_Z4_(G29),9632,0.00292,,,,28.82
 BMW,G29 Z4,2026-01,BMW_Z4_(G29),9829,0.003007,,,,29.32
 BMW,G29 Z4,2026-02,BMW_Z4_(G29),9183,0.003115,,,,28.36
 BMW,G29 Z4,2026-03,BMW_Z4_(G29),9922,0.003293,,,,29.93
-BMW,G29 Z4,2026-04,BMW_Z4_(G29),9614,0.003368,,,0.0,33.66
+BMW,G29 Z4,2026-04,BMW_Z4_(G29),9614,0.003368,,,0.0,33.65
 BMW,G29 Z4,2026-05,BMW_Z4_(G29),10204,0.003513,,,0.0,34.64
 BMW,G29 Z4,2026-06,BMW_Z4_(G29),9370,0.00369,,,,29.68
 BMW,G29 Z4,2026-07,BMW_Z4_(G29),8651,0.003579,,,0.0,32.68
@@ -6578,7 +6578,7 @@ BMW,Isetta,2025-09,Isetta,15124,0.004216,,,0.0,41.87
 BMW,Isetta,2025-10,Isetta,13666,0.003831,,,0.0,39.59
 BMW,Isetta,2025-11,Isetta,17613,0.005231,,,0.0,46.19
 BMW,Isetta,2025-12,Isetta,17660,0.005354,,,0.0,46.39
-BMW,Isetta,2026-01,Isetta,16154,0.004943,,,0.0,44.16
+BMW,Isetta,2026-01,Isetta,16154,0.004943,,,0.0,44.15
 BMW,Isetta,2026-02,Isetta,12699,0.004308,,,0.0,39.08
 BMW,Isetta,2026-03,Isetta,14106,0.004682,,,0.0,41.21
 BMW,Isetta,2026-04,Isetta,13334,0.004671,,,0.0,40.31
@@ -7167,7 +7167,7 @@ BMW,X1,2026-03,BMW_X1,19360,0.006426,,,0.0,49.25
 BMW,X1,2026-04,BMW_X1,18877,0.006613,,,0.0,49.06
 BMW,X1,2026-05,BMW_X1,18591,0.006401,,,0.0,48.59
 BMW,X1,2026-06,BMW_X1,17009,0.006698,,,0.0,47.31
-BMW,X1,2026-07,BMW_X1,16876,0.006982,,,0.0,47.32
+BMW,X1,2026-07,BMW_X1,16876,0.006982,,,0.0,47.31
 BMW,X1,2026-08,BMW_X1,17140,0.006958,,,0.0,47.64
 BMW,X1,2026-09,BMW_X1,15638,0.006734,,,0.0,45.67
 BMW,X1,2026-10,BMW_X1,15588,0.006808,,,0.0,45.65
@@ -7651,7 +7651,7 @@ BMW,Z8,2026-07,BMW_Z8,6885,0.002848,,,0.0,28.89
 BMW,Z8,2026-08,BMW_Z8,7695,0.003124,,,0.0,30.69
 BMW,Z8,2026-09,BMW_Z8,6971,0.003002,,,0.0,29.24
 BMW,Z8,2026-10,BMW_Z8,7493,0.003272,,,0.0,30.51
-BMW,i3,2025-12,,,,,,1.0,97.15
+BMW,i3,2025-12,,,,,,1.0,97.14
 BMW,i3,2026-03,BMW_i3_(hatchback),1184,0.000393,,,0.0,13.67
 BMW,i3,2026-04,BMW_i3_(hatchback),13620,0.004771,,,0.0,40.78
 BMW,i3,2026-05,BMW_i3_(hatchback),14700,0.005061,,,0.0,42.5
@@ -10221,7 +10221,7 @@ Cadillac,Cadillac CT5 & CT5-V,2026-03,Cadillac_CT5,13856,0.02156,,,0.0,51.43
 Cadillac,Cadillac CT5 & CT5-V,2026-04,Cadillac_CT5,14471,0.024214,,,1.0,64.36
 Cadillac,Cadillac CT5 & CT5-V,2026-05,Cadillac_CT5,14448,0.022861,,,0.0,52.55
 Cadillac,Cadillac CT5 & CT5-V,2026-06,Cadillac_CT5,12311,0.02243,,,0.0,49.89
-Cadillac,Cadillac CT5 & CT5-V,2026-07,Cadillac_CT5,13161,0.02413,,,0.0,51.37
+Cadillac,Cadillac CT5 & CT5-V,2026-07,Cadillac_CT5,13161,0.02413,,,0.0,51.36
 Cadillac,Cadillac CT5 & CT5-V,2026-08,Cadillac_CT5,13016,0.022372,,,0.0,50.72
 Cadillac,Cadillac CT5 & CT5-V,2026-09,Cadillac_CT5,12337,0.022711,,,1.0,61.44
 Cadillac,Cadillac CT5 & CT5-V,2026-10,Cadillac_CT5,11730,0.021727,,,0.0,48.95
@@ -10338,7 +10338,7 @@ Cadillac,Cadillac DeVille,2025-12,Cadillac_de_Ville_series,20768,0.029409,,,0.0,
 Cadillac,Cadillac DeVille,2026-01,Cadillac_de_Ville_series,20923,0.029517,,,0.0,61.14
 Cadillac,Cadillac DeVille,2026-02,Cadillac_de_Ville_series,19808,0.030989,,,0.0,60.52
 Cadillac,Cadillac DeVille,2026-03,Cadillac_de_Ville_series,19355,0.030117,,,0.0,59.98
-Cadillac,Cadillac DeVille,2026-04,Cadillac_de_Ville_series,19078,0.031922,,,0.0,60.19
+Cadillac,Cadillac DeVille,2026-04,Cadillac_de_Ville_series,19078,0.031922,,,0.0,60.18
 Cadillac,Cadillac DeVille,2026-05,Cadillac_de_Ville_series,20854,0.032996,,,0.0,61.89
 Cadillac,Cadillac DeVille,2026-06,Cadillac_de_Ville_series,18430,0.033578,,,0.0,59.94
 Cadillac,Cadillac DeVille,2026-07,Cadillac_de_Ville_series,18589,0.034082,,,0.0,60.17
@@ -10578,7 +10578,7 @@ Cadillac,Cadillac Series 62,2025-12,Cadillac_de_Ville_series,20768,0.029409,,,0.
 Cadillac,Cadillac Series 62,2026-01,Cadillac_de_Ville_series,20923,0.029517,,,,65.22
 Cadillac,Cadillac Series 62,2026-02,Cadillac_de_Ville_series,19808,0.030989,,,0.0,60.52
 Cadillac,Cadillac Series 62,2026-03,Cadillac_de_Ville_series,19355,0.030117,,,0.0,59.98
-Cadillac,Cadillac Series 62,2026-04,Cadillac_de_Ville_series,19078,0.031922,,,0.0,60.19
+Cadillac,Cadillac Series 62,2026-04,Cadillac_de_Ville_series,19078,0.031922,,,0.0,60.18
 Cadillac,Cadillac Series 62,2026-05,Cadillac_de_Ville_series,20854,0.032996,,,0.0,61.89
 Cadillac,Cadillac Series 62,2026-06,Cadillac_de_Ville_series,18430,0.033578,,,0.0,59.94
 Cadillac,Cadillac Series 62,2026-07,Cadillac_de_Ville_series,18589,0.034082,,,0.0,60.17
@@ -11614,7 +11614,7 @@ Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-03,Chevrolet_Corvette_(C3),23204,0.
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-04,Chevrolet_Corvette_(C3),24301,0.009781,,,,58.36
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-05,Chevrolet_Corvette_(C3),26400,0.01035,,,,60.58
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-06,Chevrolet_Corvette_(C3),24195,0.010422,,,,58.88
-Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-07,Chevrolet_Corvette_(C3),25679,0.011058,,,0.0,57.55
+Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-07,Chevrolet_Corvette_(C3),25679,0.011058,,,0.0,57.54
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-08,Chevrolet_Corvette_(C3),24288,0.010457,,,,58.97
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-09,Chevrolet_Corvette_(C3),21777,0.010018,,,,56.3
 Chevrolet,CORVETTE PACE CAR L82 4 SPEED,2026-10,Chevrolet_Corvette_(C3),20173,0.009933,,,,54.53
@@ -11773,7 +11773,7 @@ Chevrolet,CORVETTE ZR 1,2025-06,Chevrolet_Corvette_ZR1,10719,0.003296,,,,31.38
 Chevrolet,CORVETTE ZR 1,2025-07,Chevrolet_Corvette_ZR1,4940,0.001766,,,1.0,35.23
 Chevrolet,CORVETTE ZR 1,2025-08,Chevrolet_Corvette_ZR1,5927,0.001865,,,0.0,25.7
 Chevrolet,CORVETTE ZR 1,2025-09,Chevrolet_Corvette_ZR1,4595,0.001587,,,0.0,22.82
-Chevrolet,CORVETTE ZR 1,2025-10,Chevrolet_Corvette_ZR1,4438,0.001568,,,0.0,22.49
+Chevrolet,CORVETTE ZR 1,2025-10,Chevrolet_Corvette_ZR1,4438,0.001568,,,0.0,22.48
 Chevrolet,CORVETTE ZR 1,2025-11,Chevrolet_Corvette_ZR1,4248,0.001591,,,0.0,22.16
 Chevrolet,CORVETTE ZR 1,2025-12,Chevrolet_Corvette_ZR1,4334,0.001671,,,0.0,22.49
 Chevrolet,CORVETTE ZR 1,2026-01,Chevrolet_Corvette_ZR1,4108,0.001591,,,0.0,21.87
@@ -11797,7 +11797,7 @@ Chevrolet,CORVETTE ZR1,2025-06,Chevrolet_Corvette_ZR1,10719,0.003296,,,2.0,47.09
 Chevrolet,CORVETTE ZR1,2025-07,Chevrolet_Corvette_ZR1,4940,0.001766,,,1.0,35.23
 Chevrolet,CORVETTE ZR1,2025-08,Chevrolet_Corvette_ZR1,5927,0.001865,,,0.0,25.7
 Chevrolet,CORVETTE ZR1,2025-09,Chevrolet_Corvette_ZR1,4595,0.001587,,,0.0,22.82
-Chevrolet,CORVETTE ZR1,2025-10,Chevrolet_Corvette_ZR1,4438,0.001568,,,0.0,22.49
+Chevrolet,CORVETTE ZR1,2025-10,Chevrolet_Corvette_ZR1,4438,0.001568,,,0.0,22.48
 Chevrolet,CORVETTE ZR1,2025-11,Chevrolet_Corvette_ZR1,4248,0.001591,,,1.0,33.61
 Chevrolet,CORVETTE ZR1,2025-12,Chevrolet_Corvette_ZR1,4334,0.001671,,,3.0,34.55
 Chevrolet,CORVETTE ZR1,2026-01,Chevrolet_Corvette_ZR1,4108,0.001591,,,1.0,33.32
@@ -11906,8 +11906,8 @@ Chevrolet,CORVETTE ZR1X COUPE 3LZ ZTK,2026-07,Chevrolet_Corvette_(C8),41331,0.01
 Chevrolet,CORVETTE ZR1X COUPE 3LZ ZTK,2026-08,Chevrolet_Corvette_(C8),39883,0.017171,,,,71.77
 Chevrolet,CORVETTE ZR1X COUPE 3LZ ZTK,2026-09,Chevrolet_Corvette_(C8),38701,0.017804,,,0.0,66.16
 Chevrolet,CORVETTE ZR1X COUPE 3LZ ZTK,2026-10,Chevrolet_Corvette_(C8),35861,0.017658,,,,70.53
-Chevrolet,Camaro (1st Generation – 1967-1969),2025-06,,,,,,1.0,97.15
-Chevrolet,Camaro (1st Generation – 1967-1969),2026-01,,,,,,1.0,97.15
+Chevrolet,Camaro (1st Generation – 1967-1969),2025-06,,,,,,1.0,97.14
+Chevrolet,Camaro (1st Generation – 1967-1969),2026-01,,,,,,1.0,97.14
 Chevrolet,Camaro (1st Generation – 1967-1969),2026-06,Chevrolet_small-block_engine_(1954–2003),346,0.000149,,,0.0,11.35
 Chevrolet,Camaro (1st Generation – 1967-1969),2026-07,Chevrolet_small-block_engine_(1954–2003),6453,0.002779,,,0.0,27.92
 Chevrolet,Camaro (1st Generation – 1967-1969),2026-08,Chevrolet_small-block_engine_(1954–2003),13477,0.005802,,,1.0,53.45
@@ -12223,7 +12223,7 @@ Chevrolet,Chevelle,2025-12,Chevrolet_Chevelle,23905,0.009217,,,0.0,55.19
 Chevrolet,Chevelle,2026-01,Chevrolet_Chevelle,26879,0.010408,,,0.0,57.82
 Chevrolet,Chevelle,2026-02,Chevrolet_Chevelle,25983,0.010184,,,0.0,57.22
 Chevrolet,Chevelle,2026-03,Chevrolet_Chevelle,24778,0.009944,,,0.0,56.29
-Chevrolet,Chevelle,2026-04,Chevrolet_Chevelle,24658,0.009925,,,0.0,56.2
+Chevrolet,Chevelle,2026-04,Chevrolet_Chevelle,24658,0.009925,,,0.0,56.19
 Chevrolet,Chevelle,2026-05,Chevrolet_Chevelle,24547,0.009623,,,0.0,55.89
 Chevrolet,Chevelle,2026-06,Chevrolet_Chevelle,23350,0.010058,,,0.0,55.55
 Chevrolet,Chevelle,2026-07,Chevrolet_Chevelle,23700,0.010205,,,0.0,55.85
@@ -13286,7 +13286,7 @@ Chevrolet,Nomad,2026-07,Chevrolet_Nomad,4467,0.001924,,,,15.8
 Chevrolet,Nomad,2026-08,Chevrolet_Nomad,4730,0.002036,,,,16.64
 Chevrolet,Nomad,2026-09,Chevrolet_Nomad,4188,0.001927,,,,15.09
 Chevrolet,Nomad,2026-10,Chevrolet_Nomad,4015,0.001977,,,,14.7
-Chevrolet,Nova,2025-11,,,,,,1.0,97.15
+Chevrolet,Nova,2025-11,,,,,,1.0,97.14
 Chevrolet,P30 STEP VAN,2024-11,Chevrolet_Step-Van,2173,0.000801,,,,7.52
 Chevrolet,P30 STEP VAN,2024-12,Chevrolet_Step-Van,2231,0.000785,,,,7.69
 Chevrolet,P30 STEP VAN,2025-01,Chevrolet_Step-Van,2451,0.000854,,,,8.45
@@ -14845,7 +14845,7 @@ Chrysler,Chrysler Town & Country Minivan,2026-05,Chrysler_Pacifica_(minivan),143
 Chrysler,Chrysler Town & Country Minivan,2026-06,Chrysler_Pacifica_(minivan),13966,0.020927,,,0.0,51.37
 Chrysler,Chrysler Town & Country Minivan,2026-07,Chrysler_Pacifica_(minivan),13818,0.021527,,,,52.54
 Chrysler,Chrysler Town & Country Minivan,2026-08,Chrysler_Pacifica_(minivan),15320,0.023123,,,0.0,53.78
-Chrysler,Chrysler Town & Country Minivan,2026-09,Chrysler_Pacifica_(minivan),13386,0.017013,,,0.0,49.23
+Chrysler,Chrysler Town & Country Minivan,2026-09,Chrysler_Pacifica_(minivan),13386,0.017013,,,0.0,49.22
 Chrysler,Chrysler Town & Country Minivan,2026-10,Chrysler_Pacifica_(minivan),11866,0.018374,,,,48.11
 Chrysler,Chrysler Voyager,2024-11,Chrysler,56274,0.04287,,,,84.08
 Chrysler,Chrysler Voyager,2024-12,Chrysler,64690,0.061239,,,,87.7
@@ -16977,7 +16977,7 @@ Dodge,Polara,2025-05,Dodge_Polara,7299,0.007285,,,,31.23
 Dodge,Polara,2025-06,Dodge_Polara,6498,0.006668,,,0.0,32.95
 Dodge,Polara,2025-07,Dodge_Polara,6412,0.007217,,,0.0,33.21
 Dodge,Polara,2025-08,Dodge_Polara,7126,0.00743,,,0.0,34.82
-Dodge,Polara,2025-09,Dodge_Polara,6609,0.006921,,,0.0,33.4
+Dodge,Polara,2025-09,Dodge_Polara,6609,0.006921,,,0.0,33.39
 Dodge,Polara,2025-10,Dodge_Polara,6223,0.006841,,,0.0,32.48
 Dodge,Polara,2025-11,Dodge_Polara,6162,0.007042,,,0.0,32.54
 Dodge,Polara,2025-12,Dodge_Polara,6121,0.007103,,,0.0,32.51
@@ -19238,7 +19238,7 @@ Ferrari,296 GTB/GTS,2025-10,Ferrari_296,31601,0.053804,,,0.0,70.83
 Ferrari,296 GTB/GTS,2025-11,Ferrari_296,27828,0.052619,,,0.0,68.85
 Ferrari,296 GTB/GTS,2025-12,Ferrari_296,104625,0.163155,,,0.0,83.95
 Ferrari,296 GTB/GTS,2026-01,Ferrari_296,33498,0.060645,,,0.0,72.2
-Ferrari,296 GTB/GTS,2026-02,Ferrari_296,28793,0.058099,,,0.0,69.91
+Ferrari,296 GTB/GTS,2026-02,Ferrari_296,28793,0.058099,,,0.0,69.9
 Ferrari,296 GTB/GTS,2026-03,Ferrari_296,28826,0.055746,,,0.0,69.69
 Ferrari,296 GTB/GTS,2026-04,Ferrari_296,26785,0.054289,,,0.0,68.55
 Ferrari,296 GTB/GTS,2026-05,Ferrari_296,38011,0.059001,,,0.0,73.5
@@ -19247,8 +19247,8 @@ Ferrari,296 GTB/GTS,2026-07,Ferrari_296,26181,0.051247,,,0.0,67.96
 Ferrari,296 GTB/GTS,2026-08,Ferrari_296,25077,0.052493,,,,73.44
 Ferrari,296 GTB/GTS,2026-09,Ferrari_296,23400,0.051032,,,0.0,66.26
 Ferrari,296 GTB/GTS,2026-10,Ferrari_296,24497,0.051988,,,0.0,67.0
-Ferrari,308,2025-10,,,,,,1.0,97.15
-Ferrari,308,2026-06,,,,,,1.0,97.15
+Ferrari,308,2025-10,,,,,,1.0,97.14
+Ferrari,308,2026-06,,,,,,1.0,97.14
 Ferrari,308,2026-08,,,,,,3.0,99.82
 Ferrari,308 GT4,2024-11,Ferrari_GT4,5852,0.010383,,,,30.85
 Ferrari,308 GT4,2024-12,Ferrari_GT4,6156,0.010866,,,,32.02
@@ -19773,7 +19773,7 @@ Ferrari,Dino,2026-02,Dino_(marque),2622,0.005291,,,,16.64
 Ferrari,Dino,2026-03,Dino_(marque),2787,0.00539,,,0.0,24.25
 Ferrari,Dino,2026-04,Dino_(marque),2472,0.00501,,,0.0,23.06
 Ferrari,Dino,2026-05,Dino_(marque),3573,0.005546,,,0.0,26.03
-Ferrari,Dino,2026-06,Dino_(marque),3690,0.006477,,,0.0,27.33
+Ferrari,Dino,2026-06,Dino_(marque),3690,0.006477,,,0.0,27.32
 Ferrari,Dino,2026-07,Dino_(marque),3336,0.00653,,,,20.43
 Ferrari,Dino,2026-08,Dino_(marque),2913,0.006098,,,0.0,25.3
 Ferrari,Dino,2026-09,Dino_(marque),2832,0.006176,,,0.0,25.21
@@ -19812,7 +19812,7 @@ Ferrari,F355,2025-05,Ferrari_F355,16826,0.026129,,,,58.87
 Ferrari,F355,2025-06,Ferrari_F355,15798,0.02646,,,,57.48
 Ferrari,F355,2025-07,Ferrari_F355,15410,0.02542,,,0.0,54.44
 Ferrari,F355,2025-08,Ferrari_F355,16265,0.026133,,,0.0,55.58
-Ferrari,F355,2025-09,Ferrari_F355,16454,0.026144,,,0.0,55.8
+Ferrari,F355,2025-09,Ferrari_F355,16454,0.026144,,,0.0,55.79
 Ferrari,F355,2025-10,Ferrari_F355,16616,0.02829,,,0.0,56.88
 Ferrari,F355,2025-11,Ferrari_F355,13675,0.025858,,,0.0,52.35
 Ferrari,F355,2025-12,Ferrari_F355,13757,0.021453,,,0.0,51.3
@@ -19887,7 +19887,7 @@ Ferrari,FF,2025-08,Ferrari_FF,10378,0.016674,,,,44.43
 Ferrari,FF,2025-09,Ferrari_FF,10247,0.016282,,,,43.98
 Ferrari,FF,2025-10,Ferrari_FF,9683,0.016486,,,,43.15
 Ferrari,FF,2025-11,Ferrari_FF,8959,0.01694,,,0.0,43.38
-Ferrari,FF,2025-12,Ferrari_FF,9673,0.015084,,,0.0,43.38
+Ferrari,FF,2025-12,Ferrari_FF,9673,0.015084,,,0.0,43.37
 Ferrari,FF,2026-01,Ferrari_FF,9717,0.017592,,,,43.87
 Ferrari,FF,2026-02,Ferrari_FF,7915,0.015971,,,0.0,41.47
 Ferrari,FF,2026-03,Ferrari_FF,8004,0.015479,,,,39.47
@@ -20064,7 +20064,7 @@ Ferrari,SF90,2026-05,Ferrari_SF90,3484,0.005408,,,,19.09
 Ferrari,SF90,2026-06,Ferrari_SF90,3624,0.006362,,,1.0,38.48
 Ferrari,SF90,2026-07,Ferrari_SF90,3334,0.006526,,,0.0,26.68
 Ferrari,SF90,2026-08,Ferrari_SF90,3600,0.007536,,,0.0,28.04
-Ferrari,SF90,2026-09,Ferrari_SF90,3611,0.007875,,,0.0,28.34
+Ferrari,SF90,2026-09,Ferrari_SF90,3611,0.007875,,,0.0,28.33
 Ferrari,SF90,2026-10,Ferrari_SF90,3615,0.007672,,,0.0,28.21
 Ferrari,Testarossa,2024-11,Ferrari_Testarossa,31047,0.055085,,,,77.63
 Ferrari,Testarossa,2024-12,Ferrari_Testarossa,28933,0.051071,,,,75.82
@@ -20344,7 +20344,7 @@ Fiat,Fiat 500,2025-09,Fiat_500_(2007),18485,0.069711,,,0.0,64.18
 Fiat,Fiat 500,2025-10,Fiat_500_(2007),16528,0.064218,,,0.0,61.59
 Fiat,Fiat 500,2025-11,Fiat_500_(2007),16468,0.066314,,,0.0,61.73
 Fiat,Fiat 500,2025-12,Fiat_500_(2007),15474,0.065732,,,0.0,60.55
-Fiat,Fiat 500,2026-01,Fiat_500_(2007),15633,0.061684,,,0.0,60.23
+Fiat,Fiat 500,2026-01,Fiat_500_(2007),15633,0.061684,,,0.0,60.22
 Fiat,Fiat 500,2026-02,Fiat_500_(2007),15112,0.067767,,,0.0,60.25
 Fiat,Fiat 500,2026-03,Fiat_500_(2007),16942,0.066722,,,0.0,62.4
 Fiat,Fiat 500,2026-04,Fiat_500_(2007),16457,0.064846,,,0.0,61.57
@@ -20769,7 +20769,7 @@ Ford,A Pickup & AA,2025-02,Ford_Model_AA,3200,0.000807,,,,10.35
 Ford,A Pickup & AA,2025-03,Ford_Model_AA,3687,0.000707,,,,11.5
 Ford,A Pickup & AA,2025-04,Ford_Model_AA,3611,0.000678,,,,11.26
 Ford,A Pickup & AA,2025-05,Ford_Model_AA,3777,0.000741,,,,11.79
-Ford,A Pickup & AA,2025-06,Ford_Model_AA,3525,0.000675,,,0.0,19.45
+Ford,A Pickup & AA,2025-06,Ford_Model_AA,3525,0.000675,,,0.0,19.44
 Ford,A Pickup & AA,2025-07,Ford_Model_AA,3306,0.000757,,,,10.57
 Ford,A Pickup & AA,2025-08,Ford_Model_AA,3730,0.000758,,,0.0,19.97
 Ford,A Pickup & AA,2025-09,Ford_Model_AA,3746,0.000857,,,0.0,20.15
@@ -20954,7 +20954,7 @@ Ford,Bronco II,2026-07,Ford_Bronco_II,5073,0.001479,,,,16.23
 Ford,Bronco II,2026-08,Ford_Bronco_II,4750,0.001428,,,0.0,22.84
 Ford,Bronco II,2026-09,Ford_Bronco_II,4772,0.001488,,,0.0,22.97
 Ford,Bronco II,2026-10,Ford_Bronco_II,4859,0.001593,,,0.0,23.33
-Ford,Bronco U13/U14/U15 1966-1977,2026-06,,,,,,1.0,97.15
+Ford,Bronco U13/U14/U15 1966-1977,2026-06,,,,,,1.0,97.14
 Ford,Bronco U725,2024-11,Ford_Bronco,36444,0.008947,,,,64.5
 Ford,Bronco U725,2024-12,Ford_Bronco,36299,0.008537,,,,63.95
 Ford,Bronco U725,2025-01,Ford_Bronco,39742,0.008967,,,,65.82
@@ -21530,7 +21530,7 @@ Ford,F-150,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-150,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-150,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-150,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-150,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-150,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-150 (2021+),2024-11,Ford_F-150_Lightning,9597,0.002356,,,,27.95
 Ford,F-150 (2021+),2024-12,Ford_F-150_Lightning,9847,0.002316,,,,28.34
 Ford,F-150 (2021+),2025-01,Ford_F-150_Lightning,40311,0.009096,,,,66.21
@@ -21602,7 +21602,7 @@ Ford,F-150 SVT Lightning,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-150 SVT Lightning,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-150 SVT Lightning,2026-08,Ford_F-Series,52793,0.015867,,,,74.61
 Ford,F-150 SVT Lightning,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-150 SVT Lightning,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-150 SVT Lightning,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series,2024-11,Ford_F-Series,60935,0.014959,,,,75.3
 Ford,F-Series,2024-12,Ford_F-Series,63910,0.015032,,,,75.72
 Ford,F-Series,2025-01,Ford_F-Series,68542,0.015466,,,,76.44
@@ -21626,7 +21626,7 @@ Ford,F-Series,2026-06,Ford_F-Series,52703,0.014956,,,,73.92
 Ford,F-Series,2026-07,Ford_F-Series,54915,0.016011,,,,75.13
 Ford,F-Series,2026-08,Ford_F-Series,52793,0.015867,,,,74.61
 Ford,F-Series,2026-09,Ford_F-Series,49438,0.015414,,,,73.53
-Ford,F-Series,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1948-1952,2024-11,Ford_F-Series,60935,0.014959,,,,75.3
 Ford,F-Series 1948-1952,2024-12,Ford_F-Series,63910,0.015032,,,,75.72
 Ford,F-Series 1948-1952,2025-01,Ford_F-Series,68542,0.015466,,,,76.44
@@ -21650,7 +21650,7 @@ Ford,F-Series 1948-1952,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1948-1952,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-Series 1948-1952,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1948-1952,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1948-1952,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1948-1952,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1953-1956,2024-11,Ford_F-Series_(second_generation),4489,0.001102,,,,14.23
 Ford,F-Series 1953-1956,2024-12,Ford_F-Series_(second_generation),4531,0.001066,,,,14.29
 Ford,F-Series 1953-1956,2025-01,Ford_F-Series_(second_generation),4941,0.001115,,,,15.33
@@ -21698,7 +21698,7 @@ Ford,F-Series 1957-1960,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1957-1960,2026-07,Ford_F-Series,54915,0.016011,,,,75.13
 Ford,F-Series 1957-1960,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1957-1960,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1957-1960,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1957-1960,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1961-1966,2024-11,Ford_F-Series_(fourth_generation),4846,0.00119,,,,15.23
 Ford,F-Series 1961-1966,2024-12,Ford_F-Series_(fourth_generation),4600,0.001082,,,,14.47
 Ford,F-Series 1961-1966,2025-01,Ford_F-Series_(fourth_generation),4577,0.001033,,,,14.35
@@ -21746,7 +21746,7 @@ Ford,F-Series 1967-1972,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1967-1972,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-Series 1967-1972,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1967-1972,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1967-1972,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1967-1972,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1973-1979,2024-11,Ford_F-Series,60935,0.014959,,,,75.3
 Ford,F-Series 1973-1979,2024-12,Ford_F-Series,63910,0.015032,,,,75.72
 Ford,F-Series 1973-1979,2025-01,Ford_F-Series,68542,0.015466,,,,76.44
@@ -21770,7 +21770,7 @@ Ford,F-Series 1973-1979,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1973-1979,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-Series 1973-1979,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1973-1979,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1973-1979,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1973-1979,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1980-1986,2024-11,Ford_F-Series_(seventh_generation),7561,0.001856,,,,23.33
 Ford,F-Series 1980-1986,2024-12,Ford_F-Series_(seventh_generation),7382,0.001736,,,,22.66
 Ford,F-Series 1980-1986,2025-01,Ford_F-Series_(seventh_generation),7700,0.001737,,,,23.41
@@ -21818,7 +21818,7 @@ Ford,F-Series 1987-1991,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1987-1991,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-Series 1987-1991,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1987-1991,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1987-1991,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1987-1991,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,F-Series 1992-1997,2024-11,Ford_F-Series,60935,0.014959,,,,75.3
 Ford,F-Series 1992-1997,2024-12,Ford_F-Series,63910,0.015032,,,,75.72
 Ford,F-Series 1992-1997,2025-01,Ford_F-Series,68542,0.015466,,,,76.44
@@ -21842,7 +21842,7 @@ Ford,F-Series 1992-1997,2026-06,Ford_F-Series,52703,0.014956,,,0.0,67.83
 Ford,F-Series 1992-1997,2026-07,Ford_F-Series,54915,0.016011,,,0.0,68.77
 Ford,F-Series 1992-1997,2026-08,Ford_F-Series,52793,0.015867,,,0.0,68.36
 Ford,F-Series 1992-1997,2026-09,Ford_F-Series,49438,0.015414,,,0.0,67.54
-Ford,F-Series 1992-1997,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.91
+Ford,F-Series 1992-1997,2026-10,Ford_F-Series,46625,0.015284,,,0.0,66.9
 Ford,FIRE TRUCK,2024-11,Ford_L_series,5783,0.00142,,,,17.79
 Ford,FIRE TRUCK,2024-12,Ford_L_series,5327,0.001253,,,,16.33
 Ford,FIRE TRUCK,2025-01,Ford_L_series,5083,0.001147,,,,15.66
@@ -21931,7 +21931,7 @@ Ford,FREESTAR,2025-11,Ford_Windstar,5936,0.001409,,,,18.15
 Ford,FREESTAR,2025-12,Ford_Windstar,5501,0.001376,,,,16.96
 Ford,FREESTAR,2026-01,Ford_Windstar,5821,0.001309,,,,17.66
 Ford,FREESTAR,2026-02,Ford_Windstar,5444,0.001235,,,,16.56
-Ford,FREESTAR,2026-03,Ford_Windstar,5795,0.001406,,,0.0,24.67
+Ford,FREESTAR,2026-03,Ford_Windstar,5795,0.001406,,,0.0,24.66
 Ford,FREESTAR,2026-04,Ford_Windstar,5655,0.00149,,,,17.55
 Ford,FREESTAR,2026-05,Ford_Windstar,5511,0.001421,,,,17.09
 Ford,FREESTAR,2026-06,Ford_Windstar,5112,0.001451,,,,16.27
@@ -22651,7 +22651,7 @@ Ford,MUSTANG MACH 1,2025-11,Ford_Mustang_Mach_1,16858,0.004002,,,0.0,43.71
 Ford,MUSTANG MACH 1,2025-12,Ford_Mustang_Mach_1,14144,0.003539,,,0.0,39.72
 Ford,MUSTANG MACH 1,2026-01,Ford_Mustang_Mach_1,14492,0.003259,,,0.0,39.81
 Ford,MUSTANG MACH 1,2026-02,Ford_Mustang_Mach_1,13431,0.003048,,,0.0,38.26
-Ford,MUSTANG MACH 1,2026-03,Ford_Mustang_Mach_1,12658,0.003071,,,0.0,37.4
+Ford,MUSTANG MACH 1,2026-03,Ford_Mustang_Mach_1,12658,0.003071,,,0.0,37.39
 Ford,MUSTANG MACH 1,2026-04,Ford_Mustang_Mach_1,12958,0.003414,,,0.0,38.17
 Ford,MUSTANG MACH 1,2026-05,Ford_Mustang_Mach_1,14939,0.003851,,,0.0,41.17
 Ford,MUSTANG MACH 1,2026-06,Ford_Mustang_Mach_1,12855,0.003648,,,0.0,38.39
@@ -22874,7 +22874,7 @@ Ford,MUSTANG SALEEN S281,2026-06,Saleen_S281,2819,0.0008,,,,9.35
 Ford,MUSTANG SALEEN S281,2026-07,Saleen_S281,2851,0.000831,,,,9.5
 Ford,MUSTANG SALEEN S281,2026-08,Saleen_S281,3027,0.00091,,,,10.11
 Ford,MUSTANG SALEEN S281,2026-09,Saleen_S281,2810,0.000876,,,0.0,18.26
-Ford,MUSTANG SALEEN S281,2026-10,Saleen_S281,2577,0.000845,,,0.0,17.73
+Ford,MUSTANG SALEEN S281,2026-10,Saleen_S281,2577,0.000845,,,0.0,17.72
 Ford,MUSTANG SALEEN S302 WHITE LABEL,2024-11,Ford_Mustang_variants,3318,0.000815,,,,10.7
 Ford,MUSTANG SALEEN S302 WHITE LABEL,2024-12,Ford_Mustang_variants,3713,0.000873,,,,11.87
 Ford,MUSTANG SALEEN S302 WHITE LABEL,2025-01,Ford_Mustang_variants,3670,0.000828,,,,11.63
@@ -23883,9 +23883,9 @@ Ford,Ranchero,2026-07,Ford_Ranchero,12257,0.003574,,,0.0,37.55
 Ford,Ranchero,2026-08,Ford_Ranchero,10600,0.003186,,,0.0,34.82
 Ford,Ranchero,2026-09,Ford_Ranchero,10615,0.00331,,,0.0,34.98
 Ford,Ranchero,2026-10,Ford_Ranchero,10347,0.003392,,,0.0,34.65
-Ford,Ranger,2025-06,,,,,,1.0,97.15
-Ford,Ranger,2026-07,,,,,,1.0,97.15
-Ford,Ranger,2026-08,,,,,,1.0,97.15
+Ford,Ranger,2025-06,,,,,,1.0,97.14
+Ford,Ranger,2026-07,,,,,,1.0,97.14
+Ford,Ranger,2026-08,,,,,,1.0,97.14
 Ford,Ranger 1983-1992,2024-11,Ford_Ranger,27941,0.006859,,,,57.67
 Ford,Ranger 1983-1992,2024-12,Ford_Ranger,29214,0.006871,,,,58.58
 Ford,Ranger 1983-1992,2025-01,Ford_Ranger,30109,0.006794,,,,58.96
@@ -24208,7 +24208,7 @@ Ford,Saleen,2025-05,Saleen_302_Series,1401,0.000275,,,,4.09
 Ford,Saleen,2025-06,Saleen_302_Series,1483,0.000284,,,0.0,14.38
 Ford,Saleen,2025-07,Saleen_302_Series,1586,0.000363,,,0.0,14.78
 Ford,Saleen,2025-08,Saleen_302_Series,1294,0.000263,,,0.0,13.77
-Ford,Saleen,2025-09,Saleen_302_Series,1391,0.000318,,,0.0,14.15
+Ford,Saleen,2025-09,Saleen_302_Series,1391,0.000318,,,0.0,14.14
 Ford,Saleen,2025-10,Saleen_302_Series,1408,0.000319,,,0.0,14.2
 Ford,Saleen,2025-11,Saleen_302_Series,1278,0.000303,,,0.0,13.79
 Ford,Saleen,2025-12,Saleen_302_Series,1304,0.000326,,,0.0,13.9
@@ -25243,7 +25243,7 @@ GMC,GMC Sierra (K2XX 2014-2019),2026-07,GMC_Denali,7461,0.02284,,,,41.97
 GMC,GMC Sierra (K2XX 2014-2019),2026-08,GMC_Denali,8019,0.023855,,,,43.5
 GMC,GMC Sierra (K2XX 2014-2019),2026-09,GMC_Denali,7616,0.023371,,,0.0,43.64
 GMC,GMC Sierra (K2XX 2014-2019),2026-10,GMC_Denali,7366,0.024668,,,,42.3
-GMC,GMC Sierra (T1XX 2019+),2025-08,,,,,,1.0,97.15
+GMC,GMC Sierra (T1XX 2019+),2025-08,,,,,,1.0,97.14
 GMC,GMC Sonoma,2024-11,GMC_(automobile),19978,0.058707,,,,69.35
 GMC,GMC Sonoma,2024-12,GMC_(automobile),26752,0.068744,,,,76.78
 GMC,GMC Sonoma,2025-01,GMC_(automobile),26466,0.065809,,,,76.29
@@ -26647,7 +26647,7 @@ Honda,AP1 S2000,2025-06,Honda_S2000,29662,0.020864,,,0.0,63.96
 Honda,AP1 S2000,2025-07,Honda_S2000,26388,0.022183,,,0.0,62.76
 Honda,AP1 S2000,2025-08,Honda_S2000,30304,0.022945,,,0.0,64.79
 Honda,AP1 S2000,2025-09,Honda_S2000,27943,0.022506,,,,68.36
-Honda,AP1 S2000,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.45
+Honda,AP1 S2000,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.44
 Honda,AP1 S2000,2025-11,Honda_S2000,25259,0.021746,,,0.0,62.0
 Honda,AP1 S2000,2025-12,Honda_S2000,23816,0.021454,,,0.0,60.98
 Honda,AP1 S2000,2026-01,Honda_S2000,25064,0.020304,,,0.0,61.42
@@ -26655,7 +26655,7 @@ Honda,AP1 S2000,2026-02,Honda_S2000,24669,0.021364,,,0.0,61.43
 Honda,AP1 S2000,2026-03,Honda_S2000,24531,0.021986,,,0.0,61.57
 Honda,AP1 S2000,2026-04,Honda_S2000,25277,0.022979,,,0.0,62.36
 Honda,AP1 S2000,2026-05,Honda_S2000,25190,0.022312,,,0.0,62.12
-Honda,AP1 S2000,2026-06,Honda_S2000,21933,0.021764,,,0.0,59.71
+Honda,AP1 S2000,2026-06,Honda_S2000,21933,0.021764,,,0.0,59.7
 Honda,AP1 S2000,2026-07,Honda_S2000,20186,0.021497,,,0.0,58.19
 Honda,AP1 S2000,2026-08,Honda_S2000,21109,0.022275,,,0.0,59.23
 Honda,AP1 S2000,2026-09,Honda_S2000,18760,0.020572,,,0.0,56.76
@@ -26671,7 +26671,7 @@ Honda,AP2 S2000,2025-06,Honda_S2000,29662,0.020864,,,0.0,63.96
 Honda,AP2 S2000,2025-07,Honda_S2000,26388,0.022183,,,0.0,62.76
 Honda,AP2 S2000,2025-08,Honda_S2000,30304,0.022945,,,0.0,64.79
 Honda,AP2 S2000,2025-09,Honda_S2000,27943,0.022506,,,0.0,63.56
-Honda,AP2 S2000,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.45
+Honda,AP2 S2000,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.44
 Honda,AP2 S2000,2025-11,Honda_S2000,25259,0.021746,,,0.0,62.0
 Honda,AP2 S2000,2025-12,Honda_S2000,23816,0.021454,,,0.0,60.98
 Honda,AP2 S2000,2026-01,Honda_S2000,25064,0.020304,,,0.0,61.42
@@ -26679,7 +26679,7 @@ Honda,AP2 S2000,2026-02,Honda_S2000,24669,0.021364,,,0.0,61.43
 Honda,AP2 S2000,2026-03,Honda_S2000,24531,0.021986,,,0.0,61.57
 Honda,AP2 S2000,2026-04,Honda_S2000,25277,0.022979,,,0.0,62.36
 Honda,AP2 S2000,2026-05,Honda_S2000,25190,0.022312,,,0.0,62.12
-Honda,AP2 S2000,2026-06,Honda_S2000,21933,0.021764,,,0.0,59.71
+Honda,AP2 S2000,2026-06,Honda_S2000,21933,0.021764,,,0.0,59.7
 Honda,AP2 S2000,2026-07,Honda_S2000,20186,0.021497,,,0.0,58.19
 Honda,AP2 S2000,2026-08,Honda_S2000,21109,0.022275,,,0.0,59.23
 Honda,AP2 S2000,2026-09,Honda_S2000,18760,0.020572,,,0.0,56.76
@@ -26695,7 +26695,7 @@ Honda,AP2 S2000 CR,2025-06,Honda_S2000,29662,0.020864,,,,68.89
 Honda,AP2 S2000 CR,2025-07,Honda_S2000,26388,0.022183,,,0.0,62.76
 Honda,AP2 S2000 CR,2025-08,Honda_S2000,30304,0.022945,,,,69.97
 Honda,AP2 S2000 CR,2025-09,Honda_S2000,27943,0.022506,,,,68.36
-Honda,AP2 S2000 CR,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.45
+Honda,AP2 S2000 CR,2025-10,Honda_S2000,27711,0.022487,,,0.0,63.44
 Honda,AP2 S2000 CR,2025-11,Honda_S2000,25259,0.021746,,,0.0,62.0
 Honda,AP2 S2000 CR,2025-12,Honda_S2000,23816,0.021454,,,,65.01
 Honda,AP2 S2000 CR,2026-01,Honda_S2000,25064,0.020304,,,,65.58
@@ -26741,7 +26741,7 @@ Honda,Accord,2025-04,Honda_Accord,90276,0.060471,,,,88.93
 Honda,Accord,2025-05,Honda_Accord,84550,0.058338,,,,88.47
 Honda,Accord,2025-06,Honda_Accord,83489,0.058725,,,0.0,79.02
 Honda,Accord,2025-07,Honda_Accord,70309,0.059104,,,0.0,78.6
-Honda,Accord,2025-08,Honda_Accord,73880,0.055938,,,0.0,78.43
+Honda,Accord,2025-08,Honda_Accord,73880,0.055938,,,0.0,78.42
 Honda,Accord,2025-09,Honda_Accord,69972,0.056358,,,0.0,78.27
 Honda,Accord,2025-10,Honda_Accord,70899,0.057534,,,0.0,78.48
 Honda,Accord,2025-11,Honda_Accord,69349,0.059705,,,0.0,78.59
@@ -27447,7 +27447,7 @@ Honda,Civic,2025-10,Honda_Civic,94929,0.077034,,,1.0,92.57
 Honda,Civic,2025-11,Honda_Civic,89030,0.076648,,,0.0,80.97
 Honda,Civic,2025-12,Honda_Civic,85580,0.077093,,,0.0,80.9
 Honda,Civic,2026-01,Honda_Civic,98252,0.079594,,,0.0,81.38
-Honda,Civic,2026-02,Honda_Civic,97739,0.084644,,,0.0,81.79
+Honda,Civic,2026-02,Honda_Civic,97739,0.084644,,,0.0,81.78
 Honda,Civic,2026-03,Honda_Civic,85039,0.076216,,,0.0,80.83
 Honda,Civic,2026-04,Honda_Civic,82071,0.074611,,,1.0,92.01
 Honda,Civic,2026-05,Honda_Civic,82067,0.072691,,,0.0,80.32
@@ -27471,7 +27471,7 @@ Honda,Civic (2022+),2025-10,Honda_Civic,94929,0.077034,,,0.0,81.12
 Honda,Civic (2022+),2025-11,Honda_Civic,89030,0.076648,,,1.0,92.42
 Honda,Civic (2022+),2025-12,Honda_Civic,85580,0.077093,,,0.0,80.9
 Honda,Civic (2022+),2026-01,Honda_Civic,98252,0.079594,,,0.0,81.38
-Honda,Civic (2022+),2026-02,Honda_Civic,97739,0.084644,,,0.0,81.79
+Honda,Civic (2022+),2026-02,Honda_Civic,97739,0.084644,,,0.0,81.78
 Honda,Civic (2022+),2026-03,Honda_Civic,85039,0.076216,,,0.0,80.83
 Honda,Civic (2022+),2026-04,Honda_Civic,82071,0.074611,,,0.0,80.57
 Honda,Civic (2022+),2026-05,Honda_Civic,82067,0.072691,,,0.0,80.32
@@ -27519,7 +27519,7 @@ Honda,Civic Si,2025-10,Honda_Civic,94929,0.077034,,,0.0,81.12
 Honda,Civic Si,2025-11,Honda_Civic,89030,0.076648,,,0.0,80.97
 Honda,Civic Si,2025-12,Honda_Civic,85580,0.077093,,,0.0,80.9
 Honda,Civic Si,2026-01,Honda_Civic,98252,0.079594,,,0.0,81.38
-Honda,Civic Si,2026-02,Honda_Civic,97739,0.084644,,,0.0,81.79
+Honda,Civic Si,2026-02,Honda_Civic,97739,0.084644,,,0.0,81.78
 Honda,Civic Si,2026-03,Honda_Civic,85039,0.076216,,,0.0,80.83
 Honda,Civic Si,2026-04,Honda_Civic,82071,0.074611,,,0.0,80.57
 Honda,Civic Si,2026-05,Honda_Civic,82067,0.072691,,,0.0,80.32
@@ -28937,7 +28937,7 @@ Hummer,Hummer HMMWV/Humvee,2025-05,Hummer_H1,15010,0.162456,,,,68.45
 Hummer,Hummer HMMWV/Humvee,2025-06,Hummer_H1,14130,0.162418,,,0.0,62.51
 Hummer,Hummer HMMWV/Humvee,2025-07,Hummer_H1,13937,0.184853,,,0.0,62.57
 Hummer,Hummer HMMWV/Humvee,2025-08,Hummer_H1,15503,0.184529,,,0.0,64.58
-Hummer,Hummer HMMWV/Humvee,2025-09,Hummer_H1,13451,0.182144,,,0.0,61.97
+Hummer,Hummer HMMWV/Humvee,2025-09,Hummer_H1,13451,0.182144,,,0.0,61.96
 Hummer,Hummer HMMWV/Humvee,2025-10,Hummer_H1,12884,0.177163,,,0.0,61.27
 Hummer,Hummer HMMWV/Humvee,2025-11,Hummer_H1,13563,0.170713,,,0.0,61.99
 Hummer,Hummer HMMWV/Humvee,2025-12,Hummer_H1,13976,0.164992,,,0.0,62.37
@@ -29394,7 +29394,7 @@ Infiniti,G35 & G37,2025-06,Infiniti_G_Line,17372,0.134804,,,0.0,65.94
 Infiniti,G35 & G37,2025-07,Infiniti_G_Line,12212,0.105754,,,0.0,58.94
 Infiniti,G35 & G37,2025-08,Infiniti_G_Line,15216,0.120762,,,0.0,62.98
 Infiniti,G35 & G37,2025-09,Infiniti_G_Line,13456,0.118051,,,0.0,60.76
-Infiniti,G35 & G37,2025-10,Infiniti_G_Line,14444,0.119041,,,0.0,61.96
+Infiniti,G35 & G37,2025-10,Infiniti_G_Line,14444,0.119041,,,0.0,61.95
 Infiniti,G35 & G37,2025-11,Infiniti_G_Line,14274,0.118715,,,0.0,61.72
 Infiniti,G35 & G37,2025-12,Infiniti_G_Line,12342,0.118377,,,0.0,59.46
 Infiniti,G35 & G37,2026-01,Infiniti_G_Line,12899,0.115813,,,0.0,60.09
@@ -29420,7 +29420,7 @@ Infiniti,J30,2025-08,Infiniti_J30,2144,0.017016,,,0.0,30.67
 Infiniti,J30,2025-09,Infiniti_J30,2024,0.017757,,,0.0,30.76
 Infiniti,J30,2025-10,Infiniti_J30,2235,0.01842,,,0.0,31.51
 Infiniti,J30,2025-11,Infiniti_J30,2206,0.018347,,,0.0,31.42
-Infiniti,J30,2025-12,Infiniti_J30,2195,0.021053,,,0.0,32.32
+Infiniti,J30,2025-12,Infiniti_J30,2195,0.021053,,,0.0,32.31
 Infiniti,J30,2026-01,Infiniti_J30,2139,0.019205,,,0.0,31.56
 Infiniti,J30,2026-02,Infiniti_J30,2203,0.020534,,,0.0,32.18
 Infiniti,J30,2026-03,Infiniti_J30,2035,0.019131,,,,26.42
@@ -29846,12 +29846,12 @@ International Harvester,International Harvester Scout 800A,2025-02,International
 International Harvester,International Harvester Scout 800A,2025-03,International_Scout,25396,0.090647,,,,77.96
 International Harvester,International Harvester Scout 800A,2025-04,International_Scout,15858,0.072716,,,,65.77
 International Harvester,International Harvester Scout 800A,2025-05,International_Scout,15524,0.072675,,,,65.24
-International Harvester,International Harvester Scout 800A,2025-06,International_Scout,16913,0.07785,,,0.0,63.34
+International Harvester,International Harvester Scout 800A,2025-06,International_Scout,16913,0.07785,,,,68.08
 International Harvester,International Harvester Scout 800A,2025-07,International_Scout,21905,0.091269,,,0.0,68.57
-International Harvester,International Harvester Scout 800A,2025-08,International_Scout,21173,0.070816,,,0.0,66.5
+International Harvester,International Harvester Scout 800A,2025-08,International_Scout,21173,0.070816,,,,72.19
 International Harvester,International Harvester Scout 800A,2025-09,International_Scout,17988,0.080516,,,0.0,64.67
 International Harvester,International Harvester Scout 800A,2025-10,International_Scout,15677,0.079146,,,0.0,61.96
-International Harvester,International Harvester Scout 800A,2025-11,International_Scout,17885,0.081644,,,0.0,64.7
+International Harvester,International Harvester Scout 800A,2025-11,International_Scout,17885,0.081644,,,,69.84
 International Harvester,International Harvester Scout 800A,2025-12,International_Scout,13568,0.073852,,,0.0,58.85
 International Harvester,International Harvester Scout 800A,2026-01,International_Scout,12444,0.069009,,,,59.99
 International Harvester,International Harvester Scout 800A,2026-02,International_Scout,12891,0.073484,,,,61.16
@@ -30437,7 +30437,7 @@ Jaguar,F-Type,2026-05,Jaguar_F-Type,19477,0.052925,,,0.0,63.3
 Jaguar,F-Type,2026-06,Jaguar_F-Type,17375,0.051112,,,0.0,61.22
 Jaguar,F-Type,2026-07,Jaguar_F-Type,16309,0.046939,,,0.0,59.45
 Jaguar,F-Type,2026-08,Jaguar_F-Type,16975,0.047748,,,0.0,60.47
-Jaguar,F-Type,2026-09,Jaguar_F-Type,15565,0.045277,,,0.0,58.44
+Jaguar,F-Type,2026-09,Jaguar_F-Type,15565,0.045277,,,0.0,58.43
 Jaguar,F-Type,2026-10,Jaguar_F-Type,16435,0.044535,,,0.0,59.36
 Jaguar,KIT RACE CAR,2024-11,Jaguar_XJS,20773,0.038714,,,,67.36
 Jaguar,KIT RACE CAR,2024-12,Jaguar_XJS,19101,0.036863,,,,65.16
@@ -30890,7 +30890,7 @@ Jaguar,XF,2026-02,Jaguar_XF,4730,0.01403,,,0.0,34.49
 Jaguar,XF,2026-03,Jaguar_XF,4609,0.013187,,,0.0,33.87
 Jaguar,XF,2026-04,Jaguar_XF,4660,0.013477,,,0.0,34.1
 Jaguar,XF,2026-05,Jaguar_XF,4646,0.012625,,,0.0,33.67
-Jaguar,XF,2026-06,Jaguar_XF,4443,0.01307,,,0.0,33.49
+Jaguar,XF,2026-06,Jaguar_XF,4443,0.01307,,,0.0,33.48
 Jaguar,XF,2026-07,Jaguar_XF,4229,0.012172,,,,28.15
 Jaguar,XF,2026-08,Jaguar_XF,4416,0.012421,,,0.0,33.11
 Jaguar,XF,2026-09,Jaguar_XF,4715,0.013716,,,0.0,34.3
@@ -31174,7 +31174,7 @@ Jaguar,XK8,2025-10,Jaguar_XK_(X100),7152,0.017685,,,0.0,40.96
 Jaguar,XK8,2025-11,Jaguar_XK_(X100),7037,0.018838,,,0.0,41.16
 Jaguar,XK8,2025-12,Jaguar_XK_(X100),6568,0.016619,,,0.0,39.34
 Jaguar,XK8,2026-01,Jaguar_XK_(X100),6777,0.016965,,,,37.67
-Jaguar,XK8,2026-02,Jaguar_XK_(X100),5909,0.017527,,,0.0,38.37
+Jaguar,XK8,2026-02,Jaguar_XK_(X100),5909,0.017527,,,0.0,38.36
 Jaguar,XK8,2026-03,Jaguar_XK_(X100),6217,0.017787,,,0.0,39.11
 Jaguar,XK8,2026-04,Jaguar_XK_(X100),6213,0.017969,,,0.0,39.2
 Jaguar,XK8,2026-05,Jaguar_XK_(X100),6285,0.017078,,,0.0,38.91
@@ -31215,7 +31215,7 @@ Jaguar,XKE Series II,2025-03,Jaguar_Mark_2,6983,0.016548,,,,37.9
 Jaguar,XKE Series II,2025-04,Jaguar_Mark_2,6606,0.0155,,,,36.26
 Jaguar,XKE Series II,2025-05,Jaguar_Mark_2,7081,0.016726,,,,38.23
 Jaguar,XKE Series II,2025-06,Jaguar_Mark_2,6107,0.01527,,,0.0,37.65
-Jaguar,XKE Series II,2025-07,Jaguar_Mark_2,6225,0.01586,,,0.0,38.21
+Jaguar,XKE Series II,2025-07,Jaguar_Mark_2,6225,0.01586,,,0.0,38.2
 Jaguar,XKE Series II,2025-08,Jaguar_Mark_2,6792,0.016247,,,0.0,39.66
 Jaguar,XKE Series II,2025-09,Jaguar_Mark_2,7372,0.018043,,,,39.69
 Jaguar,XKE Series II,2025-10,Jaguar_Mark_2,6553,0.016204,,,0.0,39.13
@@ -31554,7 +31554,7 @@ Jeep,Jeep Jeepster Commando,2025-06,Jeepster_Commando,3491,0.004659,,,,17.72
 Jeep,Jeep Jeepster Commando,2025-07,Jeepster_Commando,3387,0.005003,,,0.0,24.93
 Jeep,Jeep Jeepster Commando,2025-08,Jeepster_Commando,3816,0.005234,,,,19.67
 Jeep,Jeep Jeepster Commando,2025-09,Jeepster_Commando,3402,0.005026,,,0.0,25.01
-Jeep,Jeep Jeepster Commando,2025-10,Jeepster_Commando,3075,0.004522,,,0.0,23.6
+Jeep,Jeep Jeepster Commando,2025-10,Jeepster_Commando,3075,0.004522,,,0.0,23.59
 Jeep,Jeep Jeepster Commando,2025-11,Jeepster_Commando,3159,0.004736,,,0.0,24.08
 Jeep,Jeep Jeepster Commando,2025-12,Jeepster_Commando,2786,0.004252,,,,15.18
 Jeep,Jeep Jeepster Commando,2026-01,Jeepster_Commando,3084,0.004536,,,0.0,23.62
@@ -31768,7 +31768,7 @@ Jeep,Jeep WK Grand Cherokee,2025-04,Jeep_Grand_Cherokee_(WJ),9590,0.011445,,,,39
 Jeep,Jeep WK Grand Cherokee,2025-05,Jeep_Grand_Cherokee_(WJ),8925,0.010872,,,,38.17
 Jeep,Jeep WK Grand Cherokee,2025-06,Jeep_Grand_Cherokee_(WJ),7730,0.010316,,,,35.55
 Jeep,Jeep WK Grand Cherokee,2025-07,Jeep_Grand_Cherokee_(WJ),7387,0.010912,,,,35.19
-Jeep,Jeep WK Grand Cherokee,2025-08,Jeep_Grand_Cherokee_(WJ),8267,0.011339,,,0.0,39.67
+Jeep,Jeep WK Grand Cherokee,2025-08,Jeep_Grand_Cherokee_(WJ),8267,0.011339,,,0.0,39.66
 Jeep,Jeep WK Grand Cherokee,2025-09,Jeep_Grand_Cherokee_(WJ),7967,0.011771,,,,37.0
 Jeep,Jeep WK Grand Cherokee,2025-10,Jeep_Grand_Cherokee_(WJ),8327,0.012246,,,,38.03
 Jeep,Jeep WK Grand Cherokee,2025-11,Jeep_Grand_Cherokee_(WJ),8873,0.013301,,,0.0,41.45
@@ -31872,7 +31872,7 @@ Jeep,Jeep Wrangler JK,2025-12,Jeep_Wrangler_(JL),11187,0.017074,,,0.0,46.48
 Jeep,Jeep Wrangler JK,2026-01,Jeep_Wrangler_(JL),11408,0.016781,,,0.0,46.64
 Jeep,Jeep Wrangler JK,2026-02,Jeep_Wrangler_(JL),10880,0.018007,,,0.0,46.5
 Jeep,Jeep Wrangler JK,2026-03,Jeep_Wrangler_(JL),11088,0.018788,,,0.0,47.07
-Jeep,Jeep Wrangler JK,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.87
+Jeep,Jeep Wrangler JK,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.86
 Jeep,Jeep Wrangler JK,2026-05,Jeep_Wrangler_(JL),10972,0.01934,,,0.0,47.09
 Jeep,Jeep Wrangler JK,2026-06,Jeep_Wrangler_(JL),9657,0.018322,,,0.0,44.93
 Jeep,Jeep Wrangler JK,2026-07,Jeep_Wrangler_(JL),10137,0.0184,,,0.0,45.59
@@ -31896,7 +31896,7 @@ Jeep,Jeep Wrangler JL (2018+),2025-12,Jeep_Wrangler_(JL),11187,0.017074,,,,46.16
 Jeep,Jeep Wrangler JL (2018+),2026-01,Jeep_Wrangler_(JL),11408,0.016781,,,0.0,46.64
 Jeep,Jeep Wrangler JL (2018+),2026-02,Jeep_Wrangler_(JL),10880,0.018007,,,0.0,46.5
 Jeep,Jeep Wrangler JL (2018+),2026-03,Jeep_Wrangler_(JL),11088,0.018788,,,0.0,47.07
-Jeep,Jeep Wrangler JL (2018+),2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.87
+Jeep,Jeep Wrangler JL (2018+),2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.86
 Jeep,Jeep Wrangler JL (2018+),2026-05,Jeep_Wrangler_(JL),10972,0.01934,,,0.0,47.09
 Jeep,Jeep Wrangler JL (2018+),2026-06,Jeep_Wrangler_(JL),9657,0.018322,,,0.0,44.93
 Jeep,Jeep Wrangler JL (2018+),2026-07,Jeep_Wrangler_(JL),10137,0.0184,,,0.0,45.59
@@ -31920,7 +31920,7 @@ Jeep,Jeep Wrangler TJ,2025-12,Jeep_Wrangler_(JL),11187,0.017074,,,0.0,46.48
 Jeep,Jeep Wrangler TJ,2026-01,Jeep_Wrangler_(JL),11408,0.016781,,,0.0,46.64
 Jeep,Jeep Wrangler TJ,2026-02,Jeep_Wrangler_(JL),10880,0.018007,,,0.0,46.5
 Jeep,Jeep Wrangler TJ,2026-03,Jeep_Wrangler_(JL),11088,0.018788,,,0.0,47.07
-Jeep,Jeep Wrangler TJ,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.87
+Jeep,Jeep Wrangler TJ,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.86
 Jeep,Jeep Wrangler TJ,2026-05,Jeep_Wrangler_(JL),10972,0.01934,,,0.0,47.09
 Jeep,Jeep Wrangler TJ,2026-06,Jeep_Wrangler_(JL),9657,0.018322,,,0.0,44.93
 Jeep,Jeep Wrangler TJ,2026-07,Jeep_Wrangler_(JL),10137,0.0184,,,0.0,45.59
@@ -31944,7 +31944,7 @@ Jeep,Jeep Wrangler YJ,2025-12,Jeep_Wrangler_(JL),11187,0.017074,,,0.0,46.48
 Jeep,Jeep Wrangler YJ,2026-01,Jeep_Wrangler_(JL),11408,0.016781,,,0.0,46.64
 Jeep,Jeep Wrangler YJ,2026-02,Jeep_Wrangler_(JL),10880,0.018007,,,0.0,46.5
 Jeep,Jeep Wrangler YJ,2026-03,Jeep_Wrangler_(JL),11088,0.018788,,,0.0,47.07
-Jeep,Jeep Wrangler YJ,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.87
+Jeep,Jeep Wrangler YJ,2026-04,Jeep_Wrangler_(JL),10373,0.018338,,,0.0,45.86
 Jeep,Jeep Wrangler YJ,2026-05,Jeep_Wrangler_(JL),10972,0.01934,,,0.0,47.09
 Jeep,Jeep Wrangler YJ,2026-06,Jeep_Wrangler_(JL),9657,0.018322,,,0.0,44.93
 Jeep,Jeep Wrangler YJ,2026-07,Jeep_Wrangler_(JL),10137,0.0184,,,0.0,45.59
@@ -33593,7 +33593,7 @@ Lamborghini,Aventador,2025-05,Lamborghini_Aventador,50047,0.139513,,,,90.33
 Lamborghini,Aventador,2025-06,Lamborghini_Aventador,45711,0.138057,,,0.0,79.63
 Lamborghini,Aventador,2025-07,Lamborghini_Aventador,76273,0.144015,,,0.0,83.06
 Lamborghini,Aventador,2025-08,Lamborghini_Aventador,52147,0.132134,,,0.0,80.65
-Lamborghini,Aventador,2025-09,Lamborghini_Aventador,45990,0.131821,,,0.0,79.5
+Lamborghini,Aventador,2025-09,Lamborghini_Aventador,45990,0.131821,,,0.0,79.49
 Lamborghini,Aventador,2025-10,Lamborghini_Aventador,43273,0.127429,,,,88.12
 Lamborghini,Aventador,2025-11,Lamborghini_Aventador,36943,0.1241,,,0.0,76.75
 Lamborghini,Aventador,2025-12,Lamborghini_Aventador,36739,0.1218,,,0.0,76.63
@@ -33628,7 +33628,7 @@ Lamborghini,Countach,2026-04,Lamborghini_Countach,26770,0.095752,,,0.0,71.88
 Lamborghini,Countach,2026-05,Lamborghini_Countach,32562,0.103302,,,1.0,86.31
 Lamborghini,Countach,2026-06,Lamborghini_Countach,31794,0.100347,,,0.0,74.43
 Lamborghini,Countach,2026-07,Lamborghini_Countach,30252,0.103513,,,0.0,73.74
-Lamborghini,Countach,2026-08,Lamborghini_Countach,31078,0.110154,,,1.0,85.94
+Lamborghini,Countach,2026-08,Lamborghini_Countach,31078,0.110154,,,1.0,85.93
 Lamborghini,Countach,2026-09,Lamborghini_Countach,28976,0.115365,,,0.0,73.58
 Lamborghini,Countach,2026-10,Lamborghini_Countach,31564,0.120017,,,0.0,74.89
 Lamborghini,DIABLO REPLICA,2024-11,Lamborghini_Diablo,26078,0.075771,,,,77.21
@@ -33700,7 +33700,7 @@ Lamborghini,Espada,2026-04,Lamborghini_Espada,4609,0.016486,,,0.0,35.53
 Lamborghini,Espada,2026-05,Lamborghini_Espada,5182,0.01644,,,0.0,36.51
 Lamborghini,Espada,2026-06,Lamborghini_Espada,5167,0.016308,,,0.0,36.43
 Lamborghini,Espada,2026-07,Lamborghini_Espada,4832,0.016534,,,0.0,35.97
-Lamborghini,Espada,2026-08,Lamborghini_Espada,4830,0.01712,,,0.0,36.23
+Lamborghini,Espada,2026-08,Lamborghini_Espada,4830,0.01712,,,0.0,36.22
 Lamborghini,Espada,2026-09,Lamborghini_Espada,4752,0.01892,,,0.0,36.82
 Lamborghini,Espada,2026-10,Lamborghini_Espada,5528,0.021019,,,,36.24
 Lamborghini,Gallardo,2024-11,Lamborghini_Gallardo,25864,0.075149,,,,76.96
@@ -33815,7 +33815,7 @@ Lamborghini,LM002,2025-11,Lamborghini_LM002,9774,0.032833,,,,49.74
 Lamborghini,LM002,2025-12,Lamborghini_LM002,9752,0.032331,,,,49.53
 Lamborghini,LM002,2026-01,Lamborghini_LM002,10055,0.026576,,,,48.3
 Lamborghini,LM002,2026-02,Lamborghini_LM002,7928,0.027373,,,,44.92
-Lamborghini,LM002,2026-03,Lamborghini_LM002,8142,0.028062,,,0.0,45.98
+Lamborghini,LM002,2026-03,Lamborghini_LM002,8142,0.028062,,,0.0,45.97
 Lamborghini,LM002,2026-04,Lamborghini_LM002,9158,0.032757,,,,48.66
 Lamborghini,LM002,2026-05,Lamborghini_LM002,9377,0.029748,,,,48.14
 Lamborghini,LM002,2026-06,Lamborghini_LM002,9804,0.030943,,,,49.23
@@ -33937,7 +33937,7 @@ Lamborghini,Urus,2026-01,Lamborghini_Urus,99576,0.263186,,,0.0,84.83
 Lamborghini,Urus,2026-02,Lamborghini_Urus,27048,0.093387,,,0.0,71.94
 Lamborghini,Urus,2026-03,Lamborghini_Urus,26605,0.091695,,,0.0,71.65
 Lamborghini,Urus,2026-04,Lamborghini_Urus,28516,0.101997,,,0.0,72.9
-Lamborghini,Urus,2026-05,Lamborghini_Urus,30418,0.0965,,,1.0,85.09
+Lamborghini,Urus,2026-05,Lamborghini_Urus,30418,0.0965,,,1.0,85.08
 Lamborghini,Urus,2026-06,Lamborghini_Urus,23300,0.073539,,,0.0,68.43
 Lamborghini,Urus,2026-07,Lamborghini_Urus,22616,0.077385,,,0.0,68.22
 Lamborghini,Urus,2026-08,Lamborghini_Urus,24604,0.087207,,,0.0,70.26
@@ -34586,7 +34586,7 @@ Land Rover,Range Rover Classic,2026-01,Range_Rover_Classic,10943,0.01352,,,0.0,4
 Land Rover,Range Rover Classic,2026-02,Range_Rover_Classic,9067,0.012091,,,0.0,41.14
 Land Rover,Range Rover Classic,2026-03,Range_Rover_Classic,9602,0.014322,,,0.0,42.91
 Land Rover,Range Rover Classic,2026-04,Range_Rover_Classic,8939,0.013656,,,0.0,41.7
-Land Rover,Range Rover Classic,2026-05,Range_Rover_Classic,8775,0.013332,,,0.0,41.33
+Land Rover,Range Rover Classic,2026-05,Range_Rover_Classic,8775,0.013332,,,0.0,41.32
 Land Rover,Range Rover Classic,2026-06,Range_Rover_Classic,8734,0.01464,,,0.0,41.91
 Land Rover,Range Rover Classic,2026-07,Range_Rover_Classic,8951,0.015131,,,0.0,42.43
 Land Rover,Range Rover Classic,2026-08,Range_Rover_Classic,9176,0.01548,,,0.0,42.96
@@ -34625,7 +34625,7 @@ Land Rover,Range Rover L322,2025-04,Range_Rover_(L322),19327,0.02155,,,,60.51
 Land Rover,Range Rover L322,2025-05,Range_Rover_(L322),22316,0.024142,,,,64.59
 Land Rover,Range Rover L322,2025-06,Range_Rover_(L322),19725,0.023083,,,0.0,58.28
 Land Rover,Range Rover L322,2025-07,Range_Rover_(L322),16808,0.022849,,,0.0,55.46
-Land Rover,Range Rover L322,2025-08,Range_Rover_(L322),18057,0.021337,,,0.0,56.37
+Land Rover,Range Rover L322,2025-08,Range_Rover_(L322),18057,0.021337,,,0.0,56.36
 Land Rover,Range Rover L322,2025-09,Range_Rover_(L322),19449,0.024554,,,0.0,58.41
 Land Rover,Range Rover L322,2025-10,Range_Rover_(L322),21833,0.027591,,,0.0,61.44
 Land Rover,Range Rover L322,2025-11,Range_Rover_(L322),19974,0.024028,,,0.0,58.76
@@ -35176,7 +35176,7 @@ Lexus,LS Sedan,2025-03,Lexus_LS,61380,0.068741,,,,88.39
 Lexus,LS Sedan,2025-04,Lexus_LS,48192,0.058049,,,,84.44
 Lexus,LS Sedan,2025-05,Lexus_LS,48195,0.058388,,,,84.5
 Lexus,LS Sedan,2025-06,Lexus_LS,47286,0.059148,,,0.0,75.87
-Lexus,LS Sedan,2025-07,Lexus_LS,40606,0.056793,,,0.0,74.0
+Lexus,LS Sedan,2025-07,Lexus_LS,40606,0.056793,,,0.0,73.99
 Lexus,LS Sedan,2025-08,Lexus_LS,45856,0.057476,,,0.0,75.41
 Lexus,LS Sedan,2025-09,Lexus_LS,46599,0.059333,,,0.0,75.73
 Lexus,LS Sedan,2025-10,Lexus_LS,62567,0.073093,,,0.0,79.43
@@ -36074,7 +36074,7 @@ Lincoln,"Lincoln K, KA, & KB",2026-01,Lincoln_K_series,1939,0.004751,,,,13.62
 Lincoln,"Lincoln K, KA, & KB",2026-02,Lincoln_K_series,1590,0.004033,,,,11.16
 Lincoln,"Lincoln K, KA, & KB",2026-03,Lincoln_K_series,1805,0.00481,,,,13.27
 Lincoln,"Lincoln K, KA, & KB",2026-04,Lincoln_K_series,2090,0.005331,,,0.0,22.61
-Lincoln,"Lincoln K, KA, & KB",2026-05,Lincoln_K_series,1909,0.004971,,,0.0,21.7
+Lincoln,"Lincoln K, KA, & KB",2026-05,Lincoln_K_series,1909,0.004971,,,0.0,21.69
 Lincoln,"Lincoln K, KA, & KB",2026-06,Lincoln_K_series,2011,0.005848,,,,15.77
 Lincoln,"Lincoln K, KA, & KB",2026-07,Lincoln_K_series,1925,0.005416,,,0.0,22.34
 Lincoln,"Lincoln K, KA, & KB",2026-08,Lincoln_K_series,2327,0.006267,,,,17.24
@@ -36766,7 +36766,7 @@ Lotus,Evora,2025-09,Lotus_Evora,10685,0.04364,,,,53.45
 Lotus,Evora,2025-10,Lotus_Evora,9691,0.038762,,,0.0,50.14
 Lotus,Evora,2025-11,Lotus_Evora,8921,0.040063,,,0.0,49.28
 Lotus,Evora,2025-12,Lotus_Evora,10364,0.04607,,,0.0,51.86
-Lotus,Evora,2026-01,Lotus_Evora,10745,0.045903,,,0.0,52.44
+Lotus,Evora,2026-01,Lotus_Evora,10745,0.045903,,,0.0,52.43
 Lotus,Evora,2026-02,Lotus_Evora,11723,0.055226,,,0.0,54.78
 Lotus,Evora,2026-03,Lotus_Evora,12423,0.059052,,,0.0,56.04
 Lotus,Evora,2026-04,Lotus_Evora,10270,0.046841,,,,53.11
@@ -36789,13 +36789,13 @@ Lotus,Exige,2025-08,Lotus_Exige,12571,0.047191,,,,57.25
 Lotus,Exige,2025-09,Lotus_Exige,12428,0.050759,,,,57.55
 Lotus,Exige,2025-10,Lotus_Exige,12687,0.050746,,,,57.98
 Lotus,Exige,2025-11,Lotus_Exige,10408,0.04674,,,,53.36
-Lotus,Exige,2025-12,Lotus_Exige,10044,0.044648,,,0.0,51.34
+Lotus,Exige,2025-12,Lotus_Exige,10044,0.044648,,,0.0,51.33
 Lotus,Exige,2026-01,Lotus_Exige,10938,0.046728,,,,54.33
 Lotus,Exige,2026-02,Lotus_Exige,9781,0.046077,,,,52.2
 Lotus,Exige,2026-03,Lotus_Exige,10541,0.050106,,,,54.16
 Lotus,Exige,2026-04,Lotus_Exige,10508,0.047927,,,0.0,52.34
 Lotus,Exige,2026-05,Lotus_Exige,12247,0.050054,,,,57.17
-Lotus,Exige,2026-06,Lotus_Exige,11758,0.054742,,,0.0,54.77
+Lotus,Exige,2026-06,Lotus_Exige,11758,0.054742,,,0.0,54.76
 Lotus,Exige,2026-07,Lotus_Exige,10513,0.05242,,,0.0,52.8
 Lotus,Exige,2026-08,Lotus_Exige,10989,0.051742,,,,55.17
 Lotus,Exige,2026-09,Lotus_Exige,9748,0.050009,,,,52.76
@@ -36917,7 +36917,7 @@ Lucid,Lucid Air,2026-04,Lucid_Motors,44996,1.0,,,1.0,94.39
 Lucid,Lucid Air,2026-05,Lucid_Motors,47319,1.0,,,1.0,94.87
 Lucid,Lucid Air,2026-06,Lucid_Motors,40941,1.0,,,1.0,93.35
 Lucid,Lucid Air,2026-07,Lucid_Motors,43122,1.0,,,1.0,94.0
-Lucid,Lucid Air,2026-08,Lucid_Motors,42092,1.0,,,0.0,82.21
+Lucid,Lucid Air,2026-08,Lucid_Motors,42092,1.0,,,0.0,82.2
 Lucid,Lucid Air,2026-09,Lucid_Motors,39034,1.0,,,0.0,81.39
 Lucid,Lucid Air,2026-10,Lucid_Motors,34618,1.0,,,1.0,91.46
 MG,MG F,2024-11,MG_MGB,19894,0.139668,,,,74.6
@@ -38656,7 +38656,7 @@ McLaren,Artura,2025-03,McLaren_Artura,7944,0.021293,,,,42.41
 McLaren,Artura,2025-04,McLaren_Artura,8336,0.02409,,,,44.21
 McLaren,Artura,2025-05,McLaren_Artura,7284,0.023515,,,,41.74
 McLaren,Artura,2025-06,McLaren_Artura,7789,0.025099,,,0.0,44.38
-McLaren,Artura,2025-07,McLaren_Artura,7557,0.023585,,,1.0,55.05
+McLaren,Artura,2025-07,McLaren_Artura,7557,0.023585,,,1.0,55.04
 McLaren,Artura,2025-08,McLaren_Artura,7842,0.028766,,,0.0,45.64
 McLaren,Artura,2025-09,McLaren_Artura,9232,0.039329,,,0.0,49.57
 McLaren,Artura,2025-10,McLaren_Artura,6850,0.029029,,,1.0,55.4
@@ -38716,7 +38716,7 @@ McLaren,MP4-12C,2026-03,McLaren_12C,6734,0.025961,,,0.0,42.69
 McLaren,MP4-12C,2026-04,McLaren_12C,6472,0.037152,,,0.0,44.74
 McLaren,MP4-12C,2026-05,McLaren_12C,7737,0.038193,,,0.0,47.3
 McLaren,MP4-12C,2026-06,McLaren_12C,7133,0.03559,,,0.0,45.81
-McLaren,MP4-12C,2026-07,McLaren_12C,7182,0.038437,,,0.0,46.35
+McLaren,MP4-12C,2026-07,McLaren_12C,7182,0.038437,,,0.0,46.34
 McLaren,MP4-12C,2026-08,McLaren_12C,7315,0.042236,,,,46.92
 McLaren,MP4-12C,2026-09,McLaren_12C,6398,0.035492,,,0.0,44.3
 McLaren,MP4-12C,2026-10,McLaren_12C,6841,0.037276,,,0.0,45.55
@@ -40201,7 +40201,7 @@ Mercedes-Benz,AMG SL55 AMG,2025-12,Mercedes-Benz_SL-Class_(R230),13904,0.002561,
 Mercedes-Benz,AMG SL55 AMG,2026-01,Mercedes-Benz_SL-Class_(R230),14026,0.002551,,,0.0,38.4
 Mercedes-Benz,AMG SL55 AMG,2026-02,Mercedes-Benz_SL-Class_(R230),12270,0.002437,,,0.0,36.21
 Mercedes-Benz,AMG SL55 AMG,2026-03,Mercedes-Benz_SL-Class_(R230),14086,0.00262,,,0.0,38.54
-Mercedes-Benz,AMG SL55 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.45
+Mercedes-Benz,AMG SL55 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.44
 Mercedes-Benz,AMG SL55 AMG,2026-05,Mercedes-Benz_SL-Class_(R230),13674,0.002579,,,0.0,38.02
 Mercedes-Benz,AMG SL55 AMG,2026-06,Mercedes-Benz_SL-Class_(R230),12185,0.002777,,,0.0,36.44
 Mercedes-Benz,AMG SL55 AMG,2026-07,Mercedes-Benz_SL-Class_(R230),12342,0.002882,,,0.0,36.78
@@ -40266,7 +40266,7 @@ Mercedes-Benz,Benz AMG,2025-05,Mercedes-Benz_CLS,20743,0.003439,,,,46.18
 Mercedes-Benz,Benz AMG,2025-06,Mercedes-Benz_CLS,21137,0.003623,,,1.0,58.55
 Mercedes-Benz,Benz AMG,2025-07,Mercedes-Benz_CLS,17975,0.003354,,,1.0,55.44
 Mercedes-Benz,Benz AMG,2025-08,Mercedes-Benz_CLS,21609,0.003604,,,0.0,47.41
-Mercedes-Benz,Benz AMG,2025-09,Mercedes-Benz_CLS,18329,0.003316,,,0.0,44.31
+Mercedes-Benz,Benz AMG,2025-09,Mercedes-Benz_CLS,18329,0.003316,,,0.0,44.3
 Mercedes-Benz,Benz AMG,2025-10,Mercedes-Benz_CLS,18282,0.003209,,,4.0,56.22
 Mercedes-Benz,Benz AMG,2025-11,Mercedes-Benz_CLS,19284,0.00351,,,1.0,56.83
 Mercedes-Benz,Benz AMG,2025-12,Mercedes-Benz_CLS,18739,0.003452,,,1.0,56.32
@@ -40439,7 +40439,7 @@ Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2025-10,Mercedes-Benz_E-Class_(C207),
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2025-11,Mercedes-Benz_E-Class_(C207),8165,0.001486,,,0.0,29.24
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2025-12,Mercedes-Benz_E-Class_(C207),7780,0.001433,,,0.0,28.56
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-01,Mercedes-Benz_E-Class_(C207),7523,0.001368,,,0.0,27.99
-Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-02,Mercedes-Benz_E-Class_(C207),7101,0.00141,,,0.0,27.33
+Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-02,Mercedes-Benz_E-Class_(C207),7101,0.00141,,,0.0,27.32
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-03,Mercedes-Benz_E-Class_(C207),7072,0.001315,,,0.0,27.12
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-04,Mercedes-Benz_E-Class_(C207),6896,0.00141,,,0.0,26.95
 Mercedes-Benz,C207 E-Class Coupe/Cabriolet,2026-05,Mercedes-Benz_E-Class_(C207),7111,0.001341,,,0.0,27.23
@@ -41976,7 +41976,7 @@ Mercedes-Benz,R230 SL,2025-12,Mercedes-Benz_SL-Class_(R230),13904,0.002561,,,0.0
 Mercedes-Benz,R230 SL,2026-01,Mercedes-Benz_SL-Class_(R230),14026,0.002551,,,0.0,38.4
 Mercedes-Benz,R230 SL,2026-02,Mercedes-Benz_SL-Class_(R230),12270,0.002437,,,0.0,36.21
 Mercedes-Benz,R230 SL,2026-03,Mercedes-Benz_SL-Class_(R230),14086,0.00262,,,0.0,38.54
-Mercedes-Benz,R230 SL,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.45
+Mercedes-Benz,R230 SL,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.44
 Mercedes-Benz,R230 SL,2026-05,Mercedes-Benz_SL-Class_(R230),13674,0.002579,,,0.0,38.02
 Mercedes-Benz,R230 SL,2026-06,Mercedes-Benz_SL-Class_(R230),12185,0.002777,,,0.0,36.44
 Mercedes-Benz,R230 SL,2026-07,Mercedes-Benz_SL-Class_(R230),12342,0.002882,,,0.0,36.78
@@ -42264,7 +42264,7 @@ Mercedes-Benz,SL55 AMG,2025-12,Mercedes-Benz_SL-Class_(R230),13904,0.002561,,,0.
 Mercedes-Benz,SL55 AMG,2026-01,Mercedes-Benz_SL-Class_(R230),14026,0.002551,,,,35.66
 Mercedes-Benz,SL55 AMG,2026-02,Mercedes-Benz_SL-Class_(R230),12270,0.002437,,,0.0,36.21
 Mercedes-Benz,SL55 AMG,2026-03,Mercedes-Benz_SL-Class_(R230),14086,0.00262,,,0.0,38.54
-Mercedes-Benz,SL55 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.45
+Mercedes-Benz,SL55 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.44
 Mercedes-Benz,SL55 AMG,2026-05,Mercedes-Benz_SL-Class_(R230),13674,0.002579,,,0.0,38.02
 Mercedes-Benz,SL55 AMG,2026-06,Mercedes-Benz_SL-Class_(R230),12185,0.002777,,,0.0,36.44
 Mercedes-Benz,SL55 AMG,2026-07,Mercedes-Benz_SL-Class_(R230),12342,0.002882,,,0.0,36.78
@@ -42284,7 +42284,7 @@ Mercedes-Benz,SL63 AMG,2025-08,Mercedes-Benz_SL-Class_(R231),5998,0.001,,,0.0,24
 Mercedes-Benz,SL63 AMG,2025-09,Mercedes-Benz_SL-Class_(R231),5130,0.000928,,,0.0,22.88
 Mercedes-Benz,SL63 AMG,2025-10,Mercedes-Benz_SL-Class_(R231),5164,0.000906,,,0.0,22.9
 Mercedes-Benz,SL63 AMG,2025-11,Mercedes-Benz_SL-Class_(R231),4874,0.000887,,,0.0,22.4
-Mercedes-Benz,SL63 AMG,2025-12,Mercedes-Benz_SL-Class_(R231),4533,0.000835,,,0.0,21.7
+Mercedes-Benz,SL63 AMG,2025-12,Mercedes-Benz_SL-Class_(R231),4533,0.000835,,,0.0,21.69
 Mercedes-Benz,SL63 AMG,2026-01,Mercedes-Benz_SL-Class_(R231),4230,0.000769,,,0.0,21.01
 Mercedes-Benz,SL63 AMG,2026-02,Mercedes-Benz_SL-Class_(R231),4158,0.000826,,,0.0,20.93
 Mercedes-Benz,SL63 AMG,2026-03,Mercedes-Benz_SL-Class_(R231),4652,0.000865,,,0.0,21.96
@@ -42312,7 +42312,7 @@ Mercedes-Benz,SL65 AMG,2025-12,Mercedes-Benz_SL-Class_(R230),13904,0.002561,,,,3
 Mercedes-Benz,SL65 AMG,2026-01,Mercedes-Benz_SL-Class_(R230),14026,0.002551,,,0.0,38.4
 Mercedes-Benz,SL65 AMG,2026-02,Mercedes-Benz_SL-Class_(R230),12270,0.002437,,,0.0,36.21
 Mercedes-Benz,SL65 AMG,2026-03,Mercedes-Benz_SL-Class_(R230),14086,0.00262,,,1.0,49.99
-Mercedes-Benz,SL65 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.45
+Mercedes-Benz,SL65 AMG,2026-04,Mercedes-Benz_SL-Class_(R230),12373,0.002529,,,0.0,36.44
 Mercedes-Benz,SL65 AMG,2026-05,Mercedes-Benz_SL-Class_(R230),13674,0.002579,,,0.0,38.02
 Mercedes-Benz,SL65 AMG,2026-06,Mercedes-Benz_SL-Class_(R230),12185,0.002777,,,0.0,36.44
 Mercedes-Benz,SL65 AMG,2026-07,Mercedes-Benz_SL-Class_(R230),12342,0.002882,,,0.0,36.78
@@ -42429,7 +42429,7 @@ Mercedes-Benz,SLR McLaren,2025-09,Mercedes-Benz_SLR_McLaren,22626,0.004093,,,,49
 Mercedes-Benz,SLR McLaren,2025-10,Mercedes-Benz_SLR_McLaren,23256,0.004082,,,,49.93
 Mercedes-Benz,SLR McLaren,2025-11,Mercedes-Benz_SLR_McLaren,22451,0.004087,,,0.0,48.71
 Mercedes-Benz,SLR McLaren,2025-12,Mercedes-Benz_SLR_McLaren,24521,0.004517,,,1.0,62.1
-Mercedes-Benz,SLR McLaren,2026-01,Mercedes-Benz_SLR_McLaren,23080,0.004197,,,0.0,49.35
+Mercedes-Benz,SLR McLaren,2026-01,Mercedes-Benz_SLR_McLaren,23080,0.004197,,,0.0,49.34
 Mercedes-Benz,SLR McLaren,2026-02,Mercedes-Benz_SLR_McLaren,19099,0.003793,,,0.0,45.7
 Mercedes-Benz,SLR McLaren,2026-03,Mercedes-Benz_SLR_McLaren,19040,0.003541,,,0.0,45.26
 Mercedes-Benz,SLR McLaren,2026-04,Mercedes-Benz_SLR_McLaren,17631,0.003604,,,0.0,43.99
@@ -42653,7 +42653,7 @@ Mercedes-Benz,Unimog,2026-05,Unimog,16685,0.003147,,,0.0,42.33
 Mercedes-Benz,Unimog,2026-06,Unimog,14358,0.003272,,,0.0,39.62
 Mercedes-Benz,Unimog,2026-07,Unimog,14978,0.003497,,,0.0,40.71
 Mercedes-Benz,Unimog,2026-08,Unimog,16973,0.003907,,,0.0,43.76
-Mercedes-Benz,Unimog,2026-09,Unimog,15462,0.00385,,,0.0,41.9
+Mercedes-Benz,Unimog,2026-09,Unimog,15462,0.00385,,,0.0,41.89
 Mercedes-Benz,Unimog,2026-10,Unimog,15043,0.003751,,,0.0,41.17
 Mercedes-Benz,VIANO 3 2 FUN,2024-11,Mercedes-Benz_Vito,29546,0.005566,,,,57.02
 Mercedes-Benz,VIANO 3 2 FUN,2024-12,Mercedes-Benz_Vito,28835,0.005214,,,,55.95
@@ -43654,7 +43654,7 @@ Mercedes-Benz,X204 GLK-Class,2025-10,Mercedes-Benz_GLK-Class,11668,0.002048,,,0.
 Mercedes-Benz,X204 GLK-Class,2025-11,Mercedes-Benz_GLK-Class,11126,0.002025,,,0.0,34.16
 Mercedes-Benz,X204 GLK-Class,2025-12,Mercedes-Benz_GLK-Class,10830,0.001995,,,0.0,33.68
 Mercedes-Benz,X204 GLK-Class,2026-01,Mercedes-Benz_GLK-Class,10832,0.00197,,,0.0,33.65
-Mercedes-Benz,X204 GLK-Class,2026-02,Mercedes-Benz_GLK-Class,9672,0.001921,,,0.0,32.01
+Mercedes-Benz,X204 GLK-Class,2026-02,Mercedes-Benz_GLK-Class,9672,0.001921,,,0.0,32.0
 Mercedes-Benz,X204 GLK-Class,2026-03,Mercedes-Benz_GLK-Class,9931,0.001847,,,0.0,32.27
 Mercedes-Benz,X204 GLK-Class,2026-04,Mercedes-Benz_GLK-Class,9380,0.001918,,,0.0,31.6
 Mercedes-Benz,X204 GLK-Class,2026-05,Mercedes-Benz_GLK-Class,8847,0.001669,,,0.0,30.51
@@ -44344,7 +44344,7 @@ Meyers,Meyers Manx,2025-04,Meyers_Manx,4826,1.0,,,,52.9
 Meyers,Meyers Manx,2025-05,Meyers_Manx,5829,1.0,,,,55.23
 Meyers,Meyers Manx,2025-06,Meyers_Manx,5022,1.0,,,,53.33
 Meyers,Meyers Manx,2025-07,Meyers_Manx,4925,1.0,,,,53.13
-Meyers,Meyers Manx,2025-08,Meyers_Manx,5821,1.0,,,0.0,53.44
+Meyers,Meyers Manx,2025-08,Meyers_Manx,5821,1.0,,,0.0,53.43
 Meyers,Meyers Manx,2025-09,Meyers_Manx,4659,1.0,,,,52.5
 Meyers,Meyers Manx,2025-10,Meyers_Manx,4148,1.0,,,0.0,50.36
 Meyers,Meyers Manx,2025-11,Meyers_Manx,3820,1.0,,,,50.31
@@ -44462,7 +44462,7 @@ Mini,Mini Mk I & Mk II,2025-02,Mini_(Mark_I),3058,0.006932,,,,20.09
 Mini,Mini Mk I & Mk II,2025-03,Mini_(Mark_I),2900,0.005719,,,,18.12
 Mini,Mini Mk I & Mk II,2025-04,Mini_(Mark_I),2797,0.005427,,,,17.33
 Mini,Mini Mk I & Mk II,2025-05,Mini_(Mark_I),2818,0.005699,,,,17.86
-Mini,Mini Mk I & Mk II,2025-06,Mini_(Mark_I),2504,0.005677,,,0.0,24.02
+Mini,Mini Mk I & Mk II,2025-06,Mini_(Mark_I),2504,0.005677,,,0.0,24.01
 Mini,Mini Mk I & Mk II,2025-07,Mini_(Mark_I),2379,0.005459,,,0.0,23.46
 Mini,Mini Mk I & Mk II,2025-08,Mini_(Mark_I),3260,0.006654,,,0.0,26.64
 Mini,Mini Mk I & Mk II,2025-09,Mini_(Mark_I),3296,0.006961,,,0.0,26.93
@@ -44486,7 +44486,7 @@ Mini,Mini Mk I-III Cooper,2025-02,Mini_(Mark_I),3058,0.006932,,,,20.09
 Mini,Mini Mk I-III Cooper,2025-03,Mini_(Mark_I),2900,0.005719,,,,18.12
 Mini,Mini Mk I-III Cooper,2025-04,Mini_(Mark_I),2797,0.005427,,,,17.33
 Mini,Mini Mk I-III Cooper,2025-05,Mini_(Mark_I),2818,0.005699,,,,17.86
-Mini,Mini Mk I-III Cooper,2025-06,Mini_(Mark_I),2504,0.005677,,,0.0,24.02
+Mini,Mini Mk I-III Cooper,2025-06,Mini_(Mark_I),2504,0.005677,,,0.0,24.01
 Mini,Mini Mk I-III Cooper,2025-07,Mini_(Mark_I),2379,0.005459,,,0.0,23.46
 Mini,Mini Mk I-III Cooper,2025-08,Mini_(Mark_I),3260,0.006654,,,0.0,26.64
 Mini,Mini Mk I-III Cooper,2025-09,Mini_(Mark_I),3296,0.006961,,,,20.74
@@ -44952,7 +44952,7 @@ Mitsubishi,MITSUBISHI LANCER GSR,2025-12,Mitsubishi_Lancer,36567,0.106844,,,1.0,
 Mitsubishi,MITSUBISHI LANCER GSR,2026-01,Mitsubishi_Lancer,39282,0.115577,,,0.0,77.4
 Mitsubishi,MITSUBISHI LANCER GSR,2026-02,Mitsubishi_Lancer,37599,0.117795,,,0.0,76.85
 Mitsubishi,MITSUBISHI LANCER GSR,2026-03,Mitsubishi_Lancer,37746,0.115313,,,0.0,76.91
-Mitsubishi,MITSUBISHI LANCER GSR,2026-04,Mitsubishi_Lancer,33510,0.110975,,,0.0,75.49
+Mitsubishi,MITSUBISHI LANCER GSR,2026-04,Mitsubishi_Lancer,33510,0.110975,,,0.0,75.48
 Mitsubishi,MITSUBISHI LANCER GSR,2026-05,Mitsubishi_Lancer,35326,0.114467,,,0.0,76.14
 Mitsubishi,MITSUBISHI LANCER GSR,2026-06,Mitsubishi_Lancer,31195,0.11501,,,0.0,74.68
 Mitsubishi,MITSUBISHI LANCER GSR,2026-07,Mitsubishi_Lancer,29143,0.115999,,,0.0,73.7
@@ -45168,7 +45168,7 @@ Mitsubishi,Mitsubishi Lancer Evolution,2025-12,Mitsubishi_Lancer,36567,0.106844,
 Mitsubishi,Mitsubishi Lancer Evolution,2026-01,Mitsubishi_Lancer,39282,0.115577,,,0.0,77.4
 Mitsubishi,Mitsubishi Lancer Evolution,2026-02,Mitsubishi_Lancer,37599,0.117795,,,0.0,76.85
 Mitsubishi,Mitsubishi Lancer Evolution,2026-03,Mitsubishi_Lancer,37746,0.115313,,,0.0,76.91
-Mitsubishi,Mitsubishi Lancer Evolution,2026-04,Mitsubishi_Lancer,33510,0.110975,,,0.0,75.49
+Mitsubishi,Mitsubishi Lancer Evolution,2026-04,Mitsubishi_Lancer,33510,0.110975,,,0.0,75.48
 Mitsubishi,Mitsubishi Lancer Evolution,2026-05,Mitsubishi_Lancer,35326,0.114467,,,0.0,76.14
 Mitsubishi,Mitsubishi Lancer Evolution,2026-06,Mitsubishi_Lancer,31195,0.11501,,,0.0,74.68
 Mitsubishi,Mitsubishi Lancer Evolution,2026-07,Mitsubishi_Lancer,29143,0.115999,,,0.0,73.7
@@ -45428,7 +45428,7 @@ Morgan,Morgan Aero 8,2025-08,Morgan_Aero_8,4434,0.222345,,,0.0,48.56
 Morgan,Morgan Aero 8,2025-09,Morgan_Aero_8,4207,0.20523,,,0.0,47.99
 Morgan,Morgan Aero 8,2025-10,Morgan_Aero_8,4644,0.246588,,,0.0,49.11
 Morgan,Morgan Aero 8,2025-11,Morgan_Aero_8,3877,0.221568,,,0.0,47.43
-Morgan,Morgan Aero 8,2025-12,Morgan_Aero_8,3601,0.212211,,,0.0,46.79
+Morgan,Morgan Aero 8,2025-12,Morgan_Aero_8,3601,0.212211,,,0.0,46.78
 Morgan,Morgan Aero 8,2026-01,Morgan_Aero_8,4028,0.221319,,,0.0,47.73
 Morgan,Morgan Aero 8,2026-02,Morgan_Aero_8,3243,0.230851,,,0.0,46.17
 Morgan,Morgan Aero 8,2026-03,Morgan_Aero_8,3637,0.236476,,,0.0,47.0
@@ -45479,7 +45479,7 @@ Morgan,Morgan Plus 8,2025-11,Morgan_Plus_8,2312,0.132129,,,,41.5
 Morgan,Morgan Plus 8,2025-12,Morgan_Plus_8,2422,0.142731,,,,42.24
 Morgan,Morgan Plus 8,2026-01,Morgan_Plus_8,2325,0.127747,,,,41.33
 Morgan,Morgan Plus 8,2026-02,Morgan_Plus_8,1908,0.13582,,,0.0,42.04
-Morgan,Morgan Plus 8,2026-03,Morgan_Plus_8,2196,0.142783,,,0.0,42.98
+Morgan,Morgan Plus 8,2026-03,Morgan_Plus_8,2196,0.142783,,,0.0,42.97
 Morgan,Morgan Plus 8,2026-04,Morgan_Plus_8,2363,0.144703,,,0.0,43.35
 Morgan,Morgan Plus 8,2026-05,Morgan_Plus_8,3059,0.161408,,,,44.29
 Morgan,Morgan Plus 8,2026-06,Morgan_Plus_8,2545,0.143283,,,0.0,43.75
@@ -45547,7 +45547,7 @@ Mosler,MOSLER CONSULIER GTP,2025-07,Consulier_GTP,2729,1.0,,,,47.43
 Mosler,MOSLER CONSULIER GTP,2025-08,Consulier_GTP,2773,1.0,,,,47.58
 Mosler,MOSLER CONSULIER GTP,2025-09,Consulier_GTP,2074,1.0,,,,45.57
 Mosler,MOSLER CONSULIER GTP,2025-10,Consulier_GTP,1873,1.0,,,,44.92
-Mosler,MOSLER CONSULIER GTP,2025-11,Consulier_GTP,2267,1.0,,,0.0,46.47
+Mosler,MOSLER CONSULIER GTP,2025-11,Consulier_GTP,2267,1.0,,,0.0,46.46
 Mosler,MOSLER CONSULIER GTP,2025-12,Consulier_GTP,2008,1.0,,,,45.37
 Mosler,MOSLER CONSULIER GTP,2026-01,Consulier_GTP,2087,1.0,,,,45.6
 Mosler,MOSLER CONSULIER GTP,2026-02,Consulier_GTP,1669,1.0,,,,44.24
@@ -47919,7 +47919,7 @@ Norton,Norton Atlas,2025-03,Chipping_Norton,11854,0.033213,,,,53.55
 Norton,Norton Atlas,2025-04,Chipping_Norton,12496,0.044368,,,,56.72
 Norton,Norton Atlas,2025-05,Chipping_Norton,18709,0.061673,,,,68.38
 Norton,Norton Atlas,2025-06,Chipping_Norton,21850,0.063673,,,,72.03
-Norton,Norton Atlas,2025-07,Chipping_Norton,15238,0.054151,,,0.0,58.99
+Norton,Norton Atlas,2025-07,Chipping_Norton,15238,0.054151,,,0.0,58.98
 Norton,Norton Atlas,2025-08,Chipping_Norton,15426,0.038569,,,0.0,57.48
 Norton,Norton Atlas,2025-09,Chipping_Norton,11569,0.020287,,,,48.48
 Norton,Norton Atlas,2025-10,Chipping_Norton,10275,0.015789,,,,43.66
@@ -48319,7 +48319,7 @@ Oldsmobile,Oldsmobile F-85 & Jetfire,2026-07,Oldsmobile_88,16051,0.077634,,,,66.
 Oldsmobile,Oldsmobile F-85 & Jetfire,2026-08,Oldsmobile_88,15254,0.075144,,,,65.21
 Oldsmobile,Oldsmobile F-85 & Jetfire,2026-09,Oldsmobile_88,14446,0.073428,,,,63.54
 Oldsmobile,Oldsmobile F-85 & Jetfire,2026-10,Oldsmobile_88,13913,0.073354,,,,62.71
-Oldsmobile,Oldsmobile Hurst/Olds,2025-10,,,,,,1.0,97.15
+Oldsmobile,Oldsmobile Hurst/Olds,2025-10,,,,,,1.0,97.14
 Oldsmobile,Oldsmobile Series 76,2024-11,Oldsmobile_88,17003,0.075639,,,,68.03
 Oldsmobile,Oldsmobile Series 76,2024-12,Oldsmobile_88,17347,0.075511,,,,68.46
 Oldsmobile,Oldsmobile Series 76,2025-01,Oldsmobile_88,18853,0.07813,,,,70.63
@@ -49565,7 +49565,7 @@ Plymouth,Plymouth Road Runner,2025-02,Plymouth_Road_Runner,12423,0.031407,,,,53.
 Plymouth,Plymouth Road Runner,2025-03,Plymouth_Road_Runner,14613,0.034488,,,,58.15
 Plymouth,Plymouth Road Runner,2025-04,Plymouth_Road_Runner,15551,0.035405,,,,59.94
 Plymouth,Plymouth Road Runner,2025-05,Plymouth_Road_Runner,16427,0.035668,,,,61.31
-Plymouth,Plymouth Road Runner,2025-06,Plymouth_Road_Runner,15691,0.033813,,,0.0,57.0
+Plymouth,Plymouth Road Runner,2025-06,Plymouth_Road_Runner,15691,0.033813,,,0.0,56.99
 Plymouth,Plymouth Road Runner,2025-07,Plymouth_Road_Runner,14824,0.034725,,,0.0,56.0
 Plymouth,Plymouth Road Runner,2025-08,Plymouth_Road_Runner,16278,0.029408,,,0.0,56.69
 Plymouth,Plymouth Road Runner,2025-09,Plymouth_Road_Runner,15875,0.03479,,,0.0,57.4
@@ -50142,7 +50142,7 @@ Pontiac,Pontiac Bonneville,2025-03,Pontiac_Grand_Prix,22905,0.028457,,,,66.96
 Pontiac,Pontiac Bonneville,2025-04,Pontiac_Grand_Prix,22195,0.027127,,,,65.89
 Pontiac,Pontiac Bonneville,2025-05,Pontiac_Grand_Prix,22316,0.025997,,,,65.16
 Pontiac,Pontiac Bonneville,2025-06,Pontiac_Grand_Prix,21466,0.027072,,,,65.16
-Pontiac,Pontiac Bonneville,2025-07,Pontiac_Grand_Prix,20154,0.027055,,,0.0,60.0
+Pontiac,Pontiac Bonneville,2025-07,Pontiac_Grand_Prix,20154,0.027055,,,0.0,59.99
 Pontiac,Pontiac Bonneville,2025-08,Pontiac_Grand_Prix,22845,0.028339,,,0.0,62.42
 Pontiac,Pontiac Bonneville,2025-09,Pontiac_Grand_Prix,22796,0.029242,,,,67.03
 Pontiac,Pontiac Bonneville,2025-10,Pontiac_Grand_Prix,21043,0.028118,,,,64.98
@@ -50286,7 +50286,7 @@ Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-03,Pontiac_Grand_Pr
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-04,Pontiac_Grand_Prix,22195,0.027127,,,,65.89
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-05,Pontiac_Grand_Prix,22316,0.025997,,,,65.16
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-06,Pontiac_Grand_Prix,21466,0.027072,,,0.0,61.1
-Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-07,Pontiac_Grand_Prix,20154,0.027055,,,0.0,60.0
+Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-07,Pontiac_Grand_Prix,20154,0.027055,,,0.0,59.99
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-08,Pontiac_Grand_Prix,22845,0.028339,,,0.0,62.42
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-09,Pontiac_Grand_Prix,22796,0.029242,,,0.0,62.53
 Pontiac,Pontiac Firebird (2nd Generation – 1970-1981),2025-10,Pontiac_Grand_Prix,21043,0.028118,,,0.0,60.96
@@ -50577,7 +50577,7 @@ Pontiac,Pontiac Tempest / LeMans,2025-06,Pontiac_LeMans,12792,0.016133,,,,48.32
 Pontiac,Pontiac Tempest / LeMans,2025-07,Pontiac_LeMans,11578,0.015543,,,0.0,46.29
 Pontiac,Pontiac Tempest / LeMans,2025-08,Pontiac_LeMans,13057,0.016197,,,0.0,48.5
 Pontiac,Pontiac Tempest / LeMans,2025-09,Pontiac_LeMans,12792,0.016409,,,0.0,48.28
-Pontiac,Pontiac Tempest / LeMans,2025-10,Pontiac_LeMans,11092,0.014821,,,0.0,45.22
+Pontiac,Pontiac Tempest / LeMans,2025-10,Pontiac_LeMans,11092,0.014821,,,0.0,45.21
 Pontiac,Pontiac Tempest / LeMans,2025-11,Pontiac_LeMans,9911,0.014643,,,,42.29
 Pontiac,Pontiac Tempest / LeMans,2025-12,Pontiac_LeMans,9083,0.01465,,,0.0,42.41
 Pontiac,Pontiac Tempest / LeMans,2026-01,Pontiac_LeMans,10264,0.015929,,,0.0,44.63
@@ -50647,7 +50647,7 @@ Porsche,356 Replica,2025-04,Porsche_356,23513,0.005496,,,,52.66
 Porsche,356 Replica,2025-05,Porsche_356,23315,0.00567,,,,52.78
 Porsche,356 Replica,2025-06,Porsche_356,20790,0.005449,,,,49.83
 Porsche,356 Replica,2025-07,Porsche_356,20151,0.005552,,,0.0,48.89
-Porsche,356 Replica,2025-08,Porsche_356,22792,0.005595,,,0.0,51.06
+Porsche,356 Replica,2025-08,Porsche_356,22792,0.005595,,,0.0,51.05
 Porsche,356 Replica,2025-09,Porsche_356,22499,0.005542,,,0.0,50.74
 Porsche,356 Replica,2025-10,Porsche_356,20671,0.005159,,,0.0,48.84
 Porsche,356 Replica,2025-11,Porsche_356,19908,0.005341,,,0.0,48.4
@@ -50671,7 +50671,7 @@ Porsche,356 Speedster,2025-04,Porsche_356,23513,0.005496,,,,52.66
 Porsche,356 Speedster,2025-05,Porsche_356,23315,0.00567,,,,52.78
 Porsche,356 Speedster,2025-06,Porsche_356,20790,0.005449,,,,49.83
 Porsche,356 Speedster,2025-07,Porsche_356,20151,0.005552,,,0.0,48.89
-Porsche,356 Speedster,2025-08,Porsche_356,22792,0.005595,,,0.0,51.06
+Porsche,356 Speedster,2025-08,Porsche_356,22792,0.005595,,,0.0,51.05
 Porsche,356 Speedster,2025-09,Porsche_356,22499,0.005542,,,,51.7
 Porsche,356 Speedster,2025-10,Porsche_356,20671,0.005159,,,,49.22
 Porsche,356 Speedster,2025-11,Porsche_356,19908,0.005341,,,,48.66
@@ -50765,7 +50765,7 @@ Porsche,911 1974-1977,2025-02,Porsche_911_(classic),15800,0.004506,,,,41.78
 Porsche,911 1974-1977,2025-03,Porsche_911_(classic),17337,0.004148,,,,43.46
 Porsche,911 1974-1977,2025-04,Porsche_911_(classic),17945,0.004194,,,,44.34
 Porsche,911 1974-1977,2025-05,Porsche_911_(classic),19199,0.004669,,,,46.69
-Porsche,911 1974-1977,2025-06,Porsche_911_(classic),15737,0.004124,,,0.0,42.55
+Porsche,911 1974-1977,2025-06,Porsche_911_(classic),15737,0.004124,,,0.0,42.54
 Porsche,911 1974-1977,2025-07,Porsche_911_(classic),15793,0.004351,,,0.0,42.91
 Porsche,911 1974-1977,2025-08,Porsche_911_(classic),17866,0.004386,,,0.0,45.3
 Porsche,911 1974-1977,2025-09,Porsche_911_(classic),24976,0.006152,,,0.0,53.11
@@ -50796,7 +50796,7 @@ Porsche,911 Carrera 3.2,2025-09,Porsche_911,82062,0.020214,,,0.0,72.27
 Porsche,911 Carrera 3.2,2025-10,Porsche_911,77493,0.019341,,,0.0,71.86
 Porsche,911 Carrera 3.2,2025-11,Porsche_911,73458,0.019708,,,0.0,71.84
 Porsche,911 Carrera 3.2,2025-12,Porsche_911,72918,0.020235,,,0.0,71.99
-Porsche,911 Carrera 3.2,2026-01,Porsche_911,69772,0.018868,,,0.0,71.37
+Porsche,911 Carrera 3.2,2026-01,Porsche_911,69772,0.018868,,,0.0,71.36
 Porsche,911 Carrera 3.2,2026-02,Porsche_911,63930,0.020042,,,0.0,71.41
 Porsche,911 Carrera 3.2,2026-03,Porsche_911,63056,0.019526,,,0.0,71.18
 Porsche,911 Carrera 3.2,2026-04,Porsche_911,65574,0.020336,,,0.0,71.63
@@ -50854,7 +50854,7 @@ Porsche,911 RS America,2026-07,Porsche_911_GT2,12601,0.004412,,,,36.56
 Porsche,911 RS America,2026-08,Porsche_911_GT2,12574,0.004541,,,,36.68
 Porsche,911 RS America,2026-09,Porsche_911_GT2,11292,0.004292,,,,34.11
 Porsche,911 RS America,2026-10,Porsche_911_GT2,10953,0.004389,,,,33.67
-Porsche,911 Safari,2025-12,,,,,,1.0,97.15
+Porsche,911 Safari,2025-12,,,,,,1.0,97.14
 Porsche,911 Speedster,2024-11,Porsche_911_(964),18693,0.004695,,,,46.19
 Porsche,911 Speedster,2024-12,Porsche_911_(964),17835,0.003443,,,,42.92
 Porsche,911 Speedster,2025-01,Porsche_911_(964),17528,0.004006,,,,43.5
@@ -50917,7 +50917,7 @@ Porsche,911SC,2025-09,Porsche_911,82062,0.020214,,,0.0,72.27
 Porsche,911SC,2025-10,Porsche_911,77493,0.019341,,,0.0,71.86
 Porsche,911SC,2025-11,Porsche_911,73458,0.019708,,,0.0,71.84
 Porsche,911SC,2025-12,Porsche_911,72918,0.020235,,,0.0,71.99
-Porsche,911SC,2026-01,Porsche_911,69772,0.018868,,,0.0,71.37
+Porsche,911SC,2026-01,Porsche_911,69772,0.018868,,,0.0,71.36
 Porsche,911SC,2026-02,Porsche_911,63930,0.020042,,,0.0,71.41
 Porsche,911SC,2026-03,Porsche_911,63056,0.019526,,,0.0,71.18
 Porsche,911SC,2026-04,Porsche_911,65574,0.020336,,,0.0,71.63
@@ -51592,7 +51592,7 @@ Porsche,982 718 Boxster,2025-12,Porsche_718_Boxster_and_Cayman_(982),15111,0.004
 Porsche,982 718 Boxster,2026-01,Porsche_718_Boxster_and_Cayman_(982),15770,0.004265,,,0.0,42.78
 Porsche,982 718 Boxster,2026-02,Porsche_718_Boxster_and_Cayman_(982),13934,0.004368,,,0.0,40.59
 Porsche,982 718 Boxster,2026-03,Porsche_718_Boxster_and_Cayman_(982),14720,0.004558,,,0.0,41.78
-Porsche,982 718 Boxster,2026-04,Porsche_718_Boxster_and_Cayman_(982),16611,0.005152,,,0.0,44.99
+Porsche,982 718 Boxster,2026-04,Porsche_718_Boxster_and_Cayman_(982),16611,0.005152,,,0.0,44.98
 Porsche,982 718 Boxster,2026-05,Porsche_718_Boxster_and_Cayman_(982),16421,0.004947,,,0.0,44.45
 Porsche,982 718 Boxster,2026-06,Porsche_718_Boxster_and_Cayman_(982),14875,0.005142,,,0.0,42.87
 Porsche,982 718 Boxster,2026-07,Porsche_718_Boxster_and_Cayman_(982),14564,0.005099,,,0.0,42.4
@@ -51616,7 +51616,7 @@ Porsche,982 718 Cayman,2025-12,Porsche_718_Boxster_and_Cayman_(982),15111,0.0041
 Porsche,982 718 Cayman,2026-01,Porsche_718_Boxster_and_Cayman_(982),15770,0.004265,,,,41.35
 Porsche,982 718 Cayman,2026-02,Porsche_718_Boxster_and_Cayman_(982),13934,0.004368,,,0.0,40.59
 Porsche,982 718 Cayman,2026-03,Porsche_718_Boxster_and_Cayman_(982),14720,0.004558,,,0.0,41.78
-Porsche,982 718 Cayman,2026-04,Porsche_718_Boxster_and_Cayman_(982),16611,0.005152,,,0.0,44.99
+Porsche,982 718 Cayman,2026-04,Porsche_718_Boxster_and_Cayman_(982),16611,0.005152,,,0.0,44.98
 Porsche,982 718 Cayman,2026-05,Porsche_718_Boxster_and_Cayman_(982),16421,0.004947,,,0.0,44.45
 Porsche,982 718 Cayman,2026-06,Porsche_718_Boxster_and_Cayman_(982),14875,0.005142,,,0.0,42.87
 Porsche,982 718 Cayman,2026-07,Porsche_718_Boxster_and_Cayman_(982),14564,0.005099,,,0.0,42.4
@@ -53638,7 +53638,7 @@ Porsche,Cayenne Diesel (958),2026-06,List_of_Porsche_engines,4309,0.001489,,,,14
 Porsche,Cayenne Diesel (958),2026-07,List_of_Porsche_engines,3952,0.001384,,,0.0,21.16
 Porsche,Cayenne Diesel (958),2026-08,List_of_Porsche_engines,3850,0.00139,,,0.0,20.98
 Porsche,Cayenne Diesel (958),2026-09,List_of_Porsche_engines,4177,0.001588,,,0.0,22.01
-Porsche,Cayenne Diesel (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.15
+Porsche,Cayenne Diesel (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.14
 Porsche,Cayenne GTS (957),2024-11,Porsche_Cayenne,52428,0.013167,,,,72.75
 Porsche,Cayenne GTS (957),2024-12,Porsche_Cayenne,109531,0.021145,,,,80.79
 Porsche,Cayenne GTS (957),2025-01,Porsche_Cayenne,70304,0.016068,,,,77.0
@@ -53686,7 +53686,7 @@ Porsche,Cayenne GTS (958),2026-06,List_of_Porsche_engines,4309,0.001489,,,0.0,22
 Porsche,Cayenne GTS (958),2026-07,List_of_Porsche_engines,3952,0.001384,,,0.0,21.16
 Porsche,Cayenne GTS (958),2026-08,List_of_Porsche_engines,3850,0.00139,,,0.0,20.98
 Porsche,Cayenne GTS (958),2026-09,List_of_Porsche_engines,4177,0.001588,,,0.0,22.01
-Porsche,Cayenne GTS (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.15
+Porsche,Cayenne GTS (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.14
 Porsche,Cayenne GTS Coupe (9Y3),2024-11,Porsche_Cayenne,52428,0.013167,,,,72.75
 Porsche,Cayenne GTS Coupe (9Y3),2024-12,Porsche_Cayenne,109531,0.021145,,,,80.79
 Porsche,Cayenne GTS Coupe (9Y3),2025-01,Porsche_Cayenne,70304,0.016068,,,,77.0
@@ -53758,7 +53758,7 @@ Porsche,Cayenne S (958),2026-06,List_of_Porsche_engines,4309,0.001489,,,,14.46
 Porsche,Cayenne S (958),2026-07,List_of_Porsche_engines,3952,0.001384,,,0.0,21.16
 Porsche,Cayenne S (958),2026-08,List_of_Porsche_engines,3850,0.00139,,,,13.02
 Porsche,Cayenne S (958),2026-09,List_of_Porsche_engines,4177,0.001588,,,0.0,22.01
-Porsche,Cayenne S (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.15
+Porsche,Cayenne S (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.14
 Porsche,Cayenne S (9Y0),2024-11,Porsche_Cayenne,52428,0.013167,,,,72.75
 Porsche,Cayenne S (9Y0),2024-12,Porsche_Cayenne,109531,0.021145,,,,80.79
 Porsche,Cayenne S (9Y0),2025-01,Porsche_Cayenne,70304,0.016068,,,,77.0
@@ -53830,7 +53830,7 @@ Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-06,List_of_Porsche_engines,4309
 Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-07,List_of_Porsche_engines,3952,0.001384,,,0.0,21.16
 Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-08,List_of_Porsche_engines,3850,0.00139,,,0.0,20.98
 Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-09,List_of_Porsche_engines,4177,0.001588,,,0.0,22.01
-Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.15
+Porsche,Cayenne S E-Hybrid & S Hybrid (958),2026-10,List_of_Porsche_engines,4170,0.001671,,,0.0,22.14
 Porsche,Cayenne S Titanium Edition (955),2024-11,Porsche_Cayenne,52428,0.013167,,,,72.75
 Porsche,Cayenne S Titanium Edition (955),2024-12,Porsche_Cayenne,109531,0.021145,,,,80.79
 Porsche,Cayenne S Titanium Edition (955),2025-01,Porsche_Cayenne,70304,0.016068,,,,77.0
@@ -54108,7 +54108,7 @@ Porsche,Panamera,2025-07,Porsche_Panamera,30989,0.008538,,,1.0,69.71
 Porsche,Panamera,2025-08,Porsche_Panamera,35575,0.008733,,,0.0,60.17
 Porsche,Panamera,2025-09,Porsche_Panamera,33514,0.008255,,,1.0,70.5
 Porsche,Panamera,2025-10,Porsche_Panamera,33338,0.008321,,,0.0,59.06
-Porsche,Panamera,2025-11,Porsche_Panamera,31487,0.008448,,,0.0,58.44
+Porsche,Panamera,2025-11,Porsche_Panamera,31487,0.008448,,,0.0,58.43
 Porsche,Panamera,2025-12,Porsche_Panamera,33375,0.009261,,,1.0,71.36
 Porsche,Panamera,2026-01,Porsche_Panamera,31859,0.008616,,,0.0,58.75
 Porsche,Panamera,2026-02,Porsche_Panamera,28628,0.008975,,,1.0,68.95
@@ -54136,7 +54136,7 @@ Porsche,Singer,2025-11,Singer_Vehicle_Design,5561,0.001492,,,0.0,24.31
 Porsche,Singer,2025-12,Singer_Vehicle_Design,5562,0.001543,,,,17.47
 Porsche,Singer,2026-01,Singer_Vehicle_Design,5853,0.001583,,,,18.34
 Porsche,Singer,2026-02,Singer_Vehicle_Design,5320,0.001668,,,0.0,24.21
-Porsche,Singer,2026-03,Singer_Vehicle_Design,6398,0.001981,,,0.0,26.83
+Porsche,Singer,2026-03,Singer_Vehicle_Design,6398,0.001981,,,0.0,26.82
 Porsche,Singer,2026-04,Singer_Vehicle_Design,7094,0.0022,,,1.0,39.98
 Porsche,Singer,2026-05,Singer_Vehicle_Design,5253,0.001582,,,0.0,23.95
 Porsche,Singer,2026-06,Singer_Vehicle_Design,4426,0.00153,,,0.0,22.39
@@ -54797,7 +54797,7 @@ Riley,RILEY RMD,2025-04,Riley_RM,10336,0.296585,,,,62.13
 Riley,RILEY RMD,2025-05,Riley_RM,4841,0.258946,,,,50.15
 Riley,RILEY RMD,2025-06,Riley_RM,3708,0.242893,,,,47.13
 Riley,RILEY RMD,2025-07,Riley_RM,3605,0.260646,,,,46.95
-Riley,RILEY RMD,2025-08,Riley_RM,4104,0.251578,,,0.0,48.08
+Riley,RILEY RMD,2025-08,Riley_RM,4104,0.251578,,,0.0,48.07
 Riley,RILEY RMD,2025-09,Riley_RM,4779,0.265574,,,,50.03
 Riley,RILEY RMD,2025-10,Riley_RM,6954,0.292381,,,,55.68
 Riley,RILEY RMD,2025-11,Riley_RM,4692,0.275659,,,,49.9
@@ -54992,7 +54992,7 @@ Rolls-Royce,Corniche,2026-06,Rolls-Royce_Corniche,5548,0.045266,,,0.0,43.88
 Rolls-Royce,Corniche,2026-07,Rolls-Royce_Corniche,5417,0.04444,,,,42.39
 Rolls-Royce,Corniche,2026-08,Rolls-Royce_Corniche,6043,0.048938,,,0.0,45.34
 Rolls-Royce,Corniche,2026-09,Rolls-Royce_Corniche,5714,0.045812,,,1.0,55.75
-Rolls-Royce,Corniche,2026-10,Rolls-Royce_Corniche,6062,0.042611,,,0.0,44.62
+Rolls-Royce,Corniche,2026-10,Rolls-Royce_Corniche,6062,0.042611,,,0.0,44.61
 Rolls-Royce,Cullinan,2024-11,Rolls-Royce_Cullinan,14045,0.090346,,,,64.49
 Rolls-Royce,Cullinan,2024-12,Rolls-Royce_Cullinan,14318,0.090184,,,,64.89
 Rolls-Royce,Cullinan,2025-01,Rolls-Royce_Cullinan,17585,0.102752,,,,70.55
@@ -55216,7 +55216,7 @@ Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-02,Rolls-Royce_Silver_Shado
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-03,Rolls-Royce_Silver_Shadow,10826,0.063617,,,,56.53
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-04,Rolls-Royce_Silver_Shadow,11279,0.068179,,,,57.88
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-05,Rolls-Royce_Silver_Shadow,11072,0.064517,,,,57.11
-Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-06,Rolls-Royce_Silver_Shadow,10042,0.062786,,,0.0,53.29
+Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-06,Rolls-Royce_Silver_Shadow,10042,0.062786,,,0.0,53.28
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-07,Rolls-Royce_Silver_Shadow,10456,0.070855,,,0.0,54.54
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-08,Rolls-Royce_Silver_Shadow,11765,0.069855,,,0.0,56.3
 Rolls-Royce,SY Silver Shadow & Silver Wraith II,2025-09,Rolls-Royce_Silver_Shadow,10920,0.071393,,,,57.56
@@ -55483,7 +55483,7 @@ Rover,ROVER 3500,2025-05,Rover_P6,12021,0.162058,,,,63.73
 Rover,ROVER 3500,2025-06,Rover_P6,12141,0.172968,,,,64.14
 Rover,ROVER 3500,2025-07,Rover_P6,13127,0.178042,,,,65.78
 Rover,ROVER 3500,2025-08,Rover_P6,12006,0.15798,,,1.0,71.34
-Rover,ROVER 3500,2025-09,Rover_P6,10059,0.130684,,,0.0,56.72
+Rover,ROVER 3500,2025-09,Rover_P6,10059,0.130684,,,0.0,56.71
 Rover,ROVER 3500,2025-10,Rover_P6,10452,0.151527,,,0.0,57.68
 Rover,ROVER 3500,2025-11,Rover_P6,10518,0.151301,,,0.0,57.78
 Rover,ROVER 3500,2025-12,Rover_P6,11458,0.162182,,,0.0,59.26
@@ -55709,7 +55709,7 @@ Saab,Saab 9-3 Viggen,2026-03,Saab_37_Viggen,22541,0.12359,,,,76.69
 Saab,Saab 9-3 Viggen,2026-04,Saab_37_Viggen,20929,0.119078,,,,74.99
 Saab,Saab 9-3 Viggen,2026-05,Saab_37_Viggen,24449,0.120449,,,,78.33
 Saab,Saab 9-3 Viggen,2026-06,Saab_37_Viggen,21337,0.124489,,,,75.5
-Saab,Saab 9-3 Viggen,2026-07,Saab_37_Viggen,18294,0.108392,,,0.0,66.22
+Saab,Saab 9-3 Viggen,2026-07,Saab_37_Viggen,18294,0.108392,,,0.0,66.21
 Saab,Saab 9-3 Viggen,2026-08,Saab_37_Viggen,19417,0.111619,,,0.0,67.28
 Saab,Saab 9-3 Viggen,2026-09,Saab_37_Viggen,19708,0.117296,,,,73.62
 Saab,Saab 9-3 Viggen,2026-10,Saab_37_Viggen,20556,0.123762,,,0.0,68.42
@@ -55749,7 +55749,7 @@ Saab,Saab 900,2025-07,Saab_9-3,23264,0.111565,,,0.0,70.39
 Saab,Saab 900,2025-08,Saab_9-3,23234,0.107551,,,0.0,70.21
 Saab,Saab 900,2025-09,Saab_9-3,20989,0.1071,,,0.0,68.41
 Saab,Saab 900,2025-10,Saab_9-3,21549,0.104962,,,0.0,68.77
-Saab,Saab 900,2025-11,Saab_9-3,20773,0.100698,,,1.0,79.49
+Saab,Saab 900,2025-11,Saab_9-3,20773,0.100698,,,1.0,79.48
 Saab,Saab 900,2025-12,Saab_9-3,20127,0.099357,,,0.0,67.43
 Saab,Saab 900,2026-01,Saab_9-3,25232,0.12358,,,0.0,71.78
 Saab,Saab 900,2026-02,Saab_9-3,18800,0.112918,,,0.0,66.83
@@ -55892,8 +55892,8 @@ Saleen,Saleen S7,2025-06,Saleen_S7,10486,1.0,,,0.0,60.96
 Saleen,Saleen S7,2025-07,Saleen_S7,13394,1.0,,,0.0,64.75
 Saleen,Saleen S7,2025-08,Saleen_S7,10306,1.0,,,0.0,60.69
 Saleen,Saleen S7,2025-09,Saleen_S7,8547,1.0,,,0.0,58.38
-Saleen,Saleen S7,2025-10,Saleen_S7,10398,1.0,,,0.0,60.85
-Saleen,Saleen S7,2025-11,Saleen_S7,9539,1.0,,,0.0,59.7
+Saleen,Saleen S7,2025-10,Saleen_S7,10398,1.0,,,0.0,60.84
+Saleen,Saleen S7,2025-11,Saleen_S7,9539,1.0,,,0.0,59.69
 Saleen,Saleen S7,2025-12,Saleen_S7,9242,1.0,,,0.0,59.29
 Saleen,Saleen S7,2026-01,Saleen_S7,8794,1.0,,,,62.04
 Saleen,Saleen S7,2026-02,Saleen_S7,6731,1.0,,,,57.72
@@ -56012,7 +56012,7 @@ Scion,SCION IQ,2025-06,Toyota_iQ,10388,0.175684,,,,61.06
 Scion,SCION IQ,2025-07,Toyota_iQ,11379,0.181483,,,1.0,70.82
 Scion,SCION IQ,2025-08,Toyota_iQ,12108,0.161518,,,0.0,60.09
 Scion,SCION IQ,2025-09,Toyota_iQ,11211,0.181302,,,0.0,59.16
-Scion,SCION IQ,2025-10,Toyota_iQ,10683,0.177881,,,0.0,58.41
+Scion,SCION IQ,2025-10,Toyota_iQ,10683,0.177881,,,0.0,58.4
 Scion,SCION IQ,2025-11,Toyota_iQ,10821,0.177685,,,0.0,58.58
 Scion,SCION IQ,2025-12,Toyota_iQ,8967,0.168756,,,0.0,55.99
 Scion,SCION IQ,2026-01,Toyota_iQ,8817,0.174629,,,0.0,55.84
@@ -56762,7 +56762,7 @@ Subaru,Subaru BRZ,2025-12,Subaru_Levorg,8990,0.017459,,,0.0,43.71
 Subaru,Subaru BRZ,2026-01,Subaru_Levorg,10368,0.019072,,,0.0,46.11
 Subaru,Subaru BRZ,2026-02,Subaru_Levorg,8371,0.016943,,,0.0,42.62
 Subaru,Subaru BRZ,2026-03,Subaru_Levorg,8583,0.018336,,,0.0,43.5
-Subaru,Subaru BRZ,2026-04,Subaru_Levorg,7981,0.018067,,,0.0,42.55
+Subaru,Subaru BRZ,2026-04,Subaru_Levorg,7981,0.018067,,,0.0,42.54
 Subaru,Subaru BRZ,2026-05,Subaru_Levorg,8712,0.019156,,,0.0,43.94
 Subaru,Subaru BRZ,2026-06,Subaru_Levorg,8517,0.021172,,,0.0,44.39
 Subaru,Subaru BRZ,2026-07,Subaru_Levorg,8339,0.021269,,,,43.19
@@ -56946,7 +56946,7 @@ Subaru,Subaru Legacy,2025-04,Subaru_Legacy,22284,0.036804,,,,68.48
 Subaru,Subaru Legacy,2025-05,Subaru_Legacy,20710,0.037919,,,,67.12
 Subaru,Subaru Legacy,2025-06,Subaru_Legacy,18521,0.033691,,,0.0,60.05
 Subaru,Subaru Legacy,2025-07,Subaru_Legacy,18921,0.036554,,,0.0,60.9
-Subaru,Subaru Legacy,2025-08,Subaru_Legacy,20444,0.036814,,,0.0,62.2
+Subaru,Subaru Legacy,2025-08,Subaru_Legacy,20444,0.036814,,,0.0,62.19
 Subaru,Subaru Legacy,2025-09,Subaru_Legacy,21309,0.040414,,,0.0,63.43
 Subaru,Subaru Legacy,2025-10,Subaru_Legacy,19365,0.035483,,,0.0,61.06
 Subaru,Subaru Legacy,2025-11,Subaru_Legacy,18685,0.035656,,,,64.43
@@ -58150,7 +58150,7 @@ Tesla,Roadster,2025-10,Tesla_Roadster,4184,0.008936,,,,25.32
 Tesla,Roadster,2025-11,Tesla_Roadster,3416,0.007558,,,,21.75
 Tesla,Roadster,2025-12,Tesla_Roadster,2697,0.006115,,,0.0,24.87
 Tesla,Roadster,2026-01,Tesla_Roadster,3227,0.006865,,,,20.46
-Tesla,Roadster,2026-02,Tesla_Roadster,2584,0.00596,,,0.0,24.47
+Tesla,Roadster,2026-02,Tesla_Roadster,2584,0.00596,,,0.0,24.46
 Tesla,Roadster,2026-03,Tesla_Roadster,2048,0.004557,,,0.0,21.44
 Tesla,Roadster,2026-04,Tesla_Roadster,3495,0.006335,,,,20.5
 Tesla,Roadster,2026-05,Tesla_Roadster,4091,0.006748,,,0.0,28.39
@@ -58661,7 +58661,7 @@ Toyota,Celica Supra A60,2026-05,Toyota_Supra,62806,0.020684,,,0.0,71.54
 Toyota,Celica Supra A60,2026-06,Toyota_Supra,53679,0.020015,,,0.0,70.16
 Toyota,Celica Supra A60,2026-07,Toyota_Supra,48517,0.017684,,,,74.76
 Toyota,Celica Supra A60,2026-08,Toyota_Supra,47431,0.016192,,,0.0,67.57
-Toyota,Celica Supra A60,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.45
+Toyota,Celica Supra A60,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.44
 Toyota,Celica Supra A60,2026-10,Toyota_Supra,44032,0.016457,,,0.0,67.02
 Toyota,Century,2024-11,Toyota_Century,47729,0.013034,,,,71.55
 Toyota,Century,2024-12,Toyota_Century,35327,0.00945,,,,64.66
@@ -58768,7 +58768,7 @@ Toyota,Crown,2025-04,Toyota_Crown,80424,0.018964,,,,79.1
 Toyota,Crown,2025-05,Toyota_Crown,76791,0.018676,,,,78.8
 Toyota,Crown,2025-06,Toyota_Crown,67565,0.01699,,,0.0,70.46
 Toyota,Crown,2025-07,Toyota_Crown,60375,0.018056,,,0.0,70.41
-Toyota,Crown,2025-08,Toyota_Crown,67362,0.017137,,,0.0,70.53
+Toyota,Crown,2025-08,Toyota_Crown,67362,0.017137,,,0.0,70.52
 Toyota,Crown,2025-09,Toyota_Crown,59777,0.01665,,,0.0,69.71
 Toyota,Crown,2025-10,Toyota_Crown,64221,0.017003,,,0.0,70.25
 Toyota,Crown,2025-11,Toyota_Crown,59415,0.016636,,,0.0,69.68
@@ -59693,7 +59693,7 @@ Toyota,Supra A70,2026-05,Toyota_Supra,62806,0.020684,,,0.0,71.54
 Toyota,Supra A70,2026-06,Toyota_Supra,53679,0.020015,,,0.0,70.16
 Toyota,Supra A70,2026-07,Toyota_Supra,48517,0.017684,,,0.0,68.48
 Toyota,Supra A70,2026-08,Toyota_Supra,47431,0.016192,,,0.0,67.57
-Toyota,Supra A70,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.45
+Toyota,Supra A70,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.44
 Toyota,Supra A70,2026-10,Toyota_Supra,44032,0.016457,,,0.0,67.02
 Toyota,Supra A80,2024-11,Toyota_Supra,83170,0.022712,,,,80.77
 Toyota,Supra A80,2024-12,Toyota_Supra,80845,0.021625,,,,80.27
@@ -59717,7 +59717,7 @@ Toyota,Supra A80,2026-05,Toyota_Supra,62806,0.020684,,,0.0,71.54
 Toyota,Supra A80,2026-06,Toyota_Supra,53679,0.020015,,,0.0,70.16
 Toyota,Supra A80,2026-07,Toyota_Supra,48517,0.017684,,,0.0,68.48
 Toyota,Supra A80,2026-08,Toyota_Supra,47431,0.016192,,,0.0,67.57
-Toyota,Supra A80,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.45
+Toyota,Supra A80,2026-09,Toyota_Supra,43852,0.015499,,,0.0,66.44
 Toyota,Supra A80,2026-10,Toyota_Supra,44032,0.016457,,,0.0,67.02
 Toyota,Supra J29/DB (2020-),2024-11,Toyota_GR_Supra,34211,0.009342,,,,64.07
 Toyota,Supra J29/DB (2020-),2024-12,Toyota_GR_Supra,34354,0.009189,,,,63.94
@@ -59815,7 +59815,7 @@ Toyota,TRD Pro,2026-07,Toyota_4Runner,38783,0.014136,,,0.0,64.36
 Toyota,TRD Pro,2026-08,Toyota_4Runner,35902,0.012256,,,0.0,62.58
 Toyota,TRD Pro,2026-09,Toyota_4Runner,33308,0.011772,,,0.0,61.48
 Toyota,TRD Pro,2026-10,Toyota_4Runner,31555,0.011794,,,0.0,60.81
-Toyota,Tacoma (N1X0 1995-2005),2026-09,,,,,,1.0,97.15
+Toyota,Tacoma (N1X0 1995-2005),2026-09,,,,,,1.0,97.14
 Toyota,Tacoma (N2X0 2005-2015),2024-11,Toyota_Tacoma,44522,0.012158,,,,70.17
 Toyota,Tacoma (N2X0 2005-2015),2024-12,Toyota_Tacoma,46754,0.012506,,,,70.99
 Toyota,Tacoma (N2X0 2005-2015),2025-01,Toyota_Tacoma,50607,0.013077,,,,72.27
@@ -60653,7 +60653,7 @@ Triumph,Triumph Stag,2026-04,Triumph_Stag,4716,0.018301,,,,33.22
 Triumph,Triumph Stag,2026-05,Triumph_Stag,5349,0.021731,,,,36.11
 Triumph,Triumph Stag,2026-06,Triumph_Stag,5400,0.024277,,,,37.12
 Triumph,Triumph Stag,2026-07,Triumph_Stag,5602,0.026968,,,0.0,40.92
-Triumph,Triumph Stag,2026-08,Triumph_Stag,6226,0.028342,,,0.0,42.5
+Triumph,Triumph Stag,2026-08,Triumph_Stag,6226,0.028342,,,0.0,42.49
 Triumph,Triumph Stag,2026-09,Triumph_Stag,6194,0.029407,,,,41.19
 Triumph,Triumph Stag,2026-10,Triumph_Stag,5150,0.023592,,,0.0,38.95
 Triumph,Triumph TR2,2024-11,Triumph_TR2,2107,0.008029,,,,18.67
@@ -62238,7 +62238,7 @@ Volkswagen,Volkswagen Jetta,2025-04,Volkswagen_Jetta,34388,0.023784,,,,72.43
 Volkswagen,Volkswagen Jetta,2025-05,Volkswagen_Jetta,32550,0.026079,,,,72.37
 Volkswagen,Volkswagen Jetta,2025-06,Volkswagen_Jetta,32241,0.028832,,,0.0,67.5
 Volkswagen,Volkswagen Jetta,2025-07,Volkswagen_Jetta,26535,0.0248,,,0.0,63.51
-Volkswagen,Volkswagen Jetta,2025-08,Volkswagen_Jetta,30641,0.025529,,,0.0,65.63
+Volkswagen,Volkswagen Jetta,2025-08,Volkswagen_Jetta,30641,0.025529,,,0.0,65.62
 Volkswagen,Volkswagen Jetta,2025-09,Volkswagen_Jetta,29618,0.026984,,,0.0,65.94
 Volkswagen,Volkswagen Jetta,2025-10,Volkswagen_Jetta,30165,0.027765,,,1.0,77.7
 Volkswagen,Volkswagen Jetta,2025-11,Volkswagen_Jetta,29072,0.028354,,,0.0,65.97
@@ -62440,7 +62440,7 @@ Volkswagen,Volkswagen Scirocco,2026-02,Volkswagen_Scirocco,19702,0.020237,,,0.0,
 Volkswagen,Volkswagen Scirocco,2026-03,Volkswagen_Scirocco,20869,0.020774,,,0.0,58.54
 Volkswagen,Volkswagen Scirocco,2026-04,Volkswagen_Scirocco,19236,0.020321,,,0.0,57.06
 Volkswagen,Volkswagen Scirocco,2026-05,Volkswagen_Scirocco,22667,0.023348,,,0.0,60.69
-Volkswagen,Volkswagen Scirocco,2026-06,Volkswagen_Scirocco,17654,0.0199,,,0.0,55.42
+Volkswagen,Volkswagen Scirocco,2026-06,Volkswagen_Scirocco,17654,0.0199,,,0.0,55.41
 Volkswagen,Volkswagen Scirocco,2026-07,Volkswagen_Scirocco,17226,0.020083,,,,57.34
 Volkswagen,Volkswagen Scirocco,2026-08,Volkswagen_Scirocco,17724,0.021439,,,0.0,56.03
 Volkswagen,Volkswagen Scirocco,2026-09,Volkswagen_Scirocco,17055,0.021922,,,,57.9
@@ -63360,7 +63360,7 @@ Volvo,Volvo XC90,2025-04,Volvo_XC90,36987,0.044188,,,,78.81
 Volvo,Volvo XC90,2025-05,Volvo_XC90,31081,0.044827,,,,76.24
 Volvo,Volvo XC90,2025-06,Volvo_XC90,29055,0.045968,,,0.0,68.79
 Volvo,Volvo XC90,2025-07,Volvo_XC90,29738,0.046684,,,0.0,69.19
-Volvo,Volvo XC90,2025-08,Volvo_XC90,32332,0.044501,,,0.0,70.16
+Volvo,Volvo XC90,2025-08,Volvo_XC90,32332,0.044501,,,0.0,70.15
 Volvo,Volvo XC90,2025-09,Volvo_XC90,31768,0.047819,,,0.0,70.3
 Volvo,Volvo XC90,2025-10,Volvo_XC90,33412,0.051145,,,0.0,71.27
 Volvo,Volvo XC90,2025-11,Volvo_XC90,31871,0.048547,,,0.0,70.41
