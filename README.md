@@ -392,6 +392,7 @@ To integrate real auction data:
 ## Files
 
 - `index.html` - Main dashboard HTML structure
+- `index-lots.html` - Every sale of every index car (from `data/index_lots.csv`)
 - `app.js` - Application logic, data management, and rendering
 - `app.py` - Legacy Streamlit Python scraper (deprecated)
 - `requirements.txt` - Python dependencies for legacy app
@@ -487,6 +488,19 @@ sale's highlight count, over all sales' ratings), so the cars' shares add up
 to the Apex score the index would have as one make, and the panel shows where
 that would rank. A sold price under 40% of the car's median (with three or
 more results) is set aside as most likely not the car.
+
+**Index car sales** (`index-lots.html`) tracks every sale of every car in the
+six indexes (BMW CI, MBCI, MBCI Emerging, HAGI Top, F and P): per car, its
+sales, sell-through, median and latest sold price, and its lots newest first
+with a link to the Bring a Trailer listing. `data/pipelines/index_lots.py`,
+run daily after `mai.py`, is the same matcher over every index; it writes
+`data/index_lots.csv` (the `hagi_top_lots.csv` columns plus `indexes`,
+`source`, `sale_date`, `title` and `url`) from the scored lots, catalogue lots
+of sales still to come, and the current month's closed Bring a Trailer
+listings. `online_lots.csv` leaves the month out until it is complete, so
+those last are on this page only: no score reads `index_lots.csv`. Bring a
+Trailer prices are the hammer without its buyer's fee; live prices are as the
+store holds them, fee-inclusive where entered so, else the hammer.
 
 MAI's apex lots are the **top 10% of each sale** (20 lots or more), ranked
 by high estimate, or by sold price for a lot with no estimate. Lots entered

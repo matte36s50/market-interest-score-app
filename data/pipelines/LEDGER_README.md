@@ -1,6 +1,6 @@
-# Weekly Auction Results Ledger ingest
+# Auction Results Ledger ingest
 
-Reads the weekly **Auction Results Ledger** Google Sheets, builds one deduplicated dataset,
+Reads the **Auction Results Ledger** Google Sheets (a new one every other Monday), builds one deduplicated dataset,
 validates it, and feeds the **Apex Ledger** tab (`mai-ledger.html`).
 
 This runs separately from the MII pipeline and from the store-fed MAI
@@ -26,7 +26,7 @@ Outputs, all in `data/ledger/`:
 | `.cache/` | Raw pulls (gitignored) |
 
 **Only scores are published.** The repository and the site are public, and the ledger is the
-basis of a client product, so the three CSVs are gitignored (`data/ledger/*.csv`) and the weekly
+basis of a client product, so the three CSVs are gitignored (`data/ledger/*.csv`) and the ledger
 workflow commits only `mai_ledger.json` and `validation_report.json`. Neither holds a lot's
 record, price or notes; `test_published_files_hold_no_lot_rows` checks that. Run the ingest
 locally to get the lot-level files.
@@ -94,12 +94,19 @@ Exit status is **1** on any hard error. The dataset files are then left as they 
 > `(rev record_id)` replacements, and the 12 Oct ledger carries `record_id` itself, so a live
 > run reads three ledgers. The plain 28 Sep and 5 Oct sheets are listed under `ignored_files`.
 
-## 3a. Weekly run
+## 3a. Scheduled run
 
-`.github/workflows/ledger.yml` runs the ingest and the scoring at 16:17 UTC on Mondays (after
-the week's ledger lands) and again on Tuesdays for a late one, commits `data/ledger/` and
-redeploys the site. It needs the repository secret `LEDGER_SERVICE_ACCOUNT_JSON`: the whole
-JSON key from step 1, pasted as the secret's value. Without it the run stops with a warning
+The Drive digest writes a ledger every other Monday, usually between 13:00 and 15:00 UTC.
+`.github/workflows/ledger.yml` runs the ingest and the scoring at 16:17 UTC every Monday (after
+a ledger lands) and again on Tuesdays for a late one, commits `data/ledger/` and redeploys the
+site. In an off week there is no new file: the folder is unchanged, the rebuild is
+byte-identical and nothing is committed, so the Apex Ledger tab's "as of" date stays on the
+last ledger. That is expected, not a failure. Each run reads the whole folder, so a ledger that
+lands after Tuesday's run (the 2 November 2026 ledger was created on Wednesday 4 November) is
+picked up by the next scheduled run; run the workflow by hand to take it sooner. GitHub often
+starts scheduled runs hours late.
+
+The run needs the repository secret `LEDGER_SERVICE_ACCOUNT_JSON`: the whole JSON key from step 1, pasted as the secret's value. Without it the run stops with a warning
 and changes nothing. Run it by hand from the Actions tab (*Apex Ledger → Run workflow*) after
 adding the secret, rather than waiting for Monday.
 
@@ -112,7 +119,7 @@ Zurich lots twice, once in EUR and once in CHF.
 
 - `supersedes` is carried through as the audit trail. Dedupe never reads it; a test blanks it
   and checks the result doesn't change.
-- `make` + `model` is never a join key. Model names change between weeks (lot 122:
+- `make` + `model` is never a join key. Model names change between ledgers (lot 122:
   "365 GTB/4 Daytona" → "365 GTB/4 Daytona Berlinetta").
 - The record_id's ledger date must match the date in the file's title, because dedupe orders
   rows by it.
@@ -136,7 +143,7 @@ reformatting.
 | `hagi_index` | The HAGI index(es) the car belongs to (`HAGI Top`, `HAGI F`, `HAGI P`, `BMW CI`, `MBCI`, `MBCI Emerging`), `; `-separated. Optional: ledgers before 19 Oct 2026 lack it, and it is blank there. A name outside the six is kept, with a warning |
 | `premium_included` | `yes` / `no` / `unknown`. Hammer-only and premium-inclusive prices aren't comparable; MAI output is segmented by this |
 | `price_usd`, `fx_rate` | As recorded. Never re-converted |
-| `fx_date` | Derived: the ledger date, i.e. the week whose rate `fx_rate` is. Blank when `fx_rate` is blank. Makes future re-basing possible |
+| `fx_date` | Derived: the ledger date, i.e. the ledger whose rate `fx_rate` is. Blank when `fx_rate` is blank. Makes future re-basing possible |
 | `estimate_low`, `estimate_high`, `estimate_currency` | As published. `estimate_currency` may differ from `currency`; the price's `fx_rate` is never applied to the estimate |
 | `high_estimate_usd` | As recorded. **Blank = unknown**, never 0 |
 | `status` | `CONFIRMED` / `REPORTED` / `UNVERIFIED` |
@@ -215,7 +222,7 @@ MAI = sum of P ÷ number of events with apex lots     # events unweighted
 That is the mean of P over **every** event with apex lots, 0 where the manufacturer had none. Each MAI is
 the manufacturer's share of all apex lots, the MAIs add up to 1, and a make that topped one small sale
 can't outrank one that is among the apex lots everywhere. v1 weights events by an auction rating built on
-each sale's total lot count, which a curated weekly ledger doesn't have.
+each sale's total lot count, which a curated ledger doesn't have.
 
 **Q and R are reported beside the score, not multiplied in**, as in v1:
 

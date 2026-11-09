@@ -25,6 +25,7 @@ export_live_lots.py         ← rebuild auction_lots.csv (+ upcoming_lots.csv) f
 export_online_sales.py      ← Bring a Trailer's completed months → online_lots.csv
 auction_rating.py           ← score each event
 mai.py                      ← compute per-manufacturer MAI scores
+index_lots.py               ← every lot of every index car → index_lots.csv (index-lots.html; no score reads it)
 wikipedia_pageviews.py      ← can run anytime (independent)
 ```
 
@@ -502,6 +503,51 @@ is its highlight line, BaT's weight grows with it.
 python data/pipelines/export_online_sales.py --dry-run
 python data/pipelines/export_online_sales.py
 ```
+
+---
+
+## index_lots.py
+
+Every lot of every index car, for `index-lots.html`. `data/variants.csv`
+names the constituents of six indexes (HAGI Top, F, P, the BMW CI, the MBCI
+and MBCI Emerging); `variants.matches` recognises one from a listing title
+(the Bring a Trailer slug, else "year make model", accents dropped so a
+store's "Coupé" reads "coupe"). Replicas, recreations, continuation cars and
+coachwork "in the style of" the original are ruled out. First match wins; no
+lot in the data matches two cars.
+
+`data/index_lots.csv` has one row per matched lot, from:
+
+- **the scored lots** (`auction_lots.csv` + `online_lots.csv`, prepared as
+  `mai.py` prepares them) with `highlight`, `share` and `suspect` computed as
+  for `hagi_top_lots.csv`. `hagi_top.py` is this module limited to `hagi-top`,
+  and the two files agree on every HAGI Top lot (a test checks it).
+- **this month on Bring a Trailer**: the current month's listings closed so
+  far, read from `bat.csv` by `export_online_sales.month_to_date` (the same
+  rules as the completed months; a sold price converts at its sale day's
+  rate). `online_lots.csv` leaves the month out until it is complete, so no
+  file MAI reads has these: `share` 0, never a highlight.
+- **coming up**: `upcoming_lots.csv`, estimates only.
+
+Columns: those of `hagi_top_lots.csv`, then `indexes` (`;`-separated: the M1
+is `hagi-top;bmw-ci`), `source` (`live`, `bat`, `bat_month_to_date`,
+`upcoming`), `sale_date` (a Bring a Trailer listing's own day; `event_date`
+stays its month's last day, the sale MAI scores), `title` and `url` (Bring a
+Trailer only: the store's public view carries no lot URLs).
+
+`suspect` is a sold price under 40% of the car's median over the scored lots
+(three or more); a month-to-date price is judged against the same median, so
+it can't move a scored lot's flag.
+
+```bash
+python data/pipelines/index_lots.py              # fetches bat.csv
+python data/pipelines/index_lots.py --bat PATH   # a local copy
+python data/pipelines/index_lots.py --no-bat     # no month to date; BaT lots dated by month
+```
+
+The workflow runs it after `mai.py`, with `continue-on-error`, so a problem
+here never holds back the scores. If `bat.csv` can't be read it warns and
+keeps the last file.
 
 ---
 

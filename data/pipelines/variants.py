@@ -38,9 +38,12 @@ BAT_CSV_URL = "https://my-mii-reports.s3.us-east-2.amazonaws.com/bat.csv"
 
 # Replicas and the firms best known for building them, whatever the title
 # calls the car ("1955 beck 550 spyder").
+# "In the style of" is coachwork made later to look like the original: a
+# 500K "Spezial Roadster in the style of Sindelfingen" is not a Special
+# Roadster.
 NOT_THE_CAR = re.compile(
     r"\b(replica|recreation|tribute|continuation|clone|evocation|homage|kit|reimagined|"
-    r"re ?creation|re ?body|rebodied|conver(sion|ted) to|"
+    r"re ?creation|re ?body|rebodied|conver(sion|ted) to|in the style of|"
     r"beck|intermeccanica|superformance|factory five|backdraft|kirkham|chamonix|apal|"
     r"vintage speedsters?|thoroughbred motorsports|everett morrison|shell valley|"
     r"contemporary classics?|special edition speedster|cmc)\b")

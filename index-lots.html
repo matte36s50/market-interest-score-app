@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0e10">
+    <meta name="description" content="Every sale of every HAGI index car, BMW CI, MBCI and MBCI Emerging, at the live auction houses and on Bring a Trailer, with what is coming up next.">
+    <link rel="icon" href="mii-logo.svg" type="image/svg+xml">
+    <title>Index Car Sales - Market Interest Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="mii-light-theme.js?v=2"></script>
+    <link rel="stylesheet" href="site.css?v=6">
+    <link rel="stylesheet" href="mii-light-theme.css?v=2">
+    <script src="site.js?v=1"></script>
+    <style>
+        /* An expanded row spans the whole table, which is wider than a phone
+           screen; keep its contents in view while the table scrolls. */
+        @media (max-width: 767px) {
+            .drill-inner { position: sticky; left: 24px; width: calc(100vw - 82px); }
+        }
+        .idx-switch { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+        .idx-switch::-webkit-scrollbar { display: none; }
+        .idx-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .idx-stats > div { padding: 16px 24px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .idx-stats > div:first-child { border-left: 0; }
+        .idx-stats .h-l { font-size: 12.5px; color: var(--muted); }
+        .idx-stats .h-v { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+        .idx-stats .h-s { font-size: 12.5px; color: var(--muted); }
+        @media (max-width: 900px) {
+            .idx-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .idx-stats > div:nth-child(odd) { border-left: 0; }
+            .idx-stats > div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+        }
+        .tag { font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+        .tag-hl { color: var(--accent-ink); background: var(--accent-wash); }
+        .tag-mtd { color: var(--ci-ink); background: var(--ci-wash); }
+        .tag-up { color: var(--ink-2); background: var(--surface-3); }
+        .lot-table td, .lot-table th { padding: 8px 10px; font-size: 13px; }
+        .lot-table td.num { font-size: 12.5px; }
+        .lot-table tr.is-aside td { color: var(--faint); }
+        .ext { color: var(--accent-ink); }
+        .ext:hover { text-decoration: underline; text-underline-offset: 3px; }
+    </style>
+</head>
+<body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
+    <header class="site-header">
+        <div class="wrap" style="max-width:1280px;padding-left:32px;padding-right:32px">
+            <a href="index.html" class="brand" aria-label="Market Interest Index home">
+                <img class="brand-logo" src="mii-logo.svg" alt="" width="32" height="32">
+                <span>Market Interest Index</span>
+            </a>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Overview</a>
+                <a href="mai.html">Apex Index</a>
+                <a href="index-lots.html" aria-current="page">Index sales</a>
+                <a href="analytics.html">Model comparison</a>
+                <a href="analyze.html">Data analysis</a>
+            </nav>
+            <div class="header-actions">
+                <a href="admin.html" class="admin-link">Admin</a>
+                <button id="themeToggle" class="hbtn icon-only" aria-label="Switch colour theme" title="Switch colour theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button id="printBtn" class="hbtn" title="Save this page as a PDF">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+                    <span class="label">PDF</span>
+                </button>
+                <button id="shareBtn" class="hbtn is-primary" title="Copy a link to exactly this view">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/></svg>
+                    <span class="label">Share</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero page-hero" aria-labelledby="pageTitle">
+        <div class="wrap" style="max-width:1280px;padding-left:32px;padding-right:32px">
+            <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span><span id="asOf">Every sale of every index car · live auctions and Bring a Trailer</span></span>
+            <h1 id="pageTitle">Index car sales</h1>
+            <p class="lede">Every time a car in one of HAGI's indexes crossed the block: at the live auction houses, on Bring a Trailer (including this month's results, before the month closes), and in the catalogues of sales still to come. Pick an index, then click a car for its lots, newest first.</p>
+            <div class="hero-meta"><a href="#price-basis">Price basis</a><a href="#matching">How cars are matched</a><a href="mai.html#hagi-top">HAGI Top in the Apex Index</a><span>Nothing on this page changes an MII or MAI score.</span></div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-10 pb-16 flex flex-col gap-10 [&>*]:min-w-0">
+
+        <!-- Constituents -->
+        <section class="panel scroll-mt-24" id="cars" aria-labelledby="indexTitle">
+            <div class="px-6 py-5 flex flex-wrap justify-between items-start gap-4">
+                <div class="flex flex-col gap-0.5 min-w-0">
+                    <h2 id="indexTitle" class="m-0 text-lg font-semibold">Loading…</h2>
+                    <p id="indexSubtitle" class="m-0 text-[13px] text-mute">Loading the index cars…</p>
+                </div>
+                <div class="idx-switch">
+                    <div class="seg" id="indexSwitch" role="group" aria-label="Index">
+                        <button type="button" data-index="bmw-ci" aria-pressed="true">BMW CI</button>
+                        <button type="button" data-index="mbci" aria-pressed="false">MBCI</button>
+                        <button type="button" data-index="mbci-emerging" aria-pressed="false">MBCI Emerging</button>
+                        <button type="button" data-index="hagi-top" aria-pressed="false">HAGI Top</button>
+                        <button type="button" data-index="hagi-f" aria-pressed="false">HAGI F</button>
+                        <button type="button" data-index="hagi-p" aria-pressed="false">HAGI P</button>
+                    </div>
+                </div>
+            </div>
+            <div class="idx-stats border-t border-hair" id="indexStats"></div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Car</th>
+                            <th class="text-right" title="Lots offered at a live sale or closed on Bring a Trailer">Offered</th>
+                            <th class="text-right">Sold</th>
+                            <th class="text-right" title="Sold ÷ offered. A Bring a Trailer listing that ended on a high bid counts as not sold">Sell-through</th>
+                            <th class="text-right" title="Median sold price">Median</th>
+                            <th class="text-right">Latest sold</th>
+                            <th class="pr-6" title="Lots in the catalogues of sales still to come">Coming up</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carRows">
+                        <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading the index cars…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p id="asideNote" class="m-0 px-6 py-4 text-[13px] text-mute border-t border-hair"></p>
+        </section>
+
+        <!-- Coming up -->
+        <section class="panel" aria-labelledby="upTitle">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 id="upTitle" class="m-0 text-lg font-semibold">Coming up</h2>
+                <p id="upSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Sale date</th>
+                            <th>Sale</th>
+                            <th>Car</th>
+                            <th class="text-right">Year</th>
+                            <th>Listed as</th>
+                            <th class="pr-6 text-right">High estimate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upRows">
+                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Latest results -->
+        <section class="panel" aria-labelledby="latestTitle">
+            <div class="px-6 py-5 flex flex-col gap-0.5">
+                <h2 id="latestTitle" class="m-0 text-lg font-semibold">Latest results</h2>
+                <p id="latestSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table lot-table">
+                    <thead id="latestHead"></thead>
+                    <tbody id="latestRows">
+                        <tr><td colspan="8" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="latestMore" class="px-6 py-4 border-t border-hair hidden">
+                <button type="button" class="text-[13px] text-mute hover:text-amber-700">Show all results</button>
+            </div>
+        </section>
+
+        <!-- About the numbers -->
+        <section class="grid gap-6 md:grid-cols-2 [&>*]:min-w-0">
+            <div class="panel p-6 flex flex-col gap-3 scroll-mt-24" id="price-basis">
+                <h3 class="m-0 text-base font-semibold">Price basis</h3>
+                <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
+                    <li><span class="text-ink font-medium">Bring a Trailer:</span> the hammer price, without BaT's buyer's fee (5%, capped at $7,500). At the top of the market that is about 1% under an all-in price; on a $30K car, about 5%.</li>
+                    <li><span class="text-ink font-medium">Live auctions:</span> the price the auction store holds. That is the fee-inclusive price where one was entered, otherwise the hammer, and the store doesn't record which, so a live price may or may not include the buyer's premium.</li>
+                    <li>Medians mix the two, so a car that sells mostly on Bring a Trailer reads a little low against one that sells mostly at the live houses.</li>
+                    <li>Other currencies are in US dollars at the ECB rate: a live sale's date, a completed Bring a Trailer month's last day, or the day a listing closed this month. Estimates of sales still to come use the latest rate.</li>
+                </ul>
+            </div>
+            <div class="panel p-6 flex flex-col gap-3 scroll-mt-24" id="matching">
+                <h3 class="m-0 text-base font-semibold">How cars are matched</h3>
+                <ul class="m-0 pl-5 list-disc text-sm text-mute leading-relaxed space-y-1.5">
+                    <li>Each lot is matched to an index car by its title (the Bring a Trailer listing's address, or the sale's year, make and model) against the model years and names in <code class="font-mono text-[12.5px]">data/variants.csv</code>.</li>
+                    <li>Replicas, recreations, tributes, continuation cars and later bodies "in the style of" the original are left out.</li>
+                    <li>A sold price under 40% of the car's other results is set aside as most likely not the car the title says (a project, a shell, a mislabelled listing). It stays listed, faded, but counts in no figure.</li>
+                    <li><span class="tag tag-mtd">this month</span> Bring a Trailer results from the month in progress. MAI counts a Bring a Trailer month only once it is complete, so these are in no score yet.</li>
+                    <li><span class="tag tag-hl">highlight</span> among its sale's top 10% of lots, the ones the Apex Index scores.</li>
+                    <li>Cars &amp; Bids is not included. The live houses' lot pages are not linked: the store doesn't publish them yet.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        var INDEXES = {
+            'bmw-ci': { name: 'HAGI BMW Classic Index', short: 'BMW CI', blurb: 'the E46 M3 added in 2026' },
+            'mbci': { name: 'HAGI MBCI', short: 'MBCI', blurb: 'collectors\' Mercedes-Benz' },
+            'mbci-emerging': { name: 'HAGI MBCI Emerging Classics', short: 'MBCI Emerging', blurb: 'Mercedes-Benz on the way up' },
+            'hagi-top': { name: 'HAGI Top Index', short: 'HAGI Top', blurb: '2010, Porsche and Ferrari excluded: they have their own indexes' },
+            'hagi-f': { name: 'HAGI F', short: 'HAGI F', blurb: 'Ferrari' },
+            'hagi-p': { name: 'HAGI P', short: 'HAGI P', blurb: 'Porsche' }
+        };
+        var DEFAULT_INDEX = 'bmw-ci';
+        var LATEST = 25;
+
+        function esc(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function num(v) {
+            return v != null && v !== '' && isFinite(v) ? Number(v) : null;
+        }
+        function isTrue(v) { return v === true || String(v).toLowerCase() === 'true'; }
+        function usd(v) {
+            if (!(v > 0)) return '<span class="text-faint">—</span>';
+            return v >= 1e6 ? '$' + (v / 1e6).toFixed(v >= 1e7 ? 1 : 2).replace(/\.?0+$/, '') + 'M' : '$' + Math.round(v / 1e3) + 'K';
+        }
+        function usdFull(v) {
+            return v > 0 ? '$' + Math.round(v).toLocaleString('en-US') : '<span class="text-faint">—</span>';
+        }
+        var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        function day(iso, withYear) {
+            var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+            if (!m) return '';
+            return Number(m[3]) + ' ' + MONTHS[Number(m[2]) - 1] + (withYear === false ? '' : ' ' + m[1]);
+        }
+        function median(xs) {
+            if (!xs.length) return null;
+            var s = xs.slice().sort(function (a, b) { return a - b; }), mid = s.length >> 1;
+            return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+        }
+        function load(url) {
+            return new Promise(function (resolve) {
+                Papa.parse(url, {
+                    download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
+                    complete: function (r) { resolve(r.data || []); },
+                    error: function () { resolve(null); }
+                });
+            });
+        }
+        function carName(c) {
+            var make = String(c.makes || '').split(';')[0], name = String(c.variant);
+            return name.indexOf(make) === 0 ? name : make + ' ' + name;
+        }
+        function carYears(c) {
+            var y = String(c.years || '').split('-');
+            return y[0] === y[1] ? y[0] : y.join('–');
+        }
+
+        // #index=mbci&car=mb-300sl-gullwing, as the overview keeps its state.
+        function readHash() {
+            var p = new URLSearchParams(location.hash.slice(1));
+            return { index: INDEXES[p.get('index')] ? p.get('index') : DEFAULT_INDEX, car: p.get('car') };
+        }
+        function writeHash(index, car) {
+            var p = new URLSearchParams();
+            if (index !== DEFAULT_INDEX) p.set('index', index);
+            if (car) p.set('car', car);
+            var hash = p.toString();
+            try {
+                history.replaceState(null, '', hash ? '#' + hash : location.pathname + location.search);
+            } catch (e) { /* file:// or sandboxed: the page still works */ }
+        }
+
+        // One lot as a table row. `withCar` adds the constituent's name (the
+        // latest-results list spans every car).
+        function venue(l) {
+            if (l.auction_house === 'Bring a Trailer') return 'Bring a Trailer';
+            return esc(l.event) + ' <span class="text-faint">· ' + esc(l.auction_house) + '</span>';
+        }
+        function result(l) {
+            if (l.source === 'upcoming') return '<span class="tag tag-up">coming up</span>';
+            return isTrue(l.sold) ? usdFull(num(l.sold_price_usd)) : '<span class="text-amber-700">not sold</span>';
+        }
+        function tags(l) {
+            var out = [];
+            if (l.source === 'bat_month_to_date') out.push('<span class="tag tag-mtd" title="Closed this month on Bring a Trailer; not in MAI until the month is complete">this month</span>');
+            if (isTrue(l.highlight)) out.push('<span class="tag tag-hl" title="Among its sale\'s top 10% of lots, the ones the Apex Index scores">highlight</span>');
+            if (isTrue(l.suspect)) out.push('<span class="tag tag-up" title="Under 40% of the car\'s other results: most likely not the car the title says. Counts in no figure.">set aside</span>');
+            return out.join(' ');
+        }
+        function link(l) {
+            return l.url ? '<a class="ext" href="' + esc(l.url) + '" target="_blank" rel="noopener">BaT ↗</a>'
+                : '<span class="text-faint" title="The auction store doesn\'t publish lot pages yet">—</span>';
+        }
+        function lotHead(withCar) {
+            return '<tr><th class="pl-6">Date</th>' + (withCar ? '<th>Car</th>' : '') +
+                '<th>Venue</th><th class="text-right">Year</th><th>Listed as</th>' +
+                '<th class="text-right">Sold for</th><th class="text-right">High estimate</th><th class="pr-6">Listing</th></tr>';
+        }
+        function lotRow(l, withCar, cars) {
+            return '<tr' + (isTrue(l.suspect) ? ' class="is-aside"' : '') + '>' +
+                '<td class="pl-6 font-mono text-[12.5px]">' + esc(day(l.sale_date)) + '</td>' +
+                (withCar ? '<td class="font-medium"><a href="#" data-goto="' + esc(l.variant_id) + '" class="hover:text-amber-700">' + esc(carName(cars[l.variant_id] || l)) + '</a></td>' : '') +
+                '<td class="text-mute">' + venue(l) + '</td>' +
+                '<td class="num">' + esc(l.year_of_car) + '</td>' +
+                '<td>' + esc(l.title) + (tags(l) ? ' ' + tags(l) : '') + '</td>' +
+                '<td class="num">' + result(l) + '</td>' +
+                '<td class="num">' + usdFull(num(l.high_estimate_usd)) + '</td>' +
+                '<td class="pr-6">' + link(l) + '</td>' +
+            '</tr>';
+        }
+
+        Promise.all([load('data/index_lots.csv'), load('data/variants.csv')]).then(function (res) {
+            var body = document.getElementById('carRows');
+            if (res[0] === null || res[1] === null) {
+                document.getElementById('indexTitle').textContent = 'Index car sales';
+                document.getElementById('indexSubtitle').textContent = 'The index lots (data/index_lots.csv) are not published yet.';
+                body.innerHTML = '';
+                return;
+            }
+            var lots = res[0].filter(function (r) { return r.variant_id; });
+            var variants = res[1].filter(function (r) { return r.id && !/^#/.test(r.id); });
+            var cars = {};
+            variants.forEach(function (c) { cars[c.id] = c; });
+            var byDate = function (a, b) { return String(b.sale_date).localeCompare(String(a.sale_date)) || String(a.event).localeCompare(String(b.event)); };
+            lots.sort(byDate);
+            var asOf = lots.filter(function (l) { return l.source !== 'upcoming'; }).reduce(function (m, l) { return String(l.sale_date) > m ? String(l.sale_date) : m; }, '');
+            if (asOf) document.getElementById('asOf').textContent = 'Every sale of every index car · results through ' + day(asOf);
+
+            var state = readHash();
+            var openCar = null;
+            var showAll = false;
+
+            function inIndex(index) {
+                return function (r) { return ('' + (r.indexes || '')).split(';').indexOf(index) >= 0; };
+            }
+
+            function stats(ls) {
+                var done = ls.filter(function (l) { return l.source !== 'upcoming'; });
+                var kept = done.filter(function (l) { return !isTrue(l.suspect); });
+                // A lot can be sold with no price published: it counts as
+                // sold, but not in the median.
+                var sold = kept.filter(function (l) { return isTrue(l.sold); });
+                var priced = sold.filter(function (l) { return num(l.sold_price_usd) > 0; });
+                return {
+                    done: done, kept: kept, sold: sold,
+                    aside: done.filter(function (l) { return isTrue(l.suspect); }),
+                    upcoming: ls.filter(function (l) { return l.source === 'upcoming'; }).sort(function (a, b) { return String(a.sale_date).localeCompare(String(b.sale_date)); }),
+                    mtd: kept.filter(function (l) { return l.source === 'bat_month_to_date'; }),
+                    median: median(priced.map(function (l) { return num(l.sold_price_usd); })),
+                    latest: priced[0] || null
+                };
+            }
+
+            function render() {
+                var index = state.index, meta = INDEXES[index];
+                document.querySelectorAll('#indexSwitch button').forEach(function (b) {
+                    b.setAttribute('aria-pressed', b.getAttribute('data-index') === index ? 'true' : 'false');
+                });
+                var members = variants.filter(inIndex(index));
+                var mine = lots.filter(inIndex(index));
+                var all = stats(mine);
+                var rows = members.map(function (c) {
+                    return { c: c, s: stats(mine.filter(function (l) { return l.variant_id === c.id; })) };
+                });
+                var seen = rows.filter(function (r) { return r.s.done.length || r.s.upcoming.length; }).length;
+
+                document.getElementById('indexTitle').textContent = meta.name;
+                document.getElementById('indexSubtitle').textContent = 'Its ' + members.length + ' cars (' + meta.blurb + '), in model-year order. ' +
+                    'Click a car for its lots, newest first.';
+                document.getElementById('indexStats').innerHTML =
+                    '<div><span class="h-l">Cars seen</span><span class="h-v">' + seen + '<span class="text-mute" style="font-size:15px;font-weight:500"> / ' + members.length + '</span></span><span class="h-s">offered or coming up</span></div>' +
+                    '<div><span class="h-l">Sold</span><span class="h-v">' + all.sold.length + '</span><span class="h-s">of ' + all.kept.length + ' lots offered</span></div>' +
+                    '<div><span class="h-l">Sell-through</span><span class="h-v">' + (all.kept.length ? Math.round(all.sold.length / all.kept.length * 100) + '%' : '—') + '</span><span class="h-s">live and Bring a Trailer</span></div>' +
+                    '<div><span class="h-l">This month on BaT</span><span class="h-v">' + all.mtd.length + '</span><span class="h-s">not yet in MAI</span></div>' +
+                    '<div><span class="h-l">Coming up</span><span class="h-v">' + all.upcoming.length + '</span><span class="h-s">' + (all.upcoming.length ? 'next on ' + esc(day(all.upcoming[0].sale_date)) : 'no catalogue lots yet') + '</span></div>';
+
+                body.innerHTML = rows.map(function (r) {
+                    var s = r.s, c = r.c;
+                    var name = esc(carName(c)) + ' <span class="text-faint" style="font-weight:400">' + esc(carYears(c)) + '</span>';
+                    if (!s.done.length && !s.upcoming.length) {
+                        return '<tr><td class="pl-6 text-faint">' + name + '</td>' +
+                            '<td colspan="6" class="pr-6 text-faint">Not offered at any sale in the data</td></tr>';
+                    }
+                    var latest = s.latest
+                        ? usd(num(s.latest.sold_price_usd)) + ' <span class="text-faint">' + esc(day(s.latest.sale_date)) + '</span>'
+                        : '<span class="text-faint">—</span>';
+                    var next = s.upcoming.length
+                        ? s.upcoming.length + ' <span class="text-faint">· ' + esc(day(s.upcoming[0].sale_date)) + '</span>'
+                        : '<span class="text-faint">—</span>';
+                    return '<tr class="is-clickable" data-car="' + esc(c.id) + '" id="car-' + esc(c.id) + '">' +
+                        '<td class="pl-6 font-semibold"><button type="button" class="flex items-center gap-2 text-left" aria-expanded="false">' +
+                            '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' + name + '</button></td>' +
+                        '<td class="num">' + s.kept.length + '</td>' +
+                        '<td class="num">' + s.sold.length + '</td>' +
+                        '<td class="num">' + (s.kept.length ? Math.round(s.sold.length / s.kept.length * 100) + '%' : '<span class="text-faint">—</span>') + '</td>' +
+                        '<td class="num">' + usd(s.median) + '</td>' +
+                        '<td class="num">' + latest + '</td>' +
+                        '<td class="pr-6 text-mute">' + next + '</td>' +
+                    '</tr>';
+                }).join('');
+
+                document.getElementById('asideNote').innerHTML = (all.aside.length
+                    ? 'Set aside as most likely not the car, under 40% of its other results (listed, faded, in the car\'s lots): ' + all.aside.map(function (l) {
+                        return esc(l.year_of_car) + ' ' + esc(carName(cars[l.variant_id] || l)) + ' (' + (l.auction_house === 'Bring a Trailer' ? 'Bring a Trailer' : esc(l.event)) + ', ' + usdFull(num(l.sold_price_usd)) + ')';
+                    }).join('; ') + '. '
+                    : '') + 'Prices: Bring a Trailer\'s hammer without its buyer\'s fee; the live houses\' as the store holds them (<a href="#price-basis" class="ext">price basis</a>).';
+
+                renderUpcoming(all.upcoming);
+                renderLatest(all.done);
+                if (openCar) {
+                    var tr = findRow(openCar);
+                    if (tr) toggle(tr, true); else openCar = null;
+                }
+                writeHash(index, openCar);
+            }
+
+            function renderUpcoming(up) {
+                document.getElementById('upSubtitle').textContent = up.length
+                    ? up.length + ' lot' + (up.length === 1 ? '' : 's') + ' of ' + INDEXES[state.index].short + ' cars in the catalogues of sales still to come. Estimates only; results appear the morning after a sale\'s are entered.'
+                    : 'No ' + INDEXES[state.index].short + ' car in the catalogue of a sale still to come.';
+                document.getElementById('upRows').innerHTML = up.length ? up.map(function (l) {
+                    return '<tr>' +
+                        '<td class="pl-6 font-mono text-[13px]">' + esc(day(l.sale_date)) + '</td>' +
+                        '<td>' + esc(l.event) + ' <span class="text-faint">· ' + esc(l.auction_house) + '</span></td>' +
+                        '<td class="font-medium"><a href="#" data-goto="' + esc(l.variant_id) + '" class="hover:text-amber-700">' + esc(carName(cars[l.variant_id] || l)) + '</a></td>' +
+                        '<td class="num">' + esc(l.year_of_car) + '</td>' +
+                        '<td class="text-mute">' + esc(l.title) + '</td>' +
+                        '<td class="num pr-6">' + usdFull(num(l.high_estimate_usd)) + '</td>' +
+                    '</tr>';
+                }).join('') : '<tr><td colspan="6" class="px-6 py-8 text-center text-mute">Nothing coming up yet.</td></tr>';
+            }
+
+            function renderLatest(done) {
+                var shown = showAll ? done : done.slice(0, LATEST);
+                var aside = done.filter(function (l) { return isTrue(l.suspect); }).length;
+                document.getElementById('latestSubtitle').textContent = done.length
+                    ? 'Every ' + INDEXES[state.index].short + ' lot offered, newest first' + (showAll || done.length <= LATEST ? '' : ': the latest ' + LATEST + ' of ' + done.length) +
+                      (aside ? ' (' + aside + ' set aside, faded)' : '') + '.'
+                    : 'No ' + INDEXES[state.index].short + ' car has been offered yet.';
+                document.getElementById('latestHead').innerHTML = lotHead(true);
+                document.getElementById('latestRows').innerHTML = shown.map(function (l) { return lotRow(l, true, cars); }).join('') ||
+                    '<tr><td colspan="8" class="px-6 py-8 text-center text-mute">No results yet.</td></tr>';
+                document.getElementById('latestMore').classList.toggle('hidden', showAll || done.length <= LATEST);
+            }
+
+            function carDetail(id) {
+                var c = cars[id];
+                var ls = lots.filter(function (l) { return l.variant_id === id; });
+                var s = stats(ls);
+                var order = s.upcoming.slice().reverse().concat(s.done);
+                var intro = '<p class="m-0 text-[13px] text-mute">' +
+                    '<span class="text-ink font-semibold">' + esc(carName(c)) + '</span> ' + esc(carYears(c)) +
+                    (c.generation ? ' · ' + esc(c.generation) : '') + '. ' +
+                    s.sold.length + ' sold of ' + s.kept.length + ' offered' +
+                    (s.median ? ', median ' + usdFull(s.median) : '') + '.' +
+                    (s.aside.length ? ' ' + s.aside.length + ' set aside (faded), in no figure.' : '') +
+                    (c.note ? ' ' + esc(c.note) + '.' : '') + '</p>';
+                // Coming-up lots and the newest results; a long list folds.
+                var cut = order.length > LATEST + 5 ? s.upcoming.length + LATEST : order.length;
+                return intro + '<div class="overflow-x-auto mt-3 border border-hair rounded-lg">' +
+                    '<table class="data-table lot-table"><thead>' + lotHead(false) + '</thead><tbody>' +
+                    order.map(function (l, i) {
+                        var html = lotRow(l, false, cars);
+                        return i < cut ? html : html.replace('<tr', '<tr data-extra="1" hidden');
+                    }).join('') + '</tbody></table></div>' +
+                    (cut < order.length ? '<button type="button" data-more="1" class="mt-3 text-[13px] text-mute hover:text-amber-700">Show all ' +
+                        order.length + ' lots</button>' : '');
+            }
+
+            function findRow(id) {
+                return [].find.call(body.querySelectorAll('tr[data-car]'), function (r) { return r.getAttribute('data-car') === id; });
+            }
+
+            function toggle(tr, open) {
+                var id = tr.getAttribute('data-car');
+                var btn = tr.querySelector('button[aria-expanded]');
+                var next = tr.nextElementSibling;
+                var isOpen = next && next.classList.contains('drill-row');
+                if (open === undefined) open = !isOpen;
+                if (!open) {
+                    if (isOpen) next.remove();
+                    tr.classList.remove('is-selected');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('.chev').style.transform = '';
+                    if (openCar === id) openCar = null;
+                    writeHash(state.index, openCar);
+                    return;
+                }
+                if (isOpen) return;
+                var row = document.createElement('tr');
+                row.className = 'drill-row';
+                row.innerHTML = '<td colspan="7" class="px-6 py-5 bg-canvas" style="white-space:normal"><div class="drill-inner">' + carDetail(id) + '</div></td>';
+                tr.after(row);
+                tr.classList.add('is-selected');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.querySelector('.chev').style.transform = 'rotate(90deg)';
+                openCar = id;
+                writeHash(state.index, openCar);
+            }
+
+            function goTo(id) {
+                var tr = findRow(id);
+                if (!tr) return;
+                if (openCar && openCar !== id) { var prev = findRow(openCar); if (prev) toggle(prev, false); }
+                toggle(tr, true);
+                tr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                tr.querySelector('button').focus({ preventScroll: true });
+            }
+
+            document.getElementById('indexSwitch').addEventListener('click', function (e) {
+                var b = e.target.closest('button[data-index]');
+                if (!b || b.getAttribute('data-index') === state.index) return;
+                state.index = b.getAttribute('data-index');
+                openCar = null;
+                showAll = false;
+                render();
+            });
+
+            body.addEventListener('click', function (e) {
+                var more = e.target.closest('button[data-more]');
+                if (more) {
+                    more.parentElement.querySelectorAll('[data-extra]').forEach(function (el) { el.hidden = false; });
+                    more.remove();
+                    return;
+                }
+                if (e.target.closest('a')) return;
+                var tr = e.target.closest('tr[data-car]');
+                if (!tr) return;
+                // One car open at a time keeps the URL meaningful.
+                if (openCar && openCar !== tr.getAttribute('data-car')) {
+                    var prev = findRow(openCar);
+                    if (prev) toggle(prev, false);
+                }
+                toggle(tr);
+            });
+
+            document.addEventListener('click', function (e) {
+                var a = e.target.closest('a[data-goto]');
+                if (!a) return;
+                e.preventDefault();
+                goTo(a.getAttribute('data-goto'));
+            });
+
+            document.querySelector('#latestMore button').addEventListener('click', function () {
+                showAll = true;
+                renderLatest(stats(lots.filter(inIndex(state.index))).done);
+            });
+
+            openCar = state.car && cars[state.car] && inIndex(state.index)(cars[state.car]) ? state.car : null;
+            render();
+            if (openCar) {
+                var first = findRow(openCar);
+                if (first) first.scrollIntoView({ block: 'start' });
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
