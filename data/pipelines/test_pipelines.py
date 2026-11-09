@@ -31,6 +31,7 @@ import check_coverage
 import model_list
 import variants
 import hagi_top
+import index_lots
 import export_live_lots
 import export_online_sales
 
@@ -780,6 +781,12 @@ class Variants(unittest.TestCase):
         self.assertTrue(self.hit("ferrari-365-daytona", "Ferrari",
                                  "https://bringatrailer.com/listing/1973-ferrari-365-gtb-4-daytona-3/"))
 
+    def test_coachwork_in_the_style_of_the_original_is_not_the_car(self):
+        lot = {"manufacturer": "Mercedes-Benz", "year_of_car": 1934,
+               "model": "500 K Spezial Roadster in the style of Sindelfingen"}
+        t = index_lots.lot_title(lot)
+        self.assertFalse(variants.matches(self.v["mb-500k-540k-special-roadster"], "Mercedes-Benz", t, 1934))
+
     def test_every_row_compiles_and_names_an_index(self):
         for v in self.v.values():
             self.assertTrue(v["index_list"], v["id"])
@@ -833,6 +840,130 @@ class HagiTop(unittest.TestCase):
         self.assertAlmostEqual(float(rows["jaguar-xj220"]["share"]), 0.125)
         self.assertEqual(rows["bmw-m1"]["share"], "0")
         self.assertEqual(rows["bmw-m1"]["highlight"], "false")
+
+
+class IndexLots(unittest.TestCase):
+    """index_lots.py: every lot of every index car, for index-lots.html."""
+
+    def lot(self, **kw):
+        base = {"event": "Sale", "event_date": "2026-08-15", "auction_house": "House",
+                "sold": True, "sold_price_usd": None, "high_estimate_usd": None,
+                "is_apex": False, "apex_value": None, "notes": ""}
+        base.update(kw)
+        return base
+
+    def test_a_car_in_two_indexes_is_one_row_naming_both(self):
+        m1 = self.lot(manufacturer="BMW", model="M1", year_of_car=1980, sold_price_usd=500000)
+        e30 = self.lot(manufacturer="BMW", model="M3", year_of_car=1988, sold_price_usd=80000)
+        rows = index_lots.build([m1, e30], {}, 0)
+        self.assertEqual({r["variant_id"]: r["indexes"] for r in rows},
+                         {"bmw-m1": "hagi-top;bmw-ci", "bmw-e30-m3": "bmw-ci"})
+        self.assertEqual([v["id"] for v, _ in hagi_top.match([m1, e30])], ["bmw-m1"])
+
+    def test_an_accented_title_still_matches(self):
+        lot = self.lot(manufacturer="Mercedes-Benz", model="280 SE 3.5 Coupé", year_of_car=1971)
+        self.assertEqual(index_lots.lot_title(lot), "1971 mercedes benz 280 se 3 5 coupe")
+        self.assertEqual([v["id"] for v, _ in index_lots.match([lot])], ["mb-280se-35-coupe"])
+
+    def test_hagi_top_lots_are_the_hagi_top_rows_of_index_lots(self):
+        a = self.lot(event="A", manufacturer="BMW", model="M1", year_of_car=1980, is_apex=True,
+                     apex_value=6e5, sold_price_usd=6e5)
+        b = self.lot(event="A", manufacturer="BMW", model="Z8", year_of_car=2002, is_apex=True,
+                     apex_value=2e5, sold_price_usd=2e5)
+        c = self.lot(event="B", manufacturer="Mercedes-Benz", model="300 SL Gullwing", year_of_car=1955,
+                     notes="bat:1955-mercedes-benz-300sl-gullwing-16", sold_price_usd=325000)
+        gull = [self.lot(event=f"G{i}", manufacturer="Mercedes-Benz", model="300 SL Gullwing",
+                         year_of_car=1955, sold_price_usd=p) for i, p in enumerate((1.8e6, 1.9e6, 2e6))]
+        lots = [a, b, c] + gull
+        ratings, counts = {("A", "2026-08-15"): 30.0}, {("A", "2026-08-15"): 2}
+        hagi = hagi_top.rows(hagi_top.match(lots), ratings, counts, 60.0)
+        mine = [{k: r[k] for k in hagi_top.COLS}
+                for r in index_lots.build(lots, ratings, 60.0) if "hagi-top" in r["indexes"].split(";")]
+        key = lambda r: (r["variant_id"], r["event"])
+        self.assertEqual(sorted(hagi, key=key), sorted(mine, key=key))
+        self.assertAlmostEqual(float(next(r for r in mine if r["variant_id"] == "bmw-m1")["share"]), 0.25)
+        self.assertEqual([r["sold_price_usd"] for r in mine if r["suspect"] == "true"], [325000])
+
+    def test_this_month_and_coming_up_are_listed_but_never_scored(self):
+        scored = [self.lot(event=f"S{i}", manufacturer="BMW", model="Z8", year_of_car=2001, sold_price_usd=p)
+                  for i, p in enumerate((180000, 190000, 200000))]
+        month = [{"event": "Bring a Trailer – November 2026", "event_date": "2026-11-30",
+                  "auction_house": "Bring a Trailer", "manufacturer": "BMW", "model": "Z8",
+                  "year_of_car": "2002", "sold": "true", "sold_price_usd": p, "high_estimate_usd": "",
+                  "notes": f"bat:2002-bmw-z8-{n}", "sale_date": "2026-11-04"}
+                 for n, p in ((60, "186000"), (61, "40000"))]
+        upcoming = [{"event": "The Munich Auction 2026", "event_date": "2026-11-20", "auction_house": "RM Sotheby's",
+                     "manufacturer": "BMW", "model": "Z8", "year_of_car": "2000", "high_estimate_usd": "250000",
+                     "notes": "store:x"}]
+        rows = index_lots.build(scored, {}, 0, upcoming=upcoming, month_to_date=month)
+        by_source = {}
+        for r in rows:
+            by_source.setdefault(r["source"], []).append(r)
+        self.assertEqual(len(by_source["live"]), 3)
+        mtd = by_source["bat_month_to_date"]
+        self.assertEqual({(r["share"], r["highlight"]) for r in mtd}, {("0", "false")})
+        self.assertEqual({r["sold_price_usd"]: r["suspect"] for r in mtd}, {186000: "false", 40000: "true"})
+        self.assertEqual(mtd[0]["sale_date"], "2026-11-04")
+        self.assertEqual(mtd[0]["url"], "https://bringatrailer.com/listing/2002-bmw-z8-60/")
+        self.assertEqual({r["suspect"] for r in by_source["live"]}, {"false"})
+        up = by_source["upcoming"][0]
+        self.assertEqual((up["sold"], up["high_estimate_usd"], up["sale_date"], up["url"]),
+                         ("", 250000, "2026-11-20", ""))
+
+    def test_a_listing_slug_reads_as_a_title(self):
+        v = {x["id"]: x for x in variants.load_variants()}
+        cases = [
+            ("1973-bmw-3-0cs-45-2", "bmw-e9-cs", "BMW", "3.0 CS"),
+            ("1966-mercedes-benz-600-8", "mb-600", "Mercedes-Benz", "600"),
+            ("1972-mercedes-benz-300sel-6-3-sedan-2", "mb-300sel-63", "Mercedes-Benz", "300SEL 6.3 Sedan"),
+            ("1990-mercedes-benz-190e-2-5-16-evolution-ii-12", "mb-190e-evo2", "Mercedes-Benz",
+             "190E 2.5-16 Evolution II"),
+            ("1974-bmw-2002tii-209", "bmw-2002-ti-tii-turbo", "BMW", "2002tii"),
+            ("1995-bmw-850csi-31-2", "bmw-e31-v12", "BMW", "850CSi"),
+            ("1956-mercedes-benz-300sc-cabriolet-a", "mb-300sc", "Mercedes-Benz", "300SC Cabriolet A"),
+            ("2003-alpina-z8-roadster-v8", "bmw-z8", "BMW", "Alpina Z8 Roadster V8"),
+        ]
+        for slug, vid, make, want in cases:
+            year = variants.year_of(variants.title_of(slug))
+            self.assertEqual(index_lots.bat_title(slug, v[vid], make, year), want, slug)
+
+    @unittest.skipIf(mai is None, "pandas not installed")
+    def test_end_to_end_the_same_shares_as_mai(self):
+        d = tempfile.mkdtemp()
+        lots = os.path.join(d, "lots.csv")
+        with open(lots, "w") as f:
+            f.write(MaiScores.LOTS_HEADER + "\n" + "\n".join(
+                _sale("E1", "2026-08-14", ["BMW,M1,1980,,,700000,true,", "BMW,Z8,2002,,,300000,true,"])
+                + _sale("E2", "2026-09-05", ["Mercedes-Benz,300 SL Gullwing,1955,,,1800000,true,"])) + "\n")
+        ratings = os.path.join(d, "ratings.csv")
+        with open(ratings, "w") as f:
+            f.write("event,event_date,auction_rating\nE1,2026-08-14,40\nE2,2026-09-05,100\n")
+        with unittest.mock.patch.object(mai, "LOTS_PATH", lots), \
+             unittest.mock.patch.object(mai, "ONLINE_PATH", os.path.join(d, "none.csv")), \
+             unittest.mock.patch.object(mai, "RATINGS_PATH", ratings), \
+             unittest.mock.patch.object(mai, "OUTPUT_PATH", os.path.join(d, "scores.csv")), \
+             unittest.mock.patch.object(mai, "DETAIL_PATH", os.path.join(d, "detail.csv")), \
+             unittest.mock.patch.object(mai, "APEX_LOTS_PATH", os.path.join(d, "apex.csv")), \
+             unittest.mock.patch.object(mai, "HAGI_TOP_PATH", os.path.join(d, "hagi.csv")), \
+             unittest.mock.patch.object(index_lots, "LOTS_PATH", lots), \
+             unittest.mock.patch.object(index_lots, "ONLINE_PATH", os.path.join(d, "none.csv")), \
+             unittest.mock.patch.object(index_lots, "RATINGS_PATH", ratings), \
+             unittest.mock.patch.object(index_lots, "UPCOMING_PATH", os.path.join(d, "none.csv")), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()):
+            mai.main()
+            index_lots.main(["--no-bat", "--out", os.path.join(d, "index.csv")])
+        with open(os.path.join(d, "hagi.csv")) as f:
+            hagi = {r["variant_id"]: r for r in csv.DictReader(f)}
+        with open(os.path.join(d, "index.csv")) as f:
+            mine = {r["variant_id"]: r for r in csv.DictReader(f)}
+        self.assertEqual(set(mine), {"bmw-m1", "bmw-z8", "mb-300sl-gullwing"})
+        for vid, r in hagi.items():
+            self.assertEqual({k: mine[vid][k] for k in hagi_top.COLS}, r)
+        with open(os.path.join(d, "scores.csv")) as f:
+            scores = {r["manufacturer"]: float(r["MAI_score"]) for r in csv.DictReader(f)}
+        # The BMW highlights' shares add up to BMW's MAI score.
+        bmw = sum(float(mine[v]["share"]) for v in ("bmw-m1", "bmw-z8"))
+        self.assertAlmostEqual(bmw, scores["BMW"], places=6)
 
 
 class SignalCoverage(unittest.TestCase):
@@ -1427,6 +1558,25 @@ class OnlineSales(unittest.TestCase):
                                _bat("8/3/2026", "Ford", "USD $1", model="GT")])
         self.assertEqual(sorted(r["model"] for r in rows), ["190E", "300SL", "320 Cabriolet A", "918 Spyder", "GT"])
         self.assertEqual({r["manufacturer"] for r in rows}, {"Porsche", "Mercedes-Benz", "Ford"})
+
+    def test_the_month_to_date_is_for_the_index_page_only(self):
+        rows = [_bat("9/15/2026", "BMW", "USD $90,000", slug="1988-bmw-m3-290"),
+                _bat("10/2/2026", "BMW", "USD $111,000", slug="1990-bmw-m3-120"),
+                _bat("10/5/2026", "BMW", "USD $40,000", sold=False, slug="1988-bmw-m3-294"),
+                _bat("10/9/2026", "Mercedes-Benz", "EUR €100,000", slug="1990-mercedes-benz-500e-9"),
+                _bat("10/12/2026", "BMW", "USD $1", slug="tomorrow")]
+        built, _ = self._build(rows)
+        self.assertEqual({r["event"] for r in built}, {"Bring a Trailer – September 2026"})
+        mtd, report = export_online_sales.month_to_date(rows, self.TODAY, lambda c, d: {"EUR": 1.1}.get(c))
+        self.assertEqual([(r["notes"].split(";")[0], r["sale_date"], r["sold"], r["sold_price_usd"]) for r in mtd],
+                         [("bat:1990-bmw-m3-120", "2026-10-02", "true", "111000"),
+                          ("bat:1988-bmw-m3-294", "2026-10-05", "false", ""),
+                          ("bat:1990-mercedes-benz-500e-9", "2026-10-09", "true", "110000")])
+        self.assertEqual({(r["event"], r["event_date"]) for r in mtd}, {("Bring a Trailer – October 2026", "2026-10-31")})
+        self.assertEqual(report["bad"], {"future date": 1})
+        dates = export_online_sales.sale_dates(rows, self.TODAY)
+        self.assertEqual(dates["1988-bmw-m3-290"], "2026-09-15")
+        self.assertNotIn("tomorrow", dates)
 
     def test_only_completed_months_and_never_a_partial_scrape(self):
         rows = [_bat(f"{m}/{d}/2026", "Ford", "USD $50,000") for m in (6, 7, 8) for d in range(1, 21)]

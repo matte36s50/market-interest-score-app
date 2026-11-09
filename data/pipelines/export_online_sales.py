@@ -104,13 +104,14 @@ def event_name(year, month):
     return f"{PLATFORM} – {calendar.month_name[month]} {year}"
 
 
-def build(bat_rows, today, fx):
-    """bat.csv rows -> (online_lots rows, report dict).
+def _new_bad():
+    return {"no date": 0, "future date": 0, "no make": 0, "duplicate": 0, "no price": 0}
 
-    `fx(currency, day)` gives USD per unit (EcbRates in production).
-    """
+
+def _closed_listings(bat_rows, today, bad):
+    """{(year, month): [(day, row), ...]} of the listings that closed by
+    `today`, each URL once. Rows left out are counted in `bad`."""
     listings, seen = {}, set()
-    bad = {"no date": 0, "future date": 0, "no make": 0, "duplicate": 0, "no price": 0}
     for r in bat_rows:
         url = r.get("auction_url") or ""
         if url in seen:
@@ -128,6 +129,54 @@ def build(bat_rows, today, fx):
             bad["no make"] += 1
             continue
         listings.setdefault((day.year, day.month), []).append((day, r))
+    return listings
+
+
+def _lot_row(r, year, month, rate_day, fx, bad, no_rate):
+    """One listing as an online_lots row in its month's sale, or None when it
+    has no usable price (counted in `bad` / `no_rate`). A sold price converts
+    at the ECB rate for `rate_day`."""
+    end = month_end(year, month)
+    sold = (r.get("sale_type") or "").strip().lower() == "sold"
+    currency, amount = parse_amount(r.get("sale_amount"))
+    price, note = "", ""
+    if sold:
+        if amount is None:
+            bad["no price"] += 1
+            return None
+        rate = 1.0 if currency == "USD" else fx(currency, rate_day)
+        if rate is None:
+            no_rate[currency] = no_rate.get(currency, 0) + 1
+            return None
+        price = fmt_num(round(amount * rate, 2))
+        if currency != "USD":
+            note = f"; {currency} at {rate:.4f} USD"
+    m = SLUG.search(r.get("auction_url") or "")
+    slug = m.group(1) if m else ""
+    return {
+        "event": event_name(year, month),
+        "event_date": end.isoformat(),
+        "auction_house": PLATFORM,
+        "auction_house_code": PLATFORM_CODE,
+        "lot_number": "",
+        "manufacturer": make_name(r.get("make")),
+        "model": clean_model(r.get("make"), r.get("model")),
+        "year_of_car": car_year(r, slug),
+        "low_estimate_usd": "",
+        "high_estimate_usd": "",
+        "sold_price_usd": price,
+        "sold": "true" if sold else "false",
+        "notes": f"bat:{slug or r.get('auction_url') or ''}{note}",
+    }
+
+
+def build(bat_rows, today, fx):
+    """bat.csv rows -> (online_lots rows, report dict).
+
+    `fx(currency, day)` gives USD per unit (EcbRates in production).
+    """
+    bad = _new_bad()
+    listings = _closed_listings(bat_rows, today, bad)
 
     this_month = (today.year, today.month)
     completed = {k: v for k, v in listings.items() if k < this_month}
@@ -137,39 +186,11 @@ def build(bat_rows, today, fx):
 
     out, no_rate = [], {}
     for year, month in kept:
-        end = month_end(year, month)
+        end = month_end(year, month).isoformat()
         for day, r in listings[(year, month)]:
-            sold = (r.get("sale_type") or "").strip().lower() == "sold"
-            currency, amount = parse_amount(r.get("sale_amount"))
-            price, note = "", ""
-            if sold:
-                if amount is None:
-                    bad["no price"] += 1
-                    continue
-                rate = 1.0 if currency == "USD" else fx(currency, end.isoformat())
-                if rate is None:
-                    no_rate[currency] = no_rate.get(currency, 0) + 1
-                    continue
-                price = fmt_num(round(amount * rate, 2))
-                if currency != "USD":
-                    note = f"; {currency} at {rate:.4f} USD"
-            m = SLUG.search(r.get("auction_url") or "")
-            slug = m.group(1) if m else ""
-            out.append({
-                "event": event_name(year, month),
-                "event_date": end.isoformat(),
-                "auction_house": PLATFORM,
-                "auction_house_code": PLATFORM_CODE,
-                "lot_number": "",
-                "manufacturer": make_name(r.get("make")),
-                "model": clean_model(r.get("make"), r.get("model")),
-                "year_of_car": car_year(r, slug),
-                "low_estimate_usd": "",
-                "high_estimate_usd": "",
-                "sold_price_usd": price,
-                "sold": "true" if sold else "false",
-                "notes": f"bat:{slug or r.get('auction_url') or ''}{note}",
-            })
+            row = _lot_row(r, year, month, end, fx, bad, no_rate)
+            if row:
+                out.append(row)
     spelling = unify_makes(r["manufacturer"] for r in out)   # 'Mercedes Benz' -> 'Mercedes-Benz'
     for r in out:
         r["manufacturer"] = spelling.get(r["manufacturer"], r["manufacturer"])
@@ -182,6 +203,40 @@ def build(bat_rows, today, fx):
         "no_rate": no_rate,
     }
     return out, report
+
+
+# ── For index-lots.html only ─────────────────────────────────────────────────
+# online_lots.csv holds completed months, so a car that sold last week is in
+# no file MAI reads, and no file MAI reads gets these rows.
+
+def month_to_date(bat_rows, today, fx):
+    """The current month's listings closed by `today`, as online_lots rows of
+    that month's sale ('Bring a Trailer – November 2026', dated the month's
+    last day, as the month will be once it is complete) plus `sale_date`,
+    the listing's own day. Same rules as build(); a sold price converts at
+    the rate for its sale day. -> (rows, report dict)."""
+    bad = _new_bad()
+    listings = _closed_listings(bat_rows, today, bad)
+    out, no_rate = [], {}
+    for day, r in listings.get((today.year, today.month), []):
+        row = _lot_row(r, today.year, today.month, day.isoformat(), fx, bad, no_rate)
+        if row:
+            row["sale_date"] = day.isoformat()
+            out.append(row)
+    out.sort(key=lambda row: (row["sale_date"], row["notes"]))
+    return out, {"bad": {k: v for k, v in bad.items() if v}, "no_rate": no_rate}
+
+
+def sale_dates(bat_rows, today):
+    """{listing slug: ISO day it closed} for every listing closed by `today`.
+    online_lots.csv dates each lot by its month's last day (the sale MAI
+    scores); this is the day itself."""
+    out = {}
+    for listings in _closed_listings(bat_rows, today, _new_bad()).values():
+        for day, r in listings:
+            m = SLUG.search(r.get("auction_url") or "")
+            out[m.group(1) if m else r.get("auction_url") or ""] = day.isoformat()
+    return out
 
 
 def main(argv=None, fetch=None, fx=None, today=None):
