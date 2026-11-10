@@ -1,29 +1,29 @@
 handle,name,channel_id,title,subscribers,videos_in_window,videos_matched,status,note,measured_at
-@CarandDriver,Car and Driver,UCOqhTsqySBCBTy571GArcXg,Car and Driver,862000,84,36,ok,,2026-11-09T17:19:24Z
-@Donut,Donut,UCL6JmiMXKoXS6bpP1D3bk8g,Donut,9360000,197,7,ok,,2026-11-09T17:19:09Z
-@DougDeMuro,Doug DeMuro,UCsqjHFMB_JYTaEnf_vmTNqg,Doug DeMuro,5100000,476,180,ok,,2026-11-09T17:18:36Z
-@EverydayDriver,Everyday Driver,UCv-FM9e2vGXIEExo7L-ogOQ,EverydayDriver,488000,131,23,ok,,2026-11-09T17:18:53Z
-@Hagerty,Hagerty,UCLgEVx4mzk3T3mzgbKG54Eg,Hagerty,3890000,240,64,ok,,2026-11-09T17:17:56Z
-@HarrysGarage,Harry's garage,UCIB5XXHNAWWzTOw6guIMYCg,Harry's garage,894000,139,65,ok,,2026-11-09T17:18:00Z
-@HooviesGarage,Hoovie's Garage,UCdEczn3MVkx_4PnMZ10MVFA,Hoovies Garage,1660000,127,48,ok,,2026-11-09T17:18:56Z
-@MotorWeek,MotorWeek,UC66lTpcL4h5wqxCWioKQOrg,MotorWeek,551000,678,225,ok,,2026-11-09T17:18:19Z
-@MrJWW,Mr JWW,UCK_zuVq6ZpSRMjsZ5JRPx5g,Mr JWW,1030000,100,12,ok,,2026-11-09T17:19:00Z
-@Petrolicious,Petrolicious,UCgyJPixJl95X1ut3E9K99KA,Petrolicious,933000,103,24,ok,,2026-11-09T17:17:58Z
-@Ratarossa,Ratarossa,UCA0ZY1x5r2lyKQfoUYvHvqQ,Ratarossa,289000,62,11,ok,,2026-11-09T17:19:01Z
-@RegularCars,Regular Car Reviews,UCo1pShh6dtg-T_ZZkgi_JDQ,Regular Car Reviews,970000,247,83,ok,,2026-11-09T17:18:14Z
-@Tavarish,Tavarish,UCvAhDxNNUDhi78tMXVGBUaQ,Tavarish,3140000,19,7,ok,,2026-11-09T17:18:57Z
-@TheGrandTour,The Grand Tour,UCZ1Sc5xjWpUnp_o_lUTkvgQ,The Grand Tour,2710000,111,6,ok,,2026-11-09T17:19:15Z
-@TheSmokingTire,The Smoking Tire,UCgeGealT0QYcrnoYRMltDZg,TheSmokingTire,1100000,77,17,ok,,2026-11-09T17:18:47Z
-@TheStraightPipes,TheStraightPipes,UC86SBFIAgnYL3ll2ZDgmsuA,TheStraightPipes,1810000,230,111,ok,,2026-11-09T17:18:51Z
-@ThrottleHouse,Throttle House,UCyXiDU5qjfOPxgOPeFWGwKw,Throttle House,3470000,77,44,ok,,2026-11-09T17:18:50Z
-@TopGear,Top Gear,UCjOl2AUblVmg2rA_cRgZkFg,Top Gear,9560000,273,73,ok,,2026-11-09T17:19:12Z
-@VINwiki,VINwiki,UCefl-5pmhZmljwZTE2KrcdA,VINwiki,2180000,619,22,ok,,2026-11-09T17:18:02Z
-@VehicleVirgins,Vehicle Virgins,UCtS0JcoBgAIEjmifiip8IJg,Vehicle Virgins,2510000,188,60,ok,,2026-11-09T17:19:04Z
-@autocar,Autocar,UCIMzhx509wEXMuGkTK-kD9Q,Autocar,814000,119,34,ok,,2026-11-09T17:19:30Z
-@carthrottle,Car Throttle,UCNBbCOuAN1NZAuj0vPe_MkA,Car Throttle,3010000,44,11,ok,,2026-11-09T17:19:11Z
-@hemmingsmotornews,Hemmings,UC1R1BcMAdWUtaqIXYymFVVA,Hemmings,70400,103,44,ok,,2026-11-09T17:18:34Z
-@jaylenosgarage,Jay Leno's Garage,UCQMELFlXQL38KPm8kM-4Adg,Jay Leno's Garage,4000000,152,44,ok,,2026-11-09T17:17:49Z
-@motortrendwatch,MotorTrend,UCsAegdhiYLEoaFGuJFVrqFQ,MotorTrend Channel,7000000,327,87,ok,,2026-11-09T17:19:18Z
-@roadandtrack,Road & Track,UCiNh73nU9grIPMhzxl38dwQ,RoadandTrack,119000,10,6,ok,,2026-11-09T17:19:28Z
-@savagegeese,savagegeese,UCgUvk6jVaf-1uKOqG8XNcaQ,savagegeese,878000,258,128,ok,,2026-11-09T17:18:48Z
-@shmee150,Shmee150,UCIRgR4iANHI2taJdz8hjwLw,Shmee150,2880000,133,29,ok,,2026-11-09T17:18:58Z
+@CarandDriver,Car and Driver,UCOqhTsqySBCBTy571GArcXg,Car and Driver,862000,84,36,ok,,2026-11-10T00:00:33Z
+@Donut,Donut,UCL6JmiMXKoXS6bpP1D3bk8g,Donut,9360000,197,7,ok,,2026-11-10T00:00:16Z
+@DougDeMuro,Doug DeMuro,UCsqjHFMB_JYTaEnf_vmTNqg,Doug DeMuro,5100000,476,180,ok,,2026-11-09T23:59:41Z
+@EverydayDriver,Everyday Driver,UCv-FM9e2vGXIEExo7L-ogOQ,EverydayDriver,488000,131,23,ok,,2026-11-10T00:00:00Z
+@Hagerty,Hagerty,UCLgEVx4mzk3T3mzgbKG54Eg,Hagerty,3890000,240,64,ok,,2026-11-09T23:58:58Z
+@HarrysGarage,Harry's garage,UCIB5XXHNAWWzTOw6guIMYCg,Harry's garage,894000,139,65,ok,,2026-11-09T23:59:04Z
+@HooviesGarage,Hoovie's Garage,UCdEczn3MVkx_4PnMZ10MVFA,Hoovies Garage,1660000,127,48,ok,,2026-11-10T00:00:03Z
+@MotorWeek,MotorWeek,UC66lTpcL4h5wqxCWioKQOrg,MotorWeek,551000,678,225,ok,,2026-11-09T23:59:26Z
+@MrJWW,Mr JWW,UCK_zuVq6ZpSRMjsZ5JRPx5g,Mr JWW,1030000,101,12,ok,,2026-11-10T00:00:09Z
+@Petrolicious,Petrolicious,UCgyJPixJl95X1ut3E9K99KA,Petrolicious,933000,103,24,ok,,2026-11-09T23:59:01Z
+@Ratarossa,Ratarossa,UCA0ZY1x5r2lyKQfoUYvHvqQ,Ratarossa,289000,62,11,ok,,2026-11-10T00:00:11Z
+@RegularCars,Regular Car Reviews,UCo1pShh6dtg-T_ZZkgi_JDQ,Regular Car Reviews,970000,247,83,ok,,2026-11-09T23:59:19Z
+@Tavarish,Tavarish,UCvAhDxNNUDhi78tMXVGBUaQ,Tavarish,3140000,19,7,ok,,2026-11-10T00:00:05Z
+@TheGrandTour,The Grand Tour,UCZ1Sc5xjWpUnp_o_lUTkvgQ,The Grand Tour,2710000,111,6,ok,,2026-11-10T00:00:25Z
+@TheSmokingTire,The Smoking Tire,UCgeGealT0QYcrnoYRMltDZg,TheSmokingTire,1100000,77,17,ok,,2026-11-09T23:59:52Z
+@TheStraightPipes,TheStraightPipes,UC86SBFIAgnYL3ll2ZDgmsuA,TheStraightPipes,1810000,230,111,ok,,2026-11-09T23:59:57Z
+@ThrottleHouse,Throttle House,UCyXiDU5qjfOPxgOPeFWGwKw,Throttle House,3470000,77,44,ok,,2026-11-09T23:59:56Z
+@TopGear,Top Gear,UCjOl2AUblVmg2rA_cRgZkFg,Top Gear,9560000,273,73,ok,,2026-11-10T00:00:21Z
+@VINwiki,VINwiki,UCefl-5pmhZmljwZTE2KrcdA,VINwiki,2180000,619,22,ok,,2026-11-09T23:59:06Z
+@VehicleVirgins,Vehicle Virgins,UCtS0JcoBgAIEjmifiip8IJg,Vehicle Virgins,2510000,188,60,ok,,2026-11-10T00:00:12Z
+@autocar,Autocar,UCIMzhx509wEXMuGkTK-kD9Q,Autocar,814000,119,34,ok,,2026-11-10T00:00:42Z
+@carthrottle,Car Throttle,UCNBbCOuAN1NZAuj0vPe_MkA,Car Throttle,3010000,44,11,ok,,2026-11-10T00:00:19Z
+@hemmingsmotornews,Hemmings,UC1R1BcMAdWUtaqIXYymFVVA,Hemmings,70400,103,44,ok,,2026-11-09T23:59:38Z
+@jaylenosgarage,Jay Leno's Garage,UCQMELFlXQL38KPm8kM-4Adg,Jay Leno's Garage,4000000,153,45,ok,,2026-11-09T23:58:54Z
+@motortrendwatch,MotorTrend,UCsAegdhiYLEoaFGuJFVrqFQ,MotorTrend Channel,7000000,327,87,ok,,2026-11-10T00:00:28Z
+@roadandtrack,Road & Track,UCiNh73nU9grIPMhzxl38dwQ,RoadandTrack,119000,10,6,ok,,2026-11-10T00:00:39Z
+@savagegeese,savagegeese,UCgUvk6jVaf-1uKOqG8XNcaQ,savagegeese,878000,258,128,ok,,2026-11-09T23:59:53Z
+@shmee150,Shmee150,UCIRgR4iANHI2taJdz8hjwLw,Shmee150,2880000,133,29,ok,,2026-11-10T00:00:06Z
