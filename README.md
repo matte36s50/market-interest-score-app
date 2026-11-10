@@ -500,7 +500,11 @@ of sales still to come, and the current month's closed Bring a Trailer
 listings. `online_lots.csv` leaves the month out until it is complete, so
 those last are on this page only: no score reads `index_lots.csv`. Bring a
 Trailer prices are the hammer without its buyer's fee; live prices are as the
-store holds them, fee-inclusive where entered so, else the hammer.
+store holds them, fee-inclusive where entered so, else the hammer. Three BMW
+CI constituents that cover models selling at different levels are shown model
+by model (`part_of` in `data/variants.csv`), a competition car counts as the
+car it is and is marked, and a live lot links to the auction house's page
+where the store has one.
 
 MAI's apex lots are the **top 10% of each sale** (20 lots or more), ranked
 by high estimate, or by sold price for a lot with no estimate. Lots entered

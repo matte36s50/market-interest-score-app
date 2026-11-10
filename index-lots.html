@@ -39,6 +39,7 @@
         .tag-hl { color: var(--accent-ink); background: var(--accent-wash); }
         .tag-mtd { color: var(--ci-ink); background: var(--ci-wash); }
         .tag-up { color: var(--ink-2); background: var(--surface-3); }
+        .tag-race { color: var(--ink); background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
         .lot-table td, .lot-table th { padding: 8px 10px; font-size: 13px; }
         .lot-table td.num { font-size: 12.5px; }
         .lot-table tr.is-aside td { color: var(--faint); }
@@ -143,11 +144,12 @@
                             <th>Car</th>
                             <th class="text-right">Year</th>
                             <th>Listed as</th>
-                            <th class="pr-6 text-right">High estimate</th>
+                            <th class="text-right">High estimate</th>
+                            <th class="pr-6">Listing</th>
                         </tr>
                     </thead>
                     <tbody id="upRows">
-                        <tr><td colspan="6" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
+                        <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading…</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -191,7 +193,9 @@
                     <li>A sold price under 40% of the car's other results is set aside as most likely not the car the title says (a project, a shell, a mislabelled listing). It stays listed, faded, but counts in no figure.</li>
                     <li><span class="tag tag-mtd">this month</span> Bring a Trailer results from the month in progress. MAI counts a Bring a Trailer month only once it is complete, so these are in no score yet.</li>
                     <li><span class="tag tag-hl">highlight</span> among its sale's top 10% of lots, the ones the Apex Index scores.</li>
-                    <li>Cars &amp; Bids is not included. The live houses' lot pages are not linked: the store doesn't publish them yet.</li>
+                    <li><span class="tag tag-race">race car</span> the title says it is a competition car (Group A, a works rally car, a converted racer). It counts as the car it is, in every figure.</li>
+                    <li>Where one of HAGI's cars covers models that sell at different levels, each model has its own row (HAGI's "635CSi &amp; M635CSi" is a 635CSi row and an M635CSi row), so a median is one model's.</li>
+                    <li>Cars &amp; Bids is not included. A live lot links to the auction house's own page where the store has one.</li>
                 </ul>
             </div>
         </section>
@@ -283,13 +287,22 @@
         function tags(l) {
             var out = [];
             if (l.source === 'bat_month_to_date') out.push('<span class="tag tag-mtd" title="Closed this month on Bring a Trailer; not in MAI until the month is complete">this month</span>');
+            if (isTrue(l.race)) out.push('<span class="tag tag-race" title="The title says it is a competition car. It counts as the car it is.">race car</span>');
             if (isTrue(l.highlight)) out.push('<span class="tag tag-hl" title="Among its sale\'s top 10% of lots, the ones the Apex Index scores">highlight</span>');
             if (isTrue(l.suspect)) out.push('<span class="tag tag-up" title="Under 40% of the car\'s other results: most likely not the car the title says. Counts in no figure.">set aside</span>');
             return out.join(' ');
         }
+        // Only a web address becomes a link, whatever the data file holds.
         function link(l) {
-            return l.url ? '<a class="ext" href="' + esc(l.url) + '" target="_blank" rel="noopener">BaT ↗</a>'
-                : '<span class="text-faint" title="The auction store doesn\'t publish lot pages yet">—</span>';
+            var url = String(l.url || '');
+            if (!/^https?:\/\//.test(url)) return '<span class="text-faint" title="No lot page recorded for this lot">—</span>';
+            var label = /^https:\/\/bringatrailer\.com\//.test(url) ? 'BaT' : 'Lot page';
+            return '<a class="ext" href="' + esc(url) + '" target="_blank" rel="noopener">' + label + ' ↗</a>';
+        }
+        // A model row split out of one of HAGI's cars ("635CSi & M635CSi").
+        function partOf(c) {
+            return c.part_of ? ' <span class="text-faint" style="font-weight:400" title="HAGI lists it as part of &quot;' +
+                esc(c.part_of) + '&quot;">· in ' + esc(c.part_of) + '</span>' : '';
         }
         function lotHead(withCar) {
             return '<tr><th class="pl-6">Date</th>' + (withCar ? '<th>Car</th>' : '') +
@@ -365,8 +378,14 @@
                 var seen = rows.filter(function (r) { return r.s.done.length || r.s.upcoming.length; }).length;
 
                 document.getElementById('indexTitle').textContent = meta.name;
-                document.getElementById('indexSubtitle').textContent = 'Its ' + members.length + ' cars (' + meta.blurb + '), in model-year order. ' +
-                    'Click a car for its lots, newest first.';
+                // HAGI's own count, and how many rows they are here once the
+                // cars that span price tiers are shown model by model.
+                var listed = {}, split = {};
+                members.forEach(function (c) { listed[c.part_of || c.id] = true; if (c.part_of) split[c.part_of] = true; });
+                var nListed = Object.keys(listed).length, nSplit = Object.keys(split).length;
+                document.getElementById('indexSubtitle').textContent = 'Its ' + nListed + ' cars (' + meta.blurb + ')' +
+                    (nSplit ? ', shown as ' + members.length + ': ' + nSplit + ' that cover models selling at different levels are split by model' : '') +
+                    '. In model-year order. Click a car for its lots, newest first.';
                 document.getElementById('indexStats').innerHTML =
                     '<div><span class="h-l">Cars seen</span><span class="h-v">' + seen + '<span class="text-mute" style="font-size:15px;font-weight:500"> / ' + members.length + '</span></span><span class="h-s">offered or coming up</span></div>' +
                     '<div><span class="h-l">Sold</span><span class="h-v">' + all.sold.length + '</span><span class="h-s">of ' + all.kept.length + ' lots offered</span></div>' +
@@ -376,7 +395,7 @@
 
                 body.innerHTML = rows.map(function (r) {
                     var s = r.s, c = r.c;
-                    var name = esc(carName(c)) + ' <span class="text-faint" style="font-weight:400">' + esc(carYears(c)) + '</span>';
+                    var name = esc(carName(c)) + ' <span class="text-faint" style="font-weight:400">' + esc(carYears(c)) + '</span>' + partOf(c);
                     if (!s.done.length && !s.upcoming.length) {
                         return '<tr><td class="pl-6 text-faint">' + name + '</td>' +
                             '<td colspan="6" class="pr-6 text-faint">Not offered at any sale in the data</td></tr>';
@@ -424,10 +443,11 @@
                         '<td>' + esc(l.event) + ' <span class="text-faint">· ' + esc(l.auction_house) + '</span></td>' +
                         '<td class="font-medium"><a href="#" data-goto="' + esc(l.variant_id) + '" class="hover:text-amber-700">' + esc(carName(cars[l.variant_id] || l)) + '</a></td>' +
                         '<td class="num">' + esc(l.year_of_car) + '</td>' +
-                        '<td class="text-mute">' + esc(l.title) + '</td>' +
-                        '<td class="num pr-6">' + usdFull(num(l.high_estimate_usd)) + '</td>' +
+                        '<td class="text-mute">' + esc(l.title) + (isTrue(l.race) ? ' ' + tags(l) : '') + '</td>' +
+                        '<td class="num">' + usdFull(num(l.high_estimate_usd)) + '</td>' +
+                        '<td class="pr-6">' + link(l) + '</td>' +
                     '</tr>';
-                }).join('') : '<tr><td colspan="6" class="px-6 py-8 text-center text-mute">Nothing coming up yet.</td></tr>';
+                }).join('') : '<tr><td colspan="7" class="px-6 py-8 text-center text-mute">Nothing coming up yet.</td></tr>';
             }
 
             function renderLatest(done) {
@@ -451,6 +471,7 @@
                 var intro = '<p class="m-0 text-[13px] text-mute">' +
                     '<span class="text-ink font-semibold">' + esc(carName(c)) + '</span> ' + esc(carYears(c)) +
                     (c.generation ? ' · ' + esc(c.generation) : '') + '. ' +
+                    (c.part_of ? 'HAGI lists it within "' + esc(c.part_of) + '". ' : '') +
                     s.sold.length + ' sold of ' + s.kept.length + ' offered' +
                     (s.median ? ', median ' + usdFull(s.median) : '') + '.' +
                     (s.aside.length ? ' ' + s.aside.length + ' set aside (faded), in no figure.' : '') +

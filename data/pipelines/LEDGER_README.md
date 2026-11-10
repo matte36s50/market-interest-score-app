@@ -98,13 +98,14 @@ Exit status is **1** on any hard error. The dataset files are then left as they 
 
 The Drive digest writes a ledger every other Monday, usually between 13:00 and 15:00 UTC.
 `.github/workflows/ledger.yml` runs the ingest and the scoring at 16:17 UTC every Monday (after
-a ledger lands) and again on Tuesdays for a late one, commits `data/ledger/` and redeploys the
-site. In an off week there is no new file: the folder is unchanged, the rebuild is
+a ledger lands) and again on Tuesdays and Wednesdays for a late one, commits `data/ledger/` and
+redeploys the site. In an off week there is no new file: the folder is unchanged, the rebuild is
 byte-identical and nothing is committed, so the Apex Ledger tab's "as of" date stays on the
 last ledger. That is expected, not a failure. Each run reads the whole folder, so a ledger that
-lands after Tuesday's run (the 2 November 2026 ledger was created on Wednesday 4 November) is
-picked up by the next scheduled run; run the workflow by hand to take it sooner. GitHub often
-starts scheduled runs hours late.
+lands after the week's last run is picked up by the next scheduled one (the 2 November 2026
+ledger was created on Wednesday 4 November, when the workflow ran only on Mondays and Tuesdays,
+and waited for the following Monday's run); run the workflow by hand to take it sooner. GitHub often starts
+scheduled runs hours late.
 
 The run needs the repository secret `LEDGER_SERVICE_ACCOUNT_JSON`: the whole JSON key from step 1, pasted as the secret's value. Without it the run stops with a warning
 and changes nothing. Run it by hand from the Actions tab (*Apex Ledger → Run workflow*) after

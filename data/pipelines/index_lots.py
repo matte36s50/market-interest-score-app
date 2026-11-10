@@ -28,8 +28,17 @@ Columns: those of hagi_top_lots.csv, then
   sale_date  the day of the sale. For Bring a Trailer, the listing's own day:
              event_date is its month's last day, the sale MAI scores
   title      what the listing calls the car, year and make left off
-  url        the listing, where the data has one (Bring a Trailer; the
-             store's public view carries no lot URLs)
+  url        the listing: Bring a Trailer's, or the auction house's lot page
+             where the store has one (lot_url in auction_lots.csv and
+             upcoming_lots.csv)
+  race       whether the title says it is a competition car (RACE): a Group
+             A 635CSi is still a 635CSi and counts as one, and the page marks
+             it
+
+Three BMW CI constituents that span price tiers are split by model in
+variants.csv ("635CSi & M635CSi" is a 635CSi row and an M635CSi & M6 row,
+each naming HAGI's constituent in part_of), so a median and a suspect flag
+are a model's own.
 
 suspect: a sold price under variants.SUSPECT_SHARE of the car's median, with
 at least three prices to take a median of, most likely not the car the title
@@ -78,10 +87,18 @@ LOT_COLS = [
     "model", "year_of_car", "sold", "sold_price_usd", "high_estimate_usd",
     "apex_value_usd", "highlight", "share", "suspect",
 ]
-COLS = LOT_COLS + ["indexes", "source", "sale_date", "title", "url"]
+COLS = LOT_COLS + ["indexes", "source", "sale_date", "title", "url", "race"]
 
 SLUG = re.compile(r"\bbat:([^\s;]+)")
 BAT_LISTING = "https://bringatrailer.com/listing/{}/"
+
+# A title that says the car is a competition version: built or converted for
+# racing or rallying, or run in a named series. "Competition Package" is a
+# road-car option.
+RACE = re.compile(
+    r"\b(race ?car|racecar|racer|race|racing|rally|rallye|competizione|competition(?! pack)|"
+    r"group ?[a-c1-6n]|gr ?[a-c1-6n]|procar|gtr|rsr|imsa|dtm|scca|btcc|trans ?am|touring car|"
+    r"cup car|hillclimb|ptg)\b")
 
 LIVE, ONLINE, MONTH_TO_DATE, UPCOMING = "live", "bat", "bat_month_to_date", "upcoming"
 
@@ -258,7 +275,8 @@ def row(v, lot, share=0.0, highlight=False, suspect=False, source=LIVE, sale_dat
         "source": source,
         "sale_date": sale_date or str(lot.get("event_date") or "")[:10],
         "title": title,
-        "url": BAT_LISTING.format(slug) if slug else "",
+        "url": BAT_LISTING.format(slug) if slug else _text(lot.get("lot_url")),
+        "race": "true" if RACE.search(lot_title(lot)) else "false",
     }
 
 

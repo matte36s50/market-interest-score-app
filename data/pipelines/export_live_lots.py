@@ -13,6 +13,11 @@ outcome, and counting it as unsold would drag every sell-through figure
 down. Withdrawn lots are dropped for the same reason. Prices are the
 fee-inclusive price_all_in where the store has one, else the hammer price.
 
+Each lot carries the auction house's own page for it (lot_url) where the
+store has one, for index-lots.html's links. The view's url column is read if
+the view has it and left blank if it doesn't, so the export runs against
+either.
+
 Lots of a sale that hasn't happened yet go to data/upcoming_lots.csv
 instead: catalogue estimates only, no outcome. mai.html reads it for the
 pre-sale view of apex consignments; nothing in the MAI score does. Once a
@@ -83,16 +88,23 @@ FIELDNAMES = [
     "sold_price_usd", "sold", "notes",
 ]
 
+# auction_lots.csv: the columns online_lots.csv shares, then the lot's page.
+LIVE_FIELDNAMES = FIELDNAMES + ["lot_url"]
+
 UPCOMING_FIELDNAMES = [
     "event", "event_date", "auction_house", "auction_house_code", "lot_number", "manufacturer",
-    "model", "year_of_car", "low_estimate_usd", "high_estimate_usd", "notes",
+    "model", "year_of_car", "low_estimate_usd", "high_estimate_usd", "notes", "lot_url",
 ]
 
-SELECT = ",".join([
-    "event", "auction_house", "event_date", "source_listing_id", "year",
-    "make", "model", "trim", "status", "outcome", "price", "price_all_in",
-    "currency", "estimate_low", "estimate_high", "needs_review",
-])
+# Every column of the view, which is the sixteen this reads (event,
+# auction_house, event_date, source_listing_id, year, make, model, trim,
+# status, outcome, price, price_all_in, currency, estimate_low, estimate_high,
+# needs_review) and, once the view exposes it, url. Naming url here would
+# fail the export against a view without it.
+SELECT = "*"
+
+# A link the page can publish: a plain web address, nothing a browser would run.
+LOT_URL = re.compile(r"https?://[^\s\"'<>]+")
 
 LOT_ID = re.compile(r"-lot-([^/]+)$")
 FX_URL = "https://api.frankfurter.dev/v1/{day}?base={cur}&symbols=USD"
@@ -239,6 +251,12 @@ class EcbRates:
         return self.cache[key]
 
 
+def lot_url(value):
+    """The store's url for a lot if it is a web address, else ''."""
+    value = str(value or "").strip()
+    return value if LOT_URL.fullmatch(value) else ""
+
+
 def fmt_num(value):
     """600000.0 -> '600000', 123.456 -> '123.46', None -> ''."""
     if value is None or value == "":
@@ -291,6 +309,7 @@ def _lot_fields(r, fx):
         "low_estimate_usd": fmt_num(usd(r.get("estimate_low"))),
         "high_estimate_usd": fmt_num(usd(r.get("estimate_high"))),
         "notes": notes,
+        "lot_url": lot_url(r.get("url")),
     }, usd, None
 
 
@@ -466,6 +485,7 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
               f"{lib.redact(str(exc))}. Nothing written; the next run retries.")
         return 1
     converted = sum(1 for r in rows if r["notes"].endswith(" USD"))
+    linked = sum(1 for r in rows if r["lot_url"])
     events = sorted({r["event"] for r in rows})
     print(f"Store: {len(store_rows)} live lots -> {len(rows)} exported "
           f"across {len(events)} events ({converted} converted to USD)")
@@ -493,8 +513,9 @@ def main(argv=None, fetch=fetch_live_lots, fx=None):
     if args.dry_run:
         print("Dry run — nothing written.")
         return 0
-    lib.write_rows(args.out, FIELDNAMES, rows)
-    print(f"Wrote {len(rows)} lots to {args.out}")
+    lib.write_rows(args.out, LIVE_FIELDNAMES, rows)
+    print(f"Wrote {len(rows)} lots to {args.out}"
+          + (f" ({linked} with a lot page)" if linked else ""))
     return 0
 
 
