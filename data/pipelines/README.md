@@ -100,6 +100,11 @@ app; schema in `cc-market-survey/auction-store`). It reads the anon-readable
   European sales from MAI.
 - Skips lots still at the estimate stage and withdrawn lots, so neither counts
   as unsold in the sell-through figures.
+- Carries each lot's own page at the auction house (`lot_url`, the last column
+  of `auction_lots.csv` and `upcoming_lots.csv`) where the view exposes the
+  store's `url` and it is a web address. The view is read whole (`select=*`),
+  so the export runs the same against a view without that column and leaves
+  `lot_url` blank. Nothing in the scores reads it.
 - Writes lots of sales still to come (not ended, not withdrawn, sale date
   today or later) to `data/upcoming_lots.csv`, estimates only, converted at
   the latest rate. `mai.html` reads it for the pre-sale **Upcoming apex
@@ -516,6 +521,14 @@ store's "Coupé" reads "coupe"). Replicas, recreations, continuation cars and
 coachwork "in the style of" the original are ruled out. First match wins; no
 lot in the data matches two cars.
 
+Three BMW CI constituents cover models that sell at different levels, so
+`variants.csv` holds one row per model and names HAGI's constituent in
+`part_of`: "CS, CSi & CSL" is 2800 CS & 3.0 CS, 3.0 CSi and 3.0 CSL;
+"635CSi & M635CSi" is 635CSi and M635CSi & M6; "Z3 M Roadster & Coupé" is
+one row each. A median, and the suspect flag that depends on it, is then one
+model's. The index is still its published size: count distinct `part_of`
+(or `id` where it is blank), which a test checks.
+
 `data/index_lots.csv` has one row per matched lot, from:
 
 - **the scored lots** (`auction_lots.csv` + `online_lots.csv`, prepared as
@@ -532,8 +545,11 @@ lot in the data matches two cars.
 Columns: those of `hagi_top_lots.csv`, then `indexes` (`;`-separated: the M1
 is `hagi-top;bmw-ci`), `source` (`live`, `bat`, `bat_month_to_date`,
 `upcoming`), `sale_date` (a Bring a Trailer listing's own day; `event_date`
-stays its month's last day, the sale MAI scores), `title` and `url` (Bring a
-Trailer only: the store's public view carries no lot URLs).
+stays its month's last day, the sale MAI scores), `title`, `url` (the Bring
+a Trailer listing, or the auction house's lot page where the store has one:
+`lot_url` in `auction_lots.csv` and `upcoming_lots.csv`) and `race` (the
+title says it is a competition car: Group A, Procar, "race car", a named
+series. It counts as the car it is and the page marks it).
 
 `suspect` is a sold price under 40% of the car's median over the scored lots
 (three or more); a month-to-date price is judged against the same median, so

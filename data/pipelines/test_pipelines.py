@@ -787,6 +787,47 @@ class Variants(unittest.TestCase):
         t = index_lots.lot_title(lot)
         self.assertFalse(variants.matches(self.v["mb-500k-540k-special-roadster"], "Mercedes-Benz", t, 1934))
 
+    def test_a_300sl_of_1954_to_1956_is_a_gullwing_whatever_the_title_says(self):
+        # The Roadster arrived in 1957, so before it a 300SL is the coupé.
+        self.assertTrue(self.hit("mb-300sl-gullwing", "Mercedes-Benz",
+                                 "https://bringatrailer.com/listing/1954-mercedes-benz-300sl-7/"))
+        for vid in ("mb-300sl-gullwing", "mb-300sl-roadster"):   # 1957 had both: no telling
+            self.assertFalse(self.hit(vid, "Mercedes-Benz", "https://bringatrailer.com/listing/1957-mercedes-benz-300sl/"))
+        self.assertFalse(self.hit("mb-300sl-gullwing", "Mercedes-Benz",
+                                  "https://bringatrailer.com/listing/1955-mercedes-benz-300sl-alloy-gullwing/"))
+        self.assertFalse(self.hit("mb-300sl-gullwing", "Mercedes-Benz",
+                                  "https://bringatrailer.com/listing/1956-mercedes-benz-300sl-roadster/"))
+        self.assertFalse(self.hit("mb-300sl-gullwing", "Mercedes-Benz",
+                                  "https://bringatrailer.com/listing/1955-mercedes-benz-300slr/"))
+
+    def test_a_constituent_split_by_model_puts_each_car_in_one_part(self):
+        cases = {
+            "1988-bmw-m6-172": "bmw-e24-m635csi", "1985-bmw-m635csi-64": "bmw-e24-m635csi",
+            "1986-bmw-635csi-64": "bmw-e24-635csi", "1980-bmw-635-csi-euro-spec-2": "bmw-e24-635csi",
+            "1971-bmw-2800cs-44": "bmw-e9-cs", "1973-bmw-3-0cs-98": "bmw-e9-cs",
+            "1973-bmw-3-0csi-43": "bmw-e9-csi", "1973-bmw-3-0-csl-9": "bmw-e9-csl",
+            "1999-bmw-m-roadster-93": "bmw-z3-m-roadster", "1999-bmw-m-coupe-95": "bmw-z3-m-coupe",
+            "2001-bmw-z3-m-coupe": "bmw-z3-m-coupe",
+        }
+        parts = [v for v in self.v.values() if v.get("part_of")]
+        for slug, want in cases.items():
+            got = [v["id"] for v in parts if self.hit(v["id"], "BMW", f"https://bringatrailer.com/listing/{slug}/")]
+            self.assertEqual(got, [want], slug)
+
+    def test_splitting_a_constituent_leaves_each_index_the_size_hagi_publishes(self):
+        sizes = {}
+        for v in self.v.values():
+            for index in v["index_list"]:
+                sizes.setdefault(index, set()).add(v.get("part_of") or v["id"])
+        # The sizes the repo documents (hagi-indexes.js, hagi_top.py).
+        self.assertEqual({k: len(sizes[k]) for k in ("hagi-top", "bmw-ci", "mbci", "mbci-emerging")},
+                         {"hagi-top": 24, "bmw-ci": 16, "mbci": 23, "mbci-emerging": 6})
+        self.assertEqual(sum("bmw-ci" in v["index_list"] for v in self.v.values()), 20)
+
+    def test_the_e46_m3_starts_with_the_2000_cars(self):
+        self.assertTrue(self.hit("bmw-e46-m3", "BMW", "https://bringatrailer.com/listing/2000-bmw-m3/"))
+        self.assertFalse(self.hit("bmw-e46-m3", "BMW", "https://bringatrailer.com/listing/1999-bmw-m3-204/"))
+
     def test_every_row_compiles_and_names_an_index(self):
         for v in self.v.values():
             self.assertTrue(v["index_list"], v["id"])
@@ -909,6 +950,35 @@ class IndexLots(unittest.TestCase):
         up = by_source["upcoming"][0]
         self.assertEqual((up["sold"], up["high_estimate_usd"], up["sale_date"], up["url"]),
                          ("", 250000, "2026-11-20", ""))
+
+    def test_a_competition_car_counts_as_the_car_and_is_marked(self):
+        lots = [self.lot(manufacturer="BMW", model="635CSi Group A", year_of_car=1986),
+                self.lot(manufacturer="BMW", model="E46 M3 PTG", year_of_car=2000),
+                self.lot(manufacturer="Ferrari", model="250 GT SWB Berlinetta Competizione", year_of_car=1961),
+                self.lot(manufacturer="Porsche", model="356 A 1600 Speedster SCCA Race Car", year_of_car=1958),
+                self.lot(manufacturer="McLaren", model="F1 GTR", year_of_car=1996),
+                self.lot(manufacturer="BMW", model="M3 Competition Package", year_of_car=2005),
+                self.lot(manufacturer="BMW", model="635CSi", year_of_car=1986),
+                self.lot(manufacturer="BMW", model="M3", year_of_car=1988, notes="bat:1988-bmw-m3-294")]
+        rows = index_lots.build(lots, {}, 0)
+        self.assertEqual(len(rows), len(lots))
+        self.assertEqual({r["title"]: r["race"] for r in rows}, {
+            "635CSi Group A": "true", "E46 M3 PTG": "true", "250 GT SWB Berlinetta Competizione": "true",
+            "356 A 1600 Speedster SCCA Race Car": "true", "F1 GTR": "true",
+            "M3 Competition Package": "false", "635CSi": "false", "M3": "false"})
+        self.assertNotIn("race", hagi_top.COLS)
+
+    def test_a_live_lot_links_to_its_own_page_where_the_store_has_one(self):
+        page = "https://rmsothebys.com/auctions/mu26/lots/r0042-1986-bmw-m3/"
+        scored = [self.lot(manufacturer="BMW", model="M3", year_of_car=1988, lot_url=page),
+                  self.lot(event="B", manufacturer="BMW", model="M3", year_of_car=1989, lot_url=float("nan")),
+                  self.lot(event="C", manufacturer="BMW", model="M3", year_of_car=1990)]
+        upcoming = [{"event": "The Munich Auction 2026", "event_date": "2026-11-20", "auction_house": "RM Sotheby's",
+                     "manufacturer": "BMW", "model": "M3", "year_of_car": "1986", "high_estimate_usd": "111930",
+                     "notes": "store:x", "lot_url": page}]
+        rows = index_lots.build(scored, {}, 0, upcoming=upcoming)
+        self.assertEqual(sorted((r["source"], r["url"]) for r in rows),
+                         [("live", ""), ("live", ""), ("live", page), ("upcoming", page)])
 
     def test_a_listing_slug_reads_as_a_title(self):
         v = {x["id"]: x for x in variants.load_variants()}
@@ -1324,6 +1394,33 @@ class LiveLotsExport(unittest.TestCase):
                 ["--out", "/nonexistent/x.csv"],
                 fetch=lambda *a: self.fail("must not fetch")), 0)
         self.assertIn("skipping", log.getvalue())
+
+    def test_a_lot_carries_its_page_only_if_it_is_a_web_address(self):
+        page = "https://www.broadarrowauctions.com/vehicles/am26_r0001/1962-chevrolet-corvette-327-360-fuelie"
+        row, _ = export_live_lots.to_csv_row(_store_lot(url=page))
+        self.assertEqual(row["lot_url"], page)
+        upcoming, _ = export_live_lots.to_upcoming_row(
+            _store_lot(status="upcoming", outcome=None, event_date="2099-01-01", url=page), today="2026-10-09")
+        self.assertEqual(upcoming["lot_url"], page)
+        # A view without the column, an empty value, and anything a browser
+        # would run rather than open.
+        for bad in ({}, {"url": None}, {"url": ""}, {"url": "javascript:alert(1)"},
+                    {"url": "https://x.example/a\" onmouseover=\"x"}, {"url": "ftp://x.example/lot"}):
+            self.assertEqual(export_live_lots.to_csv_row(_store_lot(**bad))[0]["lot_url"], "", bad)
+        self.assertEqual(export_live_lots.LIVE_FIELDNAMES[-1], "lot_url")
+        self.assertEqual(export_live_lots.UPCOMING_FIELDNAMES[-1], "lot_url")
+        self.assertNotIn("lot_url", export_live_lots.FIELDNAMES)      # online_lots.csv is unchanged
+
+    def test_the_view_is_read_whole_so_a_column_it_lacks_cannot_fail_the_export(self):
+        calls = []
+
+        def fake_get(url, headers=None):
+            calls.append(url)
+            return [_store_lot()]
+
+        export_live_lots.fetch_live_lots("https://x.supabase.co", "k", get_json=fake_get)
+        self.assertIn("select=%2A", calls[0])
+        self.assertNotIn("url", calls[0].split("?", 1)[1].replace("select=%2A", ""))
 
     def test_pages_until_a_short_page(self):
         calls = []

@@ -7,9 +7,12 @@ name: Apex Ledger (weekly Auction Results Ledgers)
 # runner and discarded: they are never committed or published. See
 # data/pipelines/LEDGER_README.md.
 #
-# A ledger lands on Monday, usually between 13:00 and 15:00 UTC. This runs at
-# 16:17 UTC on Mondays, and again on Tuesdays in case one is late (an unchanged
-# folder rebuilds byte-identical files, so the second run commits nothing).
+# A ledger lands every other Monday, usually between 13:00 and 15:00 UTC. This
+# runs at 16:17 UTC on Mondays, and again on Tuesdays and Wednesdays in case
+# one is late: the 2 November 2026 ledger was created on the Wednesday, after
+# both of that week's runs, and waited six days for the next. An unchanged
+# folder rebuilds byte-identical files, so a run with nothing new (the later
+# runs of a week, and every run of an off week) commits nothing.
 #
 # Repository secret (Settings → Secrets and variables → Actions):
 #   LEDGER_SERVICE_ACCOUNT_JSON  the JSON key of a Google service account that
@@ -19,8 +22,9 @@ name: Apex Ledger (weekly Auction Results Ledgers)
 
 on:
   schedule:
-    - cron: '17 16 * * 1'   # Mondays, after the week's ledger lands
+    - cron: '17 16 * * 1'   # Mondays, after a ledger lands
     - cron: '17 16 * * 2'   # Tuesdays, for a late ledger
+    - cron: '17 16 * * 3'   # Wednesdays, for a later one
   workflow_dispatch:
   push:
     branches: [main]
