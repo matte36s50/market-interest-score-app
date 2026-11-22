@@ -1,212 +1,220 @@
 manufacturer,event,event_date,auction_house,auction_rating,sale_apex_lots,apex_lots,P,Q,R,contribution,apex_lots_modern,apex_lots_classic,contribution_modern,contribution_classic
-AMG-Mercedes,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.95,1,0.00251327,0,1,0,0.00551651
-Alfa Romeo,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.857143,1,0.00322854,0,1,0,0.00708649
-Alfa Romeo,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,0,1,0,0.00342245
-Alfa Romeo,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.000421618,1,0,0.000774874,0
-Aston Martin,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,1,0.166667,1.15052,1,0.0111425,1,0,0.0204783,0
-Aston Martin,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,1,0,0.0114011,0
-Aston Martin,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.00386274,1,0,0.00709916,0
-Aston Martin,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.710526,1,0.00361786,1,0,0.00664911,0
-Aston Martin,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,0,1,0,0.00158802
-Aston Martin,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.00051093,0,1,0,0.00112147
-Aston Martin,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000498953,0,1,0,0.00109518
-Aston Martin,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000374218,0,1,0,0.000821391
-Auburn,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,,0,0.000293502,0,1,0,0.000644223
-BMW,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.666667,1,0.00361786,1,0,0.00664911,0
-BMW,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.449038,1,0.00251327,0,1,0,0.00551651
-BMW,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,0,0.00249476,0,1,0,0.0054759
-BMW,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000495462,0,1,0,0.00108752
-Bentley,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,,0,0.00322854,0,1,0,0.00708649
-Bentley,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.0024438,1,0,0.00449136,0
-Bizzarrini,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,,0,0.00178197,0,1,0,0.00391135
-Bugatti,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,2,0.105263,,1,0.0124069,1,1,0.0114011,0.0136163
-Bugatti,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.0093762,0,1,0,0.0205803
-Bugatti,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.882979,1,0.00831593,1,0,0.0152835,0
-Bugatti,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.00386274,1,0,0.00709916,0
-Bugatti,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00377068,0,1,0,0.00827648
-Bugatti,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.636364,1,0.00361786,1,0,0.00664911,0
-Bugatti,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.892857,1,0.00322854,1,0,0.00593359,0
-Bugatti,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00249476,1,0,0.00458502,0
-Bugatti,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000498953,1,0,0.000917004,0
-Bugatti,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.000356255,1,0,0.000654746,0
-Buick,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,4,0.235294,0.79725,1,0.00117401,0,4,0,0.00257689
-Cadillac,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,3,0.176471,0.818483,1,0.000880505,0,3,0,0.00193267
-Cadillac,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000404151,0,1,0,0.000887094
-Chevrolet,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Chevrolet,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000573799,0,1,0,0.00125946
-Chevrolet,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.00051093,0,1,0,0.00112147
-Chevrolet,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000495462,0,1,0,0.00108752
-Chevrolet,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.000421618,0,1,0,0.000925434
-Chevrolet,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.00040914,0,1,0,0.000898045
-Chevrolet,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000404151,0,1,0,0.000887094
-Chevrolet,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.000356255,0,1,0,0.000781964
-Chrysler,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.8,1,0.000293502,0,1,0,0.000644223
-Cord,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.624,1,0.000293502,0,1,0,0.000644223
-Delage,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Dodge,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.00051093,1,0,0.000939016,0
-Dodge,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000495462,0,1,0,0.00108752
-Dodge,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.000356255,1,0,0.000654746,0
-Duesenberg,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Duesenberg,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,1,0.0909091,,1,0.00213191,0,1,0,0.00467944
-Duesenberg,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.852083,1,0.000293502,0,1,0,0.000644223
-Ferrari,The Monaco Auction,2026-04-24,RM Sotheby's,100,6,6,1,,1,0.145705,3,3,0.133893,0.159908
-Ferrari,Geneva 2026,2026-11-08,Gooding Christie's,35.5461,3,3,1,0.924903,1,0.0517925,3,0,0.0951872,0
-Ferrari,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,8,0.421053,,1,0.0496277,4,4,0.0456043,0.0544653
-Ferrari,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,4,0.666667,0.981072,1,0.04457,2,2,0.0409567,0.0489146
-Ferrari,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,5,0.555556,0.832778,1,0.0415796,4,1,0.0611339,0.0182531
-Ferrari,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,3,0.5,,1,0.0281286,2,1,0.0344642,0.0205803
-Ferrari,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,4,0.444444,0.800192,1,0.0161526,3,1,0.0222646,0.00886357
-Ferrari,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,5,0.294118,0.876667,1,0.0161427,1,4,0.00593359,0.028346
-Ferrari,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,4,0.571429,,1,0.0150827,1,3,0.00692998,0.0248295
-Ferrari,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,6,0.545455,,1,0.0127914,3,3,0.0117544,0.0140383
-Ferrari,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,14,0.56,,1,0.0101288,13,1,0.0172856,0.00158802
-Ferrari,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,6,0.428571,,1,0.0093554,0,6,0,0.0205347
-Ferrari,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,11,0.44,,1,0.00795833,9,2,0.0119669,0.00317603
-Ferrari,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,2,0.333333,,1,0.00772548,2,0,0.0141983,0
-Ferrari,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,2,0.25,0.913333,0.5,0.00723572,1,1,0.00664911,0.00794104
-Ferrari,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00498122,0,1,0,0.0109336
-Ferrari,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,9,0.36,,1,0.00459837,7,2,0.00657311,0.00224294
-Ferrari,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,8,0.32,,1,0.00459039,6,2,0.00632736,0.00251893
-Ferrari,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,5,0.2,,1,0.00366731,5,0,0.00673999,0
-Ferrari,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,2,0.285714,0.783077,1,0.00356395,1,1,0.00327501,0.00391135
-Ferrari,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,7,0.28,,1,0.00346823,7,0,0.00637411,0
-Ferrari,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,6,0.24,,1,0.00299372,4,2,0.00366801,0.00219036
-Ferrari,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,7,0.28,,1,0.00280115,3,4,0.00220634,0.00351338
-Ferrari,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.02419,1,0.00251327,1,0,0.00461903,0
-Ferrari,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,0.514286,1,0.0024438,0,1,0,0.00536404
-Ferrari,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,6,0.24,,1,0.00224531,5,1,0.00343879,0.000821391
-Ferrari,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,5,0.2,,1,0.00210809,4,1,0.0030995,0.000925434
-Ferrari,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,5,0.2,,1,0.00202909,3,2,0.00223751,0.00178151
-Ferrari,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,4,0.16,,1,0.00163656,4,0,0.00300776,0
-Ferrari,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,4,0.16,,1,0.0016166,4,0,0.00297109,0
-Ferrari,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,4,0.16,,1,0.0011915,4,0,0.0021898,0
-Ferrari,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,2,0.08,,1,0.00071251,2,0,0.00130949,0
-Fiat,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.56,1,0.000293502,0,1,0,0.000644223
-Ford,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,5,0.2,,1,0.00366731,5,0,0.00673999,0
-Ford,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,7,0.28,,1,0.00280115,7,0,0.00514812,0
-Ford,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,3,0.12,,1,0.00217045,3,0,0.00398898,0
-Ford,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,5,0.2,,1,0.00210809,5,0,0.00387437,0
-Ford,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,5,0.2,,1,0.00202909,5,0,0.00372918,0
-Ford,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,4,0.16,,1,0.00198185,4,0,0.00364235,0
-Ford,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,5,0.2,,1,0.00178127,5,0,0.00327373,0
-Ford,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,3,0.12,,1,0.0017214,2,1,0.00210912,0.00125946
-Ford,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,2,0.08,,1,0.00144697,2,0,0.00265932,0
-Ford,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,3,0.12,,1,0.00121245,3,0,0.00222832,0
-Ford,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,4,0.16,,1,0.0011915,4,0,0.0021898,0
-Ford,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,3,0.12,,1,0.00112265,3,0,0.00206327,0
-Ford,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,2,0.08,,1,0.00081828,2,0,0.00150388,0
-Ford,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.00051093,1,0,0.000939016,0
-Ford,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000498953,1,0,0.000917004,0
-Isdera,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.00386274,0,1,0,0.00847855
-Jaguar,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,0,1,0,0.00342245
-Jaguar,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.00040914,0,1,0,0.000898045
-Koenigsegg,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.8,1,0.00831593,1,0,0.0152835,0
-Lamborghini,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.0093762,0,1,0,0.0205803
-Lamborghini,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,,0,0.00831593,0,1,0,0.0182531
-Lamborghini,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,8,0.32,,1,0.0058677,6,2,0.00808799,0.00321984
-Lamborghini,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00377068,1,0,0.00692998,0
-Lamborghini,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,4,0.16,,1,0.00229519,4,0,0.00421824,0
-Lamborghini,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,5,0.2,,1,0.00202076,1,4,0.000742772,0.00354838
-Lamborghini,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,0,1,0,0.00342245
-Lamborghini,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,2,0.08,,1,0.00144697,1,1,0.00132966,0.00158802
-Lamborghini,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,3,0.12,,1,0.00122742,3,0,0.00225582,0
-Lamborghini,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,2,0.08,,1,0.00102186,1,1,0.000939016,0.00112147
-Lamborghini,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,2,0.08,,1,0.000997906,2,0,0.00183401,0
-Lamborghini,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,2,0.08,,1,0.000990923,0,2,0,0.00217503
-Lamborghini,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,2,0.08,,1,0.000811636,2,0,0.00149167,0
-Lamborghini,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,1,0,0.00132966,0
-Lamborghini,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,2,0.08,,1,0.00071251,2,0,0.00130949,0
-Lamborghini,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,2,0.08,,1,0.000595748,2,0,0.0010949,0
-Lamborghini,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.000421618,1,0,0.000774874,0
-Lamborghini,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,1,0.04,,1,0.000400165,0,1,0,0.000878344
-Lamborghini,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000374218,0,1,0,0.000821391
-Lexus,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.000421618,1,0,0.000774874,0
-Lexus,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.00040914,1,0,0.000751941,0
-Lexus,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000374218,1,0,0.000687758,0
-Lola-Ford,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,0,0.00249476,0,1,0,0.0054759
-Maserati,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,2,0.117647,0.88125,1,0.00645707,0,2,0,0.014173
-McLaren,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.885714,1,0.00831593,1,0,0.0152835,0
-McLaren,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-McLaren,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00498122,1,0,0.00915477,0
-McLaren,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,1,0.111111,0.930556,1,0.00403815,1,0,0.00742155,0
-McLaren,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.00386274,1,0,0.00709916,0
-McLaren,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.714286,1,0.00361786,1,0,0.00664911,0
-McLaren,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,0.664286,1,0.00178197,1,0,0.00327501,0
-McLaren,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,2,0.08,,1,0.000843237,2,0,0.00154975,0
-McLaren,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,1,0.04,,1,0.000733462,1,0,0.001348,0
-McLaren,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000498953,1,0,0.000917004,0
-McLaren,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000404151,1,0,0.000742772,0
-McLaren,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,1,0.04,,1,0.000400165,1,0,0.000735445,0
-Mercedes-AMG,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.56458,1,0.00251327,1,0,0.00461903,0
-Mercedes-Benz,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,2,0.222222,0.707692,0.5,0.00807631,0,2,0,0.0177271
-Mercedes-Benz,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,2,0.25,,0,0.00723572,1,1,0.00664911,0.00794104
-Mercedes-Benz,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Mercedes-Benz,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,2,0.181818,,1,0.00426381,0,2,0,0.00935888
-Mercedes-Benz,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00377068,0,1,0,0.00827648
-Mercedes-Benz,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,2,0.285714,,0,0.00356395,0,2,0,0.00782271
-Mercedes-Benz,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.9,1,0.00322854,0,1,0,0.00708649
-Mercedes-Benz,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,2,0.142857,,1,0.00311847,0,2,0,0.00684489
-Mercedes-Benz,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.783824,1,0.00251327,0,1,0,0.00551651
-Mercedes-Benz,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.0024438,0,1,0,0.00536404
-Mercedes-Benz,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,4,0.16,,1,0.00199581,2,2,0.00183401,0.00219036
-Mercedes-Benz,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,4,0.16,,1,0.00162327,1,3,0.000745835,0.00267226
-Mercedes-Benz,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,5,0.2,,1,0.00148937,3,2,0.00164235,0.00130764
-Mercedes-Benz,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,2,0.08,,1,0.00146692,1,1,0.001348,0.00160992
-Mercedes-Benz,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,4,0.16,,1,0.00142502,3,1,0.00196424,0.000781964
-Mercedes-Benz,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,3,0.12,,1,0.00126486,1,2,0.000774874,0.00185087
-Mercedes-Benz,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,3,0.12,,1,0.00120049,2,1,0.00147089,0.000878344
-Mercedes-Benz,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,3,0.12,,1,0.00112265,2,1,0.00137552,0.000821391
-Mercedes-Benz,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,2,0.08,,1,0.00102186,1,1,0.000939016,0.00112147
-Mercedes-Benz,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,3,0.176471,0.554421,1,0.000880505,0,3,0,0.00193267
-Mercedes-Benz,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,1,0,0.00132966,0
-Mercedes-Benz,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000573799,1,0,0.00105456,0
-Mercedes-Benz,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.00040914,1,0,0.000751941,0
-Mercedes-Benz,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000404151,0,1,0,0.000887094
-Miller,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,0,1,0,0.00342245
-Packard,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Packard,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00249476,0,1,0,0.0054759
-Packard,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.522667,1,0.000293502,0,1,0,0.000644223
-Pagani,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,1,0,0.0114011,0
-Porsche,Air/Water,2026-04-26,Broad Arrow,12.8356,7,6,0.857143,,1,0.0160304,3,3,0.0147308,0.017593
-Porsche,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,4,0.235294,0.639205,1,0.0129141,0,4,0,0.028346
-Porsche,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,1,0.166667,,0,0.0111425,1,0,0.0204783,0
-Porsche,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,2,0.222222,0.846212,1,0.00807631,2,0,0.0148431,0
-Porsche,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00620346,0,1,0,0.0136163
-Porsche,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,8,0.32,,1,0.00578788,4,4,0.00531864,0.00635207
-Porsche,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00498122,0,1,0,0.0109336
-Porsche,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,11,0.44,,1,0.00450054,7,4,0.00526359,0.00359218
-Porsche,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,9,0.36,,1,0.00449058,5,4,0.00458502,0.00438072
-Porsche,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,9,0.36,,1,0.00445916,7,2,0.00637411,0.00217503
-Porsche,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,2,0.181818,,1,0.00426381,0,2,0,0.00935888
-Porsche,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,8,0.32,,1,0.00408744,7,1,0.00657311,0.00112147
-Porsche,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,10,0.4,,1,0.00374218,9,1,0.00618982,0.000821391
-Porsche,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,9,0.36,,1,0.00363736,5,4,0.00371386,0.00354838
-Porsche,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,6,0.24,,1,0.00344279,6,0,0.00632736,0
-Porsche,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,8,0.32,,1,0.00324654,6,2,0.00447501,0.00178151
-Porsche,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,4,0.16,,1,0.00289394,3,1,0.00398898,0.00158802
-Porsche,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,8,0.32,,1,0.00285004,5,3,0.00327373,0.00234589
-Porsche,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,9,0.36,,1,0.00268086,6,2,0.0032847,0.00130764
-Porsche,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,6,0.24,,1,0.00252971,4,2,0.0030995,0.00185087
-Porsche,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.265,1,0.00251327,0,1,0,0.00551651
-Porsche,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.0024438,1,0,0.00449136,0
-Porsche,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,6,0.24,,1,0.00240099,4,2,0.00294178,0.00175669
-Porsche,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,3,0.12,,1,0.00220039,1,2,0.001348,0.00321984
-Porsche,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,1,0,0.00286565,0
-RUF,Air/Water,2026-04-26,Broad Arrow,12.8356,7,1,0.142857,,1,0.00267173,1,0,0.00491026,0
-Rimac,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000573799,1,0,0.00105456,0
-Rolls-Royce,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,1,0.04,,1,0.000405818,0,1,0,0.000890753
-Rolls-Royce,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,1,0.04,,1,0.000297874,1,0,0.000547449,0
-Saleen,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,1,0,0.00132966,0
-Shelby,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,,1,0.00322854,0,1,0,0.00708649
-Shelby,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00155923,0,1,0,0.00342245
-Shelby,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,0,1,0,0.00158802
-Shelby,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.000723484,0,1,0,0.00158802
-Silsby/American LaFrance,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.597333,1,0.000293502,0,1,0,0.000644223
-Spyker,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,1,0.04,,1,0.000733462,1,0,0.001348,0
-Spyker,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000573799,1,0,0.00105456,0
-Spyker,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.00040914,1,0,0.000751941,0
-Stevens-Miller,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.483333,1,0.00322854,0,1,0,0.00708649
-Stutz,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,0.85,1,0.00178197,0,1,0,0.00391135
-Talbot-Lago,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.0093762,0,1,0,0.0205803
-Toyota,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.000356255,0,1,0,0.000781964
-Vollstedt-Ford,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00249476,0,1,0,0.0054759
+AMG-Mercedes,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.95,1,0.00247316,0,1,0,0.00532691
+Alfa Romeo,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.857143,1,0.00317702,0,1,0,0.00684293
+Alfa Romeo,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,0,1,0,0.00330482
+Alfa Romeo,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,1,0.0666667,0.416667,1,0.00106382,0,1,0,0.00229135
+Alfa Romeo,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.00041489,1,0,0.000774874,0
+Aston Martin,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,1,0.166667,1.15052,1,0.0109647,1,0,0.0204783,0
+Aston Martin,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,1,0,0.0114011,0
+Aston Martin,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.0038011,1,0,0.00709916,0
+Aston Martin,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.710526,1,0.00356013,1,0,0.00664911,0
+Aston Martin,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,0,1,0,0.00153344
+Aston Martin,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.000502777,0,1,0,0.00108292
+Aston Martin,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000490991,0,1,0,0.00105754
+Aston Martin,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000368246,0,1,0,0.000793159
+Auburn,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,,0,0.000288818,0,1,0,0.000622081
+BMW,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.666667,1,0.00356013,1,0,0.00664911,0
+BMW,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.449038,1,0.00247316,0,1,0,0.00532691
+BMW,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,0,0.00245495,0,1,0,0.00528769
+BMW,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000487555,0,1,0,0.00105014
+Bentley,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,,0,0.00317702,0,1,0,0.00684293
+Bentley,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.00240481,1,0,0.00449136,0
+Bizzarrini,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,,0,0.00175354,0,1,0,0.00377692
+Bizzarrini,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,1,0.0666667,0.85875,1,0.00106382,0,1,0,0.00229135
+Bugatti,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,2,0.105263,,1,0.0122089,1,1,0.0114011,0.0131483
+Bugatti,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.00922658,0,1,0,0.019873
+Bugatti,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.882979,1,0.00818323,1,0,0.0152835,0
+Bugatti,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.0038011,1,0,0.00709916,0
+Bugatti,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00371051,0,1,0,0.00799202
+Bugatti,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.636364,1,0.00356013,1,0,0.00664911,0
+Bugatti,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.892857,1,0.00317702,1,0,0.00593359,0
+Bugatti,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00245495,1,0,0.00458502,0
+Bugatti,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000490991,1,0,0.000917004,0
+Bugatti,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.00035057,1,0,0.000654746,0
+Buick,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,4,0.235294,0.79725,1,0.00115527,0,4,0,0.00248832
+Cadillac,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,3,0.176471,0.818483,1,0.000866454,0,3,0,0.00186624
+Cadillac,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000397702,0,1,0,0.000856604
+Chevrolet,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Chevrolet,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000564642,0,1,0,0.00121617
+Chevrolet,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.000502777,0,1,0,0.00108292
+Chevrolet,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000487555,0,1,0,0.00105014
+Chevrolet,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.00041489,0,1,0,0.000893626
+Chevrolet,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.000402611,0,1,0,0.000867178
+Chevrolet,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000397702,0,1,0,0.000856604
+Chevrolet,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.00035057,0,1,0,0.000755088
+Chrysler,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.8,1,0.000288818,0,1,0,0.000622081
+Cord,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.624,1,0.000288818,0,1,0,0.000622081
+Delage,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Dodge,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.000502777,1,0,0.000939016,0
+Dodge,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,1,0.04,,1,0.000487555,0,1,0,0.00105014
+Dodge,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.00035057,1,0,0.000654746,0
+Duesenberg,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Duesenberg,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,1,0.0909091,,1,0.00209789,0,1,0,0.0045186
+Duesenberg,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.852083,1,0.000288818,0,1,0,0.000622081
+Ferrari,The Monaco Auction,2026-04-24,RM Sotheby's,100,6,6,1,,1,0.14338,3,3,0.133893,0.154412
+Ferrari,Geneva 2026,2026-11-08,Gooding Christie's,35.5461,3,3,1,0.924903,1,0.050966,3,0,0.0951872,0
+Ferrari,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,8,0.421053,,1,0.0488357,4,4,0.0456043,0.0525933
+Ferrari,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,4,0.666667,0.981072,1,0.0438588,2,2,0.0409567,0.0472334
+Ferrari,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,5,0.555556,0.832778,1,0.0409161,4,1,0.0611339,0.0176257
+Ferrari,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,3,0.5,,1,0.0276797,2,1,0.0344642,0.019873
+Ferrari,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,4,0.444444,0.800192,1,0.0158949,3,1,0.0222646,0.00855893
+Ferrari,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,5,0.294118,0.876667,1,0.0158851,1,4,0.00593359,0.0273717
+Ferrari,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,4,0.571429,,1,0.0148421,1,3,0.00692998,0.0239761
+Ferrari,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,6,0.545455,,1,0.0125873,3,3,0.0117544,0.0135558
+Ferrari,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,14,0.56,,1,0.00996715,13,1,0.0172856,0.00153344
+Ferrari,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,6,0.428571,,1,0.00920611,0,6,0,0.0198289
+Ferrari,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,11,0.44,,1,0.00783134,9,2,0.0119669,0.00306687
+Ferrari,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,2,0.333333,,1,0.0076022,2,0,0.0141983,0
+Ferrari,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,2,0.25,0.913333,0.5,0.00712026,1,1,0.00664911,0.00766811
+Ferrari,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,5,0.333333,0.873432,1,0.00531912,0,5,0,0.0114568
+Ferrari,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00490174,0,1,0,0.0105578
+Ferrari,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,9,0.36,,1,0.00452499,7,2,0.00657311,0.00216585
+Ferrari,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,8,0.32,,1,0.00451714,6,2,0.00632736,0.00243235
+Ferrari,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,5,0.2,,1,0.00360879,5,0,0.00673999,0
+Ferrari,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,2,0.285714,0.783077,1,0.00350708,1,1,0.00327501,0.00377692
+Ferrari,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,7,0.28,,1,0.00341289,7,0,0.00637411,0
+Ferrari,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,6,0.24,,1,0.00294595,4,2,0.00366801,0.00211508
+Ferrari,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,7,0.28,,1,0.00275645,3,4,0.00220634,0.00339262
+Ferrari,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.02419,1,0.00247316,1,0,0.00461903,0
+Ferrari,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,0.514286,1,0.00240481,0,1,0,0.00517968
+Ferrari,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,6,0.24,,1,0.00220948,5,1,0.00343879,0.000793159
+Ferrari,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,5,0.2,,1,0.00207445,4,1,0.0030995,0.000893626
+Ferrari,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,5,0.2,,1,0.00199671,3,2,0.00223751,0.00172027
+Ferrari,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,4,0.16,,1,0.00161045,4,0,0.00300776,0
+Ferrari,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,4,0.16,,1,0.00159081,4,0,0.00297109,0
+Ferrari,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,4,0.16,,1,0.00117248,4,0,0.0021898,0
+Ferrari,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,2,0.08,,1,0.00070114,2,0,0.00130949,0
+Fiat,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.56,1,0.000288818,0,1,0,0.000622081
+Ford,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,5,0.2,,1,0.00360879,5,0,0.00673999,0
+Ford,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,7,0.28,,1,0.00275645,7,0,0.00514812,0
+Ford,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,3,0.12,,1,0.00213582,3,0,0.00398898,0
+Ford,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,5,0.2,,1,0.00207445,5,0,0.00387437,0
+Ford,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,5,0.2,,1,0.00199671,5,0,0.00372918,0
+Ford,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,4,0.16,,1,0.00195022,4,0,0.00364235,0
+Ford,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,5,0.2,,1,0.00175285,5,0,0.00327373,0
+Ford,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,3,0.12,,1,0.00169393,2,1,0.00210912,0.00121617
+Ford,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,2,0.08,,1,0.00142388,2,0,0.00265932,0
+Ford,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,3,0.12,,1,0.00119311,3,0,0.00222832,0
+Ford,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,4,0.16,,1,0.00117248,4,0,0.0021898,0
+Ford,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,3,0.12,,1,0.00110474,3,0,0.00206327,0
+Ford,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,2,0.08,,1,0.000805223,2,0,0.00150388,0
+Ford,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,1,0.04,,1,0.000502777,1,0,0.000939016,0
+Ford,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000490991,1,0,0.000917004,0
+Isdera,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.0038011,0,1,0,0.00818714
+Jaguar,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,0,1,0,0.00330482
+Jaguar,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.000402611,0,1,0,0.000867178
+Koenigsegg,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.8,1,0.00818323,1,0,0.0152835,0
+Lamborghini,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.00922658,0,1,0,0.019873
+Lamborghini,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,,0,0.00818323,0,1,0,0.0176257
+Lamborghini,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,8,0.32,,1,0.00577407,6,2,0.00808799,0.00310917
+Lamborghini,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00371051,1,0,0.00692998,0
+Lamborghini,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,4,0.16,,1,0.00225857,4,0,0.00421824,0
+Lamborghini,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,5,0.2,,1,0.00198851,1,4,0.000742772,0.00342642
+Lamborghini,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,0,1,0,0.00330482
+Lamborghini,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,2,0.08,,1,0.00142388,1,1,0.00132966,0.00153344
+Lamborghini,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,3,0.12,,1,0.00120783,3,0,0.00225582,0
+Lamborghini,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,2,0.08,,1,0.00100555,1,1,0.000939016,0.00108292
+Lamborghini,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,2,0.08,,1,0.000981982,2,0,0.00183401,0
+Lamborghini,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,2,0.08,,1,0.000975111,0,2,0,0.00210028
+Lamborghini,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,2,0.08,,1,0.000798685,2,0,0.00149167,0
+Lamborghini,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,1,0,0.00132966,0
+Lamborghini,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,2,0.08,,1,0.00070114,2,0,0.00130949,0
+Lamborghini,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,2,0.08,,1,0.000586241,2,0,0.0010949,0
+Lamborghini,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.00041489,1,0,0.000774874,0
+Lamborghini,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,1,0.04,,1,0.000393779,0,1,0,0.000848155
+Lamborghini,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000368246,0,1,0,0.000793159
+Lancia,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,1,0.0666667,0.861111,1,0.00106382,0,1,0,0.00229135
+Lexus,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,1,0.04,,1,0.00041489,1,0,0.000774874,0
+Lexus,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.000402611,1,0,0.000751941,0
+Lexus,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,1,0.04,,1,0.000368246,1,0,0.000687758,0
+Lola-Ford,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,0,0.00245495,0,1,0,0.00528769
+Maserati,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,2,0.117647,0.88125,1,0.00635403,0,2,0,0.0136859
+McLaren,The Las Vegas Auction 2026,2026-10-31,Broad Arrow,51.3663,9,1,0.111111,0.885714,1,0.00818323,1,0,0.0152835,0
+McLaren,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+McLaren,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00490174,1,0,0.00915477,0
+McLaren,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,1,0.111111,0.930556,1,0.00397372,1,0,0.00742155,0
+McLaren,RM Miami 2026,2026-02-27,RM Sotheby's,15.9064,6,1,0.166667,,1,0.0038011,1,0,0.00709916,0
+McLaren,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,1,0.125,0.714286,1,0.00356013,1,0,0.00664911,0
+McLaren,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,0.664286,1,0.00175354,1,0,0.00327501,0
+McLaren,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,2,0.08,,1,0.000829781,2,0,0.00154975,0
+McLaren,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,1,0.04,,1,0.000721758,1,0,0.001348,0
+McLaren,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,1,0.04,,1,0.000490991,1,0,0.000917004,0
+McLaren,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000397702,1,0,0.000742772,0
+McLaren,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,1,0.04,,1,0.000393779,1,0,0.000735445,0
+Mercedes-AMG,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.56458,1,0.00247316,1,0,0.00461903,0
+Mercedes-Benz,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,2,0.222222,0.707692,0.5,0.00794743,0,2,0,0.0171179
+Mercedes-Benz,The Zürich Auction 2026,2026-11-07,Broad Arrow,19.864,8,2,0.25,,0,0.00712026,1,1,0.00664911,0.00766811
+Mercedes-Benz,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Mercedes-Benz,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,2,0.181818,,1,0.00419577,0,2,0,0.00903721
+Mercedes-Benz,Broad Arrow Villa d'Este 2026,2026-05-18,Broad Arrow,18.1152,7,1,0.142857,,1,0.00371051,0,1,0,0.00799202
+Mercedes-Benz,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,2,0.285714,,0,0.00350708,0,2,0,0.00755384
+Mercedes-Benz,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,3,0.2,0.806313,1,0.00319147,0,3,0,0.00687406
+Mercedes-Benz,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.9,1,0.00317702,0,1,0,0.00684293
+Mercedes-Benz,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,2,0.142857,,1,0.0030687,0,2,0,0.00660963
+Mercedes-Benz,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,0.783824,1,0.00247316,0,1,0,0.00532691
+Mercedes-Benz,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.00240481,0,1,0,0.00517968
+Mercedes-Benz,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,4,0.16,,1,0.00196396,2,2,0.00183401,0.00211508
+Mercedes-Benz,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,4,0.16,,1,0.00159737,1,3,0.000745835,0.00258041
+Mercedes-Benz,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,5,0.2,,1,0.0014656,3,2,0.00164235,0.0012627
+Mercedes-Benz,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,2,0.08,,1,0.00144352,1,1,0.001348,0.00155458
+Mercedes-Benz,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,4,0.16,,1,0.00140228,3,1,0.00196424,0.000755088
+Mercedes-Benz,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,3,0.12,,1,0.00124467,1,2,0.000774874,0.00178725
+Mercedes-Benz,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,3,0.12,,1,0.00118134,2,1,0.00147089,0.000848155
+Mercedes-Benz,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,3,0.12,,1,0.00110474,2,1,0.00137552,0.000793159
+Mercedes-Benz,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,2,0.08,,1,0.00100555,1,1,0.000939016,0.00108292
+Mercedes-Benz,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,3,0.176471,0.554421,1,0.000866454,0,3,0,0.00186624
+Mercedes-Benz,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,1,0,0.00132966,0
+Mercedes-Benz,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000564642,1,0,0.00105456,0
+Mercedes-Benz,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.000402611,1,0,0.000751941,0
+Mercedes-Benz,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,1,0.04,,1,0.000397702,0,1,0,0.000856604
+Miller,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,0,1,0,0.00330482
+Packard,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Packard,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00245495,0,1,0,0.00528769
+Packard,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.522667,1,0.000288818,0,1,0,0.000622081
+Pagani,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,1,0,0.0114011,0
+Porsche,Air/Water,2026-04-26,Broad Arrow,12.8356,7,6,0.857143,,1,0.0157746,3,3,0.0147308,0.0169883
+Porsche,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,4,0.235294,0.639205,1,0.0127081,0,4,0,0.0273717
+Porsche,The London Auction 2026,2026-10-31,RM Sotheby's,45.8838,6,1,0.166667,,0,0.0109647,1,0,0.0204783,0
+Porsche,The Zoute Concours Auction 2026,2026-10-09,Broad Arrow,24.9431,9,2,0.222222,0.846212,1,0.00794743,2,0,0.0148431,0
+Porsche,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,80.8933,19,1,0.0526316,,1,0.00610447,0,1,0,0.0131483
+Porsche,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,8,0.32,,1,0.00569552,4,4,0.00531864,0.00613374
+Porsche,RM Arizona 2026,2026-01-24,RM Sotheby's,10.2561,3,1,0.333333,,1,0.00490174,0,1,0,0.0105578
+Porsche,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,11,0.44,,1,0.00442872,7,4,0.00526359,0.00346871
+Porsche,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,8.561,25,9,0.36,,1,0.00441892,5,4,0.00458502,0.00423015
+Porsche,Bring a Trailer – March 2026,2026-03-31,Bring a Trailer,8.5011,25,9,0.36,,1,0.004388,7,2,0.00637411,0.00210028
+Porsche,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,16.0948,11,2,0.181818,,1,0.00419577,0,2,0,0.00903721
+Porsche,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,8.7665,25,8,0.32,,1,0.00402221,7,1,0.00657311,0.00108292
+Porsche,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,6.4208,25,10,0.4,,1,0.00368246,9,1,0.00618982,0.000793159
+Porsche,Bring a Trailer – February 2026,2026-02-28,Bring a Trailer,6.9344,25,9,0.36,,1,0.00357932,5,4,0.00371386,0.00342642
+Porsche,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,6,0.24,,1,0.00338785,6,0,0.00632736,0
+Porsche,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,8,0.32,,1,0.00319474,6,2,0.00447501,0.00172027
+Porsche,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,4,0.16,,1,0.00284776,3,1,0.00398898,0.00153344
+Porsche,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,8,0.32,,1,0.00280456,5,3,0.00327373,0.00226526
+Porsche,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,9,0.36,,1,0.00263809,6,2,0.0032847,0.0012627
+Porsche,Bring a Trailer – August 2025,2025-08-31,Bring a Trailer,7.2341,25,6,0.24,,1,0.00248934,4,2,0.0030995,0.00178725
+Porsche,The Munich Auction 2026,2026-11-20,RM Sotheby's,10.3494,6,1,0.166667,1.265,1,0.00247316,0,1,0,0.00532691
+Porsche,Global Icons: Zoute Online 2026,2026-10-14,Broad Arrow,6.7089,4,1,0.25,,0,0.00240481,1,0,0.00449136,0
+Porsche,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,6.866,25,6,0.24,,1,0.00236267,4,2,0.00294178,0.00169631
+Porsche,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,3,0.12,,1,0.00216527,1,2,0.001348,0.00310917
+Porsche,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,1,0,0.00286565,0
+Porsche,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,1,0.0666667,0.96,1,0.00106382,0,1,0,0.00229135
+RUF,Air/Water,2026-04-26,Broad Arrow,12.8356,7,1,0.142857,,1,0.0026291,1,0,0.00491026,0
+RUF,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,1,0.0666667,0.509375,1,0.00106382,0,1,0,0.00229135
+Rimac,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000564642,1,0,0.00105456,0
+Rolls-Royce,Rétromobile New York 2026,2026-11-20,Gooding Christie's,11.1294,15,2,0.133333,0.633846,1,0.00212765,0,2,0,0.0045827
+Rolls-Royce,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,6.963,25,1,0.04,,1,0.000399342,0,1,0,0.000860137
+Rolls-Royce,Bring a Trailer – October 2025,2025-10-31,Bring a Trailer,5.1109,25,1,0.04,,1,0.000293121,1,0,0.000547449,0
+Saleen,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,1,0,0.00132966,0
+Shelby,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,,1,0.00317702,0,1,0,0.00684293
+Shelby,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,14.9818,14,1,0.0714286,,1,0.00153435,0,1,0,0.00330482
+Shelby,Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,0,1,0,0.00153344
+Shelby,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,12.4135,25,1,0.04,,1,0.00071194,0,1,0,0.00153344
+Silsby/American LaFrance,The Hershey Auction 2026,2026-10-07,RM Sotheby's,3.4244,17,1,0.0588235,0.597333,1,0.000288818,0,1,0,0.000622081
+Spyker,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,12.5847,25,1,0.04,,1,0.000721758,1,0,0.001348,0
+Spyker,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,9.8452,25,1,0.04,,1,0.000564642,1,0,0.00105456,0
+Spyker,Bring a Trailer – April 2026,2026-04-30,Bring a Trailer,7.02,25,1,0.04,,1,0.000402611,1,0,0.000751941,0
+Stevens-Miller,Gooding Monterey 2026,2026-08-15,Gooding Christie's,37.6686,17,1,0.0588235,0.483333,1,0.00317702,0,1,0,0.00684293
+Stutz,The Audrain Auction 2026,2026-10-02,Broad Arrow,8.561,7,1,0.142857,0.85,1,0.00175354,0,1,0,0.00377692
+Talbot-Lago,Gooding Retromobile 2026,2026-01-29,Gooding Christie's,38.6103,6,1,0.166667,,1,0.00922658,0,1,0,0.019873
+Toyota,Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,6.1126,25,1,0.04,,1,0.00035057,0,1,0,0.000755088
+Vollstedt-Ford,Bonhams Laguna Seca,2026-08-13,Bonhams,8.561,5,1,0.2,,1,0.00245495,0,1,0,0.00528769
