@@ -152,12 +152,15 @@ Bring a Trailer – December 2025,2025-12-31,Bring a Trailer,25,Mercedes-Benz,W1
 RM Arizona 2026,2026-01-24,RM Sotheby's,1,Ferrari,F50,1995,8805000,sold_price,true,8805000,,31,classic
 RM Arizona 2026,2026-01-24,RM Sotheby's,2,McLaren,Senna GTR,2020,1270000,sold_price,true,1270000,,6,modern
 RM Arizona 2026,2026-01-24,RM Sotheby's,3,Porsche,911 Carrera RS N/GT,1992,599000,sold_price,true,599000,,34,classic
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,1,Ferrari,288 GTO,1984,9117500,sold_price,true,9117500,,42,classic
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,2,Ferrari,FXX K EVO,2018,6980000,sold_price,true,6980000,,8,modern
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,3,Talbot-Lago,T150-C-SS,1938,6755000,sold_price,true,6755000,,88,classic
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,4,Ferrari,FXX EVO,2008,4448750,sold_price,true,4448750,,18,modern
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,5,Lamborghini,Miura P400 SV,1971,3380000,sold_price,true,3380000,,55,classic
-Gooding Retromobile 2026,2026-01-29,Gooding Christie's,6,Bugatti,57C Atalante,1938,2255000,sold_price,true,2255000,,88,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,1,Ferrari,288 GTO,1984,10911824,sold_price,true,10911824,,42,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,2,Ferrari,250 GT SWB,1960,10771200,estimate,false,,10771200,66,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,3,Ferrari,FXX K EVO,2018,8353664,sold_price,true,8353664,,8,modern
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,4,Talbot-Lago,T150-C-SS,1938,8084384,sold_price,true,8084384,,88,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,5,Ferrari,250 GT LWB California Spider,1958,7779200,estimate,false,,7779200,68,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,6,Ballot,3/8 LC Grand Prix Two-Seater,1920,7180800,estimate,false,,7180800,106,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,7,Ferrari,FXX EVO,2008,5324264,sold_price,true,5324264,,18,modern
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,8,Lamborghini,Miura P400 SV,1971,4045184,sold_price,true,4045184,,55,classic
+Rétromobile Paris 2026,2026-01-29,Gooding Christie's,9,Ferrari,Monza SP1,2021,2968064,sold_price,true,2968064,,5,modern
 RM Miami 2026,2026-02-27,RM Sotheby's,1,Ferrari,812 Competizione A,2023,2645000,sold_price,true,2645000,,3,modern
 RM Miami 2026,2026-02-27,RM Sotheby's,2,Bugatti,Veyron 16.4,2006,2122500,sold_price,true,2122500,,20,modern
 RM Miami 2026,2026-02-27,RM Sotheby's,3,McLaren,Speedtail,2020,1974000,sold_price,true,1974000,,6,modern
@@ -381,25 +384,25 @@ Gooding Monterey 2026,2026-08-15,Gooding Christie's,14,Ferrari,812 Competizione,
 Gooding Monterey 2026,2026-08-15,Gooding Christie's,15,Porsche,904 Carrera GTS,1964,2200000,estimate,true,1525000,2200000,62,classic
 Gooding Monterey 2026,2026-08-15,Gooding Christie's,16,Porsche,910,1967,2200000,estimate,true,1500000,2200000,59,classic
 Gooding Monterey 2026,2026-08-15,Gooding Christie's,17,Porsche,550A Spyder,1958,2200000,estimate,true,1400000,2200000,68,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,1,McLaren,F1 GTR,1996,38120500,sold_price,true,38120500,,30,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,2,Chevrolet,Corvette Grand Sport,1963,20575500,sold_price,true,20575500,,63,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,3,Ferrari,Daytona SP3,2023,19607500,sold_price,true,19607500,,3,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,4,Ferrari,F50,1995,13315500,sold_price,true,13315500,,31,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,5,Ferrari,288 GTO,1985,12710500,sold_price,true,12710500,,41,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,6,Ferrari,Enzo,2003,10351000,sold_price,true,10351000,,23,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,7,Duesenberg,Model JN Convertible Coupe,1935,9988000,sold_price,true,9988000,,91,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,8,Ferrari,LaFerrari,2015,9564500,sold_price,true,9564500,,11,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,9,Ferrari,F40,1991,9201500,sold_price,true,9201500,,35,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,10,Bugatti,Mistral,2025,9141000,sold_price,true,9141000,,1,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,11,Pagani,Huayra Roadster Executor,2024,8838500,sold_price,true,8838500,,2,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,12,Porsche,959 Sport,1989,7749500,sold_price,true,7749500,,37,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,13,Delage,D8-120 S Aerodynamic Coupe,1937,6358000,sold_price,true,6358000,,89,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,14,Bugatti,Type 57SC Atalante,1937,5450500,sold_price,true,5450500,,89,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,15,Mercedes-Benz,680 S Torpedo-Sport Cannes,1928,5450500,sold_price,true,5450500,,98,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,16,Ferrari,250 GT Cabriolet Series I,1958,5420250,sold_price,true,5420250,,68,classic
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,17,Ferrari,812 Competizione A Tailor Made,2024,5329500,sold_price,true,5329500,,2,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,18,Aston Martin,Valkyrie Spider,2024,5208500,sold_price,true,5208500,,2,modern
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,19,Packard,1108 Twelve Individual Custom Sport Phaeton,1934,4724500,sold_price,true,4724500,,92,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,1,McLaren,F1 GTR,1996,34655000,sold_price,true,34655000,,30,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,2,Ferrari,Daytona SP3,2023,17825000,sold_price,true,17825000,,3,modern
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,3,Chevrolet,Corvette Grand Sport,1963,13000000,estimate,true,18705000,13000000,63,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,4,Ferrari,F50,1995,12105000,sold_price,true,12105000,,31,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,5,Ferrari,288 GTO,1985,11000000,estimate,true,11555000,11000000,41,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,6,Ferrari,Enzo,2003,9410000,sold_price,true,9410000,,23,modern
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,7,Ferrari,LaFerrari,2015,8695000,sold_price,true,8695000,,11,modern
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,8,Bugatti,Mistral,2025,8310000,sold_price,true,8310000,,1,modern
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,9,Duesenberg,Model JN Convertible Coupe,1935,8000000,estimate,true,9080000,8000000,91,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,10,Pagani,Huayra Roadster Executor,2024,7000000,estimate,true,8035000,7000000,2,modern
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,11,Mercedes-Benz,680 S Torpedo-Sport Cannes,1928,6500000,estimate,true,4955000,6500000,98,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,12,Mercedes-Benz,Simplex 40 HP Rear-Entrance Tonneau,1904,6000000,estimate,true,4000000,6000000,122,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,13,Bugatti,Type 57SC Atalante,1937,6000000,estimate,true,4955000,6000000,89,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,14,Delahaye,145 Cabriolet,1937,6000000,estimate,true,3415000,6000000,89,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,15,Delage,D8-120 S Aerodynamic Coupe,1937,6000000,estimate,true,5780000,6000000,89,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,16,Porsche,959 Sport,1989,6000000,estimate,true,7045000,6000000,37,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,17,Packard,1108 Twelve Individual Custom Sport Phaeton,1934,5000000,estimate,true,4295000,5000000,92,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,18,Ferrari,F40,1991,5000000,estimate,true,8365000,5000000,35,classic
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,19,Ferrari,250 GT Cabriolet Series I,1958,4927500,sold_price,true,4927500,,68,classic
 Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,1,Ford,GT 1st Generation,2006,2101000,sold_price,true,2101000,,20,modern
 Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,2,Porsche,964 911 by Singer,1989,1661000,sold_price,true,1661000,,37,classic
 Bring a Trailer – August 2026,2026-08-31,Bring a Trailer,3,Shelby,"Cobra Mk I, II, & III",1967,1509000,sold_price,true,1509000,,59,classic
