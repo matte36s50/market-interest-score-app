@@ -1,5 +1,5 @@
 event,event_date,auction_house,auction_house_code,session,session_date,video_id,flagged,flags,lots_offered,lots_sold,sell_through,share_sold_above_high,median_multiple_of_low,median_bids_past_low,median_sec_per_bid_past_low,median_sec_per_bid_before_low,passed_median_high_bid_vs_low,high_competition_lots,coaxed_lots,room_heat_all_sales,room_heat_market_only
-RM Monterey Auction 2026,2026-08-15,RM Sotheby's,RMS,Thursday,2026-08-13,RcKOO6i0m0g,false,,35,32,0.91,0.22,1.01,1.50,9.75,9.50,0.65,8,2,67,73
+RM Monterey Auction 2026,2026-08-15,RM Sotheby's,RMS,Thursday,2026-08-13,RcKOO6i0m0g,false,,35,32,0.91,0.22,1.01,1.50,9.75,9.50,0.65,7,2,67,73
 RM Monterey Auction 2026,2026-08-15,RM Sotheby's,RMS,Friday,2026-08-14,5Yj73ZZtlF0,false,,39,37,0.95,0.14,0.97,0,10.75,9,0.84,5,4,45,49
 RM Monterey Auction 2026,2026-08-15,RM Sotheby's,RMS,Saturday,2026-08-15,2d-WXoGKZ6E,false,,50,36,0.72,0.39,1.17,3,10.50,8.50,0.84,11,10,60,65
 The Audrain Auction 2026,2026-10-02,Broad Arrow,BAA,,,slFxazaFWMw,false,,65,56,0.86,0.02,0.84,0,5,5.50,0.88,5,2,28,31
