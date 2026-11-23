@@ -543,22 +543,23 @@ Geneva 2026,2026-11-08,Gooding Christie's,2,Ferrari,812 Competizione A Aperta,20
 Geneva 2026,2026-11-08,Gooding Christie's,3,Ferrari,SF90 XX Spider Spider,2025,2076040,estimate,true,1929496,2076040,1,modern
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,1,Ferrari,275 GTB/4*S NART Spider,1967,20000000,estimate,true,18925000,20000000,59,classic
 Rétromobile New York 2026,2026-11-20,Gooding Christie's,2,RUF,Project Dragon,1998,8000000,estimate,true,4075000,8000000,28,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,3,Mercedes-Benz,300 SL Alloy Gullwing,1955,6000000,estimate,true,4735000,6000000,71,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,4,Ferrari,275 GTB,1965,2500000,estimate,true,2205000,2500000,61,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,5,Ferrari,365 GTS/4 Daytona Spider,1972,2250000,estimate,true,2040000,2250000,54,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,6,Mercedes-Benz,300 SL Roadster,1962,2200000,estimate,true,1765000,2200000,64,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,7,Mercedes-Benz,300 SL Gullwing Gullwing,1957,2000000,estimate,true,1655000,2000000,69,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,8,Alfa Romeo,6C 1750 Series III Super Sport Spider,1930,1200000,estimate,true,500000,1200000,96,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,9,Ferrari,275 GTS,1965,1200000,estimate,true,995000,1200000,61,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,10,Lancia,Aurelia B24S Spider America Spider America,1955,900000,estimate,true,775000,900000,71,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,11,Bizzarrini,5300 GT Strada,1967,800000,estimate,true,687000,800000,59,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,12,Porsche,356 A 1500 GS/GT Carrera Speedster,1957,750000,estimate,true,720000,750000,69,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,13,Rolls-Royce,Phantom III Sedanca de Ville,1937,650000,estimate,true,324000,650000,89,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,14,Rolls-Royce,Phantom III Special Henley Coupe,1937,650000,estimate,true,500000,650000,89,classic
-Rétromobile New York 2026,2026-11-20,Gooding Christie's,15,Ferrari,365 GTB/4 Daytona,1973,650000,estimate,true,522000,650000,53,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,3,Jaguar,D-Type,1956,7000000,estimate,false,,7000000,70,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,4,Mercedes-Benz,300 SL Alloy Gullwing,1955,6000000,estimate,true,4735000,6000000,71,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,5,Bugatti,Type 55 Cabriolet,1932,4000000,estimate,false,,4000000,94,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,6,Ferrari,275 GTB,1965,2500000,estimate,true,2205000,2500000,61,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,7,Ferrari,365 GTS/4 Daytona Spider,1972,2250000,estimate,true,2040000,2250000,54,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,8,Mercedes-Benz,300 SL Roadster,1962,2200000,estimate,true,1765000,2200000,64,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,9,Siata,208 CS Berlinetta,1953,2000000,estimate,false,,2000000,73,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,10,Mercedes-Benz,300 SL Gullwing Gullwing,1957,2000000,estimate,true,1655000,2000000,69,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,11,BMW,507 Series I Roadster,1957,1800000,estimate,false,,1800000,69,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,12,Ferrari,250 GT Lusso,1963,1600000,estimate,false,,1600000,63,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,13,Alfa Romeo,6C 1750 Series III Super Sport Spider,1930,1200000,estimate,true,500000,1200000,96,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,14,Ferrari,275 GTS,1965,1200000,estimate,true,995000,1200000,61,classic
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,15,Ferrari,F430,2007,1100000,estimate,false,,1100000,19,modern
+Rétromobile New York 2026,2026-11-20,Gooding Christie's,16,Bentley,6 1/2 Litre 'Le Mans Coupe' Special,1927,1000000,estimate,false,,1000000,99,classic
 The Munich Auction 2026,2026-11-20,RM Sotheby's,1,Mercedes-Benz,300 SL Roadster,1963,1868300,estimate,true,1464418,1868300,63,classic
 The Munich Auction 2026,2026-11-20,RM Sotheby's,2,Porsche,911 Turbo S Lightweight,1992,1099000,estimate,true,1390235,1099000,34,classic
-The Munich Auction 2026,2026-11-20,RM Sotheby's,3,BMW,328 Roadster,1939,714350,estimate,true,320771,714350,87,classic
-The Munich Auction 2026,2026-11-20,RM Sotheby's,4,Ferrari,458 Speciale,2015,681380,estimate,true,697865,681380,11,modern
-The Munich Auction 2026,2026-11-20,RM Sotheby's,5,Mercedes-AMG,C-Coupé DTM,2014,659400,estimate,true,1031686,659400,12,modern
-The Munich Auction 2026,2026-11-20,RM Sotheby's,6,AMG-Mercedes,C-Klasse DTM,1995,604450,estimate,true,574228,604450,31,classic
+The Munich Auction 2026,2026-11-20,RM Sotheby's,3,BMW,635CSi Group A,1986,769300,estimate,false,,769300,40,classic
+The Munich Auction 2026,2026-11-20,RM Sotheby's,4,Porsche,356 B Carrera 2 2000 GS Cabriolet by Reutter,1962,769300,estimate,false,,769300,64,classic
+The Munich Auction 2026,2026-11-20,RM Sotheby's,5,BMW,328 Roadster,1939,714350,estimate,true,320771,714350,87,classic
+The Munich Auction 2026,2026-11-20,RM Sotheby's,6,Ferrari,458 Speciale,2015,681380,estimate,true,697865,681380,11,modern
