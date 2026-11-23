@@ -33,6 +33,10 @@
             .hagi-stats > div:nth-child(n+3) { border-top: 1px solid var(--hair); }
         }
         .hl-tag { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); background: var(--accent-wash); border-radius: 999px; padding: 1px 8px; }
+        .hl-tag.is-quiet { color: var(--muted); background: transparent; border: 1px solid var(--hair); font-weight: 500; }
+        .heat-score { display: inline-block; min-width: 2.5ch; text-align: right; }
+        .heat-sub { margin: 0; padding: 20px 24px 4px; border-top: 1px solid var(--hair); font-size: 15px; font-weight: 600; }
+        .heat-cars { min-width: 200px; max-width: 320px; white-space: normal; }
     </style>
 </head>
 <body class="min-h-screen bg-canvas text-ink font-sans tabular-nums antialiased">
@@ -71,7 +75,7 @@
             <span class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Apex auctions · the top 10% of lots at each sale, and Bring a Trailer by month</span>
             <h1 id="pageTitle">Manufacturer Apex Index</h1>
             <p class="lede">How deep each manufacturer's network runs, read from how strongly its cars show up at the very top of the collector market and how well they do when they cross the block. MII measures how much attention each individual car is getting. MAI looks only at the highlights of the major live auctions and Bring a Trailer's best results each month, and counts a highlight at Monterey for more than one at a smaller sale. Click a make or a sale to see what is behind its numbers.</p>
-            <div class="hero-meta"><a href="#how-it-works">How the score works</a><a href="media/mii-explainer.mp4#t=70" data-explainer data-start="70">Watch how Apex works</a><a href="#hagi-top">HAGI Top Index</a><a href="mai-ledger.html">Weekly ledger view</a><span>Scores are each make’s share of all highlight value, so they add up to 1 across all makes.</span></div>
+            <div class="hero-meta"><a href="#how-it-works">How the score works</a><a href="media/mii-explainer.mp4#t=70" data-explainer data-start="70">Watch how Apex works</a><a href="#hagi-top">HAGI Top Index</a><a href="#heat">Bidding heat</a><a href="mai-ledger.html">Weekly ledger view</a><span>Scores are each make’s share of all highlight value, so they add up to 1 across all makes.</span></div>
         </div>
     </section>
 
@@ -141,6 +145,98 @@
                 </table>
             </div>
             <p id="hagiNote" class="m-0 px-6 py-4 text-[13px] text-mute border-t border-hair"></p>
+        </section>
+
+        <!-- Bidding heat (data/pipelines/export_heat.py) -->
+        <section id="heat" class="flex flex-col gap-6 scroll-mt-24 [&>*]:min-w-0" aria-labelledby="heatTitle">
+            <div class="flex flex-col gap-1 max-w-3xl">
+                <h2 id="heatTitle" class="m-0 text-2xl font-semibold tracking-tight">Bidding heat</h2>
+                <p class="m-0 text-mute leading-relaxed">
+                    How hard each room fought for its cars, read bid by bid from the auction houses' own livestreams:
+                    how many bids came after the low estimate was passed, how quickly they came, and how far past the
+                    estimate the car went. Shown beside the Apex score, not part of it.
+                </p>
+            </div>
+
+            <div class="panel">
+                <div class="px-6 py-5 flex flex-col gap-0.5">
+                    <h3 class="m-0 text-lg font-semibold">Room heat</h3>
+                    <p id="heatSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+                </div>
+                <div class="hagi-stats" id="heatStats"></div>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="pl-6">Sale</th>
+                                <th title="0 to 100: sell-through, share sold above the high estimate, median result against the low estimate, bids past the low, and pace, each ranked against the other sessions">Room heat</th>
+                                <th class="text-right">Sell-through</th>
+                                <th class="text-right" title="Share of sold lots whose last bid beat the high estimate">Above high</th>
+                                <th class="text-right" title="Median last bid of sold lots, as a multiple of the low estimate">Median ÷ low</th>
+                                <th class="text-right" title="Lots with three or more bids past the low estimate, coming faster than the session's usual pace">High competition</th>
+                                <th class="pr-6" title="The session's highest-scoring lot that drew high competition. Click the session for more.">Hottest lot</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomRows">
+                            <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading the rooms…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="px-6 py-5 flex flex-col gap-0.5">
+                    <h3 class="m-0 text-lg font-semibold">Hottest lots</h3>
+                    <p id="hotSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="pl-6 w-12">#</th>
+                                <th>Car</th>
+                                <th>Sale</th>
+                                <th class="text-right">Estimate</th>
+                                <th class="text-right" title="The last bid heard in the room, before the buyer's premium">Result in room</th>
+                                <th class="text-right" title="Last bid as a multiple of the low estimate">× low</th>
+                                <th class="text-right" title="Bids at or above the low estimate">Bids past low</th>
+                                <th class="text-right" title="Median seconds between bids once past the low estimate">Pace</th>
+                                <th class="pr-6 text-right" title="0 to 100, against every parsed lot">Heat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hotRows">
+                            <tr><td colspan="9" class="px-6 py-10 text-center text-mute">Loading lots…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="heatSpotlight"></div>
+            </div>
+
+            <div class="panel">
+                <div class="px-6 py-5 flex flex-col gap-0.5">
+                    <h3 class="m-0 text-lg font-semibold">Heat by make</h3>
+                    <p id="heatMakeSubtitle" class="m-0 text-[13px] text-mute">Loading…</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="pl-6">Make</th>
+                                <th class="text-right" title="Lots with an estimate whose bidding was parsed, provenance sales excluded">Lots</th>
+                                <th title="Share of the make's lots that drew high competition">High competition</th>
+                                <th class="text-right" title="Share of sold lots whose last bid beat the high estimate">Above high</th>
+                                <th class="text-right" title="Median last bid of sold lots, as a multiple of the low estimate">Median ÷ low</th>
+                                <th class="text-right" title="Sold in the room">Sell-through</th>
+                                <th class="pr-6 text-right" title="The make's position in the MAI ranking">MAI rank</th>
+                            </tr>
+                        </thead>
+                        <tbody id="heatMakeRows">
+                            <tr><td colspan="7" class="px-6 py-10 text-center text-mute">Loading makes…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="heatNote" class="m-0 px-6 py-4 text-[13px] text-mute border-t border-hair leading-relaxed"></p>
+            </div>
         </section>
 
         <!-- Upcoming -->
@@ -685,6 +781,279 @@
                 btn.setAttribute('aria-expanded', 'true');
                 btn.querySelector('.chev').style.transform = 'rotate(90deg)';
             });
+        });
+
+        // Bidding heat (data/pipelines/export_heat.py). Every bid of every
+        // lot, timed from the houses' livestreams and scored in the store.
+        // A session flagged there (a single-owner celebrity collection sold
+        // without reserve) is kept out of the market comparisons: its own
+        // panel shows it. Nothing here feeds the MAI score.
+        var HEAT_MIN_MAKE_LOTS = 8;
+        var HEAT_TOP = 15;
+
+        function money(v, cur) {
+            if (!(v > 0)) return '<span class="text-faint">—</span>';
+            var sym = { USD: '$', EUR: '€', GBP: '£' }[cur] || (cur ? cur + ' ' : '$');
+            if (v >= 1e6) return sym + String(Number((v / 1e6).toFixed(2))) + 'M';
+            if (v >= 1e3) return sym + Math.round(v / 1e3) + 'K';
+            return sym + Math.round(v);
+        }
+        function estRange(l) {
+            var lo = money(num(l.low_estimate), l.currency), hi = num(l.high_estimate);
+            return hi > 0 ? lo + '–' + money(hi, l.currency).replace(/^[^0-9]+/, '') : lo;
+        }
+        function times(v) {
+            return num(v) != null ? Number(v).toFixed(2).replace(/0$/, '') + '×' : '<span class="text-faint">—</span>';
+        }
+        function median(values) {
+            var v = values.filter(function (x) { return x != null && isFinite(x); }).sort(function (a, b) { return a - b; });
+            if (!v.length) return null;
+            var m = Math.floor(v.length / 2);
+            return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+        }
+        function heatSale(r) {
+            return esc(r.event) + (r.session ? ' · ' + esc(r.session) : '');
+        }
+        function heatTag(label) {
+            return label === 'high competition' ? '<span class="hl-tag">high competition</span>'
+                : '<span class="hl-tag is-quiet">' + esc(label) + '</span>';
+        }
+        function heatBar(score, faint) {
+            var s = num(score);
+            if (s == null) return '<span class="text-faint">—</span>';
+            return '<div class="flex items-center gap-3">' +
+                '<span class="font-mono text-sm font-medium heat-score' + (faint ? ' text-faint' : '') + '">' + Math.round(s) + '</span>' +
+                '<span class="score-bar"' + (faint ? ' style="opacity:.45"' : '') + '><span style="width:' + Math.max(2, s) + '%"></span></span></div>';
+        }
+        function flagNotes(flags) {
+            return String(flags || '').split(/;\s*/).map(function (f) { return f.replace(/^[a-z_]+:\s*/, ''); })
+                .filter(Boolean).join('; ');
+        }
+
+        Promise.all([load('data/room_heat.csv'), load('data/lot_heat.csv'), load('data/apex_lots.csv'), load('data/mai_scores.csv')]).then(function (res) {
+            var roomBody = document.getElementById('roomRows');
+            var hotBody = document.getElementById('hotRows');
+            var makeBody = document.getElementById('heatMakeRows');
+            var rooms = (res[0] || []).filter(function (r) { return r.event && r.video_id; });
+            var lots = (res[1] || []).filter(function (l) { return l.event && l.video_id; });
+            if (!rooms.length || !lots.length) {
+                document.getElementById('heatSubtitle').textContent = 'No livestream has been parsed yet (room_heat.csv, lot_heat.csv).';
+                ['hotSubtitle', 'heatMakeSubtitle'].forEach(function (id) { document.getElementById(id).textContent = ''; });
+                roomBody.innerHTML = hotBody.innerHTML = makeBody.innerHTML = '';
+                return;
+            }
+
+            // A highlight is a lot among its sale's top 10% (apex_lots.csv);
+            // that file has no lot numbers, so match on sale and car.
+            var carKey = function (r) { return [r.event, r.year_of_car, r.manufacturer, r.model].join('|').toLowerCase(); };
+            var highlights = {};
+            (res[2] || []).forEach(function (r) { if (r.event) highlights[carKey(r)] = true; });
+            var rank = {};
+            (res[3] || []).filter(function (r) { return r.manufacturer && num(r.MAI_score) != null; })
+                .sort(function (a, b) { return b.MAI_score - a.MAI_score; })
+                .forEach(function (r, i) { rank[r.manufacturer] = i + 1; });
+
+            lots.forEach(function (l) {
+                l.video_id = String(l.video_id);
+                l.flagged = isTrue(l.session_flagged);
+                l.sold = l.result_in_room === 'sold';
+                l.highlight = !!highlights[carKey(l)];
+            });
+            var bySession = {};
+            lots.forEach(function (l) { (bySession[l.video_id] = bySession[l.video_id] || []).push(l); });
+            Object.keys(bySession).forEach(function (k) {
+                bySession[k].sort(function (a, b) {
+                    return (num(b.heat_in_sale) || 0) - (num(a.heat_in_sale) || 0) || (num(b.multiple_of_low) || 0) - (num(a.multiple_of_low) || 0);
+                });
+            });
+            rooms.forEach(function (r) { r.video_id = String(r.video_id); r.flagged = isTrue(r.flagged); });
+
+            var market = rooms.filter(function (r) { return !r.flagged; })
+                .sort(function (a, b) { return (num(b.room_heat_market_only) || 0) - (num(a.room_heat_market_only) || 0); });
+            var flagged = rooms.filter(function (r) { return r.flagged; });
+            var marketLots = lots.filter(function (l) { return !l.flagged; });
+            var marketSold = marketLots.filter(function (l) { return l.sold; });
+            var hc = marketLots.filter(function (l) { return l.heat_label === 'high competition'; });
+            var aboveHigh = marketSold.filter(function (l) { return num(l.last_bid) > num(l.high_estimate); });
+            var sales = {};
+            rooms.forEach(function (r) { sales[r.event] = true; });
+
+            /* ---- rooms ---- */
+            document.getElementById('heatSubtitle').textContent = rooms.length + ' sessions at ' + Object.keys(sales).length +
+                ' sales, ' + lots.length + ' lots with an estimate. Each room is scored against the others, so a score moves as sales are added. Click a session for its hottest lots.';
+            var hot = market[0], cool = market[market.length - 1];
+            document.getElementById('heatStats').innerHTML =
+                '<div><span class="h-l">Hottest room</span><span class="h-v font-mono">' + Math.round(hot.room_heat_market_only) + '</span><span class="h-s">' + heatSale(hot) + '</span></div>' +
+                '<div><span class="h-l">Coolest room</span><span class="h-v font-mono">' + Math.round(cool.room_heat_market_only) + '</span><span class="h-s">' + heatSale(cool) + '</span></div>' +
+                '<div><span class="h-l">High competition</span><span class="h-v">' + pct(hc.length / marketLots.length) + '</span><span class="h-s">' + hc.length + ' of ' + marketLots.length + ' lots' + (flagged.length ? ', provenance sales aside' : '') + '</span></div>' +
+                '<div><span class="h-l">Sold above high estimate</span><span class="h-v">' + pct(aboveHigh.length / marketSold.length) + '</span><span class="h-s">' + aboveHigh.length + ' of ' + marketSold.length + ' sold lots</span></div>';
+
+            function carLine(l) {
+                return esc([l.year_of_car, l.manufacturer, l.model].filter(function (x) { return x != null && x !== ''; }).join(' '));
+            }
+            function roomRow(r) {
+                var top = (bySession[r.video_id] || []).filter(function (l) { return l.heat_label === 'high competition'; }).slice(0, 1);
+                var date = r.session_date || r.event_date;
+                return '<tr class="is-clickable" data-session="' + esc(r.video_id) + '">' +
+                    '<td class="pl-6"><button type="button" class="flex items-start gap-2 text-left" aria-expanded="false">' +
+                        '<span aria-hidden="true" class="chev inline-block w-3 text-faint transition-transform">›</span>' +
+                        '<span><span class="font-semibold">' + esc(r.event) + '</span>' + (r.session ? ' <span class="text-mute">· ' + esc(r.session) + '</span>' : '') +
+                        '<span class="block text-[12.5px] text-mute">' + esc(r.auction_house) + ' · <span class="font-mono">' + esc(String(date).slice(0, 10)) + '</span> · ' + esc(r.lots_offered) + ' lots</span></span>' +
+                    '</button></td>' +
+                    '<td class="w-44">' + (r.flagged
+                        ? '<div class="flex flex-col gap-1">' + heatBar(r.room_heat_all_sales, true) +
+                          '<span class="text-[12px] text-mute" title="' + esc(flagNotes(r.flags)) + '. Scored against every session; left out of the market ranking.">provenance sale, not ranked</span></div>'
+                        : heatBar(r.room_heat_market_only)) + '</td>' +
+                    '<td class="num">' + pct(r.sell_through) + '</td>' +
+                    '<td class="num">' + pct(r.share_sold_above_high) + '</td>' +
+                    '<td class="num">' + times(r.median_multiple_of_low) + '</td>' +
+                    '<td class="num">' + esc(r.high_competition_lots) + '<span class="text-faint"> of ' + esc(r.lots_offered) + '</span></td>' +
+                    '<td class="pr-6 text-[13px] text-mute heat-cars">' + (top.length ? top.map(function (l) {
+                        return carLine(l) + ' <span class="font-mono text-faint">' + times(l.multiple_of_low) + '</span>';
+                    }).join('<br>') : '<span class="text-faint">none</span>') + '</td>' +
+                '</tr>';
+            }
+            roomBody.innerHTML = market.concat(flagged).map(roomRow).join('');
+
+            function lotList(ls) {
+                return '<ul class="m-0 mt-2 p-0 list-none grid gap-1.5 text-[13px]">' + ls.map(function (l) {
+                    return '<li class="flex flex-wrap gap-x-3 gap-y-0.5 items-baseline">' +
+                        '<span class="font-mono text-faint w-10">#' + esc(l.lot_number) + '</span>' +
+                        (l.lot_url ? '<a class="text-ink hover:text-amber-700" href="' + esc(l.lot_url) + '" target="_blank" rel="noopener">' + carLine(l) + '</a>' : '<span class="text-ink">' + carLine(l) + '</span>') +
+                        '<span class="text-mute">est. ' + estRange(l) +
+                        ' · ' + (l.sold ? '' : '<span class="text-amber-700">not sold</span> at ') + money(num(l.last_bid), l.currency) +
+                        ' · ' + times(l.multiple_of_low) + ' · ' + esc(l.bids_past_low) + ' bids past low' +
+                        (num(l.sec_per_bid_past_low) ? ', ' + Math.round(l.sec_per_bid_past_low) + ' s apart' : '') + '</span>' +
+                        heatTag(l.heat_label) + (l.highlight ? ' <span class="hl-tag" title="Among its sale\'s top 10% of lots">highlight</span>' : '') +
+                    '</li>';
+                }).join('') + '</ul>';
+            }
+
+            roomBody.addEventListener('click', function (e) {
+                var link = e.target.closest('a[data-sale]');
+                if (link) {
+                    e.preventDefault();
+                    window.openSale && window.openSale(link.getAttribute('data-sale'));
+                    return;
+                }
+                if (e.target.closest('a[href]')) return;
+                var tr = e.target.closest('tr[data-session]');
+                if (!tr) return;
+                var btn = tr.querySelector('button[aria-expanded]');
+                var next = tr.nextElementSibling;
+                if (next && next.classList.contains('drill-row')) {
+                    next.remove();
+                    tr.classList.remove('is-selected');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('.chev').style.transform = '';
+                    return;
+                }
+                var r = rooms.find(function (x) { return x.video_id === tr.getAttribute('data-session'); });
+                var ls = (bySession[r.video_id] || []).slice(0, 8);
+                var passed = num(r.passed_median_high_bid_vs_low);
+                var row = document.createElement('tr');
+                row.className = 'drill-row';
+                row.innerHTML = '<td colspan="7" class="px-6 py-5 bg-canvas" style="white-space:normal"><div class="drill-inner">' +
+                    '<p class="m-0 text-[13px] text-mute">' +
+                        esc(r.lots_sold) + ' of ' + esc(r.lots_offered) + ' lots sold in the room; ' +
+                        'median ' + (num(r.median_bids_past_low) != null ? Math.round(r.median_bids_past_low) : '—') + ' bids past the low estimate' +
+                        (num(r.median_sec_per_bid_past_low) ? ', ' + Math.round(r.median_sec_per_bid_past_low) + ' s apart' : '') + '. ' +
+                        esc(r.high_competition_lots) + ' high-competition lots, ' + esc(r.coaxed_lots || 0) + ' coaxed (reopened after the auctioneer began to close).' +
+                        (passed != null ? ' Lots that passed stalled at a median ' + times(passed) + ' the low estimate.' : '') +
+                        (r.flagged ? ' ' + esc(flagNotes(r.flags)) + '.' : '') +
+                        ' <a href="#" class="hover:text-amber-700" data-sale="' + esc(saleKey(r.event, r.event_date)) + '">This sale in the index ›</a></p>' +
+                    lotList(ls) + '</div></td>';
+                tr.after(row);
+                tr.classList.add('is-selected');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.querySelector('.chev').style.transform = 'rotate(90deg)';
+            });
+
+            /* ---- hottest lots ---- */
+            var byHeat = function (a, b) {
+                return (num(b.heat_across_sales) || 0) - (num(a.heat_across_sales) || 0) ||
+                    (num(b.multiple_of_low) || 0) - (num(a.multiple_of_low) || 0) ||
+                    (num(b.bids_past_low) || 0) - (num(a.bids_past_low) || 0);
+            };
+            var top = marketLots.slice().sort(byHeat).slice(0, HEAT_TOP);
+            document.getElementById('hotSubtitle').textContent = 'The ' + top.length + ' lots that drew the most competition across every parsed sale, ' +
+                'provenance sales aside. Estimates and results are in the sale\'s currency; the result is the last bid heard, before the buyer\'s premium.';
+            hotBody.innerHTML = top.map(function (l, i) {
+                return '<tr>' +
+                    '<td class="pl-6 font-mono text-[13px] text-faint">' + String(i + 1).padStart(2, '0') + '</td>' +
+                    '<td class="font-medium" style="white-space:normal;min-width:200px">' +
+                        (l.lot_url ? '<a class="hover:text-amber-700" href="' + esc(l.lot_url) + '" target="_blank" rel="noopener">' + carLine(l) + '</a>' : carLine(l)) +
+                        (l.highlight ? ' <span class="hl-tag" title="Among its sale\'s top 10% of lots">highlight</span>' : '') + '</td>' +
+                    '<td class="text-mute text-[13px]">' + heatSale(l) + ' <span class="text-faint">#' + esc(l.lot_number) + '</span></td>' +
+                    '<td class="num text-mute">' + estRange(l) + '</td>' +
+                    '<td class="num">' + (l.sold ? '' : '<span class="text-amber-700">not sold</span> ') + money(num(l.last_bid), l.currency) + '</td>' +
+                    '<td class="num">' + times(l.multiple_of_low) + '</td>' +
+                    '<td class="num">' + esc(l.bids_past_low) + '</td>' +
+                    '<td class="num">' + (num(l.sec_per_bid_past_low) ? Math.round(l.sec_per_bid_past_low) + ' s' : '—') + '</td>' +
+                    '<td class="num pr-6 font-mono">' + Math.round(l.heat_across_sales) + '</td>' +
+                '</tr>';
+            }).join('');
+
+            document.getElementById('heatSpotlight').innerHTML = flagged.map(function (r) {
+                var ls = (bySession[r.video_id] || []).slice().sort(byHeat).slice(0, 5);
+                return '<div class="px-6 py-5 border-t border-hair">' +
+                    '<p class="m-0 text-[15px] font-semibold">Provenance spotlight: ' + heatSale(r) + '</p>' +
+                    '<p class="m-0 mt-1 text-[13px] text-mute leading-relaxed">' + esc(flagNotes(r.flags)) + '. ' +
+                        pct(r.sell_through) + ' sold, ' + pct(r.share_sold_above_high) + ' of them above the high estimate, at a median ' +
+                        times(r.median_multiple_of_low) + ' the low estimate. Scored against every session its room heat is ' +
+                        Math.round(r.room_heat_all_sales) + '. A single-owner collection sold without reserve draws a crowd for the owner as much as the cars, ' +
+                        'so it is kept out of the market comparisons above and below.</p>' +
+                    lotList(ls) + '</div>';
+            }).join('');
+
+            /* ---- by make ---- */
+            var makes = {};
+            marketLots.forEach(function (l) {
+                var m = makes[l.manufacturer] || (makes[l.manufacturer] = { name: l.manufacturer, lots: [], sold: [] });
+                m.lots.push(l);
+                if (l.sold) m.sold.push(l);
+            });
+            var makeRows = Object.keys(makes).map(function (k) {
+                var m = makes[k];
+                m.hc = m.lots.filter(function (l) { return l.heat_label === 'high competition'; }).length;
+                m.share = m.hc / m.lots.length;
+                m.above = m.sold.length ? m.sold.filter(function (l) { return num(l.last_bid) > num(l.high_estimate); }).length / m.sold.length : null;
+                m.mult = median(m.sold.map(function (l) { return num(l.multiple_of_low); }));
+                m.st = m.sold.length / m.lots.length;
+                return m;
+            }).filter(function (m) { return m.lots.length >= HEAT_MIN_MAKE_LOTS; })
+              .sort(function (a, b) { return b.share - a.share || b.lots.length - a.lots.length; });
+            var overall = hc.length / marketLots.length;
+            document.getElementById('heatMakeSubtitle').textContent = makeRows.length + ' makes with ' + HEAT_MIN_MAKE_LOTS +
+                ' or more lots measured, ranked by the share of their lots that drew high competition. Across all makes it is ' +
+                Math.round(overall * 100) + '%. Small counts swing: read the Lots column first.';
+            var maxShare = Math.max.apply(null, makeRows.map(function (m) { return m.share; }).concat([0.01]));
+            makeBody.innerHTML = makeRows.map(function (m) {
+                return '<tr>' +
+                    '<td class="pl-6 font-semibold">' + esc(m.name) + '</td>' +
+                    '<td class="num">' + m.lots.length + '</td>' +
+                    '<td class="w-64"><div class="flex items-center gap-3">' +
+                        '<span class="font-mono text-sm w-20 text-right whitespace-nowrap" title="' + m.hc + ' of ' + m.lots.length + ' lots">' + Math.round(m.share * 100) + '%<span class="text-faint"> · ' + m.hc + '</span></span>' +
+                        '<span class="score-bar"><span style="width:' + Math.max(2, m.share / maxShare * 100).toFixed(0) + '%"></span></span>' +
+                    '</div></td>' +
+                    '<td class="num">' + pct(m.above) + '</td>' +
+                    '<td class="num">' + times(m.mult) + '</td>' +
+                    '<td class="num">' + pct(m.st) + '</td>' +
+                    '<td class="num pr-6">' + (rank[m.name] ? '#' + rank[m.name] : '<span class="text-faint">—</span>') + '</td>' +
+                '</tr>';
+            }).join('');
+
+            var houses = {};
+            rooms.forEach(function (r) { houses[r.auction_house] = true; });
+            document.getElementById('heatNote').innerHTML =
+                '<span class="text-ink font-medium">How heat is read.</span> Each bid is taken from the auction house\'s livestream captions with its time in the video, ' +
+                'and the last bid is checked against the published result. A lot\'s heat (0 to 100) averages its rank on three things: bids at or above the low estimate, ' +
+                'how quickly they came, and the last bid as a multiple of the low estimate. <span class="text-ink">High competition</span>: three or more bids past the low, ' +
+                'coming faster than that session\'s usual pace. <span class="text-ink">Coaxed</span>: three or more past the low, with the bidding reopened after the auctioneer ' +
+                'began to close. <span class="text-ink">Steady</span>: three or more at an ordinary pace. <span class="text-ink">Quiet</span>: sold with fewer. ' +
+                'Room heat averages each session\'s rank on sell-through, the share sold above the high estimate, the median result against the low, the median bids past the low and the pace. ' +
+                'Covered so far: ' + Object.keys(houses).sort().map(esc).join(', ') + ' sales streamed on YouTube, lots with a published estimate only. ' +
+                'Heat measures how hard the room fought, not how high a car sits in the market, so it stays out of the MAI score.';
         });
 
         function usd(v) {

@@ -34,6 +34,7 @@ import hagi_top
 import index_lots
 import export_live_lots
 import export_online_sales
+import export_heat
 
 # mai.py needs pandas, which the stdlib-only signals workflow doesn't install;
 # the Data Pipelines workflow does and runs the MAI tests before scoring.
@@ -1547,6 +1548,140 @@ class LiveLotsExport(unittest.TestCase):
             bad = {(r.get("auction_house"), r.get("auction_house_code")) for r in rows
                    if export_live_lots.HOUSES.get(r.get("auction_house_code")) != r.get("auction_house")}
             self.assertEqual(bad, set(), os.path.basename(path))
+
+
+def _heat_lot(**over):
+    lot = {
+        "event": "RM Monterey Auction 2026", "auction_house": "RM Sothebys", "event_date": "2026-08-15",
+        "video_id": "RcKOO6i0m0g", "session_label": "Thursday", "session_on": "2026-08-13",
+        "session_flagged": False, "session_flags": None,
+        "source_listing_id": "rm-monterey-auction-2026-lot-139", "lot": "139", "year": 1938,
+        "make": "Bugatti", "model": "Type 57", "currency": "USD", "estimate_low": 900000,
+        "estimate_high": 1500000, "result_in_room": "SOLD", "last_bid": 1650000, "multiple_of_low": 1.83,
+        "n_bids": 24, "bids_past_low": 17, "sec_per_bid_past_low": 7, "sec_per_bid_before_low": 6.5,
+        "closing_calls_revived": 0, "lot_heat_in_sale": 97, "lot_heat_across_sales": 89,
+        "heat_label": "high competition", "url": None,
+    }
+    lot.update(over)
+    return lot
+
+
+def _heat_room(**over):
+    room = {
+        "event": "RM Monterey Auction 2026", "auction_house": "RM Sothebys", "event_date": "2026-08-15",
+        "video_id": "RcKOO6i0m0g", "session_label": "Thursday", "session_on": "2026-08-13",
+        "flagged": False, "flags": None, "lots_offered": 35, "lots_sold": 32, "sell_through": 0.914,
+        "share_sold_above_high": 0.219, "median_multiple_of_low": 1.01, "median_bids_past_low": 1.5,
+        "median_sec_per_bid_past_low": 9.75, "median_sec_per_bid_before_low": 7,
+        "passed_lots_median_high_bid_vs_low": 0.65, "high_competition_lots": 8, "coaxed_lots": 2,
+        "room_heat_all_sales": 67, "room_heat_market_only": 73,
+    }
+    room.update(over)
+    return room
+
+
+class HeatExport(unittest.TestCase):
+    """room_heat.csv and lot_heat.csv feed mai.html's Bidding heat section.
+    A sale must key as it does in auction_lots.csv, and labels must be the
+    ones the page knows."""
+
+    def test_lot_maps_with_the_live_export_names(self):
+        row, reason = export_heat.to_lot_row(_heat_lot())
+        self.assertIsNone(reason)
+        self.assertEqual(row["auction_house"], "RM Sotheby's")
+        self.assertEqual(row["auction_house_code"], "RMS")
+        self.assertEqual((row["session"], row["session_date"]), ("Thursday", "2026-08-13"))
+        self.assertEqual(row["result_in_room"], "sold")
+        self.assertEqual(row["multiple_of_low"], "1.83")
+        self.assertEqual(row["session_flagged"], "false")
+        self.assertEqual(row["listing_id"], "rm-monterey-auction-2026-lot-139")
+
+    def test_old_contested_label_reads_as_high_competition(self):
+        row, _ = export_heat.to_lot_row(_heat_lot(heat_label="contested"))
+        self.assertEqual(row["heat_label"], "high competition")
+        room = _heat_room()
+        del room["high_competition_lots"]
+        room["contested_lots"] = 6
+        self.assertEqual(export_heat.to_room_row(room)["high_competition_lots"], "6")
+
+    def test_unknown_labels_and_hand_excluded_lots_are_skipped(self):
+        self.assertEqual(export_heat.to_lot_row(_heat_lot(heat_label="frenzy"))[1], "unknown heat label 'frenzy'")
+        luce = next(iter(export_live_lots.EXCLUDED_LOTS))
+        self.assertEqual(export_heat.to_lot_row(_heat_lot(source_listing_id=luce))[1], "excluded by hand")
+
+    def test_make_and_sale_names_are_corrected_as_in_auction_lots(self):
+        row, _ = export_heat.to_lot_row(_heat_lot(make="Mercedez-Benz ", event="Bonhams Leguna Seca",
+                                                  auction_house="Bonhams"))
+        self.assertEqual(row["manufacturer"], "Mercedes-Benz")
+        self.assertEqual(row["event"], "Bonhams Laguna Seca")
+
+    def test_unknown_house_fails_the_build(self):
+        with self.assertRaises(export_live_lots.UnknownAuctionHouse):
+            export_heat.build([_heat_lot(auction_house="Osenat")], [_heat_room()])
+
+    def test_lots_sort_by_session_then_lot_number(self):
+        lots, rooms, _ = export_heat.build(
+            [_heat_lot(lot="1010"), _heat_lot(lot="139"), _heat_lot(lot="88", session_label="Friday", session_on="2026-08-14")],
+            [_heat_room()])
+        self.assertEqual([r["lot_number"] for r in lots], ["139", "1010", "88"])
+        self.assertEqual(len(rooms), 1)
+
+    def test_flagged_room_keeps_its_note_and_has_no_market_score(self):
+        row = export_heat.to_room_row(_heat_room(
+            flagged=True, flags="celebrity_provenance: Billy Joel motorcycle collection, all no reserve",
+            room_heat_market_only=None, room_heat_all_sales=100))
+        self.assertEqual(row["flagged"], "true")
+        self.assertEqual(row["room_heat_market_only"], "")
+        self.assertIn("Billy Joel", row["flags"])
+
+    def test_paging_and_a_missing_view(self):
+        calls = []
+
+        def get_json(url, headers=None):
+            calls.append(url)
+            return [{"n": 1}] * export_heat.PAGE if len(calls) == 1 else [{"n": 2}]
+
+        rows = export_heat.fetch_view("https://x.supabase.co/", "anon", "auction_lot_heat", "event.asc", get_json)
+        self.assertEqual(len(rows), export_heat.PAGE + 1)
+        self.assertIn("offset=1000", calls[1])
+        with self.assertRaises(SystemExit) as ctx:
+            export_heat.fetch_view("https://x.supabase.co", "anon", "auction_room_heat", "event.asc",
+                                   lambda url, headers=None: None)
+        self.assertIn("auction_room_heat not found", str(ctx.exception.code))
+
+    def test_without_secrets_nothing_is_written(self):
+        out = os.path.join(tempfile.mkdtemp(), "lot_heat.csv")
+        with unittest.mock.patch.dict(os.environ, {"CANONICAL_SUPABASE_URL": "", "CANONICAL_SUPABASE_ANON_KEY": ""}), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()):
+            code = export_heat.main(["--lots-out", out, "--rooms-out", out + ".rooms"])
+        self.assertEqual(code, 0)
+        self.assertFalse(os.path.exists(out))
+
+    def test_a_read_failure_writes_nothing(self):
+        out = os.path.join(tempfile.mkdtemp(), "lot_heat.csv")
+
+        def fail(url, key):
+            raise SystemExit("::error::auction_lot_heat not found in the store.")
+
+        env = {"CANONICAL_SUPABASE_URL": "https://x.supabase.co", "CANONICAL_SUPABASE_ANON_KEY": "anon"}
+        with unittest.mock.patch.dict(os.environ, env), \
+             unittest.mock.patch("sys.stdout", new=io.StringIO()) as log:
+            code = export_heat.main(["--lots-out", out, "--rooms-out", out + ".rooms"], fetch=fail)
+        self.assertEqual(code, 1)
+        self.assertIn("::error::", log.getvalue())
+        self.assertFalse(os.path.exists(out))
+
+    def test_committed_csvs_use_known_houses_and_labels(self):
+        for path in (export_heat.LOT_HEAT_PATH, export_heat.ROOM_HEAT_PATH):
+            if not os.path.exists(path):
+                continue
+            rows = lib.read_rows(path)
+            bad = {(r["auction_house"], r["auction_house_code"]) for r in rows
+                   if export_live_lots.HOUSES.get(r["auction_house_code"]) != r["auction_house"]}
+            self.assertEqual(bad, set(), os.path.basename(path))
+        if os.path.exists(export_heat.LOT_HEAT_PATH):
+            labels = {r["heat_label"] for r in lib.read_rows(export_heat.LOT_HEAT_PATH)}
+            self.assertLessEqual(labels, export_heat.KNOWN_LABELS)
 
 
 class ApexRule(unittest.TestCase):
