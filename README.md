@@ -517,6 +517,49 @@ See `data/pipelines/README.md`.
 token, now just points to the store. It removes the token and API key the old
 page kept in the browser, and offers any unsaved lots as a CSV download.
 
+## Bidding Heat (mai.html#heat)
+
+**Bidding heat** sits on the Apex page below the HAGI Top panel and never
+enters the MAI score. It reads how hard each room fought for its cars from the
+auction houses' own YouTube livestreams: every bid of a lot is parsed from the
+stream's captions with its time in the video, checked against the published
+result, and stored in the canonical store (`auction.live_bids`, with a
+`live_auction` summary on each listing). Two store views score it:
+
+- **Lot heat** (0 to 100): the average percentile rank of the bids placed at
+  or above the low estimate, how quickly they came, and the last bid as a
+  multiple of the low estimate. Each lot is labelled **high competition**
+  (3+ bids past the low, faster than the session's usual pace), **coaxed**
+  (3+ past the low, reopened after the auctioneer began to close), **steady**,
+  **passed** or **quiet**.
+- **Room heat** (0 to 100), per streamed session: the average rank, across
+  sessions, of sell-through, the share sold above the high estimate, the
+  median result against the low, the median bids past the low and the pace.
+  A session flagged in `auction.session_flags` (the Billy Joel motorcycle
+  collection, sold without reserve) is scored against every session but kept
+  out of the market ranking, and the page shows it in its own spotlight.
+
+The section has three panels: room heat per session (click one for its
+hottest lots and a link to the sale in the Events table), the hottest lots
+across every parsed sale, and heat by make (makes with 8 or more lots
+measured, ranked by their share of high-competition lots, beside their MAI
+rank). A lot among its sale's top 10% is tagged "highlight".
+
+`data/pipelines/export_heat.py` copies the store's anon-readable
+`public.auction_lot_heat` and `public.auction_room_heat` views to
+`data/lot_heat.csv` and `data/room_heat.csv`, with house, sale and make names
+normalised exactly as `export_live_lots.py` does. The Data Pipelines workflow
+runs it daily after the scores, with the same two secrets; it can't fail the
+job, and if the views can't be read the previous files stay published. To
+rebuild the CSVs from a saved export of the two views, run
+`python data/pipelines/export_heat.py --from-json export.json`.
+
+Coverage is whatever has been parsed: 13 sessions at 9 sales so far (RM
+Sotheby's, Broad Arrow, Gooding Christie's), lots with a published estimate
+only. Scores are relative to the sessions parsed, so they move as sales are
+added. Results are the last bid heard in the room, before the buyer's premium,
+in the sale's own currency.
+
 ## Data Maintenance Scripts
 
 Run from the repo root (`node scripts/<name>.js`). All three read `bat.csv` from

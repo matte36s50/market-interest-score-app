@@ -26,6 +26,7 @@ export_online_sales.py      ← Bring a Trailer's completed months → online_lo
 auction_rating.py           ← score each event
 mai.py                      ← compute per-manufacturer MAI scores
 index_lots.py               ← every lot of every index car → index_lots.csv (index-lots.html; no score reads it)
+export_heat.py              ← store heat views → room_heat.csv, lot_heat.csv (mai.html#heat; no score reads them)
 wikipedia_pageviews.py      ← can run anytime (independent)
 ```
 
@@ -681,3 +682,19 @@ the live houses, so the two views also lean toward those sources.
   sold price. Also `age_at_sale` and `segment` (modern / classic).
 - `mai_detail.csv` also carries `apex_lots_modern` / `apex_lots_classic` and
   `contribution_modern` / `contribution_classic`, which sum to the segment scores.
+
+## export_heat.py
+
+Copies the store's bidding-heat views (`public.auction_lot_heat`,
+`public.auction_room_heat`) to `data/lot_heat.csv` and `data/room_heat.csv`
+for the Bidding heat section of `mai.html`. Names go through
+`export_live_lots` (houses, sale names, makes), lots in its `EXCLUDED_LOTS`
+stay out, and a store row still labelled "contested" is read as "high
+competition". No score reads either file. See the main README for what the
+scores mean.
+
+```bash
+python data/pipelines/export_heat.py --dry-run
+python data/pipelines/export_heat.py
+python data/pipelines/export_heat.py --from-json saved_views.json   # offline rebuild
+```
