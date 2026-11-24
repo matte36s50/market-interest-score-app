@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-23",
   "files": [
     {
       "title": "Auction Results Ledger – September 28, 2026 (rev record_id)",
@@ -57,6 +57,14 @@
       "ledger_date": "2026-11-09",
       "rev_replacement": false,
       "rows_read": 34
+    },
+    {
+      "title": "Auction Results Ledger – November 23, 2026",
+      "file_id": "17jK9uLdIofDq3ofGaRtuVS8Hzj84BNA6XFQOD-Z9a6Y",
+      "modified_time": "2026-11-23T17:15:27.574Z",
+      "ledger_date": "2026-11-23",
+      "rev_replacement": false,
+      "rows_read": 80
     }
   ],
   "ignored_files": [
@@ -72,50 +80,59 @@
     }
   ],
   "errors": [],
-  "warnings": [],
+  "warnings": [
+    "'Auction Results Ledger – November 23, 2026' row 2 (20261107-BAA-L154@20261123): hagi_index ['13.3 pct below low. Release gives no year', '1981 retained from first record.'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 3 (20261107-BAA-L178@20261123): hagi_index ['figure unchanged. Hammer CHF 800000'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 4 (20261107-BAA-L183@20261123): hagi_index ['figure unchanged. Hammer CHF 500000'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 6 (20261107-BAA-L174@20261123): hagi_index ['figure unchanged. Hammer CHF 1000000'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 7 (20261107-BAA-L135@20261123): hagi_index ['figure unchanged. Hammer CHF 675000'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 8 (20261107-BAA-L208@20261123): hagi_index ['5.5 pct below low. Top lot of the sale.'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded.",
+    "'Auction Results Ledger – November 23, 2026' row 10 (20261107-BAA-L159@20261123): hagi_index ['so price stays blank. The CHF 2700000 post-sale ask is not a realised price.'] is not one of ['BMW CI', 'HAGI F', 'HAGI P', 'HAGI Top', 'MBCI', 'MBCI Emerging']; kept as recorded."
+  ],
   "schema_gaps": [
     "Outlier status (charity lots, one-off coachbuilt commissions, works competition cars, specification-premium cars) exists only as free text in `notes`. It is not machine-readable; review_queue.csv lists candidate rows for a human to triage. A structured column is needed."
   ],
   "counts": {
-    "rows_read": 239,
-    "rows_after_dedupe": 206,
-    "rows_superseded": 33,
+    "rows_read": 319,
+    "rows_after_dedupe": 277,
+    "rows_superseded": 42,
     "rows_by_house": {
       "Artcurial": 10,
       "Barrett-Jackson": 1,
       "Bonhams": 18,
       "Bonhams|Cars Online": 8,
-      "Broad Arrow": 66,
+      "Broad Arrow": 70,
       "Dorotheum": 4,
+      "Gooding Christie's": 35,
       "Mecum": 2,
-      "RM Sotheby's": 66,
-      "duPont REGISTRY Live": 31
+      "RM Sotheby's": 84,
+      "duPont REGISTRY Live": 45
     },
-    "rows_missing_high_estimate_usd": 77,
-    "rows_missing_published_estimate": 77,
-    "rows_missing_price": 23,
+    "rows_missing_high_estimate_usd": 113,
+    "rows_missing_published_estimate": 113,
+    "rows_missing_price": 34,
     "rows_missing_price_by_outcome": {
-      "not_sold": 19,
-      "sold": 3,
+      "not_sold": 31,
+      "sold": 2,
       "withdrawn": 1
     },
     "rows_by_status": {
-      "CONFIRMED": 142,
-      "REPORTED": 58,
-      "UNVERIFIED": 6
+      "CONFIRMED": 175,
+      "REPORTED": 98,
+      "UNVERIFIED": 4
     },
     "rows_by_premium_included": {
       "no": 20,
-      "unknown": 31,
-      "yes": 155
+      "unknown": 55,
+      "yes": 202
     },
     "rows_by_result_state": {
-      "not_sold": 19,
-      "sold_with_price": 183,
-      "sold_without_price": 3,
+      "not_sold": 31,
+      "sold_with_price": 243,
+      "sold_without_price": 2,
       "withdrawn": 1
     },
     "rows_with_estimate_currency_unlike_price_currency": 19
   },
-  "review_queue_count": 54
+  "review_queue_count": 56
 }
