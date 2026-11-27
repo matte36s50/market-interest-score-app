@@ -308,7 +308,7 @@ bmw-e31-v12,V12 (850i/Ci/CSi),Bring a Trailer – October 2026,2026-10-31,Bring 
 bmw-e31-v12,V12 (850i/Ci/CSi),Bring a Trailer – November 2026,2026-11-30,Bring a Trailer,BMW,E31 8-Series,1992,true,30150,,,false,0,false,bmw-ci,bat_month_to_date,2026-11-02,850i,https://bringatrailer.com/listing/1992-bmw-850i-66/,false
 bmw-e31-v12,V12 (850i/Ci/CSi),Bring a Trailer – November 2026,2026-11-30,Bring a Trailer,BMW,E31 8-Series,1992,true,19250,,,false,0,false,bmw-ci,bat_month_to_date,2026-11-10,850i,https://bringatrailer.com/listing/1992-bmw-850i-65/,false
 bmw-e31-v12,V12 (850i/Ci/CSi),The Munich Auction 2026,2026-11-20,RM Sotheby's,BMW,850CSi,1995,true,50554,87920,87920,false,0,false,bmw-ci,live,2026-11-20,850CSi,,false
-bmw-e31-v12,V12 (850i/Ci/CSi),The Paris Auction 2027,2027-02-03,RM Sotheby's,BMW,850i,1990,,,76825,,false,0,false,bmw-ci,upcoming,2027-02-03,850i,,false
+bmw-e31-v12,V12 (850i/Ci/CSi),The Paris Auction 2027,2027-02-03,RM Sotheby's,BMW,850i,1990,,,76699,,false,0,false,bmw-ci,upcoming,2027-02-03,850i,,false
 bmw-e46-m3,E46 M3,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,BMW,E46 M3,2004,true,24000,,24000,false,0,false,bmw-ci,bat,2025-06-01,M3 Convertible,https://bringatrailer.com/listing/2004-bmw-m3-convertible-165/,false
 bmw-e46-m3,E46 M3,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,BMW,E46 M3,2006,false,,,,false,0,false,bmw-ci,bat,2025-06-07,M3 Convertible,https://bringatrailer.com/listing/2006-bmw-m3-convertible-126/,false
 bmw-e46-m3,E46 M3,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,BMW,E46 M3,2001,true,56286,,56286,false,0,false,bmw-ci,bat,2025-06-08,M3 Convertible,https://bringatrailer.com/listing/2001-bmw-m3-convertible-25/,false
@@ -1389,10 +1389,10 @@ mb-450sel-69,450SEL 6.9,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,
 mb-450sel-69,450SEL 6.9,Bring a Trailer – July 2026,2026-07-31,Bring a Trailer,Mercedes-Benz,450SEL 6.9,1977,true,31000,,31000,false,0,false,mbci-emerging,bat,2026-07-23,450SEL 6.9,https://bringatrailer.com/listing/1977-mercedes-benz-450sel-6-9-23/,false
 mb-450sel-69,450SEL 6.9,Bring a Trailer – September 2026,2026-09-30,Bring a Trailer,Mercedes-Benz,450SEL 6.9,1978,true,21000,,21000,false,0,false,mbci-emerging,bat,2026-09-03,450SEL 6.9,https://bringatrailer.com/listing/1978-mercedes-benz-450sel-6-9-20/,false
 mb-450sel-69,450SEL 6.9,Bring a Trailer – October 2026,2026-10-31,Bring a Trailer,Mercedes-Benz,450SEL 6.9,1978,false,,,,false,0,false,mbci-emerging,bat,2026-10-15,450SEL 6.9,https://bringatrailer.com/listing/1978-mercedes-benz-450sel-6-9-21/,false
-mb-450sel-69,450SEL 6.9,The Paris Auction 2027,2027-02-03,RM Sotheby's,Mercedes-Benz,450 SEL 6.9,1979,,,252425,,false,0,false,mbci-emerging,upcoming,2027-02-03,450 SEL 6.9,,false
+mb-450sel-69,450SEL 6.9,The Paris Auction 2027,2027-02-03,RM Sotheby's,Mercedes-Benz,450 SEL 6.9,1979,,,252011,,false,0,false,mbci-emerging,upcoming,2027-02-03,450 SEL 6.9,,false
 mb-500k-540k,"500K & 540K Cabriolet A, Roadster, Coupé",RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Mercedes-Benz,500 K Normal Roadster,1935,true,1600000,1700000,1700000,false,0,false,mbci,live,2026-08-15,500 K Normal Roadster,,false
 mb-500k-540k,"500K & 540K Cabriolet A, Roadster, Coupé",The Arizona Auction 2027,2027-01-28,RM Sotheby's,Mercedes-Benz,500/540 K Cabriolet A by Sindelfingen,1935,,,4500000,,false,0,false,mbci,upcoming,2027-01-28,500/540 K Cabriolet A by Sindelfingen,,false
-mb-500k-540k,"500K & 540K Cabriolet A, Roadster, Coupé",The Paris Auction 2027,2027-02-03,RM Sotheby's,Mercedes-Benz,540 K Cabriolet A,1938,,,2414500,,false,0,false,mbci,upcoming,2027-02-03,540 K Cabriolet A,,false
+mb-500k-540k,"500K & 540K Cabriolet A, Roadster, Coupé",The Paris Auction 2027,2027-02-03,RM Sotheby's,Mercedes-Benz,540 K Cabriolet A,1938,,,2410540,,false,0,false,mbci,upcoming,2027-02-03,540 K Cabriolet A,,false
 mb-500sl-r107,500SL,Bring a Trailer – June 2025,2025-06-30,Bring a Trailer,Mercedes-Benz,R107 SL,1986,true,8800,,8800,false,0,true,mbci-emerging,bat,2025-06-19,500SL,https://bringatrailer.com/listing/1986-mercedes-benz-500sl-20/,false
 mb-500sl-r107,500SL,Bring a Trailer – July 2025,2025-07-31,Bring a Trailer,Mercedes-Benz,R107 SL,1983,true,16550,,16550,false,0,false,mbci-emerging,bat,2025-07-16,500SL,https://bringatrailer.com/listing/1983-mercedes-benz-500sl-19/,false
 mb-500sl-r107,500SL,Bring a Trailer – November 2025,2025-11-30,Bring a Trailer,Mercedes-Benz,R107 SL,1985,true,19550,,19550,false,0,false,mbci-emerging,bat,2025-11-10,500SL,https://bringatrailer.com/listing/1985-mercedes-benz-500sl-50/,false
@@ -1528,7 +1528,7 @@ porsche-959,959,Broad Arrow Amelia Island 2026,2026-03-06,Broad Arrow,Porsche,95
 porsche-959,959,Bring a Trailer – May 2026,2026-05-31,Bring a Trailer,Porsche,959,1988,false,,,,false,0,false,hagi-p,bat,2026-05-27,959 Sport,https://bringatrailer.com/listing/1988-porsche-959-sport-2/,false
 porsche-959,959,Bring a Trailer – June 2026,2026-06-30,Bring a Trailer,Porsche,959,1988,false,,,,false,0,false,hagi-p,bat,2026-06-09,959,https://bringatrailer.com/listing/1988-porsche-959/,false
 porsche-959,959,RM Monterey Auction 2026,2026-08-15,RM Sotheby's,Porsche,959 Sport,1989,true,7045000,6000000,6000000,true,0.00616355,false,hagi-p,live,2026-08-15,959 Sport,,false
-porsche-959,959,The Paris Auction 2027,2027-02-03,RM Sotheby's,Porsche,959 'Komfort',1989,,,3073000,,false,0,false,hagi-p,upcoming,2027-02-03,959 'Komfort',,false
+porsche-959,959,The Paris Auction 2027,2027-02-03,RM Sotheby's,Porsche,959 'Komfort',1989,,,3067960,,false,0,false,hagi-p,upcoming,2027-02-03,959 'Komfort',,false
 porsche-carrera-gt,Carrera GT,Gooding Amelia Island 2026,2026-03-07,Gooding Christie's,Porsche,Carrera GT,2005,true,2825000,,2825000,true,0.00148538,false,hagi-p,live,2026-03-07,Carrera GT,,false
 porsche-carrera-gt,Carrera GT,The Monaco Auction,2026-04-24,RM Sotheby's,Porsche,Carrera GT,2005,true,3037214,,3037214,false,0,false,hagi-p,live,2026-04-24,Carrera GT,,false
 porsche-carrera-gt,Carrera GT,The Tegernsee Auction,2026-07-19,RM Sotheby's,Porsche,Carrera GT,2004,true,1900211,,1900211,false,0,false,hagi-p,live,2026-07-19,Carrera GT,,false
